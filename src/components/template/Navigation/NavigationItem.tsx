@@ -28,7 +28,7 @@ const NavigationItem: React.FC<Props> = ({
     ) : (
       <>
         <div>{icon}</div>
-        <span className="text-gray-600 text-sm">{text}</span>
+        <span className="text-sm">{text}</span>
       </>
     );
   };
@@ -36,7 +36,11 @@ const NavigationItem: React.FC<Props> = ({
   return (
     <li
       onClick={onClick}
-      className={`flex items-center justify-center hover:bg-gray-100 w-28 h-20 ${className}`}
+      className={`
+      flex items-center justify-center
+       text-slate-800 hover:bg-gray-100 w-28 h-20 
+       dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700
+       ${className}`}
       title={title}
     >
       {url ? (

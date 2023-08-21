@@ -17,7 +17,7 @@ import Urls from "../../shared/common/routes/routes";
 import LoginEnum from "../../shared/enums/login.enum";
 
 export default function Login() {
-  const { loginGoogle, login, create, user } = useAuthData();
+  const { loginGoogle, login, create } = useAuthData();
 
   const router = useRouter();
 
@@ -29,11 +29,15 @@ export default function Login() {
 
   const [confirmPassword, setConfirmPassword] = useState<string>();
 
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const wormTextMessage: React.MutableRefObject<IWormAlertRefProps | null> =
     useRef(null);
 
   const submitLoginOrCreate = async () => {
     try {
+      setIsSubmitting(true);
+
       if (!username || !password) {
         throw new Error("Please enter with your credentials!");
       }
@@ -54,11 +58,15 @@ export default function Login() {
         5,
         WormAlertTypeEnum.DANGER
       );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const submitLoginGoogle = async () => {
     try {
+      setIsSubmitting(true);
+
       await loginGoogle();
     } catch (error: any) {
       wormTextMessage.current?.showWormText(
@@ -66,6 +74,8 @@ export default function Login() {
         5,
         WormAlertTypeEnum.DANGER
       );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
