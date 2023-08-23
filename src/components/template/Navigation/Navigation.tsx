@@ -3,6 +3,7 @@ import Urls from "../../../shared/common/routes/routes";
 import {
   IconAdjustmentsHorizontal,
   IconBell,
+  IconBuildingStoreFront,
   IconHome,
   IconLogout,
 } from "../../elements/icons/icons";
@@ -50,13 +51,20 @@ const Navigation: React.FC<Props> = ({}) => {
           text="Settings"
           url={Urls.SETTINGS}
         />
+        <NavigationItem
+          icon={IconBuildingStoreFront()}
+          text="Store"
+          url={Urls.STORE}
+        />
       </ul>
       <ul className="flex flex-row">
         <NavigationItem
           icon={IconLogout}
           text={"Logout"}
           onClick={logout}
-          className="text-red-600 hover:bg-red-300 hover:text-white dark:text-white dark:hover:bg-red-300"
+          className="
+            text-red-600 hover:bg-red-300 hover:text-white
+            dark:text-white dark:hover:bg-red-900"
         />
       </ul>
     </div>

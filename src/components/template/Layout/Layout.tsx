@@ -8,7 +8,7 @@ import Navigation from "../Navigation/Navigation";
 
 interface Props {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   children?: any;
 }
 

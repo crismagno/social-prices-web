@@ -1,8 +1,8 @@
-import Title from '../Title/Title';
+import Title from "../Title/Title";
 
 interface Props {
   title: string;
-  subtitle: string;
+  subtitle?: string;
 }
 
 const Header: React.FC<Props> = ({ subtitle, title }) => {

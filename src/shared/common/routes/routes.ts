@@ -6,6 +6,7 @@ const Urls = {
   PROFILE: "/profile",
   SETTINGS: "/settings",
   NOTIFICATIONS: "/notifications",
+  STORE: "/store",
 };
 
 export default Urls;
