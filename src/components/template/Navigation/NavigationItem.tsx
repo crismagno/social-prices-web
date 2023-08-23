@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface Props {
   icon?: any;
@@ -19,7 +20,13 @@ const NavigationItem: React.FC<Props> = ({
   title,
   onClick,
 }) => {
-  const classNameDefault =
+  const pathname = usePathname();
+  const classNameActiveLink: string = `
+    bg-slate-200 hover:bg-slate-300
+    dark:bg-gray-700 dark:text-yellow-200 dark:hover:bg-gray-600
+  `;
+
+  const classNameDefault: string =
     "flex flex-col justify-center items-center cursor-pointer";
 
   const renderLink = () => {
@@ -40,7 +47,8 @@ const NavigationItem: React.FC<Props> = ({
       flex items-center justify-center
        text-slate-800 hover:bg-gray-100 w-28 h-20 
        dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700
-       ${className}`}
+       ${className}
+       ${pathname === url && classNameActiveLink}`}
       title={title}
     >
       {url ? (
