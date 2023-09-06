@@ -13,42 +13,32 @@ const ForceAuth = ({ children }: any) => {
 
   const router = useRouter();
 
-  const renderContent = () => {
+  if (!isLoading && user?.email) {
     return (
       <>
         <Head>
           <script
             dangerouslySetInnerHTML={{
               __html: `
-								if (!document.cookies?.includes(${CookiesName.COOKIE_AUTH})) {
-									window.location.href = ${Urls.LOGIN}
-								}
-							`,
+            if (!document.cookies?.includes(${CookiesName.COOKIE_AUTH})) {
+              window.location.href = ${Urls.LOGIN}
+            }
+          `,
             }}
           ></script>
         </Head>
         {children}
       </>
     );
-  };
+  }
 
-  const renderLoading = () => {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Image src={"/loading.gif"} alt="loading" width={50} height={50} />
       </div>
     );
-  };
-
-  if (!isLoading && user?.email) {
-    return renderContent();
   }
-
-  if (isLoading) {
-    return renderLoading();
-  }
-
-  console.log("test---");
 
   router.push(Urls.LOGIN);
   return null;
