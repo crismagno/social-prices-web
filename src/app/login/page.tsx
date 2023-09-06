@@ -14,8 +14,8 @@ import AuthInput from "../../components/elements/AuthInput/AuthInput";
 import { IconWarning } from "../../components/elements/icons/icons";
 import useAuthData from "../../data/hook/useAuthData";
 import CookiesName from "../../shared/common/cookies/cookies";
-import Urls from "../../shared/common/routes/routes";
-import LoginEnum from "../../shared/enums/login.enum";
+import LoginEnum from "../../shared/common/enums/login.enum";
+import Urls from "../../shared/common/routes-app/routes-app";
 
 export default function Login() {
   const { loginGoogle, login, create, user } = useAuthData();

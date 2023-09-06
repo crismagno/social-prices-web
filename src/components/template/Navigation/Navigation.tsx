@@ -1,5 +1,5 @@
 import useAuthData from "../../../data/hook/useAuthData";
-import Urls from "../../../shared/common/routes/routes";
+import Urls from "../../../shared/common/routes-app/routes-app";
 import {
   IconAdjustmentsHorizontal,
   IconBell,

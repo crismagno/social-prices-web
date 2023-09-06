@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 import useAuthData from "../../../data/hook/useAuthData";
 import CookiesName from "../../../shared/common/cookies/cookies";
-import Urls from "../../../shared/common/routes/routes";
+import Urls from "../../../shared/common/routes-app/routes-app";
 
 const ForceAuth = ({ children }: any) => {
   const { user, isLoading } = useAuthData();

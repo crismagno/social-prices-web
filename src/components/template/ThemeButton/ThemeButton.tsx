@@ -1,7 +1,7 @@
 "use client";
 
 import useAppData from "../../../data/hook/useAppData";
-import ThemeEnum from "../../../shared/enums/theme.enum";
+import ThemeEnum from "../../../shared/common/enums/theme.enum";
 import { IconMoon, IconSun } from "../../elements/icons/icons";
 
 interface Props {}

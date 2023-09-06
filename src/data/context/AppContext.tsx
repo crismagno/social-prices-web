@@ -2,8 +2,8 @@
 
 import { createContext, useEffect, useState } from "react";
 
+import ThemeEnum from "../../shared/common/enums/theme.enum";
 import LocalStorageEnum from "../../shared/common/local-storage/local-storage.enum";
-import ThemeEnum from "../../shared/enums/theme.enum";
 
 interface IAppContext {
   theme: ThemeEnum.Theme;

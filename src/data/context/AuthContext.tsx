@@ -12,10 +12,10 @@ import {
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
-import firebaseApp from "../../firebase/config";
+import firebaseApp from "../../services/firebase/config";
+import IUser from "../../shared/business/users/user.interface";
 import CookiesName from "../../shared/common/cookies/cookies";
-import Urls from "../../shared/common/routes/routes";
-import IUser from "../../shared/users/user.interface";
+import Urls from "../../shared/common/routes-app/routes-app";
 
 const googleProvider = new GoogleAuthProvider();
 const auth = getAuth(firebaseApp);
