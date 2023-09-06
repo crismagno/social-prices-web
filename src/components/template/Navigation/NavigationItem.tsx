@@ -21,9 +21,10 @@ const NavigationItem: React.FC<Props> = ({
   onClick,
 }) => {
   const pathname = usePathname();
+
   const classNameActiveLink: string = `
-    bg-slate-200 hover:bg-slate-300
-    dark:bg-gray-700 dark:text-yellow-200 dark:hover:bg-gray-600
+    bg-slate-100 hover:bg-slate-200 
+    dark:bg-gray-600 dark:text-yellow-200 dark:hover:bg-gray-600
   `;
 
   const classNameDefault: string =
