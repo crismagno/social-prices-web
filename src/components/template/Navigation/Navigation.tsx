@@ -1,20 +1,20 @@
-import useAuthData from "../../../data/hook/useAuthData";
-import Urls from "../../../shared/common/routes-app/routes-app";
+import useAuthData from '../../../data/hook/useAuthData';
+import Urls from '../../../shared/common/routes-app/routes-app';
 import {
   IconAdjustmentsHorizontal,
   IconBell,
   IconBuildingStoreFront,
   IconHome,
   IconLogout,
-} from "../../elements/icons/icons";
-import NavigationItem from "./NavigationItem";
+} from '../../elements/icons/icons';
+import NavigationItem from './NavigationItem';
 
 interface Props {}
 
 const Navigation: React.FC<Props> = ({}) => {
   const { user, logout } = useAuthData();
 
-  const srcLogo: string = user?.imageUrl ?? "/avatar-default.png";
+  const srcLogo: string = user?.avatar ?? "/avatar-default.png";
 
   return (
     <div

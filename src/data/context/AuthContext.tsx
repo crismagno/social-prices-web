@@ -1,21 +1,26 @@
-import { createContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useEffect,
+  useState,
+} from 'react';
 
 import {
-  createUserWithEmailAndPassword,
   getAuth,
   GoogleAuthProvider,
-  signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   User,
-} from "firebase/auth";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+} from 'firebase/auth';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
-import firebaseApp from "../../services/firebase/config";
-import IUser from "../../shared/business/users/user.interface";
-import CookiesName from "../../shared/common/cookies/cookies";
-import Urls from "../../shared/common/routes-app/routes-app";
+import firebaseApp from '../../services/firebase/config';
+import AuthServiceMethods
+  from '../../services/social-prices-api/auth/auth-service.methods';
+import IUser from '../../shared/business/users/user.interface';
+import UsersEnum from '../../shared/business/users/users.enum';
+import CookiesName from '../../shared/common/cookies/cookies';
+import Urls from '../../shared/common/routes-app/routes-app';
 
 const googleProvider = new GoogleAuthProvider();
 const auth = getAuth(firebaseApp);
@@ -39,14 +44,19 @@ const AuthContext = createContext<IAuthContext>({
 });
 
 const normalizeUser = async (userFirebase: User): Promise<IUser> => {
-  const token: string = await userFirebase.getIdToken();
+  const providerToken: string = await userFirebase.getIdToken();
   return {
     uid: userFirebase.uid,
-    token,
-    name: userFirebase.displayName ?? null,
+    providerToken,
+    username: userFirebase.displayName ?? null,
     email: userFirebase.email ?? null,
-    imageUrl: userFirebase.photoURL,
+    avatar: userFirebase.photoURL,
     providerId: userFirebase.providerId,
+    authProvider: UsersEnum.Provider.GOOGLE,
+    authToken: null,
+    extraDataProvider: null,
+    phoneNumbers: userFirebase.phoneNumber ? [userFirebase.phoneNumber] : null,
+    status: null,
   };
 };
 
@@ -67,7 +77,7 @@ export const AuthProvider = ({ children }: any) => {
 
   const router = useRouter();
 
-  const settingSession = async (userFirebase: User | null) => {
+  const settingSessionFirebase = async (userFirebase: User | null) => {
     if (userFirebase?.email) {
       const userNormalized = await normalizeUser(userFirebase);
       setUser(userNormalized);
@@ -82,12 +92,26 @@ export const AuthProvider = ({ children }: any) => {
     return null;
   };
 
+  const settingSession = (user: IUser | null) => {
+    if (user?.email) {
+      setUser(user);
+      managerCookie(true);
+      setIsLoading(false);
+      return user.email;
+    }
+
+    setUser(null);
+    managerCookie(false);
+    setIsLoading(false);
+    return null;
+  };
+
   const loginGoogle = async () => {
     try {
       setIsLoading(true);
       const response = await signInWithPopup(auth, googleProvider);
 
-      await settingSession(response.user);
+      await settingSessionFirebase(response.user);
 
       router.push(Urls.DASHBOARD);
     } catch (error: any) {
@@ -101,13 +125,21 @@ export const AuthProvider = ({ children }: any) => {
     try {
       setIsLoading(true);
 
-      const response = await signInWithEmailAndPassword(
-        auth,
+      // const response = await signInWithEmailAndPassword(
+      //   auth,
+      //   username,
+      //   password
+      // );
+
+      // await settingSessionFirebase(response.user);
+
+      const authServiceMethods = new AuthServiceMethods();
+      const response: IUser = await authServiceMethods.signIn(
         username,
         password
       );
 
-      await settingSession(response.user);
+      settingSession(response);
 
       router.push(Urls.DASHBOARD);
     } catch (error: any) {
@@ -121,13 +153,22 @@ export const AuthProvider = ({ children }: any) => {
     try {
       setIsLoading(true);
 
-      const response = await createUserWithEmailAndPassword(
-        auth,
-        username,
-        password
-      );
+      // const response = await createUserWithEmailAndPassword(
+      //   auth,
+      //   username,
+      //   password
+      // );
 
-      await settingSession(response.user);
+      // await settingSessionFirebase(response.user);
+
+      const authServiceMethods = new AuthServiceMethods();
+      const response: IUser = await authServiceMethods.signUp({
+        email: username,
+        password,
+        username,
+      });
+
+      settingSession(response);
 
       router.push(Urls.DASHBOARD);
     } catch (error: any) {
@@ -140,13 +181,16 @@ export const AuthProvider = ({ children }: any) => {
   const logout = async () => {
     try {
       setIsLoading(true);
-      await signOut(auth);
 
-      await settingSession(null);
+      if (user?.authProvider !== UsersEnum.Provider.SOCIAL_PRICES) {
+        await signOut(auth);
+      }
+
+      await settingSessionFirebase(null);
 
       router.push(Urls.LOGIN);
     } catch (error: any) {
-      throw "Error occur when attempt logout with google.";
+      throw "Error occur when attempt logout.";
     } finally {
       setIsLoading(false);
     }
@@ -154,7 +198,7 @@ export const AuthProvider = ({ children }: any) => {
 
   useEffect(() => {
     if (Cookies.get(CookiesName.COOKIE_AUTH)) {
-      const cancel = auth.onIdTokenChanged(settingSession);
+      const cancel = auth.onIdTokenChanged(settingSessionFirebase);
 
       return () => cancel();
     } else {

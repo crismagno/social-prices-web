@@ -1,8 +1,15 @@
+import UsersEnum from './users.enum';
+
 export default interface IUser {
   uid: string;
-  name: string | null;
+  username: string | null;
   email: string | null;
-  token: string;
+  providerToken: string;
+  authToken: string | null;
   providerId: string | null;
-  imageUrl: string | null;
+  avatar: string | null;
+  authProvider: UsersEnum.Provider;
+  extraDataProvider: any | null;
+  phoneNumbers: string[] | null;
+  status: UsersEnum.Status | null;
 }
