@@ -1,39 +1,39 @@
-import axios from 'axios';
+"use client";
 
-import IUser from '../../../shared/business/users/user.interface';
-import AuthServiceEnum from './auth-service.enum';
+import IUser from "../../../shared/business/users/user.interface";
+import FetchAxios from "../../../shared/utils/fetch/fetch-axios";
+import AuthServiceEnum from "./auth-service.enum";
+import CreateUserDto from "./dto/createUser.dto";
 
 export default class AuthServiceMethods {
-  private readonly _socialPricesApiV1: string = `${process.env.NEXT_PUBLIC_SOCIAL_PRICES_API_URL_V1}`;
+  private readonly _socialPricesApiV1: string;
+  private readonly _fetchAxios: FetchAxios;
+
+  constructor() {
+    this._socialPricesApiV1 = `${process.env.NEXT_PUBLIC_SOCIAL_PRICES_API_URL_V1}`;
+    this._fetchAxios = new FetchAxios();
+  }
 
   public async signIn(email: string, password: string): Promise<IUser> {
-    const response = await axios.post(
+    const response = await this._fetchAxios.post(
       `${this._socialPricesApiV1}${AuthServiceEnum.Methods.SIGN_IN}`,
       {
         email,
         password,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
       }
     );
 
     return response.data;
   }
 
-  public async signUp(params: any): Promise<IUser> {
-    const response = await axios.post(
+  public async signUp(createUserDto: CreateUserDto): Promise<IUser> {
+    const response = await this._fetchAxios.post(
       `${this._socialPricesApiV1}${AuthServiceEnum.Methods.SIGN_UP}`,
-      params,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+      createUserDto
     );
 
     return response.data;
   }
 }
+
+export const authServiceMethodsInstance = new AuthServiceMethods();
