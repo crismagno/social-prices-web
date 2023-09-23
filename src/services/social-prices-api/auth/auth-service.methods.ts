@@ -34,6 +34,24 @@ export default class AuthServiceMethods {
 
     return response.data;
   }
+
+  public async validateToken(token: string): Promise<boolean> {
+    try {
+      const response = await this._fetchAxios.get(
+        `${this._socialPricesApiV1}${AuthServiceEnum.Methods.VALIDATE_TOKEN}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data === true;
+    } catch (error: any) {
+      return false;
+    }
+  }
 }
 
 export const authServiceMethodsInstance = new AuthServiceMethods();

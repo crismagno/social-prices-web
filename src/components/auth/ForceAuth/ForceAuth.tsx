@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 import useAuthData from "../../../data/hook/useAuthData";
 import CookiesName from "../../../shared/common/cookies/cookies";
+import LocalStorageEnum from "../../../shared/common/local-storage/local-storage.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 
 const ForceAuth = ({ children }: any) => {
@@ -21,7 +22,8 @@ const ForceAuth = ({ children }: any) => {
             dangerouslySetInnerHTML={{
               __html: `
             if (!document.cookies?.includes(${CookiesName.COOKIE_AUTH})) {
-              window.location.href = ${Urls.LOGIN}
+              window.location.href = ${Urls.LOGIN};
+              localStorage.removeItem(${LocalStorageEnum.keys.USER});
             }
           `,
             }}

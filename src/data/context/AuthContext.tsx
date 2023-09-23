@@ -84,19 +84,18 @@ export const AuthProvider = ({ children }: any) => {
   const router = useRouter();
 
   const settingSessionFirebase = async (userFirebase: User | null) => {
-    if (userFirebase?.email) {
-      const userNormalized = await normalizeUser(userFirebase);
-      setUser(userNormalized);
-      managerCookie(true);
-      managerLocalStorage(userNormalized);
-      setIsLoading(false);
-      return userNormalized.email;
+    const userFromLocalStorage: IUser | null = getUserFromLocalStorage();
+
+    if (userFirebase?.email && userFromLocalStorage) {
+      const userNormalized: IUser = await normalizeUser(userFirebase);
+
+      userFromLocalStorage.providerId = userNormalized.providerId;
+      userFromLocalStorage.providerToken = userNormalized.providerToken;
+
+      return await validateToken(userFromLocalStorage);
     }
 
-    setUser(null);
-    managerCookie(false);
-    managerLocalStorage(null);
-    setIsLoading(false);
+    settingSession(null);
     return null;
   };
 
@@ -221,23 +220,53 @@ export const AuthProvider = ({ children }: any) => {
     return null;
   };
 
+  const validateToken = async (userParam: IUser): Promise<IUser | null> => {
+    try {
+      setIsLoading(true);
+
+      const isValidToken: boolean =
+        await authServiceMethodsInstance.validateToken(userParam.authToken!);
+
+      if (!isValidToken) {
+        settingSession(null);
+
+        if (userParam?.authProvider === UsersEnum.Provider.GOOGLE) {
+          await signOut(auth);
+        }
+
+        router.push(Urls.LOGIN);
+        return null;
+      }
+
+      settingSession(userParam);
+      return userParam;
+    } catch (error: any) {
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (Cookies.get(CookiesName.COOKIE_AUTH)) {
-      const user: IUser | null = getUserFromLocalStorage();
+      const userFromLocalStorage: IUser | null = getUserFromLocalStorage();
 
-      if (!user) {
+      if (!userFromLocalStorage) {
         settingSession(null);
         return;
       }
 
-      if (user?.authProvider === UsersEnum.Provider.SOCIAL_PRICES) {
-        settingSession(user);
+      if (
+        userFromLocalStorage?.authProvider === UsersEnum.Provider.SOCIAL_PRICES
+      ) {
+        validateToken(userFromLocalStorage);
       } else {
         const cancel = auth.onIdTokenChanged(settingSessionFirebase);
 
         return () => cancel();
       }
     } else {
+      settingSession(null);
       setIsLoading(false);
     }
   }, []);
