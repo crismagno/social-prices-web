@@ -29,6 +29,7 @@ interface Props {
   icon?: any;
 }
 
+// eslint-disable-next-line react/display-name
 const WormAlert = forwardRef<IWormAlertRefProps, Props>(
   ({ className, icon }, ref) => {
     const [text, setText] = useState<string | null>(null);
@@ -39,7 +40,7 @@ const WormAlert = forwardRef<IWormAlertRefProps, Props>(
 
     const showWormText = (
       text: string,
-      seconds?: number = 1,
+      seconds: number = 1,
       typeAlert: WormAlertTypeEnum
     ): void => {
       if (!text) {

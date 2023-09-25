@@ -43,6 +43,7 @@ const AuthContext = createContext<IAuthContext>({
 
 const normalizeUser = async (userFirebase: User): Promise<IUser> => {
   const providerToken: string = await userFirebase.getIdToken();
+
   return {
     uid: userFirebase.uid,
     providerToken,
@@ -83,6 +84,38 @@ export const AuthProvider = ({ children }: any) => {
 
   const router = useRouter();
 
+  const validateToken = async (userParam: IUser): Promise<IUser | null> => {
+    try {
+      setIsLoading(true);
+
+      if (!userParam.authToken) {
+        settingSession(null);
+        return null;
+      }
+
+      const isValidToken: boolean =
+        await authServiceMethodsInstance.validateToken(userParam.authToken);
+
+      if (isValidToken) {
+        settingSession(userParam);
+        return userParam;
+      }
+
+      settingSession(null);
+
+      if (userParam?.authProvider === UsersEnum.Provider.GOOGLE) {
+        await signOut(auth);
+      }
+
+      router.push(Urls.LOGIN);
+      return null;
+    } catch (error: any) {
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const settingSessionFirebase = async (userFirebase: User | null) => {
     const userFromLocalStorage: IUser | null = getUserFromLocalStorage();
 
@@ -92,7 +125,7 @@ export const AuthProvider = ({ children }: any) => {
       userFromLocalStorage.providerId = userNormalized.providerId;
       userFromLocalStorage.providerToken = userNormalized.providerToken;
 
-      return await validateToken(userFromLocalStorage);
+      return (await validateToken(userFromLocalStorage))?.email;
     }
 
     settingSession(null);
@@ -220,33 +253,6 @@ export const AuthProvider = ({ children }: any) => {
     return null;
   };
 
-  const validateToken = async (userParam: IUser): Promise<IUser | null> => {
-    try {
-      setIsLoading(true);
-
-      const isValidToken: boolean =
-        await authServiceMethodsInstance.validateToken(userParam.authToken!);
-
-      if (!isValidToken) {
-        settingSession(null);
-
-        if (userParam?.authProvider === UsersEnum.Provider.GOOGLE) {
-          await signOut(auth);
-        }
-
-        router.push(Urls.LOGIN);
-        return null;
-      }
-
-      settingSession(userParam);
-      return userParam;
-    } catch (error: any) {
-      return null;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
     if (Cookies.get(CookiesName.COOKIE_AUTH)) {
       const userFromLocalStorage: IUser | null = getUserFromLocalStorage();
@@ -267,7 +273,6 @@ export const AuthProvider = ({ children }: any) => {
       }
     } else {
       settingSession(null);
-      setIsLoading(false);
     }
   }, []);
 
