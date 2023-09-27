@@ -16,7 +16,7 @@ import firebaseApp from "../../services/firebase/config";
 import { authServiceMethodsInstance } from "../../services/social-prices-api/auth/auth-service.methods";
 import IUser from "../../shared/business/users/user.interface";
 import UsersEnum from "../../shared/business/users/users.enum";
-import CookiesName from "../../shared/common/cookies/cookies";
+import CookiesEnum from "../../shared/common/cookies/cookies.enum";
 import LocalStorageEnum from "../../shared/common/local-storage/local-storage.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 
@@ -61,11 +61,11 @@ const normalizeUser = async (userFirebase: User): Promise<IUser> => {
 
 const managerCookie = (isLogged: boolean) => {
   if (isLogged) {
-    Cookies.set(CookiesName.COOKIE_AUTH, `${isLogged}`, {
+    Cookies.set(CookiesEnum.CookiesName.COOKIE_AUTH, `${isLogged}`, {
       expires: 30,
     });
   } else {
-    Cookies.remove(CookiesName.COOKIE_AUTH);
+    Cookies.remove(CookiesEnum.CookiesName.COOKIE_AUTH);
   }
 };
 
@@ -155,6 +155,7 @@ export const AuthProvider = ({ children }: any) => {
 
       createOrSignInUserByLoginGoogle(response.user);
     } catch (error: any) {
+      console.log(error);
       throw new Error("Error occur when attempt login with google.");
     } finally {
       setIsLoading(false);
@@ -182,7 +183,7 @@ export const AuthProvider = ({ children }: any) => {
       settingSession(responseUser);
 
       router.push(Urls.DASHBOARD);
-    }, 1000);
+    }, 3000);
   };
 
   const login = async (username: string, password: string) => {
@@ -250,11 +251,12 @@ export const AuthProvider = ({ children }: any) => {
     if (item) {
       return JSON.parse(item) as IUser;
     }
+
     return null;
   };
 
   useEffect(() => {
-    if (Cookies.get(CookiesName.COOKIE_AUTH)) {
+    if (Cookies.get(CookiesEnum.CookiesName.COOKIE_AUTH)) {
       const userFromLocalStorage: IUser | null = getUserFromLocalStorage();
 
       if (!userFromLocalStorage) {

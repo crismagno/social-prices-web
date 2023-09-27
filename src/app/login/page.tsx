@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import Cookies from "js-cookie";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import Loading from "../../components/common/Loading/Loading";
@@ -13,7 +14,7 @@ import WormAlert, {
 import AuthInput from "../../components/elements/AuthInput/AuthInput";
 import { IconWarning } from "../../components/elements/icons/icons";
 import useAuthData from "../../data/hook/useAuthData";
-import CookiesName from "../../shared/common/cookies/cookies";
+import CookiesEnum from "../../shared/common/cookies/cookies.enum";
 import LoginEnum from "../../shared/common/enums/login.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 
@@ -81,7 +82,7 @@ export default function Login() {
   };
 
   useEffect(() => {
-    if (user || Cookies.get(CookiesName.COOKIE_AUTH)) {
+    if (user || Cookies.get(CookiesEnum.CookiesName.COOKIE_AUTH)) {
       router.push(Urls.DASHBOARD);
     }
   }, [user, router]);
@@ -155,8 +156,16 @@ export default function Login() {
 
         <button
           onClick={submitLoginGoogle}
-          className="bg-red-500 hover:bg-red-400 text-white rounded-lg py-3 px-4"
+          className="bg-red-400 hover:bg-red-400 text-white rounded-lg py-1 px-4
+           flex justify-center items-center"
         >
+          <Image
+            src={"/assets/images/google-logo.png"}
+            alt="loading"
+            width={40}
+            height={40}
+            className="mr-1"
+          />
           Enter with Google
         </button>
 

@@ -4,7 +4,7 @@ import Head from "next/head";
 import { useRouter } from "next/navigation";
 
 import useAuthData from "../../../data/hook/useAuthData";
-import CookiesName from "../../../shared/common/cookies/cookies";
+import CookiesEnum from "../../../shared/common/cookies/cookies.enum";
 import LocalStorageEnum from "../../../shared/common/local-storage/local-storage.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import Loading from "../../common/Loading/Loading";
@@ -21,7 +21,7 @@ const ForceAuth = ({ children }: any) => {
           <script
             dangerouslySetInnerHTML={{
               __html: `
-            if (!document.cookies?.includes(${CookiesName.COOKIE_AUTH})) {
+            if (!document.cookies?.includes(${CookiesEnum.CookiesName.COOKIE_AUTH})) {
               window.location.href = ${Urls.LOGIN};
               localStorage.removeItem(${LocalStorageEnum.keys.USER});
             }
