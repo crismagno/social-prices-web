@@ -18,6 +18,7 @@ import IUser from "../../shared/business/users/user.interface";
 import UsersEnum from "../../shared/business/users/users.enum";
 import CookiesEnum from "../../shared/common/cookies/cookies.enum";
 import LocalStorageEnum from "../../shared/common/local-storage/local-storage.enum";
+import LocalStorageUserMethods from "../../shared/common/local-storage/methods/local-storage-user.methods";
 import Urls from "../../shared/common/routes-app/routes-app";
 
 const googleProvider = new GoogleAuthProvider();
@@ -119,7 +120,8 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   const settingSessionFirebase = async (userFirebase: User | null) => {
-    const userFromLocalStorage: IUser | null = getUserFromLocalStorage();
+    const userFromLocalStorage: IUser | null =
+      LocalStorageUserMethods.getUser();
 
     if (userFirebase?.email && userFromLocalStorage) {
       const userNormalized: IUser = await normalizeUser(userFirebase);
@@ -157,36 +159,12 @@ export const AuthProvider = ({ children }: any) => {
 
       createOrSignInUserByLoginGoogle(response.user);
     } catch (error: any) {
-      console.log(error);
-      throw new Error("Error occur when attempt login with google.");
-    } finally {
       setIsLoading(false);
+      throw new Error("Error occur when attempt login with google.");
     }
   };
 
-  const createOrSignInUserByLoginGoogle = (userFirebase: User) => {
-    setTimeout(async () => {
-      const userNormalized: IUser = await normalizeUser(userFirebase);
-
-      const responseUser: IUser = await authServiceMethodsInstance.signUp({
-        email: `${userNormalized.email}`,
-        password: "123456",
-        username: `${userNormalized.username}`,
-        authProvider: userNormalized.authProvider,
-        avatar: userNormalized.avatar ?? undefined,
-        extraDataProvider: userNormalized.extraDataProvider,
-        phoneNumbers: userNormalized.phoneNumbers ?? [],
-        uid: userNormalized.uid,
-      });
-
-      responseUser.providerId = userNormalized.providerId;
-      responseUser.providerToken = userNormalized.providerToken;
-
-      setUser(responseUser);
-
-      router.push(Urls.VALIDATE_SIGN_IN_CODE);
-    }, 3000);
-  };
+  const createOrSignInUserByLoginGoogle = (userFirebase: User) => {};
 
   const login = async (username: string, password: string) => {
     try {
@@ -245,18 +223,6 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  const getUserFromLocalStorage = (): IUser | null => {
-    const item: string | null = localStorage.getItem(
-      LocalStorageEnum.keys.USER
-    );
-
-    if (item) {
-      return JSON.parse(item) as IUser;
-    }
-
-    return null;
-  };
-
   const validateSignInCode = async (codeValue: string): Promise<boolean> => {
     try {
       if (!user) {
@@ -289,7 +255,8 @@ export const AuthProvider = ({ children }: any) => {
 
   useEffect(() => {
     if (Cookies.get(CookiesEnum.CookiesName.COOKIE_AUTH)) {
-      const userFromLocalStorage: IUser | null = getUserFromLocalStorage();
+      const userFromLocalStorage: IUser | null =
+        LocalStorageUserMethods.getUser();
 
       if (!userFromLocalStorage) {
         settingSession(null);
