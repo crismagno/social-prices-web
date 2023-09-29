@@ -7,7 +7,7 @@ import useAuthData from "../../../data/hook/useAuthData";
 import CookiesEnum from "../../../shared/common/cookies/cookies.enum";
 import LocalStorageEnum from "../../../shared/common/local-storage/local-storage.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
-import Loading from "../../common/Loading/Loading";
+import LoadingFull from "../../common/LoadingFull/LoadingFull";
 
 const ForceAuth = ({ children }: any) => {
   const { user, isLoading } = useAuthData();
@@ -35,11 +35,7 @@ const ForceAuth = ({ children }: any) => {
   }
 
   if (isLoading) {
-    return (
-      <div className="h-screen">
-        <Loading />
-      </div>
-    );
+    return <LoadingFull />;
   }
 
   router.push(Urls.LOGIN);

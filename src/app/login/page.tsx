@@ -82,7 +82,7 @@ export default function Login() {
   };
 
   useEffect(() => {
-    if (user || Cookies.get(CookiesEnum.CookiesName.COOKIE_AUTH)) {
+    if (user && Cookies.get(CookiesEnum.CookiesName.COOKIE_AUTH)) {
       router.push(Urls.DASHBOARD);
     }
   }, [user, router]);

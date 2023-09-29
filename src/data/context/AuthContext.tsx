@@ -27,6 +27,7 @@ export interface IAuthContext {
   user: IUser | null;
   isLoading: boolean;
   loginGoogle: () => Promise<void>;
+  validateSignInCode: (codeValue: string) => Promise<boolean>;
   login: (username: string, password: string) => Promise<void>;
   create: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -35,6 +36,7 @@ export interface IAuthContext {
 const AuthContext = createContext<IAuthContext>({
   user: null,
   isLoading: true,
+  validateSignInCode: async (codeValue: string): Promise<any> => {},
   loginGoogle: async (): Promise<void> => {},
   logout: async (): Promise<void> => {},
   login: async (): Promise<void> => {},
@@ -180,9 +182,9 @@ export const AuthProvider = ({ children }: any) => {
       responseUser.providerId = userNormalized.providerId;
       responseUser.providerToken = userNormalized.providerToken;
 
-      settingSession(responseUser);
+      setUser(responseUser);
 
-      router.push(Urls.DASHBOARD);
+      router.push(Urls.VALIDATE_SIGN_IN_CODE);
     }, 3000);
   };
 
@@ -195,9 +197,9 @@ export const AuthProvider = ({ children }: any) => {
         password
       );
 
-      settingSession(response);
+      setUser(response);
 
-      router.push(Urls.DASHBOARD);
+      router.push(Urls.VALIDATE_SIGN_IN_CODE);
     } catch (error: any) {
       throw error;
     } finally {
@@ -215,9 +217,9 @@ export const AuthProvider = ({ children }: any) => {
         username,
       });
 
-      settingSession(response);
+      setUser(response);
 
-      router.push(Urls.DASHBOARD);
+      router.push(Urls.VALIDATE_SIGN_IN_CODE);
     } catch (error: any) {
       throw error;
     } finally {
@@ -255,6 +257,36 @@ export const AuthProvider = ({ children }: any) => {
     return null;
   };
 
+  const validateSignInCode = async (codeValue: string): Promise<boolean> => {
+    try {
+      if (!user) {
+        router.push(Urls.LOGIN);
+        return false;
+      }
+
+      setIsLoading(true);
+
+      const response: boolean =
+        await authServiceMethodsInstance.validateSignInCode(
+          user.authToken!,
+          codeValue
+        );
+
+      if (!response) {
+        return false;
+      }
+
+      settingSession(user);
+
+      router.push(Urls.DASHBOARD);
+      return true;
+    } catch (error: any) {
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (Cookies.get(CookiesEnum.CookiesName.COOKIE_AUTH)) {
       const userFromLocalStorage: IUser | null = getUserFromLocalStorage();
@@ -280,7 +312,15 @@ export const AuthProvider = ({ children }: any) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, loginGoogle, isLoading, logout, login, create }}
+      value={{
+        user,
+        loginGoogle,
+        isLoading,
+        logout,
+        login,
+        create,
+        validateSignInCode,
+      }}
     >
       {children}
     </AuthContext.Provider>

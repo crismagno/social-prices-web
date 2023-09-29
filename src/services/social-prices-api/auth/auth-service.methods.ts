@@ -47,7 +47,28 @@ export default class AuthServiceMethods {
         }
       );
 
-      return response.data === true;
+      return response.data;
+    } catch (error: any) {
+      return false;
+    }
+  }
+
+  public async validateSignInCode(
+    token: string,
+    codeValue: string
+  ): Promise<boolean> {
+    try {
+      const response = await this._fetchAxios.get(
+        `${this._socialPricesApiV1}${AuthServiceEnum.Methods.VALIDATE_SIGN_IN_CODE}/${codeValue}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
     } catch (error: any) {
       return false;
     }
