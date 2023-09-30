@@ -171,7 +171,7 @@ export const AuthProvider = ({ children }: any) => {
 
       const responseUser: IUser = await authServiceMethodsInstance.signUp({
         email: `${userNormalized.email}`,
-        password: "123456",
+        password: `${process.env.NEXT_PUBLIC_SOCIAL_PRICES_SIGN_UP_PASSWORD_TEMP}`,
         username: `${userNormalized.username}`,
         authProvider: userNormalized.authProvider,
         avatar: userNormalized.avatar ?? undefined,
