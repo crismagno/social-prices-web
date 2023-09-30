@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
+import Avatar from "../../components/common/Avatar/Avatar";
 import Loading from "../../components/common/Loading/Loading";
 import WormAlert, {
   IWormAlertRefProps,
@@ -26,6 +27,8 @@ export default function ValidateSignInCode() {
 
   const wormTextMessage: React.MutableRefObject<IWormAlertRefProps | null> =
     useRef(null);
+
+  const srcLogo: string = user?.avatar ?? "/avatar-default.png";
 
   useEffect(() => {
     if (!user) {
@@ -76,39 +79,48 @@ export default function ValidateSignInCode() {
   return (
     <div
       className="h-screen w-screen flex flex-col justify-center items-center 
-    bg-gradient-to-r from-gray-50 to-gray-200"
+    bg-gradient-to-r from-green-100 to-slate-200"
     >
-      <div
-        className="flex flex-col justify-center items-center w-1/4 p-8
-       p-3 shadow-2xl bg-white"
-      >
+      <div className="flex flex-col justify-center items-center lg:w-1/4 md:w-1/2">
         <WormAlert
           ref={wormTextMessage}
           className="my-3 w-full"
           icon={IconWarning("text-large mr-2")}
         />
+        <div
+          className="flex flex-col justify-center items-center w-full h-full p-8
+          p-3 shadow-2xl bg-white rounded-lg"
+        >
+          <Avatar src={srcLogo} alt="Image logo" width={100} height={100} />
 
-        <span className="text-lg">Validate Sign In Code</span>
+          <span className="text-xs text-center mt-1">
+            {user?.email ?? "---"}
+          </span>
 
-        <input
-          value={codeValue}
-          onChange={(e) => setCodeValue(e.target.value)}
-          placeholder="Type your code here..."
-          className="
+          <span className="text-lg text-center mt-4">
+            Validate Sign In Code
+          </span>
+
+          <input
+            value={codeValue}
+            onChange={(e) => setCodeValue(e.target.value)}
+            placeholder="Type your code here..."
+            className="
 					px-4 py-3 bg-gray-100 rounded-lg mt-6 w-full
 					 focus:bg-white focus:border-blue-100
 					 transition-all text-lg text-center"
-          disabled={isSubmitting}
-        />
+            disabled={isSubmitting}
+          />
 
-        <button
-          className="flex justify-center items-center px-4 py-2 rounded-md mt-5
+          <button
+            className="flex justify-center items-center px-4 py-2 rounded-md mt-5
           bg-gradient-to-r from-green-400 to-green-600 text-white w-full"
-          onClick={handleValidateSignInCode}
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? <Loading height={30} width={30} /> : "Send"}
-        </button>
+            onClick={handleValidateSignInCode}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? <Loading height={30} width={30} /> : "Send"}
+          </button>
+        </div>
       </div>
     </div>
   );

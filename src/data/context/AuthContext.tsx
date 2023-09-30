@@ -165,7 +165,31 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  const createOrSignInUserByLoginGoogle = (userFirebase: User) => {};
+  const createOrSignInUserByLoginGoogle = (userFirebase: User) => {
+    setTimeout(async () => {
+      const userNormalized: IUser = await normalizeUser(userFirebase);
+
+      const responseUser: IUser = await authServiceMethodsInstance.signUp({
+        email: `${userNormalized.email}`,
+        password: "123456",
+        username: `${userNormalized.username}`,
+        authProvider: userNormalized.authProvider,
+        avatar: userNormalized.avatar ?? undefined,
+        extraDataProvider: userNormalized.extraDataProvider,
+        phoneNumbers: userNormalized.phoneNumbers ?? [],
+        uid: userNormalized.uid,
+      });
+
+      responseUser.providerId = userNormalized.providerId;
+      responseUser.providerToken = userNormalized.providerToken;
+
+      setUser(responseUser);
+
+      router.push(Urls.VALIDATE_SIGN_IN_CODE);
+
+      setIsLoading(true);
+    }, 3000);
+  };
 
   const login = async (username: string, password: string) => {
     try {
