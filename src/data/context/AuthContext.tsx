@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 
 import firebaseApp from "../../services/firebase/config";
 import { authServiceMethodsInstance } from "../../services/social-prices-api/auth/auth-service.methods";
+import { usersServiceMethodsInstance } from "../../services/social-prices-api/users/user-service.methods";
 import IUser from "../../shared/business/users/user.interface";
 import UsersEnum from "../../shared/business/users/users.enum";
 import CookiesEnum from "../../shared/common/cookies/cookies.enum";
@@ -232,17 +233,20 @@ export const AuthProvider = ({ children }: any) => {
 
       setIsLoading(true);
 
-      const response: boolean =
+      const isValidateSignInCode: boolean =
         await authServiceMethodsInstance.validateSignInCode(
           user.authToken!,
           codeValue
         );
 
-      if (!response) {
+      if (!isValidateSignInCode) {
         return false;
       }
 
-      settingSession(user);
+      const responseUser: IUser =
+        await usersServiceMethodsInstance.getUserByToken(user.authToken!);
+
+      settingSession({ ...user, ...responseUser });
 
       router.push(Urls.DASHBOARD);
       return true;
