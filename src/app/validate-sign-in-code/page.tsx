@@ -8,7 +8,6 @@ import WormAlert, {
   IWormAlertRefProps,
   WormAlertTypeEnum,
 } from "../../components/common/WorkAlert/WormAlert";
-import { IconWarning } from "../../components/elements/icons/icons";
 import useAuthData from "../../data/hook/useAuthData";
 import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
 
@@ -67,11 +66,7 @@ export default function ValidateSignInCode() {
     bg-gradient-to-r from-green-100 to-slate-200"
     >
       <div className="flex flex-col justify-center items-center lg:w-1/4 md:w-1/2">
-        <WormAlert
-          ref={wormTextMessage}
-          className="my-3 w-full"
-          icon={IconWarning("text-large mr-2")}
-        />
+        <WormAlert ref={wormTextMessage} className="my-3 w-full" />
 
         <div
           className="flex flex-col justify-center items-center w-full h-full p-8

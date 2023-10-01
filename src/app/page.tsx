@@ -1,21 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
-
-import { useRouter } from "next/navigation";
-
-import Urls from "../shared/common/routes-app/routes-app";
+import LoadingFull from "../components/common/LoadingFull/LoadingFull";
+import useForceRedirect from "../hooks/useForceRedirect/useForceRedirect";
 
 export default function Home() {
-  const router = useRouter();
+  useForceRedirect();
 
-  useEffect(() => {
-    router.push(Urls.LOGIN);
-  }, []);
-
-  return (
-    <div className="w-full h-full flex justify-center items-center">
-      Loading
-    </div>
-  );
+  return <LoadingFull />;
 }
