@@ -8,6 +8,7 @@ interface Props {
 
 const Avatar: React.FC<Props> = ({ src, alt, className, height, width }) => {
   className = `rounded-full shadow-md ${className}`;
+
   return (
     <img
       src={src}

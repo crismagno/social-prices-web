@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
-import Cookies from "js-cookie";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 import Loading from "../../components/common/Loading/Loading";
 import WormAlert, {
@@ -14,14 +12,13 @@ import WormAlert, {
 import AuthInput from "../../components/elements/AuthInput/AuthInput";
 import { IconWarning } from "../../components/elements/icons/icons";
 import useAuthData from "../../data/hook/useAuthData";
-import CookiesEnum from "../../shared/common/cookies/cookies.enum";
+import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
 import LoginEnum from "../../shared/common/enums/login.enum";
-import Urls from "../../shared/common/routes-app/routes-app";
 
 export default function Login() {
-  const { loginGoogle, login, create, user } = useAuthData();
+  const { loginGoogle, login, create } = useAuthData();
 
-  const router = useRouter();
+  useForceRedirect();
 
   const [mode, setMode] = useState<LoginEnum.Mode>(LoginEnum.Mode.LOGIN);
 
@@ -81,12 +78,6 @@ export default function Login() {
     }
   };
 
-  useEffect(() => {
-    if (user && Cookies.get(CookiesEnum.CookiesName.COOKIE_AUTH)) {
-      router.push(Urls.DASHBOARD);
-    }
-  }, [user, router]);
-
   return (
     <div className="relative flex flex-row h-screen">
       {/* part images left */}
@@ -99,7 +90,6 @@ export default function Login() {
       </div>
 
       {/* part login and create  */}
-
       {isSubmitting && (
         <div className="h-full w-full absolute flex justify-center items-center bg-gray-500/30 top-0 z-50">
           <Loading />
