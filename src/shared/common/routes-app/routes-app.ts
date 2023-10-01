@@ -8,6 +8,7 @@ const Urls = {
   NOTIFICATIONS: "/notifications",
   STORE: "/store",
   VALIDATE_SIGN_IN_CODE: "/validate-sign-in-code",
+  RECOVER_PASSWORD: "/recover-password",
 };
 
 export default Urls;

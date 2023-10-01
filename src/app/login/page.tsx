@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import Loading from "../../components/common/Loading/Loading";
 import WormAlert, {
@@ -14,9 +15,12 @@ import { IconWarning } from "../../components/elements/icons/icons";
 import useAuthData from "../../data/hook/useAuthData";
 import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
 import LoginEnum from "../../shared/common/enums/login.enum";
+import Urls from "../../shared/common/routes-app/routes-app";
 
 export default function Login() {
   const { loginGoogle, login, create } = useAuthData();
+
+  const router = useRouter();
 
   useForceRedirect();
 
@@ -134,6 +138,13 @@ export default function Login() {
             placeholder="Type confirm your password"
           />
         )}
+
+        <a
+          className="text-slate-500 hover:text-slate-800 cursor-pointer text-end mt-2 mr-2"
+          onClick={() => router.push(Urls.RECOVER_PASSWORD)}
+        >
+          Recover password
+        </a>
 
         <button
           className="mt-4 bg-indigo-500 hover:bg-indigo-400 text-white rounded-lg py-3 px-4"
