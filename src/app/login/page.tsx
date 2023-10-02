@@ -140,7 +140,7 @@ export default function Login() {
         )}
 
         <a
-          className="text-slate-500 hover:text-slate-800 cursor-pointer text-end mt-2 mr-2"
+          className="text-slate-500 hover:text-slate-800 text-sm cursor-pointer text-end mt-2 mr-2"
           onClick={() => router.push(Urls.RECOVER_PASSWORD)}
         >
           Recover password

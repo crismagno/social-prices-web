@@ -33,12 +33,14 @@ export interface IAuthContext {
   login: (username: string, password: string) => Promise<void>;
   create: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  setUser: (user: IUser | null) => void;
 }
 
 const AuthContext = createContext<IAuthContext>({
   user: null,
   isLoading: true,
   validateSignInCode: async (codeValue: string): Promise<any> => {},
+  setUser: (user: IUser | null): void => {},
   loginGoogle: async (): Promise<void> => {},
   logout: async (): Promise<void> => {},
   login: async (): Promise<void> => {},
@@ -315,6 +317,7 @@ export const AuthProvider = ({ children }: any) => {
         login,
         create,
         validateSignInCode,
+        setUser,
       }}
     >
       {children}

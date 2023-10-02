@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
 import Loading from "../../components/common/Loading/Loading";
@@ -11,21 +10,11 @@ import WormAlert, {
   WormAlertTypeEnum,
 } from "../../components/common/WorkAlert/WormAlert";
 import AuthInput from "../../components/elements/AuthInput/AuthInput";
-import useAuthData from "../../data/hook/useAuthData";
 import { usersServiceMethodsInstance } from "../../services/social-prices-api/users/user-service.methods";
-import CookiesEnum from "../../shared/common/cookies/cookies.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 
 export default function RecoverPassword() {
-  const { user } = useAuthData();
-
   const router = useRouter();
-
-  useEffect(() => {
-    if (user && Cookies.get(CookiesEnum.CookiesName.COOKIE_AUTH)) {
-      router.push(Urls.DASHBOARD);
-    }
-  }, [user, router]);
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
@@ -105,7 +94,6 @@ export default function RecoverPassword() {
 
       router.push(Urls.LOGIN);
     } catch (error: any) {
-      console.log(error);
       wormTextMessage.current?.showWormText(
         "Error when attempt recover password.",
         3,
@@ -140,8 +128,7 @@ export default function RecoverPassword() {
           />
 
           <button
-            className="flex justify-center items-center px-4 py-2 rounded-md mt-1
-           text-blue-600 w-full"
+            className="px-4 py-2 mt-1 text-blue-600 w-full text-sm "
             onClick={handleSendRecoverPasswordCode}
             disabled={isSubmitting}
           >
@@ -191,8 +178,8 @@ export default function RecoverPassword() {
 
         <button
           className="flex justify-center items-center px-4 py-2 rounded-full
-          bg-gradient-to-r from-blue-400 to-slate-600
-           text-white "
+          bg-gradient-to-r from-blue-400 to-blue-600
+           text-white text-sm"
           onClick={() => router.push(Urls.LOGIN)}
           disabled={isSubmitting}
         >

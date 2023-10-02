@@ -2,6 +2,8 @@
 
 import { useRef, useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import Avatar from "../../components/common/Avatar/Avatar";
 import Loading from "../../components/common/Loading/Loading";
 import WormAlert, {
@@ -10,9 +12,12 @@ import WormAlert, {
 } from "../../components/common/WorkAlert/WormAlert";
 import useAuthData from "../../data/hook/useAuthData";
 import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
+import Urls from "../../shared/common/routes-app/routes-app";
 
 export default function ValidateSignInCode() {
-  const { user, validateSignInCode } = useAuthData();
+  const { user, validateSignInCode, setUser } = useAuthData();
+
+  const router = useRouter();
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
@@ -85,7 +90,7 @@ export default function ValidateSignInCode() {
             onChange={(e) => setCodeValue(e.target.value)}
             placeholder="Type your code here..."
             className="
-					px-4 py-3 bg-gray-100 rounded-lg mt-6 w-full
+					px-4 py-3 bg-gray-100 rounded-lg mt-8 w-full
 					 focus:bg-white focus:border-blue-100
 					 transition-all text-lg text-center"
             disabled={isSubmitting}
@@ -100,6 +105,21 @@ export default function ValidateSignInCode() {
             {isSubmitting ? <Loading height={30} width={30} /> : "Send"}
           </button>
         </div>
+
+        <hr className="border-slate-200 my-6 w-full" />
+
+        <button
+          className="flex justify-center items-center px-4 py-2 rounded-full
+          bg-gradient-to-r from-green-400 to-green-600
+           text-white text-sm"
+          onClick={() => {
+            setUser(null);
+            router.push(Urls.LOGIN);
+          }}
+          disabled={isSubmitting}
+        >
+          Go to login
+        </button>
       </div>
     </div>
   );
