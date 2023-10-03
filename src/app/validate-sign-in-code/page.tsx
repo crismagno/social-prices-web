@@ -30,7 +30,9 @@ export default function ValidateSignInCode() {
 
   const srcLogo: string = user?.avatar ?? "/avatar-default.png";
 
-  const handleValidateSignInCode = async () => {
+  const handleValidateSignInCode = async (event: any) => {
+    event.preventDefault();
+
     try {
       setIsSubmitting(true);
       if (!codeValue.trim()) {
@@ -66,7 +68,8 @@ export default function ValidateSignInCode() {
   };
 
   return (
-    <div
+    <form
+      onSubmit={handleValidateSignInCode}
       className="h-screen w-screen flex flex-col justify-center items-center 
     bg-gradient-to-r from-green-100 to-slate-200"
     >
@@ -121,6 +124,6 @@ export default function ValidateSignInCode() {
           Go to login
         </button>
       </div>
-    </div>
+    </form>
   );
 }

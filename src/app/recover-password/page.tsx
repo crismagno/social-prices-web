@@ -66,7 +66,9 @@ export default function RecoverPassword() {
     }
   };
 
-  const handleRecoverPassword = async () => {
+  const handleRecoverPassword = async (event: any) => {
+    event.preventDefault();
+
     try {
       setIsSubmitting(true);
 
@@ -140,37 +142,38 @@ export default function RecoverPassword() {
           </button>
 
           {isSentRecoverPassword && (
-            <AuthInput
-              value={codeValue}
-              onChange={setCodeValue}
-              placeholder="Type code value"
-              disabled={isSubmitting}
-              label="Code"
-              divClassName="w-full"
-            />
-          )}
+            <form onSubmit={handleRecoverPassword} className="w-full h-full">
+              <hr className="border-slate-200 my-6 w-full" />
 
-          {isSentRecoverPassword && (
-            <AuthInput
-              value={newPassword}
-              onChange={setNewPassword}
-              placeholder="Type your new password"
-              disabled={isSubmitting}
-              label="New Password"
-              divClassName="w-full"
-              type="password"
-            />
-          )}
+              <AuthInput
+                value={codeValue}
+                onChange={setCodeValue}
+                placeholder="Type code value"
+                disabled={isSubmitting}
+                label="Code"
+                divClassName="w-full"
+              />
 
-          {isSentRecoverPassword && (
-            <button
-              className="flex justify-center items-center px-4 py-2 rounded-md mt-5
-          bg-gradient-to-r from-blue-400 to-blue-600 text-white w-full"
-              onClick={handleRecoverPassword}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? <Loading height={30} width={30} /> : "Recover"}
-            </button>
+              <AuthInput
+                value={newPassword}
+                onChange={setNewPassword}
+                placeholder="Type your new password"
+                disabled={isSubmitting}
+                label="New Password"
+                divClassName="w-full"
+                type="password"
+                useShowPassword
+              />
+
+              <button
+                className="flex justify-center items-center px-4 py-2 rounded-md mt-5
+                  bg-gradient-to-r from-blue-400 to-blue-600 text-white w-full"
+                onClick={handleRecoverPassword}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? <Loading height={30} width={30} /> : "Recover"}
+              </button>
+            </form>
           )}
         </div>
 

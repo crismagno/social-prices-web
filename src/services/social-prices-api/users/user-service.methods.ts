@@ -29,11 +29,11 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
   }
 
   public async recoverPassword(
-    recoverPassword: RecoverPasswordDto
+    recoverPasswordDto: RecoverPasswordDto
   ): Promise<IUser> {
     const response = await this._fetchAxios.post(
       `${this._socialPricesApiV1}${UsersServiceEnum.Methods.RECOVER_PASSWORD}`,
-      recoverPassword
+      recoverPasswordDto
     );
 
     return response.data;

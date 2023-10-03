@@ -37,7 +37,9 @@ export default function Login() {
   const wormTextMessage: React.MutableRefObject<IWormAlertRefProps | null> =
     useRef(null);
 
-  const submitLoginOrCreate = async () => {
+  const handleLoginOrCreate = async (event: any) => {
+    event.preventDefault();
+
     try {
       setIsSubmitting(true);
 
@@ -100,7 +102,10 @@ export default function Login() {
         </div>
       )}
 
-      <div className="relative flex flex-col justify-center m-10 w-full md:w-1/2 lg:w-1/3">
+      <form
+        onSubmit={handleLoginOrCreate}
+        className="relative flex flex-col justify-center m-10 w-full md:w-1/2 lg:w-1/3"
+      >
         <WormAlert
           ref={wormTextMessage}
           className="my-3"
@@ -127,6 +132,7 @@ export default function Login() {
           label="Password"
           type="password"
           placeholder="Type your password"
+          useShowPassword
         />
 
         {mode === LoginEnum.Mode.CREATE && (
@@ -136,6 +142,7 @@ export default function Login() {
             label="Confirm Password"
             type="password"
             placeholder="Type confirm your password"
+            useShowPassword
           />
         )}
 
@@ -148,7 +155,7 @@ export default function Login() {
 
         <button
           className="mt-4 bg-indigo-500 hover:bg-indigo-400 text-white rounded-lg py-3 px-4"
-          onClick={submitLoginOrCreate}
+          onClick={handleLoginOrCreate}
         >
           {mode === LoginEnum.Mode.LOGIN ? "Login" : "Create"}
         </button>
@@ -189,7 +196,7 @@ export default function Login() {
               : "Enter with my credentials"}
           </a>
         </p>
-      </div>
+      </form>
     </div>
   );
 }
