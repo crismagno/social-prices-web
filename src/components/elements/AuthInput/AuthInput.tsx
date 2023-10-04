@@ -52,7 +52,7 @@ const AuthInput: React.FC<
             setInputType(inputType === "password" ? "text" : "password")
           }
         >
-          {inputType === "password" ? IconEyeSlash("w-3/4") : IconEye("w-3/4")}
+          {inputType === "password" ? IconEyeSlash("w-4/5") : IconEye("w-4/5")}
         </div>
       )}
     </div>

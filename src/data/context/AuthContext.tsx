@@ -12,6 +12,7 @@ import {
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
+import handleClientError from "../../components/common/handleClientError/handleClientError";
 import firebaseApp from "../../services/firebase/config";
 import { authServiceMethodsInstance } from "../../services/social-prices-api/auth/auth-service.methods";
 import { usersServiceMethodsInstance } from "../../services/social-prices-api/users/user-service.methods";
@@ -206,7 +207,8 @@ export const AuthProvider = ({ children }: any) => {
 
       router.push(Urls.VALIDATE_SIGN_IN_CODE);
     } catch (error: any) {
-      throw error;
+      const messageError: string = handleClientError(error);
+      throw new Error(messageError);
     } finally {
       setIsLoading(false);
     }
@@ -226,7 +228,8 @@ export const AuthProvider = ({ children }: any) => {
 
       router.push(Urls.VALIDATE_SIGN_IN_CODE);
     } catch (error: any) {
-      throw error;
+      const messageError: string = handleClientError(error);
+      throw new Error(messageError);
     } finally {
       setIsLoading(false);
     }
