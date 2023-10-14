@@ -5,24 +5,24 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+import AuthInput from "../../components/common/AuthInput/AuthInput";
+import { IconWarning } from "../../components/common/icons/icons";
 import Loading from "../../components/common/Loading/Loading";
 import WormAlert, {
   IWormAlertRefProps,
   WormAlertTypeEnum,
 } from "../../components/common/WorkAlert/WormAlert";
-import AuthInput from "../../components/elements/AuthInput/AuthInput";
-import { IconWarning } from "../../components/elements/icons/icons";
 import useAuthData from "../../data/hook/useAuthData";
 import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
 import LoginEnum from "../../shared/common/enums/login.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 
 export default function Login() {
+  useForceRedirect();
+
   const { loginGoogle, login, create } = useAuthData();
 
   const router = useRouter();
-
-  useForceRedirect();
 
   const [mode, setMode] = useState<LoginEnum.Mode>(LoginEnum.Mode.LOGIN);
 

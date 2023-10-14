@@ -1,19 +1,28 @@
 interface Props {
-  src: string;
+  src?: string | null;
   alt?: string;
   className?: string;
   width?: any;
   height?: any;
+  onClick?: (event?: any) => void;
 }
 
-const Avatar: React.FC<Props> = ({ src, alt, className, height, width }) => {
+const Avatar: React.FC<Props> = ({
+  src,
+  alt,
+  className,
+  height,
+  width,
+  onClick,
+}) => {
   className = `rounded-full shadow-md ${className}`;
 
   return (
     <img
-      src={src}
+      src={src ?? "/avatar-default.png"}
       alt={alt}
       className={className}
+      onClick={onClick}
       onError={() => (
         <img
           src={"/avatar-default.png"}

@@ -2,7 +2,7 @@
 
 import useAppData from "../../../data/hook/useAppData";
 import ThemeEnum from "../../../shared/common/enums/theme.enum";
-import { IconMoon, IconSun } from "../../elements/icons/icons";
+import { IconMoon, IconSun } from "../../common/icons/icons";
 
 interface Props {}
 

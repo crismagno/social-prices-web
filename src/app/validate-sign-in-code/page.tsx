@@ -5,6 +5,8 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import Avatar from "../../components/common/Avatar/Avatar";
+import Button from "../../components/common/Button/Button";
+import HrCustom from "../../components/common/HrCustom/HrCustom";
 import Loading from "../../components/common/Loading/Loading";
 import WormAlert, {
   IWormAlertRefProps,
@@ -15,20 +17,18 @@ import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
 import Urls from "../../shared/common/routes-app/routes-app";
 
 export default function ValidateSignInCode() {
+  useForceRedirect();
+
   const { user, validateSignInCode, setUser } = useAuthData();
 
   const router = useRouter();
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  useForceRedirect();
-
   const [codeValue, setCodeValue] = useState<string>("");
 
   const wormTextMessage: React.MutableRefObject<IWormAlertRefProps | null> =
     useRef(null);
-
-  const srcLogo: string = user?.avatar ?? "/avatar-default.png";
 
   const handleValidateSignInCode = async (event: any) => {
     event.preventDefault();
@@ -80,7 +80,12 @@ export default function ValidateSignInCode() {
           className="flex flex-col justify-center items-center w-full h-full p-8
           p-3 shadow-2xl bg-white rounded-lg"
         >
-          <Avatar src={srcLogo} alt="Image logo" width={100} height={100} />
+          <Avatar
+            src={user?.avatar}
+            alt="Image logo"
+            width={100}
+            height={100}
+          />
 
           <span className="text-xs text-center mt-1">
             {user?.email ?? "---"}
@@ -99,22 +104,21 @@ export default function ValidateSignInCode() {
             disabled={isSubmitting}
           />
 
-          <button
-            className="flex justify-center items-center px-4 py-2 rounded-md mt-5
-          bg-gradient-to-r from-green-400 to-green-600 text-white w-full"
+          <Button
+            type="success"
+            className="justify-center items-center py-2 rounded-md mt-5 w-full"
             onClick={handleValidateSignInCode}
             disabled={isSubmitting}
           >
             {isSubmitting ? <Loading height={30} width={30} /> : "Send"}
-          </button>
+          </Button>
         </div>
 
-        <hr className="border-slate-200 my-6 w-full" />
+        <HrCustom className="my-6" />
 
-        <button
-          className="flex justify-center items-center px-4 py-2 rounded-full
-          bg-gradient-to-r from-green-400 to-green-600
-           text-white text-sm"
+        <Button
+          type="success"
+          className="text-sm rounded-2xl px-4"
           onClick={() => {
             setUser(null);
             router.push(Urls.LOGIN);
@@ -122,7 +126,7 @@ export default function ValidateSignInCode() {
           disabled={isSubmitting}
         >
           Go to login
-        </button>
+        </Button>
       </div>
     </form>
   );

@@ -7,15 +7,13 @@ import {
   IconBuildingStoreFront,
   IconHome,
   IconLogout,
-} from "../../elements/icons/icons";
+} from "../../common/icons/icons";
 import NavigationItem from "./NavigationItem";
 
 interface Props {}
 
 const Navigation: React.FC<Props> = ({}) => {
   const { user, logout } = useAuthData();
-
-  const srcLogo: string = user?.avatar ?? "/avatar-default.png";
 
   return (
     <div
@@ -24,7 +22,7 @@ const Navigation: React.FC<Props> = ({}) => {
     >
       <ul className="flex flex-row grow">
         <NavigationItem text="Profile" url={Urls.PROFILE} title="Logo Name">
-          <Avatar src={srcLogo} alt="Image logo" />
+          <Avatar src={user?.avatar} alt="Image logo" />
         </NavigationItem>
         <NavigationItem icon={IconHome} text="Home" url={Urls.DASHBOARD} />
         <NavigationItem

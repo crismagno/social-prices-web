@@ -9,6 +9,16 @@ namespace UsersEnum {
     ACTIVE = "ACTIVE",
     STOPPED = "STOPPED",
   }
+
+  export enum Gender {
+    FEMALE = "FEMALE",
+    MALE = "MALE",
+  }
+
+  export const GenderLabels = {
+    [Gender.FEMALE]: "Female",
+    [Gender.MALE]: "Male",
+  };
 }
 
 export default UsersEnum;

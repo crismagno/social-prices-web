@@ -2,6 +2,9 @@ import UsersEnum from "./users.enum";
 
 export default interface IUser {
   uid: string;
+  firstName: string | null;
+  lastName: string | null;
+  middleName: string | null;
   username: string | null;
   email: string | null;
   providerToken: string;
@@ -12,4 +15,30 @@ export default interface IUser {
   phoneNumbers: string[] | null;
   status: UsersEnum.Status | null;
   extraDataProvider: any | null;
+  birthDate: Date | null;
+  addresses: IUserAddress[] | null;
+  gender?: UsersEnum.Gender;
+}
+
+export interface IUserAddress {
+  address1: string;
+  address2?: string;
+  city: string;
+  isValid: boolean;
+  state?: IUserAddressState;
+  uid: string;
+  zip: string;
+  description?: string;
+  country: IUserAddressCountry;
+  district: string;
+}
+
+export interface IUserAddressState {
+  code: string;
+  name: string;
+}
+
+export interface IUserAddressCountry {
+  code: string;
+  name: string;
 }

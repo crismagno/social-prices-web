@@ -1,6 +1,6 @@
 import Layout from "../../components/template/Layout/Layout";
 
-export default function Dashboard() {
+export default function Notifications() {
   return (
     <Layout
       subtitle="Notifications information..."

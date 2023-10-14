@@ -4,6 +4,7 @@ const Urls = {
   LOGIN: "/login",
   LOGOUT: "/logout",
   PROFILE: "/profile",
+  PROFILE_EDIT: "/profile/edit",
   SETTINGS: "/settings",
   NOTIFICATIONS: "/notifications",
   STORE: "/store",

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 
 import {
   getAuth,
@@ -91,6 +91,22 @@ export const AuthProvider = ({ children }: any) => {
 
   const router = useRouter();
 
+  const settingSession = (user: IUser | null) => {
+    if (user?.email) {
+      setUser(user);
+      managerCookie(true);
+      managerLocalStorage(user);
+      setIsLoading(false);
+      return user.email;
+    }
+
+    setUser(null);
+    managerCookie(false);
+    managerLocalStorage(null);
+    setIsLoading(false);
+    return null;
+  };
+
   const validateToken = async (userParam: IUser): Promise<IUser | null> => {
     try {
       setIsLoading(true);
@@ -137,22 +153,6 @@ export const AuthProvider = ({ children }: any) => {
     }
 
     settingSession(null);
-    return null;
-  };
-
-  const settingSession = (user: IUser | null) => {
-    if (user?.email) {
-      setUser(user);
-      managerCookie(true);
-      managerLocalStorage(user);
-      setIsLoading(false);
-      return user.email;
-    }
-
-    setUser(null);
-    managerCookie(false);
-    managerLocalStorage(null);
-    setIsLoading(false);
     return null;
   };
 
@@ -286,7 +286,7 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  useEffect(() => {
+  const componentWillMount = useCallback(async () => {
     if (Cookies.get(CookiesEnum.CookiesName.COOKIE_AUTH)) {
       const userFromLocalStorage: IUser | null =
         LocalStorageUserMethods.getUser();
@@ -299,7 +299,7 @@ export const AuthProvider = ({ children }: any) => {
       if (
         userFromLocalStorage?.authProvider === UsersEnum.Provider.SOCIAL_PRICES
       ) {
-        validateToken(userFromLocalStorage);
+        await validateToken(userFromLocalStorage);
       } else {
         const cancel = auth.onIdTokenChanged(settingSessionFirebase);
 
@@ -309,6 +309,10 @@ export const AuthProvider = ({ children }: any) => {
       settingSession(null);
     }
   }, []);
+
+  useEffect(() => {
+    componentWillMount();
+  }, [componentWillMount]);
 
   return (
     <AuthContext.Provider

@@ -4,12 +4,14 @@ import { useRef, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
+import AuthInput from "../../components/common/AuthInput/AuthInput";
+import Button from "../../components/common/Button/Button";
+import HrCustom from "../../components/common/HrCustom/HrCustom";
 import Loading from "../../components/common/Loading/Loading";
 import WormAlert, {
   IWormAlertRefProps,
   WormAlertTypeEnum,
 } from "../../components/common/WorkAlert/WormAlert";
-import AuthInput from "../../components/elements/AuthInput/AuthInput";
 import { usersServiceMethodsInstance } from "../../services/social-prices-api/users/user-service.methods";
 import Urls from "../../shared/common/routes-app/routes-app";
 
@@ -143,7 +145,7 @@ export default function RecoverPassword() {
 
           {isSentRecoverPassword && (
             <form onSubmit={handleRecoverPassword} className="w-full h-full">
-              <hr className="border-slate-200 my-6 w-full" />
+              <HrCustom className="my-6" />
 
               <AuthInput
                 value={codeValue}
@@ -165,29 +167,28 @@ export default function RecoverPassword() {
                 useShowPassword
               />
 
-              <button
-                className="flex justify-center items-center px-4 py-2 rounded-md mt-5
-                  bg-gradient-to-r from-blue-400 to-blue-600 text-white w-full"
+              <Button
+                className="justify-center items-center w-full mt-5 py-2"
                 onClick={handleRecoverPassword}
                 disabled={isSubmitting}
+                type="primary"
               >
                 {isSubmitting ? <Loading height={30} width={30} /> : "Recover"}
-              </button>
+              </Button>
             </form>
           )}
         </div>
 
-        <hr className="border-slate-200 my-6 w-full" />
+        <HrCustom />
 
-        <button
-          className="flex justify-center items-center px-4 py-2 rounded-full
-          bg-gradient-to-r from-blue-400 to-blue-600
-           text-white text-sm"
+        <Button
+          className="text-sm rounded-2xl px-4"
           onClick={() => router.push(Urls.LOGIN)}
           disabled={isSubmitting}
+          type="primary"
         >
           Go to login
-        </button>
+        </Button>
       </div>
     </div>
   );
