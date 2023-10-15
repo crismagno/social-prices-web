@@ -6,11 +6,12 @@ import { useRouter } from "next/navigation";
 import Avatar from "../../components/common/Avatar/Avatar";
 import Button from "../../components/common/Button/Button";
 import Card from "../../components/common/Card/Card";
+import ContainerTitle from "../../components/common/ContainerTitle/ContainerTitle";
 import Description from "../../components/common/Description/Description";
-import HrCustom from "../../components/common/HrCustom/HrCustom";
 import {
   IconAtSymbol,
   IconCake,
+  IconFinger,
   IconIdentification,
   IconPencilSquare,
   IconPhone,
@@ -53,7 +54,7 @@ export default function Profile() {
         </div>
 
         <div className="flex flex-col justify-center items-center text-center mt-10 mb-5">
-          <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
+          <h3 className="sm:text-sm md:text-4xl font-semibold text-blueGray-700 mb-2">
             {user?.username ?? "---"}
           </h3>
 
@@ -68,83 +69,106 @@ export default function Profile() {
           </a>
         </div>
 
-        <HrCustom />
-
-        <div className="flex flex-wrap mt-5">
-          <div className="flex flex-col justify-start w-1/2">
+        <ContainerTitle title="Information" className="mt-6">
+          <div className="flex flex-wrap mt-5">
             <Description
-              label="My name"
-              description={`${user?.firstName ?? "-"} ${
-                user?.middleName ?? "-"
-              } ${user?.lastName ?? "-"}`}
-              leftIcon={IconUser()}
-            />
-
-            <Description
-              label="Username"
-              description={user?.username ?? ""}
-              leftIcon={IconIdentification()}
-            />
-
-            <Description
-              label="Email"
-              description={user?.email ?? ""}
-              leftIcon={IconAtSymbol()}
-            />
-
-            <Description
-              label="Phone"
+              label="Auth Provider"
+              className="mr-5"
               description={
-                user?.phoneNumbers?.length
-                  ? user?.phoneNumbers[0].number
-                  : "---"
+                user?.authProvider
+                  ? UsersEnum.ProviderLabels[user.authProvider]
+                  : ""
               }
-              leftIcon={IconPhone()}
+              leftIcon={IconFinger()}
+            />
+
+            <Description
+              label="Status"
+              description={
+                user?.status ? UsersEnum.StatusLabels[user.status] : ""
+              }
+              leftIcon={IconQuestion()}
             />
           </div>
+        </ContainerTitle>
 
-          <div className="flex flex-col justify-start w-1/2">
-            <div className="flex items-start mt-4 ">
-              <span className="mr-3">{IconQuestion()}</span>
-              <div className={`flex flex-col`}>
-                <label className="">Addresses</label>
-                <div className="w-full overflow-x-auto flex">
-                  {user?.addresses?.length ? (
-                    user?.addresses.map((userAddress) => (
-                      <div
-                        key={userAddress.uid}
-                        className="text-sm text-gray-500 border border-gray-300 rounded-md px-3 py-1 mr-2"
-                      >
-                        {userAddress.address1}, {userAddress.city},{" "}
-                        {userAddress.state?.code}, {userAddress.zip}
-                      </div>
-                    ))
-                  ) : (
-                    <span className="text-sm text-gray-500">---</span>
-                  )}
-                </div>
-              </div>
+        <ContainerTitle title="Profile" className="mt-6">
+          <div className="flex flex-wrap mt-5">
+            <div className="flex flex-col justify-start w-1/2">
+              <Description
+                label="My name"
+                description={`${user?.firstName ?? "-"} ${
+                  user?.middleName ?? "-"
+                } ${user?.lastName ?? "-"}`}
+                leftIcon={IconUser()}
+              />
+
+              <Description
+                label="Username"
+                description={user?.username ?? ""}
+                leftIcon={IconIdentification()}
+              />
+
+              <Description
+                label="Email"
+                description={user?.email ?? ""}
+                leftIcon={IconAtSymbol()}
+              />
+
+              <Description
+                label="Phone"
+                description={
+                  user?.phoneNumbers?.length
+                    ? user?.phoneNumbers[0].number
+                    : "---"
+                }
+                leftIcon={IconPhone()}
+              />
             </div>
 
-            <Description
-              label="Birth date"
-              leftIcon={IconCake()}
-              description={
-                user?.birthDate
-                  ? moment(user?.birthDate).format("MM/DD/YYYY")
-                  : "---"
-              }
-            />
+            <div className="flex flex-col justify-start w-1/2">
+              <div className="flex items-start mt-4 ">
+                <span className="mr-3">{IconQuestion()}</span>
+                <div className={`flex flex-col`}>
+                  <label className="">Addresses</label>
+                  <div className="w-full overflow-x-auto flex">
+                    {user?.addresses?.length ? (
+                      user?.addresses.map((userAddress) => (
+                        <div
+                          key={userAddress.uid}
+                          className="text-sm text-gray-500 border border-gray-300 rounded-md px-3 py-1 mr-2"
+                        >
+                          {userAddress.address1}, {userAddress.city},{" "}
+                          {userAddress.state?.code}, {userAddress.zip}
+                        </div>
+                      ))
+                    ) : (
+                      <span className="text-sm text-gray-500">---</span>
+                    )}
+                  </div>
+                </div>
+              </div>
 
-            <Description
-              label="Gender"
-              leftIcon={IconQuestion()}
-              description={
-                user?.gender ? UsersEnum.GenderLabels[user?.gender] : "---"
-              }
-            />
+              <Description
+                label="Birth date"
+                leftIcon={IconCake()}
+                description={
+                  user?.birthDate
+                    ? moment(user?.birthDate).format("MM/DD/YYYY")
+                    : "---"
+                }
+              />
+
+              <Description
+                label="Gender"
+                leftIcon={IconQuestion()}
+                description={
+                  user?.gender ? UsersEnum.GenderLabels[user?.gender] : "---"
+                }
+              />
+            </div>
           </div>
-        </div>
+        </ContainerTitle>
       </Card>
     </Layout>
   );

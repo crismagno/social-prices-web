@@ -10,7 +10,8 @@ type TButtonColor =
   | "transparent";
 
 const ButtonColor = {
-  default: "bg-gradient-to-tr from-gray-400 to-gray-600 hover:to-gray-800",
+  default:
+    "bg-gradient-to-tr from-gray-400 to-gray-600 hover:to-gray-800 text-white",
   danger:
     "bg-gradient-to-tr from-red-400 to-red-600 text-white hover:to-red-800",
   warning:

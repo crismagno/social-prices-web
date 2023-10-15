@@ -23,6 +23,7 @@ import {
   ICountryMockData,
   IStateMockData,
 } from "../../../../../shared/utils/mock-data/interfaces";
+import { createComma } from "../../../../../shared/utils/string-extensions/string-extensions";
 
 interface IProfileEditFormAddress {
   address1: string;
@@ -108,8 +109,6 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className }) => {
       addNewAddress();
     }
   };
-
-  const createComma = (str: string): string => (str?.trim() ? ", " + str : str);
 
   const createAddressName = (address: IProfileEditFormAddress): string => {
     let addressName: string = "";
