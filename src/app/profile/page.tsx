@@ -94,7 +94,11 @@ export default function Profile() {
 
             <Description
               label="Phone"
-              description={user?.phoneNumbers[0] ?? "---"}
+              description={
+                user?.phoneNumbers?.length
+                  ? user?.phoneNumbers[0].number
+                  : "---"
+              }
               leftIcon={IconPhone()}
             />
           </div>

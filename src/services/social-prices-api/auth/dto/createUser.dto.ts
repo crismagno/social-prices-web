@@ -7,6 +7,7 @@ import {
   IsString,
 } from "class-validator";
 
+import { IPhoneNumber } from "../../../../shared/business/users/user.interface";
 import UsersEnum from "../../../../shared/business/users/users.enum";
 
 export default class CreateUserDto {
@@ -38,7 +39,7 @@ export default class CreateUserDto {
 
   @IsOptional()
   @IsArray()
-  phoneNumbers?: string[];
+  phoneNumbers?: IPhoneNumber[];
 
   @IsOptional()
   extraDataProvider?: any;

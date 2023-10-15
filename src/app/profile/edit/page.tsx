@@ -122,7 +122,6 @@ export default function ProfileEdit() {
     value: string,
     field: ProfileEditFormKeysEnum | string
   ) => {
-    console.log(field, value);
     setForm((previous) => ({ ...previous, [field]: value }));
   };
 

@@ -12,7 +12,7 @@ export default interface IUser {
   authToken: string | null;
   avatar: string | null;
   authProvider: UsersEnum.Provider;
-  phoneNumbers: string[] | null;
+  phoneNumbers: IPhoneNumber[] | null;
   status: UsersEnum.Status | null;
   extraDataProvider: any | null;
   birthDate: Date | null;
@@ -31,6 +31,11 @@ export interface IUserAddress {
   description?: string;
   country: IUserAddressCountry;
   district: string;
+}
+
+export interface IPhoneNumber {
+  type: UsersEnum.PhoneTypes;
+  number: string;
 }
 
 export interface IUserAddressState {

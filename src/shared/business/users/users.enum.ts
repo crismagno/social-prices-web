@@ -15,6 +15,13 @@ namespace UsersEnum {
     MALE = "MALE",
   }
 
+  export enum PhoneTypes {
+    MOBILE = "MOBILE",
+    HOME = "HOME",
+    BUSINESS = "BUSINESS",
+    OTHER = "OTHER",
+  }
+
   export const GenderLabels = {
     [Gender.FEMALE]: "Female",
     [Gender.MALE]: "Male",
