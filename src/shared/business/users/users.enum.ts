@@ -11,6 +11,7 @@ namespace UsersEnum {
   }
 
   export enum Gender {
+    OTHER = "OTHER",
     FEMALE = "FEMALE",
     MALE = "MALE",
   }
@@ -23,6 +24,7 @@ namespace UsersEnum {
   }
 
   export const GenderLabels = {
+    [Gender.OTHER]: "Other",
     [Gender.FEMALE]: "Female",
     [Gender.MALE]: "Male",
   };

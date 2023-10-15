@@ -15,9 +15,10 @@ const ContainerTitle: React.FC<Props> = ({
 }) => {
   return (
     <div className={`${className} w-full`}>
-      <div className="flex justify-between">
+      <div className="flex justify-between items-end">
         <div>{title}</div>
-        {extraHeader && <div>{extraHeader}</div>}
+
+        {extraHeader}
       </div>
 
       <HrCustom className="mt-2 mb-0" />
