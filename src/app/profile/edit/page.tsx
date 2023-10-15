@@ -115,6 +115,38 @@ export default function ProfileEdit() {
 
   const removeNewAddress = (index: number) => remove(index);
 
+  const createComma = (str: string): string => (str?.trim() ? ", " + str : str);
+
+  const createAddressName = (address: IProfileEditFormAddress): string => {
+    let addressName: string = ``;
+
+    if (address.countryCode) {
+      addressName += address.countryCode;
+    }
+
+    if (address.stateCode) {
+      addressName += createComma(address.stateCode);
+    }
+
+    if (address.city) {
+      addressName += createComma(address.city);
+    }
+
+    if (address.district) {
+      addressName += createComma(address.district);
+    }
+
+    if (address.zip) {
+      addressName += createComma(address.zip);
+    }
+
+    if (address.address1) {
+      addressName += createComma(address.address1);
+    }
+
+    return addressName;
+  };
+
   return (
     <Layout title="Profile Edit" subtitle="Your personal data to update">
       <Card className=" h-min-80 mt-10">
@@ -253,13 +285,17 @@ export default function ProfileEdit() {
           >
             {fields.map(
               (formAddress: IProfileEditFormAddress, index: number) => {
-                const addressComplete: string = fields[index].address1;
+                const address: IProfileEditFormAddress = watch(
+                  `addresses.${index}`
+                );
+
+                const addressName: string = createAddressName(address);
 
                 return (
                   <Collapse
                     key={index}
                     collapsed={formAddress.isCollapsed}
-                    title={`Address (${index + 1})`}
+                    title={addressName.trim() || `Address (${index + 1})`}
                     className="relative mt-5"
                     extraHeader={
                       <Button
@@ -381,7 +417,10 @@ export default function ProfileEdit() {
                           }
                         >
                           {stateCities
-                            .find((stateCity) => stateCity.stateCode === "CE")
+                            .find(
+                              (stateCity) =>
+                                stateCity.stateCode === address.stateCode
+                            )
                             ?.cities.map((city: string) => (
                               <FormSelectOption key={city} value={city}>
                                 {city}
