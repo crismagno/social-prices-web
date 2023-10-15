@@ -111,37 +111,39 @@ export default function RecoverPassword() {
   return (
     <div
       className="h-screen w-screen flex flex-col justify-center items-center 
-    bg-gradient-to-r from-blue-100 to-slate-200"
+        bg-gradient-to-r from-blue-100 to-slate-200"
     >
       <div className="flex flex-col justify-center items-center lg:w-1/4 md:w-1/2">
         <WormAlert ref={wormTextMessage} className="my-3 w-full" />
 
         <div
-          className="flex flex-col justify-center items-center w-full h-full p-8
-          p-3 shadow-2xl bg-white rounded-lg"
+          className="flex flex-col justify-center items-center 
+          w-full h-full p-3 shadow-2xl bg-white rounded-lg"
         >
           <span className="text-lg text-center mt-6">Recover Password</span>
 
-          <AuthInput
-            value={email}
-            onChange={setEmail}
-            placeholder="Type your email"
-            disabled={isSubmitting}
-            label="Email"
-            divClassName="w-full"
-          />
+          <form onSubmit={handleSendRecoverPasswordCode} className="w-full">
+            <AuthInput
+              value={email}
+              onChange={setEmail}
+              placeholder="Type your email"
+              disabled={isSubmitting}
+              label="Email"
+              divClassName="w-full"
+            />
 
-          <button
-            className="px-4 py-2 mt-1 text-blue-600 w-full text-sm "
-            onClick={handleSendRecoverPasswordCode}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <Loading height={30} width={30} />
-            ) : (
-              "Send recover password code"
-            )}
-          </button>
+            <button
+              className="px-4 py-2 mt-1 text-blue-600 w-full text-sm "
+              onClick={handleSendRecoverPasswordCode}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <Loading height={30} width={30} />
+              ) : (
+                "Send recover password code"
+              )}
+            </button>
+          </form>
 
           {isSentRecoverPassword && (
             <form onSubmit={handleRecoverPassword} className="w-full h-full">
@@ -171,7 +173,7 @@ export default function RecoverPassword() {
                 className="justify-center items-center w-full mt-5 py-2"
                 onClick={handleRecoverPassword}
                 disabled={isSubmitting}
-                type="primary"
+                color="primary"
               >
                 {isSubmitting ? <Loading height={30} width={30} /> : "Recover"}
               </Button>
@@ -185,7 +187,7 @@ export default function RecoverPassword() {
           className="text-sm rounded-2xl px-4"
           onClick={() => router.push(Urls.LOGIN)}
           disabled={isSubmitting}
-          type="primary"
+          color="primary"
         >
           Go to login
         </Button>

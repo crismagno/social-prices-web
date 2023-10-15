@@ -1,24 +1,18 @@
-import { DetailedHTMLProps, InputHTMLAttributes, useState } from "react";
+import { InputHTMLAttributes, useState } from "react";
 
 import { IconEye, IconEyeSlash } from "../icons/icons";
 
-interface Props {
+interface Props extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  type?: string;
-  value?: any;
   onChange?: (value: any) => void;
   required?: boolean;
   inputClassName?: string;
   divClassName?: string;
   useShowPassword?: boolean;
-  className?: string;
   labelClassName?: string;
 }
 
-const DescriptionInput: React.FC<
-  | Props
-  | DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
-> = ({
+const DescriptionInput: React.FC<Props> = ({
   label,
   type,
   value,

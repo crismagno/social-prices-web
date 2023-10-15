@@ -14,7 +14,7 @@ const ContainerTitle: React.FC<Props> = ({
   className,
 }) => {
   return (
-    <div className={`my-1 ${className}`}>
+    <div className={`${className} w-full`}>
       <div className="flex justify-between">
         <div>{title}</div>
         {extraHeader && <div>{extraHeader}</div>}

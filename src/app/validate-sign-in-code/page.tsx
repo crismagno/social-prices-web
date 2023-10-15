@@ -71,7 +71,7 @@ export default function ValidateSignInCode() {
     <form
       onSubmit={handleValidateSignInCode}
       className="h-screen w-screen flex flex-col justify-center items-center 
-    bg-gradient-to-r from-green-100 to-slate-200"
+        bg-gradient-to-r from-green-100 to-slate-200"
     >
       <div className="flex flex-col justify-center items-center lg:w-1/4 md:w-1/2">
         <WormAlert ref={wormTextMessage} className="my-3 w-full" />
@@ -105,7 +105,7 @@ export default function ValidateSignInCode() {
           />
 
           <Button
-            type="success"
+            color="success"
             className="justify-center items-center py-2 rounded-md mt-5 w-full"
             onClick={handleValidateSignInCode}
             disabled={isSubmitting}
@@ -117,7 +117,7 @@ export default function ValidateSignInCode() {
         <HrCustom className="my-6" />
 
         <Button
-          type="success"
+          color="success"
           className="text-sm rounded-2xl px-4"
           onClick={() => {
             setUser(null);

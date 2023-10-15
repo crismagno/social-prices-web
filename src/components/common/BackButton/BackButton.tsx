@@ -7,7 +7,7 @@ const BackButton: React.FC = () => {
   const router = useRouter();
 
   return (
-    <Button onClick={() => router.back()} type="slate" className="px-3">
+    <Button onClick={() => router.back()} color="slate" className="px-3">
       {IconArrowTurnLeft("mr-1")}
       Back
     </Button>

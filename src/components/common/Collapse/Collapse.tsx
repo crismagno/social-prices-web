@@ -39,7 +39,7 @@ const Collapse: React.FC<Props> = ({
 
         <label className="mr-5">{title}</label>
 
-        {extraHeader && <>{extraHeader}</>}
+        {extraHeader}
       </div>
 
       {!isCollapsed && (

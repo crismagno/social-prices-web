@@ -43,7 +43,7 @@ export default function Profile() {
 
         <div className="flex justify-end relative">
           <Button
-            type="success"
+            color="success"
             onClick={() => router.push(Urls.PROFILE_EDIT)}
             className="px-3 shadow-lg"
           >

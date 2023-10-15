@@ -17,7 +17,7 @@ export default interface IUser {
   extraDataProvider: any | null;
   birthDate: Date | null;
   addresses: IUserAddress[] | null;
-  gender?: UsersEnum.Gender;
+  gender: UsersEnum.Gender | null;
 }
 
 export interface IUserAddress {

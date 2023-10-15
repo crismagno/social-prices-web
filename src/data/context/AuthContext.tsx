@@ -65,6 +65,12 @@ const normalizeUser = async (userFirebase: User): Promise<IUser> => {
       ? [{ type: UsersEnum.PhoneTypes.OTHER, number: userFirebase.phoneNumber }]
       : null,
     status: null,
+    addresses: [],
+    birthDate: null,
+    firstName: userFirebase.displayName,
+    lastName: null,
+    middleName: null,
+    gender: null,
   };
 };
 
@@ -192,7 +198,7 @@ export const AuthProvider = ({ children }: any) => {
 
       router.push(Urls.VALIDATE_SIGN_IN_CODE);
 
-      setIsLoading(true);
+      setIsLoading(false);
     }, 3000);
   };
 

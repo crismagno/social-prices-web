@@ -4,26 +4,16 @@ import {
   SelectHTMLAttributes,
 } from "react";
 
-interface Props {
+interface Props extends SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
-  value: any;
-  onChange: (value: any) => void;
-  required?: boolean;
   selectClassName?: string;
   divClassName?: string;
   useShowPassword?: boolean;
-  className?: string;
   labelClassName?: string;
-  children?: any;
+  onChange: (value: any) => void;
 }
 
-const DescriptionSelect: React.FC<
-  | Props
-  | DetailedHTMLProps<
-      SelectHTMLAttributes<HTMLSelectElement>,
-      HTMLSelectElement
-    >
-> = ({
+const DescriptionSelect: React.FC<Props> = ({
   label,
   value,
   onChange,

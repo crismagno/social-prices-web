@@ -1,12 +1,15 @@
-type TButtonType =
+import { ButtonHTMLAttributes } from "react";
+
+type TButtonColor =
   | "default"
   | "danger"
   | "warning"
   | "primary"
   | "success"
-  | "slate";
+  | "slate"
+  | "transparent";
 
-const ButtonTypes = {
+const ButtonColor = {
   default: "bg-gradient-to-tr from-gray-400 to-gray-600 hover:to-gray-800",
   danger:
     "bg-gradient-to-tr from-red-400 to-red-600 text-white hover:to-red-800",
@@ -18,28 +21,26 @@ const ButtonTypes = {
     "bg-gradient-to-tr from-green-400 to-green-600 text-white hover:to-green-800",
   slate:
     "bg-gradient-to-tr from-slate-400 to-slate-600 text-white hover:to-slate-800",
+  transparent: "transparent hover:bg-gray-200",
 };
 
-interface Props {
-  onClick?: (event: any) => void;
-  children?: any;
-  type?: TButtonType;
-  className?: string;
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+  color?: TButtonColor;
 }
 
 const Button: React.FC<Props> = ({
   onClick,
   children,
   className,
-  type,
+  color,
   ...props
 }) => {
-  type = type ?? "default";
+  color = color ?? "default";
 
   return (
     <button
       onClick={onClick}
-      className={`flex shadow-md rounded-lg p-2 ${ButtonTypes[type]} ${className}`}
+      className={`flex shadow-md rounded-md p-2 ${ButtonColor[color]} ${className}`}
       {...props}
     >
       {children}
