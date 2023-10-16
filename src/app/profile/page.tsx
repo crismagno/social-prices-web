@@ -70,7 +70,7 @@ export default function Profile() {
         </div>
 
         <ContainerTitle title="Information" className="mt-6">
-          <div className="flex flex-wrap mt-5">
+          <div className="flex">
             <Description
               label="Auth Provider"
               className="mr-5"
@@ -116,7 +116,7 @@ export default function Profile() {
               />
 
               <Description
-                label="Phone"
+                label="Phone Numbers"
                 description={
                   user?.phoneNumbers?.length
                     ? user?.phoneNumbers[0].number

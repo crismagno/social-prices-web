@@ -17,7 +17,7 @@ const Layout: React.FC<Props> = ({ subtitle, title, children }) => {
 
   return (
     <ForceAuth>
-      <div className={`${theme} relative flex flex-col h-screen w-screen`}>
+      <div className={`${theme} relative flex flex-col h-screen`}>
         <div className="p-7 bg-gray-100 dark:bg-slate-800 flex-grow pb-32">
           <Header subtitle={subtitle} title={title} />
           <Content>{children}</Content>

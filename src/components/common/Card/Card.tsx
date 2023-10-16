@@ -5,13 +5,13 @@ interface Props {
   children?: any;
 }
 
-const Card: React.FC<Props> = ({ className, children }) => {
+const Card: React.FC<Props> = ({ className = "", children }) => {
   return (
     <div
       className={`
         dark:bg-slate-700 bg-white
         p-5 relative
-        w-full h-full rounded-xl shadow-md ${className}`}
+        rounded-xl shadow-md ${className}`}
     >
       {children}
     </div>

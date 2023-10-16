@@ -69,7 +69,7 @@ const generateNewAddress = (
   isCollapsed,
 });
 
-const ProfileAddressesEdit: React.FC<Props> = ({ className }) => {
+const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
   const { user } = useAuthData();
 
   const defaultValues: IProfileEditForm = {

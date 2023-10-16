@@ -3,7 +3,7 @@ interface Props {
 }
 
 const Content: React.FC<Props> = ({ children }) => {
-  return <div>{children}</div>;
+  return children;
 };
 
 export default Content;

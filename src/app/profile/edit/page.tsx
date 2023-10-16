@@ -39,7 +39,7 @@ export default function ProfileEditPage() {
         </div>
 
         <ContainerTitle title="Information" className="mt-6">
-          <div className="flex flex-wrap mt-5">
+          <div className="flex">
             <Description
               label="Auth Provider"
               className="mr-5"
