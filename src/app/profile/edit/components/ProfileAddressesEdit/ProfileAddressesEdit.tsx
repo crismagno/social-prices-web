@@ -9,12 +9,16 @@ import FormInput from "../../../../../components/common/FormInput/FormInput";
 import FormSelect, {
   FormSelectOption,
 } from "../../../../../components/common/FormSelect/FormSelect";
+import handleClientError from "../../../../../components/common/handleClientError/handleClientError";
 import {
   IconPlus,
   IconTrash,
 } from "../../../../../components/common/icons/icons";
 import useAuthData from "../../../../../data/hook/useAuthData";
-import { IUserAddress } from "../../../../../shared/business/users/user.interface";
+import { usersServiceMethodsInstance } from "../../../../../services/social-prices-api/users/user-service.methods";
+import IUser, {
+  IUserAddress,
+} from "../../../../../shared/business/users/user.interface";
 import citiesMockData from "../../../../../shared/utils/mock-data/brazil-cities.json";
 import statesMockData from "../../../../../shared/utils/mock-data/brazil-states.json";
 import countriesMockData from "../../../../../shared/utils/mock-data/countries.json";
@@ -70,13 +74,13 @@ const generateNewAddress = (
 });
 
 const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
-  const { user } = useAuthData();
+  const { user, updateUserSession } = useAuthData();
 
   const defaultValues: IProfileEditForm = {
     addresses: user?.addresses?.length
       ? user.addresses.map((address: IUserAddress, index: number) => ({
           ...address,
-          countryCode: address.country.code,
+          countryCode: address.country?.code,
           stateCode: address.state?.code,
           isCollapsed: index === 0,
         }))
@@ -98,7 +102,35 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
     name: "addresses",
   });
 
-  const onSubmit: SubmitHandler<IProfileEditForm> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<IProfileEditForm> = async (data) => {
+    try {
+      const addresses: IUserAddress[] = data.addresses.map(
+        (address): IUserAddress => ({
+          ...address,
+          country: {
+            code: address.countryCode,
+            name:
+              countries.find((country) => country.code === address.countryCode)
+                ?.name ?? "",
+          },
+          state: {
+            code: address.stateCode ?? "",
+            name:
+              states.find((state) => state.code === address.stateCode)?.name ??
+              "",
+          },
+        })
+      );
+      const response: IUser =
+        await usersServiceMethodsInstance.updateUserAddresses({
+          addresses,
+        });
+
+      updateUserSession(response);
+    } catch (error) {
+      handleClientError(error);
+    }
+  };
 
   const addNewAddress = () => append(generateNewAddress());
 

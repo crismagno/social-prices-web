@@ -8,7 +8,10 @@ import FormInput from "../../../../../components/common/FormInput/FormInput";
 import FormSelect, {
   FormSelectOption,
 } from "../../../../../components/common/FormSelect/FormSelect";
+import handleClientError from "../../../../../components/common/handleClientError/handleClientError";
 import useAuthData from "../../../../../data/hook/useAuthData";
+import { usersServiceMethodsInstance } from "../../../../../services/social-prices-api/users/user-service.methods";
+import IUser from "../../../../../shared/business/users/user.interface";
 import UsersEnum from "../../../../../shared/business/users/users.enum";
 
 type IProfileEditForm = {
@@ -24,7 +27,7 @@ interface Props {
 }
 
 const ProfileEdit: React.FC<Props> = ({ className }) => {
-  const { user } = useAuthData();
+  const { user, updateUserSession } = useAuthData();
 
   const defaultValues: IProfileEditForm = {
     firstName: user?.firstName ?? "",
@@ -42,7 +45,21 @@ const ProfileEdit: React.FC<Props> = ({ className }) => {
     defaultValues,
   });
 
-  const onSubmit: SubmitHandler<IProfileEditForm> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<IProfileEditForm> = async (data) => {
+    try {
+      const response: IUser = await usersServiceMethodsInstance.updateUser({
+        birthDate: data.birthDate,
+        firstName: data.firstName,
+        gender: data.gender ?? null,
+        lastName: data.lastName,
+        middleName: data.middleName ?? null,
+      });
+
+      updateUserSession(response);
+    } catch (error) {
+      handleClientError(error);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={`w-full ${className}`}>
@@ -98,6 +115,8 @@ const ProfileEdit: React.FC<Props> = ({ className }) => {
               defaultValue={user?.birthDate ?? ""}
               register={register}
               registerName="birthDate"
+              registerOptions={{ required: true }}
+              errorMessage={errors.birthDate && "Birth date name is required"}
             />
 
             <FormSelect

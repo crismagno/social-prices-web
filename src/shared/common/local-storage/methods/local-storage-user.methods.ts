@@ -13,4 +13,10 @@ export default class LocalStorageUserMethods {
 
     return null;
   };
+
+  public static getUserToken = (): string | null => {
+    const user: IUser | null = this.getUser();
+
+    return user?.authToken ?? null;
+  };
 }

@@ -35,6 +35,7 @@ export interface IAuthContext {
   create: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   setUser: (user: IUser | null) => void;
+  updateUserSession: (newUser: IUser | null) => void;
 }
 
 const AuthContext = createContext<IAuthContext>({
@@ -42,6 +43,7 @@ const AuthContext = createContext<IAuthContext>({
   isLoading: true,
   validateSignInCode: async (codeValue: string): Promise<any> => {},
   setUser: (user: IUser | null): void => {},
+  updateUserSession: (newUser: IUser | null): void => {},
   loginGoogle: async (): Promise<void> => {},
   logout: async (): Promise<void> => {},
   login: async (): Promise<void> => {},
@@ -128,7 +130,14 @@ export const AuthProvider = ({ children }: any) => {
         await authServiceMethodsInstance.validateToken(userParam.authToken);
 
       if (isValidToken) {
-        settingSession(userParam);
+        const userResponse: IUser = await usersServiceMethodsInstance.getUser();
+
+        const newUserSettingsSession: IUser = {
+          ...userResponse,
+          authToken: userParam.authToken,
+        };
+
+        settingSession(newUserSettingsSession);
         return userParam;
       }
 
@@ -157,7 +166,11 @@ export const AuthProvider = ({ children }: any) => {
       userFromLocalStorage.providerId = userNormalized.providerId;
       userFromLocalStorage.providerToken = userNormalized.providerToken;
 
-      return (await validateToken(userFromLocalStorage))?.email;
+      const userValidateToken: IUser | null = await validateToken(
+        userFromLocalStorage
+      );
+
+      return userValidateToken?.email;
     }
 
     settingSession(null);
@@ -294,6 +307,20 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
+  const updateUserSession = (newUser: IUser | null): void => {
+    if (!user) {
+      settingSession(null);
+      return;
+    }
+
+    const newUserSettingsSession: IUser = {
+      ...newUser,
+      authToken: user.authToken,
+    };
+
+    settingSession(newUserSettingsSession);
+  };
+
   const componentWillMount = useCallback(async () => {
     if (Cookies.get(CookiesEnum.CookiesName.COOKIE_AUTH)) {
       const userFromLocalStorage: IUser | null =
@@ -333,6 +360,7 @@ export const AuthProvider = ({ children }: any) => {
         create,
         validateSignInCode,
         setUser,
+        updateUserSession,
       }}
     >
       {children}

@@ -34,7 +34,7 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: this.formatAuthorization(token),
           },
         }
       );
@@ -55,7 +55,7 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: this.formatAuthorization(token),
           },
         }
       );

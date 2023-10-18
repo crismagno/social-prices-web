@@ -9,12 +9,16 @@ import FormInput from "../../../../../components/common/FormInput/FormInput";
 import FormSelect, {
   FormSelectOption,
 } from "../../../../../components/common/FormSelect/FormSelect";
+import handleClientError from "../../../../../components/common/handleClientError/handleClientError";
 import {
   IconPlus,
   IconTrash,
 } from "../../../../../components/common/icons/icons";
 import useAuthData from "../../../../../data/hook/useAuthData";
-import { IPhoneNumber } from "../../../../../shared/business/users/user.interface";
+import { usersServiceMethodsInstance } from "../../../../../services/social-prices-api/users/user-service.methods";
+import IUser, {
+  IPhoneNumber,
+} from "../../../../../shared/business/users/user.interface";
 import UsersEnum from "../../../../../shared/business/users/users.enum";
 import { createComma } from "../../../../../shared/utils/string-extensions/string-extensions";
 
@@ -39,7 +43,7 @@ const generateNewAPhoneNumber = (
 });
 
 const ProfilePhonesEdit: React.FC<Props> = ({ className }) => {
-  const { user } = useAuthData();
+  const { user, updateUserSession } = useAuthData();
 
   const defaultValues: IProfileEditForm = {
     phoneNumbers: user?.phoneNumbers?.length
@@ -65,7 +69,18 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className }) => {
     name: "phoneNumbers",
   });
 
-  const onSubmit: SubmitHandler<IProfileEditForm> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<IProfileEditForm> = async (data) => {
+    try {
+      const response: IUser =
+        await usersServiceMethodsInstance.updateUserPhoneNumbers({
+          phoneNumbers: data.phoneNumbers,
+        });
+
+      updateUserSession(response);
+    } catch (error) {
+      handleClientError(error);
+    }
+  };
 
   const addNewPhoneNumber = () => append(generateNewAPhoneNumber());
 
