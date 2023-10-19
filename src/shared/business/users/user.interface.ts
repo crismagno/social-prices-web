@@ -35,6 +35,7 @@ export interface IUserAddress {
 }
 
 export interface IPhoneNumber {
+  uid: string;
   type: UsersEnum.PhoneTypes;
   number: string;
 }

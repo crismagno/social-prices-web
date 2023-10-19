@@ -64,7 +64,13 @@ const __normalizeUser = async (userFirebase: User): Promise<IUser> => {
     authToken: null,
     extraDataProvider: null,
     phoneNumbers: userFirebase.phoneNumber
-      ? [{ type: UsersEnum.PhoneTypes.OTHER, number: userFirebase.phoneNumber }]
+      ? [
+          {
+            type: UsersEnum.PhoneTypes.OTHER,
+            number: userFirebase.phoneNumber,
+            uid: Date.now().toString(),
+          },
+        ]
       : null,
     status: null,
     addresses: [],

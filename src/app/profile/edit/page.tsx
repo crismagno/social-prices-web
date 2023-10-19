@@ -26,14 +26,16 @@ export default function ProfileEditPage() {
     <Layout title="Profile Edit" subtitle="Your personal data to update">
       <Card className=" h-min-80 mt-10">
         <div className="flex justify-center absolute right-0 w-full -top-16">
-          <Tooltip title="Update avatar" className="cursor-pointer z-10">
-            <Avatar
-              src={user?.avatar}
-              width={130}
-              height={130}
-              className="shadow-lg border-none"
-            />
-          </Tooltip>
+          <div className="cursor-pointer z-10">
+            <Tooltip title="test">
+              <Avatar
+                src={user?.avatar}
+                width={130}
+                height={130}
+                className="shadow-lg border-none"
+              />
+            </Tooltip>
+          </div>
         </div>
 
         <div className="flex justify-end relative">

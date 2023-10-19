@@ -43,6 +43,7 @@ const generateNewAPhoneNumber = (
   number: "",
   type: UsersEnum.PhoneTypes.OTHER,
   isCollapsed,
+  uid: Date.now().toString(),
 });
 
 const ProfilePhonesEdit: React.FC<Props> = ({ className }) => {
