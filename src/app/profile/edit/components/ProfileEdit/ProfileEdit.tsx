@@ -17,12 +17,13 @@ import useAuthData from "../../../../../data/hook/useAuthData";
 import { usersServiceMethodsInstance } from "../../../../../services/social-prices-api/users/user-service.methods";
 import IUser from "../../../../../shared/business/users/user.interface";
 import UsersEnum from "../../../../../shared/business/users/users.enum";
+import DatesEnum from "../../../../../shared/utils/dates/dates.enum";
 
 type IProfileEditForm = {
   firstName: string;
   middleName: string | null;
   lastName: string;
-  birthDate: Date | null;
+  birthDate: string | null;
   gender: UsersEnum.Gender | null;
 };
 
@@ -36,7 +37,9 @@ const ProfileEdit: React.FC<Props> = ({ className }) => {
   const defaultValues: IProfileEditForm = {
     firstName: user?.firstName ?? "",
     lastName: user?.lastName ?? "",
-    birthDate: moment(user?.birthDate).toDate(),
+    birthDate: moment(user?.birthDate)
+      .utc()
+      .format(DatesEnum.Format.YYYYMMDD_DASHED),
     gender: user?.gender ?? UsersEnum.Gender.OTHER,
     middleName: user?.middleName ?? null,
   };
@@ -56,14 +59,14 @@ const ProfileEdit: React.FC<Props> = ({ className }) => {
       setIsSUbmitting(true);
 
       const response: IUser = await usersServiceMethodsInstance.updateUser({
-        birthDate: data.birthDate,
+        birthDate: moment(data.birthDate).toDate(),
         firstName: data.firstName,
         gender: data.gender,
         lastName: data.lastName,
         middleName: data.middleName ?? null,
       });
 
-      message.success("Your basic user information was updated!");
+      message.success("Your basic information was updated!");
 
       updateUserSession(response);
     } catch (error) {
@@ -131,9 +134,11 @@ const ProfileEdit: React.FC<Props> = ({ className }) => {
           <div className="flex flex-col justify-start w-1/2">
             <FormInput
               label="Birth date"
-              type="datetime-local"
+              type="date"
               placeholder={"Enter birth date"}
-              defaultValue={user?.birthDate ?? ""}
+              defaultValue={moment(user?.birthDate)
+                .utc()
+                .format(DatesEnum.Format.YYYYMMDD_DASHED)}
               register={register}
               registerName="birthDate"
               registerOptions={{ required: true }}

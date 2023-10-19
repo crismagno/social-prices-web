@@ -5,17 +5,10 @@ import { Tooltip } from "antd";
 import Avatar from "../../../components/common/Avatar/Avatar";
 import BackButton from "../../../components/common/BackButton/BackButton";
 import Card from "../../../components/common/Card/Card";
-import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
-import Description from "../../../components/common/Description/Description";
-import DescriptionInput from "../../../components/common/DescriptionInput/DescriptionInput";
-import {
-  IconFinger,
-  IconQuestion,
-} from "../../../components/common/icons/icons";
 import Layout from "../../../components/template/Layout/Layout";
 import useAuthData from "../../../data/hook/useAuthData";
-import UsersEnum from "../../../shared/business/users/users.enum";
 import ProfileAddressesEdit from "./components/ProfileAddressesEdit/ProfileAddressesEdit";
+import ProfileAuthEdit from "./components/ProfileAuthEdit/ProfileAuthEdit";
 import ProfileEdit from "./components/ProfileEdit/ProfileEdit";
 import ProfilePhonesEdit from "./components/ProfilePhonesEdit/ProfilePhonesEdit";
 
@@ -42,67 +35,7 @@ export default function ProfileEditPage() {
           <BackButton />
         </div>
 
-        <ContainerTitle title="Information" className="mt-6">
-          <div className="flex">
-            <Description
-              label="Logged By"
-              className="mr-5"
-              description={
-                user?.loggedByAuthProvider
-                  ? UsersEnum.ProviderLabels[user.loggedByAuthProvider]
-                  : UsersEnum.ProviderLabels.OTHER
-              }
-              leftIcon={IconFinger()}
-            />
-
-            <Description
-              label="Auth Provider"
-              className="mr-5"
-              description={
-                user?.authProvider
-                  ? UsersEnum.ProviderLabels[user.authProvider]
-                  : ""
-              }
-              leftIcon={IconFinger()}
-            />
-
-            <Description
-              label="Status"
-              description={
-                user?.status ? UsersEnum.StatusLabels[user.status] : ""
-              }
-              leftIcon={IconQuestion()}
-            />
-          </div>
-        </ContainerTitle>
-
-        <ContainerTitle title="Auth" className="mt-6">
-          <div className="flex">
-            <div className="flex flex-col justify-start w-1/2">
-              <DescriptionInput
-                label="Username"
-                placeholder={"Enter with a username"}
-                value={user?.username ?? ""}
-                disabled
-              />
-
-              <DescriptionInput
-                label="Password"
-                type="password"
-                value={"1234567890"}
-                disabled
-              />
-            </div>
-
-            <div className="flex flex-col justify-start w-1/2">
-              <DescriptionInput
-                label="Email"
-                value={user?.email ?? ""}
-                disabled
-              />
-            </div>
-          </div>
-        </ContainerTitle>
+        <ProfileAuthEdit />
 
         <ProfileEdit />
 

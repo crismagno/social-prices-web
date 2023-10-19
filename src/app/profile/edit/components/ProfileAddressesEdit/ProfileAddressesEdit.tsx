@@ -128,6 +128,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
           },
         })
       );
+
       const response: IUser =
         await usersServiceMethodsInstance.updateUserAddresses({
           addresses,

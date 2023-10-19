@@ -1,5 +1,6 @@
 "use client";
 
+import { Tag } from "antd";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 
@@ -18,7 +19,7 @@ import {
   IconQuestion,
   IconUser,
 } from "../../components/common/icons/icons";
-import Tag from "../../components/common/Tag/Tag";
+// import Tag from "../../components/common/Tag/Tag";
 import Layout from "../../components/template/Layout/Layout";
 import useAuthData from "../../data/hook/useAuthData";
 import { IPhoneNumber } from "../../shared/business/users/user.interface";
@@ -30,6 +31,20 @@ export default function Profile() {
   const { user } = useAuthData();
 
   const router = useRouter();
+
+  const getUserName = (): string => {
+    let userName = user?.firstName ?? "";
+
+    if (user?.middleName) {
+      userName += ` ${user.middleName}`;
+    }
+
+    if (user?.lastName) {
+      userName += ` ${user.lastName}`;
+    }
+
+    return userName;
+  };
 
   return (
     <Layout title="Profile" subtitle="See your information">
@@ -58,7 +73,7 @@ export default function Profile() {
 
         <div className="flex flex-col justify-center items-center text-center mt-10 mb-5">
           <h3 className="sm:text-sm md:text-4xl font-semibold text-blueGray-700 mb-2">
-            {user?.username ?? "---"}
+            {getUserName() || user?.username}
           </h3>
 
           <a
@@ -99,7 +114,19 @@ export default function Profile() {
             <Description
               label="Status"
               description={
-                user?.status ? UsersEnum.StatusLabels[user.status] : ""
+                <Tag
+                  color={
+                    UsersEnum.StatusColors[
+                      user?.status ?? UsersEnum.Status.PENDING
+                    ]
+                  }
+                >
+                  {
+                    UsersEnum.StatusLabels[
+                      user?.status ?? UsersEnum.Status.PENDING
+                    ]
+                  }
+                </Tag>
               }
               leftIcon={IconQuestion()}
             />
@@ -131,8 +158,9 @@ export default function Profile() {
 
               <Description
                 label="Phone Numbers"
+                className="overflow-x-auto"
                 description={
-                  <div className="w-full overflow-x-auto flex">
+                  <div className="w-full flex">
                     {user?.phoneNumbers?.length ? (
                       user?.phoneNumbers.map((phoneNumber: IPhoneNumber) => (
                         <Tag key={phoneNumber.number}>{`${
@@ -151,7 +179,7 @@ export default function Profile() {
             <div className="flex flex-col justify-start w-1/2">
               <div className="flex items-start mt-4 ">
                 <span className="mr-3">{IconQuestion()}</span>
-                <div className={`flex flex-col`}>
+                <div className={`flex flex-col overflow-x-auto`}>
                   <label className="">Addresses</label>
                   <div className="w-full overflow-x-auto flex">
                     {user?.addresses?.length ? (
@@ -181,7 +209,19 @@ export default function Profile() {
                 label="Gender"
                 leftIcon={IconQuestion()}
                 description={
-                  user?.gender ? UsersEnum.GenderLabels[user?.gender] : "---"
+                  <Tag
+                    color={
+                      UsersEnum.GenderColors[
+                        user?.gender ?? UsersEnum.Gender.OTHER
+                      ]
+                    }
+                  >
+                    {
+                      UsersEnum.GenderLabels[
+                        user?.gender ?? UsersEnum.Gender.OTHER
+                      ]
+                    }
+                  </Tag>
                 }
               />
             </div>

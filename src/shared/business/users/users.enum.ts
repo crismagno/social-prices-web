@@ -23,6 +23,12 @@ namespace UsersEnum {
     [Status.STOPPED]: "Stopped",
   };
 
+  export const StatusColors = {
+    [Status.PENDING]: "warning",
+    [Status.ACTIVE]: "success",
+    [Status.STOPPED]: "red",
+  };
+
   export enum Gender {
     OTHER = "OTHER",
     FEMALE = "FEMALE",
@@ -33,6 +39,12 @@ namespace UsersEnum {
     [Gender.OTHER]: "Other",
     [Gender.FEMALE]: "Female",
     [Gender.MALE]: "Male",
+  };
+
+  export const GenderColors = {
+    [Gender.OTHER]: "gray",
+    [Gender.FEMALE]: "pink",
+    [Gender.MALE]: "blue",
   };
 
   export enum PhoneTypes {

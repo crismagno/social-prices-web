@@ -1,18 +1,28 @@
-const handleClientError = (error: any): string => {
+import { message } from "antd";
+
+const handleClientError = (
+  error: any,
+  duration: number = 2,
+  onClose?: VoidFunction | undefined
+): string => {
   const errorResponse = error?.response;
 
   const errorResponseData = errorResponse?.data;
 
   const errorResponseDataError = errorResponseData?.error;
-  let message: string = "Error!";
+  let messageError: string = "Error!";
 
-  if (errorResponseDataError?.message) {
-    message = errorResponseDataError?.message;
+  if (errorResponseDataError?.messageError) {
+    messageError = errorResponseDataError?.messageError;
   } else if (errorResponseDataError?.error) {
-    message = errorResponseDataError?.error;
+    messageError = errorResponseDataError?.error;
+  } else if (typeof error === "string") {
+    messageError = error;
   }
 
-  return message;
+  message.error(messageError, duration, onClose);
+
+  return messageError;
 };
 
 export default handleClientError;
