@@ -162,7 +162,10 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
 
             <Tooltip title="Add a new address">
               <Button
-                onClick={addNewAddress}
+                onClick={(e) => {
+                  e.preventDefault();
+                  addNewAddress();
+                }}
                 color="primary"
                 className="rounded-r-full rounded-l-full"
               >
@@ -202,7 +205,10 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
               extraHeader={
                 <Tooltip title="Remove address">
                   <Button
-                    onClick={() => removeNewAddress(index)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      removeNewAddress(index);
+                    }}
                     color="transparent"
                     className="rounded-r-full rounded-l-full absolute right-2 shadow-none"
                   >

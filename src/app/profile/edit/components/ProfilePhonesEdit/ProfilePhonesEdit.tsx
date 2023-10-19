@@ -113,7 +113,10 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className }) => {
 
             <Tooltip title="Add a new phone number">
               <Button
-                onClick={addNewPhoneNumber}
+                onClick={(e) => {
+                  e.preventDefault();
+                  addNewPhoneNumber();
+                }}
                 color="primary"
                 className="rounded-r-full rounded-l-full"
               >
@@ -156,7 +159,10 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className }) => {
                 extraHeader={
                   <Tooltip title="Remove phone number">
                     <Button
-                      onClick={() => removeNewPhoneNumber(index)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        removeNewPhoneNumber(index);
+                      }}
                       color="transparent"
                       className="rounded-r-full rounded-l-full absolute right-2 shadow-none"
                     >
