@@ -18,10 +18,13 @@ import {
   IconQuestion,
   IconUser,
 } from "../../components/common/icons/icons";
+import Tag from "../../components/common/Tag/Tag";
 import Layout from "../../components/template/Layout/Layout";
 import useAuthData from "../../data/hook/useAuthData";
+import { IPhoneNumber } from "../../shared/business/users/user.interface";
 import UsersEnum from "../../shared/business/users/users.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
+import { createUserAddressName } from "../../shared/utils/string-extensions/string-extensions";
 
 export default function Profile() {
   const { user } = useAuthData();
@@ -72,6 +75,17 @@ export default function Profile() {
         <ContainerTitle title="Information" className="mt-6">
           <div className="flex">
             <Description
+              label="Logged By"
+              className="mr-5"
+              description={
+                user?.loggedByAuthProvider
+                  ? UsersEnum.ProviderLabels[user.loggedByAuthProvider]
+                  : UsersEnum.ProviderLabels.OTHER
+              }
+              leftIcon={IconFinger()}
+            />
+
+            <Description
               label="Auth Provider"
               className="mr-5"
               description={
@@ -118,9 +132,17 @@ export default function Profile() {
               <Description
                 label="Phone Numbers"
                 description={
-                  user?.phoneNumbers?.length
-                    ? user?.phoneNumbers[0].number
-                    : "---"
+                  <div className="w-full overflow-x-auto flex">
+                    {user?.phoneNumbers?.length ? (
+                      user?.phoneNumbers.map((phoneNumber: IPhoneNumber) => (
+                        <Tag key={phoneNumber.number}>{`${
+                          UsersEnum.PhoneTypesLabels[phoneNumber.type]
+                        } - ${phoneNumber.number}`}</Tag>
+                      ))
+                    ) : (
+                      <span className="text-sm text-gray-500">---</span>
+                    )}
+                  </div>
                 }
                 leftIcon={IconPhone()}
               />
@@ -133,14 +155,10 @@ export default function Profile() {
                   <label className="">Addresses</label>
                   <div className="w-full overflow-x-auto flex">
                     {user?.addresses?.length ? (
-                      user?.addresses.map((userAddress) => (
-                        <div
-                          key={userAddress.uid}
-                          className="text-sm text-gray-500 border border-gray-300 rounded-md px-3 py-1 mr-2"
-                        >
-                          {userAddress.address1}, {userAddress.city},{" "}
-                          {userAddress.state?.code}, {userAddress.zip}
-                        </div>
+                      user?.addresses.map((address) => (
+                        <Tag key={address.uid}>
+                          {createUserAddressName(address)}
+                        </Tag>
                       ))
                     ) : (
                       <span className="text-sm text-gray-500">---</span>

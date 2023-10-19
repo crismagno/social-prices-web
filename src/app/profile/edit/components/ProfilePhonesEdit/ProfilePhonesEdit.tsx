@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 
 import Button from "../../../../../components/common/Button/Button";
@@ -20,7 +22,7 @@ import IUser, {
   IPhoneNumber,
 } from "../../../../../shared/business/users/user.interface";
 import UsersEnum from "../../../../../shared/business/users/users.enum";
-import { createComma } from "../../../../../shared/utils/string-extensions/string-extensions";
+import { createPhoneNumberName } from "../../../../../shared/utils/string-extensions/string-extensions";
 
 interface IProfileEditFormPhoneNumber extends IPhoneNumber {
   isCollapsed: boolean;
@@ -69,8 +71,12 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className }) => {
     name: "phoneNumbers",
   });
 
+  const [isSubmitting, setIsSUbmitting] = useState<boolean>(false);
+
   const onSubmit: SubmitHandler<IProfileEditForm> = async (data) => {
     try {
+      setIsSUbmitting(true);
+
       const response: IUser =
         await usersServiceMethodsInstance.updateUserPhoneNumbers({
           phoneNumbers: data.phoneNumbers,
@@ -79,6 +85,8 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className }) => {
       updateUserSession(response);
     } catch (error) {
       handleClientError(error);
+    } finally {
+      setIsSUbmitting(false);
     }
   };
 
@@ -90,22 +98,6 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className }) => {
     if (fields.length === 1) {
       addNewPhoneNumber();
     }
-  };
-
-  const createPhoneNumberName = (
-    phoneNumber: IProfileEditFormPhoneNumber
-  ): string => {
-    let phoneNumberName: string = "";
-
-    if (phoneNumber.type) {
-      phoneNumberName += UsersEnum.PhoneTypesLabels[phoneNumber.type];
-    }
-
-    if (phoneNumber.number) {
-      phoneNumberName += createComma(phoneNumber.number);
-    }
-
-    return phoneNumberName;
   };
 
   return (
@@ -129,6 +121,12 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className }) => {
             className="text-sm"
             color="success"
             disabled={fields.length === 0}
+            loading={{
+              isLoading: isSubmitting,
+              height: 20,
+              width: 20,
+              element: "Updating",
+            }}
           >
             Save Phone Numbers
           </Button>
@@ -195,6 +193,7 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className }) => {
                         errors?.phoneNumbers?.[index]?.number &&
                         "Phone number is required"
                       }
+                      maxLength={30}
                     />
                   </div>
                 </div>

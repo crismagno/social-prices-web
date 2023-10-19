@@ -41,7 +41,7 @@ export default function RecoverPassword() {
 
         wormTextMessage.current?.showWormText(
           "Please fill email.",
-          3,
+          5,
           WormAlertTypeEnum.WARNING
         );
 
@@ -174,8 +174,13 @@ export default function RecoverPassword() {
                 onClick={handleRecoverPassword}
                 disabled={isSubmitting}
                 color="primary"
+                loading={{
+                  isLoading: isSubmitting,
+                  height: 30,
+                  width: 30,
+                }}
               >
-                {isSubmitting ? <Loading height={30} width={30} /> : "Recover"}
+                Recover
               </Button>
             </form>
           )}

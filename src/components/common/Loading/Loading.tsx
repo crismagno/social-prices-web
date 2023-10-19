@@ -1,13 +1,15 @@
 import Image from "next/image";
 
-interface Props {
+export interface LoadingProps {
   width?: number;
   height?: number;
+  element?: any;
 }
 
-const Loading: React.FC<Props> = ({ height, width }) => {
+const Loading: React.FC<LoadingProps> = ({ height, width, element }) => {
   return (
     <div className="flex justify-center items-center h-full w-full">
+      {element}
       <Image
         src={"/loading.gif"}
         alt="loading"

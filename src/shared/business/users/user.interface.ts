@@ -18,6 +18,7 @@ export default interface IUser {
   birthDate: Date | null;
   addresses: IUserAddress[] | null;
   gender: UsersEnum.Gender | null;
+  loggedByAuthProvider: UsersEnum.Provider;
 }
 
 export interface IUserAddress {

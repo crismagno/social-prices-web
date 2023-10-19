@@ -50,7 +50,7 @@ const AuthContext = createContext<IAuthContext>({
   create: async (): Promise<void> => {},
 });
 
-const normalizeUser = async (userFirebase: User): Promise<IUser> => {
+const __normalizeUser = async (userFirebase: User): Promise<IUser> => {
   const providerToken: string = await userFirebase.getIdToken();
 
   return {
@@ -73,10 +73,11 @@ const normalizeUser = async (userFirebase: User): Promise<IUser> => {
     lastName: null,
     middleName: null,
     gender: null,
+    loggedByAuthProvider: UsersEnum.Provider.GOOGLE,
   };
 };
 
-const managerCookie = (isLogged: boolean) => {
+const __managerCookie = (isLogged: boolean) => {
   if (isLogged) {
     Cookies.set(CookiesEnum.CookiesName.COOKIE_AUTH, `${isLogged}`, {
       expires: 30,
@@ -86,7 +87,7 @@ const managerCookie = (isLogged: boolean) => {
   }
 };
 
-const managerLocalStorage = (user: IUser | null) => {
+const __managerLocalStorage = (user: IUser | null) => {
   if (user) {
     localStorage.setItem(LocalStorageEnum.keys.USER, JSON.stringify(user));
   } else {
@@ -94,35 +95,45 @@ const managerLocalStorage = (user: IUser | null) => {
   }
 };
 
-export const AuthProvider = ({ children }: any) => {
+const __getUserUpdated = (currentUser: IUser, newUser: IUser): IUser => {
+  return {
+    ...newUser,
+    providerId: currentUser.providerId,
+    providerToken: currentUser.providerToken,
+    loggedByAuthProvider: currentUser.loggedByAuthProvider,
+    authToken: currentUser.authToken,
+  };
+};
+
+export const AuthProvider = ({ children }: { children?: any }) => {
   const [user, setUser] = useState<IUser | null>(null);
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const router = useRouter();
 
-  const settingSession = (user: IUser | null) => {
+  const _settingSession = (user: IUser | null) => {
     if (user?.email) {
       setUser(user);
-      managerCookie(true);
-      managerLocalStorage(user);
+      __managerCookie(true);
+      __managerLocalStorage(user);
       setIsLoading(false);
       return user.email;
     }
 
     setUser(null);
-    managerCookie(false);
-    managerLocalStorage(null);
+    __managerCookie(false);
+    __managerLocalStorage(null);
     setIsLoading(false);
     return null;
   };
 
-  const validateToken = async (userParam: IUser): Promise<IUser | null> => {
+  const _validateToken = async (userParam: IUser): Promise<IUser | null> => {
     try {
       setIsLoading(true);
 
       if (!userParam.authToken) {
-        settingSession(null);
+        _settingSession(null);
         return null;
       }
 
@@ -132,16 +143,13 @@ export const AuthProvider = ({ children }: any) => {
       if (isValidToken) {
         const userResponse: IUser = await usersServiceMethodsInstance.getUser();
 
-        const newUserSettingsSession: IUser = {
-          ...userResponse,
-          authToken: userParam.authToken,
-        };
+        const newUser: IUser = __getUserUpdated(userParam, userResponse);
 
-        settingSession(newUserSettingsSession);
-        return userParam;
+        _settingSession(newUser);
+        return newUser;
       }
 
-      settingSession(null);
+      _settingSession(null);
 
       if (userParam?.authProvider === UsersEnum.Provider.GOOGLE) {
         await signOut(auth);
@@ -156,42 +164,30 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  const settingSessionFirebase = async (userFirebase: User | null) => {
+  const _settingSessionFirebase = async (userFirebase: User | null) => {
     const userFromLocalStorage: IUser | null =
       LocalStorageUserMethods.getUser();
 
     if (userFirebase?.email && userFromLocalStorage) {
-      const userNormalized: IUser = await normalizeUser(userFirebase);
+      const userNormalized: IUser = await __normalizeUser(userFirebase);
 
       userFromLocalStorage.providerId = userNormalized.providerId;
       userFromLocalStorage.providerToken = userNormalized.providerToken;
 
-      const userValidateToken: IUser | null = await validateToken(
+      const userValidateToken: IUser | null = await _validateToken(
         userFromLocalStorage
       );
 
       return userValidateToken?.email;
     }
 
-    settingSession(null);
+    _settingSession(null);
     return null;
   };
 
-  const loginGoogle = async () => {
-    try {
-      setIsLoading(true);
-      const response = await signInWithPopup(auth, googleProvider);
-
-      createOrSignInUserByLoginGoogle(response.user);
-    } catch (error: any) {
-      setIsLoading(false);
-      throw new Error("Error occur when attempt login with google.");
-    }
-  };
-
-  const createOrSignInUserByLoginGoogle = (userFirebase: User) => {
+  const _createOrSignInUserByLoginGoogle = (userFirebase: User) => {
     setTimeout(async () => {
-      const userNormalized: IUser = await normalizeUser(userFirebase);
+      const userNormalized: IUser = await __normalizeUser(userFirebase);
 
       const responseUser: IUser = await authServiceMethodsInstance.signUp({
         email: `${userNormalized.email}`,
@@ -206,6 +202,7 @@ export const AuthProvider = ({ children }: any) => {
 
       responseUser.providerId = userNormalized.providerId;
       responseUser.providerToken = userNormalized.providerToken;
+      responseUser.loggedByAuthProvider = UsersEnum.Provider.GOOGLE;
 
       setUser(responseUser);
 
@@ -213,6 +210,18 @@ export const AuthProvider = ({ children }: any) => {
 
       setIsLoading(false);
     }, 3000);
+  };
+
+  const loginGoogle = async () => {
+    try {
+      setIsLoading(true);
+      const response = await signInWithPopup(auth, googleProvider);
+
+      _createOrSignInUserByLoginGoogle(response.user);
+    } catch (error: any) {
+      setIsLoading(false);
+      throw new Error("Error occur when attempt login with google.");
+    }
   };
 
   const login = async (username: string, password: string) => {
@@ -223,6 +232,8 @@ export const AuthProvider = ({ children }: any) => {
         username,
         password
       );
+
+      response.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;
 
       setUser(response);
 
@@ -245,6 +256,8 @@ export const AuthProvider = ({ children }: any) => {
         username,
       });
 
+      response.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;
+
       setUser(response);
 
       router.push(Urls.VALIDATE_SIGN_IN_CODE);
@@ -260,11 +273,11 @@ export const AuthProvider = ({ children }: any) => {
     try {
       setIsLoading(true);
 
-      if (user?.authProvider === UsersEnum.Provider.GOOGLE) {
+      if (user?.loggedByAuthProvider === UsersEnum.Provider.GOOGLE) {
         await signOut(auth);
       }
 
-      settingSession(null);
+      _settingSession(null);
 
       router.push(Urls.LOGIN);
     } catch (error: any) {
@@ -293,10 +306,12 @@ export const AuthProvider = ({ children }: any) => {
         return false;
       }
 
-      const responseUser: IUser =
+      const userResponse: IUser =
         await usersServiceMethodsInstance.getUserByToken(user.authToken!);
 
-      settingSession({ ...user, ...responseUser });
+      const newUser: IUser = __getUserUpdated(user, userResponse);
+
+      _settingSession(newUser);
 
       router.push(Urls.DASHBOARD);
       return true;
@@ -307,47 +322,56 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
-  const updateUserSession = (newUser: IUser | null): void => {
-    if (!user) {
-      settingSession(null);
+  const updateUserSession = (userUpdated: IUser | null): void => {
+    if (!userUpdated) {
       return;
     }
 
-    const newUserSettingsSession: IUser = {
-      ...newUser,
-      authToken: user.authToken,
-    };
+    if (!user) {
+      _settingSession(null);
+      return;
+    }
 
-    settingSession(newUserSettingsSession);
+    const newUser: IUser = __getUserUpdated(user, userUpdated);
+
+    _settingSession(newUser);
   };
 
-  const componentWillMount = useCallback(async () => {
-    if (Cookies.get(CookiesEnum.CookiesName.COOKIE_AUTH)) {
-      const userFromLocalStorage: IUser | null =
-        LocalStorageUserMethods.getUser();
+  /**
+   * Method main to mount app data
+   */
+  const _componentWillMount = useCallback(async () => {
+    const hasNoCookieAuth: boolean = !Cookies.get(
+      CookiesEnum.CookiesName.COOKIE_AUTH
+    );
 
-      if (!userFromLocalStorage) {
-        settingSession(null);
-        return;
-      }
-
-      if (
-        userFromLocalStorage?.authProvider === UsersEnum.Provider.SOCIAL_PRICES
-      ) {
-        await validateToken(userFromLocalStorage);
-      } else {
-        const cancel = auth.onIdTokenChanged(settingSessionFirebase);
-
-        return () => cancel();
-      }
-    } else {
-      settingSession(null);
+    if (hasNoCookieAuth) {
+      _settingSession(null);
+      return;
     }
+
+    const userFromLocalStorage: IUser | null =
+      LocalStorageUserMethods.getUser();
+
+    if (!userFromLocalStorage) {
+      _settingSession(null);
+      return;
+    }
+
+    if (
+      userFromLocalStorage?.loggedByAuthProvider === UsersEnum.Provider.GOOGLE
+    ) {
+      const cancel = auth.onIdTokenChanged(_settingSessionFirebase);
+
+      return () => cancel();
+    }
+
+    await _validateToken(userFromLocalStorage);
   }, []);
 
   useEffect(() => {
-    componentWillMount();
-  }, [componentWillMount]);
+    _componentWillMount();
+  }, [_componentWillMount]);
 
   return (
     <AuthContext.Provider

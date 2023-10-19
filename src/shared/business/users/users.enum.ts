@@ -2,11 +2,13 @@ namespace UsersEnum {
   export enum Provider {
     GOOGLE = "GOOGLE",
     SOCIAL_PRICES = "SOCIAL_PRICES",
+    OTHER = "OTHER",
   }
 
   export const ProviderLabels = {
     [Provider.GOOGLE]: "Google",
     [Provider.SOCIAL_PRICES]: "Social Prices",
+    [Provider.OTHER]: "Other",
   };
 
   export enum Status {

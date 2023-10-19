@@ -41,6 +41,17 @@ export default function ProfileEditPage() {
         <ContainerTitle title="Information" className="mt-6">
           <div className="flex">
             <Description
+              label="Logged By"
+              className="mr-5"
+              description={
+                user?.loggedByAuthProvider
+                  ? UsersEnum.ProviderLabels[user.loggedByAuthProvider]
+                  : UsersEnum.ProviderLabels.OTHER
+              }
+              leftIcon={IconFinger()}
+            />
+
+            <Description
               label="Auth Provider"
               className="mr-5"
               description={

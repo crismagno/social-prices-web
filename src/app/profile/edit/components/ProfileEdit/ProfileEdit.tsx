@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+
+import moment from "moment";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import Button from "../../../../../components/common/Button/Button";
@@ -16,10 +19,10 @@ import UsersEnum from "../../../../../shared/business/users/users.enum";
 
 type IProfileEditForm = {
   firstName: string;
-  middleName?: string;
+  middleName: string | null;
   lastName: string;
-  birthDate?: Date;
-  gender?: UsersEnum.Gender;
+  birthDate: Date | null;
+  gender: UsersEnum.Gender | null;
 };
 
 interface Props {
@@ -32,9 +35,9 @@ const ProfileEdit: React.FC<Props> = ({ className }) => {
   const defaultValues: IProfileEditForm = {
     firstName: user?.firstName ?? "",
     lastName: user?.lastName ?? "",
-    birthDate: user?.birthDate ?? new Date(),
+    birthDate: moment(user?.birthDate).toDate(),
     gender: user?.gender ?? UsersEnum.Gender.OTHER,
-    middleName: user?.middleName ?? "",
+    middleName: user?.middleName ?? null,
   };
 
   const {
@@ -45,12 +48,16 @@ const ProfileEdit: React.FC<Props> = ({ className }) => {
     defaultValues,
   });
 
+  const [isSubmitting, setIsSUbmitting] = useState<boolean>(false);
+
   const onSubmit: SubmitHandler<IProfileEditForm> = async (data) => {
     try {
+      setIsSUbmitting(true);
+
       const response: IUser = await usersServiceMethodsInstance.updateUser({
         birthDate: data.birthDate,
         firstName: data.firstName,
-        gender: data.gender ?? null,
+        gender: data.gender,
         lastName: data.lastName,
         middleName: data.middleName ?? null,
       });
@@ -58,6 +65,8 @@ const ProfileEdit: React.FC<Props> = ({ className }) => {
       updateUserSession(response);
     } catch (error) {
       handleClientError(error);
+    } finally {
+      setIsSUbmitting(false);
     }
   };
 
@@ -71,6 +80,12 @@ const ProfileEdit: React.FC<Props> = ({ className }) => {
             color="success"
             className="text-sm"
             onClick={handleSubmit(onSubmit)}
+            loading={{
+              isLoading: isSubmitting,
+              height: 20,
+              width: 20,
+              element: "Updating",
+            }}
           >
             Save Profile
           </Button>
@@ -86,6 +101,7 @@ const ProfileEdit: React.FC<Props> = ({ className }) => {
               registerName="firstName"
               registerOptions={{ required: true }}
               errorMessage={errors.firstName && "First name is required"}
+              maxLength={100}
             />
 
             <FormInput
@@ -94,6 +110,7 @@ const ProfileEdit: React.FC<Props> = ({ className }) => {
               defaultValue={user?.middleName ?? ""}
               register={register}
               registerName="middleName"
+              maxLength={100}
             />
 
             <FormInput
@@ -104,6 +121,7 @@ const ProfileEdit: React.FC<Props> = ({ className }) => {
               registerName="lastName"
               registerOptions={{ required: true }}
               errorMessage={errors.lastName && "Last name is required"}
+              maxLength={100}
             />
           </div>
 

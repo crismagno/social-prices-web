@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 
 import Button from "../../../../../components/common/Button/Button";
@@ -27,7 +29,7 @@ import {
   ICountryMockData,
   IStateMockData,
 } from "../../../../../shared/utils/mock-data/interfaces";
-import { createComma } from "../../../../../shared/utils/string-extensions/string-extensions";
+import { createUserAddressName } from "../../../../../shared/utils/string-extensions/string-extensions";
 
 interface IProfileEditFormAddress {
   address1: string;
@@ -102,8 +104,12 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
     name: "addresses",
   });
 
+  const [isSubmitting, setIsSUbmitting] = useState<boolean>(false);
+
   const onSubmit: SubmitHandler<IProfileEditForm> = async (data) => {
     try {
+      setIsSUbmitting(true);
+
       const addresses: IUserAddress[] = data.addresses.map(
         (address): IUserAddress => ({
           ...address,
@@ -129,6 +135,8 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
       updateUserSession(response);
     } catch (error) {
       handleClientError(error);
+    } finally {
+      setIsSUbmitting(false);
     }
   };
 
@@ -140,36 +148,6 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
     if (fields.length === 1) {
       addNewAddress();
     }
-  };
-
-  const createAddressName = (address: IProfileEditFormAddress): string => {
-    let addressName: string = "";
-
-    if (address.countryCode) {
-      addressName += address.countryCode;
-    }
-
-    if (address.stateCode) {
-      addressName += createComma(address.stateCode);
-    }
-
-    if (address.city) {
-      addressName += createComma(address.city);
-    }
-
-    if (address.district) {
-      addressName += createComma(address.district);
-    }
-
-    if (address.zip) {
-      addressName += createComma(address.zip);
-    }
-
-    if (address.address1) {
-      addressName += createComma(address.address1);
-    }
-
-    return addressName;
   };
 
   return (
@@ -193,6 +171,12 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
             className="text-sm"
             color="success"
             disabled={fields.length === 0}
+            loading={{
+              isLoading: isSubmitting,
+              height: 20,
+              width: 20,
+              element: "Updating",
+            }}
           >
             Save Addresses
           </Button>
@@ -202,7 +186,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
         {fields.map((formAddress: IProfileEditFormAddress, index: number) => {
           const address: IProfileEditFormAddress = watch(`addresses.${index}`);
 
-          const addressName: string = createAddressName(address);
+          const addressName: string = createUserAddressName(address);
 
           return (
             <Collapse
@@ -251,6 +235,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
                     errorMessage={
                       errors?.addresses?.[index]?.zip && "Zipcode is required"
                     }
+                    maxLength={20}
                   />
 
                   <FormInput
@@ -264,6 +249,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
                       errors?.addresses?.[index]?.district &&
                       "District is required"
                     }
+                    maxLength={200}
                   />
                 </div>
 
@@ -298,6 +284,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
                       errors?.addresses?.[index]?.address1 &&
                       "Address1 is required"
                     }
+                    maxLength={200}
                   />
 
                   <FormInput
@@ -306,6 +293,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
                     defaultValue={formAddress.description}
                     register={register}
                     registerName={`addresses.${index}.description`}
+                    maxLength={400}
                   />
                 </div>
 
@@ -338,6 +326,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
                     defaultValue={formAddress.address2}
                     register={register}
                     registerName={`addresses.${index}.address2`}
+                    maxLength={200}
                   />
                 </div>
               </div>

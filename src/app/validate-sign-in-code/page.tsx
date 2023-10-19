@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import Avatar from "../../components/common/Avatar/Avatar";
 import Button from "../../components/common/Button/Button";
 import HrCustom from "../../components/common/HrCustom/HrCustom";
-import Loading from "../../components/common/Loading/Loading";
 import WormAlert, {
   IWormAlertRefProps,
   WormAlertTypeEnum,
@@ -109,8 +108,13 @@ export default function ValidateSignInCode() {
             className="justify-center items-center py-2 rounded-md mt-5 w-full"
             onClick={handleValidateSignInCode}
             disabled={isSubmitting}
+            loading={{
+              isLoading: isSubmitting,
+              height: 30,
+              width: 30,
+            }}
           >
-            {isSubmitting ? <Loading height={30} width={30} /> : "Send"}
+            Send
           </Button>
         </div>
 

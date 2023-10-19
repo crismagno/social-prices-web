@@ -1,5 +1,7 @@
 import { ButtonHTMLAttributes } from "react";
 
+import Loading, { LoadingProps } from "../Loading/Loading";
+
 type TButtonColor =
   | "default"
   | "danger"
@@ -25,8 +27,13 @@ const ButtonColor = {
   transparent: "transparent hover:bg-gray-200",
 };
 
+interface ButtonLoadingProps extends LoadingProps {
+  isLoading: boolean;
+}
+
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   color?: TButtonColor;
+  loading?: ButtonLoadingProps;
 }
 
 const Button: React.FC<Props> = ({
@@ -34,6 +41,7 @@ const Button: React.FC<Props> = ({
   children,
   className,
   color,
+  loading,
   ...props
 }) => {
   color = color ?? "default";
@@ -44,7 +52,7 @@ const Button: React.FC<Props> = ({
       className={`flex shadow-md rounded-md p-2 ${ButtonColor[color]} ${className}`}
       {...props}
     >
-      {children}
+      {loading?.isLoading ? <Loading {...loading} /> : children}
     </button>
   );
 };
