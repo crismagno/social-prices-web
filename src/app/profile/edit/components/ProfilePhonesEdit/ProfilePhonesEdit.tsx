@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { message, Tooltip } from "antd";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 
 import Button from "../../../../../components/common/Button/Button";
@@ -82,6 +83,8 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className }) => {
           phoneNumbers: data.phoneNumbers,
         });
 
+      message.success("Your Phone numbers information was updated!");
+
       updateUserSession(response);
     } catch (error) {
       handleClientError(error);
@@ -107,13 +110,15 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className }) => {
           <div className="flex items-center">
             <label className="mr-4">Phone Numbers</label>
 
-            <Button
-              onClick={addNewPhoneNumber}
-              color="primary"
-              className="rounded-r-full rounded-l-full"
-            >
-              {IconPlus()}
-            </Button>
+            <Tooltip title="Add a new phone number">
+              <Button
+                onClick={addNewPhoneNumber}
+                color="primary"
+                className="rounded-r-full rounded-l-full"
+              >
+                {IconPlus()}
+              </Button>
+            </Tooltip>
           </div>
         }
         extraHeader={
@@ -148,13 +153,15 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className }) => {
                 title={phoneNumberName.trim() || `Phone Number (${index + 1})`}
                 className="relative mt-5"
                 extraHeader={
-                  <Button
-                    onClick={() => removeNewPhoneNumber(index)}
-                    color="transparent"
-                    className="rounded-r-full rounded-l-full absolute right-2 shadow-none"
-                  >
-                    {IconTrash("w-3 h-3 text-red-500 hover:text-red-600")}
-                  </Button>
+                  <Tooltip title="Remove phone number">
+                    <Button
+                      onClick={() => removeNewPhoneNumber(index)}
+                      color="transparent"
+                      className="rounded-r-full rounded-l-full absolute right-2 shadow-none"
+                    >
+                      {IconTrash("w-3 h-3 text-red-500 hover:text-red-600")}
+                    </Button>
+                  </Tooltip>
                 }
               >
                 <div className="flex">

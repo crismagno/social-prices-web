@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { message, Tooltip } from "antd";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 
 import Button from "../../../../../components/common/Button/Button";
@@ -132,6 +133,8 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
           addresses,
         });
 
+      message.success("Your addresses information was updated!");
+
       updateUserSession(response);
     } catch (error) {
       handleClientError(error);
@@ -157,13 +160,15 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
           <div className="flex items-center">
             <label className="mr-4">Addresses</label>
 
-            <Button
-              onClick={addNewAddress}
-              color="primary"
-              className="rounded-r-full rounded-l-full"
-            >
-              {IconPlus()}
-            </Button>
+            <Tooltip title="Add a new address">
+              <Button
+                onClick={addNewAddress}
+                color="primary"
+                className="rounded-r-full rounded-l-full"
+              >
+                {IconPlus()}
+              </Button>
+            </Tooltip>
           </div>
         }
         extraHeader={
@@ -195,13 +200,15 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
               title={addressName.trim() || `Address (${index + 1})`}
               className="relative mt-5"
               extraHeader={
-                <Button
-                  onClick={() => removeNewAddress(index)}
-                  color="transparent"
-                  className="rounded-r-full rounded-l-full absolute right-2 shadow-none"
-                >
-                  {IconTrash("w-3 h-3 text-red-500 hover:text-red-600")}
-                </Button>
+                <Tooltip title="Remove address">
+                  <Button
+                    onClick={() => removeNewAddress(index)}
+                    color="transparent"
+                    className="rounded-r-full rounded-l-full absolute right-2 shadow-none"
+                  >
+                    {IconTrash("w-3 h-3 text-red-500 hover:text-red-600")}
+                  </Button>
+                </Tooltip>
               }
             >
               <div className="flex">

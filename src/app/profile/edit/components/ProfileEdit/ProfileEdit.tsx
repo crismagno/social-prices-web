@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { message } from "antd";
 import moment from "moment";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -61,6 +62,8 @@ const ProfileEdit: React.FC<Props> = ({ className }) => {
         lastName: data.lastName,
         middleName: data.middleName ?? null,
       });
+
+      message.success("Your basic user information was updated!");
 
       updateUserSession(response);
     } catch (error) {

@@ -1,5 +1,7 @@
 "use client";
 
+import { Tooltip } from "antd";
+
 import Avatar from "../../../components/common/Avatar/Avatar";
 import BackButton from "../../../components/common/BackButton/BackButton";
 import Card from "../../../components/common/Card/Card";
@@ -24,14 +26,14 @@ export default function ProfileEditPage() {
     <Layout title="Profile Edit" subtitle="Your personal data to update">
       <Card className=" h-min-80 mt-10">
         <div className="flex justify-center absolute right-0 w-full -top-16">
-          <div className="cursor-pointer">
+          <Tooltip title="Update avatar" className="cursor-pointer z-10">
             <Avatar
               src={user?.avatar}
               width={130}
               height={130}
               className="shadow-lg border-none"
             />
-          </div>
+          </Tooltip>
         </div>
 
         <div className="flex justify-end relative">
