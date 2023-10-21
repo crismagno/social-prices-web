@@ -42,13 +42,12 @@ const Collapse: React.FC<Props> = ({
         {extraHeader}
       </div>
 
-      {!isCollapsed && (
-        <div
-          className={`px-3 py-2 border-b border-r border-l rounded-b-lg pb-5 ${bodyClassName}`}
-        >
-          {children}
-        </div>
-      )}
+      <div
+        className={`px-3 py-2 border-b border-r border-l rounded-b-lg pb-5 ${bodyClassName} 
+        ${isCollapsed ? "hidden" : ""} transition-all`}
+      >
+        {children}
+      </div>
     </div>
   );
 };

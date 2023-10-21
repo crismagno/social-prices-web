@@ -144,7 +144,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
     }
   };
 
-  const addNewAddress = () => append(generateNewAddress());
+  const addNewAddress = () => append(generateNewAddress(false));
 
   const removeNewAddress = (index: number) => {
     remove(index);

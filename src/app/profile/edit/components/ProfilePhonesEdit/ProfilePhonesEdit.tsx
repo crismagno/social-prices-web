@@ -94,7 +94,7 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className }) => {
     }
   };
 
-  const addNewPhoneNumber = () => append(generateNewAPhoneNumber());
+  const addNewPhoneNumber = () => append(generateNewAPhoneNumber(true));
 
   const removeNewPhoneNumber = (index: number) => {
     remove(index);
