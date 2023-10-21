@@ -10,7 +10,7 @@ import UsersServiceEnum from "./user-service.enum";
 
 export default class UsersServiceMethods extends ServiceMethodsBase {
   public async getUser(): Promise<IUser> {
-    const response = await this._fetchAxios.get(
+    const response = await this._fetchAxios.get<IUser>(
       `${this._socialPricesApiV1}${UsersServiceEnum.Methods.GET_USER}`,
       {
         headers: {
@@ -24,7 +24,7 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
   }
 
   public async getUserByToken(token: string): Promise<IUser> {
-    const response = await this._fetchAxios.get(
+    const response = await this._fetchAxios.get<IUser>(
       `${this._socialPricesApiV1}${UsersServiceEnum.Methods.GET_USER_BY_TOKEN}`,
       {
         headers: {
@@ -38,7 +38,7 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
   }
 
   public async sendRecoverPasswordCode(email: string): Promise<IUser> {
-    const response = await this._fetchAxios.get(
+    const response = await this._fetchAxios.get<IUser>(
       `${this._socialPricesApiV1}${UsersServiceEnum.Methods.SEND_RECOVER_PASSWORD_CODE}/${email}`
     );
 
@@ -48,7 +48,7 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
   public async recoverPassword(
     recoverPasswordDto: RecoverPasswordDto
   ): Promise<IUser> {
-    const response = await this._fetchAxios.post(
+    const response = await this._fetchAxios.post<IUser>(
       `${this._socialPricesApiV1}${UsersServiceEnum.Methods.RECOVER_PASSWORD}`,
       recoverPasswordDto
     );
@@ -57,7 +57,7 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
   }
 
   public async updateUser(updateUserDto: UpdateUserDto): Promise<IUser> {
-    const response = await this._fetchAxios.post(
+    const response = await this._fetchAxios.post<IUser>(
       `${this._socialPricesApiV1}${UsersServiceEnum.Methods.UPDATE_USER}`,
       updateUserDto,
       {
@@ -74,7 +74,7 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
   public async updateUserPhoneNumbers(
     updateUserPhoneNumbersDto: UpdateUserPhoneNumbersDto
   ): Promise<IUser> {
-    const response = await this._fetchAxios.post(
+    const response = await this._fetchAxios.post<IUser>(
       `${this._socialPricesApiV1}${UsersServiceEnum.Methods.UPDATE_USER_PHONE_NUMBERS}`,
       updateUserPhoneNumbersDto,
       {
@@ -91,7 +91,7 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
   public async updateUserAddresses(
     updateUserAddressesDto: UpdateUserAddressesDto
   ): Promise<IUser> {
-    const response = await this._fetchAxios.post(
+    const response = await this._fetchAxios.post<IUser>(
       `${this._socialPricesApiV1}${UsersServiceEnum.Methods.UPDATE_USER_ADDRESSES}`,
       updateUserAddressesDto,
       {

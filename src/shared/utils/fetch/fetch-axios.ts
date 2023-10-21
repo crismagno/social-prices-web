@@ -24,48 +24,52 @@ export default class FetchAxios {
 
   //#region Public Methods
 
-  public async get(
+  public async get<T = any, D = any>(
     url: string,
-    config?: AxiosRequestConfig<any>
-  ): Promise<AxiosResponse<any, any>> {
-    config = this._getConfig(config);
+    config?: AxiosRequestConfig<D>
+  ): Promise<AxiosResponse<T, D>> {
+    config = this._getConfig<D>(config);
 
-    const response = await axios.get(url, config);
+    const response: AxiosResponse<T, D> = await axios.get<T>(url, config);
 
     return response;
   }
 
-  public async post(
+  public async post<T = any, D = any>(
     url: string,
     data?: any,
-    config?: AxiosRequestConfig<any>
-  ): Promise<AxiosResponse<any, any>> {
-    config = this._getConfig(config);
+    config?: AxiosRequestConfig<D>
+  ): Promise<AxiosResponse<T, D>> {
+    config = this._getConfig<D>(config);
 
-    const response = await axios.post(url, data, config);
+    const response: AxiosResponse<T, D> = await axios.post<T>(
+      url,
+      data,
+      config
+    );
 
     return response;
   }
 
-  public async put(
+  public async put<T = any, D = any>(
     url: string,
     data?: any,
-    config?: AxiosRequestConfig<any>
-  ): Promise<AxiosResponse<any, any>> {
-    config = this._getConfig(config);
+    config?: AxiosRequestConfig<D>
+  ): Promise<AxiosResponse<T, D>> {
+    config = this._getConfig<D>(config);
 
-    const response = await axios.put(url, data, config);
+    const response: AxiosResponse<T, D> = await axios.put<T>(url, data, config);
 
     return response;
   }
 
-  public async delete(
+  public async delete<T = any, D = any>(
     url: string,
-    config?: AxiosRequestConfig<any>
-  ): Promise<AxiosResponse<any, any>> {
+    config?: AxiosRequestConfig<D>
+  ): Promise<AxiosResponse<T, D>> {
     config = this._getConfig(config);
 
-    const response = await axios.delete(url, config);
+    const response: AxiosResponse<T, D> = await axios.delete<T>(url, config);
 
     return response;
   }
@@ -74,9 +78,9 @@ export default class FetchAxios {
 
   //#region Private Methods
 
-  private _getConfig(
-    config?: AxiosRequestConfig<any>
-  ): AxiosRequestConfig<any> {
+  private _getConfig<D = any>(
+    config?: AxiosRequestConfig<D>
+  ): AxiosRequestConfig<D> {
     return (config = config ? config : this._defaultConfig);
   }
 

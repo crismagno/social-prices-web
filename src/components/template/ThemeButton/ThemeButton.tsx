@@ -2,11 +2,8 @@
 
 import useAppData from "../../../data/hook/useAppData";
 import ThemeEnum from "../../../shared/common/enums/theme.enum";
-import { IconMoon, IconSun } from "../../common/icons/icons";
 
-interface Props {}
-
-const ThemeButton: React.FC<Props> = ({}) => {
+const ThemeButton: React.FC = () => {
   const { changeTheme, theme } = useAppData();
 
   return (
@@ -30,7 +27,7 @@ const ThemeButton: React.FC<Props> = ({}) => {
             : "text-yellow-300 bg-blue-950"
         }`}
       >
-        {theme === ThemeEnum.Theme.DARK ? IconSun : IconMoon}
+        {ThemeEnum.ThemeIcons[theme]}
       </span>
       <span>
         {theme === ThemeEnum.Theme.LIGHT

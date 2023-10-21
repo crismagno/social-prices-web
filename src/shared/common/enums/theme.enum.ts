@@ -1,3 +1,5 @@
+import { IconMoon, IconSun } from "../../../components/common/icons/icons";
+
 namespace ThemeEnum {
   export enum Theme {
     LIGHT = "light",
@@ -7,6 +9,11 @@ namespace ThemeEnum {
   export const ThemeLabels = {
     [Theme.LIGHT]: "Light",
     [Theme.DARK]: "Dark",
+  };
+
+  export const ThemeIcons = {
+    [Theme.LIGHT]: IconMoon,
+    [Theme.DARK]: IconSun,
   };
 }
 

@@ -86,7 +86,6 @@ export default function Login() {
 
   return (
     <div className="relative flex flex-row h-screen">
-      {/* part images left */}
       <div className="hidden md:block md:w-2-1/2 lg:w-2/3">
         <img
           src="https://source.unsplash.com/random"
@@ -95,7 +94,6 @@ export default function Login() {
         />
       </div>
 
-      {/* part login and create  */}
       {isSubmitting && (
         <div className="h-full w-full absolute flex justify-center items-center bg-gray-500/30 top-0 z-50">
           <Loading />

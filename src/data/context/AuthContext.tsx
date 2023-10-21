@@ -3,6 +3,7 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 
 import {
+  Auth,
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
@@ -23,8 +24,8 @@ import LocalStorageEnum from "../../shared/common/local-storage/local-storage.en
 import LocalStorageUserMethods from "../../shared/common/local-storage/methods/local-storage-user.methods";
 import Urls from "../../shared/common/routes-app/routes-app";
 
-const googleProvider = new GoogleAuthProvider();
-const auth = getAuth(firebaseApp);
+const googleProvider: GoogleAuthProvider = new GoogleAuthProvider();
+const auth: Auth = getAuth(firebaseApp);
 
 export interface IAuthContext {
   user: IUser | null;
@@ -101,7 +102,7 @@ const __managerLocalStorage = (user: IUser | null) => {
   }
 };
 
-const __getUserUpdated = (currentUser: IUser, newUser: IUser): IUser => {
+const __mergeUserUpdated = (currentUser: IUser, newUser: IUser): IUser => {
   return {
     ...newUser,
     providerId: currentUser.providerId,
@@ -149,7 +150,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       if (isValidToken) {
         const userResponse: IUser = await usersServiceMethodsInstance.getUser();
 
-        const newUser: IUser = __getUserUpdated(userParam, userResponse);
+        const newUser: IUser = __mergeUserUpdated(userParam, userResponse);
 
         _settingSession(newUser);
         return newUser;
@@ -295,7 +296,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
 
   const validateSignInCode = async (codeValue: string): Promise<boolean> => {
     try {
-      if (!user) {
+      if (!user?.authToken) {
         router.push(Urls.LOGIN);
         return false;
       }
@@ -304,7 +305,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
 
       const isValidateSignInCode: boolean =
         await authServiceMethodsInstance.validateSignInCode(
-          user.authToken!,
+          user.authToken,
           codeValue
         );
 
@@ -315,7 +316,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       const userResponse: IUser =
         await usersServiceMethodsInstance.getUserByToken(user.authToken!);
 
-      const newUser: IUser = __getUserUpdated(user, userResponse);
+      const newUser: IUser = __mergeUserUpdated(user, userResponse);
 
       _settingSession(newUser);
 
@@ -338,7 +339,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       return;
     }
 
-    const newUser: IUser = __getUserUpdated(user, userUpdated);
+    const newUser: IUser = __mergeUserUpdated(user, userUpdated);
 
     _settingSession(newUser);
   };

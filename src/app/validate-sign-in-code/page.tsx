@@ -76,7 +76,7 @@ export default function ValidateSignInCode() {
         <WormAlert ref={wormTextMessage} className="my-3 w-full" />
 
         <div
-          className="flex flex-col justify-center items-center w-full h-full p-8
+          className="flex flex-col justify-center items-center w-full h-full
           p-3 shadow-2xl bg-white rounded-lg"
         >
           <Avatar
@@ -96,10 +96,9 @@ export default function ValidateSignInCode() {
             value={codeValue}
             onChange={(e) => setCodeValue(e.target.value)}
             placeholder="Type your code here..."
-            className="
-					px-4 py-3 bg-gray-100 rounded-lg mt-8 w-full
-					 focus:bg-white focus:border-blue-100
-					 transition-all text-lg text-center"
+            className="px-4 py-3 bg-gray-100 rounded-lg mt-8 w-full
+              focus:bg-white focus:border-blue-100
+              transition-all text-lg text-center"
             disabled={isSubmitting}
           />
 

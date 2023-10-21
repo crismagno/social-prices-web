@@ -7,7 +7,7 @@ import CreateUserDto from "./dto/createUser.dto";
 
 export default class AuthServiceMethods extends ServiceMethodsBase {
   public async signIn(email: string, password: string): Promise<IUser> {
-    const response = await this._fetchAxios.post(
+    const response = await this._fetchAxios.post<IUser>(
       `${this._socialPricesApiV1}${AuthServiceEnum.Methods.SIGN_IN}`,
       {
         email,
@@ -19,7 +19,7 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
   }
 
   public async signUp(createUserDto: CreateUserDto): Promise<IUser> {
-    const response = await this._fetchAxios.post(
+    const response = await this._fetchAxios.post<IUser>(
       `${this._socialPricesApiV1}${AuthServiceEnum.Methods.SIGN_UP}`,
       createUserDto
     );
@@ -29,7 +29,7 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
 
   public async validateToken(token: string): Promise<boolean> {
     try {
-      const response = await this._fetchAxios.get(
+      const response = await this._fetchAxios.get<boolean>(
         `${this._socialPricesApiV1}${AuthServiceEnum.Methods.VALIDATE_TOKEN}`,
         {
           headers: {
@@ -50,7 +50,7 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
     codeValue: string
   ): Promise<boolean> {
     try {
-      const response = await this._fetchAxios.get(
+      const response = await this._fetchAxios.get<boolean>(
         `${this._socialPricesApiV1}${AuthServiceEnum.Methods.VALIDATE_SIGN_IN_CODE}/${codeValue}`,
         {
           headers: {
