@@ -174,7 +174,7 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className }) => {
                 <div className="flex">
                   <div className="flex flex-col justify-start w-1/2">
                     <FormSelect
-                      label="Country"
+                      label="Type"
                       placeholder={"Select phone type"}
                       defaultValue={formPhoneNumber.type}
                       register={register}
