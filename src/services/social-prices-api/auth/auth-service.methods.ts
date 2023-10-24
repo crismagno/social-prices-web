@@ -66,5 +66,3 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
     }
   }
 }
-
-export const authServiceMethodsInstance = new AuthServiceMethods();

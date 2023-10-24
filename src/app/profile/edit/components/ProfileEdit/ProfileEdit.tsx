@@ -14,12 +14,12 @@ import FormSelect, {
 } from "../../../../../components/common/FormSelect/FormSelect";
 import handleClientError from "../../../../../components/common/handleClientError/handleClientError";
 import useAuthData from "../../../../../data/hook/useAuthData";
-import { usersServiceMethodsInstance } from "../../../../../services/social-prices-api/users/user-service.methods";
+import { serviceMethodsInstance } from "../../../../../services/social-prices-api/ServiceMethods";
 import IUser from "../../../../../shared/business/users/user.interface";
 import UsersEnum from "../../../../../shared/business/users/users.enum";
 import DatesEnum from "../../../../../shared/utils/dates/dates.enum";
 
-type IProfileEditForm = {
+type IForm = {
   firstName: string;
   middleName: string | null;
   lastName: string;
@@ -31,10 +31,10 @@ interface Props {
   className?: string;
 }
 
-const ProfileEdit: React.FC<Props> = ({ className }) => {
+const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
   const { user, updateUserSession } = useAuthData();
 
-  const defaultValues: IProfileEditForm = {
+  const defaultValues: IForm = {
     firstName: user?.firstName ?? "",
     lastName: user?.lastName ?? "",
     birthDate: moment(user?.birthDate)
@@ -48,23 +48,24 @@ const ProfileEdit: React.FC<Props> = ({ className }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IProfileEditForm>({
+  } = useForm<IForm>({
     defaultValues,
   });
 
   const [isSubmitting, setIsSUbmitting] = useState<boolean>(false);
 
-  const onSubmit: SubmitHandler<IProfileEditForm> = async (data) => {
+  const onSubmit: SubmitHandler<IForm> = async (data: IForm) => {
     try {
       setIsSUbmitting(true);
 
-      const response: IUser = await usersServiceMethodsInstance.updateUser({
-        birthDate: moment(data.birthDate).toDate(),
-        firstName: data.firstName,
-        gender: data.gender,
-        lastName: data.lastName,
-        middleName: data.middleName ?? null,
-      });
+      const response: IUser =
+        await serviceMethodsInstance.usersServiceMethods.updateUser({
+          birthDate: moment(data.birthDate).toDate(),
+          firstName: data.firstName,
+          gender: data.gender,
+          lastName: data.lastName,
+          middleName: data.middleName ?? null,
+        });
 
       message.success("Your basic information was updated!");
 

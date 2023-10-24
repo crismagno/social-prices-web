@@ -12,7 +12,7 @@ import WormAlert, {
   IWormAlertRefProps,
   WormAlertTypeEnum,
 } from "../../components/common/WorkAlert/WormAlert";
-import { usersServiceMethodsInstance } from "../../services/social-prices-api/users/user-service.methods";
+import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
 import Urls from "../../shared/common/routes-app/routes-app";
 
 export default function RecoverPassword() {
@@ -48,7 +48,9 @@ export default function RecoverPassword() {
         return;
       }
 
-      await usersServiceMethodsInstance.sendRecoverPasswordCode(email);
+      await serviceMethodsInstance.usersServiceMethods.sendRecoverPasswordCode(
+        email
+      );
 
       setIsSentRecoverPassword(true);
 
@@ -84,7 +86,7 @@ export default function RecoverPassword() {
         return;
       }
 
-      await usersServiceMethodsInstance.recoverPassword({
+      await serviceMethodsInstance.usersServiceMethods.recoverPassword({
         codeValue,
         email,
         newPassword,

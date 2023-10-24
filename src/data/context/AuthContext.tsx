@@ -15,8 +15,7 @@ import { useRouter } from "next/navigation";
 
 import handleClientError from "../../components/common/handleClientError/handleClientError";
 import firebaseApp from "../../services/firebase/config";
-import { authServiceMethodsInstance } from "../../services/social-prices-api/auth/auth-service.methods";
-import { usersServiceMethodsInstance } from "../../services/social-prices-api/users/user-service.methods";
+import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
 import IUser from "../../shared/business/users/user.interface";
 import UsersEnum from "../../shared/business/users/users.enum";
 import CookiesEnum from "../../shared/common/cookies/cookies.enum";
@@ -145,10 +144,13 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       }
 
       const isValidToken: boolean =
-        await authServiceMethodsInstance.validateToken(userParam.authToken);
+        await serviceMethodsInstance.authServiceMethods.validateToken(
+          userParam.authToken
+        );
 
       if (isValidToken) {
-        const userResponse: IUser = await usersServiceMethodsInstance.getUser();
+        const userResponse: IUser =
+          await serviceMethodsInstance.usersServiceMethods.getUser();
 
         const newUser: IUser = __mergeUserUpdated(userParam, userResponse);
 
@@ -196,16 +198,17 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     setTimeout(async () => {
       const userNormalized: IUser = await __normalizeUser(userFirebase);
 
-      const responseUser: IUser = await authServiceMethodsInstance.signUp({
-        email: `${userNormalized.email}`,
-        password: `${process.env.NEXT_PUBLIC_SOCIAL_PRICES_SIGN_UP_PASSWORD_TEMP}`,
-        username: `${userNormalized.username}`,
-        authProvider: userNormalized.authProvider,
-        avatar: userNormalized.avatar ?? undefined,
-        extraDataProvider: userNormalized.extraDataProvider,
-        phoneNumbers: userNormalized.phoneNumbers ?? [],
-        uid: userNormalized.uid,
-      });
+      const responseUser: IUser =
+        await serviceMethodsInstance.authServiceMethods.signUp({
+          email: `${userNormalized.email}`,
+          password: `${process.env.NEXT_PUBLIC_SOCIAL_PRICES_SIGN_UP_PASSWORD_TEMP}`,
+          username: `${userNormalized.username}`,
+          authProvider: userNormalized.authProvider,
+          avatar: userNormalized.avatar ?? undefined,
+          extraDataProvider: userNormalized.extraDataProvider,
+          phoneNumbers: userNormalized.phoneNumbers ?? [],
+          uid: userNormalized.uid,
+        });
 
       responseUser.providerId = userNormalized.providerId;
       responseUser.providerToken = userNormalized.providerToken;
@@ -235,10 +238,11 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     try {
       setIsLoading(true);
 
-      const response: IUser = await authServiceMethodsInstance.signIn(
-        username,
-        password
-      );
+      const response: IUser =
+        await serviceMethodsInstance.authServiceMethods.signIn(
+          username,
+          password
+        );
 
       response.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;
 
@@ -257,11 +261,12 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     try {
       setIsLoading(true);
 
-      const response: IUser = await authServiceMethodsInstance.signUp({
-        email: username,
-        password,
-        username,
-      });
+      const response: IUser =
+        await serviceMethodsInstance.authServiceMethods.signUp({
+          email: username,
+          password,
+          username,
+        });
 
       response.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;
 
@@ -304,7 +309,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       setIsLoading(true);
 
       const isValidateSignInCode: boolean =
-        await authServiceMethodsInstance.validateSignInCode(
+        await serviceMethodsInstance.authServiceMethods.validateSignInCode(
           user.authToken,
           codeValue
         );
@@ -314,7 +319,9 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       }
 
       const userResponse: IUser =
-        await usersServiceMethodsInstance.getUserByToken(user.authToken!);
+        await serviceMethodsInstance.usersServiceMethods.getUserByToken(
+          user.authToken!
+        );
 
       const newUser: IUser = __mergeUserUpdated(user, userResponse);
 

@@ -105,5 +105,3 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 }
-
-export const usersServiceMethodsInstance = new UsersServiceMethods();

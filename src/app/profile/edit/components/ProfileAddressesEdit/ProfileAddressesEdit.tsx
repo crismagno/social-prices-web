@@ -18,7 +18,7 @@ import {
   IconTrash,
 } from "../../../../../components/common/icons/icons";
 import useAuthData from "../../../../../data/hook/useAuthData";
-import { usersServiceMethodsInstance } from "../../../../../services/social-prices-api/users/user-service.methods";
+import { serviceMethodsInstance } from "../../../../../services/social-prices-api/ServiceMethods";
 import IUser, {
   IUserAddress,
 } from "../../../../../shared/business/users/user.interface";
@@ -46,7 +46,7 @@ interface IProfileEditFormAddress {
   isCollapsed: boolean;
 }
 
-type IProfileEditForm = {
+type IForm = {
   addresses: IProfileEditFormAddress[];
 };
 
@@ -79,7 +79,7 @@ const generateNewAddress = (
 const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
   const { user, updateUserSession } = useAuthData();
 
-  const defaultValues: IProfileEditForm = {
+  const defaultValues: IForm = {
     addresses: user?.addresses?.length
       ? user.addresses.map((address: IUserAddress, index: number) => ({
           ...address,
@@ -96,7 +96,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
     watch,
     control,
     formState: { errors },
-  } = useForm<IProfileEditForm>({
+  } = useForm<IForm>({
     defaultValues,
   });
 
@@ -107,7 +107,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
 
   const [isSubmitting, setIsSUbmitting] = useState<boolean>(false);
 
-  const onSubmit: SubmitHandler<IProfileEditForm> = async (data) => {
+  const onSubmit: SubmitHandler<IForm> = async (data) => {
     try {
       setIsSUbmitting(true);
 
@@ -130,7 +130,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
       );
 
       const response: IUser =
-        await usersServiceMethodsInstance.updateUserAddresses({
+        await serviceMethodsInstance.usersServiceMethods.updateUserAddresses({
           addresses,
         });
 

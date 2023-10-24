@@ -18,7 +18,7 @@ import {
   IconTrash,
 } from "../../../../../components/common/icons/icons";
 import useAuthData from "../../../../../data/hook/useAuthData";
-import { usersServiceMethodsInstance } from "../../../../../services/social-prices-api/users/user-service.methods";
+import { serviceMethodsInstance } from "../../../../../services/social-prices-api/ServiceMethods";
 import IUser, {
   IPhoneNumber,
 } from "../../../../../shared/business/users/user.interface";
@@ -29,7 +29,7 @@ interface IProfileEditFormPhoneNumber extends IPhoneNumber {
   isCollapsed: boolean;
 }
 
-type IProfileEditForm = {
+type IForm = {
   phoneNumbers: IProfileEditFormPhoneNumber[];
 };
 
@@ -46,10 +46,10 @@ const generateNewAPhoneNumber = (
   uid: Date.now().toString(),
 });
 
-const ProfilePhonesEdit: React.FC<Props> = ({ className }) => {
+const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
   const { user, updateUserSession } = useAuthData();
 
-  const defaultValues: IProfileEditForm = {
+  const defaultValues: IForm = {
     phoneNumbers: user?.phoneNumbers?.length
       ? user.phoneNumbers.map((phoneNumber: IPhoneNumber, index: number) => ({
           ...phoneNumber,
@@ -64,7 +64,7 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className }) => {
     watch,
     control,
     formState: { errors },
-  } = useForm<IProfileEditForm>({
+  } = useForm<IForm>({
     defaultValues,
   });
 
@@ -75,14 +75,16 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className }) => {
 
   const [isSubmitting, setIsSUbmitting] = useState<boolean>(false);
 
-  const onSubmit: SubmitHandler<IProfileEditForm> = async (data) => {
+  const onSubmit: SubmitHandler<IForm> = async (data) => {
     try {
       setIsSUbmitting(true);
 
       const response: IUser =
-        await usersServiceMethodsInstance.updateUserPhoneNumbers({
-          phoneNumbers: data.phoneNumbers,
-        });
+        await serviceMethodsInstance.usersServiceMethods.updateUserPhoneNumbers(
+          {
+            phoneNumbers: data.phoneNumbers,
+          }
+        );
 
       message.success("Your Phone numbers information was updated!");
 
