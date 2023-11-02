@@ -54,7 +54,6 @@ export default function Profile() {
             <Avatar
               src={user?.avatar}
               width={130}
-              height={130}
               className="shadow-lg border-none"
             />
           </div>

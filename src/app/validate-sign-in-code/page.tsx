@@ -79,12 +79,7 @@ export default function ValidateSignInCode() {
           className="flex flex-col justify-center items-center w-full h-full
           p-3 shadow-2xl bg-white rounded-lg"
         >
-          <Avatar
-            src={user?.avatar}
-            alt="Image logo"
-            width={100}
-            height={100}
-          />
+          <Avatar src={user?.avatar} alt="Image logo" width={100} />
 
           <span className="text-xs text-center mt-1">
             {user?.email ?? "---"}

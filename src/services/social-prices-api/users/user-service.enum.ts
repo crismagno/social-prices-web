@@ -7,6 +7,8 @@ namespace UsersServiceEnum {
     UPDATE_USER = "/users/updateUser",
     UPDATE_USER_ADDRESSES = "/users/updateUserAddresses",
     UPDATE_USER_PHONE_NUMBERS = "/users/updateUserPhoneNumbers",
+    UPLOAD_AVATAR = "/users/uploadAvatar",
+    GET_AVATAR_IMAGE = "/users/avatars",
   }
 }
 

@@ -104,4 +104,32 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
 
     return response.data;
   }
+
+  public async uploadAvatar(formData: FormData): Promise<IUser> {
+    const response = await this._fetchAxios.post<IUser>(
+      `${this._socialPricesApiV1}${UsersServiceEnum.Methods.UPLOAD_AVATAR}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async getAvatarImage(filename: string): Promise<any> {
+    const response = await this._fetchAxios.get<any>(
+      `${this._socialPricesApiV1}${UsersServiceEnum.Methods.GET_AVATAR_IMAGE}/${filename}`,
+      {
+        headers: {
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
 }

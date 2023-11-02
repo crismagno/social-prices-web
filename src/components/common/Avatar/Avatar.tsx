@@ -1,9 +1,12 @@
+import { useEffect, useState } from "react";
+
+import { getAvatarImageLocalUrl } from "../../../shared/utils/images/url-images";
+
 interface Props {
   src?: string | null;
   alt?: string;
   className?: string;
   width?: any;
-  height?: any;
   onClick?: (event?: any) => void;
 }
 
@@ -11,29 +14,27 @@ const Avatar: React.FC<Props> = ({
   src,
   alt,
   className,
-  height,
-  width,
+  width = 60,
   onClick,
 }) => {
-  className = `rounded-full shadow-md ${className}`;
+  className = `object-cover rounded-full shadow-md ${className}`;
+
+  const defaultImage: string = "/avatar-default.png";
+
+  const [image, setImage] = useState<string>(defaultImage);
+
+  useEffect(() => {
+    setImage(src ? getAvatarImageLocalUrl(src) : defaultImage);
+  }, [src]);
 
   return (
     <img
-      src={src ?? "/avatar-default.png"}
+      src={image}
       alt={alt}
       className={className}
       onClick={onClick}
-      onError={() => (
-        <img
-          src={"/avatar-default.png"}
-          alt={alt}
-          className={className}
-          width={width ?? "50%"}
-          height={height ?? "50%"}
-        />
-      )}
-      width={width ?? "50%"}
-      height={height ?? "50%"}
+      onError={() => setImage(defaultImage)}
+      style={{ width, height: width }}
     />
   );
 };
