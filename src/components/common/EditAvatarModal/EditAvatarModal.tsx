@@ -1,25 +1,23 @@
 import "./styles.scss";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Button, message, Modal, Upload } from "antd";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
 
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  PlusOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 
 import useAuthData from "../../../data/hook/useAuthData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import IUser from "../../../shared/business/users/user.interface";
+import { getBase64 } from "../../../shared/common/images/helper";
+import { getAvatarImageLocalUrl } from "../../../shared/utils/images/url-images";
 import handleClientError from "../handleClientError/handleClientError";
-
-const getBase64 = (file: RcFile): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
 
 interface Props {
   isVisible: boolean;
@@ -28,7 +26,18 @@ interface Props {
 }
 
 const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
-  const { updateUserSession } = useAuthData();
+  const { updateUserSession, user } = useAuthData();
+
+  const getDefaultFile = (): UploadFile => {
+    const defaultAvatarUrl: string = getAvatarImageLocalUrl(user?.avatar!);
+
+    return {
+      uid: "12345",
+      name: "avatar.png",
+      status: "done",
+      url: defaultAvatarUrl,
+    };
+  };
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
@@ -38,7 +47,17 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
 
   const [previewTitle, setPreviewTitle] = useState<string>("");
 
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileList, setFileList] = useState<UploadFile[]>(
+    user?.avatar ? [getDefaultFile()] : []
+  );
+
+  useEffect(() => {
+    if (user?.avatar) {
+      setFileList([getDefaultFile()]);
+    } else {
+      setFileList([]);
+    }
+  }, [user?.avatar]);
 
   const handleCancel = () => setPreviewOpen(false);
 
@@ -54,8 +73,9 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
     );
   };
 
-  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
+  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
+  };
 
   const handleSubmit = async (e: any) => {
     if (fileList.length === 0) {
@@ -81,6 +101,24 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
     }
   };
 
+  const handleRemoveAvatar = async (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setIsSubmitting(true);
+
+    try {
+      const response: IUser =
+        await serviceMethodsInstance.usersServiceMethods.removeAvatar();
+
+      updateUserSession(response);
+    } catch (error: any) {
+      handleClientError(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const uploadButton = (
     <div>
       <PlusOutlined />
@@ -92,11 +130,15 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
     <Modal
       zIndex={10000}
       open={isVisible}
-      onCancel={onCancel}
+      onCancel={() => {
+        setFileList(user?.avatar ? [getDefaultFile()] : []);
+        onCancel();
+      }}
       onOk={onOk}
       okButtonProps={{ hidden: true, disabled: isSubmitting }}
       cancelButtonProps={{ hidden: true, disabled: isSubmitting }}
       closable={!isSubmitting}
+      destroyOnClose
     >
       <div className="content-edit-avatar-modal">
         <Upload
@@ -112,14 +154,27 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
           {fileList.length === 1 ? null : uploadButton}
         </Upload>
 
-        <Button
-          onClick={handleSubmit}
-          className="flex justify-center items-center mt-10"
-          loading={isSubmitting}
-        >
-          <UploadOutlined />
-          Upload Avatar
-        </Button>
+        <div className="flex mt-8">
+          <Button
+            onClick={handleSubmit}
+            className="flex justify-center items-center mr-2"
+            loading={isSubmitting}
+          >
+            <UploadOutlined />
+            Upload Avatar
+          </Button>
+
+          {user?.avatar && (
+            <Button
+              onClick={handleRemoveAvatar}
+              className="flex justify-center items-center"
+              loading={isSubmitting}
+            >
+              <DeleteOutlined />
+              Remove Avatar
+            </Button>
+          )}
+        </div>
       </div>
 
       <Modal

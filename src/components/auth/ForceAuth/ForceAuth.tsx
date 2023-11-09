@@ -39,6 +39,7 @@ const ForceAuth = ({ children }: any) => {
   }
 
   router.push(Urls.LOGIN);
+
   return null;
 };
 

@@ -26,23 +26,28 @@ const Navigation: React.FC<Props> = ({}) => {
         <NavigationItem text="Profile" url={Urls.PROFILE} title="Logo Name">
           <Avatar src={user?.avatar} alt="Image logo" />
         </NavigationItem>
+
         <NavigationItem icon={IconHome} text="Home" url={Urls.DASHBOARD} />
+
         <NavigationItem
           icon={IconBell}
           text="Notifications"
           url={Urls.NOTIFICATIONS}
         />
+
         <NavigationItem
           icon={IconAdjustmentsHorizontal}
           text="Settings"
           url={Urls.SETTINGS}
         />
+
         <NavigationItem
           icon={IconBuildingStoreFront()}
           text="Store"
           url={Urls.STORE}
         />
       </ul>
+
       <ul className="flex flex-row">
         <NavigationItem
           icon={IconLogout}

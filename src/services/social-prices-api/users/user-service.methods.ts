@@ -120,6 +120,20 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
+  public async removeAvatar(): Promise<IUser> {
+    const response = await this._fetchAxios.delete<IUser>(
+      `${this._socialPricesApiV1}${UsersServiceEnum.Methods.REMOVE_AVATAR}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
   public async getAvatarImage(filename: string): Promise<any> {
     const response = await this._fetchAxios.get<any>(
       `${this._socialPricesApiV1}${UsersServiceEnum.Methods.GET_AVATAR_IMAGE}/${filename}`,

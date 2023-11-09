@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { defaultAvatarImage } from "../../../shared/common/images/files-names";
 import { getAvatarImageLocalUrl } from "../../../shared/utils/images/url-images";
 
 interface Props {
@@ -19,12 +20,10 @@ const Avatar: React.FC<Props> = ({
 }) => {
   className = `object-cover rounded-full shadow-md ${className}`;
 
-  const defaultImage: string = "/avatar-default.png";
-
-  const [image, setImage] = useState<string>(defaultImage);
+  const [image, setImage] = useState<string>(defaultAvatarImage);
 
   useEffect(() => {
-    setImage(src ? getAvatarImageLocalUrl(src) : defaultImage);
+    setImage(src ? getAvatarImageLocalUrl(src) : defaultAvatarImage);
   }, [src]);
 
   return (
@@ -33,7 +32,7 @@ const Avatar: React.FC<Props> = ({
       alt={alt}
       className={className}
       onClick={onClick}
-      onError={() => setImage(defaultImage)}
+      onError={() => setImage(defaultAvatarImage)}
       style={{ width, height: width }}
     />
   );
