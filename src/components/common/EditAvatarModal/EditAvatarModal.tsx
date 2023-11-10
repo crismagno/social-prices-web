@@ -15,7 +15,7 @@ import {
 import useAuthData from "../../../data/hook/useAuthData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import IUser from "../../../shared/business/users/user.interface";
-import { getBase64 } from "../../../shared/common/images/helper";
+import { getBase64 } from "../../../shared/utils/images/helper";
 import { getAvatarImageLocalUrl } from "../../../shared/utils/images/url-images";
 import handleClientError from "../handleClientError/handleClientError";
 
@@ -135,8 +135,8 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
         onCancel();
       }}
       onOk={onOk}
-      okButtonProps={{ hidden: true, disabled: isSubmitting }}
-      cancelButtonProps={{ hidden: true, disabled: isSubmitting }}
+      okButtonProps={{ hidden: true }}
+      cancelButtonProps={{ hidden: true }}
       closable={!isSubmitting}
       destroyOnClose
     >

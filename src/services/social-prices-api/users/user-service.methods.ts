@@ -3,6 +3,7 @@
 import IUser from "../../../shared/business/users/user.interface";
 import ServiceMethodsBase from "../ServiceMethods.base";
 import RecoverPasswordDto from "./dto/recoverPassword.dto";
+import UpdateEmailDto from "./dto/updateEmail.dto";
 import UpdateUserDto from "./dto/updateUser.dto";
 import UpdateUserAddressesDto from "./dto/updateUserAddresses.dto";
 import UpdateUserPhoneNumbersDto from "./dto/updateUserPhoneNumbers.dto";
@@ -139,6 +140,35 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
       `${this._socialPricesApiV1}${UsersServiceEnum.Methods.GET_AVATAR_IMAGE}/${filename}`,
       {
         headers: {
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async sendUpdateEmailCode(email: string): Promise<IUser> {
+    const response = await this._fetchAxios.get<IUser>(
+      `${this._socialPricesApiV1}${UsersServiceEnum.Methods.SEND_UPDATE_EMAIL_CODE}/${email}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async updateEmail(updateEmailDto: UpdateEmailDto): Promise<IUser> {
+    const response = await this._fetchAxios.post<IUser>(
+      `${this._socialPricesApiV1}${UsersServiceEnum.Methods.UPDATE_EMAIL}`,
+      updateEmailDto,
+      {
+        headers: {
+          "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
       }

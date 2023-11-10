@@ -10,6 +10,8 @@ const Urls = {
   STORE: "/store",
   VALIDATE_SIGN_IN_CODE: "/validate-sign-in-code",
   RECOVER_PASSWORD: "/recover-password",
+  UPDATE_EMAIL: "/update-email",
+  UPDATE_USERNAME: "/update-username",
 };
 
 export default Urls;

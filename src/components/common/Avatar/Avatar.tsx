@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { defaultAvatarImage } from "../../../shared/common/images/files-names";
+import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
 import { getAvatarImageLocalUrl } from "../../../shared/utils/images/url-images";
 
 interface Props {

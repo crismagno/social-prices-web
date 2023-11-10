@@ -107,7 +107,10 @@ const __mergeUserUpdated = (currentUser: IUser, newUser: IUser): IUser => {
     providerId: currentUser.providerId,
     providerToken: currentUser.providerToken,
     loggedByAuthProvider: currentUser.loggedByAuthProvider,
-    authToken: currentUser.authToken,
+    authToken:
+      newUser.authToken && newUser.authToken !== currentUser.authToken
+        ? newUser.authToken
+        : currentUser.authToken,
   };
 };
 
@@ -202,7 +205,6 @@ export const AuthProvider = ({ children }: { children?: any }) => {
         await serviceMethodsInstance.authServiceMethods.signUp({
           email: `${userNormalized.email}`,
           password: `${process.env.NEXT_PUBLIC_SOCIAL_PRICES_SIGN_UP_PASSWORD_TEMP}`,
-          username: `${userNormalized.username}`,
           authProvider: userNormalized.authProvider,
           avatar: userNormalized.avatar ?? undefined,
           extraDataProvider: userNormalized.extraDataProvider,
@@ -257,15 +259,14 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     }
   };
 
-  const create = async (username: string, password: string) => {
+  const create = async (email: string, password: string) => {
     try {
       setIsLoading(true);
 
       const response: IUser =
         await serviceMethodsInstance.authServiceMethods.signUp({
-          email: username,
+          email: email,
           password,
-          username,
         });
 
       response.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;
@@ -336,8 +337,8 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     }
   };
 
-  const updateUserSession = (userUpdated: IUser | null): void => {
-    if (!userUpdated) {
+  const updateUserSession = (newUser: IUser | null): void => {
+    if (!newUser) {
       return;
     }
 
@@ -346,9 +347,9 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       return;
     }
 
-    const newUser: IUser = __mergeUserUpdated(user, userUpdated);
+    const userUpdated: IUser = __mergeUserUpdated(user, newUser);
 
-    _settingSession(newUser);
+    _settingSession(userUpdated);
   };
 
   /**

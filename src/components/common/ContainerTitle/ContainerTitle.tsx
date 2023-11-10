@@ -5,17 +5,21 @@ interface Props {
   extraHeader?: any;
   children?: any;
   className?: string;
+  subClassName?: string;
 }
 
 const ContainerTitle: React.FC<Props> = ({
   title,
   extraHeader,
   children,
-  className,
+  className = "",
+  subClassName = "",
 }) => {
+  subClassName = subClassName ? subClassName : "flex justify-between items-end";
+
   return (
     <div className={`${className} w-full`}>
-      <div className="flex justify-between items-end">
+      <div className={subClassName}>
         <label>{title}</label>
 
         {extraHeader}

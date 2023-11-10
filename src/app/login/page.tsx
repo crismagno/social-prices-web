@@ -26,7 +26,7 @@ export default function Login() {
 
   const [mode, setMode] = useState<LoginEnum.Mode>(LoginEnum.Mode.LOGIN);
 
-  const [username, setUsername] = useState<string>();
+  const [email, setEmail] = useState<string>();
 
   const [password, setPassword] = useState<string>();
 
@@ -43,7 +43,7 @@ export default function Login() {
     try {
       setIsSubmitting(true);
 
-      if (!username || !password) {
+      if (!email || !password) {
         throw new Error("Please enter with your credentials!");
       }
 
@@ -52,11 +52,11 @@ export default function Login() {
       }
 
       if (mode === LoginEnum.Mode.CREATE) {
-        await create(username, password);
+        await create(email, password);
         return;
       }
 
-      await login(username, password);
+      await login(email, password);
     } catch (error: any) {
       wormTextMessage.current?.showWormText(
         error.message,
@@ -117,11 +117,11 @@ export default function Login() {
         </h1>
 
         <AuthInput
-          value={username}
-          onChange={setUsername}
+          value={email}
+          onChange={setEmail}
           label="User"
           type="text"
-          placeholder="Type email or username"
+          placeholder="Type email or email"
         />
 
         <AuthInput
