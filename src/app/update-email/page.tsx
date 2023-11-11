@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 
+import { message } from "antd";
 import { useRouter } from "next/navigation";
 
 import AuthInput from "../../components/common/AuthInput/AuthInput";
@@ -9,10 +10,6 @@ import Button from "../../components/common/Button/Button";
 import handleClientError from "../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../components/common/HrCustom/HrCustom";
 import Loading from "../../components/common/Loading/Loading";
-import WormAlert, {
-  IWormAlertRefProps,
-  WormAlertTypeEnum,
-} from "../../components/common/WorkAlert/WormAlert";
 import useAuthData from "../../data/hook/useAuthData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
 import IUser from "../../shared/business/users/user.interface";
@@ -32,21 +29,16 @@ export default function UpdateEmail() {
 
   const [codeValue, setCodeValue] = useState<string>("");
 
-  const wormTextMessage: React.MutableRefObject<IWormAlertRefProps | null> =
-    useRef(null);
+  const handleSendUpdateEmailCode = async (event: any) => {
+    event.preventDefault();
 
-  const handleSendUpdateEmailCode = async () => {
     try {
       setIsSubmitting(true);
 
       if (!email.trim()) {
         setCodeValue("");
 
-        wormTextMessage.current?.showWormText(
-          "Please fill email.",
-          5,
-          WormAlertTypeEnum.WARNING
-        );
+        message.warning("Please fill email.");
 
         return;
       }
@@ -57,17 +49,9 @@ export default function UpdateEmail() {
 
       setIsSentUpdateEmail(true);
 
-      wormTextMessage.current?.showWormText(
-        "Code to update email was sent to your email.",
-        3,
-        WormAlertTypeEnum.SUCCESS
-      );
+      message.success("Code to update email was sent to your email.");
     } catch (error: any) {
-      wormTextMessage.current?.showWormText(
-        "Error when attempt send update email code.",
-        3,
-        WormAlertTypeEnum.DANGER
-      );
+      message.error("Error when attempt send update email code.");
     } finally {
       setIsSubmitting(false);
     }
@@ -80,11 +64,7 @@ export default function UpdateEmail() {
       setIsSubmitting(true);
 
       if (!email.trim() || !codeValue.trim() || !newEmail.trim()) {
-        wormTextMessage.current?.showWormText(
-          "Please fill input values.",
-          3,
-          WormAlertTypeEnum.WARNING
-        );
+        message.warning("Please fill input values.");
 
         return;
       }
@@ -96,11 +76,7 @@ export default function UpdateEmail() {
           newEmail,
         });
 
-      wormTextMessage.current?.showWormText(
-        "Your email has been reset.",
-        3,
-        WormAlertTypeEnum.SUCCESS
-      );
+      message.success("Your email has been reset.");
 
       updateUserSession(newUser);
 
@@ -115,11 +91,9 @@ export default function UpdateEmail() {
   return (
     <div
       className="h-screen w-screen flex flex-col justify-center items-center 
-        bg-gradient-to-r from-yellow-100 to-slate-200"
+        bg-gradient-to-r from-teal-100 to-slate-200"
     >
       <div className="flex flex-col justify-center items-center lg:w-1/4 md:w-1/2">
-        <WormAlert ref={wormTextMessage} className="my-3 w-full" />
-
         <div
           className="flex flex-col justify-center items-center 
           w-full h-full p-3 shadow-2xl bg-white rounded-lg"
@@ -137,7 +111,7 @@ export default function UpdateEmail() {
             />
 
             <button
-              className="px-4 py-2 mt-1 text-yellow-600 w-full text-sm "
+              className="px-4 py-2 mt-1 text-teal-600 w-full text-sm "
               onClick={handleSendUpdateEmailCode}
               disabled={isSubmitting}
             >
@@ -175,7 +149,7 @@ export default function UpdateEmail() {
                 className="justify-center items-center w-full mt-5 py-2"
                 onClick={handleUpdateEmail}
                 disabled={isSubmitting}
-                color="warning"
+                color="success"
                 loading={{
                   isLoading: isSubmitting,
                   height: 30,
@@ -194,7 +168,7 @@ export default function UpdateEmail() {
           className="text-sm rounded-2xl px-4"
           onClick={() => router.back()}
           disabled={isSubmitting}
-          color="warning"
+          color="success"
         >
           Go Back
         </Button>

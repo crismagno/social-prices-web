@@ -232,7 +232,8 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       _createOrSignInUserByLoginGoogle(response.user);
     } catch (error: any) {
       setIsLoading(false);
-      throw new Error("Error occur when attempt login with google.");
+
+      throw error;
     }
   };
 
@@ -252,8 +253,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
 
       router.push(Urls.VALIDATE_SIGN_IN_CODE);
     } catch (error: any) {
-      const messageError: string = handleClientError(error);
-      throw new Error(messageError);
+      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -275,8 +275,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
 
       router.push(Urls.VALIDATE_SIGN_IN_CODE);
     } catch (error: any) {
-      const messageError: string = handleClientError(error);
-      throw new Error(messageError);
+      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -294,6 +293,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
 
       router.push(Urls.LOGIN);
     } catch (error: any) {
+      handleClientError(error);
       throw error;
     } finally {
       setIsLoading(false);

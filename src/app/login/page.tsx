@@ -1,17 +1,13 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import AuthInput from "../../components/common/AuthInput/AuthInput";
-import { IconWarning } from "../../components/common/icons/icons";
+import handleClientError from "../../components/common/handleClientError/handleClientError";
 import Loading from "../../components/common/Loading/Loading";
-import WormAlert, {
-  IWormAlertRefProps,
-  WormAlertTypeEnum,
-} from "../../components/common/WorkAlert/WormAlert";
 import useAuthData from "../../data/hook/useAuthData";
 import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
 import LoginEnum from "../../shared/common/enums/login.enum";
@@ -34,9 +30,6 @@ export default function Login() {
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const wormTextMessage: React.MutableRefObject<IWormAlertRefProps | null> =
-    useRef(null);
-
   const handleLoginOrCreate = async (event: any) => {
     event.preventDefault();
 
@@ -58,11 +51,7 @@ export default function Login() {
 
       await login(email, password);
     } catch (error: any) {
-      wormTextMessage.current?.showWormText(
-        error.message,
-        5,
-        WormAlertTypeEnum.DANGER
-      );
+      handleClientError(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -74,11 +63,7 @@ export default function Login() {
 
       await loginGoogle();
     } catch (error: any) {
-      wormTextMessage.current?.showWormText(
-        error.message,
-        5,
-        WormAlertTypeEnum.DANGER
-      );
+      handleClientError(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -104,12 +89,6 @@ export default function Login() {
         onSubmit={handleLoginOrCreate}
         className="relative flex flex-col justify-center m-10 w-full md:w-1/2 lg:w-1/3"
       >
-        <WormAlert
-          ref={wormTextMessage}
-          className="my-3"
-          icon={IconWarning("text-large mr-2")}
-        />
-
         <h1 className="text-xl font-bold text-center">
           {mode === LoginEnum.Mode.LOGIN
             ? "Enter with your account"

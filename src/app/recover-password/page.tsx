@@ -1,17 +1,14 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 
+import { message } from "antd";
 import { useRouter } from "next/navigation";
 
 import AuthInput from "../../components/common/AuthInput/AuthInput";
 import Button from "../../components/common/Button/Button";
 import HrCustom from "../../components/common/HrCustom/HrCustom";
 import Loading from "../../components/common/Loading/Loading";
-import WormAlert, {
-  IWormAlertRefProps,
-  WormAlertTypeEnum,
-} from "../../components/common/WorkAlert/WormAlert";
 import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
 
 export default function RecoverPassword() {
@@ -28,21 +25,16 @@ export default function RecoverPassword() {
 
   const [codeValue, setCodeValue] = useState<string>("");
 
-  const wormTextMessage: React.MutableRefObject<IWormAlertRefProps | null> =
-    useRef(null);
+  const handleSendRecoverPasswordCode = async (event: any) => {
+    event.preventDefault();
 
-  const handleSendRecoverPasswordCode = async () => {
     try {
       setIsSubmitting(true);
 
       if (!email.trim()) {
         setCodeValue("");
 
-        wormTextMessage.current?.showWormText(
-          "Please fill email.",
-          5,
-          WormAlertTypeEnum.WARNING
-        );
+        message.warning("Please fill email.");
 
         return;
       }
@@ -53,17 +45,9 @@ export default function RecoverPassword() {
 
       setIsSentRecoverPassword(true);
 
-      wormTextMessage.current?.showWormText(
-        "Code to recover password was sent to your email.",
-        3,
-        WormAlertTypeEnum.SUCCESS
-      );
+      message.success("Code to recover password was sent to your email.");
     } catch (error: any) {
-      wormTextMessage.current?.showWormText(
-        "Error when attempt send recover password code.",
-        3,
-        WormAlertTypeEnum.DANGER
-      );
+      message.error("Error when attempt send recover password code.");
     } finally {
       setIsSubmitting(false);
     }
@@ -76,11 +60,7 @@ export default function RecoverPassword() {
       setIsSubmitting(true);
 
       if (!email.trim() || !codeValue.trim() || !newPassword.trim()) {
-        wormTextMessage.current?.showWormText(
-          "Please fill input values.",
-          3,
-          WormAlertTypeEnum.WARNING
-        );
+        message.warning("Please fill input values.");
 
         return;
       }
@@ -91,19 +71,11 @@ export default function RecoverPassword() {
         newPassword,
       });
 
-      wormTextMessage.current?.showWormText(
-        "Your password has been reset.",
-        3,
-        WormAlertTypeEnum.SUCCESS
-      );
+      message.success("Your password has been reset.");
 
       router.back();
     } catch (error: any) {
-      wormTextMessage.current?.showWormText(
-        "Error when attempt recover password.",
-        3,
-        WormAlertTypeEnum.DANGER
-      );
+      message.error("Error when attempt recover password.");
     } finally {
       setIsSubmitting(false);
     }
@@ -115,8 +87,6 @@ export default function RecoverPassword() {
         bg-gradient-to-r from-blue-100 to-slate-200"
     >
       <div className="flex flex-col justify-center items-center lg:w-1/4 md:w-1/2">
-        <WormAlert ref={wormTextMessage} className="my-3 w-full" />
-
         <div
           className="flex flex-col justify-center items-center 
           w-full h-full p-3 shadow-2xl bg-white rounded-lg"

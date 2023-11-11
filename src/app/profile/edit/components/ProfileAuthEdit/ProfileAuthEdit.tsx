@@ -16,7 +16,6 @@ const ProfileAuthEdit: React.FC = () => {
       className="mt-6"
       extraHeader={
         <Button.Group>
-          <Button href={Urls.UPDATE_EMAIL}>Username</Button>
           <Button href={Urls.UPDATE_EMAIL}>Email</Button>
           <Button href={Urls.RECOVER_PASSWORD}>Password</Button>
         </Button.Group>

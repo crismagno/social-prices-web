@@ -5,15 +5,14 @@ const handleClientError = (
   duration: number = 2,
   onClose?: VoidFunction | undefined
 ): string => {
-  const errorResponse = error?.response;
+  let messageError: string = error?.message ?? "Error!";
 
-  const errorResponseData = errorResponse?.data;
+  const errorResponseData = error?.response?.data;
 
   const errorResponseDataError = errorResponseData?.error;
-  let messageError: string = "Error!";
 
-  if (errorResponseDataError?.messageError) {
-    messageError = errorResponseDataError?.messageError;
+  if (errorResponseDataError?.message) {
+    messageError = errorResponseDataError?.message;
   } else if (errorResponseDataError?.error) {
     messageError = errorResponseDataError?.error;
   } else if (typeof error === "string") {

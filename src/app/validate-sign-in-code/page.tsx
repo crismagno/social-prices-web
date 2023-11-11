@@ -1,16 +1,13 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 
+import { message } from "antd";
 import { useRouter } from "next/navigation";
 
 import Avatar from "../../components/common/Avatar/Avatar";
 import Button from "../../components/common/Button/Button";
 import HrCustom from "../../components/common/HrCustom/HrCustom";
-import WormAlert, {
-  IWormAlertRefProps,
-  WormAlertTypeEnum,
-} from "../../components/common/WorkAlert/WormAlert";
 import useAuthData from "../../data/hook/useAuthData";
 import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
 import Urls from "../../shared/common/routes-app/routes-app";
@@ -26,9 +23,6 @@ export default function ValidateSignInCode() {
 
   const [codeValue, setCodeValue] = useState<string>("");
 
-  const wormTextMessage: React.MutableRefObject<IWormAlertRefProps | null> =
-    useRef(null);
-
   const handleValidateSignInCode = async (event: any) => {
     event.preventDefault();
 
@@ -37,11 +31,7 @@ export default function ValidateSignInCode() {
       if (!codeValue.trim()) {
         setCodeValue("");
 
-        wormTextMessage.current?.showWormText(
-          "Please fill code value!",
-          5,
-          WormAlertTypeEnum.DANGER
-        );
+        message.warning("Please fill code value!");
 
         return;
       }
@@ -49,18 +39,10 @@ export default function ValidateSignInCode() {
       const isCodeValueValid: boolean = await validateSignInCode(codeValue);
 
       if (!isCodeValueValid) {
-        wormTextMessage.current?.showWormText(
-          "Code invalid",
-          3,
-          WormAlertTypeEnum.DANGER
-        );
+        message.error("Code invalid");
       }
     } catch (error: any) {
-      wormTextMessage.current?.showWormText(
-        "Code invalid!",
-        3,
-        WormAlertTypeEnum.DANGER
-      );
+      message.error("Code invalid!");
     } finally {
       setIsSubmitting(false);
     }
@@ -73,8 +55,6 @@ export default function ValidateSignInCode() {
         bg-gradient-to-r from-green-100 to-slate-200"
     >
       <div className="flex flex-col justify-center items-center lg:w-1/4 md:w-1/2">
-        <WormAlert ref={wormTextMessage} className="my-3 w-full" />
-
         <div
           className="flex flex-col justify-center items-center w-full h-full
           p-3 shadow-2xl bg-white rounded-lg"
