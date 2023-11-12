@@ -43,8 +43,8 @@ const Navigation: React.FC<Props> = ({}) => {
 
         <NavigationItem
           icon={IconBuildingStoreFront()}
-          text="Store"
-          url={Urls.STORE}
+          text="My Stores"
+          url={Urls.MY_STORES}
         />
       </ul>
 

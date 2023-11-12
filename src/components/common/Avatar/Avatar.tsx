@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
-import { getAvatarImageLocalUrl } from "../../../shared/utils/images/url-images";
+import { getImageAwsS3 } from "../../../shared/utils/images/url-images";
 
 interface Props {
   src?: string | null;
@@ -23,7 +23,7 @@ const Avatar: React.FC<Props> = ({
   const [image, setImage] = useState<string>(defaultAvatarImage);
 
   useEffect(() => {
-    setImage(src ? getAvatarImageLocalUrl(src) : defaultAvatarImage);
+    setImage(src ? getImageAwsS3(src) : defaultAvatarImage);
   }, [src]);
 
   return (

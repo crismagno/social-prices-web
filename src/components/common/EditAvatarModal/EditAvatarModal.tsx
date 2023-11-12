@@ -16,7 +16,7 @@ import useAuthData from "../../../data/hook/useAuthData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import IUser from "../../../shared/business/users/user.interface";
 import { getBase64 } from "../../../shared/utils/images/helper";
-import { getAvatarImageLocalUrl } from "../../../shared/utils/images/url-images";
+import { getImageAwsS3 } from "../../../shared/utils/images/url-images";
 import handleClientError from "../handleClientError/handleClientError";
 
 interface Props {
@@ -29,7 +29,7 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
   const { updateUserSession, user } = useAuthData();
 
   const getDefaultFile = (): UploadFile => {
-    const defaultAvatarUrl: string = getAvatarImageLocalUrl(user?.avatar!);
+    const defaultAvatarUrl: string = getImageAwsS3(user?.avatar!);
 
     return {
       uid: "12345",

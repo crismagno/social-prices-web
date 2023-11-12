@@ -7,7 +7,7 @@ const Urls = {
   PROFILE_EDIT: "/profile/edit",
   SETTINGS: "/settings",
   NOTIFICATIONS: "/notifications",
-  STORE: "/store",
+  MY_STORES: "/my-stores",
   VALIDATE_SIGN_IN_CODE: "/validate-sign-in-code",
   RECOVER_PASSWORD: "/recover-password",
   UPDATE_EMAIL: "/update-email",
