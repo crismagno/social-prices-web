@@ -1,6 +1,8 @@
 "use client";
 
-import { Tag } from "antd";
+import { useState } from "react";
+
+import { Modal, Tag } from "antd";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 
@@ -19,18 +21,21 @@ import {
   IconQuestion,
   IconUser,
 } from "../../components/common/icons/icons";
-// import Tag from "../../components/common/Tag/Tag";
 import Layout from "../../components/template/Layout/Layout";
 import useAuthData from "../../data/hook/useAuthData";
 import { IPhoneNumber } from "../../shared/business/users/user.interface";
 import UsersEnum from "../../shared/business/users/users.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
+import { defaultAvatarImage } from "../../shared/utils/images/files-names";
+import { getImageAwsS3 } from "../../shared/utils/images/url-images";
 import { createUserAddressName } from "../../shared/utils/string-extensions/string-extensions";
 
 export default function Profile() {
   const { user } = useAuthData();
 
   const router = useRouter();
+
+  const [previewOpen, setPreviewOpen] = useState<boolean>(false);
 
   const getUserName = (): string => {
     let userName = user?.firstName ?? "";
@@ -50,7 +55,7 @@ export default function Profile() {
     <Layout title="Profile" subtitle="See your information">
       <Card className=" h-min-80 mt-10">
         <div className="flex justify-center absolute right-0 w-full -top-16">
-          <div className="cursor-pointer">
+          <div className="cursor-pointer" onClick={() => setPreviewOpen(true)}>
             <Avatar
               src={user?.avatar}
               width={130}
@@ -58,6 +63,20 @@ export default function Profile() {
             />
           </div>
         </div>
+
+        <Modal
+          open={previewOpen}
+          footer={null}
+          onCancel={() => setPreviewOpen(false)}
+        >
+          <img
+            alt="preview image"
+            style={{ width: "100%" }}
+            src={
+              user?.avatar ? getImageAwsS3(user?.avatar) : defaultAvatarImage
+            }
+          />
+        </Modal>
 
         <div className="flex justify-end relative">
           <Button
