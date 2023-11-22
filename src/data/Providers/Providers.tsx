@@ -2,16 +2,21 @@
 
 import React from "react";
 
-import StyledComponentsRegistry from "../../lib/AntdRegistry";
+import { ConfigProvider } from "antd";
+
+import StyledComponentsRegistry from "../../lib-antd/AntdRegistry";
+import { antdThemeConfig } from "../../lib-antd/theme";
 import { AppProvider } from "../context/AppContext";
 import { AuthProvider } from "../context/AuthContext";
 
 export function Providers({ children }: any) {
   return (
     <StyledComponentsRegistry>
-      <AuthProvider>
-        <AppProvider>{children}</AppProvider>
-      </AuthProvider>
+      <ConfigProvider theme={antdThemeConfig}>
+        <AuthProvider>
+          <AppProvider>{children}</AppProvider>
+        </AuthProvider>
+      </ConfigProvider>
     </StyledComponentsRegistry>
   );
 }
