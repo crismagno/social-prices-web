@@ -4,6 +4,9 @@ import { useState } from "react";
 
 import { message, Tooltip } from "antd";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import Button from "../../../../../components/common/Button/Button";
 import Collapse from "../../../../../components/common/Collapse/Collapse";
@@ -32,23 +35,27 @@ import {
 } from "../../../../../shared/utils/mock-data/interfaces";
 import { createUserAddressName } from "../../../../../shared/utils/string-extensions/string-extensions";
 
-interface IProfileEditFormAddress {
-  address1: string;
-  address2?: string;
-  city: string;
-  isValid: boolean;
-  stateCode?: string;
-  uid: string;
-  zip: string;
-  description?: string;
-  countryCode: string;
-  district: string;
-  isCollapsed: boolean;
-}
+const addressFormSchema = z.object({
+  address1: z.string().nonempty("Address1 is required"),
+  address2: z.string().optional(),
+  city: z.string().nonempty("City is required"),
+  isValid: z.boolean(),
+  stateCode: z.string().nonempty("State is required"),
+  uid: z.string(),
+  zip: z.string().nonempty("Zipcode is required"),
+  description: z.string().optional(),
+  countryCode: z.string().nonempty("Country is required"),
+  district: z.string().nonempty("District is required"),
+  isCollapsed: z.boolean(),
+});
 
-type IForm = {
-  addresses: IProfileEditFormAddress[];
-};
+type TAddressFormSchema = z.infer<typeof addressFormSchema>;
+
+const formSchema = z.object({
+  addresses: z.array(addressFormSchema),
+});
+
+type TFormSchema = z.infer<typeof formSchema>;
 
 interface Props {
   className?: string;
@@ -62,7 +69,7 @@ const stateCities: ICityMockData[] = citiesMockData.states;
 
 const generateNewAddress = (
   isCollapsed: boolean = true
-): IProfileEditFormAddress => ({
+): TAddressFormSchema => ({
   address1: "",
   city: "",
   countryCode: countries[0].code,
@@ -79,12 +86,12 @@ const generateNewAddress = (
 const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
   const { user, updateUserSession } = useAuthData();
 
-  const defaultValues: IForm = {
+  const defaultValues: TFormSchema = {
     addresses: user?.addresses?.length
       ? user.addresses.map((address: IUserAddress, index: number) => ({
           ...address,
           countryCode: address.country?.code,
-          stateCode: address.state?.code,
+          stateCode: address.state?.code ?? "",
           isCollapsed: index === 0,
         }))
       : [generateNewAddress(false)],
@@ -96,8 +103,9 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
     watch,
     control,
     formState: { errors },
-  } = useForm<IForm>({
+  } = useForm<TFormSchema>({
     defaultValues,
+    resolver: zodResolver(formSchema),
   });
 
   const { append, fields, remove } = useFieldArray({
@@ -107,7 +115,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
 
   const [isSubmitting, setIsSUbmitting] = useState<boolean>(false);
 
-  const onSubmit: SubmitHandler<IForm> = async (data) => {
+  const onSubmit: SubmitHandler<TFormSchema> = async (data) => {
     try {
       setIsSUbmitting(true);
 
@@ -192,8 +200,8 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
         }
         className="mt-10"
       >
-        {fields.map((formAddress: IProfileEditFormAddress, index: number) => {
-          const address: IProfileEditFormAddress = watch(`addresses.${index}`);
+        {fields.map((formAddress: TAddressFormSchema, index: number) => {
+          const address: TAddressFormSchema = watch(`addresses.${index}`);
 
           const addressName: string = createUserAddressName(address);
 
@@ -228,8 +236,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
                     registerName={`addresses.${index}.countryCode`}
                     registerOptions={{ required: true }}
                     errorMessage={
-                      errors?.addresses?.[index]?.countryCode &&
-                      "Country is required"
+                      errors?.addresses?.[index]?.countryCode?.message
                     }
                   >
                     {countries.map((country: ICountryMockData) => (
@@ -246,9 +253,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
                     register={register}
                     registerName={`addresses.${index}.zip`}
                     registerOptions={{ required: true }}
-                    errorMessage={
-                      errors?.addresses?.[index]?.zip && "Zipcode is required"
-                    }
+                    errorMessage={errors?.addresses?.[index]?.zip?.message}
                     maxLength={20}
                   />
 
@@ -259,10 +264,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
                     register={register}
                     registerName={`addresses.${index}.district`}
                     registerOptions={{ required: true }}
-                    errorMessage={
-                      errors?.addresses?.[index]?.district &&
-                      "District is required"
-                    }
+                    errorMessage={errors?.addresses?.[index]?.district?.message}
                     maxLength={200}
                   />
                 </div>
@@ -276,8 +278,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
                     registerName={`addresses.${index}.stateCode`}
                     registerOptions={{ required: true }}
                     errorMessage={
-                      errors?.addresses?.[index]?.stateCode &&
-                      "State is required"
+                      errors?.addresses?.[index]?.stateCode?.message
                     }
                   >
                     {states.map((state: IStateMockData) => (
@@ -294,10 +295,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
                     register={register}
                     registerName={`addresses.${index}.address1`}
                     registerOptions={{ required: true }}
-                    errorMessage={
-                      errors?.addresses?.[index]?.address1 &&
-                      "Address1 is required"
-                    }
+                    errorMessage={errors?.addresses?.[index]?.address1?.message}
                     maxLength={200}
                   />
 
@@ -319,9 +317,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
                     register={register}
                     registerName={`addresses.${index}.city`}
                     registerOptions={{ required: true }}
-                    errorMessage={
-                      errors?.addresses?.[index]?.city && "City is required"
-                    }
+                    errorMessage={errors?.addresses?.[index]?.city?.message}
                   >
                     {stateCities
                       .find(

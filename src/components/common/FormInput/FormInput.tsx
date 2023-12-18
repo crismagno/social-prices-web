@@ -10,7 +10,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   divClassName?: string;
   useShowPassword?: boolean;
   labelClassName?: string;
-  register: UseFormRegister;
+  register: UseFormRegister<any>;
   registerName: any;
   registerOptions?: RegisterOptions;
   defaultValue?: any;

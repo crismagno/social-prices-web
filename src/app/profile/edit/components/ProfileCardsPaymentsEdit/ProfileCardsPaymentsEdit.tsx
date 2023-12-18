@@ -56,7 +56,7 @@ const generateNewAPhoneNumber = (
   uid: Date.now().toString(),
 });
 
-const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
+const ProfileCardsPaymentsEdit: React.FC<Props> = ({ className = "" }) => {
   const { user, updateUserSession } = useAuthData();
 
   const defaultValues: TFormSchema = {
@@ -122,7 +122,7 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
       <ContainerTitle
         title={
           <div className="flex items-center">
-            <label className="mr-4">Phone Numbers</label>
+            <label className="mr-4">Cards Payments</label>
 
             <Tooltip title="Add a new phone number">
               <Button
@@ -233,4 +233,4 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
   );
 };
 
-export default ProfilePhonesEdit;
+export default ProfileCardsPaymentsEdit;

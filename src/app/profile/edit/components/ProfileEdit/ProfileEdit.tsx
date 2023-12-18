@@ -5,6 +5,9 @@ import { useState } from "react";
 import { message } from "antd";
 import moment from "moment";
 import { SubmitHandler, useForm } from "react-hook-form";
+import z from "zod";
+
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import Button from "../../../../../components/common/Button/Button";
 import ContainerTitle from "../../../../../components/common/ContainerTitle/ContainerTitle";
@@ -19,22 +22,24 @@ import IUser from "../../../../../shared/business/users/user.interface";
 import UsersEnum from "../../../../../shared/business/users/users.enum";
 import DatesEnum from "../../../../../shared/utils/dates/dates.enum";
 
-type IForm = {
-  firstName: string;
-  middleName: string | null;
-  lastName: string;
-  birthDate: string | null;
-  gender: UsersEnum.Gender | null;
-};
-
 interface Props {
   className?: string;
 }
 
+const formSchema = z.object({
+  firstName: z.string().nonempty("First name is required"),
+  lastName: z.string().nonempty("Last name is required"),
+  birthDate: z.string().nonempty("Birth date name is required"),
+  middleName: z.string().nullable(),
+  gender: z.string().nullable(),
+});
+
+type TFormSchema = z.infer<typeof formSchema>;
+
 const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
   const { user, updateUserSession } = useAuthData();
 
-  const defaultValues: IForm = {
+  const defaultValues: TFormSchema = {
     firstName: user?.firstName ?? "",
     lastName: user?.lastName ?? "",
     birthDate: moment(user?.birthDate)
@@ -48,13 +53,14 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IForm>({
+  } = useForm<TFormSchema>({
     defaultValues,
+    resolver: zodResolver(formSchema),
   });
 
   const [isSubmitting, setIsSUbmitting] = useState<boolean>(false);
 
-  const onSubmit: SubmitHandler<IForm> = async (data: IForm) => {
+  const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
     try {
       setIsSUbmitting(true);
 
@@ -107,7 +113,7 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
               register={register}
               registerName="firstName"
               registerOptions={{ required: true }}
-              errorMessage={errors.firstName && "First name is required"}
+              errorMessage={errors.firstName?.message}
               maxLength={100}
             />
 
@@ -127,7 +133,7 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
               register={register}
               registerName="lastName"
               registerOptions={{ required: true }}
-              errorMessage={errors.lastName && "Last name is required"}
+              errorMessage={errors.lastName?.message}
               maxLength={100}
             />
           </div>
@@ -143,7 +149,7 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
               register={register}
               registerName="birthDate"
               registerOptions={{ required: true }}
-              errorMessage={errors.birthDate && "Birth date name is required"}
+              errorMessage={errors.birthDate?.message}
             />
 
             <FormSelect
