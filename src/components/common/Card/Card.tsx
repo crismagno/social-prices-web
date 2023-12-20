@@ -11,7 +11,7 @@ const Card: React.FC<Props> = ({ className = "", children }) => {
       className={`
         dark:bg-slate-700 bg-white
         p-5 relative
-        rounded-xl shadow-md ${className}`}
+        rounded-xl shadow-md shadow-gray-100 ${className}`}
     >
       {children}
     </div>
