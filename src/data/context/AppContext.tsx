@@ -3,7 +3,7 @@
 import { createContext, useEffect, useState } from "react";
 
 import ThemeEnum from "../../shared/common/enums/theme.enum";
-import LocalStorageEnum from "../../shared/common/local-storage/local-storage.enum";
+import LocalStorageThemeMethods from "../../shared/common/local-storage/methods/local-storage-theme.methods";
 
 interface IAppContext {
   theme: ThemeEnum.Theme;
@@ -26,13 +26,12 @@ export function AppProvider({ children }: any) {
 
     setTheme(selectedTheme);
 
-    localStorage.setItem(LocalStorageEnum.keys.THEME, selectedTheme);
+    LocalStorageThemeMethods.setTheme(selectedTheme);
   };
 
   useEffect(() => {
-    const selectedTheme: ThemeEnum.Theme | null = localStorage.getItem(
-      LocalStorageEnum.keys.THEME
-    ) as ThemeEnum.Theme | null;
+    const selectedTheme: ThemeEnum.Theme | null =
+      LocalStorageThemeMethods.getTheme();
 
     if (selectedTheme) {
       setTheme(selectedTheme);
