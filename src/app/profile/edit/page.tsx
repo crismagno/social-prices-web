@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Tooltip } from "antd";
 
 import Avatar from "../../../components/common/Avatar/Avatar";
-import BackButton from "../../../components/common/BackButton/BackButton";
 import Card from "../../../components/common/Card/Card";
 import EditAvatarModal from "../../../components/common/EditAvatarModal/EditAvatarModal";
 import Layout from "../../../components/template/Layout/Layout";
@@ -23,7 +22,11 @@ export default function ProfileEditPage() {
     useState<boolean>(false);
 
   return (
-    <Layout title="Profile Edit" subtitle="Your personal data to update">
+    <Layout
+      title="Profile Edit"
+      subtitle="Your personal data to update"
+      hasBackButton
+    >
       <Card className=" h-min-80 mt-10">
         <div className="flex justify-center absolute right-0 w-full -top-16">
           <div className="cursor-pointer z-10">
@@ -42,10 +45,6 @@ export default function ProfileEditPage() {
               />
             </Tooltip>
           </div>
-        </div>
-
-        <div className="flex justify-end relative">
-          <BackButton />
         </div>
 
         <ProfileAuthEdit />

@@ -15,10 +15,10 @@ const Urls = {
   PROFILE_EDIT: "/profile/edit",
 
   // my stores
-  MY_STORES: "/my-stores",
-  NEW_STORE: "/my-stores/new-store",
-  EDIT_STORE: "/my-stores/edit-store",
-  DELETE_STORE: "/my-stores/delete-store",
+  STORES: "/stores",
+  NEW_STORE: "/stores/new-store",
+  EDIT_STORE: "/stores/edit-store",
+  DELETE_STORE: "/stores/delete-store",
 };
 
 export default Urls;

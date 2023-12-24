@@ -1,26 +1,30 @@
-import { OptionHTMLAttributes, SelectHTMLAttributes } from "react";
+import { InputHTMLAttributes } from "react";
 
+import { Input } from "antd";
+import { CompoundedComponent } from "antd/es/float-button/interface";
 import { RegisterOptions, UseFormRegister } from "react-hook-form";
 
-interface Props extends SelectHTMLAttributes<HTMLSelectElement> {
+interface Props extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  selectClassName?: string;
+  inputClassName?: string;
   divClassName?: string;
   useShowPassword?: boolean;
   labelClassName?: string;
-  register: UseFormRegister;
+  register: UseFormRegister<any>;
   registerName: any;
   registerOptions?: RegisterOptions;
   defaultValue?: any;
   errorMessage?: string;
 }
 
-const FormSelect: React.FC<Props> = ({
+const InputAntd: React.FC<Props> = ({
   label,
-  selectClassName,
+  type,
+  value,
+  inputClassName,
   divClassName,
+  useShowPassword,
   labelClassName,
-  children,
   register,
   registerName,
   registerOptions,
@@ -32,17 +36,13 @@ const FormSelect: React.FC<Props> = ({
     <div className={`flex flex-col mt-4 mr-5 ${divClassName}`}>
       <label className={`text-sm ${labelClassName}`}>{label}</label>
 
-      <select
-        className={`
-					px-4 py-1.5 bg-white rounded-lg mt-1 w-full
-					 focus:bg-slate-50 border border-slate-200 focus:border-blue-100
-					 transition-all ${selectClassName}`}
+      <Input
+        className={inputClassName}
+        type={type}
         defaultValue={defaultValue}
         {...register(registerName, { ...registerOptions })}
-        {...props}
-      >
-        {children}
-      </select>
+        {...(props as CompoundedComponent)}
+      />
 
       {errorMessage && (
         <p role="alert" className="text-sm text-red-500 px-1">
@@ -53,14 +53,4 @@ const FormSelect: React.FC<Props> = ({
   );
 };
 
-export default FormSelect;
-
-export const FormSelectOption: React.FC<
-  OptionHTMLAttributes<HTMLOptionElement>
-> = ({ value, children, ...props }) => {
-  return (
-    <option value={value} {...props}>
-      {children ?? value}
-    </option>
-  );
-};
+export default InputAntd;

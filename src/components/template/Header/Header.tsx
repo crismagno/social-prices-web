@@ -3,13 +3,12 @@ import Title from "../Title/Title";
 interface Props {
   title: string;
   subtitle?: string;
+  hasBackButton?: boolean;
 }
 
-const Header: React.FC<Props> = ({ subtitle, title }) => {
+const Header: React.FC<Props> = ({ subtitle, title, hasBackButton }) => {
   return (
-    <div>
-      <Title subtitle={subtitle} title={title} />
-    </div>
+    <Title subtitle={subtitle} title={title} hasBackButton={hasBackButton} />
   );
 };
 

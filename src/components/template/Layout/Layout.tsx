@@ -10,16 +10,26 @@ interface Props {
   title: string;
   subtitle?: string;
   children?: any;
+  hasBackButton?: boolean;
 }
 
-const Layout: React.FC<Props> = ({ subtitle, title, children }) => {
+const Layout: React.FC<Props> = ({
+  subtitle,
+  title,
+  children,
+  hasBackButton,
+}) => {
   const { theme } = useAppData();
 
   return (
     <ForceAuth>
       <div className={`${theme} relative flex flex-col h-screen`}>
         <div className="p-7 bg-gray-100 dark:bg-slate-800 flex-grow pb-32">
-          <Header subtitle={subtitle} title={title} />
+          <Header
+            subtitle={subtitle}
+            title={title}
+            hasBackButton={hasBackButton}
+          />
           <Content>{children}</Content>
         </div>
         <Navigation />

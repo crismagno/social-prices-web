@@ -4,7 +4,7 @@ import { Button, Card, Image, Table, Tooltip } from "antd";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 
 import Layout from "../../components/template/Layout/Layout";
 import Urls from "../../shared/common/routes-app/routes-app";
@@ -16,7 +16,7 @@ export default function MyStores() {
   const dataSource = Array(2).fill({
     _id: "1",
     name: "Mike",
-    tags: ["tag1"],
+    email: "Mike@gmail.com",
     logoUrl:
       "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
     createdAt: new Date(),
@@ -43,7 +43,11 @@ export default function MyStores() {
         className="h-min-80 mt-5"
         extra={
           <>
-            <Button type="primary" onClick={handleNewStore}>
+            <Button
+              type="primary"
+              onClick={handleNewStore}
+              icon={<PlusOutlined />}
+            >
               New store
             </Button>
           </>
@@ -53,7 +57,7 @@ export default function MyStores() {
           dataSource={dataSource}
           columns={[
             {
-              title: "Logo",
+              title: "",
               dataIndex: "logoUrl",
               key: "logoUrl",
               render: (logoUrl: string) => {
@@ -73,9 +77,14 @@ export default function MyStores() {
               key: "name",
             },
             {
-              title: "Tags",
-              dataIndex: "tags",
-              key: "tags",
+              title: "Email",
+              dataIndex: "email",
+              key: "email",
+            },
+            {
+              title: "Description",
+              dataIndex: "description",
+              key: "description",
             },
             {
               title: "Created At",
@@ -92,17 +101,12 @@ export default function MyStores() {
                 moment(updatedAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
             },
             {
-              title: "Description",
-              dataIndex: "description",
-              key: "description",
-            },
-            {
               title: "Status",
               dataIndex: "status",
               key: "status",
             },
             {
-              title: "Actions",
+              title: "Action",
               dataIndex: "action",
               key: "action",
               render: (_: any, record: any) => {
@@ -111,7 +115,7 @@ export default function MyStores() {
                     <Tooltip title="edit store">
                       <Button
                         className="mr-1"
-                        type="info"
+                        type="primary"
                         onClick={handleEditStore}
                         icon={<EditOutlined />}
                       />

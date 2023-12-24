@@ -32,7 +32,7 @@ const DescriptionInput: React.FC<Props> = ({
 
       <input
         className={`
-					px-4 py-2 bg-white rounded-lg mt-1 w-full
+					px-4 py-1 bg-white rounded-lg mt-1 w-full
 					 focus:bg-slate-50 border border-slate-300 focus:border-blue-100 hover:border-blue-300
 					 transition-all ${inputClassName}`}
         value={value}
