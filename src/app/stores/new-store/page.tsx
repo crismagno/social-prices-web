@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 
-import { Button, Card, Col, Row, Tooltip } from "antd";
+import { Button, Card, Col, message, Row, Tooltip } from "antd";
+import moment from "moment";
 import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 
@@ -11,8 +12,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Avatar from "../../../components/common/Avatar/Avatar";
 import EditStoreLogoModal from "../../../components/common/EditStoreLogoModal/EditStoreLogoModal";
 import FormInput from "../../../components/common/FormInput/FormInput";
+import handleClientError from "../../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../../components/common/HrCustom/HrCustom";
 import Layout from "../../../components/template/Layout/Layout";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 
 const formSchema = z.object({
   name: z.string().nonempty("Name is required"),
@@ -43,11 +46,30 @@ export default function NewStore() {
   const [isVisibleEditAvatarModal, setIsVisibleAvatarModal] =
     useState<boolean>(false);
 
+  const [isSubmitting, setIsSUbmitting] = useState<boolean>(false);
+
   const logoUrl: string =
     "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png";
 
   const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
-    console.log(data);
+    try {
+      setIsSUbmitting(true);
+
+      const response: any =
+        await serviceMethodsInstance.storesServiceMethods.create({
+          description: data.description,
+          email: data.email,
+          logo: null,
+          name: data.name,
+          startedAt: moment(data.startedAt).toDate(),
+        });
+
+      message.success("Your store has been created successfully!");
+    } catch (error) {
+      handleClientError(error);
+    } finally {
+      setIsSUbmitting(false);
+    }
   };
 
   return (

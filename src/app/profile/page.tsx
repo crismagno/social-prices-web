@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Modal, Tag } from "antd";
+import { Modal, Tag, Tooltip } from "antd";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 
@@ -94,15 +94,17 @@ export default function Profile() {
             {getUserName() || user?.username}
           </h3>
 
-          <a
-            href={`mailto:${user?.email}`}
-            className="flex items-center text-sm leading-normal mt-0 mb-2 text-gray-400 
+          <Tooltip title={"My Email, click to send a email"}>
+            <a
+              href={`mailto:${user?.email}`}
+              className="flex items-center text-sm leading-normal mt-0 mb-2 text-gray-400 
             font-bold px-2 py-1 shadow-sm rounded-lg border border-gray-300
             w-min"
-          >
-            {IconAtSymbol("w-3.5 h-3.5")}
-            {user?.email}
-          </a>
+            >
+              {IconAtSymbol("w-3.5 h-3.5")}
+              {user?.email}
+            </a>
+          </Tooltip>
         </div>
 
         <ContainerTitle title="Information" className="mt-6">

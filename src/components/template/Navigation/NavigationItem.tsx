@@ -1,3 +1,4 @@
+import { Tooltip } from "antd";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -50,15 +51,16 @@ const NavigationItem: React.FC<Props> = ({
        dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700
        ${className}
        ${pathname === url && classNameActiveLink}`}
-      title={title}
     >
-      {url ? (
-        <Link href={url} className={classNameDefault}>
-          {renderLink()}
-        </Link>
-      ) : (
-        <div className={classNameDefault}>{renderLink()}</div>
-      )}
+      <Tooltip title={title}>
+        {url ? (
+          <Link href={url} className={classNameDefault}>
+            {renderLink()}
+          </Link>
+        ) : (
+          <div className={classNameDefault}>{renderLink()}</div>
+        )}
+      </Tooltip>
     </li>
   );
 };

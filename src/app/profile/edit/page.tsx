@@ -11,7 +11,6 @@ import Layout from "../../../components/template/Layout/Layout";
 import useAuthData from "../../../data/hook/useAuthData";
 import ProfileAddressesEdit from "./components/ProfileAddressesEdit/ProfileAddressesEdit";
 import ProfileAuthEdit from "./components/ProfileAuthEdit/ProfileAuthEdit";
-import ProfileCardsPaymentsEdit from "./components/ProfileCardsPaymentsEdit/ProfileCardsPaymentsEdit";
 import ProfileEdit from "./components/ProfileEdit/ProfileEdit";
 import ProfilePhonesEdit from "./components/ProfilePhonesEdit/ProfilePhonesEdit";
 
@@ -55,7 +54,7 @@ export default function ProfileEditPage() {
 
         <ProfilePhonesEdit />
 
-        <ProfileCardsPaymentsEdit />
+        {/* <ProfileCardsPaymentsEdit /> */}
       </Card>
     </Layout>
   );

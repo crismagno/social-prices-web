@@ -23,7 +23,7 @@ const Navigation: React.FC<Props> = ({}) => {
       fixed bottom-0 left-0"
     >
       <ul className="flex flex-row grow">
-        <NavigationItem text="Profile" url={Urls.PROFILE} title="Logo Name">
+        <NavigationItem text="Profile" url={Urls.PROFILE} title="Go to Profile">
           <Avatar src={user?.avatar} alt="Image logo" />
         </NavigationItem>
 
