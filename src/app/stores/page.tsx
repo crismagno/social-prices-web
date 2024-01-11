@@ -7,23 +7,15 @@ import { useRouter } from "next/navigation";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 
 import Layout from "../../components/template/Layout/Layout";
+import { IStore } from "../../shared/business/stores/stores.interface";
 import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
+import { useFindStoresByUser } from "./useFindStoresByUser";
 
 export default function MyStores() {
   const router = useRouter();
 
-  const dataSource = Array(2).fill({
-    _id: "1",
-    name: "Mike",
-    email: "Mike@gmail.com",
-    logoUrl:
-      "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    status: "ACTIVE",
-    description: "test any description",
-  });
+  const { isLoading, stores } = useFindStoresByUser();
 
   const handleNewStore = () => {
     router.push(Urls.NEW_STORE);
@@ -53,19 +45,23 @@ export default function MyStores() {
           </>
         }
       >
-        <Table
-          dataSource={dataSource}
+        <Table<IStore>
+          dataSource={stores}
           columns={[
             {
               title: "",
-              dataIndex: "logoUrl",
-              key: "logoUrl",
-              render: (logoUrl: string) => {
+              dataIndex: "logo",
+              key: "logo",
+              render: (logo: string) => {
+                if (!logo) {
+                  return "";
+                }
+
                 return (
                   <Image
                     width={60}
-                    src={logoUrl}
-                    alt="logoUrl"
+                    src={logo}
+                    alt="logo"
                     className="rounded-full"
                   />
                 );

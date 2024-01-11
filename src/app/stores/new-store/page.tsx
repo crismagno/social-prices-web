@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { Button, Card, Col, message, Row, Tooltip } from "antd";
 import moment from "moment";
+import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 
@@ -27,6 +28,8 @@ const formSchema = z.object({
 type TFormSchema = z.infer<typeof formSchema>;
 
 export default function NewStore() {
+  const router = useRouter();
+
   const defaultValues: TFormSchema = {
     name: "",
     email: "",
@@ -55,16 +58,17 @@ export default function NewStore() {
     try {
       setIsSUbmitting(true);
 
-      const response: any =
-        await serviceMethodsInstance.storesServiceMethods.create({
-          description: data.description,
-          email: data.email,
-          logo: null,
-          name: data.name,
-          startedAt: moment(data.startedAt).toDate(),
-        });
+      await serviceMethodsInstance.storesServiceMethods.create({
+        description: data.description,
+        email: data.email,
+        logo: null,
+        name: data.name,
+        startedAt: moment(data.startedAt).toDate(),
+      });
 
       message.success("Your store has been created successfully!");
+
+      router.back();
     } catch (error) {
       handleClientError(error);
     } finally {
@@ -155,7 +159,11 @@ export default function NewStore() {
           <HrCustom className="my-7" />
 
           <div className="flex justify-center my-5">
-            <Button type="primary" onClick={handleSubmit(onSubmit)}>
+            <Button
+              type="primary"
+              onClick={handleSubmit(onSubmit)}
+              loading={isSubmitting}
+            >
               Create
             </Button>
           </div>
