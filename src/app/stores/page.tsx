@@ -57,12 +57,13 @@ export default function MyStores() {
               title: "#",
               dataIndex: "logo",
               key: "logo",
+              align: "center",
               render: (logo: string) => {
                 if (!logo) {
                   return (
                     <Image
-                      width={60}
-                      height={60}
+                      width={50}
+                      height={50}
                       src={logoUrlDefault}
                       alt="logo"
                       className="rounded-full"
@@ -72,8 +73,8 @@ export default function MyStores() {
 
                 return (
                   <Image
-                    width={60}
-                    height={60}
+                    width={50}
+                    height={50}
                     src={getImageAwsS3(logo)}
                     onError={() => logoUrlDefault}
                     alt="logo"
