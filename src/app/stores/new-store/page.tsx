@@ -19,6 +19,7 @@ import ImageModal from "../../../components/common/ImageModal/ImageModal";
 import Layout from "../../../components/template/Layout/Layout";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import CreateStoreDto from "../../../services/social-prices-api/stores/dto/createStore.dto";
+import { getBase64 } from "../../../shared/utils/images/helper";
 
 const formSchema = z.object({
   name: z.string().nonempty("Name is required"),
@@ -55,8 +56,7 @@ export default function NewStore() {
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const logoUrlDefault: string =
-    "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png";
+  const [logoUrl, setLogoUrl] = useState<string | null>();
 
   const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
     try {
@@ -95,6 +95,18 @@ export default function NewStore() {
     }
   };
 
+  const getFileUrl = async (file: UploadFile) => {
+    if (!file) {
+      return null;
+    }
+
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as RcFile);
+    }
+
+    return file.url || (file.preview as string);
+  };
+
   return (
     <Layout subtitle="New store" title="New store" hasBackButton>
       <Card className="h-min-80 mt-2">
@@ -103,7 +115,7 @@ export default function NewStore() {
             <div className="cursor-pointer z-10">
               <Tooltip title="Edit logo" placement="bottom">
                 <Avatar
-                  src={fileList?.[0]?.url ?? logoUrlDefault}
+                  src={logoUrl}
                   width={150}
                   className="shadow-lg border-none"
                   onClick={() => setIsVisibleAvatarModal(true)}
@@ -112,9 +124,11 @@ export default function NewStore() {
                 <ImageModal
                   isVisible={isVisibleEditAvatarModal}
                   onCancel={() => setIsVisibleAvatarModal(false)}
-                  onOk={(_, fileList) => {
+                  onOk={async (_, fileList) => {
                     setIsVisibleAvatarModal(false);
                     setFileList(fileList);
+                    const url: string | null = await getFileUrl(fileList?.[0]);
+                    setLogoUrl(url);
                   }}
                 />
               </Tooltip>

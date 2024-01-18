@@ -9,6 +9,7 @@ interface Props {
   className?: string;
   width?: any;
   onClick?: (event?: any) => void;
+  noUseAwsS3?: boolean;
 }
 
 const Avatar: React.FC<Props> = ({
@@ -17,13 +18,18 @@ const Avatar: React.FC<Props> = ({
   className,
   width = 60,
   onClick,
+  noUseAwsS3,
 }) => {
   className = `object-cover rounded-full shadow-md ${className}`;
 
   const [image, setImage] = useState<string>(defaultAvatarImage);
 
   useEffect(() => {
-    setImage(src ? getImageAwsS3(src) : defaultAvatarImage);
+    if (noUseAwsS3) {
+      setImage(src ? getImageAwsS3(src) : defaultAvatarImage);
+    } else {
+      setImage(src ? src : defaultAvatarImage);
+    }
   }, [src]);
 
   return (
