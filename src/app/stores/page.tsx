@@ -1,21 +1,26 @@
 "use client";
 
-import { Button, Card, Image, Table, Tooltip } from "antd";
+import { Button, Card, Image, Table, Tag, Tooltip } from "antd";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { EditOutlined, EnterOutlined, PlusOutlined } from "@ant-design/icons";
 
 import Layout from "../../components/template/Layout/Layout";
+import StoresEnum from "../../shared/business/stores/stores.enum";
 import { IStore } from "../../shared/business/stores/stores.interface";
 import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
+import { getImageAwsS3 } from "../../shared/utils/images/url-images";
 import { useFindStoresByUser } from "./useFindStoresByUser";
 
 export default function MyStores() {
   const router = useRouter();
 
   const { isLoading, stores } = useFindStoresByUser();
+
+  const logoUrlDefault: string =
+    "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png";
 
   const handleNewStore = () => {
     router.push(Urls.NEW_STORE);
@@ -49,18 +54,28 @@ export default function MyStores() {
           dataSource={stores}
           columns={[
             {
-              title: "",
+              title: "#",
               dataIndex: "logo",
               key: "logo",
               render: (logo: string) => {
                 if (!logo) {
-                  return "";
+                  return (
+                    <Image
+                      width={60}
+                      height={60}
+                      src={logoUrlDefault}
+                      alt="logo"
+                      className="rounded-full"
+                    />
+                  );
                 }
 
                 return (
                   <Image
                     width={60}
-                    src={logo}
+                    height={60}
+                    src={getImageAwsS3(logo)}
+                    onError={() => logoUrlDefault}
                     alt="logo"
                     className="rounded-full"
                   />
@@ -100,6 +115,11 @@ export default function MyStores() {
               title: "Status",
               dataIndex: "status",
               key: "status",
+              render: (status: StoresEnum.Status) => (
+                <Tag color={StoresEnum.StatusColor[status]}>
+                  {StoresEnum.StatusLabel[status]}
+                </Tag>
+              ),
             },
             {
               title: "Action",
@@ -111,16 +131,16 @@ export default function MyStores() {
                     <Tooltip title="edit store">
                       <Button
                         className="mr-1"
-                        type="primary"
+                        type="warning"
                         onClick={handleEditStore}
                         icon={<EditOutlined />}
                       />
                     </Tooltip>
-                    <Tooltip title="delete store">
+                    <Tooltip title="Go to store">
                       <Button
-                        type="danger"
+                        type="primary"
                         onClick={handleDeleteStore}
-                        icon={<DeleteOutlined />}
+                        icon={<EnterOutlined />}
                       />
                     </Tooltip>
                   </>
@@ -128,6 +148,7 @@ export default function MyStores() {
               },
             },
           ]}
+          loading={isLoading}
         />
       </Card>
     </Layout>

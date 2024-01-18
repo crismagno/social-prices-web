@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 
-import { Button, Card, Col, message, Row, Tooltip } from "antd";
+import { Button, Card, Col, message, Row, Tooltip, UploadFile } from "antd";
+import { RcFile } from "antd/es/upload";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -11,12 +12,13 @@ import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import Avatar from "../../../components/common/Avatar/Avatar";
-import EditStoreLogoModal from "../../../components/common/EditStoreLogoModal/EditStoreLogoModal";
 import FormInput from "../../../components/common/FormInput/FormInput";
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../../components/common/HrCustom/HrCustom";
+import ImageModal from "../../../components/common/ImageModal/ImageModal";
 import Layout from "../../../components/template/Layout/Layout";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
+import CreateStoreDto from "../../../services/social-prices-api/stores/dto/createStore.dto";
 
 const formSchema = z.object({
   name: z.string().nonempty("Name is required"),
@@ -51,20 +53,37 @@ export default function NewStore() {
 
   const [isSubmitting, setIsSUbmitting] = useState<boolean>(false);
 
-  const logoUrl: string =
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+  const logoUrlDefault: string =
     "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png";
 
   const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
     try {
+      if (fileList.length === 0) {
+        message.error("Please select a logo.");
+        return;
+      }
+
       setIsSUbmitting(true);
 
-      await serviceMethodsInstance.storesServiceMethods.create({
+      const formData = new FormData();
+
+      formData.append("logo", fileList[0].originFileObj as RcFile);
+
+      const createStoreDto: CreateStoreDto = {
         description: data.description,
         email: data.email,
         logo: null,
         name: data.name,
         startedAt: moment(data.startedAt).toDate(),
-      });
+      };
+
+      for (const property of Object.keys(createStoreDto)) {
+        formData.append([`${property}`], createStoreDto[property]);
+      }
+
+      await serviceMethodsInstance.storesServiceMethods.create(formData);
 
       message.success("Your store has been created successfully!");
 
@@ -84,16 +103,19 @@ export default function NewStore() {
             <div className="cursor-pointer z-10">
               <Tooltip title="Edit logo" placement="bottom">
                 <Avatar
-                  src={logoUrl}
+                  src={fileList?.[0]?.url ?? logoUrlDefault}
                   width={150}
                   className="shadow-lg border-none"
                   onClick={() => setIsVisibleAvatarModal(true)}
                 />
 
-                <EditStoreLogoModal
+                <ImageModal
                   isVisible={isVisibleEditAvatarModal}
                   onCancel={() => setIsVisibleAvatarModal(false)}
-                  onOk={() => setIsVisibleAvatarModal(false)}
+                  onOk={(_, fileList) => {
+                    setIsVisibleAvatarModal(false);
+                    setFileList(fileList);
+                  }}
                 />
               </Tooltip>
             </div>

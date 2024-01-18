@@ -7,6 +7,7 @@ import { IStore } from "../../shared/business/stores/stores.interface";
 export const useFindStoresByUser = (): {
   isLoading: boolean;
   stores: IStore[];
+  fetchFindStoresByUser: () => void;
 } => {
   const [stores, setStores] = useState<IStore[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -32,5 +33,6 @@ export const useFindStoresByUser = (): {
   return {
     isLoading,
     stores,
+    fetchFindStoresByUser,
   };
 };

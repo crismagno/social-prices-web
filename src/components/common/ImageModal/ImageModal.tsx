@@ -2,35 +2,23 @@ import "./styles.scss";
 
 import React, { useEffect, useState } from "react";
 
-import { Button, message, Modal, Upload } from "antd";
+import { Modal, Upload } from "antd";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
 
-import {
-  DeleteOutlined,
-  PlusOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 
-import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
-import IUser from "../../../shared/business/users/user.interface";
 import { getBase64 } from "../../../shared/utils/images/helper";
 import { getImageAwsS3 } from "../../../shared/utils/images/url-images";
-import handleClientError from "../handleClientError/handleClientError";
 
 interface Props {
   isVisible: boolean;
   onCancel: (e?: any) => void;
-  onOk: (e?: any) => void;
+  onOk: (e: any, fileList: UploadFile[]) => void;
   url?: string | null;
 }
 
-const EditStoreLogoModal: React.FC<Props> = ({
-  isVisible,
-  onCancel,
-  onOk,
-  url,
-}) => {
+const ImageModal: React.FC<Props> = ({ isVisible, onCancel, onOk, url }) => {
   const getDefaultFile = (): UploadFile => {
     const defaultUrl: string = getImageAwsS3(url!);
 
@@ -41,8 +29,6 @@ const EditStoreLogoModal: React.FC<Props> = ({
       url: defaultUrl,
     };
   };
-
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [previewOpen, setPreviewOpen] = useState<boolean>(false);
 
@@ -80,48 +66,6 @@ const EditStoreLogoModal: React.FC<Props> = ({
     setFileList(newFileList);
   };
 
-  const handleSubmit = async (e: any) => {
-    if (fileList.length === 0) {
-      message.error("Please select a image to avatar.");
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    const formData = new FormData();
-
-    formData.append("logoUrl", fileList[0].originFileObj as RcFile);
-
-    try {
-      const response: IUser =
-        await serviceMethodsInstance.usersServiceMethods.uploadAvatar(formData);
-
-      // updateUserSession(response);
-    } catch (error: any) {
-      handleClientError(error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleRemoveAvatar = async (e: any) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    setIsSubmitting(true);
-
-    try {
-      const response: IUser =
-        await serviceMethodsInstance.usersServiceMethods.removeAvatar();
-
-      // updateUserSession(response);
-    } catch (error: any) {
-      handleClientError(error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   const uploadButton = (
     <div>
       <PlusOutlined />
@@ -137,10 +81,7 @@ const EditStoreLogoModal: React.FC<Props> = ({
         setFileList(url ? [getDefaultFile()] : []);
         onCancel();
       }}
-      onOk={onOk}
-      okButtonProps={{ hidden: true }}
-      cancelButtonProps={{ hidden: true }}
-      closable={!isSubmitting}
+      onOk={(e) => onOk(e, fileList)}
       destroyOnClose
     >
       <div className="content-edit-modal">
@@ -152,32 +93,9 @@ const EditStoreLogoModal: React.FC<Props> = ({
           onChange={handleChange}
           className="avatar-uploader"
           style={{ width: 100 }}
-          disabled={isSubmitting}
         >
           {fileList.length === 1 ? null : uploadButton}
         </Upload>
-
-        <div className="flex mt-8">
-          <Button
-            onClick={handleSubmit}
-            className="flex justify-center items-center mr-2"
-            loading={isSubmitting}
-          >
-            <UploadOutlined />
-            Upload
-          </Button>
-
-          {url && (
-            <Button
-              onClick={handleRemoveAvatar}
-              className="flex justify-center items-center"
-              loading={isSubmitting}
-            >
-              <DeleteOutlined />
-              Remove
-            </Button>
-          )}
-        </div>
       </div>
 
       <Modal
@@ -193,4 +111,4 @@ const EditStoreLogoModal: React.FC<Props> = ({
   );
 };
 
-export default EditStoreLogoModal;
+export default ImageModal;
