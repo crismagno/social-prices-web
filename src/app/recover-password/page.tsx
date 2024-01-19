@@ -33,9 +33,7 @@ export default function RecoverPassword() {
 
       if (!email.trim()) {
         setCodeValue("");
-
         message.warning("Please fill email.");
-
         return;
       }
 
@@ -61,7 +59,6 @@ export default function RecoverPassword() {
 
       if (!email.trim() || !codeValue.trim() || !newPassword.trim()) {
         message.warning("Please fill input values.");
-
         return;
       }
 

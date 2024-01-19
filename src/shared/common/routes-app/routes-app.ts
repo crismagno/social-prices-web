@@ -14,7 +14,7 @@ const Urls = {
   PROFILE: "/profile",
   PROFILE_EDIT: "/profile/edit",
 
-  // my stores
+  // stores
   STORES: "/stores",
   NEW_STORE: "/stores/new-store",
   EDIT_STORE: "/stores/edit-store",

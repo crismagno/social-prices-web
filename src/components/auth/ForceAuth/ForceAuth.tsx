@@ -1,5 +1,6 @@
 "use client";
 
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 
@@ -12,7 +13,7 @@ import LoadingFull from "../../common/LoadingFull/LoadingFull";
 const ForceAuth = ({ children }: any) => {
   const { user, isLoading } = useAuthData();
 
-  const router = useRouter();
+  const router: AppRouterInstance = useRouter();
 
   if (!isLoading && user?.email) {
     return (

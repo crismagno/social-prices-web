@@ -1,25 +1,25 @@
 // Should be used for overriding all buttons.
 // Import the css on entry point.
 .ant-btn-primary {
-  background-color: #3474ef;
+  background-color: #1677ff;
 
   &:hover {
-    background-color: #3474ef;
+    background-color: #1677ff;
   }
 }
 
 .ant-btn-danger {
-  background-color: red;
+  background-color: FF4D4E;
   color: #fff;
 
   &:hover {
-    background-color: red;
+    background-color: FF4D4E;
     color: #fff;
   }
 }
 
 .ant-btn-info {
-  background-color: #6e9cf3;
+  background-color: #87b1fe;
   color: #fff;
 
   &:hover {
@@ -29,11 +29,21 @@
 }
 
 .ant-btn-warning {
-  background-color: #deed13;
+  background-color: #faf609;
   color: #000;
 
   &:hover {
-    background-color: #deed13;
+    background-color: #f6f358;
+    color: #000;
+  }
+}
+
+.ant-btn-default {
+  background-color: #fff;
+  color: #000;
+
+  &:hover {
+    background-color: #fff;
     color: #000;
   }
 }

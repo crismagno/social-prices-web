@@ -37,9 +37,7 @@ export default function UpdateEmail() {
 
       if (!email.trim()) {
         setCodeValue("");
-
         message.warning("Please fill email.");
-
         return;
       }
 
@@ -65,7 +63,6 @@ export default function UpdateEmail() {
 
       if (!email.trim() || !codeValue.trim() || !newEmail.trim()) {
         message.warning("Please fill input values.");
-
         return;
       }
 

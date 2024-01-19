@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 
 import Cookies from "js-cookie";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
 import useAuthData from "../../data/hook/useAuthData";
@@ -12,7 +13,7 @@ import Urls from "../../shared/common/routes-app/routes-app";
 const useForceRedirect = () => {
   const { user } = useAuthData();
 
-  const router = useRouter();
+  const router: AppRouterInstance = useRouter();
 
   useEffect(() => {
     if (!user) {

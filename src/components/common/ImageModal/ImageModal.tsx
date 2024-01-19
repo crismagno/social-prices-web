@@ -41,14 +41,8 @@ const ImageModal: React.FC<Props> = ({ isVisible, onCancel, onOk, url }) => {
   );
 
   useEffect(() => {
-    if (url) {
-      setFileList([getDefaultFile()]);
-    } else {
-      setFileList([]);
-    }
+    setFileList(url ? [getDefaultFile()] : []);
   }, [url]);
-
-  const handleCancel = () => setPreviewOpen(false);
 
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
@@ -103,7 +97,7 @@ const ImageModal: React.FC<Props> = ({ isVisible, onCancel, onOk, url }) => {
         open={previewOpen}
         title={previewTitle}
         footer={null}
-        onCancel={handleCancel}
+        onCancel={() => setPreviewOpen(false)}
       >
         <img alt="preview image" style={{ width: "100%" }} src={previewImage} />
       </Modal>

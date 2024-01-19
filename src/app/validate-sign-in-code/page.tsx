@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 
 import Avatar from "../../components/common/Avatar/Avatar";
 import Button from "../../components/common/Button/Button";
+import handleClientError from "../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../components/common/HrCustom/HrCustom";
 import useAuthData from "../../data/hook/useAuthData";
 import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
@@ -42,7 +43,7 @@ export default function ValidateSignInCode() {
         message.error("Code invalid");
       }
     } catch (error: any) {
-      message.error("Code invalid!");
+      handleClientError(error);
     } finally {
       setIsSubmitting(false);
     }
