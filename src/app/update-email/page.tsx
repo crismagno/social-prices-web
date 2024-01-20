@@ -6,7 +6,7 @@ import { message } from "antd";
 import { useRouter } from "next/navigation";
 
 import AuthInput from "../../components/common/AuthInput/AuthInput";
-import Button from "../../components/common/Button/Button";
+import ButtonCommon from "../../components/common/ButtonCommon/ButtonCommon";
 import handleClientError from "../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../components/common/HrCustom/HrCustom";
 import Loading from "../../components/common/Loading/Loading";
@@ -142,7 +142,7 @@ export default function UpdateEmail() {
                 divClassName="w-full"
               />
 
-              <Button
+              <ButtonCommon
                 className="justify-center items-center w-full mt-5 py-2"
                 onClick={handleUpdateEmail}
                 disabled={isSubmitting}
@@ -154,21 +154,21 @@ export default function UpdateEmail() {
                 }}
               >
                 Update
-              </Button>
+              </ButtonCommon>
             </form>
           )}
         </div>
 
         <HrCustom />
 
-        <Button
+        <ButtonCommon
           className="text-sm rounded-2xl px-4"
           onClick={() => router.back()}
           disabled={isSubmitting}
           color="success"
         >
           Go Back
-        </Button>
+        </ButtonCommon>
       </div>
     </div>
   );

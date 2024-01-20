@@ -6,7 +6,7 @@ import { message } from "antd";
 import { useRouter } from "next/navigation";
 
 import Avatar from "../../components/common/Avatar/Avatar";
-import Button from "../../components/common/Button/Button";
+import ButtonCommon from "../../components/common/ButtonCommon/ButtonCommon";
 import handleClientError from "../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../components/common/HrCustom/HrCustom";
 import useAuthData from "../../data/hook/useAuthData";
@@ -78,7 +78,7 @@ export default function ValidateSignInCode() {
             disabled={isSubmitting}
           />
 
-          <Button
+          <ButtonCommon
             color="success"
             className="justify-center items-center py-2 rounded-md mt-5 w-full"
             onClick={handleValidateSignInCode}
@@ -90,12 +90,12 @@ export default function ValidateSignInCode() {
             }}
           >
             Send
-          </Button>
+          </ButtonCommon>
         </div>
 
         <HrCustom className="my-6" />
 
-        <Button
+        <ButtonCommon
           color="success"
           className="text-sm rounded-2xl px-4"
           onClick={() => {
@@ -105,7 +105,7 @@ export default function ValidateSignInCode() {
           disabled={isSubmitting}
         >
           Go to login
-        </Button>
+        </ButtonCommon>
       </div>
     </form>
   );

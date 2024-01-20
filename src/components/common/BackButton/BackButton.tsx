@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 
-import Button from "../Button/Button";
+import Button from "../ButtonCommon/ButtonCommon";
 import { IconArrowTurnLeft } from "../icons/icons";
 
 const BackButton: React.FC = () => {

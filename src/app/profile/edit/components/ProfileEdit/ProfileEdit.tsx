@@ -9,7 +9,7 @@ import z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import Button from "../../../../../components/common/Button/Button";
+import ButtonCommon from "../../../../../components/common/ButtonCommon/ButtonCommon";
 import ContainerTitle from "../../../../../components/common/ContainerTitle/ContainerTitle";
 import FormInput from "../../../../../components/common/FormInput/FormInput";
 import FormSelect, {
@@ -89,7 +89,7 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
         title="Profile"
         className="mt-10"
         extraHeader={
-          <Button
+          <ButtonCommon
             color="success"
             className="text-sm"
             onClick={handleSubmit(onSubmit)}
@@ -101,7 +101,7 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
             }}
           >
             Save Profile
-          </Button>
+          </ButtonCommon>
         }
       >
         <div className="flex">

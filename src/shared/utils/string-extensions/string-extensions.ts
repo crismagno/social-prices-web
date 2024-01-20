@@ -1,3 +1,4 @@
+import { IStorePhoneNumber } from "../../business/stores/stores.interface";
 import {
   IPhoneNumber,
   IUserAddress,
@@ -37,15 +38,21 @@ export const createUserAddressName = (address: IUserAddress | any): string => {
   return addressName;
 };
 
-export const createPhoneNumberName = (phoneNumber: IPhoneNumber): string => {
+export const createPhoneNumberName = (
+  phoneNumber: IPhoneNumber | IStorePhoneNumber
+): string => {
   let phoneNumberName: string = "";
 
-  if (phoneNumber.type) {
+  if (phoneNumber?.type) {
     phoneNumberName += UsersEnum.PhoneTypesLabels[phoneNumber.type];
   }
 
   if (phoneNumber.number) {
-    phoneNumberName += createComma(phoneNumber.number);
+    if (phoneNumber.type) {
+      phoneNumberName += createComma(phoneNumber.number);
+    } else {
+      phoneNumberName += phoneNumber.number;
+    }
   }
 
   return phoneNumberName;

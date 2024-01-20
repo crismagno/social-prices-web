@@ -7,7 +7,7 @@ import moment from "moment";
 import { useRouter } from "next/navigation";
 
 import Avatar from "../../components/common/Avatar/Avatar";
-import Button from "../../components/common/Button/Button";
+import ButtonCommon from "../../components/common/ButtonCommon/ButtonCommon";
 import Card from "../../components/common/Card/Card";
 import ContainerTitle from "../../components/common/ContainerTitle/ContainerTitle";
 import Description from "../../components/common/Description/Description";
@@ -79,14 +79,14 @@ export default function Profile() {
         </Modal>
 
         <div className="flex justify-end relative">
-          <Button
+          <ButtonCommon
             color="success"
             onClick={() => router.push(Urls.PROFILE_EDIT)}
             className="px-3 shadow-lg"
           >
             {IconPencilSquare("mr-1")}
             Edit
-          </Button>
+          </ButtonCommon>
         </div>
 
         <div className="flex flex-col justify-center items-center text-center mt-10 mb-5">

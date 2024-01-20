@@ -6,7 +6,7 @@ import { message } from "antd";
 import { useRouter } from "next/navigation";
 
 import AuthInput from "../../components/common/AuthInput/AuthInput";
-import Button from "../../components/common/Button/Button";
+import ButtonCommon from "../../components/common/ButtonCommon/ButtonCommon";
 import HrCustom from "../../components/common/HrCustom/HrCustom";
 import Loading from "../../components/common/Loading/Loading";
 import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
@@ -137,7 +137,7 @@ export default function RecoverPassword() {
                 useShowPassword
               />
 
-              <Button
+              <ButtonCommon
                 className="justify-center items-center w-full mt-5 py-2"
                 onClick={handleRecoverPassword}
                 disabled={isSubmitting}
@@ -149,21 +149,21 @@ export default function RecoverPassword() {
                 }}
               >
                 Recover
-              </Button>
+              </ButtonCommon>
             </form>
           )}
         </div>
 
         <HrCustom />
 
-        <Button
+        <ButtonCommon
           className="text-sm rounded-2xl px-4"
           onClick={() => router.back()}
           disabled={isSubmitting}
           color="primary"
         >
           Go Back
-        </Button>
+        </ButtonCommon>
       </div>
     </div>
   );

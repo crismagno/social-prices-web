@@ -8,7 +8,7 @@ import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import Button from "../../../../../components/common/Button/Button";
+import ButtonCommon from "../../../../../components/common/ButtonCommon/ButtonCommon";
 import Collapse from "../../../../../components/common/Collapse/Collapse";
 import ContainerTitle from "../../../../../components/common/ContainerTitle/ContainerTitle";
 import FormInput from "../../../../../components/common/FormInput/FormInput";
@@ -125,7 +125,7 @@ const ProfileCardsPaymentsEdit: React.FC<Props> = ({ className = "" }) => {
             <label className="mr-4">Cards Payments</label>
 
             <Tooltip title="Add a new phone number">
-              <Button
+              <ButtonCommon
                 onClick={(e) => {
                   e.preventDefault();
                   addNewPhoneNumber();
@@ -134,12 +134,12 @@ const ProfileCardsPaymentsEdit: React.FC<Props> = ({ className = "" }) => {
                 className="rounded-r-full rounded-l-full"
               >
                 {IconPlus()}
-              </Button>
+              </ButtonCommon>
             </Tooltip>
           </div>
         }
         extraHeader={
-          <Button
+          <ButtonCommon
             className="text-sm"
             color="success"
             disabled={fields.length === 0}
@@ -151,7 +151,7 @@ const ProfileCardsPaymentsEdit: React.FC<Props> = ({ className = "" }) => {
             }}
           >
             Save Phone Numbers
-          </Button>
+          </ButtonCommon>
         }
         className="mt-10"
       >
@@ -173,7 +173,7 @@ const ProfileCardsPaymentsEdit: React.FC<Props> = ({ className = "" }) => {
                 className="relative mt-5"
                 extraHeader={
                   <Tooltip title="Remove phone number">
-                    <Button
+                    <ButtonCommon
                       onClick={(e) => {
                         e.preventDefault();
                         removeNewPhoneNumber(index);
@@ -182,7 +182,7 @@ const ProfileCardsPaymentsEdit: React.FC<Props> = ({ className = "" }) => {
                       className="rounded-r-full rounded-l-full absolute right-2 shadow-none"
                     >
                       {IconTrash("w-3 h-3 text-red-500 hover:text-red-600")}
-                    </Button>
+                    </ButtonCommon>
                   </Tooltip>
                 }
               >

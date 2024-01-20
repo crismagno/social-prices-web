@@ -51,6 +51,8 @@ export default function MyStores() {
         }
       >
         <Table<IStore>
+          rowKey={"_id"}
+          onChange={(e) => console.log(e)}
           dataSource={stores}
           columns={[
             {
@@ -76,7 +78,6 @@ export default function MyStores() {
                     width={50}
                     height={50}
                     src={getImageAwsS3(logo)}
-                    onError={() => logoUrlDefault}
                     alt="logo"
                     className="rounded-full"
                   />
@@ -87,35 +88,37 @@ export default function MyStores() {
               title: "Name",
               dataIndex: "name",
               key: "name",
+              align: "center",
             },
             {
               title: "Email",
               dataIndex: "email",
               key: "email",
-            },
-            {
-              title: "Description",
-              dataIndex: "description",
-              key: "description",
+              align: "center",
             },
             {
               title: "Created At",
               dataIndex: "createdAt",
               key: "createdAt",
+              align: "center",
               render: (createdAt: Date) =>
                 moment(createdAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
+              sorter: true,
             },
             {
               title: "Updated At",
               dataIndex: "updatedAt",
               key: "updatedAt",
+              align: "center",
               render: (updatedAt: Date) =>
                 moment(updatedAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
+              sorter: true,
             },
             {
               title: "Status",
               dataIndex: "status",
               key: "status",
+              align: "center",
               render: (status: StoresEnum.Status) => (
                 <Tag color={StoresEnum.StatusColor[status]}>
                   {StoresEnum.StatusLabel[status]}
@@ -126,6 +129,7 @@ export default function MyStores() {
               title: "Action",
               dataIndex: "action",
               key: "action",
+              align: "center",
               render: (_: any, record: any) => {
                 return (
                   <>

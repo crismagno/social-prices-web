@@ -36,7 +36,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: ButtonLoadingProps;
 }
 
-const Button: React.FC<Props> = ({
+const ButtonCommon: React.FC<Props> = ({
   onClick,
   children,
   className,
@@ -57,4 +57,4 @@ const Button: React.FC<Props> = ({
   );
 };
 
-export default Button;
+export default ButtonCommon;
