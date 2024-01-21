@@ -26,12 +26,12 @@ export default function MyStores() {
     router.push(Urls.NEW_STORE);
   };
 
-  const handleEditStore = () => {
-    router.push(Urls.EDIT_STORE);
+  const handleEditStore = (store: IStore) => {
+    router.push(Urls.EDIT_STORE.replace(":storeId", store._id));
   };
 
-  const handleDeleteStore = () => {
-    router.push(Urls.DELETE_STORE);
+  const handleGotToStore = (store: IStore) => {
+    alert("go to store...");
   };
 
   return (
@@ -130,21 +130,21 @@ export default function MyStores() {
               dataIndex: "action",
               key: "action",
               align: "center",
-              render: (_: any, record: any) => {
+              render: (_: any, store: IStore) => {
                 return (
                   <>
                     <Tooltip title="edit store">
                       <Button
                         className="mr-1"
                         type="warning"
-                        onClick={handleEditStore}
+                        onClick={() => handleEditStore(store)}
                         icon={<EditOutlined />}
                       />
                     </Tooltip>
                     <Tooltip title="Go to store">
                       <Button
                         type="primary"
-                        onClick={handleDeleteStore}
+                        onClick={() => handleGotToStore(store)}
                         icon={<EnterOutlined />}
                       />
                     </Tooltip>

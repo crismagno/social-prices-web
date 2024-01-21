@@ -22,7 +22,7 @@ export default class StoresServiceMethods extends ServiceMethodsBase {
 
   public async findById(storeId: string): Promise<IStore> {
     const response = await this._fetchAxios.get<IStore>(
-      `${this._socialPricesApiV1}${StoresServiceEnum.Methods.FIND_BY_ID}${storeId}`,
+      `${this._socialPricesApiV1}${StoresServiceEnum.Methods.FIND_BY_ID}/${storeId}`,
       {
         headers: {
           "Content-Type": "application/json",

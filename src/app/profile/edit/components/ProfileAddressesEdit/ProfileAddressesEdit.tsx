@@ -165,6 +165,21 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={`w-full ${className}`}>
       <ContainerTitle
+        extraHeader={
+          <ButtonCommon
+            color="success"
+            className="text-sm"
+            onClick={handleSubmit(onSubmit)}
+            loading={{
+              isLoading: isSubmitting,
+              height: 20,
+              width: 20,
+              element: "Updating",
+            }}
+          >
+            Save Addresses
+          </ButtonCommon>
+        }
         title={
           <div className="flex items-center">
             <label className="mr-4">Addresses</label>
@@ -175,6 +190,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
                   e.preventDefault();
                   addNewAddress();
                 }}
+                disabled={isSubmitting}
                 color="primary"
                 className="rounded-r-full rounded-l-full"
               >
@@ -199,6 +215,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
               extraHeader={
                 <Tooltip title="Remove address">
                   <ButtonCommon
+                    disabled={isSubmitting}
                     onClick={(e) => {
                       e.preventDefault();
                       removeNewAddress(index);

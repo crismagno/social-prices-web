@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button, Card, Col, message, Row, Tooltip, UploadFile } from "antd";
 import { RcFile } from "antd/es/upload";
 import { isArray } from "class-validator";
 import moment from "moment";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import z from "zod";
 
@@ -25,6 +24,7 @@ import handleClientError from "../../../components/common/handleClientError/hand
 import HrCustom from "../../../components/common/HrCustom/HrCustom";
 import { IconPlus, IconTrash } from "../../../components/common/icons/icons";
 import ImageModal from "../../../components/common/ImageModal/ImageModal";
+import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import Layout from "../../../components/template/Layout/Layout";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import CreateStoreDto from "../../../services/social-prices-api/stores/dto/createStore.dto";
@@ -33,6 +33,7 @@ import {
   IStorePhoneNumber,
 } from "../../../shared/business/stores/stores.interface";
 import { getFileUrl } from "../../../shared/utils/images/helper";
+import { getImageAwsS3 } from "../../../shared/utils/images/url-images";
 import citiesMockData from "../../../shared/utils/mock-data/brazil-cities.json";
 import statesMockData from "../../../shared/utils/mock-data/brazil-states.json";
 import countriesMockData from "../../../shared/utils/mock-data/countries.json";
@@ -45,6 +46,7 @@ import {
   createPhoneNumberName,
   createUserAddressName,
 } from "../../../shared/utils/string-extensions/string-extensions";
+import { useFindStoreById } from "./useFindStoreById";
 
 const addressFormSchema = z.object({
   address1: z.string().nonempty("Address1 is required"),
@@ -112,15 +114,35 @@ const generateNewAPhoneNumber = (
 });
 
 export default function NewStore() {
-  const router: AppRouterInstance = useRouter();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const storeId = searchParams.get("sid");
+
+  const { store, isLoadingStore } = useFindStoreById(storeId);
+
+  const isEditMode: boolean = !!storeId && !!store;
 
   const defaultValues: TFormSchema = {
-    name: "",
-    email: "",
-    description: null,
-    startedAt: "",
-    addresses: [generateNewAddress(false)],
-    phoneNumbers: [generateNewAPhoneNumber(false)],
+    name: store?.name ?? "",
+    email: store?.email ?? "",
+    description: store?.description ?? null,
+    startedAt: store?.startedAt ?? "",
+    addresses: store?.addresses.length
+      ? store?.addresses.map((address: IStoreAddress, index: number) => ({
+          ...address,
+          countryCode: address.country?.code,
+          stateCode: address.state?.code ?? "",
+          isCollapsed: index === 0,
+        }))
+      : [generateNewAddress(false)],
+    phoneNumbers: store?.phoneNumbers.length
+      ? store?.phoneNumbers.map(
+          (phoneNumber: IStorePhoneNumber, index: number) => ({
+            ...phoneNumber,
+            isCollapsed: index === 0,
+          })
+        )
+      : [generateNewAPhoneNumber(false)],
   };
 
   const {
@@ -160,6 +182,17 @@ export default function NewStore() {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const [logoUrl, setLogoUrl] = useState<string | null>();
+
+  useEffect(() => {
+    if (store?.logo) {
+      const url: string = getImageAwsS3(store.logo);
+      setLogoUrl(url);
+    }
+  }, [store]);
+
+  if (storeId && isLoadingStore) {
+    return <LoadingFull />;
+  }
 
   const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
     try {
@@ -277,7 +310,7 @@ export default function NewStore() {
               <FormInput
                 label="Name"
                 placeholder={"Enter name"}
-                defaultValue={""}
+                defaultValue={store?.name}
                 register={register}
                 registerName="name"
                 registerOptions={{ required: true }}
@@ -290,7 +323,7 @@ export default function NewStore() {
               <FormInput
                 label="Email"
                 placeholder={"Enter email"}
-                defaultValue={""}
+                defaultValue={store?.email}
                 register={register}
                 registerName="email"
                 registerOptions={{ required: true }}
@@ -308,7 +341,7 @@ export default function NewStore() {
                 label="Started At"
                 type="date"
                 placeholder={"Enter started at"}
-                defaultValue={null}
+                defaultValue={store?.startedAt}
                 register={register}
                 registerName="startedAt"
                 registerOptions={{ required: true }}
@@ -320,7 +353,7 @@ export default function NewStore() {
               <FormInput
                 label="Description"
                 placeholder={"Enter description"}
-                defaultValue={""}
+                defaultValue={store?.description}
                 register={register}
                 registerName="description"
                 errorMessage={errors.description?.message}
@@ -609,7 +642,7 @@ export default function NewStore() {
               loading={isSubmitting}
               disabled={isSubmitting}
             >
-              Create
+              {isEditMode ? "Save" : "Create"}
             </Button>
           </div>
         </form>

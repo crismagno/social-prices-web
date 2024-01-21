@@ -17,8 +17,7 @@ const Urls = {
   // stores
   STORES: "/stores",
   NEW_STORE: "/stores/detail",
-  EDIT_STORE: "/stores/detail/:storeId",
-  DELETE_STORE: "/stores/delete/:storeId",
+  EDIT_STORE: "/stores/detail?sid=:storeId",
 };
 
 export default Urls;
