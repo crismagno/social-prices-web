@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { Modal, Tag, Tooltip } from "antd";
 import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
 import Avatar from "../../components/common/Avatar/Avatar";
@@ -33,7 +34,7 @@ import { createUserAddressName } from "../../shared/utils/string-extensions/stri
 export default function Profile() {
   const { user } = useAuthData();
 
-  const router = useRouter();
+  const router: AppRouterInstance = useRouter();
 
   const [previewOpen, setPreviewOpen] = useState<boolean>(false);
 

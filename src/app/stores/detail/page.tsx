@@ -6,7 +6,12 @@ import { Button, Card, Col, message, Row, Tooltip, UploadFile } from "antd";
 import { RcFile } from "antd/es/upload";
 import { isArray } from "class-validator";
 import moment from "moment";
-import { useRouter, useSearchParams } from "next/navigation";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import {
+  ReadonlyURLSearchParams,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import z from "zod";
 
@@ -28,10 +33,12 @@ import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import Layout from "../../../components/template/Layout/Layout";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import CreateStoreDto from "../../../services/social-prices-api/stores/dto/createStore.dto";
+import UpdateStoreDto from "../../../services/social-prices-api/stores/dto/updateStore.dto";
 import {
   IStoreAddress,
   IStorePhoneNumber,
 } from "../../../shared/business/stores/stores.interface";
+import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getFileUrl } from "../../../shared/utils/images/helper";
 import { getImageAwsS3 } from "../../../shared/utils/images/url-images";
 import citiesMockData from "../../../shared/utils/mock-data/brazil-cities.json";
@@ -114,36 +121,17 @@ const generateNewAPhoneNumber = (
 });
 
 export default function NewStore() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const storeId = searchParams.get("sid");
+  const router: AppRouterInstance = useRouter();
+
+  const searchParams: ReadonlyURLSearchParams = useSearchParams();
+
+  const storeId: string | null = searchParams.get("sid");
 
   const { store, isLoadingStore } = useFindStoreById(storeId);
 
-  const isEditMode: boolean = !!storeId && !!store;
+  const [formValues, setFormValues] = useState<TFormSchema>();
 
-  const defaultValues: TFormSchema = {
-    name: store?.name ?? "",
-    email: store?.email ?? "",
-    description: store?.description ?? null,
-    startedAt: store?.startedAt ?? "",
-    addresses: store?.addresses.length
-      ? store?.addresses.map((address: IStoreAddress, index: number) => ({
-          ...address,
-          countryCode: address.country?.code,
-          stateCode: address.state?.code ?? "",
-          isCollapsed: index === 0,
-        }))
-      : [generateNewAddress(false)],
-    phoneNumbers: store?.phoneNumbers.length
-      ? store?.phoneNumbers.map(
-          (phoneNumber: IStorePhoneNumber, index: number) => ({
-            ...phoneNumber,
-            isCollapsed: index === 0,
-          })
-        )
-      : [generateNewAPhoneNumber(false)],
-  };
+  const isEditMode: boolean = !!storeId && !!store;
 
   const {
     register,
@@ -152,7 +140,7 @@ export default function NewStore() {
     control,
     watch,
   } = useForm<TFormSchema>({
-    defaultValues,
+    values: formValues,
     resolver: zodResolver(formSchema),
   });
 
@@ -188,6 +176,33 @@ export default function NewStore() {
       const url: string = getImageAwsS3(store.logo);
       setLogoUrl(url);
     }
+
+    const values: TFormSchema = {
+      name: store?.name ?? "",
+      email: store?.email ?? "",
+      description: store?.description ?? null,
+      startedAt: moment(store?.startedAt)
+        .utc()
+        .format(DatesEnum.Format.YYYYMMDD_DASHED),
+      addresses: store?.addresses.length
+        ? store?.addresses.map((address: IStoreAddress, index: number) => ({
+            ...address,
+            countryCode: address.country?.code,
+            stateCode: address.state?.code ?? "",
+            isCollapsed: index === 0,
+          }))
+        : [generateNewAddress(false)],
+      phoneNumbers: store?.phoneNumbers.length
+        ? store?.phoneNumbers.map(
+            (phoneNumber: IStorePhoneNumber, index: number) => ({
+              ...phoneNumber,
+              isCollapsed: index === 0,
+            })
+          )
+        : [generateNewAPhoneNumber(false)],
+    };
+
+    setFormValues(values);
   }, [store]);
 
   if (storeId && isLoadingStore) {
@@ -195,6 +210,14 @@ export default function NewStore() {
   }
 
   const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
+    if (isEditMode) {
+      await updateStore(data);
+    } else {
+      await createStore(data);
+    }
+  };
+
+  const createStore = async (data: TFormSchema) => {
     try {
       if (fileList.length === 0) {
         message.warning("Please select a logo.");
@@ -256,6 +279,71 @@ export default function NewStore() {
     }
   };
 
+  const updateStore = async (data: TFormSchema) => {
+    try {
+      if (!store) {
+        message.warning("Store not found to update!");
+        return;
+      }
+
+      setIsSUbmitting(true);
+
+      const formData = new FormData();
+
+      if (fileList.length > 0) {
+        formData.append("logo", fileList[0].originFileObj as RcFile);
+      }
+
+      const addresses: IStoreAddress[] = data.addresses.map(
+        (address): IStoreAddress => ({
+          ...address,
+          country: {
+            code: address.countryCode,
+            name:
+              countries.find((country) => country.code === address.countryCode)
+                ?.name ?? "",
+          },
+          state: {
+            code: address.stateCode ?? "",
+            name:
+              states.find((state) => state.code === address.stateCode)?.name ??
+              "",
+          },
+        })
+      );
+
+      const updateStoreDto: UpdateStoreDto = {
+        storeId: store._id,
+        description: data.description,
+        email: data.email,
+        name: data.name,
+        startedAt: moment(data.startedAt).toDate(),
+        addresses,
+        phoneNumbers: data.phoneNumbers,
+      };
+
+      for (const property of Object.keys(updateStoreDto)) {
+        let value: any = updateStoreDto[property];
+
+        if (isArray(value)) {
+          value = JSON.stringify(value);
+        }
+
+        formData.append([`${property}`], value);
+      }
+
+      await serviceMethodsInstance.storesServiceMethods.update(formData);
+
+      message.success("Your store has been updated successfully!");
+
+      router.back();
+    } catch (error) {
+      handleClientError(error);
+    } finally {
+      setIsSUbmitting(false);
+    }
+  };
+
   const addNewAddress = () => appendAddress(generateNewAddress(false));
 
   const removeNewAddress = (index: number) => {
@@ -277,7 +365,11 @@ export default function NewStore() {
   };
 
   return (
-    <Layout subtitle="New store" title="New store" hasBackButton>
+    <Layout
+      subtitle={isEditMode ? "Edit store details" : "New store details"}
+      title={isEditMode ? "Edit store" : "New store"}
+      hasBackButton
+    >
       <Card className="h-min-80 mt-2">
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* Common fields */}
@@ -289,6 +381,7 @@ export default function NewStore() {
                   width={150}
                   className="shadow-lg border-none"
                   onClick={() => setIsVisibleAvatarModal(true)}
+                  noUseAwsS3
                 />
 
                 <ImageModal
@@ -630,7 +723,6 @@ export default function NewStore() {
               type="default"
               className="mr-3"
               onClick={() => router.back()}
-              loading={isSubmitting}
               disabled={isSubmitting}
             >
               Cancel

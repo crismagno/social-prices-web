@@ -20,6 +20,21 @@ export default class StoresServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
+  public async update(formData: FormData): Promise<IStore> {
+    const response = await this._fetchAxios.put<IStore>(
+      `${this._socialPricesApiV1}${StoresServiceEnum.Methods.UPDATE}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
   public async findById(storeId: string): Promise<IStore> {
     const response = await this._fetchAxios.get<IStore>(
       `${this._socialPricesApiV1}${StoresServiceEnum.Methods.FIND_BY_ID}/${storeId}`,

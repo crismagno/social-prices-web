@@ -161,7 +161,7 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
             loading={isSubmitting}
           >
             <UploadOutlined />
-            Upload Avatar
+            Upload
           </Button>
 
           {user?.avatar && (
@@ -171,7 +171,7 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
               loading={isSubmitting}
             >
               <DeleteOutlined />
-              Remove Avatar
+              Remove
             </Button>
           )}
         </div>

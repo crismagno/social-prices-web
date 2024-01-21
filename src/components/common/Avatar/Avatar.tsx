@@ -22,15 +22,17 @@ const Avatar: React.FC<Props> = ({
 }) => {
   className = `object-cover rounded-full shadow-md ${className}`;
 
-  const [image, setImage] = useState<string>(defaultAvatarImage);
+  const [image, setImage] = useState<string>();
 
   useEffect(() => {
+    let url: string = src ? getImageAwsS3(src) : defaultAvatarImage;
+
     if (noUseAwsS3) {
-      setImage(src ? getImageAwsS3(src) : defaultAvatarImage);
-    } else {
-      setImage(src ? src : defaultAvatarImage);
+      url = src ? src : defaultAvatarImage;
     }
-  }, [src]);
+
+    setImage(url);
+  }, [src, noUseAwsS3]);
 
   return (
     <img

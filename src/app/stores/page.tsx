@@ -2,6 +2,7 @@
 
 import { Button, Card, Image, Table, Tag, Tooltip } from "antd";
 import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
 import { EditOutlined, EnterOutlined, PlusOutlined } from "@ant-design/icons";
@@ -11,16 +12,14 @@ import StoresEnum from "../../shared/business/stores/stores.enum";
 import { IStore } from "../../shared/business/stores/stores.interface";
 import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
+import { defaultAvatarImage } from "../../shared/utils/images/files-names";
 import { getImageAwsS3 } from "../../shared/utils/images/url-images";
 import { useFindStoresByUser } from "./useFindStoresByUser";
 
 export default function MyStores() {
-  const router = useRouter();
+  const router: AppRouterInstance = useRouter();
 
   const { isLoading, stores } = useFindStoresByUser();
-
-  const logoUrlDefault: string =
-    "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png";
 
   const handleNewStore = () => {
     router.push(Urls.NEW_STORE);
@@ -66,7 +65,7 @@ export default function MyStores() {
                     <Image
                       width={50}
                       height={50}
-                      src={logoUrlDefault}
+                      src={defaultAvatarImage}
                       alt="logo"
                       className="rounded-full"
                     />
