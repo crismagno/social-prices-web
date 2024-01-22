@@ -80,6 +80,7 @@ const __normalizeUser = async (userFirebase: User): Promise<IUser> => {
     middleName: null,
     gender: null,
     loggedByAuthProvider: UsersEnum.Provider.GOOGLE,
+    _id: userFirebase.uid,
   };
 };
 

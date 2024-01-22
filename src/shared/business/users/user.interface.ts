@@ -1,7 +1,7 @@
 import UsersEnum from "./users.enum";
 
 export default interface IUser {
-  _id: string;
+  readonly _id: string;
   uid: string;
   firstName: string | null;
   lastName: string | null;
