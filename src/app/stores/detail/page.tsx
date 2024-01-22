@@ -180,7 +180,7 @@ export default function NewStore() {
     const values: TFormSchema = {
       name: store?.name ?? "",
       email: store?.email ?? "",
-      description: store?.description ?? null,
+      description: store?.description ?? "",
       startedAt: moment(store?.startedAt)
         .utc()
         .format(DatesEnum.Format.YYYYMMDD_DASHED),
