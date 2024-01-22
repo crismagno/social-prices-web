@@ -364,6 +364,19 @@ export default function NewStore() {
     }
   };
 
+  const onImageModalOk = async (_: any, fileList: UploadFile<any>[]) => {
+    setIsVisibleAvatarModal(false);
+    setFileList(fileList);
+
+    let url: string | null = store?.logo ? getImageAwsS3(store.logo) : null;
+
+    if (fileList.length) {
+      url = await getFileUrl(fileList?.[0]);
+    }
+
+    setLogoUrl(url);
+  };
+
   return (
     <Layout
       subtitle={isEditMode ? "Edit store details" : "New store details"}
@@ -387,12 +400,7 @@ export default function NewStore() {
                 <ImageModal
                   isVisible={isVisibleEditAvatarModal}
                   onCancel={() => setIsVisibleAvatarModal(false)}
-                  onOk={async (_, fileList) => {
-                    setIsVisibleAvatarModal(false);
-                    setFileList(fileList);
-                    const url: string | null = await getFileUrl(fileList?.[0]);
-                    setLogoUrl(url);
-                  }}
+                  onOk={onImageModalOk}
                 />
               </Tooltip>
             </div>
