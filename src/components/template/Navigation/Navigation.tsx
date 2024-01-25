@@ -54,7 +54,7 @@ const Navigation: React.FC<Props> = ({}) => {
           text={"Logout"}
           onClick={logout}
           className="
-            text-red-600 hover:bg-red-300 hover:text-white
+            text-red-600 hover:bg-red-400 hover:text-white
             dark:text-white dark:hover:bg-slate-700"
         />
       </ul>
