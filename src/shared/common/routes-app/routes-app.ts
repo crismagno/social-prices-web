@@ -1,5 +1,4 @@
 const Urls = {
-  TEST: "/test",
   DASHBOARD: "/dashboard",
   LOGIN: "/login",
   LOGOUT: "/logout",
@@ -18,6 +17,10 @@ const Urls = {
   STORES: "/stores",
   NEW_STORE: "/stores/detail",
   EDIT_STORE: "/stores/detail?sid=:storeId",
+  // stores products
+  STORE_PRODUCTS: "/stores/:storeId/products",
+  STORE_NEW_PRODUCT: "/stores/:storeId/products/detail",
+  STORE_EDIT_PRODUCT: "/stores/:storeId/products/detail?pid=:productId",
 };
 
 export default Urls;

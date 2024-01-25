@@ -1,83 +1,63 @@
 "use client";
 
-import { Button, Card, Image, TablePaginationConfig, Tag, Tooltip } from "antd";
-import {
-  FilterValue,
-  SorterResult,
-  TableCurrentDataSource,
-} from "antd/es/table/interface";
+import { Button, Card, Image, Tag, Tooltip } from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter } from "next/navigation";
-import { RecordType } from "zod";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+import { useParams, useRouter } from "next/navigation";
 
-import { EditOutlined, EnterOutlined, PlusOutlined } from "@ant-design/icons";
+import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 
-import TableAntdCustom from "../../components/custom/antd/TableAntdCustom/TableAntdCustom";
-import Layout from "../../components/template/Layout/Layout";
-import StoresEnum from "../../shared/business/stores/stores.enum";
-import { IStore } from "../../shared/business/stores/stores.interface";
-import Urls from "../../shared/common/routes-app/routes-app";
-import DatesEnum from "../../shared/utils/dates/dates.enum";
-import { defaultAvatarImage } from "../../shared/utils/images/files-names";
-import { getImageAwsS3 } from "../../shared/utils/images/url-images";
-import { StoreDetail } from "./components/StoreDetail/StoreDetail";
-import { useFindStoresByUserTableState } from "./useFindStoresByUserTableState";
+import TableAntdCustom from "../../../../components/custom/antd/TableAntdCustom/TableAntdCustom";
+import Layout from "../../../../components/template/Layout/Layout";
+import StoresEnum from "../../../../shared/business/stores/stores.enum";
+import { IStore } from "../../../../shared/business/stores/stores.interface";
+import Urls from "../../../../shared/common/routes-app/routes-app";
+import DatesEnum from "../../../../shared/utils/dates/dates.enum";
+import { defaultAvatarImage } from "../../../../shared/utils/images/files-names";
+import { getImageAwsS3 } from "../../../../shared/utils/images/url-images";
+import { StoreDetail } from "../../components/StoreDetail/StoreDetail";
+import { useFindStoresByUserTableState } from "../../useFindStoresByUserTableState";
 
-export default function Stores() {
+export default function Products() {
   const router: AppRouterInstance = useRouter();
+
+  const params: Params = useParams();
 
   const { isLoading, stores, fetchFindStoresByUserTableState, total } =
     useFindStoresByUserTableState();
 
-  const handleNewStore = () => {
-    router.push(Urls.NEW_STORE);
+  const handleNewProduct = () => {
+    router.push(Urls.STORE_NEW_PRODUCT);
   };
 
-  const handleEditStore = (store: IStore) => {
-    router.push(Urls.EDIT_STORE.replace(":storeId", store._id));
-  };
-
-  const handleGotToStore = (store: IStore) => {
-    router.push(Urls.STORE_PRODUCTS.replace(":storeId", store._id));
+  const handleEditProduct = (product) => {
+    router.push(Urls.STORE_EDIT_PRODUCT.replace(":storeId", params?.storeId));
   };
 
   const onSearch = (value: string) => {
     fetchFindStoresByUserTableState({ search: value?.trim() });
   };
 
-  const handleChangeTable = (
-    pagination: TablePaginationConfig,
-    filters: Record<string, FilterValue | null>,
-    sorter: SorterResult<RecordType> | SorterResult<RecordType>[],
-    extra: TableCurrentDataSource<RecordType>
-  ) => {
-    console.log("pagination: ", pagination);
-    console.log("filters: ", filters);
-    console.log("sorter: ", sorter);
-    console.log("extra: ", extra);
-  };
-
   return (
-    <Layout subtitle="My Stores" title="Stores">
+    <Layout subtitle="My Products" title="Products" hasBackButton>
       <Card
-        title="Stores"
+        title="Products"
         className="h-min-80 mt-5"
         extra={
           <>
             <Button
               type="primary"
-              onClick={handleNewStore}
+              onClick={handleNewProduct}
               icon={<PlusOutlined />}
             >
-              New Store
+              New Product
             </Button>
           </>
         }
       >
         <TableAntdCustom<IStore>
           rowKey={"_id"}
-          onChange={handleChangeTable}
           dataSource={stores}
           columns={[
             {
@@ -164,15 +144,8 @@ export default function Stores() {
                       <Button
                         className="mr-1"
                         type="warning"
-                        onClick={() => handleEditStore(store)}
+                        onClick={() => handleEditProduct(store)}
                         icon={<EditOutlined />}
-                      />
-                    </Tooltip>
-                    <Tooltip title="Go to store">
-                      <Button
-                        type="primary"
-                        onClick={() => handleGotToStore(store)}
-                        icon={<EnterOutlined />}
                       />
                     </Tooltip>
                   </>
