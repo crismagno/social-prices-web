@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-import { Tooltip } from "antd";
-
 import Avatar from "../../../components/common/Avatar/Avatar";
 import Card from "../../../components/common/Card/Card";
 import EditAvatarModal from "../../../components/common/EditAvatarModal/EditAvatarModal";
@@ -29,20 +27,19 @@ export default function ProfileEditPage() {
       <Card className=" h-min-80 mt-10">
         <div className="flex justify-center absolute right-0 w-full -top-16">
           <div className="cursor-pointer z-10">
-            <Tooltip title="Edit avatar" placement="bottom">
-              <Avatar
-                src={user?.avatar}
-                width={130}
-                className="shadow-lg border-none"
-                onClick={() => setIsVisibleAvatarModal(true)}
-              />
+            <Avatar
+              src={user?.avatar}
+              width={130}
+              className="shadow-lg border-none"
+              onClick={() => setIsVisibleAvatarModal(true)}
+              title="Edit avatar"
+            />
 
-              <EditAvatarModal
-                isVisible={isVisibleEditAvatarModal}
-                onCancel={() => setIsVisibleAvatarModal(false)}
-                onOk={() => setIsVisibleAvatarModal(false)}
-              />
-            </Tooltip>
+            <EditAvatarModal
+              isVisible={isVisibleEditAvatarModal}
+              onCancel={() => setIsVisibleAvatarModal(false)}
+              onOk={() => setIsVisibleAvatarModal(false)}
+            />
           </div>
         </div>
 

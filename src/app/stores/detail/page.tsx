@@ -729,7 +729,7 @@ export default function NewStore() {
           <div className="flex justify-center my-5">
             <Button
               type="default"
-              className="mr-3"
+              className="mr-2"
               onClick={() => router.back()}
               disabled={isSubmitting}
             >

@@ -61,6 +61,7 @@ export default function Profile() {
               src={user?.avatar}
               width={130}
               className="shadow-lg border-none"
+              title="See avatar"
             />
           </div>
         </div>

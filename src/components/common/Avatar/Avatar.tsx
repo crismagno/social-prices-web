@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { Tooltip } from "antd";
+
 import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
 import { getImageAwsS3 } from "../../../shared/utils/images/url-images";
 
@@ -10,6 +12,7 @@ interface Props {
   width?: any;
   onClick?: (event?: any) => void;
   noUseAwsS3?: boolean;
+  title?: string;
 }
 
 const Avatar: React.FC<Props> = ({
@@ -19,6 +22,7 @@ const Avatar: React.FC<Props> = ({
   width = 60,
   onClick,
   noUseAwsS3,
+  title,
 }) => {
   className = `object-cover rounded-full shadow-md ${className}`;
 
@@ -35,14 +39,16 @@ const Avatar: React.FC<Props> = ({
   }, [src, noUseAwsS3]);
 
   return (
-    <img
-      src={image}
-      alt={alt}
-      className={className}
-      onClick={onClick}
-      onError={() => setImage(defaultAvatarImage)}
-      style={{ width, height: width }}
-    />
+    <Tooltip title={title}>
+      <img
+        src={image}
+        alt={alt}
+        className={className}
+        onClick={onClick}
+        onError={() => setImage(defaultAvatarImage)}
+        style={{ width, height: width }}
+      />
+    </Tooltip>
   );
 };
 

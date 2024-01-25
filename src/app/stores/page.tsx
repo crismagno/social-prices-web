@@ -1,12 +1,13 @@
 "use client";
 
-import { Button, Card, Image, Table, Tag, Tooltip } from "antd";
+import { Button, Card, Image, Tag, Tooltip } from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
 import { EditOutlined, EnterOutlined, PlusOutlined } from "@ant-design/icons";
 
+import TableAntdCustom from "../../components/custom/antd/TableAntdCustom/TableAntdCustom";
 import Layout from "../../components/template/Layout/Layout";
 import StoresEnum from "../../shared/business/stores/stores.enum";
 import { IStore } from "../../shared/business/stores/stores.interface";
@@ -14,12 +15,14 @@ import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../shared/utils/images/files-names";
 import { getImageAwsS3 } from "../../shared/utils/images/url-images";
-import { useFindStoresByUser } from "./useFindStoresByUser";
+import { StoreDetail } from "./components/StoreDetail/StoreDetail";
+import { useFindStoresByUserTableState } from "./useFindStoresByUserTableState";
 
 export default function MyStores() {
   const router: AppRouterInstance = useRouter();
 
-  const { isLoading, stores } = useFindStoresByUser();
+  const { isLoading, stores, fetchFindStoresByUserTableState, total } =
+    useFindStoresByUserTableState();
 
   const handleNewStore = () => {
     router.push(Urls.NEW_STORE);
@@ -33,9 +36,14 @@ export default function MyStores() {
     alert("go to store...");
   };
 
+  const onSearch = (value: string) => {
+    fetchFindStoresByUserTableState({ search: value?.trim() });
+  };
+
   return (
     <Layout subtitle="My Stores" title="Stores">
       <Card
+        title="Stores"
         className="h-min-80 mt-5"
         extra={
           <>
@@ -49,7 +57,7 @@ export default function MyStores() {
           </>
         }
       >
-        <Table<IStore>
+        <TableAntdCustom<IStore>
           rowKey={"_id"}
           onChange={(e) => console.log(e)}
           dataSource={stores}
@@ -73,13 +81,15 @@ export default function MyStores() {
                 }
 
                 return (
-                  <Image
-                    width={50}
-                    height={50}
-                    src={getImageAwsS3(logo)}
-                    alt="logo"
-                    className="rounded-full"
-                  />
+                  <Tooltip title="See logo">
+                    <Image
+                      width={50}
+                      height={50}
+                      src={getImageAwsS3(logo)}
+                      alt="logo"
+                      className="rounded-full"
+                    />
+                  </Tooltip>
                 );
               },
             },
@@ -132,7 +142,7 @@ export default function MyStores() {
               render: (_: any, store: IStore) => {
                 return (
                   <>
-                    <Tooltip title="edit store">
+                    <Tooltip title="Edit store">
                       <Button
                         className="mr-1"
                         type="warning"
@@ -152,7 +162,14 @@ export default function MyStores() {
               },
             },
           ]}
+          search={{ onSearch, placeholder: "Search stores.." }}
           loading={isLoading}
+          expandable={{
+            expandedRowRender: (store: IStore) => <StoreDetail store={store} />,
+          }}
+          pagination={{
+            total,
+          }}
         />
       </Card>
     </Layout>
