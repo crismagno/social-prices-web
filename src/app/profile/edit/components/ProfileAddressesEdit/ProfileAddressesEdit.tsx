@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 
-import { message, Tooltip } from "antd";
+import { Button, message, Tooltip } from "antd";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { SaveOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import ButtonCommon from "../../../../../components/common/ButtonCommon/ButtonCommon";
@@ -166,19 +167,14 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
     <form onSubmit={handleSubmit(onSubmit)} className={`w-full ${className}`}>
       <ContainerTitle
         extraHeader={
-          <ButtonCommon
-            color="success"
-            className="text-sm"
+          <Button
+            loading={isSubmitting}
+            type="primary"
             onClick={handleSubmit(onSubmit)}
-            loading={{
-              isLoading: isSubmitting,
-              height: 20,
-              width: 20,
-              element: "Updating",
-            }}
+            icon={<SaveOutlined />}
           >
             Save Addresses
-          </ButtonCommon>
+          </Button>
         }
         title={
           <div className="flex items-center">

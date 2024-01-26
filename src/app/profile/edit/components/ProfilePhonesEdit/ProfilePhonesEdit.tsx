@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 
-import { message, Tooltip } from "antd";
+import { Button, message, Tooltip } from "antd";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { SaveOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import ButtonCommon from "../../../../../components/common/ButtonCommon/ButtonCommon";
@@ -122,7 +123,7 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
       <ContainerTitle
         title={
           <div className="flex items-center">
-            <label className="mr-4">Phone Numbers</label>
+            <label className="mr-4">Phones</label>
 
             <Tooltip title="Add a new phone number">
               <ButtonCommon
@@ -139,19 +140,15 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
           </div>
         }
         extraHeader={
-          <ButtonCommon
-            className="text-sm"
-            color="success"
+          <Button
             disabled={fields.length === 0}
-            loading={{
-              isLoading: isSubmitting,
-              height: 20,
-              width: 20,
-              element: "Updating",
-            }}
+            loading={isSubmitting}
+            type="primary"
+            onClick={handleSubmit(onSubmit)}
+            icon={<SaveOutlined />}
           >
-            Save Phone Numbers
-          </ButtonCommon>
+            Save Phones
+          </Button>
         }
         className="mt-10"
       >

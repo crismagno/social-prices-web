@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 
-import { message } from "antd";
+import { Button, message } from "antd";
 import moment from "moment";
 import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 
+import { SaveOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import ButtonCommon from "../../../../../components/common/ButtonCommon/ButtonCommon";
 import ContainerTitle from "../../../../../components/common/ContainerTitle/ContainerTitle";
 import FormInput from "../../../../../components/common/FormInput/FormInput";
 import FormSelect, {
@@ -89,19 +89,14 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
         title="Profile"
         className="mt-10"
         extraHeader={
-          <ButtonCommon
-            color="success"
-            className="text-sm"
+          <Button
+            loading={isSubmitting}
+            type="primary"
             onClick={handleSubmit(onSubmit)}
-            loading={{
-              isLoading: isSubmitting,
-              height: 20,
-              width: 20,
-              element: "Updating",
-            }}
+            icon={<SaveOutlined />}
           >
             Save Profile
-          </ButtonCommon>
+          </Button>
         }
       >
         <div className="flex">
