@@ -8,6 +8,7 @@ import { useParams, useRouter } from "next/navigation";
 
 import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 
+import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
 import TableAntdCustom from "../../../../components/custom/antd/TableAntdCustom/TableAntdCustom";
 import Layout from "../../../../components/template/Layout/Layout";
 import StoresEnum from "../../../../shared/business/stores/stores.enum";
@@ -17,12 +18,15 @@ import DatesEnum from "../../../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../../../shared/utils/images/files-names";
 import { getImageAwsS3 } from "../../../../shared/utils/images/url-images";
 import { StoreDetail } from "../../components/StoreDetail/StoreDetail";
+import { useFindStoreById } from "../../detail/useFindStoreById";
 import { useFindStoresByUserTableState } from "../../useFindStoresByUserTableState";
 
 export default function Products() {
   const router: AppRouterInstance = useRouter();
 
   const params: Params = useParams();
+
+  const { isLoadingStore, store } = useFindStoreById(params?.storeId);
 
   const { isLoading, stores, fetchFindStoresByUserTableState, total } =
     useFindStoresByUserTableState();
@@ -39,8 +43,16 @@ export default function Products() {
     fetchFindStoresByUserTableState({ search: value?.trim() });
   };
 
+  if (isLoadingStore || !store) {
+    return <LoadingFull />;
+  }
+
   return (
-    <Layout subtitle="My Products" title="Products" hasBackButton>
+    <Layout
+      subtitle={`Here we can see about products for store - ${store.name}`}
+      title="Store Products"
+      hasBackButton
+    >
       <Card
         title="Products"
         className="h-min-80 mt-5"
