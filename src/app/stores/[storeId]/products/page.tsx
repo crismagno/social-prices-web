@@ -155,7 +155,7 @@ export default function Products() {
                     <Tooltip title="Edit store">
                       <Button
                         className="mr-1"
-                        type="warning"
+                        type="success"
                         onClick={() => handleEditProduct(store)}
                         icon={<EditOutlined />}
                       />

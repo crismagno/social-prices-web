@@ -69,6 +69,7 @@ const __normalizeUser = async (userFirebase: User): Promise<IUser> => {
             type: UsersEnum.PhoneTypes.OTHER,
             number: userFirebase.phoneNumber,
             uid: Date.now().toString(),
+            messengers: [],
           },
         ]
       : null,
@@ -81,6 +82,7 @@ const __normalizeUser = async (userFirebase: User): Promise<IUser> => {
     gender: null,
     loggedByAuthProvider: UsersEnum.Provider.GOOGLE,
     _id: userFirebase.uid,
+    about: null,
   };
 };
 
@@ -207,10 +209,11 @@ export const AuthProvider = ({ children }: { children?: any }) => {
           email: `${userNormalized.email}`,
           password: `${process.env.NEXT_PUBLIC_SOCIAL_PRICES_SIGN_UP_PASSWORD_TEMP}`,
           authProvider: userNormalized.authProvider,
-          avatar: userNormalized.avatar ?? undefined,
+          avatar: userNormalized.avatar,
           extraDataProvider: userNormalized.extraDataProvider,
           phoneNumbers: userNormalized.phoneNumbers ?? [],
           uid: userNormalized.uid,
+          about: null,
         });
 
       responseUser.providerId = userNormalized.providerId;
@@ -268,6 +271,12 @@ export const AuthProvider = ({ children }: { children?: any }) => {
         await serviceMethodsInstance.authServiceMethods.signUp({
           email: email,
           password,
+          about: null,
+          authProvider: null,
+          avatar: null,
+          extraDataProvider: null,
+          phoneNumbers: null,
+          uid: null,
         });
 
       response.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;

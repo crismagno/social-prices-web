@@ -22,21 +22,25 @@ export default class CreateUserDto {
 
   @IsString()
   @IsOptional()
-  uid?: string;
+  uid: string | null;
 
   @IsString()
   @IsOptional()
   @IsEnum(UsersEnum.Provider)
-  authProvider?: UsersEnum.Provider;
+  authProvider: UsersEnum.Provider | null;
 
   @IsString()
   @IsOptional()
-  avatar?: string;
+  avatar: string | null;
 
   @IsOptional()
   @IsArray()
-  phoneNumbers?: IPhoneNumber[];
+  phoneNumbers: IPhoneNumber[] | null;
 
   @IsOptional()
-  extraDataProvider?: any;
+  extraDataProvider: any | null;
+
+  @IsString()
+  @IsOptional()
+  about: string | null;
 }

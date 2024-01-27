@@ -2,7 +2,16 @@
 
 import { useEffect, useState } from "react";
 
-import { Button, Card, Col, message, Row, Tooltip, UploadFile } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  message,
+  Row,
+  Select,
+  Tooltip,
+  UploadFile,
+} from "antd";
 import { RcFile } from "antd/es/upload";
 import { isArray } from "class-validator";
 import moment from "moment";
@@ -12,7 +21,12 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import {
+  Controller,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from "react-hook-form";
 import z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,6 +48,7 @@ import Layout from "../../../components/template/Layout/Layout";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import CreateStoreDto from "../../../services/social-prices-api/stores/dto/createStore.dto";
 import UpdateStoreDto from "../../../services/social-prices-api/stores/dto/updateStore.dto";
+import StoresEnum from "../../../shared/business/stores/stores.enum";
 import {
   IStoreAddress,
   IStorePhoneNumber,
@@ -73,8 +88,10 @@ type TAddressFormSchema = z.infer<typeof addressFormSchema>;
 
 const phoneNumberFormSchema = z.object({
   uid: z.string(),
+  type: z.string().nonempty("Phone type is required"),
   number: z.string().nonempty("Phone number is required"),
   isCollapsed: z.boolean().optional(),
+  messengers: z.array(z.string()),
 });
 
 type TPhoneNumberFormSchema = z.infer<typeof phoneNumberFormSchema>;
@@ -86,6 +103,7 @@ const formSchema = z.object({
   description: z.string().nullable(),
   addresses: z.array(addressFormSchema),
   phoneNumbers: z.array(phoneNumberFormSchema),
+  about: z.string().nullable(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -115,9 +133,11 @@ const generateNewAddress = (
 const generateNewAPhoneNumber = (
   isCollapsed: boolean = true
 ): TPhoneNumberFormSchema => ({
+  type: StoresEnum.PhoneTypes.OTHER,
   number: "",
   isCollapsed,
   uid: Date.now().toString(),
+  messengers: [],
 });
 
 export default function NewStore() {
@@ -178,6 +198,7 @@ export default function NewStore() {
     }
 
     const values: TFormSchema = {
+      about: store?.about ?? null,
       name: store?.name ?? "",
       email: store?.email ?? "",
       description: store?.description ?? "",
@@ -255,6 +276,7 @@ export default function NewStore() {
         startedAt: moment(data.startedAt).toDate(),
         addresses,
         phoneNumbers: data.phoneNumbers,
+        about: data.about,
       };
 
       for (const property of Object.keys(createStoreDto)) {
@@ -320,6 +342,7 @@ export default function NewStore() {
         startedAt: moment(data.startedAt).toDate(),
         addresses,
         phoneNumbers: data.phoneNumbers,
+        about: data.about,
       };
 
       for (const property of Object.keys(updateStoreDto)) {
@@ -459,6 +482,20 @@ export default function NewStore() {
                 registerName="description"
                 errorMessage={errors.description?.message}
                 maxLength={200}
+              />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col xs={24}>
+              <FormInput
+                label="About"
+                placeholder={"Enter about"}
+                defaultValue={store?.about}
+                register={register}
+                registerName="about"
+                maxLength={400}
+                type="text"
               />
             </Col>
           </Row>
@@ -651,7 +688,7 @@ export default function NewStore() {
           <ContainerTitle
             title={
               <div className="flex items-center">
-                <label className="mr-4">Phone Numbers</label>
+                <label className="mr-4">Phones</label>
 
                 <Tooltip title="Add a new phone number">
                   <ButtonCommon
@@ -704,6 +741,31 @@ export default function NewStore() {
                   >
                     <div className="flex">
                       <div className="flex flex-col justify-start w-1/2">
+                        <FormSelect
+                          label="Type"
+                          placeholder={"Select phone type"}
+                          defaultValue={formPhoneNumber.type}
+                          register={register}
+                          registerName={`phoneNumbers.${index}.type`}
+                          registerOptions={{ required: true }}
+                          errorMessage={
+                            errors?.phoneNumbers?.[index]?.type?.message
+                          }
+                        >
+                          {Object.keys(StoresEnum.PhoneTypes).map(
+                            (phoneType: string) => (
+                              <FormSelectOption
+                                key={phoneType}
+                                value={phoneType}
+                              >
+                                {StoresEnum.PhoneTypesLabels[phoneType]}
+                              </FormSelectOption>
+                            )
+                          )}
+                        </FormSelect>
+                      </div>
+
+                      <div className="flex flex-col justify-start w-1/2">
                         <FormInput
                           label="Phone Number"
                           placeholder={"Enter phone number"}
@@ -716,6 +778,45 @@ export default function NewStore() {
                           }
                           maxLength={30}
                         />
+                      </div>
+
+                      <div className="flex flex-col justify-start w-1/2">
+                        <div className={`flex flex-col mt-4 mr-5`}>
+                          <label className={`text-sm`}>Messengers</label>
+
+                          <Controller
+                            control={control}
+                            name={`phoneNumbers.${index}.messengers`}
+                            render={({
+                              field: { onChange, onBlur, value, name, ref },
+                            }) => (
+                              <Select
+                                onChange={onChange}
+                                onBlur={onBlur}
+                                name={name}
+                                value={value}
+                                ref={ref}
+                                placeholder={"Select messengers"}
+                                mode="multiple"
+                              >
+                                {Object.keys(
+                                  StoresEnum.PhoneNumberMessenger
+                                ).map((phoneMessenger: string) => (
+                                  <Select.Option
+                                    key={phoneMessenger}
+                                    value={phoneMessenger}
+                                  >
+                                    {
+                                      StoresEnum.PhoneNumberMessengerLabels[
+                                        phoneMessenger
+                                      ]
+                                    }
+                                  </Select.Option>
+                                ))}
+                              </Select>
+                            )}
+                          ></Controller>
+                        </div>
                       </div>
                     </div>
                   </Collapse>

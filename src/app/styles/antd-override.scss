@@ -29,11 +29,11 @@
 }
 
 .ant-btn-warning {
-  background-color: #faf609;
+  background-color: #ffec3d;
   color: #000;
 
   &:hover {
-    background-color: #f6f358;
+    background-color: #fff566;
     color: #000;
   }
 }
@@ -45,5 +45,15 @@
   &:hover {
     background-color: #fff;
     color: #000;
+  }
+}
+
+.ant-btn-success {
+  background-color: #52c41a;
+  color: #fff;
+
+  &:hover {
+    background-color: #73d13d;
+    color: #fff;
   }
 }

@@ -60,6 +60,20 @@ namespace UsersEnum {
     [PhoneTypes.BUSINESS]: "Business",
     [PhoneTypes.OTHER]: "Other",
   };
+
+  export enum PhoneNumberMessenger {
+    WHATSAPP = "WHATSAPP",
+    TELEGRAM = "TELEGRAM",
+    MESSENGER = "MESSENGER",
+    OTHER = "OTHER",
+  }
+
+  export const PhoneNumberMessengerLabels = {
+    [PhoneNumberMessenger.WHATSAPP]: "Whatsapp",
+    [PhoneNumberMessenger.TELEGRAM]: "Telegram",
+    [PhoneNumberMessenger.MESSENGER]: "Messenger",
+    [PhoneNumberMessenger.OTHER]: "Other",
+  };
 }
 
 export default UsersEnum;

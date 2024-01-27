@@ -13,11 +13,14 @@ export interface IStore {
   userId: string;
   addresses: IStoreAddress[];
   phoneNumbers: IStorePhoneNumber[];
+  about: string | null;
 }
 
 export interface IStorePhoneNumber {
   uid: string;
+  type: StoresEnum.PhoneTypes;
   number: string;
+  messengers: StoresEnum.PhoneNumberMessenger[];
 }
 
 export interface IStoreAddress {

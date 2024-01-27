@@ -163,7 +163,7 @@ export default function Stores() {
                     <Tooltip title="Edit store">
                       <Button
                         className="mr-1"
-                        type="warning"
+                        type="success"
                         onClick={() => handleEditStore(store)}
                         icon={<EditOutlined />}
                       />

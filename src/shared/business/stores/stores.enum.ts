@@ -16,6 +16,34 @@ namespace StoresEnum {
     [Status.INACTIVE]: "warning",
     [Status.STOPPED]: "gray",
   };
+
+  export enum PhoneTypes {
+    MOBILE = "MOBILE",
+    HOME = "HOME",
+    BUSINESS = "BUSINESS",
+    OTHER = "OTHER",
+  }
+
+  export const PhoneTypesLabels = {
+    [PhoneTypes.MOBILE]: "Mobile",
+    [PhoneTypes.HOME]: "Home",
+    [PhoneTypes.BUSINESS]: "Business",
+    [PhoneTypes.OTHER]: "Other",
+  };
+
+  export enum PhoneNumberMessenger {
+    WHATSAPP = "WHATSAPP",
+    TELEGRAM = "TELEGRAM",
+    MESSENGER = "MESSENGER",
+    OTHER = "OTHER",
+  }
+
+  export const PhoneNumberMessengerLabels = {
+    [PhoneNumberMessenger.WHATSAPP]: "Whatsapp",
+    [PhoneNumberMessenger.TELEGRAM]: "Telegram",
+    [PhoneNumberMessenger.MESSENGER]: "Messenger",
+    [PhoneNumberMessenger.OTHER]: "Other",
+  };
 }
 
 export default StoresEnum;

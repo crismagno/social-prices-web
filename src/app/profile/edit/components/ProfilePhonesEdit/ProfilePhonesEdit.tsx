@@ -2,8 +2,13 @@
 
 import { useState } from "react";
 
-import { Button, message, Tooltip } from "antd";
-import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import { Button, message, Select, Tooltip } from "antd";
+import {
+  Controller,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from "react-hook-form";
 import { z } from "zod";
 
 import { SaveOutlined } from "@ant-design/icons";
@@ -34,6 +39,7 @@ const phoneNumberFormSchema = z.object({
   type: z.string().nonempty("Phone type is required"),
   number: z.string().nonempty("Phone number is required"),
   isCollapsed: z.boolean().optional(),
+  messengers: z.array(z.string()),
 });
 
 type TPhoneNumberFormSchema = z.infer<typeof phoneNumberFormSchema>;
@@ -55,6 +61,7 @@ const generateNewAPhoneNumber = (
   type: UsersEnum.PhoneTypes.OTHER,
   isCollapsed,
   uid: Date.now().toString(),
+  messengers: [],
 });
 
 const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
@@ -219,6 +226,45 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
                       }
                       maxLength={30}
                     />
+                  </div>
+
+                  <div className="flex flex-col justify-start w-1/2">
+                    <div className={`flex flex-col mt-4 mr-5`}>
+                      <label className={`text-sm`}>Messengers</label>
+
+                      <Controller
+                        control={control}
+                        name={`phoneNumbers.${index}.messengers`}
+                        render={({
+                          field: { onChange, onBlur, value, name, ref },
+                        }) => (
+                          <Select
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            name={name}
+                            value={value}
+                            ref={ref}
+                            placeholder={"Select messengers"}
+                            mode="multiple"
+                          >
+                            {Object.keys(UsersEnum.PhoneNumberMessenger).map(
+                              (phoneMessenger: string) => (
+                                <Select.Option
+                                  key={phoneMessenger}
+                                  value={phoneMessenger}
+                                >
+                                  {
+                                    UsersEnum.PhoneNumberMessengerLabels[
+                                      phoneMessenger
+                                    ]
+                                  }
+                                </Select.Option>
+                              )
+                            )}
+                          </Select>
+                        )}
+                      ></Controller>
+                    </div>
                   </div>
                 </div>
               </Collapse>

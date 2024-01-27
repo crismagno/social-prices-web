@@ -32,6 +32,7 @@ const formSchema = z.object({
   birthDate: z.string().nonempty("Birth date name is required"),
   middleName: z.string().nullable(),
   gender: z.string().nullable(),
+  about: z.string().nullable(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -47,6 +48,7 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
       .format(DatesEnum.Format.YYYYMMDD_DASHED),
     gender: user?.gender ?? UsersEnum.Gender.OTHER,
     middleName: user?.middleName ?? null,
+    about: user?.about ?? null,
   };
 
   const {
@@ -68,9 +70,10 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
         await serviceMethodsInstance.usersServiceMethods.updateUser({
           birthDate: moment(data.birthDate).toDate(),
           firstName: data.firstName,
-          gender: data.gender,
+          gender: data.gender as UsersEnum.PhoneTypes,
           lastName: data.lastName,
           middleName: data.middleName ?? null,
+          about: data.about,
         });
 
       message.success("Your basic information was updated!");
@@ -161,6 +164,18 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
               ))}
             </FormSelect>
           </div>
+        </div>
+
+        <div className="flex flex-col justify-start">
+          <FormInput
+            label="About"
+            placeholder={"Enter about"}
+            defaultValue={user?.about ?? ""}
+            register={register}
+            registerName="about"
+            maxLength={400}
+            type="text"
+          />
         </div>
       </ContainerTitle>
     </form>

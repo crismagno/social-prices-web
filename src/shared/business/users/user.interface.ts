@@ -20,6 +20,7 @@ export default interface IUser {
   addresses: IUserAddress[] | null;
   gender: UsersEnum.Gender | null;
   loggedByAuthProvider: UsersEnum.Provider;
+  about: string | null;
 }
 
 export interface IUserAddress {
@@ -39,6 +40,7 @@ export interface IPhoneNumber {
   uid: string;
   type: UsersEnum.PhoneTypes;
   number: string;
+  messengers: UsersEnum.PhoneNumberMessenger[];
 }
 
 export interface IUserAddressState {

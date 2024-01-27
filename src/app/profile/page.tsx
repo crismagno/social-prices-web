@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 
-import { Modal, Tag, Tooltip } from "antd";
+import { Button, Modal, Tag, Tooltip } from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
+import { EditOutlined } from "@ant-design/icons";
+
 import Avatar from "../../components/common/Avatar/Avatar";
-import ButtonCommon from "../../components/common/ButtonCommon/ButtonCommon";
 import Card from "../../components/common/Card/Card";
 import ContainerTitle from "../../components/common/ContainerTitle/ContainerTitle";
 import Description from "../../components/common/Description/Description";
@@ -81,14 +82,14 @@ export default function Profile() {
         </Modal>
 
         <div className="flex justify-end relative">
-          <ButtonCommon
-            color="success"
+          <Button
+            type="success"
             onClick={() => router.push(Urls.PROFILE_EDIT)}
             className="px-3 shadow-lg"
+            icon={<EditOutlined />}
           >
-            {IconPencilSquare("mr-1")}
             Edit
-          </ButtonCommon>
+          </Button>
         </div>
 
         <div className="flex flex-col justify-center items-center text-center mt-10 mb-5">
@@ -246,6 +247,14 @@ export default function Profile() {
                   </Tag>
                 }
               />
+
+              {user?.about && (
+                <Description
+                  label="About"
+                  description={user?.about}
+                  leftIcon={IconPencilSquare()}
+                />
+              )}
             </div>
           </div>
         </ContainerTitle>

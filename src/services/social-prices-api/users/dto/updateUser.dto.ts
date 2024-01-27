@@ -22,4 +22,8 @@ export default class UpdateUserDto {
   @IsOptional()
   @IsEnum(UsersEnum.Gender)
   gender: UsersEnum.Gender | null;
+
+  @IsString()
+  @IsOptional()
+  about: string | null;
 }
