@@ -57,3 +57,14 @@ export const createPhoneNumberName = (
 
   return phoneNumberName;
 };
+
+export const messengersToString = (messengers: string[]): string =>
+  messengers.reduce((acc, curr, index) => {
+    if (index !== 0) {
+      acc += `, ${UsersEnum.PhoneNumberMessengerLabels[curr]}`;
+    } else {
+      acc = UsersEnum.PhoneNumberMessengerLabels[curr];
+    }
+
+    return acc;
+  }, "");

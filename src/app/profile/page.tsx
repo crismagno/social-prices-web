@@ -30,7 +30,10 @@ import UsersEnum from "../../shared/business/users/users.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 import { defaultAvatarImage } from "../../shared/utils/images/files-names";
 import { getImageAwsS3 } from "../../shared/utils/images/url-images";
-import { createUserAddressName } from "../../shared/utils/string-extensions/string-extensions";
+import {
+  createUserAddressName,
+  messengersToString,
+} from "../../shared/utils/string-extensions/string-extensions";
 
 export default function Profile() {
   const { user } = useAuthData();
@@ -186,9 +189,14 @@ export default function Profile() {
                   <div className="w-full flex">
                     {user?.phoneNumbers?.length ? (
                       user?.phoneNumbers.map((phoneNumber: IPhoneNumber) => (
-                        <Tag key={phoneNumber.number}>{`${
-                          UsersEnum.PhoneTypesLabels[phoneNumber.type]
-                        } - ${phoneNumber.number}`}</Tag>
+                        <Tooltip
+                          key={phoneNumber.number}
+                          title={messengersToString(phoneNumber.messengers)}
+                        >
+                          <Tag key={phoneNumber.number}>{`${
+                            UsersEnum.PhoneTypesLabels[phoneNumber.type]
+                          } - ${phoneNumber.number}`}</Tag>
+                        </Tooltip>
                       ))
                     ) : (
                       <span className="text-sm text-gray-500">---</span>

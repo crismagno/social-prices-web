@@ -1,4 +1,4 @@
-import { Card, Tag } from "antd";
+import { Card, Tag, Tooltip } from "antd";
 import moment from "moment";
 
 import Description from "../../../../components/common/Description/Description";
@@ -7,11 +7,15 @@ import {
   IconPhone,
   IconQuestion,
 } from "../../../../components/common/icons/icons";
+import StoresEnum from "../../../../shared/business/stores/stores.enum";
 import {
   IStore,
   IStorePhoneNumber,
 } from "../../../../shared/business/stores/stores.interface";
-import { createUserAddressName } from "../../../../shared/utils/string-extensions/string-extensions";
+import {
+  createUserAddressName,
+  messengersToString,
+} from "../../../../shared/utils/string-extensions/string-extensions";
 
 interface Props {
   store: IStore;
@@ -47,7 +51,15 @@ export const StoreDetail: React.FC<Props> = ({ store }) => {
               <div className="w-full flex">
                 {store?.phoneNumbers?.length ? (
                   store?.phoneNumbers.map((phoneNumber: IStorePhoneNumber) => (
-                    <Tag key={phoneNumber.number}>{phoneNumber.number}</Tag>
+                    <Tooltip
+                      key={phoneNumber.number}
+                      title={messengersToString(phoneNumber.messengers)}
+                    >
+                      <Tag>
+                        {StoresEnum.PhoneTypesLabels[phoneNumber.type]} -{" "}
+                        {phoneNumber.number}
+                      </Tag>
+                    </Tooltip>
                   ))
                 ) : (
                   <span className="text-sm text-gray-500">---</span>

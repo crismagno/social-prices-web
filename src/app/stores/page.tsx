@@ -59,7 +59,7 @@ export default function Stores() {
   };
 
   return (
-    <Layout subtitle="My Stores" title="Stores">
+    <Layout subtitle="My Stores" title="Stores" hasBackButton>
       <Card
         title="Stores"
         className="h-min-80 mt-5"
