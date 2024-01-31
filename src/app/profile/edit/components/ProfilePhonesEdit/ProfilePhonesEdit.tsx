@@ -255,7 +255,7 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
                                 >
                                   {
                                     UsersEnum.PhoneNumberMessengerLabels[
-                                      phoneMessenger
+                                      phoneMessenger as UsersEnum.PhoneNumberMessenger
                                     ]
                                   }
                                 </Select.Option>

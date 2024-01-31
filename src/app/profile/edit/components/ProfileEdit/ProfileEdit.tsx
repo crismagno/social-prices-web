@@ -15,6 +15,7 @@ import FormInput from "../../../../../components/common/FormInput/FormInput";
 import FormSelect, {
   FormSelectOption,
 } from "../../../../../components/common/FormSelect/FormSelect";
+import FormTextarea from "../../../../../components/common/FormTextarea/FormTextarea";
 import handleClientError from "../../../../../components/common/handleClientError/handleClientError";
 import useAuthData from "../../../../../data/hook/useAuthData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/ServiceMethods";
@@ -70,7 +71,7 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
         await serviceMethodsInstance.usersServiceMethods.updateUser({
           birthDate: moment(data.birthDate).toDate(),
           firstName: data.firstName,
-          gender: data.gender as UsersEnum.PhoneTypes,
+          gender: data.gender as UsersEnum.Gender,
           lastName: data.lastName,
           middleName: data.middleName ?? null,
           about: data.about,
@@ -157,9 +158,9 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
               register={register}
               registerName="gender"
             >
-              {Object.keys(UsersEnum.Gender).map((gender: any) => (
+              {Object.keys(UsersEnum.Gender).map((gender: string) => (
                 <FormSelectOption key={gender} value={gender}>
-                  {UsersEnum.GenderLabels[gender]}
+                  {UsersEnum.GenderLabels[gender as UsersEnum.Gender]}
                 </FormSelectOption>
               ))}
             </FormSelect>
@@ -167,14 +168,13 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
         </div>
 
         <div className="flex flex-col justify-start">
-          <FormInput
+          <FormTextarea
             label="About"
             placeholder={"Enter about"}
             defaultValue={user?.about ?? ""}
             register={register}
             registerName="about"
-            maxLength={400}
-            type="text"
+            rows={4}
           />
         </div>
       </ContainerTitle>

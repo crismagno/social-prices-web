@@ -1,5 +1,6 @@
-import { Button } from "antd";
 import { useRouter } from "next/navigation";
+
+import BackButton from "../../common/BackButton/BackButton";
 
 interface Props {
   title: string;
@@ -25,9 +26,7 @@ const Title: React.FC<Props> = ({ subtitle, title, hasBackButton }) => {
 
       {hasBackButton && (
         <div>
-          <Button className="z-50" onClick={() => router.back()}>
-            Back
-          </Button>
+          <BackButton />
         </div>
       )}
     </div>

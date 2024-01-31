@@ -14,7 +14,7 @@ interface Props<T> extends TableProps<T> {
   };
 }
 
-function TableAntdCustom<T extends object = any>({
+function TableCustomAntd<T extends object = any>({
   search,
   ...props
 }: Props<T>) {
@@ -61,4 +61,4 @@ function TableAntdCustom<T extends object = any>({
   );
 }
 
-export default TableAntdCustom;
+export default TableCustomAntd;

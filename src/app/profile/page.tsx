@@ -57,7 +57,7 @@ export default function Profile() {
   };
 
   return (
-    <Layout title="Profile" subtitle="See your information">
+    <Layout title="Profile" subtitle="See my information">
       <Card className=" h-min-80 mt-10">
         <div className="flex justify-center absolute right-0 w-full -top-16">
           <div className="cursor-pointer" onClick={() => setPreviewOpen(true)}>

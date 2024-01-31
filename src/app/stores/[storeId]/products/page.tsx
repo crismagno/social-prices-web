@@ -9,7 +9,7 @@ import { useParams, useRouter } from "next/navigation";
 import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
-import TableAntdCustom from "../../../../components/custom/antd/TableAntdCustom/TableAntdCustom";
+import TableCustomAntd from "../../../../components/custom/antd/TableCustomAntd/TableCustomAntd";
 import Layout from "../../../../components/template/Layout/Layout";
 import StoresEnum from "../../../../shared/business/stores/stores.enum";
 import { IStore } from "../../../../shared/business/stores/stores.interface";
@@ -68,7 +68,7 @@ export default function Products() {
           </>
         }
       >
-        <TableAntdCustom<IStore>
+        <TableCustomAntd<IStore>
           rowKey={"_id"}
           dataSource={stores}
           columns={[

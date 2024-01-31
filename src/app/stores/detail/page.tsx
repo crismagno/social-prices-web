@@ -39,6 +39,7 @@ import FormInput from "../../../components/common/FormInput/FormInput";
 import FormSelect, {
   FormSelectOption,
 } from "../../../components/common/FormSelect/FormSelect";
+import FormTextarea from "../../../components/common/FormTextarea/FormTextarea";
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../../components/common/HrCustom/HrCustom";
 import { IconPlus, IconTrash } from "../../../components/common/icons/icons";
@@ -488,14 +489,13 @@ export default function NewStore() {
 
           <Row>
             <Col xs={24}>
-              <FormInput
+              <FormTextarea
                 label="About"
                 placeholder={"Enter about"}
                 defaultValue={store?.about}
                 register={register}
                 registerName="about"
-                maxLength={400}
-                type="text"
+                rows={4}
               />
             </Col>
           </Row>
@@ -808,7 +808,7 @@ export default function NewStore() {
                                   >
                                     {
                                       StoresEnum.PhoneNumberMessengerLabels[
-                                        phoneMessenger
+                                        phoneMessenger as StoresEnum.PhoneNumberMessenger
                                       ]
                                     }
                                   </Select.Option>
