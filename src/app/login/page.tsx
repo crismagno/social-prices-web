@@ -140,6 +140,7 @@ export default function Login() {
         <hr className="border-gray-300 my-6 w-full" />
 
         <button
+          type="button"
           onClick={submitLoginGoogle}
           className="bg-red-400 hover:bg-red-400 text-white rounded-lg py-1 px-4
            flex justify-center items-center"
