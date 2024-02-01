@@ -1,3 +1,7 @@
+import { useState } from "react";
+
+import { Modal } from "antd";
+
 import useAuthData from "../../../data/hook/useAuthData";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import Avatar from "../../common/Avatar/Avatar";
@@ -14,6 +18,8 @@ interface Props {}
 
 const Navigation: React.FC<Props> = ({}) => {
   const { user, logout } = useAuthData();
+
+  const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
 
   return (
     <div
@@ -52,12 +58,27 @@ const Navigation: React.FC<Props> = ({}) => {
         <NavigationItem
           icon={IconLogout}
           text={"Logout"}
-          onClick={logout}
+          onClick={() => setShowLogoutModal(true)}
           className="
             text-red-600 hover:bg-red-400 hover:text-white
             dark:text-white dark:hover:bg-slate-700"
         />
       </ul>
+
+      <Modal
+        open={showLogoutModal}
+        title="Logout"
+        destroyOnClose
+        onCancel={() => setShowLogoutModal(false)}
+        onOk={async () => {
+          await logout();
+          setShowLogoutModal(false);
+        }}
+        okText={"Yes"}
+        cancelText={"No"}
+      >
+        Are you sure logout?
+      </Modal>
     </div>
   );
 };
