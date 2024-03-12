@@ -11,6 +11,7 @@ import {
   IconBuildingStoreFront,
   IconHome,
   IconLogout,
+  IconSquare2x2,
 } from "../../common/icons/icons";
 import NavigationItem from "./NavigationItem";
 
@@ -51,6 +52,11 @@ const Navigation: React.FC<Props> = ({}) => {
           icon={IconBuildingStoreFront()}
           text="Stores"
           url={Urls.STORES}
+        />
+        <NavigationItem
+          icon={IconSquare2x2()}
+          text="Products"
+          url={Urls.PRODUCTS}
         />
       </ul>
 

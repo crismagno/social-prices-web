@@ -21,6 +21,11 @@ const Urls = {
   STORE_PRODUCTS: "/stores/:storeId/products",
   STORE_NEW_PRODUCT: "/stores/:storeId/products/detail",
   STORE_EDIT_PRODUCT: "/stores/:storeId/products/detail?pid=:productId",
+
+  // products
+  PRODUCTS: "/products",
+  NEW_PRODUCT: "/products/detail",
+  EDIT_PRODUCT: "/products/detail?sid=:productId",
 };
 
 export default Urls;
