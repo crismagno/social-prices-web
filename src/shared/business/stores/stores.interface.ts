@@ -14,6 +14,7 @@ export interface IStore {
   addresses: IStoreAddress[];
   phoneNumbers: IStorePhoneNumber[];
   about: string | null;
+  removed: IStoreRemoved | null;
 }
 
 export interface IStorePhoneNumber {
@@ -44,4 +45,9 @@ export interface IStoreAddressState {
 export interface IStoreAddressCountry {
   code: string;
   name: string;
+}
+
+export interface IStoreRemoved {
+  description: string | null;
+  removedAt: Date;
 }

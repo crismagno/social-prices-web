@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { Button, Card, Image, TablePaginationConfig, Tag, Tooltip } from "antd";
 import {
   FilterValue,
@@ -21,14 +23,19 @@ import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../shared/utils/images/files-names";
 import { getImageAwsS3 } from "../../shared/utils/images/url-images";
+import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { StoreDetail } from "./components/StoreDetail/StoreDetail";
 import { useFindStoresByUserTableState } from "./useFindStoresByUserTableState";
 
 export default function Stores() {
   const router: AppRouterInstance = useRouter();
 
-  const { isLoading, stores, fetchFindStoresByUserTableState, total } =
-    useFindStoresByUserTableState();
+  const [tableStateRequest, setTableStateRequest] = useState<
+    ITableStateRequest<IStore> | undefined
+  >();
+
+  const { isLoading, stores, total } =
+    useFindStoresByUserTableState(tableStateRequest);
 
   const handleNewStore = () => {
     router.push(Urls.NEW_STORE);
@@ -43,7 +50,7 @@ export default function Stores() {
   };
 
   const onSearch = (value: string) => {
-    fetchFindStoresByUserTableState({ search: value?.trim() });
+    setTableStateRequest({ ...tableStateRequest, search: value?.trim() });
   };
 
   const handleChangeTable = (
@@ -52,10 +59,13 @@ export default function Stores() {
     sorter: SorterResult<RecordType> | SorterResult<RecordType>[],
     extra: TableCurrentDataSource<RecordType>
   ) => {
-    console.log("pagination: ", pagination);
-    console.log("filters: ", filters);
-    console.log("sorter: ", sorter);
-    console.log("extra: ", extra);
+    setTableStateRequest({
+      ...tableStateRequest,
+      filters,
+      pagination,
+      sort: { field: sorter.field, order: sorter.order },
+      action: extra.action,
+    });
   };
 
   return (
@@ -144,6 +154,10 @@ export default function Stores() {
             {
               title: "Status",
               dataIndex: "status",
+              filters: Object.keys(StoresEnum.Status).map((status: string) => ({
+                text: StoresEnum.StatusLabel[status],
+                value: status,
+              })),
               key: "status",
               align: "center",
               render: (status: StoresEnum.Status) => (

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { Button, Card, Image, TablePaginationConfig, Tooltip } from "antd";
 import {
   FilterValue,
@@ -20,13 +22,18 @@ import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../shared/utils/images/files-names";
 import { getImageAwsS3 } from "../../shared/utils/images/url-images";
+import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { useFindProductsByUserTableState } from "./useFindProductsByUserTableState";
 
 export default function Products() {
   const router: AppRouterInstance = useRouter();
 
-  const { isLoading, products, fetchFindProductsByUserTableState, total } =
-    useFindProductsByUserTableState();
+  const [tableStateRequest, setTableStateRequest] = useState<
+    ITableStateRequest<IProduct> | undefined
+  >();
+
+  const { isLoading, products, total } =
+    useFindProductsByUserTableState(tableStateRequest);
 
   const handleNewProduct = () => {
     router.push(Urls.NEW_PRODUCT);
@@ -41,7 +48,7 @@ export default function Products() {
   };
 
   const onSearch = (value: string) => {
-    fetchFindProductsByUserTableState({ search: value?.trim() });
+    setTableStateRequest({ ...tableStateRequest, search: value?.trim() });
   };
 
   const handleChangeTable = (
@@ -50,10 +57,13 @@ export default function Products() {
     sorter: SorterResult<RecordType> | SorterResult<RecordType>[],
     extra: TableCurrentDataSource<RecordType>
   ) => {
-    console.log("pagination: ", pagination);
-    console.log("filters: ", filters);
-    console.log("sorter: ", sorter);
-    console.log("extra: ", extra);
+    setTableStateRequest({
+      ...tableStateRequest,
+      filters,
+      pagination,
+      sort: { field: sorter.field, order: sorter.order },
+      action: extra.action,
+    });
   };
 
   return (

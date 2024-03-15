@@ -8,37 +8,38 @@ import {
   ITableStateResponse,
 } from "../../shared/utils/table/table-state.interface";
 
-export const useFindStoresByUserTableState = (): {
+export const useFindStoresByUserTableState = (
+  tableState?: ITableStateRequest<IStore>
+): {
   isLoading: boolean;
   stores: IStore[];
   total: number;
-  fetchFindStoresByUserTableState: (
-    tableState?: ITableStateRequest<IStore>
-  ) => Promise<void>;
+  fetchFindStoresByUserTableState: () => Promise<void>;
 } => {
   const [stores, setStores] = useState<IStore[]>([]);
+
   const [total, setTotal] = useState<number>(0);
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const fetchFindStoresByUserTableState = useCallback(
-    async (tableState?: ITableStateRequest<IStore>) => {
-      try {
-        setIsLoading(true);
-        const response: ITableStateResponse<IStore[]> =
-          await serviceMethodsInstance.storesServiceMethods.findByUserTableState(
-            tableState
-          );
+  const fetchFindStoresByUserTableState = useCallback(async () => {
+    try {
+      setIsLoading(true);
 
-        setStores(response.data);
-        setTotal(response.total);
-      } catch (error: any) {
-        handleClientError(error);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    []
-  );
+      const response: ITableStateResponse<IStore[]> =
+        await serviceMethodsInstance.storesServiceMethods.findByUserTableState(
+          tableState
+        );
+
+      setStores(response.data);
+
+      setTotal(response.total);
+    } catch (error: any) {
+      handleClientError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [tableState]);
 
   useEffect(() => {
     fetchFindStoresByUserTableState();
