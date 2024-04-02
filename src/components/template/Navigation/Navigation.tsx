@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Modal } from "antd";
+import { Modal } from 'antd';
 
-import useAuthData from "../../../data/hook/useAuthData";
-import Urls from "../../../shared/common/routes-app/routes-app";
-import Avatar from "../../common/Avatar/Avatar";
+import useAuthData from '../../../data/hook/useAuthData';
+import Urls from '../../../shared/common/routes-app/routes-app';
+import Avatar from '../../common/Avatar/Avatar';
 import {
   IconAdjustmentsHorizontal,
   IconBell,
@@ -12,8 +12,8 @@ import {
   IconHome,
   IconLogout,
   IconSquare2x2,
-} from "../../common/icons/icons";
-import NavigationItem from "./NavigationItem";
+} from '../../common/icons/icons';
+import NavigationItem from './NavigationItem';
 
 interface Props {}
 

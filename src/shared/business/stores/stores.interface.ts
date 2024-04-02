@@ -1,5 +1,5 @@
-import { ISoftDeleteEntity } from "../entities/entities.interfaces";
-import StoresEnum from "./stores.enum";
+import { ISoftDeleteEntity } from '../interfaces/soft-delete.interface';
+import StoresEnum from './stores.enum';
 
 export interface IStore extends ISoftDeleteEntity {
   _id: string;

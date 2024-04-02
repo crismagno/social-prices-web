@@ -1,29 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Button, Card, Image, TablePaginationConfig, Tooltip } from "antd";
+import {
+  Button,
+  Card,
+  Image,
+  TablePaginationConfig,
+  Tooltip,
+} from 'antd';
 import {
   FilterValue,
   SorterResult,
   TableCurrentDataSource,
-} from "antd/es/table/interface";
-import moment from "moment";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter } from "next/navigation";
-import { RecordType } from "zod";
+} from 'antd/es/table/interface';
+import moment from 'moment';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+import { useRouter } from 'next/navigation';
+import { RecordType } from 'zod';
 
-import { EditOutlined, EnterOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  EnterOutlined,
+  PlusOutlined,
+} from '@ant-design/icons';
 
-import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
-import Layout from "../../components/template/Layout/Layout";
-import { IProduct } from "../../shared/business/products/products.interface";
-import Urls from "../../shared/common/routes-app/routes-app";
-import DatesEnum from "../../shared/utils/dates/dates.enum";
-import { defaultAvatarImage } from "../../shared/utils/images/files-names";
-import { getImageAwsS3 } from "../../shared/utils/images/url-images";
-import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
-import { useFindProductsByUserTableState } from "./useFindProductsByUserTableState";
+import YesNo from '../../components/common/YesNo/YesNo';
+import TableCustomAntd
+  from '../../components/custom/antd/TableCustomAntd/TableCustomAntd';
+import Layout from '../../components/template/Layout/Layout';
+import { IProduct } from '../../shared/business/products/products.interface';
+import CommonEnum from '../../shared/common/enums/common.enum';
+import Urls from '../../shared/common/routes-app/routes-app';
+import DatesEnum from '../../shared/utils/dates/dates.enum';
+import { defaultAvatarImage } from '../../shared/utils/images/files-names';
+import { getImageAwsS3 } from '../../shared/utils/images/url-images';
+import {
+  ITableStateRequest,
+} from '../../shared/utils/table/table-state.interface';
+import {
+  useFindProductsByUserTableState,
+} from './useFindProductsByUserTableState';
 
 export default function Products() {
   const router: AppRouterInstance = useRouter();
@@ -148,6 +165,11 @@ export default function Products() {
               dataIndex: "isActive",
               key: "isActive",
               align: "center",
+              filters: Object.keys(CommonEnum.YesNo).map((value) => ({
+                value: value === CommonEnum.YesNo.YES,
+                text: CommonEnum.YesNoLabels[value],
+              })),
+              render: (isActive: boolean) => <YesNo isTrue={isActive} />,
             },
             {
               title: "Action",
