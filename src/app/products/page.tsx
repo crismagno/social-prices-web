@@ -1,46 +1,34 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  Button,
-  Card,
-  Image,
-  TablePaginationConfig,
-  Tooltip,
-} from 'antd';
+import { Button, Card, Image, TablePaginationConfig, Tag, Tooltip } from "antd";
 import {
   FilterValue,
   SorterResult,
   TableCurrentDataSource,
-} from 'antd/es/table/interface';
-import moment from 'moment';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
-import { useRouter } from 'next/navigation';
-import { RecordType } from 'zod';
+} from "antd/es/table/interface";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import { useRouter } from "next/navigation";
+import { RecordType } from "zod";
 
-import {
-  EditOutlined,
-  EnterOutlined,
-  PlusOutlined,
-} from '@ant-design/icons';
+import { EditOutlined, EnterOutlined, PlusOutlined } from "@ant-design/icons";
 
-import YesNo from '../../components/common/YesNo/YesNo';
-import TableCustomAntd
-  from '../../components/custom/antd/TableCustomAntd/TableCustomAntd';
-import Layout from '../../components/template/Layout/Layout';
-import { IProduct } from '../../shared/business/products/products.interface';
-import CommonEnum from '../../shared/common/enums/common.enum';
-import Urls from '../../shared/common/routes-app/routes-app';
-import DatesEnum from '../../shared/utils/dates/dates.enum';
-import { defaultAvatarImage } from '../../shared/utils/images/files-names';
-import { getImageAwsS3 } from '../../shared/utils/images/url-images';
-import {
-  ITableStateRequest,
-} from '../../shared/utils/table/table-state.interface';
-import {
-  useFindProductsByUserTableState,
-} from './useFindProductsByUserTableState';
+import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
+import YesNo from "../../components/common/YesNo/YesNo";
+import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
+import Layout from "../../components/template/Layout/Layout";
+import { IProduct } from "../../shared/business/products/products.interface";
+import CommonEnum from "../../shared/common/enums/common.enum";
+import Urls from "../../shared/common/routes-app/routes-app";
+import DatesEnum from "../../shared/utils/dates/dates.enum";
+import { defaultAvatarImage } from "../../shared/utils/images/files-names";
+import { getImageAwsS3 } from "../../shared/utils/images/url-images";
+import { formatterMoney } from "../../shared/utils/string-extensions/string-extensions";
+import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
+import { useFindStoresByUser } from "../stores/useFindStoresByUser";
+import { useFindProductsByUserTableState } from "./useFindProductsByUserTableState";
 
 export default function Products() {
   const router: AppRouterInstance = useRouter();
@@ -51,6 +39,8 @@ export default function Products() {
 
   const { isLoading, products, total } =
     useFindProductsByUserTableState(tableStateRequest);
+
+  const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
   const handleNewProduct = () => {
     router.push(Urls.NEW_PRODUCT);
@@ -82,6 +72,13 @@ export default function Products() {
       action: extra.action,
     });
   };
+
+  if (isLoadingStores) {
+    return <LoadingFull />;
+  }
+
+  const getStoreName = (storeId: string) =>
+    stores.find((store) => store._id === storeId)?.name ?? "";
 
   return (
     <Layout subtitle="My Products" title="Products" hasBackButton>
@@ -143,6 +140,25 @@ export default function Products() {
               align: "center",
             },
             {
+              title: "BarCode",
+              dataIndex: "barCode",
+              key: "barCode",
+              align: "center",
+            },
+            {
+              title: "Quantity",
+              dataIndex: "quantity",
+              key: "quantity",
+              align: "center",
+            },
+            {
+              title: "Price",
+              dataIndex: "price",
+              key: "price",
+              align: "center",
+              render: (price: number) => formatterMoney(price),
+            },
+            {
               title: "Created At",
               dataIndex: "createdAt",
               key: "createdAt",
@@ -169,7 +185,25 @@ export default function Products() {
                 value: value === CommonEnum.YesNo.YES,
                 text: CommonEnum.YesNoLabels[value],
               })),
-              render: (isActive: boolean) => <YesNo isTrue={isActive} />,
+              render: (isActive: boolean) => (
+                <Tag color={isActive ? "green" : "red"}>
+                  <YesNo isTrue={isActive} />
+                </Tag>
+              ),
+            },
+            {
+              title: "Stores",
+              dataIndex: "storeIds",
+              key: "storeIds",
+              align: "center",
+              filters: stores.map((store) => ({
+                value: store._id,
+                text: store.name,
+              })),
+              render: (storeIds: string[]) =>
+                storeIds.map((storeId: string) => (
+                  <Tag key={storeId}>{getStoreName(storeId)}</Tag>
+                )),
             },
             {
               title: "Action",

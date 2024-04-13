@@ -3,6 +3,7 @@ export interface IProduct {
   name: string;
   quantity: number;
   description: string | null;
+  details: string | null;
   price: number;
   isActive: boolean;
   createdAt: Date;

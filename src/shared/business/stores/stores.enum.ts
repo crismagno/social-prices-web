@@ -14,7 +14,7 @@ namespace StoresEnum {
   export const StatusColor = {
     [Status.ACTIVE]: "success",
     [Status.INACTIVE]: "warning",
-    [Status.STOPPED]: "gray",
+    [Status.STOPPED]: "red",
   };
 
   export enum PhoneTypes {

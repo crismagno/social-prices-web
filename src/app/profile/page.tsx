@@ -23,6 +23,7 @@ import {
   IconQuestion,
   IconUser,
 } from "../../components/common/icons/icons";
+import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import Layout from "../../components/template/Layout/Layout";
 import useAuthData from "../../data/hook/useAuthData";
 import { IPhoneNumber } from "../../shared/business/users/user.interface";
@@ -32,6 +33,7 @@ import { defaultAvatarImage } from "../../shared/utils/images/files-names";
 import { getImageAwsS3 } from "../../shared/utils/images/url-images";
 import {
   createUserAddressName,
+  getUserName,
   messengersToString,
 } from "../../shared/utils/string-extensions/string-extensions";
 
@@ -42,32 +44,21 @@ export default function Profile() {
 
   const [previewOpen, setPreviewOpen] = useState<boolean>(false);
 
-  const getUserName = (): string => {
-    let userName = user?.firstName ?? "";
-
-    if (user?.middleName) {
-      userName += ` ${user.middleName}`;
-    }
-
-    if (user?.lastName) {
-      userName += ` ${user.lastName}`;
-    }
-
-    return userName;
-  };
+  if (!user) {
+    return <LoadingFull />;
+  }
 
   return (
     <Layout title="Profile" subtitle="See my information">
       <Card className=" h-min-80 mt-10">
         <div className="flex justify-center absolute right-0 w-full -top-16">
-          <div className="cursor-pointer" onClick={() => setPreviewOpen(true)}>
-            <Avatar
-              src={user?.avatar}
-              width={130}
-              className="shadow-lg border-none"
-              title="See avatar"
-            />
-          </div>
+          <Avatar
+            onClick={() => setPreviewOpen(true)}
+            src={user?.avatar}
+            width={130}
+            className="shadow-lg border-none cursor-pointer z-10"
+            title="See avatar"
+          />
         </div>
 
         <Modal
@@ -78,9 +69,7 @@ export default function Profile() {
           <img
             alt="preview image"
             style={{ width: "100%" }}
-            src={
-              user?.avatar ? getImageAwsS3(user?.avatar) : defaultAvatarImage
-            }
+            src={user?.avatar ? getImageAwsS3(user.avatar) : defaultAvatarImage}
           />
         </Modal>
 
@@ -97,7 +86,7 @@ export default function Profile() {
 
         <div className="flex flex-col justify-center items-center text-center mt-10 mb-5">
           <h3 className="sm:text-sm md:text-4xl font-semibold text-blueGray-700 mb-2">
-            {getUserName() || user?.username}
+            {getUserName(user)}
           </h3>
 
           <Tooltip title={"My Email, click to send a email"}>

@@ -46,7 +46,7 @@ export default function Stores() {
   };
 
   const handleGotToStore = (store: IStore) => {
-    router.push(Urls.STORE_PRODUCTS.replace(":storeId", store._id));
+    router.push(Urls.STORE.replace(":storeId", store._id));
   };
 
   const onSearch = (value: string) => {

@@ -9,6 +9,7 @@ import {
   message,
   Row,
   Select,
+  Tag,
   Tooltip,
   UploadFile,
 } from "antd";
@@ -105,6 +106,7 @@ const formSchema = z.object({
   addresses: z.array(addressFormSchema),
   phoneNumbers: z.array(phoneNumberFormSchema),
   about: z.string().nullable(),
+  status: z.string(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -222,6 +224,7 @@ export default function NewStore() {
             })
           )
         : [generateNewAPhoneNumber(false)],
+      status: store?.status ?? StoresEnum.Status.ACTIVE,
     };
 
     setFormValues(values);
@@ -278,6 +281,7 @@ export default function NewStore() {
         addresses,
         phoneNumbers: data.phoneNumbers,
         about: data.about,
+        status: data.status as StoresEnum.Status,
       };
 
       for (const property of Object.keys(createStoreDto)) {
@@ -344,6 +348,7 @@ export default function NewStore() {
         addresses,
         phoneNumbers: data.phoneNumbers,
         about: data.about,
+        status: data.status as StoresEnum.Status,
       };
 
       for (const property of Object.keys(updateStoreDto)) {
@@ -488,6 +493,36 @@ export default function NewStore() {
           </Row>
 
           <Row>
+            <Col xs={12}>
+              <div className={`flex flex-col mt-4 mr-5`}>
+                <label className={`text-sm`}>Status</label>
+
+                <Controller
+                  control={control}
+                  name={`status`}
+                  render={({
+                    field: { onChange, onBlur, value, name, ref },
+                  }) => (
+                    <Select
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      name={name}
+                      value={value}
+                      ref={ref}
+                      placeholder={"Select status"}
+                    >
+                      {Object.keys(StoresEnum.Status).map((status: string) => (
+                        <Select.Option key={status} value={status}>
+                          <Tag color={StoresEnum.StatusColor[status]}>
+                            {StoresEnum.StatusLabel[status]}
+                          </Tag>
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  )}
+                ></Controller>
+              </div>
+            </Col>
             <Col xs={24}>
               <FormTextarea
                 label="About"

@@ -26,21 +26,19 @@ export default function ProfileEditPage() {
     >
       <Card className=" h-min-80 mt-10">
         <div className="flex justify-center absolute right-0 w-full -top-16">
-          <div className="cursor-pointer z-10">
-            <Avatar
-              src={user?.avatar}
-              width={130}
-              className="shadow-lg border-none"
-              onClick={() => setIsVisibleAvatarModal(true)}
-              title="Edit avatar"
-            />
+          <Avatar
+            src={user?.avatar}
+            width={130}
+            className="shadow-lg border-none cursor-pointer z-10"
+            onClick={() => setIsVisibleAvatarModal(true)}
+            title="Edit avatar"
+          />
 
-            <EditAvatarModal
-              isVisible={isVisibleEditAvatarModal}
-              onCancel={() => setIsVisibleAvatarModal(false)}
-              onOk={() => setIsVisibleAvatarModal(false)}
-            />
-          </div>
+          <EditAvatarModal
+            isVisible={isVisibleEditAvatarModal}
+            onCancel={() => setIsVisibleAvatarModal(false)}
+            onOk={() => setIsVisibleAvatarModal(false)}
+          />
         </div>
 
         <ProfileAuthEdit />

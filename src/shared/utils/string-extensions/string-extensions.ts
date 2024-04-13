@@ -1,5 +1,5 @@
 import { IStorePhoneNumber } from "../../business/stores/stores.interface";
-import {
+import IUser, {
   IPhoneNumber,
   IUserAddress,
 } from "../../business/users/user.interface";
@@ -68,3 +68,23 @@ export const messengersToString = (messengers: string[]): string =>
 
     return acc;
   }, "");
+
+export const formatterMoney = (value: any) =>
+  `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+export const parserMoney = (value: any) =>
+  value?.replace(/\R\$\s?|(,*)/g, "") as unknown as number;
+
+export const getUserName = (user: IUser): string => {
+  let userName: string = user?.firstName ?? "";
+
+  if (user?.middleName) {
+    userName += ` ${user.middleName}`;
+  }
+
+  if (user?.lastName) {
+    userName += ` ${user.lastName}`;
+  }
+
+  return userName || user.username || "";
+};

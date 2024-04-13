@@ -1,32 +1,36 @@
 import {
-	IsArray,
-	IsBoolean,
-	IsNumber,
-	IsOptional,
-	IsString,
-	Min,
-} from 'class-validator';
+  IsArray,
+  IsBoolean,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from "class-validator";
 
 export default class CreateProductDto {
-	@IsString()
-	name: string;
+  @IsString()
+  name: string;
 
-	@IsNumber()
-	@Min(0)
-	@Min(1000000)
-	quantity: number;
+  @IsString()
+  @IsOptional()
+  barCode: string | null;
 
-	@IsString()
-	@IsOptional()
-	description: string | null;
+  @IsString()
+  @IsOptional()
+  details: string | null;
 
-	@IsNumber()
-	@Min(0)
-	price: number;
+  @IsNumber()
+  quantity: number;
 
-	@IsBoolean()
-	isActive: boolean;
+  @IsString()
+  @IsOptional()
+  description: string | null;
 
-	@IsArray()
-	storeIds: string[];
+  @IsNumber()
+  price: number;
+
+  @IsBoolean()
+  isActive: boolean;
+
+  @IsArray()
+  storeIds: string[];
 }
