@@ -17,6 +17,12 @@ namespace StoresEnum {
     [Status.STOPPED]: "red",
   };
 
+  export const StatusBadgeColor = {
+    [Status.ACTIVE]: "green",
+    [Status.INACTIVE]: "yellow",
+    [Status.STOPPED]: "red",
+  };
+
   export enum PhoneTypes {
     MOBILE = "MOBILE",
     HOME = "HOME",

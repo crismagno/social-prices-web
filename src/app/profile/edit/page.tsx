@@ -28,7 +28,7 @@ export default function ProfileEditPage() {
         <div className="flex justify-center absolute right-0 w-full -top-16">
           <Avatar
             src={user?.avatar}
-            width={130}
+            width={180}
             className="shadow-lg border-none cursor-pointer z-10"
             onClick={() => setIsVisibleAvatarModal(true)}
             title="Edit avatar"

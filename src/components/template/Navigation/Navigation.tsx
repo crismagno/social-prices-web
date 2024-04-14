@@ -92,6 +92,13 @@ const Navigation: React.FC<Props> = ({}) => {
         okText={"Yes"}
         cancelText={"No"}
       >
+        <div className="flex justify-center absolute right-0 w-full -top-16">
+          <Avatar
+            src={user?.avatar}
+            width={120}
+            className="shadow-lg border-none z-10"
+          />
+        </div>
         Are you sure logout?
       </Modal>
     </div>

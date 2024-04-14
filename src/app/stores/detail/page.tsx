@@ -3,13 +3,13 @@
 import { useEffect, useState } from "react";
 
 import {
+  Badge,
   Button,
   Card,
   Col,
   message,
   Row,
   Select,
-  Tag,
   Tooltip,
   UploadFile,
 } from "antd";
@@ -420,7 +420,7 @@ export default function NewStore() {
               <Tooltip title="Edit logo" placement="bottom">
                 <Avatar
                   src={logoUrl}
-                  width={150}
+                  width={180}
                   className="shadow-lg border-none"
                   onClick={() => setIsVisibleAvatarModal(true)}
                   noUseAwsS3
@@ -513,19 +513,20 @@ export default function NewStore() {
                     >
                       {Object.keys(StoresEnum.Status).map((status: string) => (
                         <Select.Option key={status} value={status}>
-                          <Tag
-                            color={
-                              StoresEnum.StatusColor[
-                                status as StoresEnum.Status
-                              ]
-                            }
-                          >
+                          <span className="mr-1">
                             {
                               StoresEnum.StatusLabel[
                                 status as StoresEnum.Status
                               ]
                             }
-                          </Tag>
+                          </span>
+                          <Badge
+                            color={
+                              StoresEnum.StatusBadgeColor[
+                                status as StoresEnum.Status
+                              ]
+                            }
+                          />
                         </Select.Option>
                       ))}
                     </Select>
@@ -540,7 +541,7 @@ export default function NewStore() {
                 defaultValue={store?.about}
                 register={register}
                 registerName="about"
-                rows={4}
+                rows={2}
               />
             </Col>
           </Row>

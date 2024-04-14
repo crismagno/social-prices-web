@@ -55,7 +55,7 @@ export default function Profile() {
           <Avatar
             onClick={() => setPreviewOpen(true)}
             src={user?.avatar}
-            width={130}
+            width={180}
             className="shadow-lg border-none cursor-pointer z-10"
             title="See avatar"
           />
@@ -84,7 +84,7 @@ export default function Profile() {
           </Button>
         </div>
 
-        <div className="flex flex-col justify-center items-center text-center mt-10 mb-5">
+        <div className="flex flex-col justify-center items-center text-center mt-20 mb-5">
           <h3 className="sm:text-sm md:text-4xl font-semibold text-blueGray-700 mb-2">
             {getUserName(user)}
           </h3>

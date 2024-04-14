@@ -13,7 +13,7 @@ const ProfileAuthEdit: React.FC = () => {
   return (
     <ContainerTitle
       title="Auth"
-      className="mt-6"
+      className="mt-20"
       extraHeader={
         <Button.Group>
           <Button href={Urls.UPDATE_EMAIL}>Email</Button>

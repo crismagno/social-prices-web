@@ -61,9 +61,16 @@ export const createPhoneNumberName = (
 export const messengersToString = (messengers: string[]): string =>
   messengers.reduce((acc, curr, index) => {
     if (index !== 0) {
-      acc += `, ${UsersEnum.PhoneNumberMessengerLabels[curr]}`;
+      acc += `, ${
+        UsersEnum.PhoneNumberMessengerLabels[
+          curr as UsersEnum.PhoneNumberMessenger
+        ]
+      }`;
     } else {
-      acc = UsersEnum.PhoneNumberMessengerLabels[curr];
+      acc =
+        UsersEnum.PhoneNumberMessengerLabels[
+          curr as UsersEnum.PhoneNumberMessenger
+        ];
     }
 
     return acc;

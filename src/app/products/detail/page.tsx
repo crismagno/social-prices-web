@@ -12,6 +12,7 @@ import {
   Input,
   InputNumber,
   message,
+  Modal,
   QRCode,
   Row,
   Select,
@@ -96,6 +97,10 @@ export default function ProductDetail() {
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
+  const [previewOpen, setPreviewOpen] = useState<boolean>(false);
+
+  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
+
   useEffect(() => {
     if (product?.filesUrl?.length) {
       const productFilesUrlToFileList = product.filesUrl.map(
@@ -134,16 +139,14 @@ export default function ProductDetail() {
   };
 
   const onPreview = async (file: UploadFile) => {
-    let src = file.url as string;
+    let src = file.url as string | null;
 
     if (!src) {
       src = await getFileUrl(fileList?.[0]);
     }
 
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
+    setPreviewSrc(src);
+    setPreviewOpen(true);
   };
 
   const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
@@ -286,9 +289,24 @@ export default function ProductDetail() {
                   onChange={onChange}
                   onPreview={onPreview}
                 >
-                  {fileList.length < 5 && "+ Upload"}
+                  {fileList.length < 10 && "+ Upload"}
                 </Upload>
               </ImgCrop>
+
+              <Modal
+                open={previewOpen}
+                footer={null}
+                onCancel={() => {
+                  setPreviewSrc(undefined);
+                  setPreviewOpen(false);
+                }}
+              >
+                <img
+                  alt="preview image"
+                  style={{ width: "100%" }}
+                  src={previewSrc}
+                />
+              </Modal>
             </div>
           </div>
 
@@ -399,22 +417,8 @@ export default function ProductDetail() {
           </Row>
 
           <Row>
-            <Col xs={24}>
-              <FormTextarea
-                label="Details"
-                placeholder={"Enter details"}
-                defaultValue={product?.details}
-                register={register}
-                registerName="details"
-                errorMessage={errors.details?.message}
-                rows={4}
-              />
-            </Col>
-          </Row>
-
-          <Row>
             <Col xs={8}>
-              <div className={`flex flex-col mt-4 mr-5`}>
+              <div className={`flex flex-col mt-4`}>
                 <label className={`text-sm mr-1`}>QRCode</label>
 
                 <Controller
@@ -437,7 +441,7 @@ export default function ProductDetail() {
             </Col>
 
             <Col xs={8}>
-              <div className={`flex flex-col mt-4 mr-5`}>
+              <div className={`flex flex-col mt-4 ml-2`}>
                 <label className={`text-sm mr-1`} for="isActive">
                   Is Active
                 </label>
@@ -457,6 +461,20 @@ export default function ProductDetail() {
                   )}
                 ></Controller>
               </div>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col xs={24}>
+              <FormTextarea
+                label="Details"
+                placeholder={"Enter details"}
+                defaultValue={product?.details}
+                register={register}
+                registerName="details"
+                errorMessage={errors.details?.message}
+                rows={2}
+              />
             </Col>
           </Row>
 

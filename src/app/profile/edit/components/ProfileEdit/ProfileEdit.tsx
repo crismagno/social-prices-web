@@ -174,7 +174,7 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
             defaultValue={user?.about ?? ""}
             register={register}
             registerName="about"
-            rows={4}
+            rows={2}
           />
         </div>
       </ContainerTitle>
