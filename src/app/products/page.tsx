@@ -26,6 +26,7 @@ import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../shared/utils/images/files-names";
 import { getImageAwsS3 } from "../../shared/utils/images/url-images";
 import { formatterMoney } from "../../shared/utils/string-extensions/string-extensions";
+import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { useFindStoresByUser } from "../stores/useFindStoresByUser";
 import { useFindProductsByUserTableState } from "./useFindProductsByUserTableState";
@@ -35,7 +36,7 @@ export default function Products() {
 
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<IProduct> | undefined
-  >();
+  >(createTableState({ sort: { field: "createdAt", order: "ascend" } }));
 
   const { isLoading, products, total } =
     useFindProductsByUserTableState(tableStateRequest);
@@ -68,7 +69,10 @@ export default function Products() {
       ...tableStateRequest,
       filters,
       pagination,
-      sort: { field: sorter.field, order: sorter.order },
+      sort: {
+        field: sorter.field ?? "createdAt",
+        order: sorter.order ?? "ascend",
+      },
       action: extra.action,
     });
   };
@@ -183,7 +187,7 @@ export default function Products() {
               align: "center",
               filters: Object.keys(CommonEnum.YesNo).map((value) => ({
                 value: value === CommonEnum.YesNo.YES,
-                text: CommonEnum.YesNoLabels[value],
+                text: CommonEnum.YesNoLabels[value as CommonEnum.YesNo],
               })),
               render: (isActive: boolean) => (
                 <Tag color={isActive ? "green" : "red"}>

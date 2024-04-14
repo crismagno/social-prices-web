@@ -9,10 +9,13 @@ import {
   Card,
   Checkbox,
   Col,
+  Input,
   InputNumber,
   message,
+  QRCode,
   Row,
   Select,
+  Space,
   Upload,
   UploadFile,
   UploadProps,
@@ -59,6 +62,7 @@ const formSchema = z.object({
   isActive: z.boolean(),
   storeIds: z.array(z.string()),
   barCode: z.string().optional(),
+  QRCode: z.string().optional(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -95,11 +99,11 @@ export default function ProductDetail() {
   useEffect(() => {
     if (product?.filesUrl?.length) {
       const productFilesUrlToFileList = product.filesUrl.map(
-        (productFileUrl: string, index: number) => ({
+        (fileUrl: string, index: number) => ({
           uid: `product-file-${index}`,
-          name: productFileUrl,
+          name: fileUrl,
           status: "done",
-          url: getImageAwsS3(productFileUrl),
+          url: getImageAwsS3(fileUrl),
         })
       );
 
@@ -115,6 +119,7 @@ export default function ProductDetail() {
       price: product?.price ?? 0,
       quantity: product?.quantity ?? 0,
       storeIds: product?.storeIds ?? [],
+      QRCode: product?.QRCode ?? "",
     };
 
     setFormValues(values);
@@ -173,6 +178,7 @@ export default function ProductDetail() {
         quantity: data.quantity ?? 0,
         storeIds: data.storeIds,
         barCode: data.barCode ?? null,
+        QRCode: data.QRCode ?? null,
       };
 
       for (const property of Object.keys(createProductDto)) {
@@ -206,10 +212,22 @@ export default function ProductDetail() {
 
       setIsSUbmitting(true);
 
+      const deletedFilesUrl: string[] = product!.filesUrl.filter(
+        (fileUrl: string) => {
+          return !fileList.find(
+            (file) => file.name === fileUrl && !file.originFileObj
+          );
+        }
+      );
+
       const formData = new FormData();
 
-      for (var i = 0; i < fileList.length; i++) {
-        formData.append("files", fileList[i].originFileObj as RcFile);
+      const fileListToUpload: UploadFile<any>[] = fileList.filter(
+        (file) => file.originFileObj
+      );
+
+      for (var i = 0; i < fileListToUpload.length; i++) {
+        formData.append("files", fileListToUpload[i].originFileObj as RcFile);
       }
 
       const updateProductDto: UpdateProductDto = {
@@ -222,6 +240,8 @@ export default function ProductDetail() {
         barCode: data.barCode ?? null,
         storeIds: data.storeIds,
         productId: product!._id,
+        QRCode: data.QRCode ?? null,
+        deletedFilesUrl,
       };
 
       for (const property of Object.keys(updateProductDto)) {
@@ -254,18 +274,22 @@ export default function ProductDetail() {
     >
       <Card className="h-min-80 mt-2">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="content-edit-files flex justify-center">
-            <ImgCrop rotationSlider>
-              <Upload
-                action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-                listType="picture-card"
-                fileList={fileList}
-                onChange={onChange}
-                onPreview={onPreview}
-              >
-                {fileList.length < 5 && "+ Upload"}
-              </Upload>
-            </ImgCrop>
+          <div className="content-edit-files flex flex-col justify-start">
+            <label className={`text-sm`}>Images</label>
+
+            <div className="mt-2">
+              <ImgCrop rotationSlider>
+                <Upload
+                  action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+                  listType="picture-card"
+                  fileList={fileList}
+                  onChange={onChange}
+                  onPreview={onPreview}
+                >
+                  {fileList.length < 5 && "+ Upload"}
+                </Upload>
+              </ImgCrop>
+            </div>
           </div>
 
           <HrCustom className="my-7" />
@@ -376,25 +400,6 @@ export default function ProductDetail() {
 
           <Row>
             <Col xs={24}>
-              <div className={`flex flex-col mt-4 mr-5`}>
-                <label className={`text-sm`}>Is Active</label>
-
-                <Controller
-                  control={control}
-                  name={`isActive`}
-                  render={({ field: { onChange, value, name, ref } }) => (
-                    <Checkbox
-                      onChange={onChange}
-                      name={name}
-                      value={value}
-                      checked={!!value}
-                      ref={ref}
-                    ></Checkbox>
-                  )}
-                ></Controller>
-              </div>
-            </Col>
-            <Col xs={24}>
               <FormTextarea
                 label="Details"
                 placeholder={"Enter details"}
@@ -404,6 +409,54 @@ export default function ProductDetail() {
                 errorMessage={errors.details?.message}
                 rows={4}
               />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col xs={8}>
+              <div className={`flex flex-col mt-4 mr-5`}>
+                <label className={`text-sm mr-1`}>QRCode</label>
+
+                <Controller
+                  control={control}
+                  name={`QRCode`}
+                  render={({ field: { onChange, value, name, ref } }) => (
+                    <Space direction="vertical" align="start">
+                      <QRCode value={value ?? ""} />
+                      <Input
+                        name={name}
+                        placeholder="-"
+                        maxLength={60}
+                        value={value}
+                        onChange={onChange}
+                      />
+                    </Space>
+                  )}
+                ></Controller>
+              </div>
+            </Col>
+
+            <Col xs={8}>
+              <div className={`flex flex-col mt-4 mr-5`}>
+                <label className={`text-sm mr-1`} for="isActive">
+                  Is Active
+                </label>
+
+                <Controller
+                  control={control}
+                  name={`isActive`}
+                  render={({ field: { onChange, value, name, ref } }) => (
+                    <Checkbox
+                      id="isActive"
+                      onChange={onChange}
+                      name={name}
+                      value={value}
+                      checked={!!value}
+                      ref={ref}
+                    ></Checkbox>
+                  )}
+                ></Controller>
+              </div>
             </Col>
           </Row>
 

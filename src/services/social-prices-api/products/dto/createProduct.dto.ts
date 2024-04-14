@@ -33,4 +33,8 @@ export default class CreateProductDto {
 
   @IsArray()
   storeIds: string[];
+
+  @IsString()
+  @IsOptional()
+  QRCode: string | null;
 }

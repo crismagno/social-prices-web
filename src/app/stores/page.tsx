@@ -23,6 +23,7 @@ import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../shared/utils/images/files-names";
 import { getImageAwsS3 } from "../../shared/utils/images/url-images";
+import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { StoreDetail } from "./components/StoreDetail/StoreDetail";
 import { useFindStoresByUserTableState } from "./useFindStoresByUserTableState";
@@ -32,7 +33,7 @@ export default function Stores() {
 
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<IStore> | undefined
-  >();
+  >(createTableState({ sort: { field: "createdAt", order: "ascend" } }));
 
   const { isLoading, stores, total } =
     useFindStoresByUserTableState(tableStateRequest);
@@ -63,7 +64,10 @@ export default function Stores() {
       ...tableStateRequest,
       filters,
       pagination,
-      sort: { field: sorter.field, order: sorter.order },
+      sort: {
+        field: sorter.field ?? "createdAt",
+        order: sorter.order ?? "ascend",
+      },
       action: extra.action,
     });
   };
@@ -155,7 +159,7 @@ export default function Stores() {
               title: "Status",
               dataIndex: "status",
               filters: Object.keys(StoresEnum.Status).map((status: string) => ({
-                text: StoresEnum.StatusLabel[status],
+                text: StoresEnum.StatusLabel[status as StoresEnum.Status],
                 value: status,
               })),
               key: "status",

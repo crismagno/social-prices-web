@@ -513,8 +513,18 @@ export default function NewStore() {
                     >
                       {Object.keys(StoresEnum.Status).map((status: string) => (
                         <Select.Option key={status} value={status}>
-                          <Tag color={StoresEnum.StatusColor[status]}>
-                            {StoresEnum.StatusLabel[status]}
+                          <Tag
+                            color={
+                              StoresEnum.StatusColor[
+                                status as StoresEnum.Status
+                              ]
+                            }
+                          >
+                            {
+                              StoresEnum.StatusLabel[
+                                status as StoresEnum.Status
+                              ]
+                            }
                           </Tag>
                         </Select.Option>
                       ))}

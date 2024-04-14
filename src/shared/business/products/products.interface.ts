@@ -13,4 +13,5 @@ export interface IProduct {
   filesUrl: string[];
   mainUrl: string | null;
   barCode: string | null;
+  QRCode: string | null;
 }

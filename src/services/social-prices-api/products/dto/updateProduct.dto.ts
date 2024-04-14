@@ -36,4 +36,11 @@ export default class UpdateProductDto {
 
   @IsArray()
   storeIds: string[];
+
+  @IsString()
+  @IsOptional()
+  QRCode: string | null;
+
+  @IsArray()
+  deletedFilesUrl: string[];
 }
