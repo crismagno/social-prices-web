@@ -24,7 +24,10 @@ import LocalStorageUserMethods from "../../shared/common/local-storage/methods/l
 import Urls from "../../shared/common/routes-app/routes-app";
 
 const googleProvider: GoogleAuthProvider = new GoogleAuthProvider();
+googleProvider.addScope("https://www.googleapis.com/auth/contacts.readonly");
+
 const auth: Auth = getAuth(firebaseApp);
+auth.languageCode = "it";
 
 export interface IAuthContext {
   user: IUser | null;
@@ -200,32 +203,30 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     return null;
   };
 
-  const _createOrSignInUserByLoginGoogle = (userFirebase: User) => {
-    setTimeout(async () => {
-      const userNormalized: IUser = await __normalizeUser(userFirebase);
+  const _createOrSignInUserByLoginGoogle = async (userFirebase: User) => {
+    const userNormalized: IUser = await __normalizeUser(userFirebase);
 
-      const responseUser: IUser =
-        await serviceMethodsInstance.authServiceMethods.signUp({
-          email: `${userNormalized.email}`,
-          password: `${process.env.NEXT_PUBLIC_SOCIAL_PRICES_SIGN_UP_PASSWORD_TEMP}`,
-          authProvider: userNormalized.authProvider,
-          avatar: userNormalized.avatar,
-          extraDataProvider: userNormalized.extraDataProvider,
-          phoneNumbers: userNormalized.phoneNumbers ?? [],
-          uid: userNormalized.uid,
-          about: null,
-        });
+    const responseUser: IUser =
+      await serviceMethodsInstance.authServiceMethods.signUp({
+        email: `${userNormalized.email}`,
+        password: `${process.env.NEXT_PUBLIC_SOCIAL_PRICES_SIGN_UP_PASSWORD_TEMP}`,
+        authProvider: userNormalized.authProvider,
+        avatar: userNormalized.avatar,
+        extraDataProvider: userNormalized.extraDataProvider,
+        phoneNumbers: userNormalized.phoneNumbers ?? [],
+        uid: userNormalized.uid,
+        about: null,
+      });
 
-      responseUser.providerId = userNormalized.providerId;
-      responseUser.providerToken = userNormalized.providerToken;
-      responseUser.loggedByAuthProvider = UsersEnum.Provider.GOOGLE;
+    responseUser.providerId = userNormalized.providerId;
+    responseUser.providerToken = userNormalized.providerToken;
+    responseUser.loggedByAuthProvider = UsersEnum.Provider.GOOGLE;
 
-      setUser(responseUser);
+    setUser(responseUser);
 
-      router.push(Urls.VALIDATE_SIGN_IN_CODE);
+    router.push(Urls.VALIDATE_SIGN_IN_CODE);
 
-      setIsLoading(false);
-    }, 3000);
+    setIsLoading(false);
   };
 
   const loginGoogle = async () => {
@@ -233,7 +234,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       setIsLoading(true);
       const response = await signInWithPopup(auth, googleProvider);
 
-      _createOrSignInUserByLoginGoogle(response.user);
+      await _createOrSignInUserByLoginGoogle(response.user);
     } catch (error: any) {
       setIsLoading(false);
 
