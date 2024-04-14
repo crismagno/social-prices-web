@@ -297,7 +297,7 @@ export default function ProductDetail() {
                 open={previewOpen}
                 footer={null}
                 onCancel={() => {
-                  setPreviewSrc(undefined);
+                  setPreviewSrc(null);
                   setPreviewOpen(false);
                 }}
               >

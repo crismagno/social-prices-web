@@ -30,4 +30,23 @@
     width: 180px !important;
     height: 200px !important;
   }
+
+  :where(.css-dev-only-do-not-override-3mqfnx).ant-upload-wrapper
+    .ant-upload-list {
+    width: 90vw !important;
+    overflow-x: auto !important;
+    height: 230px !important;
+    overflow-y: hidden !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+  }
+
+  :where(
+      .css-dev-only-do-not-override-3mqfnx
+    ).ant-upload-wrapper.ant-upload-picture-card-wrapper
+    .ant-upload.ant-upload-select
+    > .ant-upload {
+    width: 200px !important;
+    display: flex !important;
+  }
 }
