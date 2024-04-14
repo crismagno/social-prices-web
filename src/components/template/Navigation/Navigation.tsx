@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { Modal } from 'antd';
+import { Modal } from "antd";
 
-import useAuthData from '../../../data/hook/useAuthData';
-import Urls from '../../../shared/common/routes-app/routes-app';
-import Avatar from '../../common/Avatar/Avatar';
+import useAuthData from "../../../data/hook/useAuthData";
+import Urls from "../../../shared/common/routes-app/routes-app";
+import { getUserName } from "../../../shared/utils/string-extensions/string-extensions";
+import Avatar from "../../common/Avatar/Avatar";
 import {
   IconAdjustmentsHorizontal,
   IconBell,
@@ -12,8 +13,8 @@ import {
   IconHome,
   IconLogout,
   IconSquare2x2,
-} from '../../common/icons/icons';
-import NavigationItem from './NavigationItem';
+} from "../../common/icons/icons";
+import NavigationItem from "./NavigationItem";
 
 interface Props {}
 
@@ -21,6 +22,10 @@ const Navigation: React.FC<Props> = ({}) => {
   const { user, logout } = useAuthData();
 
   const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div
@@ -30,7 +35,11 @@ const Navigation: React.FC<Props> = ({}) => {
       fixed bottom-0 left-0"
     >
       <ul className="flex flex-row grow">
-        <NavigationItem text="Profile" url={Urls.PROFILE} title="Go to Profile">
+        <NavigationItem
+          text="Profile"
+          url={Urls.PROFILE}
+          title={getUserName(user)}
+        >
           <Avatar src={user?.avatar} alt="Image logo" />
         </NavigationItem>
 
