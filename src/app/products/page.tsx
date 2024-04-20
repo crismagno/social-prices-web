@@ -13,7 +13,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 import { RecordType } from "zod";
 
-import { EditOutlined, EnterOutlined, PlusOutlined } from "@ant-design/icons";
+import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import YesNo from "../../components/common/YesNo/YesNo";
@@ -50,10 +50,6 @@ export default function Products() {
 
   const handleEditProduct = (product: IProduct) => {
     router.push(Urls.EDIT_PRODUCT.replace(":productId", product._id));
-  };
-
-  const handleGotToProduct = (product: IProduct) => {
-    console.log(product);
   };
 
   const onSearch = (value: string) => {
@@ -242,13 +238,6 @@ export default function Products() {
                         type="success"
                         onClick={() => handleEditProduct(product)}
                         icon={<EditOutlined />}
-                      />
-                    </Tooltip>
-                    <Tooltip title="Go to store">
-                      <Button
-                        type="primary"
-                        onClick={() => handleGotToProduct(product)}
-                        icon={<EnterOutlined />}
                       />
                     </Tooltip>
                   </>
