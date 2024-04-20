@@ -43,4 +43,7 @@ export default class UpdateProductDto {
 
   @IsArray()
   deletedFilesUrl: string[];
+
+  @IsArray()
+  categoriesCode: string[];
 }

@@ -14,4 +14,5 @@ export interface IProduct {
   mainUrl: string | null;
   barCode: string | null;
   QRCode: string | null;
+  categoriesCode: string[];
 }

@@ -19,6 +19,7 @@ import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import YesNo from "../../components/common/YesNo/YesNo";
 import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
 import Layout from "../../components/template/Layout/Layout";
+import ProductsEnum from "../../shared/business/products/products.enum";
 import { IProduct } from "../../shared/business/products/products.interface";
 import CommonEnum from "../../shared/common/enums/common.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
@@ -161,6 +162,24 @@ export default function Products() {
               key: "price",
               align: "center",
               render: (price: number) => formatterMoney(price),
+            },
+            {
+              title: "Categories",
+              dataIndex: "categoriesCode",
+              key: "categoriesCode",
+              align: "center",
+              render: (categoriesCode: string[]) =>
+                categoriesCode?.length
+                  ? categoriesCode.map((categoryCode) => (
+                      <Tag key={categoryCode}>
+                        {
+                          ProductsEnum.categories.find(
+                            (category) => category.code === categoryCode
+                          )?.name
+                        }
+                      </Tag>
+                    ))
+                  : "None categories",
             },
             {
               title: "Created At",

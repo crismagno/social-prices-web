@@ -44,6 +44,7 @@ import Layout from "../../../components/template/Layout/Layout";
 import CreateProductDto from "../../../services/social-prices-api/products/dto/createProduct.dto";
 import UpdateProductDto from "../../../services/social-prices-api/products/dto/updateProduct.dto";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
+import ProductsEnum from "../../../shared/business/products/products.enum";
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import { getFileUrl } from "../../../shared/utils/images/helper";
 import { getImageAwsS3 } from "../../../shared/utils/images/url-images";
@@ -64,6 +65,7 @@ const formSchema = z.object({
   storeIds: z.array(z.string()),
   barCode: z.string().optional(),
   QRCode: z.string().optional(),
+  categoriesCode: z.array(z.string()),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -125,6 +127,7 @@ export default function ProductDetail() {
       quantity: product?.quantity ?? 0,
       storeIds: product?.storeIds ?? [],
       QRCode: product?.QRCode ?? "",
+      categoriesCode: product?.categoriesCode ?? [],
     };
 
     setFormValues(values);
@@ -182,6 +185,7 @@ export default function ProductDetail() {
         storeIds: data.storeIds,
         barCode: data.barCode ?? null,
         QRCode: data.QRCode ?? null,
+        categoriesCode: data.categoriesCode ?? [],
       };
 
       for (const property of Object.keys(createProductDto)) {
@@ -245,6 +249,7 @@ export default function ProductDetail() {
         productId: product!._id,
         QRCode: data.QRCode ?? null,
         deletedFilesUrl,
+        categoriesCode: data.categoriesCode ?? [],
       };
 
       for (const property of Object.keys(updateProductDto)) {
@@ -417,7 +422,39 @@ export default function ProductDetail() {
           </Row>
 
           <Row>
-            <Col xs={8}>
+            <Col xs={24} md={8}>
+              <div className={`flex flex-col mt-4 mr-5`}>
+                <label className={`text-sm`}>Categories</label>
+
+                <Controller
+                  control={control}
+                  name={`categoriesCode`}
+                  render={({
+                    field: { onChange, onBlur, value, name, ref },
+                  }) => (
+                    <Select
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      name={name}
+                      value={value}
+                      ref={ref}
+                      placeholder={"Select categories"}
+                      mode="multiple"
+                    >
+                      {ProductsEnum.categories.map((category: any) => (
+                        <Select.Option
+                          key={category.code}
+                          value={category.code}
+                        >
+                          {category.name}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  )}
+                ></Controller>
+              </div>
+            </Col>
+            <Col xs={24} md={8}>
               <div className={`flex flex-col mt-4`}>
                 <label className={`text-sm mr-1`}>QRCode</label>
 
@@ -440,7 +477,7 @@ export default function ProductDetail() {
               </div>
             </Col>
 
-            <Col xs={8}>
+            <Col xs={24} md={8}>
               <div className={`flex flex-col mt-4 ml-2`}>
                 <label className={`text-sm mr-1`} for="isActive">
                   Is Active
