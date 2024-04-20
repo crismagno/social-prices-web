@@ -293,6 +293,7 @@ export default function ProductDetail() {
                   fileList={fileList}
                   onChange={onChange}
                   onPreview={onPreview}
+                  multiple
                 >
                   {fileList.length < 10 && "+ Upload"}
                 </Upload>

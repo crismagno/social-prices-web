@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 
-import { Button, Card, Image, TablePaginationConfig, Tag, Tooltip } from "antd";
+import {
+  Avatar,
+  Button,
+  Card,
+  Image,
+  TablePaginationConfig,
+  Tag,
+  Tooltip,
+} from "antd";
 import {
   FilterValue,
   SorterResult,
@@ -105,11 +113,11 @@ export default function Products() {
           columns={[
             {
               title: "#",
-              dataIndex: "mainUrl",
-              key: "mainUrl",
+              dataIndex: "filesUrl",
+              key: "filesUrl",
               align: "center",
-              render: (mainUrl: string) => {
-                if (!mainUrl) {
+              render: (filesUrl: string[]) => {
+                if (!filesUrl?.length) {
                   return (
                     <Image
                       width={50}
@@ -122,15 +130,22 @@ export default function Products() {
                 }
 
                 return (
-                  <Tooltip title="See product">
-                    <Image
-                      width={50}
-                      height={50}
-                      src={getImageAwsS3(mainUrl)}
-                      alt="mainUrl"
-                      className="rounded-full"
-                    />
-                  </Tooltip>
+                  <Avatar.Group
+                    maxCount={2}
+                    shape="circle"
+                    size="large"
+                    maxStyle={{ color: "#f56a00", backgroundColor: "#fde3cf" }}
+                  >
+                    {filesUrl.map((fileUrl) => (
+                      <Image
+                        key={fileUrl}
+                        width={40}
+                        src={getImageAwsS3(fileUrl)}
+                        alt="mainUrl"
+                        className="rounded-full"
+                      />
+                    ))}
+                  </Avatar.Group>
                 );
               },
             },
