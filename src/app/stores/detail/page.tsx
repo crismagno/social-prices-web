@@ -107,6 +107,7 @@ const formSchema = z.object({
   phoneNumbers: z.array(phoneNumberFormSchema),
   about: z.string().nullable(),
   status: z.string(),
+  categoriesCode: z.array(z.string()),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -225,6 +226,7 @@ export default function NewStore() {
           )
         : [generateNewAPhoneNumber(false)],
       status: store?.status ?? StoresEnum.Status.ACTIVE,
+      categoriesCode: store?.categoriesCode ?? [],
     };
 
     setFormValues(values);
@@ -282,6 +284,7 @@ export default function NewStore() {
         phoneNumbers: data.phoneNumbers,
         about: data.about,
         status: data.status as StoresEnum.Status,
+        categoriesCode: data.categoriesCode,
       };
 
       for (const property of Object.keys(createStoreDto)) {
@@ -349,6 +352,7 @@ export default function NewStore() {
         phoneNumbers: data.phoneNumbers,
         about: data.about,
         status: data.status as StoresEnum.Status,
+        categoriesCode: data.categoriesCode,
       };
 
       for (const property of Object.keys(updateStoreDto)) {
@@ -436,7 +440,7 @@ export default function NewStore() {
           </div>
 
           <Row gutter={[16, 16]} className="mt-10">
-            <Col xs={24} md={12}>
+            <Col xs={24} md={8}>
               <FormInput
                 label="Name"
                 placeholder={"Enter name"}
@@ -449,7 +453,7 @@ export default function NewStore() {
               />
             </Col>
 
-            <Col xs={24} md={12}>
+            <Col xs={24} md={8}>
               <FormInput
                 label="Email"
                 placeholder={"Enter email"}
@@ -463,10 +467,7 @@ export default function NewStore() {
                 divClassName="pl-0"
               />
             </Col>
-          </Row>
-
-          <Row>
-            <Col xs={24} md={12}>
+            <Col xs={24} md={8}>
               <FormInput
                 label="Started At"
                 type="date"
@@ -478,8 +479,10 @@ export default function NewStore() {
                 errorMessage={errors.startedAt?.message}
               />
             </Col>
+          </Row>
 
-            <Col xs={24} md={12}>
+          <Row>
+            <Col xs={24} md={8}>
               <FormInput
                 label="Description"
                 placeholder={"Enter description"}
@@ -490,10 +493,7 @@ export default function NewStore() {
                 maxLength={200}
               />
             </Col>
-          </Row>
-
-          <Row>
-            <Col xs={12}>
+            <Col xs={8}>
               <div className={`flex flex-col mt-4 mr-5`}>
                 <label className={`text-sm`}>Status</label>
 
@@ -534,6 +534,41 @@ export default function NewStore() {
                 ></Controller>
               </div>
             </Col>
+            <Col xs={24} md={8}>
+              <div className={`flex flex-col mt-4 mr-5`}>
+                <label className={`text-sm`}>Categories</label>
+
+                <Controller
+                  control={control}
+                  name={`categoriesCode`}
+                  render={({
+                    field: { onChange, onBlur, value, name, ref },
+                  }) => (
+                    <Select
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      name={name}
+                      value={value}
+                      ref={ref}
+                      placeholder={"Select categories"}
+                      mode="multiple"
+                    >
+                      {StoresEnum.categories.map((category: any) => (
+                        <Select.Option
+                          key={category.code}
+                          value={category.code}
+                        >
+                          {category.name}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  )}
+                ></Controller>
+              </div>
+            </Col>
+          </Row>
+
+          <Row>
             <Col xs={24}>
               <FormTextarea
                 label="About"

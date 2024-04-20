@@ -156,6 +156,24 @@ export default function Stores() {
               sorter: true,
             },
             {
+              title: "Categories",
+              dataIndex: "categoriesCode",
+              key: "categoriesCode",
+              align: "center",
+              render: (categoriesCode: string[]) =>
+                categoriesCode?.length
+                  ? categoriesCode.map((categoryCode) => (
+                      <Tag key={categoryCode}>
+                        {
+                          StoresEnum.categories.find(
+                            (category) => category.code === categoryCode
+                          )?.name
+                        }
+                      </Tag>
+                    ))
+                  : "None categories",
+            },
+            {
               title: "Status",
               dataIndex: "status",
               filters: Object.keys(StoresEnum.Status).map((status: string) => ({

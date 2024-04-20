@@ -154,13 +154,13 @@ export default function ProductDetail() {
 
   const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
     if (isEditMode) {
-      await updateStore(data);
+      await updateProduct(data);
     } else {
-      await createStore(data);
+      await createProduct(data);
     }
   };
 
-  const createStore = async (data: TFormSchema) => {
+  const createProduct = async (data: TFormSchema) => {
     try {
       if (fileList.length === 0) {
         message.warning("Please select a image.");
@@ -210,7 +210,7 @@ export default function ProductDetail() {
     }
   };
 
-  const updateStore = async (data: TFormSchema) => {
+  const updateProduct = async (data: TFormSchema) => {
     try {
       if (fileList.length === 0) {
         message.warning("Please select a image.");

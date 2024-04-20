@@ -32,4 +32,6 @@ export default class UpdateStoreDto {
   phoneNumbers: any[];
 
   status: StoresEnum.Status;
+
+  categoriesCode: string[];
 }
