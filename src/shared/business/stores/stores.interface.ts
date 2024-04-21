@@ -19,7 +19,7 @@ export interface IStore
   phoneNumbers: IStorePhoneNumber[];
   about: string | null;
   removed: IStoreRemoved | null;
-  categoriesCode: string[];
+  categoriesIds: string[];
 }
 
 export interface IStorePhoneNumber {

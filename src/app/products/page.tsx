@@ -27,7 +27,8 @@ import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import YesNo from "../../components/common/YesNo/YesNo";
 import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
 import Layout from "../../components/template/Layout/Layout";
-import ProductsEnum from "../../shared/business/products/products.enum";
+import CategoriesEnum from "../../shared/business/categories/categories.enum";
+import { ICategory } from "../../shared/business/categories/categories.interface";
 import { IProduct } from "../../shared/business/products/products.interface";
 import CommonEnum from "../../shared/common/enums/common.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
@@ -37,6 +38,7 @@ import { getImageAwsS3 } from "../../shared/utils/images/url-images";
 import { formatterMoney } from "../../shared/utils/string-extensions/string-extensions";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
+import { useGetCategoriesByType } from "../categories/useGetCategoriesByType";
 import { useFindStoresByUser } from "../stores/useFindStoresByUser";
 import { useFindProductsByUserTableState } from "./useFindProductsByUserTableState";
 
@@ -49,6 +51,10 @@ export default function Products() {
 
   const { isLoading, products, total } =
     useFindProductsByUserTableState(tableStateRequest);
+
+  const { categories, isLoading: isLoadingCategories } = useGetCategoriesByType(
+    CategoriesEnum.Type.PRODUCT
+  );
 
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
@@ -82,7 +88,7 @@ export default function Products() {
     });
   };
 
-  if (isLoadingStores) {
+  if (isLoadingStores || isLoadingCategories) {
     return <LoadingFull />;
   }
 
@@ -176,21 +182,21 @@ export default function Products() {
             },
             {
               title: "Categories",
-              dataIndex: "categoriesCode",
-              key: "categoriesCode",
+              dataIndex: "categoriesIds",
+              key: "categoriesIds",
               align: "center",
-              render: (categoriesCode: string[]) =>
-                categoriesCode?.length
-                  ? categoriesCode.map((categoryCode) => (
-                      <Tag key={categoryCode}>
+              render: (categoriesIds: string[]) =>
+                categoriesIds?.length
+                  ? categoriesIds.map((categoryId) => (
+                      <Tag key={categoryId}>
                         {
-                          ProductsEnum.categories.find(
-                            (category) => category.code === categoryCode
+                          categories.find(
+                            (category: ICategory) => category._id === categoryId
                           )?.name
                         }
                       </Tag>
                     ))
-                  : "None categories",
+                  : "-",
             },
             {
               title: "Created At",

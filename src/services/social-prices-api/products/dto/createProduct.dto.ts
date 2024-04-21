@@ -39,5 +39,5 @@ export default class CreateProductDto {
   QRCode: string | null;
 
   @IsArray()
-  categoriesCode: string[];
+  categoriesIds: string[];
 }

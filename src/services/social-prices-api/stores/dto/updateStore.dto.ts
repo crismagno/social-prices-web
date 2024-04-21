@@ -33,5 +33,5 @@ export default class UpdateStoreDto {
 
   status: StoresEnum.Status;
 
-  categoriesCode: string[];
+  categoriesIds: string[];
 }

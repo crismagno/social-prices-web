@@ -50,6 +50,8 @@ import Layout from "../../../components/template/Layout/Layout";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import CreateStoreDto from "../../../services/social-prices-api/stores/dto/createStore.dto";
 import UpdateStoreDto from "../../../services/social-prices-api/stores/dto/updateStore.dto";
+import CategoriesEnum from "../../../shared/business/categories/categories.enum";
+import { ICategory } from "../../../shared/business/categories/categories.interface";
 import StoresEnum from "../../../shared/business/stores/stores.enum";
 import {
   IStoreAddress,
@@ -70,6 +72,7 @@ import {
   createPhoneNumberName,
   createUserAddressName,
 } from "../../../shared/utils/string-extensions/string-extensions";
+import { useGetCategoriesByType } from "../../categories/useGetCategoriesByType";
 import { useFindStoreById } from "./useFindStoreById";
 
 const addressFormSchema = z.object({
@@ -107,7 +110,7 @@ const formSchema = z.object({
   phoneNumbers: z.array(phoneNumberFormSchema),
   about: z.string().nullable(),
   status: z.string(),
-  categoriesCode: z.array(z.string()),
+  categoriesIds: z.array(z.string()),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -152,6 +155,10 @@ export default function NewStore() {
   const storeId: string | null = searchParams.get("sid");
 
   const { store, isLoadingStore } = useFindStoreById(storeId);
+
+  const { categories, isLoading: isLoadingCategories } = useGetCategoriesByType(
+    CategoriesEnum.Type.STORE
+  );
 
   const [formValues, setFormValues] = useState<TFormSchema>();
 
@@ -226,13 +233,13 @@ export default function NewStore() {
           )
         : [generateNewAPhoneNumber(false)],
       status: store?.status ?? StoresEnum.Status.ACTIVE,
-      categoriesCode: store?.categoriesCode ?? [],
+      categoriesIds: store?.categoriesIds ?? [],
     };
 
     setFormValues(values);
   }, [store]);
 
-  if (storeId && isLoadingStore) {
+  if ((storeId && isLoadingStore) || isLoadingCategories) {
     return <LoadingFull />;
   }
 
@@ -284,7 +291,7 @@ export default function NewStore() {
         phoneNumbers: data.phoneNumbers,
         about: data.about,
         status: data.status as StoresEnum.Status,
-        categoriesCode: data.categoriesCode,
+        categoriesIds: data.categoriesIds,
       };
 
       for (const property of Object.keys(createStoreDto)) {
@@ -352,7 +359,7 @@ export default function NewStore() {
         phoneNumbers: data.phoneNumbers,
         about: data.about,
         status: data.status as StoresEnum.Status,
-        categoriesCode: data.categoriesCode,
+        categoriesIds: data.categoriesIds,
       };
 
       for (const property of Object.keys(updateStoreDto)) {
@@ -540,7 +547,7 @@ export default function NewStore() {
 
                 <Controller
                   control={control}
-                  name={`categoriesCode`}
+                  name={`categoriesIds`}
                   render={({
                     field: { onChange, onBlur, value, name, ref },
                   }) => (
@@ -553,11 +560,8 @@ export default function NewStore() {
                       placeholder={"Select categories"}
                       mode="multiple"
                     >
-                      {StoresEnum.categories.map((category: any) => (
-                        <Select.Option
-                          key={category.code}
-                          value={category.code}
-                        >
+                      {categories.map((category: ICategory) => (
+                        <Select.Option key={category._id} value={category._id}>
                           {category.name}
                         </Select.Option>
                       ))}

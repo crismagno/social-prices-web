@@ -44,7 +44,8 @@ import Layout from "../../../components/template/Layout/Layout";
 import CreateProductDto from "../../../services/social-prices-api/products/dto/createProduct.dto";
 import UpdateProductDto from "../../../services/social-prices-api/products/dto/updateProduct.dto";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
-import ProductsEnum from "../../../shared/business/products/products.enum";
+import CategoriesEnum from "../../../shared/business/categories/categories.enum";
+import { ICategory } from "../../../shared/business/categories/categories.interface";
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import { getFileUrl } from "../../../shared/utils/images/helper";
 import { getImageAwsS3 } from "../../../shared/utils/images/url-images";
@@ -52,6 +53,7 @@ import {
   formatterMoney,
   parserMoney,
 } from "../../../shared/utils/string-extensions/string-extensions";
+import { useGetCategoriesByType } from "../../categories/useGetCategoriesByType";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindProductById } from "./useFindProductById";
 
@@ -65,7 +67,7 @@ const formSchema = z.object({
   storeIds: z.array(z.string()),
   barCode: z.string().optional(),
   QRCode: z.string().optional(),
-  categoriesCode: z.array(z.string()),
+  categoriesIds: z.array(z.string()),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -76,6 +78,10 @@ export default function ProductDetail() {
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
 
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
+
+  const { categories, isLoading: isLoadingCategories } = useGetCategoriesByType(
+    CategoriesEnum.Type.PRODUCT
+  );
 
   const productId: string | null = searchParams.get("pid");
 
@@ -127,13 +133,13 @@ export default function ProductDetail() {
       quantity: product?.quantity ?? 0,
       storeIds: product?.storeIds ?? [],
       QRCode: product?.QRCode ?? "",
-      categoriesCode: product?.categoriesCode ?? [],
+      categoriesIds: product?.categoriesIds ?? [],
     };
 
     setFormValues(values);
   }, [product]);
 
-  if ((productId && isLoading) || isLoadingStores) {
+  if ((productId && isLoading) || isLoadingStores || isLoadingCategories) {
     return <LoadingFull />;
   }
 
@@ -185,7 +191,7 @@ export default function ProductDetail() {
         storeIds: data.storeIds,
         barCode: data.barCode ?? null,
         QRCode: data.QRCode ?? null,
-        categoriesCode: data.categoriesCode ?? [],
+        categoriesIds: data.categoriesIds ?? [],
       };
 
       for (const property of Object.keys(createProductDto)) {
@@ -249,7 +255,7 @@ export default function ProductDetail() {
         productId: product!._id,
         QRCode: data.QRCode ?? null,
         deletedFilesUrl,
-        categoriesCode: data.categoriesCode ?? [],
+        categoriesIds: data.categoriesIds ?? [],
       };
 
       for (const property of Object.keys(updateProductDto)) {
@@ -429,7 +435,7 @@ export default function ProductDetail() {
 
                 <Controller
                   control={control}
-                  name={`categoriesCode`}
+                  name={`categoriesIds`}
                   render={({
                     field: { onChange, onBlur, value, name, ref },
                   }) => (
@@ -442,11 +448,8 @@ export default function ProductDetail() {
                       placeholder={"Select categories"}
                       mode="multiple"
                     >
-                      {ProductsEnum.categories.map((category: any) => (
-                        <Select.Option
-                          key={category.code}
-                          value={category.code}
-                        >
+                      {categories.map((category: ICategory) => (
+                        <Select.Option key={category._id} value={category._id}>
                           {category.name}
                         </Select.Option>
                       ))}

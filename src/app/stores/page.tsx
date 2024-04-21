@@ -15,8 +15,11 @@ import { RecordType } from "zod";
 
 import { EditOutlined, EnterOutlined, PlusOutlined } from "@ant-design/icons";
 
+import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
 import Layout from "../../components/template/Layout/Layout";
+import CategoriesEnum from "../../shared/business/categories/categories.enum";
+import { ICategory } from "../../shared/business/categories/categories.interface";
 import StoresEnum from "../../shared/business/stores/stores.enum";
 import { IStore } from "../../shared/business/stores/stores.interface";
 import Urls from "../../shared/common/routes-app/routes-app";
@@ -25,6 +28,7 @@ import { defaultAvatarImage } from "../../shared/utils/images/files-names";
 import { getImageAwsS3 } from "../../shared/utils/images/url-images";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
+import { useGetCategoriesByType } from "../categories/useGetCategoriesByType";
 import { StoreDetail } from "./components/StoreDetail/StoreDetail";
 import { useFindStoresByUserTableState } from "./useFindStoresByUserTableState";
 
@@ -37,6 +41,10 @@ export default function Stores() {
 
   const { isLoading, stores, total } =
     useFindStoresByUserTableState(tableStateRequest);
+
+  const { categories, isLoading: isLoadingCategories } = useGetCategoriesByType(
+    CategoriesEnum.Type.STORE
+  );
 
   const handleNewStore = () => {
     router.push(Urls.NEW_STORE);
@@ -71,6 +79,10 @@ export default function Stores() {
       action: extra.action,
     });
   };
+
+  if (isLoadingCategories) {
+    return <LoadingFull />;
+  }
 
   return (
     <Layout subtitle="My Stores" title="Stores" hasBackButton>
@@ -157,21 +169,21 @@ export default function Stores() {
             },
             {
               title: "Categories",
-              dataIndex: "categoriesCode",
-              key: "categoriesCode",
+              dataIndex: "categoriesIds",
+              key: "categoriesIds",
               align: "center",
-              render: (categoriesCode: string[]) =>
-                categoriesCode?.length
-                  ? categoriesCode.map((categoryCode) => (
-                      <Tag key={categoryCode}>
+              render: (categoriesIds: string[]) =>
+                categoriesIds?.length
+                  ? categoriesIds.map((categoryId) => (
+                      <Tag key={categoryId}>
                         {
-                          StoresEnum.categories.find(
-                            (category) => category.code === categoryCode
+                          categories.find(
+                            (category: ICategory) => category._id === categoryId
                           )?.name
                         }
                       </Tag>
                     ))
-                  : "None categories",
+                  : "-",
             },
             {
               title: "Status",

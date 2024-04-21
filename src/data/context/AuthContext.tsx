@@ -56,6 +56,8 @@ const AuthContext = createContext<IAuthContext>({
 const __normalizeUser = async (userFirebase: User): Promise<IUser> => {
   const providerToken: string = await userFirebase.getIdToken();
 
+  const now: Date = new Date();
+
   return {
     uid: userFirebase.uid,
     providerToken,
@@ -86,6 +88,8 @@ const __normalizeUser = async (userFirebase: User): Promise<IUser> => {
     loggedByAuthProvider: UsersEnum.Provider.GOOGLE,
     _id: userFirebase.uid,
     about: null,
+    createdAt: now,
+    updatedAt: now,
   };
 };
 
