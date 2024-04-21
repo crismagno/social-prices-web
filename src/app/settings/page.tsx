@@ -7,7 +7,11 @@ import ThemeButton from "../../components/template/ThemeButton/ThemeButton";
 
 export default function Settings() {
   return (
-    <Layout subtitle="System settings" title="Settings to update system">
+    <Layout
+      subtitle="System settings"
+      title="Settings to update system"
+      hasBackButton
+    >
       <Card className=" h-min-80 mt-10">
         <ContainerTitle title="Layout" className="mt-6 text-base">
           <div className="flex">
