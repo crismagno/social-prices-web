@@ -85,6 +85,8 @@ export default function Stores() {
     return <LoadingFull />;
   }
 
+  const categoriesSort: ICategory[] = sortArray(categories, "name");
+
   return (
     <Layout subtitle="My Stores" title="Stores" hasBackButton>
       <Card
@@ -172,13 +174,17 @@ export default function Stores() {
               title: "Categories",
               dataIndex: "categoriesIds",
               key: "categoriesIds",
+              filters: categoriesSort.map((category: ICategory) => ({
+                text: category.name,
+                value: category._id,
+              })),
               align: "center",
               render: (categoriesIds: string[]) =>
                 categoriesIds?.length
                   ? categoriesIds.map((categoryId) => (
                       <Tag key={categoryId}>
                         {
-                          sortArray(categories, "name").find(
+                          categoriesSort.find(
                             (category: ICategory) => category._id === categoryId
                           )?.name
                         }

@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import {
   Avatar,
+  Badge,
   Button,
   Card,
   Image,
@@ -30,8 +31,11 @@ import Layout from "../../components/template/Layout/Layout";
 import CategoriesEnum from "../../shared/business/categories/categories.enum";
 import { ICategory } from "../../shared/business/categories/categories.interface";
 import { IProduct } from "../../shared/business/products/products.interface";
+import StoresEnum from "../../shared/business/stores/stores.enum";
+import { IStore } from "../../shared/business/stores/stores.interface";
 import CommonEnum from "../../shared/common/enums/common.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
+import { sortArray } from "../../shared/utils/array/functions";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../shared/utils/images/files-names";
 import { getImageAwsS3 } from "../../shared/utils/images/url-images";
@@ -92,8 +96,10 @@ export default function Products() {
     return <LoadingFull />;
   }
 
-  const getStoreName = (storeId: string) =>
-    stores.find((store) => store._id === storeId)?.name ?? "";
+  const getStore = (storeId: string): IStore | undefined =>
+    stores.find((store) => store._id === storeId);
+
+  const categoriesSort: ICategory[] = sortArray(categories, "name");
 
   return (
     <Layout subtitle="My Products" title="Products" hasBackButton>
@@ -185,12 +191,16 @@ export default function Products() {
               dataIndex: "categoriesIds",
               key: "categoriesIds",
               align: "center",
+              filters: categoriesSort.map((category: ICategory) => ({
+                text: category.name,
+                value: category._id,
+              })),
               render: (categoriesIds: string[]) =>
                 categoriesIds?.length
                   ? categoriesIds.map((categoryId) => (
                       <Tag key={categoryId}>
                         {
-                          categories.find(
+                          categoriesSort.find(
                             (category: ICategory) => category._id === categoryId
                           )?.name
                         }
@@ -240,10 +250,28 @@ export default function Products() {
                 value: store._id,
                 text: store.name,
               })),
-              render: (storeIds: string[]) =>
-                storeIds.map((storeId: string) => (
-                  <Tag key={storeId}>{getStoreName(storeId)}</Tag>
-                )),
+              render: (storeIds: string[]) => {
+                return storeIds.map((storeId: string) => {
+                  const store: IStore | undefined = getStore(storeId);
+
+                  if (!store) {
+                    return null;
+                  }
+
+                  return (
+                    <Tag key={storeId}>
+                      <span className="mr-1">{store.name ?? "No name"}</span>
+                      <Badge
+                        color={
+                          StoresEnum.StatusBadgeColor[
+                            store.status as StoresEnum.Status
+                          ]
+                        }
+                      />
+                    </Tag>
+                  );
+                });
+              },
             },
             {
               title: "Action",
