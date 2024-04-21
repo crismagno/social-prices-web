@@ -34,7 +34,7 @@ const FormSelect: React.FC<Props> = ({
 
       <select
         className={`
-					px-4 py-1.5 bg-white rounded-lg mt-1 w-full
+					px-4 py-1.5 bg-white rounded-lg mt-1 w-full text-sm
 					 focus:bg-slate-50 border border-slate-200 focus:border-blue-100
 					 transition-all ${selectClassName}`}
         defaultValue={defaultValue}

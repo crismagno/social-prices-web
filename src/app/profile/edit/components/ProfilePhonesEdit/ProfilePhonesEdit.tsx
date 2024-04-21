@@ -174,7 +174,7 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
                 key={index}
                 collapsed={formPhoneNumber.isCollapsed}
                 title={phoneNumberName.trim() || `Phone Number (${index + 1})`}
-                className="relative mt-5"
+                className="relative mt-5 text-sm"
                 extraHeader={
                   <Tooltip title="Remove phone number">
                     <ButtonCommon

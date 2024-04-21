@@ -207,7 +207,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
               key={index}
               collapsed={formAddress.isCollapsed}
               title={addressName.trim() || `Address (${index + 1})`}
-              className="relative mt-5"
+              className="relative mt-5 text-sm"
               extraHeader={
                 <Tooltip title="Remove address">
                   <ButtonCommon
