@@ -47,6 +47,7 @@ import { serviceMethodsInstance } from "../../../services/social-prices-api/Serv
 import CategoriesEnum from "../../../shared/business/categories/categories.enum";
 import { ICategory } from "../../../shared/business/categories/categories.interface";
 import { IStore } from "../../../shared/business/stores/stores.interface";
+import { sortArray } from "../../../shared/utils/array/functions";
 import { getFileUrl } from "../../../shared/utils/images/helper";
 import { getImageAwsS3 } from "../../../shared/utils/images/url-images";
 import {
@@ -448,11 +449,16 @@ export default function ProductDetail() {
                       placeholder={"Select categories"}
                       mode="multiple"
                     >
-                      {categories.map((category: ICategory) => (
-                        <Select.Option key={category._id} value={category._id}>
-                          {category.name}
-                        </Select.Option>
-                      ))}
+                      {sortArray(categories, "name").map(
+                        (category: ICategory) => (
+                          <Select.Option
+                            key={category._id}
+                            value={category._id}
+                          >
+                            {category.name}
+                          </Select.Option>
+                        )
+                      )}
                     </Select>
                   )}
                 ></Controller>

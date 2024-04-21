@@ -23,6 +23,7 @@ import { ICategory } from "../../shared/business/categories/categories.interface
 import StoresEnum from "../../shared/business/stores/stores.enum";
 import { IStore } from "../../shared/business/stores/stores.interface";
 import Urls from "../../shared/common/routes-app/routes-app";
+import { sortArray } from "../../shared/utils/array/functions";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../shared/utils/images/files-names";
 import { getImageAwsS3 } from "../../shared/utils/images/url-images";
@@ -177,7 +178,7 @@ export default function Stores() {
                   ? categoriesIds.map((categoryId) => (
                       <Tag key={categoryId}>
                         {
-                          categories.find(
+                          sortArray(categories, "name").find(
                             (category: ICategory) => category._id === categoryId
                           )?.name
                         }
