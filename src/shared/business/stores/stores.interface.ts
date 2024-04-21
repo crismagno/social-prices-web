@@ -1,15 +1,18 @@
+import { ICreatedAtEntity } from "../interfaces/created-at.interface";
 import { ISoftDeleteEntity } from "../interfaces/soft-delete.interface";
+import { IUpdatedAtEntity } from "../interfaces/updated-at.interface";
 import StoresEnum from "./stores.enum";
 
-export interface IStore extends ISoftDeleteEntity {
+export interface IStore
+  extends ISoftDeleteEntity,
+    ICreatedAtEntity,
+    IUpdatedAtEntity {
   _id: string;
   logo: string | null;
   email: string;
   name: string;
   description: string | null;
   startedAt: Date;
-  createdAt: Date;
-  updatedAt: Date;
   status: StoresEnum.Status;
   userId: string;
   addresses: IStoreAddress[];

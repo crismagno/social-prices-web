@@ -1,4 +1,7 @@
-export interface IProduct {
+import { ICreatedAtEntity } from "../interfaces/created-at.interface";
+import { IUpdatedAtEntity } from "../interfaces/updated-at.interface";
+
+export interface IProduct extends ICreatedAtEntity, IUpdatedAtEntity {
   readonly _id: string;
   name: string;
   quantity: number;
@@ -6,8 +9,6 @@ export interface IProduct {
   details: string | null;
   price: number;
   isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
   userId: string;
   storeIds: string[];
   filesUrl: string[];

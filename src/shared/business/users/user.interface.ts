@@ -1,6 +1,8 @@
+import { ICreatedAtEntity } from "../interfaces/created-at.interface";
+import { IUpdatedAtEntity } from "../interfaces/updated-at.interface";
 import UsersEnum from "./users.enum";
 
-export default interface IUser {
+export default interface IUser extends ICreatedAtEntity, IUpdatedAtEntity {
   readonly _id: string;
   uid: string;
   firstName: string | null;
