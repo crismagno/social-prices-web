@@ -7,7 +7,7 @@ import {
   IsString,
 } from "class-validator";
 
-import { IPhoneNumber } from "../../../../shared/business/users/user.interface";
+import { IPhoneNumber } from "../../../../shared/business/interfaces/phone-number";
 import UsersEnum from "../../../../shared/business/users/users.enum";
 
 export default class CreateUserDto {

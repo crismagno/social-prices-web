@@ -28,9 +28,8 @@ import {
 } from "../../../../../components/common/icons/icons";
 import useAuthData from "../../../../../data/hook/useAuthData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/ServiceMethods";
-import IUser, {
-  IPhoneNumber,
-} from "../../../../../shared/business/users/user.interface";
+import { IPhoneNumber } from "../../../../../shared/business/interfaces/phone-number";
+import IUser from "../../../../../shared/business/users/user.interface";
 import UsersEnum from "../../../../../shared/business/users/users.enum";
 import { createPhoneNumberName } from "../../../../../shared/utils/string-extensions/string-extensions";
 

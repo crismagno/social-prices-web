@@ -52,11 +52,9 @@ import CreateStoreDto from "../../../services/social-prices-api/stores/dto/creat
 import UpdateStoreDto from "../../../services/social-prices-api/stores/dto/updateStore.dto";
 import CategoriesEnum from "../../../shared/business/categories/categories.enum";
 import { ICategory } from "../../../shared/business/categories/categories.interface";
+import { IAddress } from "../../../shared/business/interfaces/address.interface";
+import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number";
 import StoresEnum from "../../../shared/business/stores/stores.enum";
-import {
-  IStoreAddress,
-  IStorePhoneNumber,
-} from "../../../shared/business/stores/stores.interface";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getFileUrl } from "../../../shared/utils/images/helper";
 import { getImageAwsS3 } from "../../../shared/utils/images/url-images";
@@ -217,7 +215,7 @@ export default function NewStore() {
         .utc()
         .format(DatesEnum.Format.YYYYMMDD_DASHED),
       addresses: store?.addresses.length
-        ? store?.addresses.map((address: IStoreAddress, index: number) => ({
+        ? store?.addresses.map((address: IAddress, index: number) => ({
             ...address,
             countryCode: address.country?.code,
             stateCode: address.state?.code ?? "",
@@ -226,7 +224,7 @@ export default function NewStore() {
         : [generateNewAddress(false)],
       phoneNumbers: store?.phoneNumbers.length
         ? store?.phoneNumbers.map(
-            (phoneNumber: IStorePhoneNumber, index: number) => ({
+            (phoneNumber: IPhoneNumber, index: number) => ({
               ...phoneNumber,
               isCollapsed: index === 0,
             })
@@ -264,8 +262,8 @@ export default function NewStore() {
 
       formData.append("logo", fileList[0].originFileObj as RcFile);
 
-      const addresses: IStoreAddress[] = data.addresses.map(
-        (address): IStoreAddress => ({
+      const addresses: IAddress[] = data.addresses.map(
+        (address): IAddress => ({
           ...address,
           country: {
             code: address.countryCode,
@@ -331,8 +329,8 @@ export default function NewStore() {
         formData.append("logo", fileList[0].originFileObj as RcFile);
       }
 
-      const addresses: IStoreAddress[] = data.addresses.map(
-        (address): IStoreAddress => ({
+      const addresses: IAddress[] = data.addresses.map(
+        (address): IAddress => ({
           ...address,
           country: {
             code: address.countryCode,
@@ -798,7 +796,7 @@ export default function NewStore() {
                 );
 
                 const phoneNumberName: string = createPhoneNumberName(
-                  phoneNUmber as IStorePhoneNumber
+                  phoneNUmber as IPhoneNumber
                 );
 
                 return (

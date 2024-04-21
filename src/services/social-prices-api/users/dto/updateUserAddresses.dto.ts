@@ -1,8 +1,8 @@
 import { IsArray } from "class-validator";
 
-import { IUserAddress } from "../../../../shared/business/users/user.interface";
+import { IAddress } from "../../../../shared/business/interfaces/address.interface";
 
 export default class UpdateUserAddressesDto {
   @IsArray()
-  addresses: IUserAddress[];
+  addresses: IAddress[];
 }

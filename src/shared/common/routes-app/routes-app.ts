@@ -23,6 +23,11 @@ const Urls = {
   PRODUCTS: "/products",
   NEW_PRODUCT: "/products/detail",
   EDIT_PRODUCT: "/products/detail?pid=:productId",
+
+  // products
+  CUSTOMERS: "/customers",
+  NEW_CUSTOMER: "/customers/detail",
+  EDIT_CUSTOMER: "/customers/detail?cid=:customerId",
 };
 
 export default Urls;

@@ -23,9 +23,8 @@ import {
 } from "../../../../../components/common/icons/icons";
 import useAuthData from "../../../../../data/hook/useAuthData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/ServiceMethods";
-import IUser, {
-  IUserAddress,
-} from "../../../../../shared/business/users/user.interface";
+import { IAddress } from "../../../../../shared/business/interfaces/address.interface";
+import IUser from "../../../../../shared/business/users/user.interface";
 import citiesMockData from "../../../../../shared/utils/mock-data/brazil-cities.json";
 import statesMockData from "../../../../../shared/utils/mock-data/brazil-states.json";
 import countriesMockData from "../../../../../shared/utils/mock-data/countries.json";
@@ -89,7 +88,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
 
   const defaultValues: TFormSchema = {
     addresses: user?.addresses?.length
-      ? user.addresses.map((address: IUserAddress, index: number) => ({
+      ? user.addresses.map((address: IAddress, index: number) => ({
           ...address,
           countryCode: address.country?.code,
           stateCode: address.state?.code ?? "",
@@ -120,8 +119,8 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
     try {
       setIsSUbmitting(true);
 
-      const addresses: IUserAddress[] = data.addresses.map(
-        (address): IUserAddress => ({
+      const addresses: IAddress[] = data.addresses.map(
+        (address): IAddress => ({
           ...address,
           country: {
             code: address.countryCode,

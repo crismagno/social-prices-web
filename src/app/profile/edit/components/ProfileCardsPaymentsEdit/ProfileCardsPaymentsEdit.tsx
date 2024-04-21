@@ -22,9 +22,8 @@ import {
 } from "../../../../../components/common/icons/icons";
 import useAuthData from "../../../../../data/hook/useAuthData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/ServiceMethods";
-import IUser, {
-  IPhoneNumber,
-} from "../../../../../shared/business/users/user.interface";
+import { IPhoneNumber } from "../../../../../shared/business/interfaces/phone-number";
+import IUser from "../../../../../shared/business/users/user.interface";
 import UsersEnum from "../../../../../shared/business/users/users.enum";
 import { createPhoneNumberName } from "../../../../../shared/utils/string-extensions/string-extensions";
 
@@ -202,7 +201,11 @@ const ProfileCardsPaymentsEdit: React.FC<Props> = ({ className = "" }) => {
                       {Object.keys(UsersEnum.PhoneTypes).map(
                         (phoneType: string) => (
                           <FormSelectOption key={phoneType} value={phoneType}>
-                            {UsersEnum.PhoneTypesLabels[phoneType]}
+                            {
+                              UsersEnum.PhoneTypesLabels[
+                                phoneType as UsersEnum.PhoneTypes
+                              ]
+                            }
                           </FormSelectOption>
                         )
                       )}

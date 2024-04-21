@@ -1,14 +1,12 @@
-import { IStorePhoneNumber } from "../../business/stores/stores.interface";
-import IUser, {
-  IPhoneNumber,
-  IUserAddress,
-} from "../../business/users/user.interface";
+import { IAddress } from "../../business/interfaces/address.interface";
+import { IPhoneNumber } from "../../business/interfaces/phone-number";
+import IUser from "../../business/users/user.interface";
 import UsersEnum from "../../business/users/users.enum";
 
 export const createComma = (str: string): string =>
   str?.trim() ? ", " + str : str;
 
-export const createUserAddressName = (address: IUserAddress | any): string => {
+export const createUserAddressName = (address: IAddress | any): string => {
   let addressName: string = "";
 
   if (address.countryCode || address.country) {
@@ -38,9 +36,7 @@ export const createUserAddressName = (address: IUserAddress | any): string => {
   return addressName;
 };
 
-export const createPhoneNumberName = (
-  phoneNumber: IPhoneNumber | IStorePhoneNumber
-): string => {
+export const createPhoneNumberName = (phoneNumber: IPhoneNumber): string => {
   let phoneNumberName: string = "";
 
   if (phoneNumber?.type) {

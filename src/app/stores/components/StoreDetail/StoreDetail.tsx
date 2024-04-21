@@ -7,11 +7,9 @@ import {
   IconPhone,
   IconQuestion,
 } from "../../../../components/common/icons/icons";
+import { IPhoneNumber } from "../../../../shared/business/interfaces/phone-number";
 import StoresEnum from "../../../../shared/business/stores/stores.enum";
-import {
-  IStore,
-  IStorePhoneNumber,
-} from "../../../../shared/business/stores/stores.interface";
+import { IStore } from "../../../../shared/business/stores/stores.interface";
 import {
   createUserAddressName,
   messengersToString,
@@ -50,7 +48,7 @@ export const StoreDetail: React.FC<Props> = ({ store }) => {
             description={
               <div className="w-full flex">
                 {store?.phoneNumbers?.length ? (
-                  store?.phoneNumbers.map((phoneNumber: IStorePhoneNumber) => (
+                  store?.phoneNumbers.map((phoneNumber: IPhoneNumber) => (
                     <Tooltip
                       key={phoneNumber.number}
                       title={messengersToString(phoneNumber.messengers)}
