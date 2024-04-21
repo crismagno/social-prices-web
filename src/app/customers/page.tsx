@@ -69,7 +69,7 @@ export default function Customers() {
   };
 
   return (
-    <Layout subtitle="Customers" title="Manager my customers" hasBackButton>
+    <Layout subtitle="Manager my customers" title="Customers" hasBackButton>
       <Card
         title="Customers"
         className="h-min-80 mt-5"
