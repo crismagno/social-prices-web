@@ -1,3 +1,4 @@
+import { ICustomer } from "../../business/customers/customer.interface";
 import { IAddress } from "../../business/interfaces/address.interface";
 import { IPhoneNumber } from "../../business/interfaces/phone-number";
 import IUser from "../../business/users/user.interface";
@@ -90,4 +91,18 @@ export const getUserName = (user: IUser): string => {
   }
 
   return userName || user.username || "";
+};
+
+export const getCustomerName = (customer: ICustomer): string => {
+  let customerName: string = customer?.firstName ?? "";
+
+  if (customer?.middleName) {
+    customerName += ` ${customer.middleName}`;
+  }
+
+  if (customer?.lastName) {
+    customerName += ` ${customer.lastName}`;
+  }
+
+  return customerName ?? "";
 };

@@ -13,6 +13,7 @@ import {
   IconHome,
   IconLogout,
   IconSquare2x2,
+  IconUsers,
 } from "../../common/icons/icons";
 import NavigationItem from "./NavigationItem";
 
@@ -66,6 +67,11 @@ const Navigation: React.FC<Props> = ({}) => {
           icon={IconSquare2x2()}
           text="Products"
           url={Urls.PRODUCTS}
+        />
+        <NavigationItem
+          icon={IconUsers()}
+          text="Customers"
+          url={Urls.CUSTOMERS}
         />
       </ul>
 
