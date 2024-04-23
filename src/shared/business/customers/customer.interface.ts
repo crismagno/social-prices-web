@@ -9,7 +9,7 @@ export interface ICustomer extends ICreatedAtEntity, IUpdatedAtEntity {
   avatar: string | null;
   userId: string | null;
   email: string | null;
-  ownerOfUserId: string;
+  ownerUserId: string;
   firstName: string | null;
   lastName: string | null;
   middleName: string | null;

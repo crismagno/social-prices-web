@@ -26,7 +26,7 @@ export const useFindCustomersByOwnerOfUserTableState = (
     try {
       setIsLoading(true);
       const response: ITableStateResponse<ICustomer[]> =
-        await serviceMethodsInstance.customersServiceMethods.findByOwnerOfUserTableState(
+        await serviceMethodsInstance.customersServiceMethods.findByOwnerUserTableState(
           tableState
         );
 

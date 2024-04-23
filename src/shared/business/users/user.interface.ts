@@ -17,7 +17,7 @@ export default interface IUser extends ICreatedAtEntity, IUpdatedAtEntity {
   authToken: string | null;
   avatar: string | null;
   authProvider: UsersEnum.Provider;
-  phoneNumbers: IPhoneNumber[] | null;
+  phoneNumbers: IPhoneNumber[];
   status: UsersEnum.Status | null;
   extraDataProvider: any | null;
   birthDate: Date | null;

@@ -58,7 +58,7 @@ export default class CustomersServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
-  public async findByOwnerOfUserTableState(
+  public async findByOwnerUserTableState(
     tableState?: ITableStateRequest<ICustomer>
   ): Promise<ITableStateResponse<ICustomer[]>> {
     const response = await this._fetchAxios.post<
