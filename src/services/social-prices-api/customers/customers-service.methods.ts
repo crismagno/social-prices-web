@@ -64,7 +64,7 @@ export default class CustomersServiceMethods extends ServiceMethodsBase {
     const response = await this._fetchAxios.post<
       ITableStateResponse<ICustomer[]>
     >(
-      `${this._socialPricesApiV1}${CustomersServiceEnum.Methods.FIND_BY_OWNER_OF_USER_TABLE_STATE}`,
+      `${this._socialPricesApiV1}${CustomersServiceEnum.Methods.FIND_BY_OWNER_USER_TABLE_STATE}`,
       tableState,
       {
         headers: {

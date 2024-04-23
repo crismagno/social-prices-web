@@ -12,6 +12,7 @@ export const useFindStoreById = (
   fetchFindStoreById: () => void;
 } => {
   const [store, setStore] = useState<IStore | null>(null);
+
   const [isLoadingStore, setIsLoadingStore] = useState<boolean>(false);
 
   const fetchFindStoreById = useCallback(async () => {

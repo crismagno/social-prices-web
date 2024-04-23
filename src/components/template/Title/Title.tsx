@@ -1,5 +1,3 @@
-import { useRouter } from "next/navigation";
-
 import BackButton from "../../common/BackButton/BackButton";
 
 interface Props {
@@ -9,7 +7,6 @@ interface Props {
 }
 
 const Title: React.FC<Props> = ({ subtitle, title, hasBackButton }) => {
-  const router = useRouter();
   return (
     <div className="flex justify-between items-end">
       <div>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Button, Modal, Tag, Tooltip } from "antd";
+import { Button, Image, Modal, Tag, Tooltip } from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
@@ -29,6 +29,7 @@ import useAuthData from "../../data/hook/useAuthData";
 import { IPhoneNumber } from "../../shared/business/interfaces/phone-number";
 import UsersEnum from "../../shared/business/users/users.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
+import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../shared/utils/images/files-names";
 import { getImageAwsS3 } from "../../shared/utils/images/url-images";
 import {
@@ -54,7 +55,7 @@ export default function Profile() {
         <div className="flex justify-center absolute right-0 w-full -top-16">
           <Avatar
             onClick={() => setPreviewOpen(true)}
-            src={user?.avatar}
+            src={user.avatar}
             width={180}
             className="shadow-lg border-none cursor-pointer z-10"
             title="See avatar"
@@ -66,10 +67,11 @@ export default function Profile() {
           footer={null}
           onCancel={() => setPreviewOpen(false)}
         >
-          <img
+          <Image
             alt="preview image"
             style={{ width: "100%" }}
-            src={user?.avatar ? getImageAwsS3(user.avatar) : defaultAvatarImage}
+            preview={false}
+            src={user.avatar ? getImageAwsS3(user.avatar) : defaultAvatarImage}
           />
         </Modal>
 
@@ -91,13 +93,13 @@ export default function Profile() {
 
           <Tooltip title={"My Email, click to send a email"}>
             <a
-              href={`mailto:${user?.email}`}
+              href={`mailto:${user.email}`}
               className="flex items-center text-sm leading-normal mt-0 mb-2 text-gray-400 
             font-bold px-2 py-1 shadow-sm rounded-lg border border-gray-300
             w-min"
             >
               {IconAtSymbol("w-3.5 h-3.5")}
-              {user?.email}
+              {user.email}
             </a>
           </Tooltip>
         </div>
@@ -108,7 +110,7 @@ export default function Profile() {
               label="Logged By"
               className="mr-5"
               description={
-                user?.loggedByAuthProvider
+                user.loggedByAuthProvider
                   ? UsersEnum.ProviderLabels[user.loggedByAuthProvider]
                   : UsersEnum.ProviderLabels.OTHER
               }
@@ -119,7 +121,7 @@ export default function Profile() {
               label="Auth Provider"
               className="mr-5"
               description={
-                user?.authProvider
+                user.authProvider
                   ? UsersEnum.ProviderLabels[user.authProvider]
                   : ""
               }
@@ -132,13 +134,13 @@ export default function Profile() {
                 <Tag
                   color={
                     UsersEnum.StatusColors[
-                      user?.status ?? UsersEnum.Status.PENDING
+                      user.status ?? UsersEnum.Status.PENDING
                     ]
                   }
                 >
                   {
                     UsersEnum.StatusLabels[
-                      user?.status ?? UsersEnum.Status.PENDING
+                      user.status ?? UsersEnum.Status.PENDING
                     ]
                   }
                 </Tag>
@@ -153,21 +155,21 @@ export default function Profile() {
             <div className="flex flex-col justify-start w-1/2">
               <Description
                 label="My name"
-                description={`${user?.firstName ?? "-"} ${
-                  user?.middleName ?? "-"
-                } ${user?.lastName ?? "-"}`}
+                description={`${user.firstName ?? "-"} ${
+                  user.middleName ?? "-"
+                } ${user.lastName ?? "-"}`}
                 leftIcon={IconUser()}
               />
 
               <Description
                 label="Username"
-                description={user?.username ?? ""}
+                description={user.username ?? ""}
                 leftIcon={IconIdentification()}
               />
 
               <Description
                 label="Email"
-                description={user?.email ?? ""}
+                description={user.email ?? ""}
                 leftIcon={IconAtSymbol()}
               />
 
@@ -176,8 +178,8 @@ export default function Profile() {
                 className="overflow-x-auto"
                 description={
                   <div className="w-full flex">
-                    {user?.phoneNumbers?.length ? (
-                      user?.phoneNumbers.map((phoneNumber: IPhoneNumber) => (
+                    {user.phoneNumbers?.length ? (
+                      user.phoneNumbers.map((phoneNumber: IPhoneNumber) => (
                         <Tooltip
                           key={phoneNumber.number}
                           title={messengersToString(phoneNumber.messengers)}
@@ -188,7 +190,7 @@ export default function Profile() {
                         </Tooltip>
                       ))
                     ) : (
-                      <span className="text-sm text-gray-500">---</span>
+                      <span className="text-sm text-gray-500">-</span>
                     )}
                   </div>
                 }
@@ -202,8 +204,8 @@ export default function Profile() {
                 <div className={`flex flex-col overflow-x-auto`}>
                   <label className="">Addresses</label>
                   <div className="w-full overflow-x-auto flex">
-                    {user?.addresses?.length ? (
-                      user?.addresses.map((address) => (
+                    {user.addresses?.length ? (
+                      user.addresses.map((address) => (
                         <Tag key={address.uid}>
                           {createUserAddressName(address)}
                         </Tag>
@@ -219,9 +221,9 @@ export default function Profile() {
                 label="Birth date"
                 leftIcon={IconCake()}
                 description={
-                  user?.birthDate
-                    ? moment(user?.birthDate).format("MM/DD/YYYY")
-                    : "---"
+                  user.birthDate
+                    ? moment(user.birthDate).format(DatesEnum.Format.MMDDYYYY)
+                    : "-"
                 }
               />
 
@@ -232,23 +234,23 @@ export default function Profile() {
                   <Tag
                     color={
                       UsersEnum.GenderColors[
-                        user?.gender ?? UsersEnum.Gender.OTHER
+                        user.gender ?? UsersEnum.Gender.OTHER
                       ]
                     }
                   >
                     {
                       UsersEnum.GenderLabels[
-                        user?.gender ?? UsersEnum.Gender.OTHER
+                        user.gender ?? UsersEnum.Gender.OTHER
                       ]
                     }
                   </Tag>
                 }
               />
 
-              {user?.about && (
+              {user.about && (
                 <Description
                   label="About"
-                  description={user?.about}
+                  description={user.about}
                   leftIcon={IconPencilSquare()}
                 />
               )}

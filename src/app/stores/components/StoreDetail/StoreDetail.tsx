@@ -10,6 +10,7 @@ import {
 import { IPhoneNumber } from "../../../../shared/business/interfaces/phone-number";
 import StoresEnum from "../../../../shared/business/stores/stores.enum";
 import { IStore } from "../../../../shared/business/stores/stores.interface";
+import DatesEnum from "../../../../shared/utils/dates/dates.enum";
 import {
   createUserAddressName,
   messengersToString,
@@ -29,8 +30,8 @@ export const StoreDetail: React.FC<Props> = ({ store }) => {
             leftIcon={IconCake()}
             description={
               store?.startedAt
-                ? moment(store?.startedAt).format("MM/DD/YYYY")
-                : "---"
+                ? moment(store?.startedAt).format(DatesEnum.Format.MMDDYYYY)
+                : "-"
             }
           />
 
@@ -60,7 +61,7 @@ export const StoreDetail: React.FC<Props> = ({ store }) => {
                     </Tooltip>
                   ))
                 ) : (
-                  <span className="text-sm text-gray-500">---</span>
+                  <span className="text-sm text-gray-500">-</span>
                 )}
               </div>
             }
@@ -79,7 +80,7 @@ export const StoreDetail: React.FC<Props> = ({ store }) => {
                     </Tag>
                   ))
                 ) : (
-                  <span className="text-sm text-gray-500">---</span>
+                  <span className="text-sm text-gray-500">-</span>
                 )}
               </div>
             </div>

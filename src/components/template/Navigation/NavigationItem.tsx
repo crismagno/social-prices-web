@@ -25,7 +25,7 @@ const NavigationItem: React.FC<Props> = ({
 
   const classNameActiveLink: string = `
     bg-slate-100 hover:bg-slate-200 
-    dark:bg-gray-700 dark:text-yellow-200 dark:hover:bg-gray-800
+    dark:bg-gray-600 dark:text-yellow-200 dark:hover:bg-gray-800
   `;
 
   const classNameDefault: string =
