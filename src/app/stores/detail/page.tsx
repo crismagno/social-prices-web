@@ -330,6 +330,7 @@ export default function StoreDetailPage() {
                   isVisible={isVisibleEditAvatarModal}
                   onCancel={() => setIsVisibleAvatarModal(false)}
                   onOk={onImageModalOk}
+                  url={logoUrl}
                 />
               </Tooltip>
             </div>

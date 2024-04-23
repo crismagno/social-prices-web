@@ -9,7 +9,6 @@ import type { UploadFile } from "antd/es/upload/interface";
 import { PlusOutlined } from "@ant-design/icons";
 
 import { getBase64 } from "../../../shared/utils/images/helper";
-import { getImageAwsS3 } from "../../../shared/utils/images/url-images";
 
 interface Props {
   isVisible: boolean;
@@ -20,13 +19,11 @@ interface Props {
 
 const ImageModal: React.FC<Props> = ({ isVisible, onCancel, onOk, url }) => {
   const getDefaultFile = (): UploadFile => {
-    const defaultUrl: string = getImageAwsS3(url!);
-
     return {
       uid: "12345",
       name: "url.png",
       status: "done",
-      url: defaultUrl,
+      url: url!,
     };
   };
 
