@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Button, Image, Modal, Tag, Tooltip } from "antd";
+import { Button, Card, Image, Modal, Tag, Tooltip } from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation";
 import { EditOutlined } from "@ant-design/icons";
 
 import Avatar from "../../components/common/Avatar/Avatar";
-import Card from "../../components/common/Card/Card";
 import ContainerTitle from "../../components/common/ContainerTitle/ContainerTitle";
 import Description from "../../components/common/Description/Description";
 import {
@@ -222,7 +221,7 @@ export default function Profile() {
                 leftIcon={IconCake()}
                 description={
                   user.birthDate
-                    ? moment(user.birthDate).format(DatesEnum.Format.MMDDYYYY)
+                    ? moment(user.birthDate).format(DatesEnum.Format.DDMMYYY)
                     : "-"
                 }
               />

@@ -30,7 +30,7 @@ interface Props {
 const formSchema = z.object({
   firstName: z.string().nonempty("First name is required"),
   lastName: z.string().nonempty("Last name is required"),
-  birthDate: z.string().nonempty("Birth date name is required"),
+  birthDate: z.string().nonempty("Birth date is required"),
   middleName: z.string().nullable(),
   gender: z.string().nullable(),
   about: z.string().nullable(),

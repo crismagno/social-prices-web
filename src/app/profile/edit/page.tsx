@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 
+import { Card } from "antd";
+
 import Avatar from "../../../components/common/Avatar/Avatar";
-import Card from "../../../components/common/Card/Card";
 import EditAvatarModal from "../../../components/common/EditAvatarModal/EditAvatarModal";
 import Layout from "../../../components/template/Layout/Layout";
 import useAuthData from "../../../data/hook/useAuthData";

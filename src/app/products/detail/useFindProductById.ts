@@ -1,15 +1,8 @@
-import {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useState } from "react";
 
-import handleClientError
-  from '../../../components/common/handleClientError/handleClientError';
-import {
-  serviceMethodsInstance,
-} from '../../../services/social-prices-api/ServiceMethods';
-import { IProduct } from '../../../shared/business/products/products.interface';
+import handleClientError from "../../../components/common/handleClientError/handleClientError";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
+import { IProduct } from "../../../shared/business/products/products.interface";
 
 export const useFindProductById = (
   productsId: string | null
@@ -19,6 +12,7 @@ export const useFindProductById = (
   fetchFindProductById: () => void;
 } => {
   const [product, setProduct] = useState<IProduct | null>(null);
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchFindProductById = useCallback(async () => {

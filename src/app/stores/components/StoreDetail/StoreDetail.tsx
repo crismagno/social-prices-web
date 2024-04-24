@@ -30,7 +30,7 @@ export const StoreDetail: React.FC<Props> = ({ store }) => {
             leftIcon={IconCake()}
             description={
               store?.startedAt
-                ? moment(store?.startedAt).format(DatesEnum.Format.MMDDYYYY)
+                ? moment(store?.startedAt).format(DatesEnum.Format.DDMMYYY)
                 : "-"
             }
           />

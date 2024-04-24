@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Button, Card, Image, TablePaginationConfig, Tooltip } from "antd";
+import { Button, Card, Image, TablePaginationConfig, Tag, Tooltip } from "antd";
 import {
   FilterValue,
   SorterResult,
@@ -120,7 +120,7 @@ export default function Customers() {
               },
             },
             {
-              title: "First Name",
+              title: "Name",
               dataIndex: "firstName",
               key: "firstName",
               align: "center",
@@ -131,40 +131,39 @@ export default function Customers() {
               dataIndex: "email",
               key: "email",
               align: "center",
+              render: (email: string) => (
+                <a href={`mailto:${email}`} className="text-blue-500">
+                  {email}
+                </a>
+              ),
             },
             {
               title: "Gender",
               dataIndex: "gender",
               key: "gender",
               align: "center",
-              render: (gender: UsersEnum.Gender | null) =>
-                gender ? UsersEnum.GenderLabels[gender] : "-",
+              filters: Object.keys(UsersEnum.Gender).map((gender: string) => ({
+                text: UsersEnum.GenderLabels[gender as UsersEnum.Gender],
+                value: gender,
+              })),
+              render: (gender: UsersEnum.Gender | null) => (
+                <Tag
+                  color={
+                    UsersEnum.GenderColors[gender ?? UsersEnum.Gender.OTHER]
+                  }
+                >
+                  {UsersEnum.GenderLabels[gender ?? UsersEnum.Gender.OTHER]}
+                </Tag>
+              ),
             },
             {
               title: "Birth Date",
               dataIndex: "birthDate",
               key: "birthDate",
               align: "center",
+              sorter: true,
               render: (birthDate: Date) =>
-                moment(birthDate).format(DatesEnum.Format.YYYYMMDD_DASHED),
-            },
-            {
-              title: "Created At",
-              dataIndex: "createdAt",
-              key: "createdAt",
-              align: "center",
-              render: (createdAt: Date) =>
-                moment(createdAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
-              sorter: true,
-            },
-            {
-              title: "Updated At",
-              dataIndex: "updatedAt",
-              key: "updatedAt",
-              align: "center",
-              render: (updatedAt: Date) =>
-                moment(updatedAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
-              sorter: true,
+                moment(birthDate).format(DatesEnum.Format.DDMMYYY),
             },
             {
               title: "Action",
