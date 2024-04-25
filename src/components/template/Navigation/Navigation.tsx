@@ -16,6 +16,7 @@ import {
   IconUsers,
 } from "../../common/icons/icons";
 import NavigationItem from "./NavigationItem";
+import { SalesMenu } from "./SalesMenu/SalesMenu";
 
 interface Props {}
 
@@ -73,6 +74,8 @@ const Navigation: React.FC<Props> = ({}) => {
           text="Customers"
           url={Urls.CUSTOMERS}
         />
+
+        <SalesMenu />
       </ul>
 
       <ul className="flex flex-row">

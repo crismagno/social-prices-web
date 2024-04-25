@@ -28,6 +28,9 @@ const Urls = {
   CUSTOMERS: "/customers",
   NEW_CUSTOMER: "/customers/detail",
   EDIT_CUSTOMER: "/customers/detail?cid=:customerId",
+
+  // sales
+  SALES: "/sales",
 };
 
 export default Urls;
