@@ -10,6 +10,7 @@ export const useFindProductsByUser = (): {
   fetchFindProductsByUser: () => Promise<void>;
 } => {
   const [products, setProducts] = useState<IProduct[]>([]);
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchFindProductsByUser = useCallback(async () => {

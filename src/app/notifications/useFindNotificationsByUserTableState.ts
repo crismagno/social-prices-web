@@ -2,36 +2,35 @@ import { useCallback, useEffect, useState } from "react";
 
 import handleClientError from "../../components/common/handleClientError/handleClientError";
 import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
-import { IProduct } from "../../shared/business/products/products.interface";
+import { INotification } from "../../shared/business/notifications/notification.interface";
 import {
   ITableStateRequest,
   ITableStateResponse,
 } from "../../shared/utils/table/table-state.interface";
 
-export const useFindProductsByUserTableState = (
-  tableState?: ITableStateRequest<IProduct>
+export const useFindNotificationsByUserTableState = (
+  tableState?: ITableStateRequest<INotification>
 ): {
   isLoading: boolean;
-  products: IProduct[];
+  notifications: INotification[];
   total: number;
-  fetchFindProductsByUserTableState: () => Promise<void>;
+  fetchFindNotificationsByUserTableState: () => Promise<void>;
 } => {
-  const [products, setProducts] = useState<IProduct[]>([]);
+  const [notifications, setNotifications] = useState<INotification[]>([]);
 
   const [total, setTotal] = useState<number>(0);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const fetchFindProductsByUserTableState = useCallback(async () => {
+  const fetchFindNotificationsByUserTableState = useCallback(async () => {
     try {
       setIsLoading(true);
-
-      const response: ITableStateResponse<IProduct[]> =
-        await serviceMethodsInstance.productsServiceMethods.findByUserTableState(
+      const response: ITableStateResponse<INotification[]> =
+        await serviceMethodsInstance.notificationsServiceMethods.findByUserTableState(
           tableState
         );
 
-      setProducts(response.data);
+      setNotifications(response.data);
       setTotal(response.total);
     } catch (error: any) {
       handleClientError(error);
@@ -41,13 +40,13 @@ export const useFindProductsByUserTableState = (
   }, [tableState]);
 
   useEffect(() => {
-    fetchFindProductsByUserTableState();
-  }, [fetchFindProductsByUserTableState]);
+    fetchFindNotificationsByUserTableState();
+  }, [fetchFindNotificationsByUserTableState]);
 
   return {
     isLoading,
     total,
-    products,
-    fetchFindProductsByUserTableState,
+    notifications,
+    fetchFindNotificationsByUserTableState,
   };
 };
