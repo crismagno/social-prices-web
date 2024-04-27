@@ -41,4 +41,18 @@ export default class NotificationsServiceMethods extends ServiceMethodsBase {
 
     return response.data;
   }
+
+  public async countNotSeenByUser(): Promise<number> {
+    const response = await this._fetchAxios.get<number>(
+      `${this._socialPricesApiV1}${NotificationServiceEnum.Methods.COUNT_NOT_SEEN_BY_USER}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
 }

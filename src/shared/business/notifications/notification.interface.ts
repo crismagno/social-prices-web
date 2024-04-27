@@ -10,4 +10,5 @@ export interface INotification extends ICreatedAtEntity, IUpdatedAtEntity {
   subtitle: string | null;
   type: NotificationsEnum.Type;
   createdByUserId: string;
+  isSeen: boolean;
 }
