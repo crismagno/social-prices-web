@@ -19,7 +19,9 @@ const Layout: React.FC<Props> = ({
   children,
   hasBackButton,
 }) => {
-  const { theme } = useAppData();
+  const {
+    theme: { theme },
+  } = useAppData();
 
   return (
     <ForceAuth>
