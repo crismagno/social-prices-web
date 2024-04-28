@@ -31,8 +31,8 @@ export default function NotificationsPage() {
 
   useEffect(() => {
     const notificationsNotSeenIds: string[] = notifications
-      .filter((notification) => !notification.isSeen)
-      .map((notification) => notification._id);
+      .filter((notification: INotification) => !notification.isSeen)
+      .map((notification: INotification) => notification._id);
 
     if (notificationsNotSeenIds.length > 0) {
       const updateNotificationsToSeen = async () => {

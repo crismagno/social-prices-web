@@ -76,11 +76,13 @@ const Navigation: React.FC<Props> = ({}) => {
           text="Stores"
           url={Urls.STORES}
         />
+
         <NavigationItem
           icon={IconSquare2x2()}
           text="Products"
           url={Urls.PRODUCTS}
         />
+
         <NavigationItem
           icon={IconUsers()}
           text="Customers"
