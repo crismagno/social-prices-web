@@ -16,6 +16,7 @@ export const useFindProductsByUser = (): {
   const fetchFindProductsByUser = useCallback(async () => {
     try {
       setIsLoading(true);
+
       const response: IProduct[] =
         await serviceMethodsInstance.productsServiceMethods.findByUser();
 

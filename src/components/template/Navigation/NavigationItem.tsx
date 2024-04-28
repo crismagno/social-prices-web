@@ -2,6 +2,8 @@ import { Tooltip } from "antd";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import Loading from "../../common/Loading/Loading";
+
 interface Props {
   icon?: any;
   text?: string;
@@ -10,6 +12,7 @@ interface Props {
   className?: string;
   title?: string;
   onClick?: () => Promise<void> | void;
+  isLoading?: boolean;
 }
 
 const NavigationItem: React.FC<Props> = ({
@@ -20,6 +23,7 @@ const NavigationItem: React.FC<Props> = ({
   className,
   title,
   onClick,
+  isLoading,
 }) => {
   const pathname = usePathname();
 
@@ -42,6 +46,12 @@ const NavigationItem: React.FC<Props> = ({
     );
   };
 
+  const loadingOrRenderLink = isLoading ? (
+    <Loading width={30} height={30} />
+  ) : (
+    renderLink()
+  );
+
   return (
     <li
       onClick={onClick}
@@ -55,10 +65,10 @@ const NavigationItem: React.FC<Props> = ({
       <Tooltip title={title}>
         {url ? (
           <Link href={url} className={classNameDefault}>
-            {renderLink()}
+            {loadingOrRenderLink}
           </Link>
         ) : (
-          <div className={classNameDefault}>{renderLink()}</div>
+          <div className={classNameDefault}>{loadingOrRenderLink}</div>
         )}
       </Tooltip>
     </li>

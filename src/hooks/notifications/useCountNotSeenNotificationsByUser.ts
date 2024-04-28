@@ -2,25 +2,24 @@ import { useCallback, useEffect, useState } from "react";
 
 import handleClientError from "../../components/common/handleClientError/handleClientError";
 import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
-import { IStore } from "../../shared/business/stores/stores.interface";
 
-export const useFindStoresByUser = (): {
+export const useCountNotSeenNotificationsByUser = (): {
   isLoading: boolean;
-  stores: IStore[];
-  fetchFindStoresByUser: () => Promise<void>;
+  count: number;
+  fetchCountNotSeenNotificationsByUser: () => Promise<void>;
 } => {
-  const [stores, setStores] = useState<IStore[]>([]);
+  const [count, setCount] = useState<number>(0);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const fetchFindStoresByUser = useCallback(async () => {
+  const fetchCountNotSeenNotificationsByUser = useCallback(async () => {
     try {
       setIsLoading(true);
 
-      const response: IStore[] =
-        await serviceMethodsInstance.storesServiceMethods.findByUser();
+      const response: number =
+        await serviceMethodsInstance.notificationsServiceMethods.countNotSeenByUser();
 
-      setStores(response);
+      setCount(response);
     } catch (error: any) {
       handleClientError(error);
     } finally {
@@ -29,12 +28,12 @@ export const useFindStoresByUser = (): {
   }, []);
 
   useEffect(() => {
-    fetchFindStoresByUser();
-  }, [fetchFindStoresByUser]);
+    fetchCountNotSeenNotificationsByUser();
+  }, [fetchCountNotSeenNotificationsByUser]);
 
   return {
     isLoading,
-    stores,
-    fetchFindStoresByUser,
+    count,
+    fetchCountNotSeenNotificationsByUser,
   };
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Card, TablePaginationConfig, Tag } from "antd";
 import {
@@ -13,6 +13,7 @@ import { RecordType } from "zod";
 
 import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
 import Layout from "../../components/template/Layout/Layout";
+import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
 import { INotification } from "../../shared/business/notifications/notification.interface";
 import NotificationsEnum from "../../shared/business/notifications/notifications.enum";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
@@ -27,6 +28,22 @@ export default function NotificationsPage() {
 
   const { isLoading, notifications, total } =
     useFindNotificationsByUserTableState(tableStateRequest);
+
+  useEffect(() => {
+    const notificationsNotSeenIds: string[] = notifications
+      .filter((notification) => !notification.isSeen)
+      .map((notification) => notification._id);
+
+    if (notificationsNotSeenIds.length > 0) {
+      const updateNotificationsToSeen = async () => {
+        await serviceMethodsInstance.notificationsServiceMethods.updateToSeen(
+          notificationsNotSeenIds
+        );
+      };
+
+      updateNotificationsToSeen();
+    }
+  }, [notifications]);
 
   const onSearch = (value: string) => {
     setTableStateRequest({ ...tableStateRequest, search: value?.trim() });

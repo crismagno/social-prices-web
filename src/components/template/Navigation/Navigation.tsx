@@ -3,12 +3,14 @@ import { useState } from "react";
 import { Modal } from "antd";
 
 import useAuthData from "../../../data/hook/useAuthData";
+import { useCountNotSeenNotificationsByUser } from "../../../hooks/notifications/useCountNotSeenNotificationsByUser";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import { getUserName } from "../../../shared/utils/string-extensions/string-extensions";
 import Avatar from "../../common/Avatar/Avatar";
 import {
   IconAdjustmentsHorizontal,
   IconBell,
+  IconBellAlert,
   IconBuildingStoreFront,
   IconHome,
   IconLogout,
@@ -23,6 +25,11 @@ interface Props {}
 const Navigation: React.FC<Props> = ({}) => {
   const { user, logout } = useAuthData();
 
+  const {
+    count: countNotificationNotSeen,
+    isLoading: isLoadingCountNotificationNotSeen,
+  } = useCountNotSeenNotificationsByUser();
+
   const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
 
   if (!user) {
@@ -31,7 +38,7 @@ const Navigation: React.FC<Props> = ({}) => {
 
   return (
     <div
-      className="max-h-24 flex flex-row 
+      className="max-h-24 flex flex-row
       shadow-lg shadow-slate-600 dark:shadow-white 
      bg-white dark:bg-gray-800 dark:text-white w-screen overflow-x-auto
       fixed bottom-0 left-0"
@@ -48,9 +55,14 @@ const Navigation: React.FC<Props> = ({}) => {
         <NavigationItem icon={IconHome} text="Home" url={Urls.DASHBOARD} />
 
         <NavigationItem
-          icon={IconBell}
+          icon={
+            countNotificationNotSeen
+              ? IconBellAlert("animate-pulse text-yellow-500")
+              : IconBell()
+          }
           text="Notifications"
           url={Urls.NOTIFICATIONS}
+          isLoading={isLoadingCountNotificationNotSeen}
         />
 
         <NavigationItem
