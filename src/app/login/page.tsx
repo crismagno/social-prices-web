@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import AuthInput from "../../components/common/AuthInput/AuthInput";
 import handleClientError from "../../components/common/handleClientError/handleClientError";
 import Loading from "../../components/common/Loading/Loading";
-import useAuthData from "../../data/hook/useAuthData";
+import useAuthData from "../../data/context/auth/useAuthData";
 import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
 import LoginEnum from "../../shared/common/enums/login.enum";
 import Urls from "../../shared/common/routes-app/routes-app";

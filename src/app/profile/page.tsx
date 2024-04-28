@@ -24,7 +24,7 @@ import {
 } from "../../components/common/icons/icons";
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import Layout from "../../components/template/Layout/Layout";
-import useAuthData from "../../data/hook/useAuthData";
+import useAuthData from "../../data/context/auth/useAuthData";
 import { IPhoneNumber } from "../../shared/business/interfaces/phone-number";
 import UsersEnum from "../../shared/business/users/users.enum";
 import Urls from "../../shared/common/routes-app/routes-app";

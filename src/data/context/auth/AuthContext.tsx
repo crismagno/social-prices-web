@@ -13,15 +13,15 @@ import {
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
-import handleClientError from "../../components/common/handleClientError/handleClientError";
-import firebaseApp from "../../services/firebase/config";
-import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
-import IUser from "../../shared/business/users/user.interface";
-import UsersEnum from "../../shared/business/users/users.enum";
-import CookiesEnum from "../../shared/common/cookies/cookies.enum";
-import LocalStorageEnum from "../../shared/common/local-storage/local-storage.enum";
-import LocalStorageUserMethods from "../../shared/common/local-storage/methods/local-storage-user.methods";
-import Urls from "../../shared/common/routes-app/routes-app";
+import handleClientError from "../../../components/common/handleClientError/handleClientError";
+import firebaseApp from "../../../services/firebase/config";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
+import IUser from "../../../shared/business/users/user.interface";
+import UsersEnum from "../../../shared/business/users/users.enum";
+import CookiesEnum from "../../../shared/common/cookies/cookies.enum";
+import LocalStorageEnum from "../../../shared/common/local-storage/local-storage.enum";
+import LocalStorageUserMethods from "../../../shared/common/local-storage/methods/local-storage-user.methods";
+import Urls from "../../../shared/common/routes-app/routes-app";
 
 const googleProvider: GoogleAuthProvider = new GoogleAuthProvider();
 googleProvider.addScope("https://www.googleapis.com/auth/contacts.readonly");
@@ -31,6 +31,7 @@ auth.languageCode = "it";
 
 export interface IAuthContext {
   user: IUser | null;
+  isLogged: boolean;
   isLoading: boolean;
   loginGoogle: () => Promise<void>;
   validateSignInCode: (codeValue: string) => Promise<boolean>;
@@ -44,6 +45,7 @@ export interface IAuthContext {
 const AuthContext = createContext<IAuthContext>({
   user: null,
   isLoading: true,
+  isLogged: false,
   validateSignInCode: async (codeValue: string): Promise<any> => {},
   setUser: (user: IUser | null): void => {},
   updateUserSession: (newUser: IUser | null): void => {},
@@ -77,7 +79,7 @@ const __normalizeUser = async (userFirebase: User): Promise<IUser> => {
             messengers: [],
           },
         ]
-      : null,
+      : [],
     status: null,
     addresses: [],
     birthDate: null,
@@ -129,6 +131,8 @@ export const AuthProvider = ({ children }: { children?: any }) => {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const [isLogged, setIsLogged] = useState<boolean>(false);
+
   const router = useRouter();
 
   const _settingSession = (user: IUser | null) => {
@@ -137,6 +141,8 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       __managerCookie(true);
       __managerLocalStorage(user);
       setIsLoading(false);
+      setIsLoading(false);
+      setIsLogged(true);
       return user.email;
     }
 
@@ -144,6 +150,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     __managerCookie(false);
     __managerLocalStorage(null);
     setIsLoading(false);
+    setIsLogged(false);
     return null;
   };
 
@@ -407,6 +414,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     <AuthContext.Provider
       value={{
         user,
+        isLogged,
         loginGoogle,
         isLoading,
         logout,

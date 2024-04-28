@@ -13,6 +13,7 @@ import { RecordType } from "zod";
 
 import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
 import Layout from "../../components/template/Layout/Layout";
+import useAppData from "../../data/context/app/useAppData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
 import { INotification } from "../../shared/business/notifications/notification.interface";
 import NotificationsEnum from "../../shared/business/notifications/notifications.enum";
@@ -22,6 +23,10 @@ import { ITableStateRequest } from "../../shared/utils/table/table-state.interfa
 import { useFindNotificationsByUserTableState } from "./useFindNotificationsByUserTableState";
 
 export default function NotificationsPage() {
+  const {
+    notifications: { fetchCountNotSeenNotificationsByUser },
+  } = useAppData();
+
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<INotification> | undefined
   >(createTableState({ sort: { field: "createdAt", order: "ascend" } }));
@@ -39,6 +44,8 @@ export default function NotificationsPage() {
         await serviceMethodsInstance.notificationsServiceMethods.updateToSeen(
           notificationsNotSeenIds
         );
+
+        await fetchCountNotSeenNotificationsByUser();
       };
 
       updateNotificationsToSeen();

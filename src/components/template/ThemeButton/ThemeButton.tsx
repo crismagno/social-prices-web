@@ -2,11 +2,13 @@
 
 import { Tooltip } from "antd";
 
-import useAppData from "../../../data/hook/useAppData";
+import useAppData from "../../../data/context/app/useAppData";
 import ThemeEnum from "../../../shared/common/enums/theme.enum";
 
 const ThemeButton: React.FC = () => {
-  const { changeTheme, theme } = useAppData();
+  const {
+    theme: { changeTheme, theme },
+  } = useAppData();
 
   return (
     <Tooltip

@@ -2,8 +2,8 @@ import { useState } from "react";
 
 import { Modal } from "antd";
 
-import useAuthData from "../../../data/hook/useAuthData";
-import { useCountNotSeenNotificationsByUser } from "../../../hooks/notifications/useCountNotSeenNotificationsByUser";
+import useAppData from "../../../data/context/app/useAppData";
+import useAuthData from "../../../data/context/auth/useAuthData";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import { getUserName } from "../../../shared/utils/string-extensions/string-extensions";
 import Avatar from "../../common/Avatar/Avatar";
@@ -26,9 +26,11 @@ const Navigation: React.FC<Props> = ({}) => {
   const { user, logout } = useAuthData();
 
   const {
-    count: countNotificationNotSeen,
-    isLoading: isLoadingCountNotificationNotSeen,
-  } = useCountNotSeenNotificationsByUser();
+    notifications: {
+      countNotificationNotSeen,
+      isLoadingCountNotificationNotSeen,
+    },
+  } = useAppData();
 
   const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
 

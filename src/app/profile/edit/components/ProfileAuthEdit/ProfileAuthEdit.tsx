@@ -4,7 +4,7 @@ import { Button } from "antd";
 
 import ContainerTitle from "../../../../../components/common/ContainerTitle/ContainerTitle";
 import DescriptionInput from "../../../../../components/common/DescriptionInput/DescriptionInput";
-import useAuthData from "../../../../../data/hook/useAuthData";
+import useAuthData from "../../../../../data/context/auth/useAuthData";
 import Urls from "../../../../../shared/common/routes-app/routes-app";
 
 const ProfileAuthEdit: React.FC = () => {

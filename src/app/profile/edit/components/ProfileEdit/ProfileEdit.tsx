@@ -17,7 +17,7 @@ import FormSelect, {
 } from "../../../../../components/common/FormSelect/FormSelect";
 import FormTextarea from "../../../../../components/common/FormTextarea/FormTextarea";
 import handleClientError from "../../../../../components/common/handleClientError/handleClientError";
-import useAuthData from "../../../../../data/hook/useAuthData";
+import useAuthData from "../../../../../data/context/auth/useAuthData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/ServiceMethods";
 import IUser from "../../../../../shared/business/users/user.interface";
 import UsersEnum from "../../../../../shared/business/users/users.enum";

@@ -7,7 +7,7 @@ import { Card } from "antd";
 import Avatar from "../../../components/common/Avatar/Avatar";
 import EditAvatarModal from "../../../components/common/EditAvatarModal/EditAvatarModal";
 import Layout from "../../../components/template/Layout/Layout";
-import useAuthData from "../../../data/hook/useAuthData";
+import useAuthData from "../../../data/context/auth/useAuthData";
 import ProfileAddressesEdit from "./components/ProfileAddressesEdit/ProfileAddressesEdit";
 import ProfileAuthEdit from "./components/ProfileAuthEdit/ProfileAuthEdit";
 import ProfileEdit from "./components/ProfileEdit/ProfileEdit";

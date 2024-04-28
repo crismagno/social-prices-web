@@ -10,7 +10,7 @@ import ButtonCommon from "../../components/common/ButtonCommon/ButtonCommon";
 import handleClientError from "../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../components/common/HrCustom/HrCustom";
 import Loading from "../../components/common/Loading/Loading";
-import useAuthData from "../../data/hook/useAuthData";
+import useAuthData from "../../data/context/auth/useAuthData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
 import IUser from "../../shared/business/users/user.interface";
 

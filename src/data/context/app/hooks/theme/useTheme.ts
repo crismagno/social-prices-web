@@ -1,21 +1,19 @@
-"use client";
+import { useEffect, useState } from "react";
 
-import { createContext, useEffect, useState } from "react";
+import ThemeEnum from "../../../../../shared/common/enums/theme.enum";
+import LocalStorageThemeMethods from "../../../../../shared/common/local-storage/methods/local-storage-theme.methods";
 
-import ThemeEnum from "../../shared/common/enums/theme.enum";
-import LocalStorageThemeMethods from "../../shared/common/local-storage/methods/local-storage-theme.methods";
-
-interface IAppContext {
+export interface IAppContextTheme {
   theme: ThemeEnum.Theme;
   changeTheme: () => void;
 }
 
-const AppContext = createContext<IAppContext>({
+export const useThemeDefaultValue: IAppContextTheme = {
   theme: ThemeEnum.Theme.LIGHT,
   changeTheme: () => {},
-});
+};
 
-export function AppProvider({ children }: any) {
+export const useTheme = (): IAppContextTheme => {
   const [theme, setTheme] = useState<ThemeEnum.Theme>(ThemeEnum.Theme.LIGHT);
 
   const changeTheme = () => {
@@ -38,16 +36,8 @@ export function AppProvider({ children }: any) {
     }
   }, []);
 
-  return (
-    <AppContext.Provider
-      value={{
-        theme,
-        changeTheme,
-      }}
-    >
-      {children}
-    </AppContext.Provider>
-  );
-}
-
-export default AppContext;
+  return {
+    theme,
+    changeTheme,
+  };
+};

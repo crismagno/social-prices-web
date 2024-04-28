@@ -1,6 +1,6 @@
 "use client";
 
-import useAppData from "../../../data/hook/useAppData";
+import useAppData from "../../../data/context/app/useAppData";
 import ForceAuth from "../../auth/ForceAuth/ForceAuth";
 import Content from "../Content/Content";
 import Header from "../Header/Header";

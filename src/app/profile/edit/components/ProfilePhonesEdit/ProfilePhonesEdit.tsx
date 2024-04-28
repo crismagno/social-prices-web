@@ -15,7 +15,7 @@ import {
   phoneNumberFormSchema,
   PhoneNumbers,
 } from "../../../../../components/common/PhoneNumbers/PhoneNumbers";
-import useAuthData from "../../../../../data/hook/useAuthData";
+import useAuthData from "../../../../../data/context/auth/useAuthData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/ServiceMethods";
 import { IPhoneNumber } from "../../../../../shared/business/interfaces/phone-number";
 import IUser from "../../../../../shared/business/users/user.interface";

@@ -4,7 +4,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 
-import useAuthData from "../../../data/hook/useAuthData";
+import useAuthData from "../../../data/context/auth/useAuthData";
 import CookiesEnum from "../../../shared/common/cookies/cookies.enum";
 import LocalStorageEnum from "../../../shared/common/local-storage/local-storage.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
