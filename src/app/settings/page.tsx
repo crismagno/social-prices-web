@@ -5,7 +5,7 @@ import Description from "../../components/common/Description/Description";
 import Layout from "../../components/template/Layout/Layout";
 import ThemeButton from "../../components/template/ThemeButton/ThemeButton";
 
-export default function Settings() {
+export default function SettingsPage() {
   return (
     <Layout
       subtitle="System settings"

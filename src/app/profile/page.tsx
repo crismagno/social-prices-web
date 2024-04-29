@@ -37,7 +37,7 @@ import {
   messengersToString,
 } from "../../shared/utils/string-extensions/string-extensions";
 
-export default function Profile() {
+export default function ProfilePage() {
   const { user } = useAuthData();
 
   const router: AppRouterInstance = useRouter();

@@ -13,7 +13,7 @@ import Layout from "../../../components/template/Layout/Layout";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import { useFindStoreById } from "../detail/useFindStoreById";
 
-export default function Store() {
+export default function StorePage() {
   const router: AppRouterInstance = useRouter();
 
   const params: Params = useParams();

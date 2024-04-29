@@ -2,16 +2,10 @@
 
 import { useEffect, useState } from "react";
 
-import { Card, TablePaginationConfig, Tag } from "antd";
-import {
-  FilterValue,
-  SorterResult,
-  TableCurrentDataSource,
-} from "antd/es/table/interface";
+import { Button, Card, List, Tag } from "antd";
 import moment from "moment";
-import { RecordType } from "zod";
+import VirtualList from "rc-virtual-list";
 
-import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
 import Layout from "../../components/template/Layout/Layout";
 import useAppData from "../../data/context/app/useAppData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
@@ -22,6 +16,8 @@ import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { useFindNotificationsByUserTableState } from "./useFindNotificationsByUserTableState";
 
+const containerHeight: number = 600;
+
 export default function NotificationsPage() {
   const {
     notifications: { fetchCountNotSeenNotificationsByUser },
@@ -29,10 +25,17 @@ export default function NotificationsPage() {
 
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<INotification> | undefined
-  >(createTableState({ sort: { field: "createdAt", order: "ascend" } }));
+  >(
+    createTableState({
+      sort: { field: "createdAt", order: "descend" },
+      pagination: { pageSize: 10, skip: 0, current: undefined, total: 0 },
+    })
+  );
 
-  const { isLoading, notifications, total } =
-    useFindNotificationsByUserTableState(tableStateRequest);
+  const { isLoading, notifications } = useFindNotificationsByUserTableState(
+    tableStateRequest,
+    true
+  );
 
   useEffect(() => {
     const notificationsNotSeenIds: string[] = notifications
@@ -52,91 +55,81 @@ export default function NotificationsPage() {
     }
   }, [notifications]);
 
-  const onSearch = (value: string) => {
-    setTableStateRequest({ ...tableStateRequest, search: value?.trim() });
-  };
-
-  const handleChangeTable = (
-    pagination: TablePaginationConfig,
-    filters: Record<string, FilterValue | null>,
-    sorter: SorterResult<RecordType> | SorterResult<RecordType>[],
-    extra: TableCurrentDataSource<RecordType>
-  ) => {
+  const handleChangeTable = () => {
     setTableStateRequest({
       ...tableStateRequest,
-      filters,
-      pagination,
-      sort: {
-        field: sorter.field ?? "createdAt",
-        order: sorter.order ?? "ascend",
+      filters: {},
+      pagination: {
+        total: 0,
+        current: undefined,
+        pageSize: 10,
+        skip: notifications.length,
       },
-      action: extra.action,
     });
+  };
+
+  const onScroll = (e: React.UIEvent<HTMLElement, UIEvent>) => {
+    if (
+      Math.abs(
+        e.currentTarget.scrollHeight -
+          e.currentTarget.scrollTop -
+          containerHeight
+      ) <= 1
+    ) {
+      handleChangeTable();
+    }
   };
 
   return (
     <Layout subtitle="My Notifications" title="Notifications" hasBackButton>
       <Card title="Notifications" className="h-min-80 mt-5">
-        <TableCustomAntd<INotification>
-          rowKey={"_id"}
-          onChange={handleChangeTable}
-          dataSource={notifications}
-          columns={[
-            {
-              title: "Title",
-              dataIndex: "title",
-              key: "title",
-              align: "center",
-              render: (title: string) => <b>{title}</b>,
-            },
-            {
-              title: "Subtitle",
-              dataIndex: "subtitle",
-              key: "subtitle",
-              align: "center",
-            },
-            {
-              title: "Content",
-              dataIndex: "content",
-              key: "content",
-              align: "center",
-            },
-            {
-              title: "Type",
-              dataIndex: "type",
-              key: "type",
-              align: "center",
-              render: (type: NotificationsEnum.Type) => (
-                <Tag color={NotificationsEnum.TypeColors[type]}>
-                  {NotificationsEnum.TypeLabels[type]}
-                </Tag>
-              ),
-            },
-            {
-              title: "Created At",
-              dataIndex: "createdAt",
-              key: "createdAt",
-              align: "center",
-              render: (createdAt: Date) =>
-                moment(createdAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
-              sorter: true,
-            },
-            {
-              title: "Updated At",
-              dataIndex: "updatedAt",
-              key: "updatedAt",
-              align: "center",
-              render: (updatedAt: Date) =>
-                moment(updatedAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
-              sorter: true,
-            },
-          ]}
-          search={{ onSearch, placeholder: "Search notifications.." }}
-          loading={isLoading}
-          pagination={{
-            total,
-          }}
-        />
+        <List loading={isLoading}>
+          <VirtualList
+            data={notifications}
+            height={containerHeight}
+            itemHeight={50}
+            itemKey="_id"
+            onScroll={onScroll}
+          >
+            {(notification: INotification) => (
+              <List.Item key={notification._id}>
+                <List.Item.Meta
+                  title={
+                    <>
+                      <div>
+                        {notification.title}
+                        <Tag
+                          className="ml-2"
+                          color={
+                            NotificationsEnum.TypeColors[notification.type]
+                          }
+                        >
+                          {NotificationsEnum.TypeLabels[notification.type]}
+                        </Tag>
+                      </div>
+                    </>
+                  }
+                  description={
+                    <div className="flex flex-col">
+                      <div>{notification.content}</div>
+                      <small>
+                        {moment(notification.createdAt).format(
+                          DatesEnum.Format.DDMMYYYYhhmmss
+                        )}
+                      </small>
+                    </div>
+                  }
+                />
+              </List.Item>
+            )}
+          </VirtualList>
+
+          <div className="flex justify-center">
+            <Button onClick={handleChangeTable} loading={isLoading}>
+              Load More
+            </Button>
+          </div>
+        </List>
       </Card>
     </Layout>
   );

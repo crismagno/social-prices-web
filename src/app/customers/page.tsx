@@ -28,7 +28,7 @@ import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { useFindCustomersByOwnerOfUserTableState } from "./useFindCustomersByOwnerOfUserTableState";
 
-export default function Customers() {
+export default function CustomersPage() {
   const router: AppRouterInstance = useRouter();
 
   const [tableStateRequest, setTableStateRequest] = useState<

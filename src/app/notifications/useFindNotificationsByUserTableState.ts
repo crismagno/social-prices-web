@@ -9,7 +9,8 @@ import {
 } from "../../shared/utils/table/table-state.interface";
 
 export const useFindNotificationsByUserTableState = (
-  tableState?: ITableStateRequest<INotification>
+  tableState?: ITableStateRequest<INotification>,
+  useConcat: boolean = false
 ): {
   isLoading: boolean;
   notifications: INotification[];
@@ -25,19 +26,25 @@ export const useFindNotificationsByUserTableState = (
   const fetchFindNotificationsByUserTableState = useCallback(async () => {
     try {
       setIsLoading(true);
+
       const response: ITableStateResponse<INotification[]> =
         await serviceMethodsInstance.notificationsServiceMethods.findByUserTableState(
           tableState
         );
 
-      setNotifications(response.data);
+      if (useConcat) {
+        setNotifications((value) => [...value, ...response.data]);
+      } else {
+        setNotifications(response.data);
+      }
+
       setTotal(response.total);
     } catch (error: any) {
       handleClientError(error);
     } finally {
       setIsLoading(false);
     }
-  }, [tableState]);
+  }, [tableState, useConcat]);
 
   useEffect(() => {
     fetchFindNotificationsByUserTableState();

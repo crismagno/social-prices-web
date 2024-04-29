@@ -46,7 +46,7 @@ import { useGetCategoriesByType } from "../categories/useGetCategoriesByType";
 import { useFindStoresByUser } from "../stores/useFindStoresByUser";
 import { useFindProductsByUserTableState } from "./useFindProductsByUserTableState";
 
-export default function Products() {
+export default function ProductsPage() {
   const router: AppRouterInstance = useRouter();
 
   const [tableStateRequest, setTableStateRequest] = useState<

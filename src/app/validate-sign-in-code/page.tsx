@@ -13,7 +13,7 @@ import useAuthData from "../../data/context/auth/useAuthData";
 import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
 import Urls from "../../shared/common/routes-app/routes-app";
 
-export default function ValidateSignInCode() {
+export default function ValidateSignInCodePage() {
   useForceRedirect();
 
   const { user, validateSignInCode, setUser } = useAuthData();

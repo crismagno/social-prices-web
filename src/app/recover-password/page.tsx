@@ -11,7 +11,7 @@ import HrCustom from "../../components/common/HrCustom/HrCustom";
 import Loading from "../../components/common/Loading/Loading";
 import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
 
-export default function RecoverPassword() {
+export default function RecoverPasswordPage() {
   const router = useRouter();
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);

@@ -13,11 +13,13 @@ export const useGetCategoriesByType = (
   fetchFindCategoriesByType: () => Promise<void>;
 } => {
   const [categories, setCategories] = useState<ICategory[]>([]);
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchFindCategoriesByType = useCallback(async () => {
     try {
       setIsLoading(true);
+
       const response: ICategory[] =
         await serviceMethodsInstance.categoriesServiceMethods.findByType(type);
 

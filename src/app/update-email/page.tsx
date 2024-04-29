@@ -14,7 +14,7 @@ import useAuthData from "../../data/context/auth/useAuthData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
 import IUser from "../../shared/business/users/user.interface";
 
-export default function UpdateEmail() {
+export default function UpdateEmailPage() {
   const { updateUserSession } = useAuthData();
 
   const router = useRouter();

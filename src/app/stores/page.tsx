@@ -33,7 +33,7 @@ import { useGetCategoriesByType } from "../categories/useGetCategoriesByType";
 import { StoreDetail } from "./components/StoreDetail/StoreDetail";
 import { useFindStoresByUserTableState } from "./useFindStoresByUserTableState";
 
-export default function Stores() {
+export default function StoresPage() {
   const router: AppRouterInstance = useRouter();
 
   const [tableStateRequest, setTableStateRequest] = useState<

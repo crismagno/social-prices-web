@@ -73,7 +73,7 @@ const formSchema = z.object({
 
 type TFormSchema = z.infer<typeof formSchema>;
 
-export default function ProductDetail() {
+export default function ProductDetailPage() {
   const router: AppRouterInstance = useRouter();
 
   const searchParams: ReadonlyURLSearchParams = useSearchParams();

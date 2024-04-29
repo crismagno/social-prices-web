@@ -13,7 +13,7 @@ import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
 import LoginEnum from "../../shared/common/enums/login.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 
-export default function Login() {
+export default function LoginPage() {
   useForceRedirect();
 
   const { loginGoogle, login, create } = useAuthData();
