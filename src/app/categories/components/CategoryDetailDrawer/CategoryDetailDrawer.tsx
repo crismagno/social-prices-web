@@ -7,6 +7,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import FormInput from "../../../../components/common/FormInput/FormInput";
+import FormTextarea from "../../../../components/common/FormTextarea/FormTextarea";
 import handleClientError from "../../../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../../../components/common/HrCustom/HrCustom";
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
@@ -22,6 +23,7 @@ import { useFindCategoryById } from "../../useFindCategoryById";
 const formSchema = z.object({
   name: z.string().nonempty("Name is required"),
   type: z.string().nonempty("Type is required"),
+  description: z.string().nullable(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -63,6 +65,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
     const values: TFormSchema = {
       name: category?.name ?? "",
       type: category?.type ?? CategoriesEnum.Type.PRODUCT,
+      description: category?.description ?? null,
     };
 
     setFormValues(values);
@@ -93,6 +96,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
         name: data.name,
         ownerUserId: user!._id,
         type: data.type as CategoriesEnum.Type,
+        description: data.description,
       };
 
       const newCategory: ICategory =
@@ -120,6 +124,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
         ownerUserId: user!._id,
         type: data.type as CategoriesEnum.Type,
         categoryId: categoryId!,
+        description: data.description,
       };
 
       const categoryUpdated: ICategory =
@@ -141,6 +146,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
     setFormValues({
       name: "",
       type: CategoriesEnum.Type.PRODUCT,
+      description: null,
     });
     onClose();
   };
@@ -191,6 +197,17 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
                 )}
               ></Controller>
             </div>
+          </Col>
+
+          <Col xs={24}>
+            <FormTextarea
+              label="Description"
+              placeholder={"Enter description"}
+              defaultValue={category?.description}
+              register={register}
+              registerName="description"
+              rows={2}
+            />
           </Col>
         </Row>
 

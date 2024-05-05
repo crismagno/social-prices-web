@@ -126,5 +126,5 @@ export const getCustomerName = (customer: ICustomer): string => {
   return customerName ?? "";
 };
 
-export const parseToUpperAndUnderline = (value: string) =>
+export const parseToUpperAndUnderline = (value: string): string =>
   value?.trim().toLocaleUpperCase().split(" ").join("_");

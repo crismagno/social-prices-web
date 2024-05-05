@@ -9,8 +9,6 @@ import {
   TableCurrentDataSource,
 } from "antd/es/table/interface";
 import moment from "moment";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter } from "next/navigation";
 import { RecordType } from "zod";
 
 import { EditOutlined, PlusOutlined } from "@ant-design/icons";
@@ -26,8 +24,6 @@ import { CategoryDetailDrawer } from "./components/CategoryDetailDrawer/Category
 import { useFindCategoriesByUserTableState } from "./useFindCategoriesByUserTableState";
 
 export default function CategoriesPage() {
-  const router: AppRouterInstance = useRouter();
-
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<ICategory> | undefined
   >(createTableState({ sort: { field: "createdAt", order: "ascend" } }));
@@ -97,6 +93,12 @@ export default function CategoriesPage() {
               title: "Name",
               dataIndex: "name",
               key: "name",
+              align: "center",
+            },
+            {
+              title: "Description",
+              dataIndex: "description",
+              key: "description",
               align: "center",
             },
             {
