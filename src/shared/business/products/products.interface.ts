@@ -15,5 +15,5 @@ export interface IProduct extends ICreatedAtEntity, IUpdatedAtEntity {
   mainUrl: string | null;
   barCode: string | null;
   QRCode: string | null;
-  categoriesCode: string[];
+  categoriesIds: string[];
 }

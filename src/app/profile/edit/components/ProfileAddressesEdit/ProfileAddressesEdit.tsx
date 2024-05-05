@@ -19,6 +19,7 @@ import {
 import handleClientError from "../../../../../components/common/handleClientError/handleClientError";
 import useAuthData from "../../../../../data/context/auth/useAuthData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/ServiceMethods";
+import AddressEnum from "../../../../../shared/business/enums/address.enum";
 import { IAddress } from "../../../../../shared/business/interfaces/address.interface";
 import IUser from "../../../../../shared/business/users/user.interface";
 
@@ -78,6 +79,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
               states.find((state) => state.code === address.stateCode)?.name ??
               "",
           },
+          types: address.types as AddressEnum.Types[],
         })
       );
 

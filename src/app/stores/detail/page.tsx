@@ -52,6 +52,7 @@ import CreateStoreDto from "../../../services/social-prices-api/stores/dto/creat
 import UpdateStoreDto from "../../../services/social-prices-api/stores/dto/updateStore.dto";
 import CategoriesEnum from "../../../shared/business/categories/categories.enum";
 import { ICategory } from "../../../shared/business/categories/categories.interface";
+import AddressEnum from "../../../shared/business/enums/address.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
 import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number";
 import StoresEnum from "../../../shared/business/stores/stores.enum";
@@ -189,6 +190,7 @@ export default function StoreDetailPage() {
               states.find((state) => state.code === address.stateCode)?.name ??
               "",
           },
+          types: address.types as AddressEnum.Types[],
         })
       );
 
@@ -256,6 +258,7 @@ export default function StoreDetailPage() {
               states.find((state) => state.code === address.stateCode)?.name ??
               "",
           },
+          types: address.types as AddressEnum.Types[],
         })
       );
 

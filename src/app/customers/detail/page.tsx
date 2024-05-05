@@ -43,6 +43,7 @@ import Layout from "../../../components/template/Layout/Layout";
 import CreateCustomerDto from "../../../services/social-prices-api/customers/dto/createCustomer.dto";
 import UpdateCustomerDto from "../../../services/social-prices-api/customers/dto/updateCustomer.dto";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
+import AddressEnum from "../../../shared/business/enums/address.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
 import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number";
 import UsersEnum from "../../../shared/business/users/users.enum";
@@ -172,6 +173,7 @@ export default function CustomerDetailPage() {
               states.find((state) => state.code === address.stateCode)?.name ??
               "",
           },
+          types: address.types as AddressEnum.Types[],
         })
       );
 
@@ -239,6 +241,7 @@ export default function CustomerDetailPage() {
               states.find((state) => state.code === address.stateCode)?.name ??
               "",
           },
+          types: address.types as AddressEnum.Types[],
         })
       );
 

@@ -1,22 +1,25 @@
+import AddressEnum from "../enums/address.enum";
+
 export interface IAddress {
-	address1: string;
-	address2?: string;
-	city: string;
-	isValid: boolean;
-	state?: IAddressState;
-	uid: string;
-	zip: string;
-	description?: string;
-	country: IAddressCountry;
-	district: string;
+  address1: string;
+  address2?: string;
+  city: string;
+  isValid: boolean;
+  state?: IAddressState;
+  uid: string;
+  zip: string;
+  description?: string;
+  country: IAddressCountry;
+  district: string;
+  types: AddressEnum.Types[];
 }
 
 export interface IAddressState {
-	code: string;
-	name: string;
+  code: string;
+  name: string;
 }
 
 export interface IAddressCountry {
-	code: string;
-	name: string;
+  code: string;
+  name: string;
 }

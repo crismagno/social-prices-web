@@ -1,4 +1,5 @@
 import { ICustomer } from "../../business/customers/customer.interface";
+import AddressEnum from "../../business/enums/address.enum";
 import { IAddress } from "../../business/interfaces/address.interface";
 import { IPhoneNumber } from "../../business/interfaces/phone-number";
 import IUser from "../../business/users/user.interface";
@@ -32,6 +33,24 @@ export const createUserAddressName = (address: IAddress | any): string => {
 
   if (address.address1) {
     addressName += createComma(address.address1);
+  }
+
+  if (address.types?.length) {
+    const typesToString = address.types.reduce(
+      (acc: string, curr: AddressEnum.Types, index: number) => {
+        const lastIndexElement: number = address.types.length - 1;
+
+        if (index !== lastIndexElement) {
+          acc += `${AddressEnum.TypesLabels[curr]}, `;
+        } else if (index === lastIndexElement) {
+          acc += `${AddressEnum.TypesLabels[curr]}`;
+        }
+
+        return acc;
+      },
+      ""
+    );
+    addressName += ` (${typesToString})`;
   }
 
   return addressName;
