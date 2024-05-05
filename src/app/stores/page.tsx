@@ -29,7 +29,7 @@ import { defaultAvatarImage } from "../../shared/utils/images/files-names";
 import { getImageAwsS3 } from "../../shared/utils/images/url-images";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
-import { useGetCategoriesByType } from "../categories/useGetCategoriesByType";
+import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";
 import { StoreDetail } from "./components/StoreDetail/StoreDetail";
 import { useFindStoresByUserTableState } from "./useFindStoresByUserTableState";
 
@@ -43,9 +43,8 @@ export default function StoresPage() {
   const { isLoading, stores, total } =
     useFindStoresByUserTableState(tableStateRequest);
 
-  const { categories, isLoading: isLoadingCategories } = useGetCategoriesByType(
-    CategoriesEnum.Type.STORE
-  );
+  const { categories, isLoading: isLoadingCategories } =
+    useFindCategoriesByType(CategoriesEnum.Type.STORE);
 
   const handleNewStore = () => {
     router.push(Urls.NEW_STORE);

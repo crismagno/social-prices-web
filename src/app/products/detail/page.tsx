@@ -54,7 +54,7 @@ import {
   formatterMoney,
   parserMoney,
 } from "../../../shared/utils/string-extensions/string-extensions";
-import { useGetCategoriesByType } from "../../categories/useGetCategoriesByType";
+import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindProductById } from "./useFindProductById";
 
@@ -80,9 +80,8 @@ export default function ProductDetailPage() {
 
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
-  const { categories, isLoading: isLoadingCategories } = useGetCategoriesByType(
-    CategoriesEnum.Type.PRODUCT
-  );
+  const { categories, isLoading: isLoadingCategories } =
+    useFindCategoriesByType(CategoriesEnum.Type.PRODUCT);
 
   const productId: string | null = searchParams.get("pid");
 

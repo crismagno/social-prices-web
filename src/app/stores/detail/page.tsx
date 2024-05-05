@@ -59,7 +59,7 @@ import StoresEnum from "../../../shared/business/stores/stores.enum";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getFileUrl } from "../../../shared/utils/images/helper";
 import { getImageAwsS3 } from "../../../shared/utils/images/url-images";
-import { useGetCategoriesByType } from "../../categories/useGetCategoriesByType";
+import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
 import { useFindStoreById } from "./useFindStoreById";
 
 const formSchema = z.object({
@@ -85,9 +85,8 @@ export default function StoreDetailPage() {
 
   const { store, isLoadingStore } = useFindStoreById(storeId);
 
-  const { categories, isLoading: isLoadingCategories } = useGetCategoriesByType(
-    CategoriesEnum.Type.STORE
-  );
+  const { categories, isLoading: isLoadingCategories } =
+    useFindCategoriesByType(CategoriesEnum.Type.STORE);
 
   const [formValues, setFormValues] = useState<TFormSchema>();
 
@@ -190,7 +189,7 @@ export default function StoreDetailPage() {
               states.find((state) => state.code === address.stateCode)?.name ??
               "",
           },
-          types: address.types as AddressEnum.Types[],
+          types: address.types as AddressEnum.Type[],
         })
       );
 
@@ -258,7 +257,7 @@ export default function StoreDetailPage() {
               states.find((state) => state.code === address.stateCode)?.name ??
               "",
           },
-          types: address.types as AddressEnum.Types[],
+          types: address.types as AddressEnum.Type[],
         })
       );
 

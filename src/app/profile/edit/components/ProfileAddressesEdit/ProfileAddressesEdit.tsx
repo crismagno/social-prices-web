@@ -79,7 +79,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
               states.find((state) => state.code === address.stateCode)?.name ??
               "",
           },
-          types: address.types as AddressEnum.Types[],
+          types: address.types as AddressEnum.Type[],
         })
       );
 

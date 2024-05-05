@@ -1,14 +1,14 @@
 namespace AddressEnum {
-  export enum Types {
+  export enum Type {
     SHIPPING = "SHIPPING",
     HOME = "HOME",
     NORMAL = "NORMAL",
   }
 
   export const TypesLabels = {
-    [Types.SHIPPING]: "Shipping",
-    [Types.HOME]: "Home",
-    [Types.NORMAL]: "Normal",
+    [Type.SHIPPING]: "Shipping",
+    [Type.HOME]: "Home",
+    [Type.NORMAL]: "Normal",
   };
 }
 

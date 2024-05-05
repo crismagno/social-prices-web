@@ -7,5 +7,6 @@ export interface ICategory extends ICreatedAtEntity, IUpdatedAtEntity {
   name: string;
   code: string;
   type: CategoriesEnum.Type;
-  userId: string;
+  createdByUserId: string;
+  ownerUserId: string | null;
 }

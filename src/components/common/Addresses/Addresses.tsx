@@ -273,9 +273,9 @@ export const Addresses: React.FC<Props> = ({
                         placeholder={"Select types"}
                         mode="multiple"
                       >
-                        {Object.keys(AddressEnum.Types).map((type: string) => (
+                        {Object.keys(AddressEnum.Type).map((type: string) => (
                           <Select.Option key={type} value={type}>
-                            {AddressEnum.TypesLabels[type as AddressEnum.Types]}
+                            {AddressEnum.TypesLabels[type as AddressEnum.Type]}
                           </Select.Option>
                         ))}
                       </Select>

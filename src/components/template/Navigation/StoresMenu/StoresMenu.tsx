@@ -4,10 +4,15 @@ import { Menu, MenuProps } from "antd";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import {
+  AppstoreOutlined,
+  BlockOutlined,
+  HomeOutlined,
+  TeamOutlined,
+} from "@ant-design/icons";
 
 import Urls from "../../../../shared/common/routes-app/routes-app";
-import { IconCart } from "../../../common/icons/icons";
+import { IconBuildingStoreFront } from "../../../common/icons/icons";
 import NavigationItem from "../NavigationItem";
 
 type MenuItem = Required<MenuProps>["items"][number];
@@ -29,20 +34,35 @@ const getItem = (
 
 interface Props {}
 
-export const SalesMenu: React.FC<Props> = ({}) => {
+export const StoresMenu: React.FC<Props> = ({}) => {
   const router: AppRouterInstance = useRouter();
 
   const items: MenuItem[] = [
     getItem(
-      <NavigationItem icon={IconCart()} text="Sales" url={Urls.SALES} />,
-      "sub1",
+      <NavigationItem
+        icon={IconBuildingStoreFront()}
+        text="Stores"
+        url={Urls.STORES}
+      />,
+      Urls.STORES,
       null,
       [
         getItem(
-          "Sales",
+          "Stores",
           null,
           null,
-          [getItem("Create Sale", Urls.SALES, <ShoppingCartOutlined />)],
+          [
+            getItem("Stores", Urls.STORES, <HomeOutlined />),
+            getItem("Customers", Urls.CUSTOMERS, <TeamOutlined />),
+            getItem("Categories", Urls.CATEGORIES, <BlockOutlined />),
+          ],
+          "group"
+        ),
+        getItem(
+          "Products",
+          null,
+          null,
+          [getItem("Products", Urls.PRODUCTS, <AppstoreOutlined />)],
           "group"
         ),
       ]

@@ -37,7 +37,7 @@ export const createUserAddressName = (address: IAddress | any): string => {
 
   if (address.types?.length) {
     const typesToString = address.types.reduce(
-      (acc: string, curr: AddressEnum.Types, index: number) => {
+      (acc: string, curr: AddressEnum.Type, index: number) => {
         const lastIndexElement: number = address.types.length - 1;
 
         if (index !== lastIndexElement) {
@@ -125,3 +125,6 @@ export const getCustomerName = (customer: ICustomer): string => {
 
   return customerName ?? "";
 };
+
+export const parseToUpperAndUnderline = (value: string) =>
+  value?.trim().toLocaleUpperCase().split(" ").join("_");

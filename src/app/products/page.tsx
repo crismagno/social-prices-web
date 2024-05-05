@@ -42,7 +42,7 @@ import { getImageAwsS3 } from "../../shared/utils/images/url-images";
 import { formatterMoney } from "../../shared/utils/string-extensions/string-extensions";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
-import { useGetCategoriesByType } from "../categories/useGetCategoriesByType";
+import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";
 import { useFindStoresByUser } from "../stores/useFindStoresByUser";
 import { useFindProductsByUserTableState } from "./useFindProductsByUserTableState";
 
@@ -56,9 +56,8 @@ export default function ProductsPage() {
   const { isLoading, products, total } =
     useFindProductsByUserTableState(tableStateRequest);
 
-  const { categories, isLoading: isLoadingCategories } = useGetCategoriesByType(
-    CategoriesEnum.Type.PRODUCT
-  );
+  const { categories, isLoading: isLoadingCategories } =
+    useFindCategoriesByType(CategoriesEnum.Type.PRODUCT);
 
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
