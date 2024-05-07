@@ -60,7 +60,7 @@ export const createPhoneNumberName = (phoneNumber: IPhoneNumber): string => {
   let phoneNumberName: string = "";
 
   if (phoneNumber?.type) {
-    phoneNumberName += UsersEnum.PhoneTypesLabels[phoneNumber.type];
+    phoneNumberName += UsersEnum.TypeLabels[phoneNumber.type];
   }
 
   if (phoneNumber.number) {

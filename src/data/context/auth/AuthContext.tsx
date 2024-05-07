@@ -73,7 +73,7 @@ const __normalizeUser = async (userFirebase: User): Promise<IUser> => {
     phoneNumbers: userFirebase.phoneNumber
       ? [
           {
-            type: UsersEnum.PhoneTypes.OTHER,
+            type: UsersEnum.Type.OTHER,
             number: userFirebase.phoneNumber,
             uid: Date.now().toString(),
             messengers: [],

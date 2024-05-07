@@ -184,7 +184,7 @@ export default function ProfilePage() {
                           title={messengersToString(phoneNumber.messengers)}
                         >
                           <Tag key={phoneNumber.number}>{`${
-                            UsersEnum.PhoneTypesLabels[phoneNumber.type]
+                            UsersEnum.TypeLabels[phoneNumber.type]
                           } - ${phoneNumber.number}`}</Tag>
                         </Tooltip>
                       ))

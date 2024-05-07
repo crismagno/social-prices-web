@@ -25,7 +25,7 @@ export type TPhoneNumberFormSchema = z.infer<typeof phoneNumberFormSchema>;
 export const generateNewAPhoneNumber = (
   isCollapsed: boolean = true
 ): TPhoneNumberFormSchema => ({
-  type: StoresEnum.PhoneTypes.OTHER,
+  type: StoresEnum.Type.OTHER,
   number: "",
   isCollapsed,
   uid: Date.now().toString(),
@@ -131,17 +131,11 @@ export const PhoneNumbers: React.FC<Props> = ({
                     registerOptions={{ required: true }}
                     errorMessage={errors?.phoneNumbers?.[index]?.type?.message}
                   >
-                    {Object.keys(StoresEnum.PhoneTypes).map(
-                      (phoneType: string) => (
-                        <FormSelectOption key={phoneType} value={phoneType}>
-                          {
-                            StoresEnum.PhoneTypesLabels[
-                              phoneType as StoresEnum.PhoneTypes
-                            ]
-                          }
-                        </FormSelectOption>
-                      )
-                    )}
+                    {Object.keys(StoresEnum.Type).map((phoneType: string) => (
+                      <FormSelectOption key={phoneType} value={phoneType}>
+                        {StoresEnum.TypeLabels[phoneType as StoresEnum.Type]}
+                      </FormSelectOption>
+                    ))}
                   </FormSelect>
                 </div>
 
