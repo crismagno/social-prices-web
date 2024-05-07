@@ -27,6 +27,7 @@ import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import YesNo from "../../components/common/YesNo/YesNo";
 import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
+import { TagCategoryCustomAntd } from "../../components/custom/antd/TagCategoryCustomAntd/TagCategoryCustomAntd";
 import Layout from "../../components/template/Layout/Layout";
 import CategoriesEnum from "../../shared/business/categories/categories.enum";
 import { ICategory } from "../../shared/business/categories/categories.interface";
@@ -196,15 +197,23 @@ export default function ProductsPage() {
               })),
               render: (categoriesIds: string[]) =>
                 categoriesIds?.length
-                  ? categoriesIds.map((categoryId) => (
-                      <Tag key={categoryId}>
-                        {
-                          categoriesSort.find(
-                            (category: ICategory) => category._id === categoryId
-                          )?.name
-                        }
-                      </Tag>
-                    ))
+                  ? categoriesIds.map((categoryId) => {
+                      const category: ICategory | undefined =
+                        categoriesSort.find(
+                          (category: ICategory) => category._id === categoryId
+                        );
+
+                      if (!category) {
+                        return null;
+                      }
+
+                      return (
+                        <TagCategoryCustomAntd
+                          key={category._id}
+                          category={category}
+                        />
+                      );
+                    })
                   : "-",
             },
             {

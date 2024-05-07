@@ -46,6 +46,7 @@ import {
   phoneNumberFormSchema,
   PhoneNumbers,
 } from "../../../components/common/PhoneNumbers/PhoneNumbers";
+import { TagCategoryCustomAntd } from "../../../components/custom/antd/TagCategoryCustomAntd/TagCategoryCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import CreateStoreDto from "../../../services/social-prices-api/stores/dto/createStore.dto";
@@ -454,7 +455,10 @@ export default function StoreDetailPage() {
                     >
                       {categories.map((category: ICategory) => (
                         <Select.Option key={category._id} value={category._id}>
-                          {category.name}
+                          <TagCategoryCustomAntd
+                            category={category}
+                            useTag={false}
+                          />
                         </Select.Option>
                       ))}
                     </Select>

@@ -76,7 +76,8 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
   }
 
   if (categoryId && !category) {
-    return <div>Category not found!</div>;
+    message.error("Category not found!");
+    return null;
   }
 
   const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
