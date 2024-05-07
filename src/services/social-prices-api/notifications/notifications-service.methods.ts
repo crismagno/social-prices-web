@@ -11,7 +11,12 @@ import NotificationServiceEnum from "./notifications-service.enum";
 export default class NotificationsServiceMethods extends ServiceMethodsBase {
   public async findById(notificationId: string): Promise<INotification> {
     const response = await this._fetchAxios.get<INotification>(
-      `${this._socialPricesApiV1}${NotificationServiceEnum.Methods.FIND_BY_ID}/${notificationId}`,
+      `${
+        this._socialPricesApiV1
+      }${NotificationServiceEnum.Methods.FIND_BY_ID.replace(
+        ":notificationId",
+        notificationId
+      )}`,
       {
         headers: {
           "Content-Type": "application/json",

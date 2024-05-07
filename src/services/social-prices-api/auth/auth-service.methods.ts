@@ -51,7 +51,12 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
   ): Promise<boolean> {
     try {
       const response = await this._fetchAxios.get<boolean>(
-        `${this._socialPricesApiV1}${AuthServiceEnum.Methods.VALIDATE_SIGN_IN_CODE}/${codeValue}`,
+        `${
+          this._socialPricesApiV1
+        }${AuthServiceEnum.Methods.VALIDATE_SIGN_IN_CODE.replace(
+          ":codeValue",
+          codeValue
+        )}`,
         {
           headers: {
             "Content-Type": "application/json",
