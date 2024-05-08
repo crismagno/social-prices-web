@@ -1,17 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Button, Card, Image, Modal, Tag, Tooltip } from "antd";
-import moment from "moment";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter } from "next/navigation";
+import {
+  Button,
+  Card,
+  Image,
+  Modal,
+  Tag,
+  Tooltip,
+} from 'antd';
+import moment from 'moment';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+import { useRouter } from 'next/navigation';
 
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined } from '@ant-design/icons';
 
-import Avatar from "../../components/common/Avatar/Avatar";
-import ContainerTitle from "../../components/common/ContainerTitle/ContainerTitle";
-import Description from "../../components/common/Description/Description";
+import Avatar from '../../components/common/Avatar/Avatar';
+import ContainerTitle
+  from '../../components/common/ContainerTitle/ContainerTitle';
+import Description from '../../components/common/Description/Description';
 import {
   IconAtSymbol,
   IconCake,
@@ -21,21 +29,21 @@ import {
   IconPhone,
   IconQuestion,
   IconUser,
-} from "../../components/common/icons/icons";
-import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
-import Layout from "../../components/template/Layout/Layout";
-import useAuthData from "../../data/context/auth/useAuthData";
-import { IPhoneNumber } from "../../shared/business/interfaces/phone-number";
-import UsersEnum from "../../shared/business/users/users.enum";
-import Urls from "../../shared/common/routes-app/routes-app";
-import DatesEnum from "../../shared/utils/dates/dates.enum";
-import { defaultAvatarImage } from "../../shared/utils/images/files-names";
-import { getImageAwsS3 } from "../../shared/utils/images/url-images";
+} from '../../components/common/icons/icons';
+import LoadingFull from '../../components/common/LoadingFull/LoadingFull';
+import Layout from '../../components/template/Layout/Layout';
+import useAuthData from '../../data/context/auth/useAuthData';
+import { IPhoneNumber } from '../../shared/business/interfaces/phone-number';
+import UsersEnum from '../../shared/business/users/users.enum';
+import Urls from '../../shared/common/routes-app/routes-app';
+import DatesEnum from '../../shared/utils/dates/dates.enum';
+import { defaultAvatarImage } from '../../shared/utils/images/files-names';
+import { getImageAwsS3 } from '../../shared/utils/images/url-images';
 import {
   createUserAddressName,
   getUserName,
   messengersToString,
-} from "../../shared/utils/string-extensions/string-extensions";
+} from '../../shared/utils/string-extensions/string-extensions';
 
 export default function ProfilePage() {
   const { user } = useAuthData();
@@ -154,9 +162,7 @@ export default function ProfilePage() {
             <div className="flex flex-col justify-start w-1/2">
               <Description
                 label="My name"
-                description={`${user.firstName ?? "-"} ${
-                  user.middleName ?? "-"
-                } ${user.lastName ?? "-"}`}
+                description={`${user.name ?? "-"}`}
                 leftIcon={IconUser()}
               />
 

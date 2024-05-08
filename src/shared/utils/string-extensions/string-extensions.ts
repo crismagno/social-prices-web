@@ -1,9 +1,9 @@
-import { ICustomer } from "../../business/customers/customer.interface";
-import AddressEnum from "../../business/enums/address.enum";
-import { IAddress } from "../../business/interfaces/address.interface";
-import { IPhoneNumber } from "../../business/interfaces/phone-number";
-import IUser from "../../business/users/user.interface";
-import UsersEnum from "../../business/users/users.enum";
+import { ICustomer } from '../../business/customers/customer.interface';
+import AddressEnum from '../../business/enums/address.enum';
+import { IAddress } from '../../business/interfaces/address.interface';
+import { IPhoneNumber } from '../../business/interfaces/phone-number';
+import IUser from '../../business/users/user.interface';
+import UsersEnum from '../../business/users/users.enum';
 
 export const createComma = (str: string): string =>
   str?.trim() ? ", " + str : str;
@@ -98,19 +98,8 @@ export const formatterMoney = (value: any) =>
 export const parserMoney = (value: any) =>
   value?.replace(/\R\$\s?|(,*)/g, "") as unknown as number;
 
-export const getUserName = (user: IUser): string => {
-  let userName: string = user?.firstName ?? "";
-
-  if (user?.middleName) {
-    userName += ` ${user.middleName}`;
-  }
-
-  if (user?.lastName) {
-    userName += ` ${user.lastName}`;
-  }
-
-  return userName || user.username || "";
-};
+export const getUserName = (user: IUser): string =>
+  user?.name || user.username || "";
 
 export const getCustomerName = (customer: ICustomer): string => {
   let customerName: string = customer?.firstName ?? "";

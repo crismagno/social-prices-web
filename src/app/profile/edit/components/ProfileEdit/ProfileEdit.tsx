@@ -1,37 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Button, message } from "antd";
-import moment from "moment";
-import { SubmitHandler, useForm } from "react-hook-form";
-import z from "zod";
+import {
+  Button,
+  Col,
+  message,
+  Row,
+} from 'antd';
+import moment from 'moment';
+import {
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
+import z from 'zod';
 
-import { SaveOutlined } from "@ant-design/icons";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { SaveOutlined } from '@ant-design/icons';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import ContainerTitle from "../../../../../components/common/ContainerTitle/ContainerTitle";
-import FormInput from "../../../../../components/common/FormInput/FormInput";
+import ContainerTitle
+  from '../../../../../components/common/ContainerTitle/ContainerTitle';
+import FormInput from '../../../../../components/common/FormInput/FormInput';
 import FormSelect, {
   FormSelectOption,
-} from "../../../../../components/common/FormSelect/FormSelect";
-import FormTextarea from "../../../../../components/common/FormTextarea/FormTextarea";
-import handleClientError from "../../../../../components/common/handleClientError/handleClientError";
-import useAuthData from "../../../../../data/context/auth/useAuthData";
-import { serviceMethodsInstance } from "../../../../../services/social-prices-api/ServiceMethods";
-import IUser from "../../../../../shared/business/users/user.interface";
-import UsersEnum from "../../../../../shared/business/users/users.enum";
-import DatesEnum from "../../../../../shared/utils/dates/dates.enum";
+} from '../../../../../components/common/FormSelect/FormSelect';
+import FormTextarea
+  from '../../../../../components/common/FormTextarea/FormTextarea';
+import handleClientError
+  from '../../../../../components/common/handleClientError/handleClientError';
+import useAuthData from '../../../../../data/context/auth/useAuthData';
+import {
+  serviceMethodsInstance,
+} from '../../../../../services/social-prices-api/ServiceMethods';
+import IUser from '../../../../../shared/business/users/user.interface';
+import UsersEnum from '../../../../../shared/business/users/users.enum';
+import DatesEnum from '../../../../../shared/utils/dates/dates.enum';
 
 interface Props {
   className?: string;
 }
 
 const formSchema = z.object({
-  firstName: z.string().nonempty("First name is required"),
-  lastName: z.string().nonempty("Last name is required"),
+  name: z.string().nonempty("Name is required"),
   birthDate: z.string().nonempty("Birth date is required"),
-  middleName: z.string().nullable(),
   gender: z.string().nullable(),
   about: z.string().nullable(),
 });
@@ -42,13 +53,11 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
   const { user, updateUserSession } = useAuthData();
 
   const defaultValues: TFormSchema = {
-    firstName: user?.firstName ?? "",
-    lastName: user?.lastName ?? "",
+    name: user?.name ?? "",
     birthDate: moment(user?.birthDate)
       .utc()
       .format(DatesEnum.Format.YYYYMMDD_DASHED),
     gender: user?.gender ?? UsersEnum.Gender.OTHER,
-    middleName: user?.middleName ?? null,
     about: user?.about ?? null,
   };
 
@@ -70,10 +79,8 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
       const response: IUser =
         await serviceMethodsInstance.usersServiceMethods.updateUser({
           birthDate: moment(data.birthDate).toDate(),
-          firstName: data.firstName,
+          name: data.name,
           gender: data.gender as UsersEnum.Gender,
-          lastName: data.lastName,
-          middleName: data.middleName ?? null,
           about: data.about,
         });
 
@@ -103,41 +110,21 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
           </Button>
         }
       >
-        <div className="flex">
-          <div className="flex flex-col justify-start w-1/2">
+        <Row>
+          <Col xs={24} md={8}>
             <FormInput
-              label="First name"
-              placeholder={"Enter first name"}
-              defaultValue={user?.firstName ?? ""}
+              label="Name"
+              placeholder={"Enter name"}
+              defaultValue={user?.name ?? ""}
               register={register}
-              registerName="firstName"
+              registerName="name"
               registerOptions={{ required: true }}
-              errorMessage={errors.firstName?.message}
+              errorMessage={errors.name?.message}
               maxLength={100}
             />
+          </Col>
 
-            <FormInput
-              label="Middle name"
-              placeholder={"Enter middle name"}
-              defaultValue={user?.middleName ?? ""}
-              register={register}
-              registerName="middleName"
-              maxLength={100}
-            />
-
-            <FormInput
-              label="Last name"
-              placeholder={"Enter last name"}
-              defaultValue={user?.lastName ?? ""}
-              register={register}
-              registerName="lastName"
-              registerOptions={{ required: true }}
-              errorMessage={errors.lastName?.message}
-              maxLength={100}
-            />
-          </div>
-
-          <div className="flex flex-col justify-start w-1/2">
+          <Col xs={24} md={8}>
             <FormInput
               label="Birth date"
               type="date"
@@ -150,7 +137,9 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
               registerOptions={{ required: true }}
               errorMessage={errors.birthDate?.message}
             />
+          </Col>
 
+          <Col xs={24} md={8}>
             <FormSelect
               label="Gender"
               placeholder={"Select gender"}
@@ -164,19 +153,21 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
                 </FormSelectOption>
               ))}
             </FormSelect>
-          </div>
-        </div>
+          </Col>
+        </Row>
 
-        <div className="flex flex-col justify-start">
-          <FormTextarea
-            label="About"
-            placeholder={"Enter about"}
-            defaultValue={user?.about ?? ""}
-            register={register}
-            registerName="about"
-            rows={2}
-          />
-        </div>
+        <Row>
+          <Col xs={24}>
+            <FormTextarea
+              label="About"
+              placeholder={"Enter about"}
+              defaultValue={user?.about ?? ""}
+              register={register}
+              registerName="about"
+              rows={2}
+            />
+          </Col>
+        </Row>
       </ContainerTitle>
     </form>
   );

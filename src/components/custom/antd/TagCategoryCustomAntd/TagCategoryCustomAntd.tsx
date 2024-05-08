@@ -1,8 +1,13 @@
-import { Tag, Tooltip } from "antd";
+import {
+  Tag,
+  Tooltip,
+} from 'antd';
 
-import { PlusCircleOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined } from '@ant-design/icons';
 
-import { ICategory } from "../../../../shared/business/categories/categories.interface";
+import {
+  ICategory,
+} from '../../../../shared/business/categories/categories.interface';
 
 interface Props {
   category: ICategory;

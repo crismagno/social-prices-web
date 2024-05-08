@@ -1,8 +1,11 @@
 "use client";
 
-import "./styles.scss";
+import './styles.scss';
 
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from 'react';
 
 import {
   Button,
@@ -20,44 +23,60 @@ import {
   Upload,
   UploadFile,
   UploadProps,
-} from "antd";
-import ImgCrop from "antd-img-crop";
-import { RcFile } from "antd/es/upload";
-import { isArray } from "class-validator";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+} from 'antd';
+import ImgCrop from 'antd-img-crop';
+import { RcFile } from 'antd/es/upload';
+import { isArray } from 'class-validator';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
 import {
   ReadonlyURLSearchParams,
   useRouter,
   useSearchParams,
-} from "next/navigation";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import z from "zod";
+} from 'next/navigation';
+import {
+  Controller,
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
+import z from 'zod';
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import FormInput from "../../../components/common/FormInput/FormInput";
-import FormTextarea from "../../../components/common/FormTextarea/FormTextarea";
-import handleClientError from "../../../components/common/handleClientError/handleClientError";
-import HrCustom from "../../../components/common/HrCustom/HrCustom";
-import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
-import { TagCategoryCustomAntd } from "../../../components/custom/antd/TagCategoryCustomAntd/TagCategoryCustomAntd";
-import Layout from "../../../components/template/Layout/Layout";
-import CreateProductDto from "../../../services/social-prices-api/products/dto/createProduct.dto";
-import UpdateProductDto from "../../../services/social-prices-api/products/dto/updateProduct.dto";
-import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
-import CategoriesEnum from "../../../shared/business/categories/categories.enum";
-import { ICategory } from "../../../shared/business/categories/categories.interface";
-import { IStore } from "../../../shared/business/stores/stores.interface";
-import { sortArray } from "../../../shared/utils/array/functions";
-import { getFileUrl } from "../../../shared/utils/images/helper";
-import { getImageAwsS3 } from "../../../shared/utils/images/url-images";
+import FormInput from '../../../components/common/FormInput/FormInput';
+import FormTextarea from '../../../components/common/FormTextarea/FormTextarea';
+import handleClientError
+  from '../../../components/common/handleClientError/handleClientError';
+import HrCustom from '../../../components/common/HrCustom/HrCustom';
+import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
+import {
+  TagCategoryCustomAntd,
+} from '../../../components/custom/antd/TagCategoryCustomAntd/TagCategoryCustomAntd';
+import Layout from '../../../components/template/Layout/Layout';
+import CreateProductDto
+  from '../../../services/social-prices-api/products/dto/createProduct.dto';
+import UpdateProductDto
+  from '../../../services/social-prices-api/products/dto/updateProduct.dto';
+import {
+  serviceMethodsInstance,
+} from '../../../services/social-prices-api/ServiceMethods';
+import CategoriesEnum
+  from '../../../shared/business/categories/categories.enum';
+import {
+  ICategory,
+} from '../../../shared/business/categories/categories.interface';
+import { IStore } from '../../../shared/business/stores/stores.interface';
+import { sortArray } from '../../../shared/utils/array/functions';
+import { getFileUrl } from '../../../shared/utils/images/helper';
+import { getImageAwsS3 } from '../../../shared/utils/images/url-images';
 import {
   formatterMoney,
   parserMoney,
-} from "../../../shared/utils/string-extensions/string-extensions";
-import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
-import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
-import { useFindProductById } from "./useFindProductById";
+} from '../../../shared/utils/string-extensions/string-extensions';
+import {
+  useFindCategoriesByType,
+} from '../../categories/useFindCategoriesByType';
+import { useFindStoresByUser } from '../../stores/useFindStoresByUser';
+import { useFindProductById } from './useFindProductById';
 
 const formSchema = z.object({
   name: z.string().nonempty("Name is required"),

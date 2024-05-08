@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
 
 import {
   Avatar,
@@ -11,41 +11,55 @@ import {
   TablePaginationConfig,
   Tag,
   Tooltip,
-} from "antd";
+} from 'antd';
 import {
   FilterValue,
   SorterResult,
   TableCurrentDataSource,
-} from "antd/es/table/interface";
-import moment from "moment";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter } from "next/navigation";
-import { RecordType } from "zod";
+} from 'antd/es/table/interface';
+import moment from 'moment';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+import { useRouter } from 'next/navigation';
+import { RecordType } from 'zod';
 
-import { EditOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  PlusOutlined,
+} from '@ant-design/icons';
 
-import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
-import YesNo from "../../components/common/YesNo/YesNo";
-import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
-import { TagCategoryCustomAntd } from "../../components/custom/antd/TagCategoryCustomAntd/TagCategoryCustomAntd";
-import Layout from "../../components/template/Layout/Layout";
-import CategoriesEnum from "../../shared/business/categories/categories.enum";
-import { ICategory } from "../../shared/business/categories/categories.interface";
-import { IProduct } from "../../shared/business/products/products.interface";
-import StoresEnum from "../../shared/business/stores/stores.enum";
-import { IStore } from "../../shared/business/stores/stores.interface";
-import CommonEnum from "../../shared/common/enums/common.enum";
-import Urls from "../../shared/common/routes-app/routes-app";
-import { sortArray } from "../../shared/utils/array/functions";
-import DatesEnum from "../../shared/utils/dates/dates.enum";
-import { defaultAvatarImage } from "../../shared/utils/images/files-names";
-import { getImageAwsS3 } from "../../shared/utils/images/url-images";
-import { formatterMoney } from "../../shared/utils/string-extensions/string-extensions";
-import { createTableState } from "../../shared/utils/table/table-state";
-import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
-import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";
-import { useFindStoresByUser } from "../stores/useFindStoresByUser";
-import { useFindProductsByUserTableState } from "./useFindProductsByUserTableState";
+import LoadingFull from '../../components/common/LoadingFull/LoadingFull';
+import YesNo from '../../components/common/YesNo/YesNo';
+import TableCustomAntd
+  from '../../components/custom/antd/TableCustomAntd/TableCustomAntd';
+import {
+  TagCategoriesCustomAntd,
+} from '../../components/custom/antd/TagCategoriesCustomAntd/TagCategoriesCustomAntd';
+import Layout from '../../components/template/Layout/Layout';
+import CategoriesEnum from '../../shared/business/categories/categories.enum';
+import {
+  ICategory,
+} from '../../shared/business/categories/categories.interface';
+import { IProduct } from '../../shared/business/products/products.interface';
+import StoresEnum from '../../shared/business/stores/stores.enum';
+import { IStore } from '../../shared/business/stores/stores.interface';
+import CommonEnum from '../../shared/common/enums/common.enum';
+import Urls from '../../shared/common/routes-app/routes-app';
+import { sortArray } from '../../shared/utils/array/functions';
+import DatesEnum from '../../shared/utils/dates/dates.enum';
+import { defaultAvatarImage } from '../../shared/utils/images/files-names';
+import { getImageAwsS3 } from '../../shared/utils/images/url-images';
+import {
+  formatterMoney,
+} from '../../shared/utils/string-extensions/string-extensions';
+import { createTableState } from '../../shared/utils/table/table-state';
+import {
+  ITableStateRequest,
+} from '../../shared/utils/table/table-state.interface';
+import { useFindCategoriesByType } from '../categories/useFindCategoriesByType';
+import { useFindStoresByUser } from '../stores/useFindStoresByUser';
+import {
+  useFindProductsByUserTableState,
+} from './useFindProductsByUserTableState';
 
 export default function ProductsPage() {
   const router: AppRouterInstance = useRouter();
@@ -195,26 +209,12 @@ export default function ProductsPage() {
                 text: category.name,
                 value: category._id,
               })),
-              render: (categoriesIds: string[]) =>
-                categoriesIds?.length
-                  ? categoriesIds.map((categoryId) => {
-                      const category: ICategory | undefined =
-                        categoriesSort.find(
-                          (category: ICategory) => category._id === categoryId
-                        );
-
-                      if (!category) {
-                        return null;
-                      }
-
-                      return (
-                        <TagCategoryCustomAntd
-                          key={category._id}
-                          category={category}
-                        />
-                      );
-                    })
-                  : "-",
+              render: (categoriesIds: string[]) => (
+                <TagCategoriesCustomAntd
+                  categories={categoriesSort}
+                  categoriesIds={categoriesIds}
+                />
+              ),
             },
             {
               title: "Created At",
