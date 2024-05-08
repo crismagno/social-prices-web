@@ -1,43 +1,12 @@
-import {
-  IsArray,
-  IsBoolean,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from "class-validator";
-
 export default class CreateProductDto {
-  @IsString()
-  name: string;
-
-  @IsString()
-  @IsOptional()
-  barCode: string | null;
-
-  @IsString()
-  @IsOptional()
-  details: string | null;
-
-  @IsNumber()
-  quantity: number;
-
-  @IsString()
-  @IsOptional()
-  description: string | null;
-
-  @IsNumber()
-  price: number;
-
-  @IsBoolean()
-  isActive: boolean;
-
-  @IsArray()
-  storeIds: string[];
-
-  @IsString()
-  @IsOptional()
-  QRCode: string | null;
-
-  @IsArray()
-  categoriesIds: string[];
+  name: string = "";
+  barCode: string | null = null;
+  details: string | null = null;
+  quantity: number = 0;
+  description: string | null = null;
+  price: number = 0;
+  isActive: boolean = false;
+  storeIds: string[] = [];
+  QRCode: string | null = null;
+  categoriesIds: string[] = [];
 }

@@ -1,26 +1,11 @@
-import { IsEnum, IsOptional, IsString } from "class-validator";
-
-import CategoriesEnum from "../../../../shared/business/categories/categories.enum";
+import CategoriesEnum
+  from '../../../../shared/business/categories/categories.enum';
 
 export default class UpdateCategoryDto {
-  @IsString()
-  categoryId: string;
-
-  @IsString()
-  name: string;
-
-  @IsString()
-  @IsEnum(CategoriesEnum.Type)
-  type: CategoriesEnum.Type;
-
-  @IsString()
-  code: string;
-
-  @IsString()
-  @IsOptional()
-  ownerUserId: string | null;
-
-  @IsString()
-  @IsOptional()
-  description: string | null;
+  categoryId: string = "";
+  name: string = "";
+  type: CategoriesEnum.Type = CategoriesEnum.Type.PRODUCT;
+  code: string = "";
+  ownerUserId: string | null = null;
+  description: string | null = null;
 }

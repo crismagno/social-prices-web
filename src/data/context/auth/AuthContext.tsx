@@ -1,6 +1,11 @@
 "use client";
 
-import { createContext, useCallback, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
 import {
   Auth,
@@ -9,19 +14,24 @@ import {
   signInWithPopup,
   signOut,
   User,
-} from "firebase/auth";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+} from 'firebase/auth';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
-import handleClientError from "../../../components/common/handleClientError/handleClientError";
-import firebaseApp from "../../../services/firebase/config";
-import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
-import IUser from "../../../shared/business/users/user.interface";
-import UsersEnum from "../../../shared/business/users/users.enum";
-import CookiesEnum from "../../../shared/common/cookies/cookies.enum";
-import LocalStorageEnum from "../../../shared/common/local-storage/local-storage.enum";
-import LocalStorageUserMethods from "../../../shared/common/local-storage/methods/local-storage-user.methods";
-import Urls from "../../../shared/common/routes-app/routes-app";
+import handleClientError
+  from '../../../components/common/handleClientError/handleClientError';
+import firebaseApp from '../../../services/firebase/config';
+import {
+  serviceMethodsInstance,
+} from '../../../services/social-prices-api/ServiceMethods';
+import IUser from '../../../shared/business/users/user.interface';
+import UsersEnum from '../../../shared/business/users/users.enum';
+import CookiesEnum from '../../../shared/common/cookies/cookies.enum';
+import LocalStorageEnum
+  from '../../../shared/common/local-storage/local-storage.enum';
+import LocalStorageUserMethods
+  from '../../../shared/common/local-storage/methods/local-storage-user.methods';
+import Urls from '../../../shared/common/routes-app/routes-app';
 
 const googleProvider: GoogleAuthProvider = new GoogleAuthProvider();
 googleProvider.addScope("https://www.googleapis.com/auth/contacts.readonly");
@@ -287,7 +297,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
           authProvider: null,
           avatar: null,
           extraDataProvider: null,
-          phoneNumbers: null,
+          phoneNumbers: [],
           uid: null,
         });
 
