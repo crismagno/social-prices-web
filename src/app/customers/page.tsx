@@ -34,9 +34,6 @@ import Urls from '../../shared/common/routes-app/routes-app';
 import DatesEnum from '../../shared/utils/dates/dates.enum';
 import { defaultAvatarImage } from '../../shared/utils/images/files-names';
 import { getImageAwsS3 } from '../../shared/utils/images/url-images';
-import {
-  getCustomerName,
-} from '../../shared/utils/string-extensions/string-extensions';
 import { createTableState } from '../../shared/utils/table/table-state';
 import {
   ITableStateRequest,
@@ -138,10 +135,9 @@ export default function CustomersPage() {
             },
             {
               title: "Name",
-              dataIndex: "firstName",
-              key: "firstName",
+              dataIndex: "name",
+              key: "name",
               align: "center",
-              render: (_, customer: ICustomer) => getCustomerName(customer),
             },
             {
               title: "Email",

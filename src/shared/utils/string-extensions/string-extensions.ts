@@ -1,4 +1,3 @@
-import { ICustomer } from '../../business/customers/customer.interface';
 import AddressEnum from '../../business/enums/address.enum';
 import { IAddress } from '../../business/interfaces/address.interface';
 import { IPhoneNumber } from '../../business/interfaces/phone-number';
@@ -100,20 +99,6 @@ export const parserMoney = (value: any) =>
 
 export const getUserName = (user: IUser): string =>
   user?.name || user.username || "";
-
-export const getCustomerName = (customer: ICustomer): string => {
-  let customerName: string = customer?.firstName ?? "";
-
-  if (customer?.middleName) {
-    customerName += ` ${customer.middleName}`;
-  }
-
-  if (customer?.lastName) {
-    customerName += ` ${customer.lastName}`;
-  }
-
-  return customerName ?? "";
-};
 
 export const parseToUpperAndUnderline = (value: string): string =>
   value?.trim().toLocaleUpperCase().split(" ").join("_");

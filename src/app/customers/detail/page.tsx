@@ -1,21 +1,35 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from 'react';
 
-import { Button, Card, Col, message, Row, Tooltip, UploadFile } from "antd";
-import { RcFile } from "antd/es/upload";
-import { isArray } from "class-validator";
-import moment from "moment";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import {
+  Button,
+  Card,
+  Col,
+  message,
+  Row,
+  Tooltip,
+  UploadFile,
+} from 'antd';
+import { RcFile } from 'antd/es/upload';
+import { isArray } from 'class-validator';
+import moment from 'moment';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
 import {
   ReadonlyURLSearchParams,
   useRouter,
   useSearchParams,
-} from "next/navigation";
-import { SubmitHandler, useForm } from "react-hook-form";
-import z from "zod";
+} from 'next/navigation';
+import {
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
+import z from 'zod';
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
   Addresses,
@@ -23,39 +37,44 @@ import {
   countries,
   generateNewAddress,
   states,
-} from "../../../components/common/Addresses/Addresses";
-import Avatar from "../../../components/common/Avatar/Avatar";
-import FormInput from "../../../components/common/FormInput/FormInput";
+} from '../../../components/common/Addresses/Addresses';
+import Avatar from '../../../components/common/Avatar/Avatar';
+import FormInput from '../../../components/common/FormInput/FormInput';
 import FormSelect, {
   FormSelectOption,
-} from "../../../components/common/FormSelect/FormSelect";
-import FormTextarea from "../../../components/common/FormTextarea/FormTextarea";
-import handleClientError from "../../../components/common/handleClientError/handleClientError";
-import HrCustom from "../../../components/common/HrCustom/HrCustom";
-import ImageModal from "../../../components/common/ImageModal/ImageModal";
-import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+} from '../../../components/common/FormSelect/FormSelect';
+import FormTextarea from '../../../components/common/FormTextarea/FormTextarea';
+import handleClientError
+  from '../../../components/common/handleClientError/handleClientError';
+import HrCustom from '../../../components/common/HrCustom/HrCustom';
+import ImageModal from '../../../components/common/ImageModal/ImageModal';
+import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
 import {
   generateNewAPhoneNumber,
   phoneNumberFormSchema,
   PhoneNumbers,
-} from "../../../components/common/PhoneNumbers/PhoneNumbers";
-import Layout from "../../../components/template/Layout/Layout";
-import CreateCustomerDto from "../../../services/social-prices-api/customers/dto/createCustomer.dto";
-import UpdateCustomerDto from "../../../services/social-prices-api/customers/dto/updateCustomer.dto";
-import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
-import AddressEnum from "../../../shared/business/enums/address.enum";
-import { IAddress } from "../../../shared/business/interfaces/address.interface";
-import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number";
-import UsersEnum from "../../../shared/business/users/users.enum";
-import DatesEnum from "../../../shared/utils/dates/dates.enum";
-import { getFileUrl } from "../../../shared/utils/images/helper";
-import { getImageAwsS3 } from "../../../shared/utils/images/url-images";
-import { useFindCustomerById } from "./useFindCustomerById";
+} from '../../../components/common/PhoneNumbers/PhoneNumbers';
+import Layout from '../../../components/template/Layout/Layout';
+import CreateCustomerDto
+  from '../../../services/social-prices-api/customers/dto/createCustomer.dto';
+import UpdateCustomerDto
+  from '../../../services/social-prices-api/customers/dto/updateCustomer.dto';
+import {
+  serviceMethodsInstance,
+} from '../../../services/social-prices-api/ServiceMethods';
+import AddressEnum from '../../../shared/business/enums/address.enum';
+import {
+  IAddress,
+} from '../../../shared/business/interfaces/address.interface';
+import { IPhoneNumber } from '../../../shared/business/interfaces/phone-number';
+import UsersEnum from '../../../shared/business/users/users.enum';
+import DatesEnum from '../../../shared/utils/dates/dates.enum';
+import { getFileUrl } from '../../../shared/utils/images/helper';
+import { getImageAwsS3 } from '../../../shared/utils/images/url-images';
+import { useFindCustomerById } from './useFindCustomerById';
 
 const formSchema = z.object({
-  firstName: z.string().nonempty("First name is required"),
-  middleName: z.string().nullable(),
-  lastName: z.string().nonempty("Last name is required"),
+  name: z.string().nonempty("Name is required"),
   email: z.string().email().nonempty("Email is required"),
   addresses: z.array(addressFormSchema),
   phoneNumbers: z.array(phoneNumberFormSchema),
@@ -107,9 +126,7 @@ export default function CustomerDetailPage() {
 
     const values: TFormSchema = {
       about: customer?.about ?? null,
-      firstName: customer?.firstName ?? "",
-      middleName: customer?.middleName ?? null,
-      lastName: customer?.lastName ?? "",
+      name: customer?.name ?? "",
       email: customer?.email ?? "",
       birthDate: moment(customer?.birthDate)
         .utc()
@@ -182,9 +199,7 @@ export default function CustomerDetailPage() {
         addresses,
         birthDate: moment(data.birthDate).toDate(),
         email: data.email,
-        firstName: data.firstName,
-        middleName: data.middleName ?? "",
-        lastName: data.lastName,
+        name: data.name,
         gender: data.gender as UsersEnum.Gender,
         phoneNumbers: data.phoneNumbers,
       };
@@ -250,9 +265,7 @@ export default function CustomerDetailPage() {
         addresses,
         birthDate: moment(data.birthDate).toDate(),
         email: data.email,
-        firstName: data.firstName,
-        middleName: data.middleName ?? "",
-        lastName: data.lastName,
+        name: data.name,
         gender: data.gender as UsersEnum.Gender,
         phoneNumbers: data.phoneNumbers,
         customerId: customer._id,
@@ -324,48 +337,21 @@ export default function CustomerDetailPage() {
             </div>
           </div>
 
-          <Row gutter={[16, 16]} className="mt-10">
-            <Col xs={24} md={8}>
+          <Row className="mt-10">
+            <Col xs={24} md={12}>
               <FormInput
-                label="First Name"
-                placeholder={"Enter first name"}
-                defaultValue={customer?.firstName}
+                label="Name"
+                placeholder={"Enter name"}
+                defaultValue={customer?.name}
                 register={register}
-                registerName="firstName"
+                registerName="name"
                 registerOptions={{ required: true }}
-                errorMessage={errors.firstName?.message}
+                errorMessage={errors.name?.message}
                 maxLength={200}
               />
             </Col>
 
-            <Col xs={24} md={8}>
-              <FormInput
-                label="Middle Name"
-                placeholder={"Enter middle name"}
-                defaultValue={customer?.middleName}
-                register={register}
-                registerName="middleName"
-                errorMessage={errors.middleName?.message}
-                maxLength={200}
-              />
-            </Col>
-
-            <Col xs={24} md={8}>
-              <FormInput
-                label="Last Name"
-                placeholder={"Enter last name"}
-                defaultValue={customer?.lastName}
-                register={register}
-                registerName="lastName"
-                registerOptions={{ required: true }}
-                errorMessage={errors.lastName?.message}
-                maxLength={200}
-              />
-            </Col>
-          </Row>
-
-          <Row>
-            <Col xs={24} md={8}>
+            <Col xs={24} md={12}>
               <FormInput
                 label="Email"
                 placeholder={"Enter email"}
@@ -380,7 +366,7 @@ export default function CustomerDetailPage() {
               />
             </Col>
 
-            <Col xs={24} md={8}>
+            <Col xs={24} md={12}>
               <FormInput
                 label="Birth Date"
                 type="date"
@@ -392,7 +378,7 @@ export default function CustomerDetailPage() {
               />
             </Col>
 
-            <Col xs={24} md={8}>
+            <Col xs={24} md={12}>
               <FormSelect
                 label="Gender"
                 placeholder={"Select gender"}
