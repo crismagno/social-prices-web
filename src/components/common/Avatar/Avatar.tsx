@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Tooltip } from "antd";
 
 import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
-import { getImageAwsS3 } from "../../../shared/utils/images/url-images";
+import { getImageUrl } from "../../../shared/utils/images/url-images";
 
 interface Props {
   src?: string | null;
@@ -29,7 +29,7 @@ const Avatar: React.FC<Props> = ({
   const [image, setImage] = useState<string>();
 
   useEffect(() => {
-    let url: string = src ? getImageAwsS3(src) : defaultAvatarImage;
+    let url: string = src ? getImageUrl(src) : defaultAvatarImage;
 
     if (noUseAwsS3) {
       url = src ? src : defaultAvatarImage;

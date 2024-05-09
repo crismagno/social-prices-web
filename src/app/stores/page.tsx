@@ -1,56 +1,38 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  Button,
-  Card,
-  Image,
-  TablePaginationConfig,
-  Tag,
-  Tooltip,
-} from 'antd';
+import { Button, Card, Image, TablePaginationConfig, Tag, Tooltip } from "antd";
 import {
   FilterValue,
   SorterResult,
   TableCurrentDataSource,
-} from 'antd/es/table/interface';
-import moment from 'moment';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
-import { useRouter } from 'next/navigation';
-import { RecordType } from 'zod';
+} from "antd/es/table/interface";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import { useRouter } from "next/navigation";
+import { RecordType } from "zod";
 
-import {
-  EditOutlined,
-  EnterOutlined,
-  PlusOutlined,
-} from '@ant-design/icons';
+import { EditOutlined, EnterOutlined, PlusOutlined } from "@ant-design/icons";
 
-import LoadingFull from '../../components/common/LoadingFull/LoadingFull';
-import TableCustomAntd
-  from '../../components/custom/antd/TableCustomAntd/TableCustomAntd';
-import {
-  TagCategoriesCustomAntd,
-} from '../../components/custom/antd/TagCategoriesCustomAntd/TagCategoriesCustomAntd';
-import Layout from '../../components/template/Layout/Layout';
-import CategoriesEnum from '../../shared/business/categories/categories.enum';
-import {
-  ICategory,
-} from '../../shared/business/categories/categories.interface';
-import StoresEnum from '../../shared/business/stores/stores.enum';
-import { IStore } from '../../shared/business/stores/stores.interface';
-import Urls from '../../shared/common/routes-app/routes-app';
-import { sortArray } from '../../shared/utils/array/functions';
-import DatesEnum from '../../shared/utils/dates/dates.enum';
-import { defaultAvatarImage } from '../../shared/utils/images/files-names';
-import { getImageAwsS3 } from '../../shared/utils/images/url-images';
-import { createTableState } from '../../shared/utils/table/table-state';
-import {
-  ITableStateRequest,
-} from '../../shared/utils/table/table-state.interface';
-import { useFindCategoriesByType } from '../categories/useFindCategoriesByType';
-import { StoreDetail } from './components/StoreDetail/StoreDetail';
-import { useFindStoresByUserTableState } from './useFindStoresByUserTableState';
+import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
+import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
+import { TagCategoriesCustomAntd } from "../../components/custom/antd/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
+import Layout from "../../components/template/Layout/Layout";
+import CategoriesEnum from "../../shared/business/categories/categories.enum";
+import { ICategory } from "../../shared/business/categories/categories.interface";
+import StoresEnum from "../../shared/business/stores/stores.enum";
+import { IStore } from "../../shared/business/stores/stores.interface";
+import Urls from "../../shared/common/routes-app/routes-app";
+import { sortArray } from "../../shared/utils/array/functions";
+import DatesEnum from "../../shared/utils/dates/dates.enum";
+import { defaultAvatarImage } from "../../shared/utils/images/files-names";
+import { getImageUrl } from "../../shared/utils/images/url-images";
+import { createTableState } from "../../shared/utils/table/table-state";
+import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
+import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";
+import { StoreDetail } from "./components/StoreDetail/StoreDetail";
+import { useFindStoresByUserTableState } from "./useFindStoresByUserTableState";
 
 export default function StoresPage() {
   const router: AppRouterInstance = useRouter();
@@ -150,7 +132,7 @@ export default function StoresPage() {
                     <Image
                       width={50}
                       height={50}
-                      src={getImageAwsS3(logo)}
+                      src={getImageUrl(logo)}
                       alt="logo"
                       className="rounded-full"
                     />

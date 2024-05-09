@@ -1,46 +1,31 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  Button,
-  Card,
-  Image,
-  TablePaginationConfig,
-  Tag,
-  Tooltip,
-} from 'antd';
+import { Button, Card, Image, TablePaginationConfig, Tag, Tooltip } from "antd";
 import {
   FilterValue,
   SorterResult,
   TableCurrentDataSource,
-} from 'antd/es/table/interface';
-import moment from 'moment';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
-import { useRouter } from 'next/navigation';
-import { RecordType } from 'zod';
+} from "antd/es/table/interface";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import { useRouter } from "next/navigation";
+import { RecordType } from "zod";
 
-import {
-  EditOutlined,
-  PlusOutlined,
-} from '@ant-design/icons';
+import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 
-import TableCustomAntd
-  from '../../components/custom/antd/TableCustomAntd/TableCustomAntd';
-import Layout from '../../components/template/Layout/Layout';
-import { ICustomer } from '../../shared/business/customers/customer.interface';
-import UsersEnum from '../../shared/business/users/users.enum';
-import Urls from '../../shared/common/routes-app/routes-app';
-import DatesEnum from '../../shared/utils/dates/dates.enum';
-import { defaultAvatarImage } from '../../shared/utils/images/files-names';
-import { getImageAwsS3 } from '../../shared/utils/images/url-images';
-import { createTableState } from '../../shared/utils/table/table-state';
-import {
-  ITableStateRequest,
-} from '../../shared/utils/table/table-state.interface';
-import {
-  useFindCustomersByOwnerOfUserTableState,
-} from './useFindCustomersByOwnerOfUserTableState';
+import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
+import Layout from "../../components/template/Layout/Layout";
+import { ICustomer } from "../../shared/business/customers/customer.interface";
+import UsersEnum from "../../shared/business/users/users.enum";
+import Urls from "../../shared/common/routes-app/routes-app";
+import DatesEnum from "../../shared/utils/dates/dates.enum";
+import { defaultAvatarImage } from "../../shared/utils/images/files-names";
+import { getImageUrl } from "../../shared/utils/images/url-images";
+import { createTableState } from "../../shared/utils/table/table-state";
+import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
+import { useFindCustomersByOwnerOfUserTableState } from "./useFindCustomersByOwnerOfUserTableState";
 
 export default function CustomersPage() {
   const router: AppRouterInstance = useRouter();
@@ -126,7 +111,7 @@ export default function CustomersPage() {
                   <Image
                     width={50}
                     height={50}
-                    src={getImageAwsS3(avatar)}
+                    src={getImageUrl(avatar)}
                     alt="mainUrl"
                     className="rounded-full"
                   />
