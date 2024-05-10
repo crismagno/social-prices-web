@@ -11,14 +11,12 @@ import {
   IconAdjustmentsHorizontal,
   IconBell,
   IconBellAlert,
-  IconBuildingStoreFront,
   IconHome,
   IconLogout,
-  IconSquare2x2,
-  IconUsers,
 } from "../../common/icons/icons";
 import NavigationItem from "./NavigationItem";
 import { SalesMenu } from "./SalesMenu/SalesMenu";
+import { StoresMenu } from "./StoresMenu/StoresMenu";
 
 interface Props {}
 
@@ -73,23 +71,7 @@ const Navigation: React.FC<Props> = ({}) => {
           url={Urls.SETTINGS}
         />
 
-        <NavigationItem
-          icon={IconBuildingStoreFront()}
-          text="Stores"
-          url={Urls.STORES}
-        />
-
-        <NavigationItem
-          icon={IconSquare2x2()}
-          text="Products"
-          url={Urls.PRODUCTS}
-        />
-
-        <NavigationItem
-          icon={IconUsers()}
-          text="Customers"
-          url={Urls.CUSTOMERS}
-        />
+        <StoresMenu />
 
         <SalesMenu />
       </ul>

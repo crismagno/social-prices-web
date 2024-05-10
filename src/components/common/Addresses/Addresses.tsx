@@ -1,7 +1,8 @@
-import { Tooltip } from "antd";
-import { useFieldArray } from "react-hook-form";
+import { Select, Tooltip } from "antd";
+import { Controller, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 
+import AddressEnum from "../../../shared/business/enums/address.enum";
 import citiesMockData from "../../../shared/utils/mock-data/brazil-cities.json";
 import statesMockData from "../../../shared/utils/mock-data/brazil-states.json";
 import countriesMockData from "../../../shared/utils/mock-data/countries.json";
@@ -38,6 +39,7 @@ export const addressFormSchema = z.object({
   countryCode: z.string().nonempty("Country is required"),
   district: z.string().nonempty("District is required"),
   isCollapsed: z.boolean(),
+  types: z.array(z.string()),
 });
 
 export type TAddressFormSchema = z.infer<typeof addressFormSchema>;
@@ -64,6 +66,7 @@ export const generateNewAddress = (
   stateCode: "",
   district: "",
   isCollapsed,
+  types: [],
 });
 
 export const Addresses: React.FC<Props> = ({
@@ -251,6 +254,34 @@ export const Addresses: React.FC<Props> = ({
                   registerName={`addresses.${index}.address2`}
                   maxLength={200}
                 />
+
+                <div className={`flex flex-col mt-4 mr-5`}>
+                  <label className={`text-sm`}>Types</label>
+
+                  <Controller
+                    control={control}
+                    name={`addresses.${index}.types`}
+                    render={({
+                      field: { onChange, onBlur, value, name, ref },
+                    }) => (
+                      <Select
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        name={name}
+                        value={value}
+                        ref={ref}
+                        placeholder={"Select types"}
+                        mode="multiple"
+                      >
+                        {Object.keys(AddressEnum.Type).map((type: string) => (
+                          <Select.Option key={type} value={type}>
+                            {AddressEnum.TypesLabels[type as AddressEnum.Type]}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    )}
+                  ></Controller>
+                </div>
               </div>
             </div>
           </Collapse>

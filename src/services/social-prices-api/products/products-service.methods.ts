@@ -41,7 +41,12 @@ export default class ProductsServiceMethods extends ServiceMethodsBase {
 
   public async findById(productId: string): Promise<IProduct> {
     const response = await this._fetchAxios.get<IProduct>(
-      `${this._socialPricesApiV1}${ProductsServiceEnum.Methods.FIND_BY_ID}/${productId}`,
+      `${
+        this._socialPricesApiV1
+      }${ProductsServiceEnum.Methods.FIND_BY_ID.replace(
+        ":productId",
+        productId
+      )}`,
       {
         headers: {
           "Content-Type": "application/json",

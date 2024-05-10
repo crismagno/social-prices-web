@@ -55,7 +55,7 @@ export const StoreDetail: React.FC<Props> = ({ store }) => {
                       title={messengersToString(phoneNumber.messengers)}
                     >
                       <Tag>
-                        {StoresEnum.PhoneTypesLabels[phoneNumber.type]} -{" "}
+                        {StoresEnum.TypeLabels[phoneNumber.type]} -{" "}
                         {phoneNumber.number}
                       </Tag>
                     </Tooltip>

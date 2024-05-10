@@ -40,7 +40,12 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
 
   public async sendRecoverPasswordCode(email: string): Promise<IUser> {
     const response = await this._fetchAxios.get<IUser>(
-      `${this._socialPricesApiV1}${UsersServiceEnum.Methods.SEND_RECOVER_PASSWORD_CODE}/${email}`
+      `${
+        this._socialPricesApiV1
+      }${UsersServiceEnum.Methods.SEND_RECOVER_PASSWORD_CODE.replace(
+        ":email",
+        email
+      )}`
     );
 
     return response.data;
@@ -150,7 +155,12 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
 
   public async sendUpdateEmailCode(email: string): Promise<IUser> {
     const response = await this._fetchAxios.get<IUser>(
-      `${this._socialPricesApiV1}${UsersServiceEnum.Methods.SEND_UPDATE_EMAIL_CODE}/${email}`,
+      `${
+        this._socialPricesApiV1
+      }${UsersServiceEnum.Methods.SEND_UPDATE_EMAIL_CODE.replace(
+        ":email",
+        email
+      )}`,
       {
         headers: {
           "Content-Type": "application/json",

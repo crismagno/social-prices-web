@@ -23,18 +23,18 @@ namespace StoresEnum {
     [Status.STOPPED]: "red",
   };
 
-  export enum PhoneTypes {
+  export enum Type {
     MOBILE = "MOBILE",
     HOME = "HOME",
     BUSINESS = "BUSINESS",
     OTHER = "OTHER",
   }
 
-  export const PhoneTypesLabels = {
-    [PhoneTypes.MOBILE]: "Mobile",
-    [PhoneTypes.HOME]: "Home",
-    [PhoneTypes.BUSINESS]: "Business",
-    [PhoneTypes.OTHER]: "Other",
+  export const TypeLabels = {
+    [Type.MOBILE]: "Mobile",
+    [Type.HOME]: "Home",
+    [Type.BUSINESS]: "Business",
+    [Type.OTHER]: "Other",
   };
 
   export enum PhoneNumberMessenger {

@@ -17,6 +17,7 @@ import { EditOutlined, EnterOutlined, PlusOutlined } from "@ant-design/icons";
 
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
+import { TagCategoriesCustomAntd } from "../../components/custom/antd/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
 import Layout from "../../components/template/Layout/Layout";
 import CategoriesEnum from "../../shared/business/categories/categories.enum";
 import { ICategory } from "../../shared/business/categories/categories.interface";
@@ -26,10 +27,10 @@ import Urls from "../../shared/common/routes-app/routes-app";
 import { sortArray } from "../../shared/utils/array/functions";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../shared/utils/images/files-names";
-import { getImageAwsS3 } from "../../shared/utils/images/url-images";
+import { getImageUrl } from "../../shared/utils/images/url-images";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
-import { useGetCategoriesByType } from "../categories/useGetCategoriesByType";
+import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";
 import { StoreDetail } from "./components/StoreDetail/StoreDetail";
 import { useFindStoresByUserTableState } from "./useFindStoresByUserTableState";
 
@@ -43,9 +44,8 @@ export default function StoresPage() {
   const { isLoading, stores, total } =
     useFindStoresByUserTableState(tableStateRequest);
 
-  const { categories, isLoading: isLoadingCategories } = useGetCategoriesByType(
-    CategoriesEnum.Type.STORE
-  );
+  const { categories, isLoading: isLoadingCategories } =
+    useFindCategoriesByType(CategoriesEnum.Type.STORE);
 
   const handleNewStore = () => {
     router.push(Urls.NEW_STORE);
@@ -132,7 +132,7 @@ export default function StoresPage() {
                     <Image
                       width={50}
                       height={50}
-                      src={getImageAwsS3(logo)}
+                      src={getImageUrl(logo)}
                       alt="logo"
                       className="rounded-full"
                     />
@@ -179,18 +179,12 @@ export default function StoresPage() {
                 value: category._id,
               })),
               align: "center",
-              render: (categoriesIds: string[]) =>
-                categoriesIds?.length
-                  ? categoriesIds.map((categoryId) => (
-                      <Tag key={categoryId}>
-                        {
-                          categoriesSort.find(
-                            (category: ICategory) => category._id === categoryId
-                          )?.name
-                        }
-                      </Tag>
-                    ))
-                  : "-",
+              render: (categoriesIds: string[]) => (
+                <TagCategoriesCustomAntd
+                  categories={categoriesSort}
+                  categoriesIds={categoriesIds}
+                />
+              ),
             },
             {
               title: "Status",

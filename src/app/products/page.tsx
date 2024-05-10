@@ -27,6 +27,7 @@ import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import YesNo from "../../components/common/YesNo/YesNo";
 import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
+import { TagCategoriesCustomAntd } from "../../components/custom/antd/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
 import Layout from "../../components/template/Layout/Layout";
 import CategoriesEnum from "../../shared/business/categories/categories.enum";
 import { ICategory } from "../../shared/business/categories/categories.interface";
@@ -38,11 +39,11 @@ import Urls from "../../shared/common/routes-app/routes-app";
 import { sortArray } from "../../shared/utils/array/functions";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../shared/utils/images/files-names";
-import { getImageAwsS3 } from "../../shared/utils/images/url-images";
+import { getImageUrl } from "../../shared/utils/images/url-images";
 import { formatterMoney } from "../../shared/utils/string-extensions/string-extensions";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
-import { useGetCategoriesByType } from "../categories/useGetCategoriesByType";
+import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";
 import { useFindStoresByUser } from "../stores/useFindStoresByUser";
 import { useFindProductsByUserTableState } from "./useFindProductsByUserTableState";
 
@@ -56,9 +57,8 @@ export default function ProductsPage() {
   const { isLoading, products, total } =
     useFindProductsByUserTableState(tableStateRequest);
 
-  const { categories, isLoading: isLoadingCategories } = useGetCategoriesByType(
-    CategoriesEnum.Type.PRODUCT
-  );
+  const { categories, isLoading: isLoadingCategories } =
+    useFindCategoriesByType(CategoriesEnum.Type.PRODUCT);
 
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
@@ -152,7 +152,7 @@ export default function ProductsPage() {
                       <Image
                         key={fileUrl}
                         width={40}
-                        src={getImageAwsS3(fileUrl)}
+                        src={getImageUrl(fileUrl)}
                         alt="mainUrl"
                         className="rounded-full"
                       />
@@ -195,18 +195,12 @@ export default function ProductsPage() {
                 text: category.name,
                 value: category._id,
               })),
-              render: (categoriesIds: string[]) =>
-                categoriesIds?.length
-                  ? categoriesIds.map((categoryId) => (
-                      <Tag key={categoryId}>
-                        {
-                          categoriesSort.find(
-                            (category: ICategory) => category._id === categoryId
-                          )?.name
-                        }
-                      </Tag>
-                    ))
-                  : "-",
+              render: (categoriesIds: string[]) => (
+                <TagCategoriesCustomAntd
+                  categories={categoriesSort}
+                  categoriesIds={categoriesIds}
+                />
+              ),
             },
             {
               title: "Created At",

@@ -31,6 +31,9 @@ const Urls = {
 
   // sales
   SALES: "/sales",
+
+  // sales
+  CATEGORIES: "/categories",
 };
 
 export default Urls;

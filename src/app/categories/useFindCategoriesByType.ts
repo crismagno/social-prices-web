@@ -5,7 +5,7 @@ import { serviceMethodsInstance } from "../../services/social-prices-api/Service
 import CategoriesEnum from "../../shared/business/categories/categories.enum";
 import { ICategory } from "../../shared/business/categories/categories.interface";
 
-export const useGetCategoriesByType = (
+export const useFindCategoriesByType = (
   type: CategoriesEnum.Type
 ): {
   isLoading: boolean;

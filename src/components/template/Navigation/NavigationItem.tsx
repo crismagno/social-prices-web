@@ -1,8 +1,8 @@
-import { Tooltip } from "antd";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Tooltip } from 'antd';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-import Loading from "../../common/Loading/Loading";
+import Loading from '../../common/Loading/Loading';
 
 interface Props {
   icon?: any;
@@ -29,7 +29,8 @@ const NavigationItem: React.FC<Props> = ({
 
   const classNameActiveLink: string = `
     bg-slate-100 hover:bg-slate-200 
-    dark:bg-gray-700 dark:text-yellow-200 dark:hover:bg-gray-800
+    dark:bg-gray-700 dark:text-yellow-200 dark:hover:bg-gray-800 
+    border-b-2 border-blue-500 transition-all
   `;
 
   const classNameDefault: string =
@@ -59,6 +60,7 @@ const NavigationItem: React.FC<Props> = ({
       flex items-center justify-center
        text-slate-800 hover:bg-gray-100 w-28 h-20 
        dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700
+       hover:border-b-2 hover:border-blue-500 transition-all
        ${className}
        ${pathname === url && classNameActiveLink}`}
     >

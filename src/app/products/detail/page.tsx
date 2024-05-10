@@ -40,6 +40,7 @@ import FormTextarea from "../../../components/common/FormTextarea/FormTextarea";
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../../components/common/HrCustom/HrCustom";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+import { TagCategoryCustomAntd } from "../../../components/custom/antd/TagCategoryCustomAntd/TagCategoryCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
 import CreateProductDto from "../../../services/social-prices-api/products/dto/createProduct.dto";
 import UpdateProductDto from "../../../services/social-prices-api/products/dto/updateProduct.dto";
@@ -49,12 +50,12 @@ import { ICategory } from "../../../shared/business/categories/categories.interf
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import { sortArray } from "../../../shared/utils/array/functions";
 import { getFileUrl } from "../../../shared/utils/images/helper";
-import { getImageAwsS3 } from "../../../shared/utils/images/url-images";
+import { getImageUrl } from "../../../shared/utils/images/url-images";
 import {
   formatterMoney,
   parserMoney,
 } from "../../../shared/utils/string-extensions/string-extensions";
-import { useGetCategoriesByType } from "../../categories/useGetCategoriesByType";
+import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindProductById } from "./useFindProductById";
 
@@ -80,9 +81,8 @@ export default function ProductDetailPage() {
 
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
-  const { categories, isLoading: isLoadingCategories } = useGetCategoriesByType(
-    CategoriesEnum.Type.PRODUCT
-  );
+  const { categories, isLoading: isLoadingCategories } =
+    useFindCategoriesByType(CategoriesEnum.Type.PRODUCT);
 
   const productId: string | null = searchParams.get("pid");
 
@@ -117,7 +117,7 @@ export default function ProductDetailPage() {
           uid: `product-file-${index}`,
           name: fileUrl,
           status: "done",
-          url: getImageAwsS3(fileUrl),
+          url: getImageUrl(fileUrl),
         })
       );
 
@@ -455,7 +455,10 @@ export default function ProductDetailPage() {
                             key={category._id}
                             value={category._id}
                           >
-                            {category.name}
+                            <TagCategoryCustomAntd
+                              category={category}
+                              useTag={false}
+                            />
                           </Select.Option>
                         )
                       )}

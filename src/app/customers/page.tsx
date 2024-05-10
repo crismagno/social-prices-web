@@ -22,8 +22,7 @@ import UsersEnum from "../../shared/business/users/users.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../shared/utils/images/files-names";
-import { getImageAwsS3 } from "../../shared/utils/images/url-images";
-import { getCustomerName } from "../../shared/utils/string-extensions/string-extensions";
+import { getImageUrl } from "../../shared/utils/images/url-images";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { useFindCustomersByOwnerOfUserTableState } from "./useFindCustomersByOwnerOfUserTableState";
@@ -69,7 +68,7 @@ export default function CustomersPage() {
   };
 
   return (
-    <Layout subtitle="Manager my customers" title="Customers" hasBackButton>
+    <Layout subtitle="Manager my Customers" title="Customers" hasBackButton>
       <Card
         title="Customers"
         className="h-min-80 mt-5"
@@ -112,7 +111,7 @@ export default function CustomersPage() {
                   <Image
                     width={50}
                     height={50}
-                    src={getImageAwsS3(avatar)}
+                    src={getImageUrl(avatar)}
                     alt="mainUrl"
                     className="rounded-full"
                   />
@@ -121,10 +120,9 @@ export default function CustomersPage() {
             },
             {
               title: "Name",
-              dataIndex: "firstName",
-              key: "firstName",
+              dataIndex: "name",
+              key: "name",
               align: "center",
-              render: (_, customer: ICustomer) => getCustomerName(customer),
             },
             {
               title: "Email",

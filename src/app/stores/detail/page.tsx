@@ -46,19 +46,21 @@ import {
   phoneNumberFormSchema,
   PhoneNumbers,
 } from "../../../components/common/PhoneNumbers/PhoneNumbers";
+import { TagCategoryCustomAntd } from "../../../components/custom/antd/TagCategoryCustomAntd/TagCategoryCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import CreateStoreDto from "../../../services/social-prices-api/stores/dto/createStore.dto";
 import UpdateStoreDto from "../../../services/social-prices-api/stores/dto/updateStore.dto";
 import CategoriesEnum from "../../../shared/business/categories/categories.enum";
 import { ICategory } from "../../../shared/business/categories/categories.interface";
+import AddressEnum from "../../../shared/business/enums/address.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
 import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number";
 import StoresEnum from "../../../shared/business/stores/stores.enum";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getFileUrl } from "../../../shared/utils/images/helper";
-import { getImageAwsS3 } from "../../../shared/utils/images/url-images";
-import { useGetCategoriesByType } from "../../categories/useGetCategoriesByType";
+import { getImageUrl } from "../../../shared/utils/images/url-images";
+import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
 import { useFindStoreById } from "./useFindStoreById";
 
 const formSchema = z.object({
@@ -84,9 +86,8 @@ export default function StoreDetailPage() {
 
   const { store, isLoadingStore } = useFindStoreById(storeId);
 
-  const { categories, isLoading: isLoadingCategories } = useGetCategoriesByType(
-    CategoriesEnum.Type.STORE
-  );
+  const { categories, isLoading: isLoadingCategories } =
+    useFindCategoriesByType(CategoriesEnum.Type.STORE);
 
   const [formValues, setFormValues] = useState<TFormSchema>();
 
@@ -114,7 +115,7 @@ export default function StoreDetailPage() {
 
   useEffect(() => {
     if (store?.logo) {
-      const url: string = getImageAwsS3(store.logo);
+      const url: string = getImageUrl(store.logo);
       setLogoUrl(url);
     }
 
@@ -189,6 +190,7 @@ export default function StoreDetailPage() {
               states.find((state) => state.code === address.stateCode)?.name ??
               "",
           },
+          types: address.types as AddressEnum.Type[],
         })
       );
 
@@ -251,11 +253,12 @@ export default function StoreDetailPage() {
                 ?.name ?? "",
           },
           state: {
-            code: address.stateCode ?? "",
+            code: address.stateCode ?? null,
             name:
               states.find((state) => state.code === address.stateCode)?.name ??
               "",
           },
+          types: address.types as AddressEnum.Type[],
         })
       );
 
@@ -298,7 +301,7 @@ export default function StoreDetailPage() {
     setIsVisibleAvatarModal(false);
     setFileList(fileList);
 
-    let url: string | null = store?.logo ? getImageAwsS3(store.logo) : null;
+    let url: string | null = store?.logo ? getImageUrl(store.logo) : null;
 
     if (fileList.length) {
       url = await getFileUrl(fileList?.[0]);
@@ -452,7 +455,10 @@ export default function StoreDetailPage() {
                     >
                       {categories.map((category: ICategory) => (
                         <Select.Option key={category._id} value={category._id}>
-                          {category.name}
+                          <TagCategoryCustomAntd
+                            category={category}
+                            useTag={false}
+                          />
                         </Select.Option>
                       ))}
                     </Select>

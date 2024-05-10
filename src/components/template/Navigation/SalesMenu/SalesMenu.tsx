@@ -1,6 +1,8 @@
 import "./styles.scss";
 
-import { Menu, MenuProps, message } from "antd";
+import { Menu, MenuProps } from "antd";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import { useRouter } from "next/navigation";
 
 import { ShoppingCartOutlined } from "@ant-design/icons";
 
@@ -28,6 +30,8 @@ const getItem = (
 interface Props {}
 
 export const SalesMenu: React.FC<Props> = ({}) => {
+  const router: AppRouterInstance = useRouter();
+
   const items: MenuItem[] = [
     getItem(
       <NavigationItem icon={IconCart()} text="Sales" url={Urls.SALES} />,
@@ -38,7 +42,7 @@ export const SalesMenu: React.FC<Props> = ({}) => {
           "Sales",
           null,
           null,
-          [getItem("Create Sale", "sub11", <ShoppingCartOutlined />)],
+          [getItem("Create Sale", Urls.SALES, <ShoppingCartOutlined />)],
           "group"
         ),
       ]
@@ -46,7 +50,7 @@ export const SalesMenu: React.FC<Props> = ({}) => {
   ];
 
   const onClick: MenuProps["onClick"] = (e) => {
-    message.info("test");
+    router.push(e.key);
   };
 
   return (

@@ -1,11 +1,28 @@
-import { ICustomer } from "../../business/customers/customer.interface";
+import AddressEnum from "../../business/enums/address.enum";
 import { IAddress } from "../../business/interfaces/address.interface";
 import { IPhoneNumber } from "../../business/interfaces/phone-number";
-import IUser from "../../business/users/user.interface";
 import UsersEnum from "../../business/users/users.enum";
 
 export const createComma = (str: string): string =>
   str?.trim() ? ", " + str : str;
+
+export const messengersToString = (messengers: string[]): string =>
+  messengers.reduce((acc, curr, index) => {
+    if (index !== 0) {
+      acc += `, ${
+        UsersEnum.PhoneNumberMessengerLabels[
+          curr as UsersEnum.PhoneNumberMessenger
+        ]
+      }`;
+    } else {
+      acc =
+        UsersEnum.PhoneNumberMessengerLabels[
+          curr as UsersEnum.PhoneNumberMessenger
+        ];
+    }
+
+    return acc;
+  }, "");
 
 export const createUserAddressName = (address: IAddress | any): string => {
   let addressName: string = "";
@@ -34,6 +51,24 @@ export const createUserAddressName = (address: IAddress | any): string => {
     addressName += createComma(address.address1);
   }
 
+  if (address.types?.length) {
+    const typesToString = address.types.reduce(
+      (acc: string, curr: AddressEnum.Type, index: number) => {
+        const lastIndexElement: number = address.types.length - 1;
+
+        if (index !== lastIndexElement) {
+          acc += `${AddressEnum.TypesLabels[curr]}, `;
+        } else if (index === lastIndexElement) {
+          acc += `${AddressEnum.TypesLabels[curr]}`;
+        }
+
+        return acc;
+      },
+      ""
+    );
+    addressName += ` (${typesToString})`;
+  }
+
   return addressName;
 };
 
@@ -41,7 +76,7 @@ export const createPhoneNumberName = (phoneNumber: IPhoneNumber): string => {
   let phoneNumberName: string = "";
 
   if (phoneNumber?.type) {
-    phoneNumberName += UsersEnum.PhoneTypesLabels[phoneNumber.type];
+    phoneNumberName += UsersEnum.TypeLabels[phoneNumber.type];
   }
 
   if (phoneNumber.number) {
@@ -52,26 +87,12 @@ export const createPhoneNumberName = (phoneNumber: IPhoneNumber): string => {
     }
   }
 
+  if (phoneNumber.messengers.length) {
+    phoneNumberName += `(${messengersToString(phoneNumber.messengers)})`;
+  }
+
   return phoneNumberName;
 };
-
-export const messengersToString = (messengers: string[]): string =>
-  messengers.reduce((acc, curr, index) => {
-    if (index !== 0) {
-      acc += `, ${
-        UsersEnum.PhoneNumberMessengerLabels[
-          curr as UsersEnum.PhoneNumberMessenger
-        ]
-      }`;
-    } else {
-      acc =
-        UsersEnum.PhoneNumberMessengerLabels[
-          curr as UsersEnum.PhoneNumberMessenger
-        ];
-    }
-
-    return acc;
-  }, "");
 
 export const formatterMoney = (value: any) =>
   `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -79,30 +100,8 @@ export const formatterMoney = (value: any) =>
 export const parserMoney = (value: any) =>
   value?.replace(/\R\$\s?|(,*)/g, "") as unknown as number;
 
-export const getUserName = (user: IUser): string => {
-  let userName: string = user?.firstName ?? "";
+export const getUserName = (user: IUser): string =>
+  user?.name || user.username || "";
 
-  if (user?.middleName) {
-    userName += ` ${user.middleName}`;
-  }
-
-  if (user?.lastName) {
-    userName += ` ${user.lastName}`;
-  }
-
-  return userName || user.username || "";
-};
-
-export const getCustomerName = (customer: ICustomer): string => {
-  let customerName: string = customer?.firstName ?? "";
-
-  if (customer?.middleName) {
-    customerName += ` ${customer.middleName}`;
-  }
-
-  if (customer?.lastName) {
-    customerName += ` ${customer.lastName}`;
-  }
-
-  return customerName ?? "";
-};
+export const parseToUpperAndUnderline = (value: string): string =>
+  value?.trim().toLocaleUpperCase().split(" ").join("_");

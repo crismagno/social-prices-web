@@ -30,7 +30,7 @@ import UsersEnum from "../../shared/business/users/users.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../shared/utils/images/files-names";
-import { getImageAwsS3 } from "../../shared/utils/images/url-images";
+import { getImageUrl } from "../../shared/utils/images/url-images";
 import {
   createUserAddressName,
   getUserName,
@@ -70,7 +70,7 @@ export default function ProfilePage() {
             alt="preview image"
             style={{ width: "100%" }}
             preview={false}
-            src={user.avatar ? getImageAwsS3(user.avatar) : defaultAvatarImage}
+            src={user.avatar ? getImageUrl(user.avatar) : defaultAvatarImage}
           />
         </Modal>
 
@@ -154,9 +154,7 @@ export default function ProfilePage() {
             <div className="flex flex-col justify-start w-1/2">
               <Description
                 label="My name"
-                description={`${user.firstName ?? "-"} ${
-                  user.middleName ?? "-"
-                } ${user.lastName ?? "-"}`}
+                description={`${user.name ?? "-"}`}
                 leftIcon={IconUser()}
               />
 
@@ -184,7 +182,7 @@ export default function ProfilePage() {
                           title={messengersToString(phoneNumber.messengers)}
                         >
                           <Tag key={phoneNumber.number}>{`${
-                            UsersEnum.PhoneTypesLabels[phoneNumber.type]
+                            UsersEnum.TypeLabels[phoneNumber.type]
                           } - ${phoneNumber.number}`}</Tag>
                         </Tooltip>
                       ))

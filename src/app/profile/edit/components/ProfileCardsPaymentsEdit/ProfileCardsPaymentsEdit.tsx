@@ -50,7 +50,7 @@ const generateNewAPhoneNumber = (
   isCollapsed: boolean = true
 ): TPhoneNumberFormSchema => ({
   number: "",
-  type: UsersEnum.PhoneTypes.OTHER,
+  type: UsersEnum.Type.OTHER,
   isCollapsed,
   uid: Date.now().toString(),
 });
@@ -198,17 +198,11 @@ const ProfileCardsPaymentsEdit: React.FC<Props> = ({ className = "" }) => {
                         errors?.phoneNumbers?.[index]?.type?.message
                       }
                     >
-                      {Object.keys(UsersEnum.PhoneTypes).map(
-                        (phoneType: string) => (
-                          <FormSelectOption key={phoneType} value={phoneType}>
-                            {
-                              UsersEnum.PhoneTypesLabels[
-                                phoneType as UsersEnum.PhoneTypes
-                              ]
-                            }
-                          </FormSelectOption>
-                        )
-                      )}
+                      {Object.keys(UsersEnum.Type).map((phoneType: string) => (
+                        <FormSelectOption key={phoneType} value={phoneType}>
+                          {UsersEnum.TypeLabels[phoneType as UsersEnum.Type]}
+                        </FormSelectOption>
+                      ))}
                     </FormSelect>
                   </div>
 
