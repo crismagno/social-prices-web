@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 
 import { EditOutlined } from "@ant-design/icons";
 
+import { AddressesTag } from "../../components/common/AddressesTag/AddressesTag";
 import Avatar from "../../components/common/Avatar/Avatar";
 import ContainerTitle from "../../components/common/ContainerTitle/ContainerTitle";
 import Description from "../../components/common/Description/Description";
@@ -23,19 +24,15 @@ import {
   IconUser,
 } from "../../components/common/icons/icons";
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
+import { PhoneNumbersTag } from "../../components/common/PhoneNumbersTag/PhoneNumbersTag";
 import Layout from "../../components/template/Layout/Layout";
 import useAuthData from "../../data/context/auth/useAuthData";
-import { IPhoneNumber } from "../../shared/business/interfaces/phone-number";
 import UsersEnum from "../../shared/business/users/users.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../shared/utils/images/files-names";
 import { getImageUrl } from "../../shared/utils/images/url-images";
-import {
-  createUserAddressName,
-  getUserName,
-  messengersToString,
-} from "../../shared/utils/string-extensions/string-extensions";
+import { getUserName } from "../../shared/utils/string-extensions/string-extensions";
 
 export default function ProfilePage() {
   const { user } = useAuthData();
@@ -175,20 +172,7 @@ export default function ProfilePage() {
                 className="overflow-x-auto"
                 description={
                   <div className="w-full flex">
-                    {user.phoneNumbers?.length ? (
-                      user.phoneNumbers.map((phoneNumber: IPhoneNumber) => (
-                        <Tooltip
-                          key={phoneNumber.number}
-                          title={messengersToString(phoneNumber.messengers)}
-                        >
-                          <Tag key={phoneNumber.number}>{`${
-                            UsersEnum.TypeLabels[phoneNumber.type]
-                          } - ${phoneNumber.number}`}</Tag>
-                        </Tooltip>
-                      ))
-                    ) : (
-                      <span className="text-sm text-gray-500">-</span>
-                    )}
+                    <PhoneNumbersTag phoneNumbers={user.phoneNumbers} />
                   </div>
                 }
                 leftIcon={IconPhone()}
@@ -201,15 +185,7 @@ export default function ProfilePage() {
                 <div className={`flex flex-col overflow-x-auto`}>
                   <label className="">Addresses</label>
                   <div className="w-full overflow-x-auto flex">
-                    {user.addresses?.length ? (
-                      user.addresses.map((address) => (
-                        <Tag key={address.uid}>
-                          {createUserAddressName(address)}
-                        </Tag>
-                      ))
-                    ) : (
-                      <span className="text-sm text-gray-500">---</span>
-                    )}
+                    <AddressesTag addresses={user.addresses} />
                   </div>
                 </div>
               </div>

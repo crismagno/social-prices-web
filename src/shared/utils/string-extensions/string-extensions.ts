@@ -24,7 +24,7 @@ export const messengersToString = (messengers: string[]): string =>
     return acc;
   }, "");
 
-export const createUserAddressName = (address: IAddress | any): string => {
+export const createAddressName = (address: IAddress | any): string => {
   let addressName: string = "";
 
   if (address.countryCode || address.country) {

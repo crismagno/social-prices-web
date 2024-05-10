@@ -15,9 +15,11 @@ import { RecordType } from "zod";
 
 import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 
+import { PhoneNumbersTag } from "../../components/common/PhoneNumbersTag/PhoneNumbersTag";
 import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
 import Layout from "../../components/template/Layout/Layout";
 import { ICustomer } from "../../shared/business/customers/customer.interface";
+import { IPhoneNumber } from "../../shared/business/interfaces/phone-number";
 import UsersEnum from "../../shared/business/users/users.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
@@ -133,6 +135,15 @@ export default function CustomersPage() {
                 <a href={`mailto:${email}`} className="text-blue-500">
                   {email}
                 </a>
+              ),
+            },
+            {
+              title: "Phone Numbers",
+              dataIndex: "phoneNumbers",
+              key: "phoneNumbers",
+              align: "center",
+              render: (phoneNumbers: IPhoneNumber[]) => (
+                <PhoneNumbersTag phoneNumbers={phoneNumbers} />
               ),
             },
             {

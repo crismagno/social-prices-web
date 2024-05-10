@@ -11,7 +11,7 @@ import {
   ICountryMockData,
   IStateMockData,
 } from "../../../shared/utils/mock-data/interfaces";
-import { createUserAddressName } from "../../../shared/utils/string-extensions/string-extensions";
+import { createAddressName } from "../../../shared/utils/string-extensions/string-extensions";
 import ButtonCommon from "../ButtonCommon/ButtonCommon";
 import Collapse from "../Collapse/Collapse";
 import ContainerTitle from "../ContainerTitle/ContainerTitle";
@@ -121,7 +121,7 @@ export const Addresses: React.FC<Props> = ({
       {fieldsAddresses.map((formAddress: TAddressFormSchema, index: number) => {
         const address: TAddressFormSchema = watch(`addresses.${index}`);
 
-        const addressName: string = createUserAddressName(address);
+        const addressName: string = createAddressName(address);
 
         return (
           <Collapse
