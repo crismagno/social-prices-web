@@ -22,7 +22,7 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -47,6 +47,7 @@ import {
   PhoneNumbers,
 } from "../../../components/common/PhoneNumbers/PhoneNumbers";
 import { TagCategoryCustomAntd } from "../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
+import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import CreateStoreDto from "../../../services/social-prices-api/stores/dto/createStore.dto";
@@ -57,6 +58,7 @@ import AddressEnum from "../../../shared/business/enums/address.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
 import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number";
 import StoresEnum from "../../../shared/business/stores/stores.enum";
+import { IStore } from "../../../shared/business/stores/stores.interface";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getFileUrl } from "../../../shared/utils/images/helper";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
@@ -394,77 +396,41 @@ export default function StoreDetailPage() {
               />
             </Col>
             <Col xs={8}>
-              <div className={`flex flex-col mt-4 mr-5`}>
-                <label className={`text-sm`}>Status</label>
-
-                <Controller
-                  control={control}
-                  name={`status`}
-                  render={({
-                    field: { onChange, onBlur, value, name, ref },
-                  }) => (
-                    <Select
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      name={name}
-                      value={value}
-                      ref={ref}
-                      placeholder={"Select status"}
-                    >
-                      {Object.keys(StoresEnum.Status).map((status: string) => (
-                        <Select.Option key={status} value={status}>
-                          <span className="mr-1">
-                            {
-                              StoresEnum.StatusLabel[
-                                status as StoresEnum.Status
-                              ]
-                            }
-                          </span>
-                          <Badge
-                            color={
-                              StoresEnum.StatusBadgeColor[
-                                status as StoresEnum.Status
-                              ]
-                            }
-                          />
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  )}
-                ></Controller>
-              </div>
+              <SelectCustomAntd<IStore>
+                controller={{ control, name: "status" }}
+                label="Status"
+                placeholder={"Select status"}
+                errorMessage={errors.status?.message}
+              >
+                {Object.keys(StoresEnum.Status).map((status: string) => (
+                  <Select.Option key={status} value={status}>
+                    <span className="mr-1">
+                      {StoresEnum.StatusLabel[status as StoresEnum.Status]}
+                    </span>
+                    <Badge
+                      color={
+                        StoresEnum.StatusBadgeColor[status as StoresEnum.Status]
+                      }
+                    />
+                  </Select.Option>
+                ))}
+              </SelectCustomAntd>
             </Col>
-            <Col xs={24} md={8}>
-              <div className={`flex flex-col mt-4 mr-5`}>
-                <label className={`text-sm`}>Categories</label>
 
-                <Controller
-                  control={control}
-                  name={`categoriesIds`}
-                  render={({
-                    field: { onChange, onBlur, value, name, ref },
-                  }) => (
-                    <Select
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      name={name}
-                      value={value}
-                      ref={ref}
-                      placeholder={"Select categories"}
-                      mode="multiple"
-                    >
-                      {categories.map((category: ICategory) => (
-                        <Select.Option key={category._id} value={category._id}>
-                          <TagCategoryCustomAntd
-                            category={category}
-                            useTag={false}
-                          />
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  )}
-                ></Controller>
-              </div>
+            <Col xs={24} md={8}>
+              <SelectCustomAntd<IStore>
+                controller={{ control, name: "categoriesIds" }}
+                label="Categories"
+                placeholder={"Select categories"}
+                mode="multiple"
+                errorMessage={errors.categoriesIds?.message}
+              >
+                {categories.map((category: ICategory) => (
+                  <Select.Option key={category._id} value={category._id}>
+                    <TagCategoryCustomAntd category={category} useTag={false} />
+                  </Select.Option>
+                ))}
+              </SelectCustomAntd>
             </Col>
           </Row>
 

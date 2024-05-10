@@ -41,12 +41,14 @@ import handleClientError from "../../../components/common/handleClientError/hand
 import HrCustom from "../../../components/common/HrCustom/HrCustom";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { TagCategoryCustomAntd } from "../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
+import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
 import CreateProductDto from "../../../services/social-prices-api/products/dto/createProduct.dto";
 import UpdateProductDto from "../../../services/social-prices-api/products/dto/updateProduct.dto";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import CategoriesEnum from "../../../shared/business/categories/categories.enum";
 import { ICategory } from "../../../shared/business/categories/categories.interface";
+import { IProduct } from "../../../shared/business/products/products.interface";
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import { sortArray } from "../../../shared/utils/array/functions";
 import { getFileUrl } from "../../../shared/utils/images/helper";
@@ -399,73 +401,37 @@ export default function ProductDetailPage() {
               />
             </Col>
             <Col xs={24} md={8}>
-              <div className={`flex flex-col mt-4 mr-5`}>
-                <label className={`text-sm`}>Stores</label>
-
-                <Controller
-                  control={control}
-                  name={`storeIds`}
-                  render={({
-                    field: { onChange, onBlur, value, name, ref },
-                  }) => (
-                    <Select
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      name={name}
-                      value={value}
-                      ref={ref}
-                      placeholder={"Select stores"}
-                      mode="multiple"
-                    >
-                      {stores.map((store: IStore) => (
-                        <Select.Option key={store._id} value={store._id}>
-                          {store.name}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  )}
-                ></Controller>
-              </div>
+              <SelectCustomAntd<IProduct>
+                controller={{ control, name: "storeIds" }}
+                label="Stores"
+                errorMessage={errors.storeIds?.message}
+                placeholder={"Select stores"}
+                mode="multiple"
+              >
+                {stores.map((store: IStore) => (
+                  <Select.Option key={store._id} value={store._id}>
+                    {store.name}
+                  </Select.Option>
+                ))}
+              </SelectCustomAntd>
             </Col>
           </Row>
 
           <Row>
             <Col xs={24} md={8}>
-              <div className={`flex flex-col mt-4 mr-5`}>
-                <label className={`text-sm`}>Categories</label>
-
-                <Controller
-                  control={control}
-                  name={`categoriesIds`}
-                  render={({
-                    field: { onChange, onBlur, value, name, ref },
-                  }) => (
-                    <Select
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      name={name}
-                      value={value}
-                      ref={ref}
-                      placeholder={"Select categories"}
-                      mode="multiple"
-                    >
-                      {sortArray(categories, "name").map(
-                        (category: ICategory) => (
-                          <Select.Option
-                            key={category._id}
-                            value={category._id}
-                          >
-                            <TagCategoryCustomAntd
-                              category={category}
-                              useTag={false}
-                            />
-                          </Select.Option>
-                        )
-                      )}
-                    </Select>
-                  )}
-                ></Controller>
-              </div>
+              <SelectCustomAntd<IProduct>
+                controller={{ control, name: "categoriesIds" }}
+                label="Categories"
+                errorMessage={errors.categoriesIds?.message}
+                placeholder={"Select scategoriestores"}
+                mode="multiple"
+              >
+                {sortArray(categories, "name").map((category: ICategory) => (
+                  <Select.Option key={category._id} value={category._id}>
+                    <TagCategoryCustomAntd category={category} useTag={false} />
+                  </Select.Option>
+                ))}
+              </SelectCustomAntd>
             </Col>
             <Col xs={24} md={8}>
               <div className={`flex flex-col mt-4`}>

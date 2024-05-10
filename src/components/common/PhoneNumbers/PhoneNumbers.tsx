@@ -1,15 +1,15 @@
 import { Select, Tooltip } from "antd";
-import { Controller, useFieldArray } from "react-hook-form";
+import { useFieldArray } from "react-hook-form";
 import { z } from "zod";
 
 import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number";
 import StoresEnum from "../../../shared/business/stores/stores.enum";
 import { createPhoneNumberName } from "../../../shared/utils/string-extensions/string-extensions";
+import { SelectCustomAntd } from "../../custom/antd/SelectCustomAntd/SelectCustomAntd";
 import ButtonCommon from "../ButtonCommon/ButtonCommon";
 import Collapse from "../Collapse/Collapse";
 import ContainerTitle from "../ContainerTitle/ContainerTitle";
 import FormInput from "../FormInput/FormInput";
-import FormSelect, { FormSelectOption } from "../FormSelect/FormSelect";
 import { IconPlus, IconTrash } from "../icons/icons";
 
 export const phoneNumberFormSchema = z.object({
@@ -122,21 +122,17 @@ export const PhoneNumbers: React.FC<Props> = ({
             >
               <div className="flex">
                 <div className="flex flex-col justify-start w-1/2">
-                  <FormSelect
+                  <SelectCustomAntd<IPhoneNumber>
+                    controller={{ control, name: `phoneNumbers.${index}.type` }}
                     label="Type"
-                    placeholder={"Select phone type"}
-                    defaultValue={formPhoneNumber.type}
-                    register={register}
-                    registerName={`phoneNumbers.${index}.type`}
-                    registerOptions={{ required: true }}
                     errorMessage={errors?.phoneNumbers?.[index]?.type?.message}
                   >
                     {Object.keys(StoresEnum.Type).map((phoneType: string) => (
-                      <FormSelectOption key={phoneType} value={phoneType}>
+                      <Select.Option key={phoneType} value={phoneType}>
                         {StoresEnum.TypeLabels[phoneType as StoresEnum.Type]}
-                      </FormSelectOption>
+                      </Select.Option>
                     ))}
-                  </FormSelect>
+                  </SelectCustomAntd>
                 </div>
 
                 <div className="flex flex-col justify-start w-1/2">
@@ -155,42 +151,33 @@ export const PhoneNumbers: React.FC<Props> = ({
                 </div>
 
                 <div className="flex flex-col justify-start w-1/2">
-                  <div className={`flex flex-col mt-4 mr-5`}>
-                    <label className={`text-sm`}>Messengers</label>
-
-                    <Controller
-                      control={control}
-                      name={`phoneNumbers.${index}.messengers`}
-                      render={({
-                        field: { onChange, onBlur, value, name, ref },
-                      }) => (
-                        <Select
-                          onChange={onChange}
-                          onBlur={onBlur}
-                          name={name}
-                          value={value}
-                          ref={ref}
-                          placeholder={"Select messengers"}
-                          mode="multiple"
+                  <SelectCustomAntd<IPhoneNumber>
+                    controller={{
+                      control,
+                      name: `phoneNumbers.${index}.messengers`,
+                    }}
+                    label="Messengers"
+                    errorMessage={
+                      errors?.phoneNumbers?.[index]?.messengers?.message
+                    }
+                    placeholder={"Select messengers"}
+                    mode="multiple"
+                  >
+                    {Object.keys(StoresEnum.PhoneNumberMessenger).map(
+                      (phoneMessenger: string) => (
+                        <Select.Option
+                          key={phoneMessenger}
+                          value={phoneMessenger}
                         >
-                          {Object.keys(StoresEnum.PhoneNumberMessenger).map(
-                            (phoneMessenger: string) => (
-                              <Select.Option
-                                key={phoneMessenger}
-                                value={phoneMessenger}
-                              >
-                                {
-                                  StoresEnum.PhoneNumberMessengerLabels[
-                                    phoneMessenger as StoresEnum.PhoneNumberMessenger
-                                  ]
-                                }
-                              </Select.Option>
-                            )
-                          )}
-                        </Select>
-                      )}
-                    ></Controller>
-                  </div>
+                          {
+                            StoresEnum.PhoneNumberMessengerLabels[
+                              phoneMessenger as StoresEnum.PhoneNumberMessenger
+                            ]
+                          }
+                        </Select.Option>
+                      )
+                    )}
+                  </SelectCustomAntd>
                 </div>
               </div>
             </Collapse>

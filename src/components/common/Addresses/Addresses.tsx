@@ -1,8 +1,9 @@
 import { Select, Tooltip } from "antd";
-import { Controller, useFieldArray } from "react-hook-form";
+import { useFieldArray } from "react-hook-form";
 import { z } from "zod";
 
 import AddressEnum from "../../../shared/business/enums/address.enum";
+import { IAddress } from "../../../shared/business/interfaces/address.interface";
 import citiesMockData from "../../../shared/utils/mock-data/brazil-cities.json";
 import statesMockData from "../../../shared/utils/mock-data/brazil-states.json";
 import countriesMockData from "../../../shared/utils/mock-data/countries.json";
@@ -12,11 +13,11 @@ import {
   IStateMockData,
 } from "../../../shared/utils/mock-data/interfaces";
 import { createAddressName } from "../../../shared/utils/string-extensions/string-extensions";
+import { SelectCustomAntd } from "../../custom/antd/SelectCustomAntd/SelectCustomAntd";
 import ButtonCommon from "../ButtonCommon/ButtonCommon";
 import Collapse from "../Collapse/Collapse";
 import ContainerTitle from "../ContainerTitle/ContainerTitle";
 import FormInput from "../FormInput/FormInput";
-import FormSelect, { FormSelectOption } from "../FormSelect/FormSelect";
 import { IconPlus, IconTrash } from "../icons/icons";
 
 export const countries: ICountryMockData[] = countriesMockData.filter(
@@ -146,23 +147,23 @@ export const Addresses: React.FC<Props> = ({
           >
             <div className="flex">
               <div className="flex flex-col justify-start w-1/2">
-                <FormSelect
-                  label="Country"
-                  placeholder={"Select country"}
-                  defaultValue={formAddress.countryCode}
-                  register={register}
-                  registerName={`addresses.${index}.countryCode`}
-                  registerOptions={{ required: true }}
+                <SelectCustomAntd<IAddress>
+                  controller={{
+                    control,
+                    name: `addresses.${index}.countryCode`,
+                  }}
                   errorMessage={
                     errors?.addresses?.[index]?.countryCode?.message
                   }
+                  label="Country"
+                  placeholder={"Select country"}
                 >
                   {countries.map((country: ICountryMockData) => (
-                    <FormSelectOption key={country.code} value={country.code}>
+                    <Select.Option key={country.code} value={country.code}>
                       {country.name}
-                    </FormSelectOption>
+                    </Select.Option>
                   ))}
-                </FormSelect>
+                </SelectCustomAntd>
 
                 <FormInput
                   label="Zipcode"
@@ -188,21 +189,18 @@ export const Addresses: React.FC<Props> = ({
               </div>
 
               <div className="flex flex-col justify-start w-1/2">
-                <FormSelect
+                <SelectCustomAntd<IAddress>
+                  controller={{ control, name: `addresses.${index}.stateCode` }}
+                  errorMessage={errors?.addresses?.[index]?.stateCode?.message}
                   label="State"
                   placeholder={"Select state"}
-                  defaultValue={formAddress.stateCode}
-                  register={register}
-                  registerName={`addresses.${index}.stateCode`}
-                  registerOptions={{ required: true }}
-                  errorMessage={errors?.addresses?.[index]?.stateCode?.message}
                 >
                   {states.map((state: IStateMockData) => (
-                    <FormSelectOption key={state.code} value={state.code}>
+                    <Select.Option key={state.code} value={state.code}>
                       {state.name}
-                    </FormSelectOption>
+                    </Select.Option>
                   ))}
-                </FormSelect>
+                </SelectCustomAntd>
 
                 <FormInput
                   label="Address 1"
@@ -226,25 +224,22 @@ export const Addresses: React.FC<Props> = ({
               </div>
 
               <div className="flex flex-col justify-start w-1/2">
-                <FormSelect
+                <SelectCustomAntd<IAddress>
+                  controller={{ control, name: `addresses.${index}.city` }}
+                  errorMessage={errors?.addresses?.[index]?.city?.message}
                   label="City"
                   placeholder={"Select city"}
-                  defaultValue={formAddress.city}
-                  register={register}
-                  registerName={`addresses.${index}.city`}
-                  registerOptions={{ required: true }}
-                  errorMessage={errors?.addresses?.[index]?.city?.message}
                 >
                   {stateCities
                     .find(
                       (stateCity) => stateCity.stateCode === address.stateCode
                     )
                     ?.cities.map((city: string) => (
-                      <FormSelectOption key={city} value={city}>
+                      <Select.Option key={city} value={city}>
                         {city}
-                      </FormSelectOption>
+                      </Select.Option>
                     ))}
-                </FormSelect>
+                </SelectCustomAntd>
 
                 <FormInput
                   label="Address 2"
@@ -255,33 +250,19 @@ export const Addresses: React.FC<Props> = ({
                   maxLength={200}
                 />
 
-                <div className={`flex flex-col mt-4 mr-5`}>
-                  <label className={`text-sm`}>Types</label>
-
-                  <Controller
-                    control={control}
-                    name={`addresses.${index}.types`}
-                    render={({
-                      field: { onChange, onBlur, value, name, ref },
-                    }) => (
-                      <Select
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        name={name}
-                        value={value}
-                        ref={ref}
-                        placeholder={"Select types"}
-                        mode="multiple"
-                      >
-                        {Object.keys(AddressEnum.Type).map((type: string) => (
-                          <Select.Option key={type} value={type}>
-                            {AddressEnum.TypesLabels[type as AddressEnum.Type]}
-                          </Select.Option>
-                        ))}
-                      </Select>
-                    )}
-                  ></Controller>
-                </div>
+                <SelectCustomAntd<IAddress>
+                  controller={{ control, name: `addresses.${index}.types` }}
+                  label="Types"
+                  errorMessage={errors?.addresses?.[index]?.types?.message}
+                  placeholder={"Select types"}
+                  mode="multiple"
+                >
+                  {Object.keys(AddressEnum.Type).map((type: string) => (
+                    <Select.Option key={type} value={type}>
+                      {AddressEnum.TypesLabels[type as AddressEnum.Type]}
+                    </Select.Option>
+                  ))}
+                </SelectCustomAntd>
               </div>
             </div>
           </Collapse>
