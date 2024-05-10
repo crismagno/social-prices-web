@@ -30,13 +30,13 @@ export const stateCities: ICityMockData[] = citiesMockData.states;
 
 export const addressFormSchema = z.object({
   address1: z.string().nonempty("Address1 is required"),
-  address2: z.string().optional(),
+  address2: z.string().nullable(),
   city: z.string().nonempty("City is required"),
   isValid: z.boolean(),
   stateCode: z.string().nonempty("State is required"),
   uid: z.string(),
   zip: z.string().nonempty("Zipcode is required"),
-  description: z.string().optional(),
+  description: z.string().nullable(),
   countryCode: z.string().nonempty("Country is required"),
   district: z.string().nonempty("District is required"),
   isCollapsed: z.boolean(),
