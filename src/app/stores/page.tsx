@@ -16,8 +16,8 @@ import { RecordType } from "zod";
 import { EditOutlined, EnterOutlined, PlusOutlined } from "@ant-design/icons";
 
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
+import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
 import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
-import { TagCategoriesCustomAntd } from "../../components/custom/antd/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
 import Layout from "../../components/template/Layout/Layout";
 import CategoriesEnum from "../../shared/business/categories/categories.enum";
 import { ICategory } from "../../shared/business/categories/categories.interface";

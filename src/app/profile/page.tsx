@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Button, Card, Image, Modal, Tag, Tooltip } from "antd";
+import { Button, Card, Col, Image, Modal, Row, Tag, Tooltip } from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
@@ -147,8 +147,8 @@ export default function ProfilePage() {
         </ContainerTitle>
 
         <ContainerTitle title="Profile" className="mt-6">
-          <div className="flex flex-wrap mt-5">
-            <div className="flex flex-col justify-start w-1/2">
+          <Row>
+            <Col xs={24} md={12}>
               <Description
                 label="My name"
                 description={`${user.name ?? "-"}`}
@@ -177,9 +177,9 @@ export default function ProfilePage() {
                 }
                 leftIcon={IconPhone()}
               />
-            </div>
+            </Col>
 
-            <div className="flex flex-col justify-start w-1/2">
+            <Col xs={24} md={12}>
               <div className="flex items-start mt-4 ">
                 <span className="mr-3">{IconQuestion()}</span>
                 <div className={`flex flex-col overflow-x-auto`}>
@@ -227,8 +227,8 @@ export default function ProfilePage() {
                   leftIcon={IconPencilSquare()}
                 />
               )}
-            </div>
-          </div>
+            </Col>
+          </Row>
         </ContainerTitle>
       </Card>
     </Layout>

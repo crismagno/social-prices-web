@@ -40,7 +40,7 @@ import FormTextarea from "../../../components/common/FormTextarea/FormTextarea";
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../../components/common/HrCustom/HrCustom";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
-import { TagCategoryCustomAntd } from "../../../components/custom/antd/TagCategoryCustomAntd/TagCategoryCustomAntd";
+import { TagCategoryCustomAntd } from "../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
 import CreateProductDto from "../../../services/social-prices-api/products/dto/createProduct.dto";
 import UpdateProductDto from "../../../services/social-prices-api/products/dto/updateProduct.dto";

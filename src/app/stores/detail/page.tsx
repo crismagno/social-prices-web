@@ -46,7 +46,7 @@ import {
   phoneNumberFormSchema,
   PhoneNumbers,
 } from "../../../components/common/PhoneNumbers/PhoneNumbers";
-import { TagCategoryCustomAntd } from "../../../components/custom/antd/TagCategoryCustomAntd/TagCategoryCustomAntd";
+import { TagCategoryCustomAntd } from "../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import CreateStoreDto from "../../../services/social-prices-api/stores/dto/createStore.dto";
