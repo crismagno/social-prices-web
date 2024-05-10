@@ -2,32 +2,17 @@
 
 import { useState } from "react";
 
-import {
-  Avatar,
-  Badge,
-  Button,
-  Card,
-  Image,
-  TablePaginationConfig,
-  Tag,
-  Tooltip,
-} from "antd";
-import {
-  FilterValue,
-  SorterResult,
-  TableCurrentDataSource,
-} from "antd/es/table/interface";
+import { Avatar, Badge, Button, Card, Image, Tag, Tooltip } from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
-import { RecordType } from "zod";
 
 import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
 import YesNo from "../../components/common/YesNo/YesNo";
-import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
+import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
 import CategoriesEnum from "../../shared/business/categories/categories.enum";
 import { ICategory } from "../../shared/business/categories/categories.interface";
@@ -70,28 +55,6 @@ export default function ProductsPage() {
     router.push(Urls.EDIT_PRODUCT.replace(":productId", product._id));
   };
 
-  const onSearch = (value: string) => {
-    setTableStateRequest({ ...tableStateRequest, search: value?.trim() });
-  };
-
-  const handleChangeTable = (
-    pagination: TablePaginationConfig,
-    filters: Record<string, FilterValue | null>,
-    sorter: SorterResult<RecordType> | SorterResult<RecordType>[],
-    extra: TableCurrentDataSource<RecordType>
-  ) => {
-    setTableStateRequest({
-      ...tableStateRequest,
-      filters,
-      pagination,
-      sort: {
-        field: sorter.field ?? "createdAt",
-        order: sorter.order ?? "ascend",
-      },
-      action: extra.action,
-    });
-  };
-
   if (isLoadingStores || isLoadingCategories) {
     return <LoadingFull />;
   }
@@ -118,9 +81,10 @@ export default function ProductsPage() {
           </>
         }
       >
-        <TableCustomAntd<IProduct>
+        <TableCustomAntd2<IProduct>
           rowKey={"_id"}
-          onChange={handleChangeTable}
+          tableStateRequest={tableStateRequest}
+          setTableStateRequest={setTableStateRequest}
           dataSource={products}
           columns={[
             {
@@ -288,7 +252,7 @@ export default function ProductsPage() {
               },
             },
           ]}
-          search={{ onSearch, placeholder: "Search products.." }}
+          search={{ placeholder: "Search products.." }}
           loading={isLoading}
           pagination={{
             total,

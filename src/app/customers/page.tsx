@@ -2,21 +2,15 @@
 
 import { useState } from "react";
 
-import { Button, Card, Image, TablePaginationConfig, Tag, Tooltip } from "antd";
-import {
-  FilterValue,
-  SorterResult,
-  TableCurrentDataSource,
-} from "antd/es/table/interface";
+import { Button, Card, Image, Tag, Tooltip } from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
-import { RecordType } from "zod";
 
 import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 
 import { PhoneNumbersTag } from "../../components/common/PhoneNumbersTag/PhoneNumbersTag";
-import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
+import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
 import { ICustomer } from "../../shared/business/customers/customer.interface";
 import { IPhoneNumber } from "../../shared/business/interfaces/phone-number";
@@ -47,28 +41,6 @@ export default function CustomersPage() {
     router.push(Urls.EDIT_CUSTOMER.replace(":customerId", customer._id));
   };
 
-  const onSearch = (value: string) => {
-    setTableStateRequest({ ...tableStateRequest, search: value?.trim() });
-  };
-
-  const handleChangeTable = (
-    pagination: TablePaginationConfig,
-    filters: Record<string, FilterValue | null>,
-    sorter: SorterResult<RecordType> | SorterResult<RecordType>[],
-    extra: TableCurrentDataSource<RecordType>
-  ) => {
-    setTableStateRequest({
-      ...tableStateRequest,
-      filters,
-      pagination,
-      sort: {
-        field: sorter.field ?? "createdAt",
-        order: sorter.order ?? "ascend",
-      },
-      action: extra.action,
-    });
-  };
-
   return (
     <Layout subtitle="Manager my Customers" title="Customers" hasBackButton>
       <Card
@@ -86,9 +58,8 @@ export default function CustomersPage() {
           </>
         }
       >
-        <TableCustomAntd<ICustomer>
+        <TableCustomAntd2<ICustomer>
           rowKey={"_id"}
-          onChange={handleChangeTable}
           dataSource={customers}
           columns={[
             {
@@ -195,8 +166,10 @@ export default function CustomersPage() {
               },
             },
           ]}
-          search={{ onSearch, placeholder: "Search customers.." }}
+          search={{ placeholder: "Search customers.." }}
           loading={isLoading}
+          tableStateRequest={tableStateRequest}
+          setTableStateRequest={setTableStateRequest}
           pagination={{
             total,
           }}

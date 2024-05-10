@@ -2,18 +2,12 @@
 
 import { useState } from "react";
 
-import { Button, Card, TablePaginationConfig, Tag, Tooltip } from "antd";
-import {
-  FilterValue,
-  SorterResult,
-  TableCurrentDataSource,
-} from "antd/es/table/interface";
+import { Button, Card, Tag, Tooltip } from "antd";
 import moment from "moment";
-import { RecordType } from "zod";
 
 import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 
-import TableCustomAntd from "../../components/custom/antd/TableCustomAntd/TableCustomAntd";
+import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
 import CategoriesEnum from "../../shared/business/categories/categories.enum";
 import { ICategory } from "../../shared/business/categories/categories.interface";
@@ -45,28 +39,6 @@ export default function CategoriesPage() {
     setIsCategoryDetailDrawerOpen(true);
   };
 
-  const onSearch = (value: string) => {
-    setTableStateRequest({ ...tableStateRequest, search: value?.trim() });
-  };
-
-  const handleChangeTable = (
-    pagination: TablePaginationConfig,
-    filters: Record<string, FilterValue | null>,
-    sorter: SorterResult<RecordType> | SorterResult<RecordType>[],
-    extra: TableCurrentDataSource<RecordType>
-  ) => {
-    setTableStateRequest({
-      ...tableStateRequest,
-      filters,
-      pagination,
-      sort: {
-        field: sorter.field ?? "createdAt",
-        order: sorter.order ?? "ascend",
-      },
-      action: extra.action,
-    });
-  };
-
   return (
     <Layout subtitle="My Categories" title="Categories" hasBackButton>
       <Card
@@ -84,9 +56,8 @@ export default function CategoriesPage() {
           </>
         }
       >
-        <TableCustomAntd<ICategory>
+        <TableCustomAntd2<ICategory>
           rowKey={"_id"}
-          onChange={handleChangeTable}
           dataSource={categories}
           columns={[
             {
@@ -153,12 +124,15 @@ export default function CategoriesPage() {
               },
             },
           ]}
-          search={{ onSearch, placeholder: "Search categories.." }}
+          search={{ placeholder: "Search categories.." }}
           loading={isLoading}
+          tableStateRequest={tableStateRequest}
+          setTableStateRequest={setTableStateRequest}
           pagination={{
             total,
           }}
         />
+
         <CategoryDetailDrawer
           isOpen={isCategoryDetailDrawerOpen}
           categoryId={categoryId}
