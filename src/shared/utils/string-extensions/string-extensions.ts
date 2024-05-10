@@ -1,11 +1,28 @@
-import AddressEnum from '../../business/enums/address.enum';
-import { IAddress } from '../../business/interfaces/address.interface';
-import { IPhoneNumber } from '../../business/interfaces/phone-number';
-import IUser from '../../business/users/user.interface';
-import UsersEnum from '../../business/users/users.enum';
+import AddressEnum from "../../business/enums/address.enum";
+import { IAddress } from "../../business/interfaces/address.interface";
+import { IPhoneNumber } from "../../business/interfaces/phone-number";
+import UsersEnum from "../../business/users/users.enum";
 
 export const createComma = (str: string): string =>
   str?.trim() ? ", " + str : str;
+
+export const messengersToString = (messengers: string[]): string =>
+  messengers.reduce((acc, curr, index) => {
+    if (index !== 0) {
+      acc += `, ${
+        UsersEnum.PhoneNumberMessengerLabels[
+          curr as UsersEnum.PhoneNumberMessenger
+        ]
+      }`;
+    } else {
+      acc =
+        UsersEnum.PhoneNumberMessengerLabels[
+          curr as UsersEnum.PhoneNumberMessenger
+        ];
+    }
+
+    return acc;
+  }, "");
 
 export const createUserAddressName = (address: IAddress | any): string => {
   let addressName: string = "";
@@ -70,26 +87,12 @@ export const createPhoneNumberName = (phoneNumber: IPhoneNumber): string => {
     }
   }
 
+  if (phoneNumber.messengers.length) {
+    phoneNumberName += `(${messengersToString(phoneNumber.messengers)})`;
+  }
+
   return phoneNumberName;
 };
-
-export const messengersToString = (messengers: string[]): string =>
-  messengers.reduce((acc, curr, index) => {
-    if (index !== 0) {
-      acc += `, ${
-        UsersEnum.PhoneNumberMessengerLabels[
-          curr as UsersEnum.PhoneNumberMessenger
-        ]
-      }`;
-    } else {
-      acc =
-        UsersEnum.PhoneNumberMessengerLabels[
-          curr as UsersEnum.PhoneNumberMessenger
-        ];
-    }
-
-    return acc;
-  }, "");
 
 export const formatterMoney = (value: any) =>
   `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
