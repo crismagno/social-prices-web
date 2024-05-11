@@ -10,9 +10,7 @@ import { HomeOutlined, PlusOutlined, TabletOutlined } from "@ant-design/icons";
 import Urls from "../../../../shared/common/routes-app/routes-app";
 import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
 
-interface Props {}
-
-export const StoresCard: React.FC<Props> = ({}) => {
+export const StoresCard: React.FC = () => {
   const router: AppRouterInstance = useRouter();
 
   const { isLoading, stores } = useFindStoresByUser();

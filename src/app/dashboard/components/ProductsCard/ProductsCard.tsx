@@ -14,9 +14,7 @@ import {
 import Urls from "../../../../shared/common/routes-app/routes-app";
 import { useCountProductsByUser } from "../../../products/useCountProductsByUser";
 
-interface Props {}
-
-export const ProductsCard: React.FC<Props> = ({}) => {
+export const ProductsCard: React.FC = () => {
   const router: AppRouterInstance = useRouter();
 
   const { isLoading, count } = useCountProductsByUser();

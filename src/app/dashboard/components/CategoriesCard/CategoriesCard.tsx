@@ -10,9 +10,7 @@ import { BlockOutlined, TabletOutlined } from "@ant-design/icons";
 import Urls from "../../../../shared/common/routes-app/routes-app";
 import { useCountCategoriesByUser } from "../../../categories/useCountCategoriesByUser";
 
-interface Props {}
-
-export const CategoriesCard: React.FC<Props> = ({}) => {
+export const CategoriesCard: React.FC = () => {
   const router: AppRouterInstance = useRouter();
 
   const { isLoading, count } = useCountCategoriesByUser();

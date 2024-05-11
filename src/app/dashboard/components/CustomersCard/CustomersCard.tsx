@@ -10,9 +10,7 @@ import { PlusOutlined, TabletOutlined, TeamOutlined } from "@ant-design/icons";
 import Urls from "../../../../shared/common/routes-app/routes-app";
 import { useCountCustomersByUser } from "../../../customers/useCountCustomersByUser";
 
-interface Props {}
-
-export const CustomersCard: React.FC<Props> = ({}) => {
+export const CustomersCard: React.FC = () => {
   const router: AppRouterInstance = useRouter();
 
   const { isLoading, count } = useCountCustomersByUser();
