@@ -6,6 +6,7 @@ namespace CategoriesServiceEnum {
     UPDATE = "/categories",
     FIND_BY_USER_TABLE_STATE = "/categories/userTableState",
     CREATE_MULTI = "/categories/multi",
+    COUNT_BY_USER = "/categories/user/count",
   }
 }
 

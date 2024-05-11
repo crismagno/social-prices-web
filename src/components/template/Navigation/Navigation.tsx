@@ -52,7 +52,7 @@ const Navigation: React.FC<Props> = ({}) => {
           <Avatar src={user?.avatar} alt="Image logo" />
         </NavigationItem>
 
-        <NavigationItem icon={IconHome} text="Home" url={Urls.DASHBOARD} />
+        <NavigationItem icon={IconHome()} text="Home" url={Urls.DASHBOARD} />
 
         <NavigationItem
           icon={
