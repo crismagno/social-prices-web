@@ -298,7 +298,7 @@ export default function CustomerDetailPage() {
   return (
     <Layout
       subtitle={isEditMode ? "Edit customer details" : "New customer details"}
-      title={isEditMode ? "Edit customer" : "New customer"}
+      title={isEditMode ? `Edit customer: ${customer?.name}` : "New customer"}
       hasBackButton
     >
       <Card className="h-min-80 mt-2">

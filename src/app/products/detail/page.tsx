@@ -286,7 +286,7 @@ export default function ProductDetailPage() {
   return (
     <Layout
       subtitle={isEditMode ? "Edit product details" : "New product details"}
-      title={isEditMode ? "Edit product" : "New product"}
+      title={isEditMode ? `Edit product: ${product?.name}` : "New product"}
       hasBackButton
     >
       <Card className="h-min-80 mt-2">
