@@ -158,13 +158,13 @@ export default function StoreDetailPage() {
 
   const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
     if (isEditMode) {
-      await updateStore(data);
+      await handleUpdate(data);
     } else {
-      await createStore(data);
+      await handleCreate(data);
     }
   };
 
-  const createStore = async (data: TFormSchema) => {
+  const handleCreate = async (data: TFormSchema) => {
     try {
       if (fileList.length === 0) {
         message.warning("Please select a logo.");
@@ -230,7 +230,7 @@ export default function StoreDetailPage() {
     }
   };
 
-  const updateStore = async (data: TFormSchema) => {
+  const handleUpdate = async (data: TFormSchema) => {
     try {
       if (!store) {
         message.warning("Store not found to update!");

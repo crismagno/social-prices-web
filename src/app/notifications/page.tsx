@@ -153,6 +153,7 @@ export default function NotificationsPage() {
             </Select>
           </Col>
         </Row>
+
         <Row>
           <Col xs={24}>
             <ListCustomAntd
