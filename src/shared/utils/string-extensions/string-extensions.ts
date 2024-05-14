@@ -66,6 +66,7 @@ export const createAddressName = (address: IAddress | any): string => {
       },
       ""
     );
+
     addressName += ` (${typesToString})`;
   }
 

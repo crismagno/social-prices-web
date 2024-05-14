@@ -21,7 +21,7 @@ export const CategoriesCard: React.FC = () => {
       cover={
         <div
           className="flex flex-col justify-center items-center w-full h-60 
-        bg-gradient-to-tr from-slate-600 to-pink-600 hover:to-slate-800 hover:to-pink-700 text-white"
+        bg-gradient-to-tr from-slate-600 to-pink-600 hover:from-slate-700 hover:to-pink-700 text-white"
         >
           <div className="flex flex-col justify-center items-center w-full h-full">
             <BlockOutlined style={{ fontSize: 50 }} />

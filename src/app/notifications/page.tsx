@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { Card, List, Tag } from "antd";
+import { Card, Col, List, Row, Select, Tag } from "antd";
 import moment from "moment";
 
 import ListCustomAntd from "../../components/custom/antd/ListCustomAntd/ListCustomAntd";
@@ -82,6 +82,25 @@ export default function NotificationsPage() {
     });
   };
 
+  const handleChangeType = (type: NotificationsEnum.Type | null) => {
+    setUseConcat(false);
+
+    setTableStateRequest({
+      ...tableStateRequest,
+      filters: type
+        ? {
+            type: [type],
+          }
+        : [],
+      pagination: {
+        total: 0,
+        current: undefined,
+        pageSize: 10,
+        skip: 0,
+      },
+    });
+  };
+
   const renderDataItem = (notification: INotification): JSX.Element => {
     return (
       <List.Item key={notification._id}>
@@ -117,16 +136,37 @@ export default function NotificationsPage() {
   return (
     <Layout subtitle="My Notifications" title="Notifications" hasBackButton>
       <Card title="Notifications" className="h-min-80 mt-5">
-        <ListCustomAntd
-          containerHeight={600}
-          data={notifications}
-          handleScroll={handleChangeList}
-          itemKey="_id"
-          renderDataItem={renderDataItem}
-          isLoading={isLoading}
-          search={{ onSearch, placeholder: "Search notifications.." }}
-          total={total}
-        />
+        <Row>
+          <Col xs={24}>
+            <label>Filter By Type: </label>
+            <Select
+              onChange={handleChangeType}
+              className="w-52"
+              placeholder="Select a Type"
+            >
+              <Select.Option value={null}>Select a Type</Select.Option>
+              {Object.keys(NotificationsEnum.Type).map((type) => (
+                <Select.Option key={type} value={type}>
+                  {NotificationsEnum.TypeLabels[type as NotificationsEnum.Type]}
+                </Select.Option>
+              ))}
+            </Select>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={24}>
+            <ListCustomAntd
+              containerHeight={600}
+              data={notifications}
+              handleScroll={handleChangeList}
+              itemKey="_id"
+              renderDataItem={renderDataItem}
+              isLoading={isLoading}
+              search={{ onSearch, placeholder: "Search notifications.." }}
+              total={total}
+            />
+          </Col>
+        </Row>
       </Card>
     </Layout>
   );

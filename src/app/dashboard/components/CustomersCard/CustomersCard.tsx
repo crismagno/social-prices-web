@@ -21,7 +21,8 @@ export const CustomersCard: React.FC = () => {
       cover={
         <div
           className="flex flex-col justify-center items-center w-full h-60 
-      bg-gradient-to-tr from-pink-700 to-blue-500 hover:to-green-800 hover:to-blue-700 text-white"
+            bg-gradient-to-tr from-pink-700 to-blue-500 
+            hover:from-pink-800 hover:to-blue-600 text-white"
         >
           <div className="flex flex-col justify-center items-center w-full h-full">
             <TeamOutlined style={{ fontSize: 50 }} />

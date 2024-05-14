@@ -25,7 +25,8 @@ export const ProductsCard: React.FC = () => {
       cover={
         <div
           className="flex flex-col justify-center items-center w-full h-60 
-      bg-gradient-to-tr from-green-700 to-blue-500 hover:to-green-800 hover:to-blue-700 text-white"
+            bg-gradient-to-tr from-green-700 to-blue-500 
+          hover:from-green-800 hover:to-blue-600 text-white"
         >
           <div className="flex flex-col justify-center items-center w-full h-full">
             <AppstoreOutlined style={{ fontSize: 50 }} />
