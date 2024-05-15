@@ -106,9 +106,19 @@ export default function ProfilePage() {
               label="Logged By"
               className="mr-5"
               description={
-                user.loggedByAuthProvider
-                  ? UsersEnum.ProviderLabels[user.loggedByAuthProvider]
-                  : UsersEnum.ProviderLabels.OTHER
+                <Tag
+                  color={
+                    UsersEnum.ProviderColors[
+                      user.loggedByAuthProvider ?? UsersEnum.Provider.OTHER
+                    ]
+                  }
+                >
+                  {
+                    UsersEnum.ProviderLabels[
+                      user.loggedByAuthProvider ?? UsersEnum.Provider.OTHER
+                    ]
+                  }
+                </Tag>
               }
               leftIcon={IconFinger()}
             />
@@ -117,9 +127,19 @@ export default function ProfilePage() {
               label="Auth Provider"
               className="mr-5"
               description={
-                user.authProvider
-                  ? UsersEnum.ProviderLabels[user.authProvider]
-                  : ""
+                <Tag
+                  color={
+                    UsersEnum.ProviderColors[
+                      user.authProvider ?? UsersEnum.Provider.OTHER
+                    ]
+                  }
+                >
+                  {
+                    UsersEnum.ProviderLabels[
+                      user.authProvider ?? UsersEnum.Provider.OTHER
+                    ]
+                  }
+                </Tag>
               }
               leftIcon={IconFinger()}
             />
