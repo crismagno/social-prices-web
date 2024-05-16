@@ -97,7 +97,7 @@ function ListCustomAntd<T extends object = any>({
 
         <div className="flex justify-between items-baseline mt-2">
           <div>
-            Total: {total} / {data.length}
+            Total: {data.length} / {total}
           </div>
           <Button onClick={handleScroll} loading={isLoading}>
             Load More
