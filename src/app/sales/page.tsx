@@ -3,6 +3,8 @@
 import { useState } from "react";
 
 import { Button, Card, Tag } from "antd";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import { useRouter } from "next/navigation";
 
 import { PlusOutlined } from "@ant-design/icons";
 
@@ -10,17 +12,24 @@ import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/Tabl
 import Layout from "../../components/template/Layout/Layout";
 import { ISale } from "../../shared/business/sales/sale.interface";
 import SalesEnum from "../../shared/business/sales/sales.enum";
+import Urls from "../../shared/common/routes-app/routes-app";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { useFindSalesByUserTableState } from "./useFindSalesByUserTableState";
 
 export default function SalesPage() {
+  const router: AppRouterInstance = useRouter();
+
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<ISale> | undefined
   >(createTableState({ sort: { field: "createdAt", order: "ascend" } }));
 
   const { isLoading, sales, total } =
     useFindSalesByUserTableState(tableStateRequest);
+
+  const handleCreateSale = () => {
+    router.push(Urls.SALES_CREATE);
+  };
 
   return (
     <Layout subtitle="Sales information" title="Sales">
@@ -29,7 +38,11 @@ export default function SalesPage() {
         className="h-min-80 mt-5"
         extra={
           <>
-            <Button type="primary" onClick={() => {}} icon={<PlusOutlined />}>
+            <Button
+              type="primary"
+              onClick={handleCreateSale}
+              icon={<PlusOutlined />}
+            >
               Create Sale
             </Button>
           </>
