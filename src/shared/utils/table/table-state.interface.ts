@@ -6,6 +6,7 @@ export interface ITableStateRequest<T> {
   pagination?: ITableStateRequestPagination;
   filters?: any;
   action?: any;
+  useConcat?: boolean;
 }
 
 export interface ITableStateRequestSort<T> {

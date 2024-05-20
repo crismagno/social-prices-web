@@ -30,7 +30,12 @@ export const useFindCustomersByOwnerOfUserTableState = (
           tableState
         );
 
-      setCustomers(response.data);
+      if (tableState?.useConcat) {
+        setCustomers((value) => [...value, ...response.data]);
+      } else {
+        setCustomers(response.data);
+      }
+
       setTotal(response.total);
     } catch (error: any) {
       handleClientError(error);

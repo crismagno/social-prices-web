@@ -9,8 +9,7 @@ import {
 } from "../../shared/utils/table/table-state.interface";
 
 export const useFindNotificationsByUserTableState = (
-  tableState?: ITableStateRequest<INotification>,
-  useConcat: boolean = false
+  tableState?: ITableStateRequest<INotification>
 ): {
   isLoading: boolean;
   notifications: INotification[];
@@ -32,7 +31,7 @@ export const useFindNotificationsByUserTableState = (
           tableState
         );
 
-      if (useConcat) {
+      if (tableState?.useConcat) {
         setNotifications((value) => [...value, ...response.data]);
       } else {
         setNotifications(response.data);
@@ -44,7 +43,7 @@ export const useFindNotificationsByUserTableState = (
     } finally {
       setIsLoading(false);
     }
-  }, [tableState, useConcat]);
+  }, [tableState]);
 
   useEffect(() => {
     fetchFindNotificationsByUserTableState();

@@ -30,10 +30,8 @@ export default function NotificationsPage() {
     })
   );
 
-  const [useConcat, setUseConcat] = useState<boolean>(true);
-
   const { isLoading, notifications, total } =
-    useFindNotificationsByUserTableState(tableStateRequest, useConcat);
+    useFindNotificationsByUserTableState(tableStateRequest);
 
   useEffect(() => {
     const notificationsNotSeenIds: string[] = notifications
@@ -53,9 +51,7 @@ export default function NotificationsPage() {
     }
   }, [notifications]);
 
-  const handleChangeList = () => {
-    setUseConcat(true);
-
+  const handleScrollList = () => {
     setTableStateRequest({
       ...tableStateRequest,
       filters: {},
@@ -65,11 +61,11 @@ export default function NotificationsPage() {
         pageSize: 10,
         skip: notifications.length,
       },
+      useConcat: true,
     });
   };
-  const onSearch = (value: string) => {
-    setUseConcat(false);
 
+  const onSearch = (value: string) => {
     setTableStateRequest({
       ...tableStateRequest,
       search: value?.trim(),
@@ -79,12 +75,11 @@ export default function NotificationsPage() {
         pageSize: 10,
         skip: 0,
       },
+      useConcat: false,
     });
   };
 
   const handleChangeType = (type: NotificationsEnum.Type | null) => {
-    setUseConcat(false);
-
     setTableStateRequest({
       ...tableStateRequest,
       filters: type
@@ -98,6 +93,7 @@ export default function NotificationsPage() {
         pageSize: 10,
         skip: 0,
       },
+      useConcat: false,
     });
   };
 
@@ -159,7 +155,7 @@ export default function NotificationsPage() {
             <ListCustomAntd
               containerHeight={600}
               data={notifications}
-              handleScroll={handleChangeList}
+              handleScroll={handleScrollList}
               itemKey="_id"
               renderDataItem={renderDataItem}
               isLoading={isLoading}
