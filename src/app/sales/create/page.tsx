@@ -48,7 +48,7 @@ const customerFormSchema = z.object({
   gender: z.string().nullable(),
 });
 
-type TCustomerFormSchema = z.infer<typeof formSchema>;
+type TCustomerFormSchema = z.infer<typeof customerFormSchema>;
 
 const formSchema = z.object({
   customer: customerFormSchema,
@@ -380,11 +380,12 @@ export default function CreateSalePage() {
                 <InputCustomAntd
                   controller={{ control, name: "customer.address.zip" }}
                   label="Zipcode"
-                  divClassName="mt-1 ml-3"
+                  divClassName="mt-0 ml-3"
                   placeholder={"Enter zip"}
                   errorMessage={errors?.customer?.address?.zip?.message}
                   maxLength={200}
                 />
+
                 <InputCustomAntd
                   controller={{ control, name: "customer.address.description" }}
                   label="Description"
@@ -393,6 +394,21 @@ export default function CreateSalePage() {
                   errorMessage={errors?.customer?.address?.description?.message}
                   maxLength={200}
                 />
+
+                <SelectCustomAntd
+                  controller={{ control, name: `customer.address.types` }}
+                  label="Types"
+                  divClassName="mt-1 ml-3"
+                  placeholder={"Select types"}
+                  errorMessage={errors?.customer?.address?.types?.message?.toString()}
+                  mode="multiple"
+                >
+                  {Object.keys(AddressEnum.Type).map((type: string) => (
+                    <Select.Option key={type} value={type}>
+                      {AddressEnum.TypesLabels[type as AddressEnum.Type]}
+                    </Select.Option>
+                  ))}
+                </SelectCustomAntd>
               </Col>
             </Row>
           </Card>
