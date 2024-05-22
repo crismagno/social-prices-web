@@ -232,7 +232,8 @@ export const Addresses: React.FC<Props> = ({
                 >
                   {stateCities
                     .find(
-                      (stateCity) => stateCity.stateCode === address.stateCode
+                      (stateCity: ICityMockData) =>
+                        stateCity.stateCode === address.stateCode
                     )
                     ?.cities.map((city: string) => (
                       <Select.Option key={city} value={city}>

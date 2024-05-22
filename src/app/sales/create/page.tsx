@@ -2,25 +2,38 @@
 
 import { useState } from "react";
 
-import { Card, Col, Divider, Image, Row, Select, Tooltip } from "antd";
+import { Card, Col, Image, Row, Select, Tooltip } from "antd";
+import { find, includes } from "lodash";
 import moment from "moment";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { addressFormSchema } from "../../../components/common/Addresses/Addresses";
+import {
+  addressFormSchema,
+  countries,
+  generateNewAddress,
+  stateCities,
+  states,
+  TAddressFormSchema,
+} from "../../../components/common/Addresses/Addresses";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
-import { phoneNumberFormSchema } from "../../../components/common/PhoneNumbers/PhoneNumbers";
 import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
+import AddressEnum from "../../../shared/business/enums/address.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
 import UsersEnum from "../../../shared/business/users/users.enum";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
+import {
+  ICityMockData,
+  ICountryMockData,
+  IStateMockData,
+} from "../../../shared/utils/mock-data/interfaces";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { SelectCustomer } from "./components/SelectCustomer/SelectCustomer";
 
@@ -28,8 +41,8 @@ const customerFormSchema = z.object({
   customerId: z.string().nullable(),
   name: z.string(),
   email: z.string(),
-  addresses: z.array(addressFormSchema),
-  phoneNumbers: z.array(phoneNumberFormSchema),
+  address: addressFormSchema,
+  phoneNumber: z.string().nullable(),
   about: z.string().nullable(),
   birthDate: z.string().nullable(),
   gender: z.string().nullable(),
@@ -39,22 +52,6 @@ type TCustomerFormSchema = z.infer<typeof formSchema>;
 
 const formSchema = z.object({
   customer: customerFormSchema,
-  shippingAddress: z
-    .object({
-      address1: z.string().nonempty("Address1 is required"),
-      address2: z.string().nullable(),
-      city: z.string().nonempty("City is required"),
-      isValid: z.boolean(),
-      stateCode: z.string().nonempty("State is required"),
-      uid: z.string(),
-      zip: z.string().nonempty("Zipcode is required"),
-      description: z.string().nullable(),
-      countryCode: z.string().nonempty("Country is required"),
-      district: z.string().nonempty("District is required"),
-      isCollapsed: z.boolean(),
-      types: z.array(z.string()),
-    })
-    .nullable(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -65,6 +62,10 @@ export default function CreateSalePage() {
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
   const [selectedCustomer, setSelectedCustomer] = useState<ICustomer | null>(
+    null
+  );
+
+  const [selectedAddressUid, setSelectedAddressUid] = useState<string | null>(
     null
   );
 
@@ -84,12 +85,35 @@ export default function CreateSalePage() {
   }
 
   const handleSelectCustomer = (customer: ICustomer | null) => {
+    const firstAddress: IAddress | undefined = find(
+      customer?.addresses,
+      (customerAddress: IAddress) =>
+        includes(customerAddress.types, AddressEnum.Type.SHIPPING)
+    );
+
+    const address: TAddressFormSchema = firstAddress
+      ? {
+          address1: firstAddress.address1,
+          address2: firstAddress.address2,
+          city: firstAddress.city,
+          countryCode: firstAddress.country.code,
+          description: firstAddress.description,
+          district: firstAddress.district,
+          isValid: firstAddress.isValid,
+          types: firstAddress.types,
+          uid: firstAddress.uid,
+          zip: firstAddress.zip,
+          isCollapsed: true,
+          stateCode: firstAddress.state?.code!,
+        }
+      : generateNewAddress();
+
     setFormValues({
       ...formValues,
       customer: {
         customerId: customer?._id ?? null,
         about: null,
-        addresses: customer?.addresses ?? [],
+        address,
         birthDate: customer?.birthDate
           ? moment(customer?.birthDate)
               .utc()
@@ -98,94 +122,89 @@ export default function CreateSalePage() {
         email: customer?.email ?? "",
         gender: customer?.gender ?? UsersEnum.Gender.MALE,
         name: customer?.name ?? "",
-        phoneNumbers: customer?.phoneNumbers ?? [],
+        phoneNumber: customer?.phoneNumbers?.[0]?.number ?? null,
       },
     });
 
     setSelectedCustomer(customer);
+
+    setSelectedAddressUid(firstAddress?.uid ?? null);
   };
 
-  const renderShippingAddress = () => {
-    let selectShippingAddress = null;
-    if (formValues?.customer?.customerId) {
-      selectShippingAddress = (
-        <div className={`flex flex-col mt-4 mr-5`}>
-          <label className={`text-sm`}>Select Address</label>
+  const handleSelectAddress = (addressUid: string | null) => {
+    const findAddress: IAddress | undefined = addressUid
+      ? find(selectedCustomer?.addresses, { uid: addressUid })
+      : undefined;
 
-          <Select style={{ width: 300 }}>
-            {formValues?.customer?.addresses.map((address: IAddress) => (
-              <Select.Option key={address.uid} value={address.uid}>
-                {address.address1}
-              </Select.Option>
-            ))}
-          </Select>
-        </div>
-      );
-    }
+    const address: TAddressFormSchema = findAddress
+      ? {
+          address1: findAddress.address1,
+          address2: findAddress.address2,
+          city: findAddress.city,
+          countryCode: findAddress.country.code,
+          description: findAddress.description,
+          district: findAddress.district,
+          isValid: findAddress.isValid,
+          types: findAddress.types,
+          uid: findAddress.uid,
+          zip: findAddress.zip,
+          isCollapsed: true,
+          stateCode: findAddress.state?.code!,
+        }
+      : generateNewAddress();
 
-    return (
-      <Row>
-        <Divider type="vertical" />
-        <Col xs={24} md={9}>
-          {selectShippingAddress}
-          <InputCustomAntd<ICustomer>
-            controller={{ control, name: "customer.name" }}
-            label="Name"
-            divClassName="mt-0"
-            placeholder={"Enter customer name"}
-            errorMessage={errors?.customer?.name?.message}
-            maxLength={200}
-          />
-        </Col>
-      </Row>
-    );
+    setFormValues({
+      ...formValues,
+      customer: {
+        ...formValues!.customer,
+        address,
+      },
+    });
+
+    setSelectedAddressUid(addressUid);
   };
 
   return (
     <Layout subtitle="Create manual sale" title="Create Sale">
-      <Card
-        title={
-          <div className="flex">
-            <label className="mr-2">Customer: </label>
-
-            <SelectCustomer
-              control={control}
-              errors={errors}
-              onSelectCustomer={handleSelectCustomer}
-            />
-          </div>
-        }
-        className="h-min-80 mt-5"
-      >
-        <Row>
-          <Col xs={24} md={2}>
-            <Tooltip title="See avatar">
-              <Image
-                width={70}
-                height={70}
-                src={
-                  selectedCustomer?.avatar
-                    ? getImageUrl(selectedCustomer.avatar)
-                    : defaultAvatarImage
-                }
-                onError={() => (
+      <Row gutter={[16, 16]}>
+        {/* Customer Info */}
+        <Col xs={24} md={12}>
+          <Card
+            title={
+              <div className="flex">
+                <label className="mr-2">Customer: </label>
+                <SelectCustomer onSelectCustomer={handleSelectCustomer} />
+              </div>
+            }
+            className="h-min-80 mt-5"
+          >
+            <Row>
+              <Col xs={24} md={4}>
+                <Tooltip title="See avatar">
                   <Image
-                    width={70}
-                    height={70}
-                    src={defaultAvatarImage}
+                    width={110}
+                    height={110}
+                    src={
+                      selectedCustomer?.avatar
+                        ? getImageUrl(selectedCustomer.avatar)
+                        : defaultAvatarImage
+                    }
+                    onError={() => (
+                      <Image
+                        width={110}
+                        height={110}
+                        src={defaultAvatarImage}
+                        alt="avatar"
+                        className="rounded-full shadow-md"
+                      />
+                    )}
                     alt="avatar"
                     className="rounded-full shadow-md"
                   />
-                )}
-                alt="avatar"
-                className="rounded-full shadow-md"
-              />
-            </Tooltip>
-          </Col>
+                </Tooltip>
+              </Col>
 
-          <Col xs={24} md={10}>
-            <Row>
-              <Col xs={24} md={9}>
+              <Col xs={24} md={10}>
                 <InputCustomAntd<ICustomer>
                   controller={{ control, name: "customer.name" }}
                   label="Name"
@@ -204,9 +223,18 @@ export default function CreateSalePage() {
                   errorMessage={errors?.customer?.email?.message}
                   maxLength={200}
                 />
+
+                <InputCustomAntd<ICustomer>
+                  controller={{ control, name: "customer.phoneNumber" }}
+                  label="Phone Number"
+                  divClassName="mt-1"
+                  placeholder={"Enter customer phone number"}
+                  errorMessage={errors?.customer?.phoneNumber?.message}
+                  maxLength={200}
+                />
               </Col>
 
-              <Col xs={24} md={9}>
+              <Col xs={24} md={10}>
                 <InputCustomAntd<ICustomer>
                   controller={{ control, name: "customer.birthDate" }}
                   label="Birth Date"
@@ -231,13 +259,145 @@ export default function CreateSalePage() {
                 </SelectCustomAntd>
               </Col>
             </Row>
-          </Col>
+          </Card>
+        </Col>
 
-          <Col xs={24} md={12}>
-            {renderShippingAddress()}
-          </Col>
-        </Row>
-      </Card>
+        {/* Customer Address */}
+        <Col xs={24} md={12}>
+          <Card
+            title={
+              <div className="flex">
+                <label className="mr-2">
+                  {selectedCustomer ? "Shipping Address: " : "Shipping Address"}{" "}
+                </label>
+
+                {selectedCustomer && (
+                  <Select
+                    style={{ width: 300 }}
+                    onChange={handleSelectAddress}
+                    defaultValue={null}
+                    value={selectedAddressUid}
+                  >
+                    <Select.Option key={"NEW_ADDRESS"} value={null}>
+                      New Address
+                    </Select.Option>
+
+                    {selectedCustomer?.addresses.map((address: IAddress) => (
+                      <Select.Option key={address.uid} value={address.uid}>
+                        {address.address1}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                )}
+              </div>
+            }
+            className="h-min-80 mt-5"
+          >
+            <Row>
+              <Col xs={24} md={8}>
+                <SelectCustomAntd
+                  controller={{
+                    control,
+                    name: `customer.address.countryCode`,
+                  }}
+                  divClassName="mt-0"
+                  errorMessage={errors?.customer?.address?.countryCode?.message}
+                  label="Country"
+                  placeholder={"Select country"}
+                >
+                  {countries.map((country: ICountryMockData) => (
+                    <Select.Option key={country.code} value={country.code}>
+                      {country.name}
+                    </Select.Option>
+                  ))}
+                </SelectCustomAntd>
+
+                <SelectCustomAntd<IAddress>
+                  controller={{ control, name: `customer.address.stateCode` }}
+                  errorMessage={errors?.customer?.address?.stateCode?.message}
+                  label="State"
+                  divClassName="mt-1"
+                  placeholder={"Select state"}
+                >
+                  {states.map((state: IStateMockData) => (
+                    <Select.Option key={state.code} value={state.code}>
+                      {state.name}
+                    </Select.Option>
+                  ))}
+                </SelectCustomAntd>
+
+                <SelectCustomAntd<IAddress>
+                  controller={{ control, name: `customer.address.city` }}
+                  errorMessage={errors?.customer?.address?.city?.message}
+                  label="City"
+                  divClassName="mt-1"
+                  placeholder={"Select city"}
+                >
+                  {stateCities
+                    .find(
+                      (stateCity: ICityMockData) =>
+                        stateCity.stateCode ===
+                        formValues?.customer?.address.stateCode
+                    )
+                    ?.cities.map((city: string) => (
+                      <Select.Option key={city} value={city}>
+                        {city}
+                      </Select.Option>
+                    ))}
+                </SelectCustomAntd>
+              </Col>
+
+              <Col xs={24} md={8}>
+                <InputCustomAntd
+                  controller={{ control, name: "customer.address.address1" }}
+                  label="Address1"
+                  divClassName="mt-0 ml-3"
+                  placeholder={"Enter address1"}
+                  errorMessage={errors?.customer?.address?.address1?.message}
+                  maxLength={200}
+                />
+
+                <InputCustomAntd
+                  controller={{ control, name: "customer.address.address2" }}
+                  label="Address2"
+                  divClassName="mt-1 ml-3"
+                  placeholder={"Enter address2"}
+                  errorMessage={errors?.customer?.address?.address2?.message}
+                  maxLength={200}
+                />
+
+                <InputCustomAntd
+                  controller={{ control, name: "customer.address.district" }}
+                  label="District"
+                  divClassName="mt-1 ml-3"
+                  placeholder={"Enter district"}
+                  errorMessage={errors?.customer?.address?.district?.message}
+                  maxLength={200}
+                />
+              </Col>
+
+              <Col xs={24} md={8}>
+                <InputCustomAntd
+                  controller={{ control, name: "customer.address.zip" }}
+                  label="Zipcode"
+                  divClassName="mt-1 ml-3"
+                  placeholder={"Enter zip"}
+                  errorMessage={errors?.customer?.address?.zip?.message}
+                  maxLength={200}
+                />
+                <InputCustomAntd
+                  controller={{ control, name: "customer.address.description" }}
+                  label="Description"
+                  divClassName="mt-1 ml-3"
+                  placeholder={"Enter description"}
+                  errorMessage={errors?.customer?.address?.description?.message}
+                  maxLength={200}
+                />
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+      </Row>
     </Layout>
   );
 }

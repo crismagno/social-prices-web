@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 
 import { Select } from "antd";
-import { Control } from "react-hook-form";
 
-import { SelectCustomAntd } from "../../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { ICustomer } from "../../../../../shared/business/customers/customer.interface";
 import { createTableState } from "../../../../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../../../../shared/utils/table/table-state.interface";
@@ -12,16 +10,10 @@ import { useFindCustomersByOwnerOfUserTableState } from "../../../../customers/u
 const containerHeight: number = 250;
 
 interface Props {
-  control: Control<any, any>;
-  errors: any;
   onSelectCustomer?: (customer: ICustomer | null) => void;
 }
 
-export const SelectCustomer: React.FC<Props> = ({
-  control,
-  errors,
-  onSelectCustomer,
-}) => {
+export const SelectCustomer: React.FC<Props> = ({ onSelectCustomer }) => {
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<ICustomer> | undefined
   >(
@@ -70,11 +62,7 @@ export const SelectCustomer: React.FC<Props> = ({
   };
 
   return (
-    <SelectCustomAntd<ICustomer>
-      controller={{ control, name: "customer.customerId" }}
-      divClassName="m-0"
-      labelClassName="none"
-      errorMessage={errors.customerId?.message}
+    <Select
       onPopupScroll={onPopupScroll}
       onSearch={onSearch}
       showSearch
@@ -93,7 +81,7 @@ export const SelectCustomer: React.FC<Props> = ({
       }}
       listHeight={containerHeight}
       filterOption={false}
-      style={{ width: 250 }}
+      style={{ width: 300 }}
     >
       <Select.Option key={"NEW_CUSTOMER"} value={null}>
         New Customer
@@ -104,6 +92,6 @@ export const SelectCustomer: React.FC<Props> = ({
           {customer.name}
         </Select.Option>
       ))}
-    </SelectCustomAntd>
+    </Select>
   );
 };
