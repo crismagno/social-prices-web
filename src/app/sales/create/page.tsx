@@ -105,11 +105,13 @@ export default function CreateSalePage() {
   }
 
   const handleSelectCustomer = (customer: ICustomer | null) => {
-    const firstAddress: IAddress | undefined = find(
+    let firstAddress: IAddress | undefined = find(
       customer?.addresses,
       (customerAddress: IAddress) =>
         includes(customerAddress.types, AddressEnum.Type.SHIPPING)
     );
+
+    firstAddress = firstAddress ?? customer?.addresses?.[0];
 
     const address: TAddressFormSchema = firstAddress
       ? {
