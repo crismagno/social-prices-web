@@ -1,8 +1,8 @@
-import { Select, SelectProps } from "antd";
+import { Input, InputProps } from "antd";
 import { Control, Controller } from "react-hook-form";
 
-interface Props<T> extends SelectProps<T> {
-  controller?: {
+interface Props<T> extends InputProps {
+  controller: {
     control: Control<any>;
     name: keyof T | string;
   };
@@ -12,7 +12,7 @@ interface Props<T> extends SelectProps<T> {
   errorMessage?: string;
 }
 
-export function SelectCustomAntd<T extends object = any>({
+export function InputCustomAntd<T extends object = any>({
   label,
   controller,
   divClassName,
@@ -34,17 +34,15 @@ export function SelectCustomAntd<T extends object = any>({
       <Controller
         control={controller.control}
         name={controller.name}
-        render={({ field: { onChange, onBlur, value, name, ref } }) => (
-          <Select
+        render={({ field: { onChange, value, name, ref } }) => (
+          <Input
+            className="w-full"
             onChange={onChange}
-            onBlur={onBlur}
             name={name}
             value={value}
             ref={ref}
             {...props}
-          >
-            {children}
-          </Select>
+          />
         )}
       ></Controller>
 

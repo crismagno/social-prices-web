@@ -14,9 +14,14 @@ const containerHeight: number = 250;
 interface Props {
   control: Control<any, any>;
   errors: any;
+  onSelectCustomer?: (customer: ICustomer | null) => void;
 }
 
-export const SelectCustomer: React.FC<Props> = ({ control, errors }) => {
+export const SelectCustomer: React.FC<Props> = ({
+  control,
+  errors,
+  onSelectCustomer,
+}) => {
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<ICustomer> | undefined
   >(
@@ -66,13 +71,22 @@ export const SelectCustomer: React.FC<Props> = ({ control, errors }) => {
 
   return (
     <SelectCustomAntd<ICustomer>
-      controller={{ control, name: "customerId" }}
+      controller={{ control, name: "customer.customerId" }}
       divClassName="m-0"
       labelClassName="none"
       errorMessage={errors.customerId?.message}
       onPopupScroll={onPopupScroll}
       onSearch={onSearch}
       showSearch
+      onSelect={(customerId) => {
+        const selectedCustomer: ICustomer | undefined | null = customerId
+          ? customers.find(
+              (customer: ICustomer) => customer._id === (customerId as any)
+            )
+          : null;
+
+        onSelectCustomer?.(selectedCustomer ?? null);
+      }}
       defaultValue={null}
       dropdownStyle={{
         maxHeight: containerHeight,
