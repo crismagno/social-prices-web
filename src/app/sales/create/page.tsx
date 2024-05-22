@@ -188,7 +188,16 @@ export default function CreateSalePage() {
 
   return (
     <Layout subtitle="Create manual sale" title="Create Sale" hasBackButton>
-      <Row gutter={[16, 16]}>
+      <Row gutter={[16, 16]} className="mt-5">
+        <Col xs={24}>
+          <div className="bg-white w-full py-3 px-5 rounded-md">
+            <span className="text-lg mr-2">Sale Number:</span>
+            <span className="text-lg font-bold e-radius">{Date.now()}</span>
+          </div>
+        </Col>
+      </Row>
+
+      <Row gutter={[16, 16]} className="mt-3">
         {/* Customer Info */}
         <Col xs={24} md={12}>
           <Card
@@ -198,7 +207,7 @@ export default function CreateSalePage() {
                 <SelectCustomer onSelectCustomer={handleSelectCustomer} />
               </div>
             }
-            className="h-min-80 mt-5"
+            className="h-min-80"
           >
             <Row>
               <Col xs={24} md={4}>
@@ -346,7 +355,7 @@ export default function CreateSalePage() {
                 </div>
               </div>
             }
-            className="h-min-80 mt-5"
+            className="h-min-80"
           >
             <Row>
               <Col xs={24} md={8}>
