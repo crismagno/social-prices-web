@@ -309,7 +309,9 @@ export default function CreateSalePage() {
 
                       {selectedCustomer?.addresses.map((address: IAddress) => (
                         <Select.Option key={address.uid} value={address.uid}>
-                          {address.address1}
+                          <Tooltip title={createAddressName(address)}>
+                            {createAddressName(address)}
+                          </Tooltip>
                         </Select.Option>
                       ))}
                     </Select>
