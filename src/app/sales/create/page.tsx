@@ -367,7 +367,7 @@ export default function CreateSalePage() {
                   ))}
                 </SelectCustomAntd>
 
-                <SelectCustomAntd<IAddress>
+                <SelectCustomAntd
                   controller={{ control, name: `customer.address.stateCode` }}
                   errorMessage={errors?.customer?.address?.stateCode?.message}
                   label="State"
@@ -381,7 +381,7 @@ export default function CreateSalePage() {
                   ))}
                 </SelectCustomAntd>
 
-                <SelectCustomAntd<IAddress>
+                <SelectCustomAntd
                   controller={{ control, name: `customer.address.city` }}
                   errorMessage={errors?.customer?.address?.city?.message}
                   label="City"
