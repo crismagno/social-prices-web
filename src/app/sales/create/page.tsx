@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Card, Col, Image, Row, Select, Tooltip } from "antd";
 import { find, includes } from "lodash";
@@ -25,6 +25,7 @@ import Layout from "../../../components/template/Layout/Layout";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import AddressEnum from "../../../shared/business/enums/address.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
+import SalesEnum from "../../../shared/business/sales/sales.enum";
 import UsersEnum from "../../../shared/business/users/users.enum";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
@@ -34,6 +35,7 @@ import {
   ICountryMockData,
   IStateMockData,
 } from "../../../shared/utils/mock-data/interfaces";
+import { createAddressName } from "../../../shared/utils/string-extensions/string-extensions";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { SelectCustomer } from "./components/SelectCustomer/SelectCustomer";
 
@@ -52,6 +54,7 @@ type TCustomerFormSchema = z.infer<typeof customerFormSchema>;
 
 const formSchema = z.object({
   customer: customerFormSchema,
+  deliveryType: z.string(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -79,6 +82,23 @@ export default function CreateSalePage() {
     values: formValues,
     resolver: zodResolver(formSchema),
   });
+
+  useEffect(() => {
+    setFormValues({
+      ...formValues,
+      customer: {
+        about: null,
+        address: generateNewAddress(),
+        birthDate: null,
+        customerId: null,
+        email: "",
+        gender: UsersEnum.Gender.MALE,
+        name: "",
+        phoneNumber: null,
+      },
+      deliveryType: SalesEnum.DeliveryType.DELIVERY,
+    });
+  }, []);
 
   if (isLoadingStores) {
     return <LoadingFull />;
@@ -205,7 +225,7 @@ export default function CreateSalePage() {
               </Col>
 
               <Col xs={24} md={10}>
-                <InputCustomAntd<ICustomer>
+                <InputCustomAntd
                   controller={{ control, name: "customer.name" }}
                   label="Name"
                   divClassName="mt-0"
@@ -214,7 +234,7 @@ export default function CreateSalePage() {
                   maxLength={200}
                 />
 
-                <InputCustomAntd<ICustomer>
+                <InputCustomAntd
                   controller={{ control, name: "customer.email" }}
                   label="Email"
                   type="email"
@@ -224,7 +244,7 @@ export default function CreateSalePage() {
                   maxLength={200}
                 />
 
-                <InputCustomAntd<ICustomer>
+                <InputCustomAntd
                   controller={{ control, name: "customer.phoneNumber" }}
                   label="Phone Number"
                   divClassName="mt-1"
@@ -235,7 +255,7 @@ export default function CreateSalePage() {
               </Col>
 
               <Col xs={24} md={10}>
-                <InputCustomAntd<ICustomer>
+                <InputCustomAntd
                   controller={{ control, name: "customer.birthDate" }}
                   label="Birth Date"
                   divClassName="mt-0 ml-3"
@@ -245,7 +265,7 @@ export default function CreateSalePage() {
                   maxLength={200}
                 />
 
-                <SelectCustomAntd<ICustomer>
+                <SelectCustomAntd
                   controller={{ control, name: "customer.gender" }}
                   label="Gender"
                   divClassName="mt-1 ml-3"
@@ -266,29 +286,60 @@ export default function CreateSalePage() {
         <Col xs={24} md={12}>
           <Card
             title={
-              <div className="flex">
-                <label className="mr-2">
-                  {selectedCustomer ? "Shipping Address: " : "Shipping Address"}{" "}
-                </label>
+              <div className="flex justify-between">
+                <div className="flex">
+                  <label className="mr-2">
+                    {selectedCustomer
+                      ? "Shipping Address: "
+                      : "Shipping Address"}{" "}
+                  </label>
 
-                {selectedCustomer && (
-                  <Select
-                    style={{ width: 300 }}
-                    onChange={handleSelectAddress}
-                    defaultValue={null}
-                    value={selectedAddressUid}
+                  {selectedCustomer && (
+                    <Select
+                      style={{ width: 250 }}
+                      onChange={handleSelectAddress}
+                      defaultValue={null}
+                      value={selectedAddressUid}
+                    >
+                      <Select.Option key={"NEW_ADDRESS"} value={null}>
+                        New Address
+                      </Select.Option>
+
+                      {selectedCustomer?.addresses.map((address: IAddress) => (
+                        <Select.Option key={address.uid} value={address.uid}>
+                          {address.address1}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  )}
+                </div>
+
+                <div className="flex">
+                  <label className="mr-2">Delivery Type:</label>
+
+                  <SelectCustomAntd
+                    controller={{
+                      control,
+                      name: `deliveryType`,
+                    }}
+                    divClassName="mt-0"
+                    errorMessage={errors?.deliveryType?.message}
+                    placeholder={"Select delivery type"}
+                    style={{ width: 150 }}
                   >
-                    <Select.Option key={"NEW_ADDRESS"} value={null}>
-                      New Address
-                    </Select.Option>
-
-                    {selectedCustomer?.addresses.map((address: IAddress) => (
-                      <Select.Option key={address.uid} value={address.uid}>
-                        {address.address1}
+                    {Object.keys(SalesEnum.DeliveryType).map((type: string) => (
+                      <Select.Option key={type} value={type}>
+                        <Tooltip title={createAddressName(type)}>
+                          {
+                            SalesEnum.DeliveryTypeLabels[
+                              type as SalesEnum.DeliveryType
+                            ]
+                          }
+                        </Tooltip>
                       </Select.Option>
                     ))}
-                  </Select>
-                )}
+                  </SelectCustomAntd>
+                </div>
               </div>
             }
             className="h-min-80 mt-5"

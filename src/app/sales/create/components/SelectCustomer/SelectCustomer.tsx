@@ -81,7 +81,7 @@ export const SelectCustomer: React.FC<Props> = ({ onSelectCustomer }) => {
       }}
       listHeight={containerHeight}
       filterOption={false}
-      style={{ width: 300 }}
+      style={{ width: 250 }}
     >
       <Select.Option key={"NEW_CUSTOMER"} value={null}>
         New Customer
