@@ -187,7 +187,7 @@ export default function CreateSalePage() {
   };
 
   return (
-    <Layout subtitle="Create manual sale" title="Create Sale">
+    <Layout subtitle="Create manual sale" title="Create Sale" hasBackButton>
       <Row gutter={[16, 16]}>
         {/* Customer Info */}
         <Col xs={24} md={12}>
