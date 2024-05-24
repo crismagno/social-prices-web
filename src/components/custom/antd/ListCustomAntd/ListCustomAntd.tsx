@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Button, Col, List, ListProps, Row } from "antd";
+import { Button, Col, Empty, List, ListProps, Row } from "antd";
 import Search, { SearchProps } from "antd/es/input/Search";
 import VirtualList from "rc-virtual-list";
 
@@ -84,28 +84,32 @@ function ListCustomAntd<T extends object = any>({
     <>
       {renderSearch()}
 
-      <List loading={isLoading} {...props}>
-        <VirtualList
-          data={data}
-          height={containerHeight}
-          itemHeight={50}
-          itemKey={itemKey}
-          onScroll={onScroll}
-        >
-          {(dataItem: any) => renderDataItem(dataItem)}
-        </VirtualList>
+      {data?.length ? (
+        <List loading={isLoading} {...props}>
+          <VirtualList
+            data={data}
+            height={containerHeight}
+            itemHeight={50}
+            itemKey={itemKey}
+            onScroll={onScroll}
+          >
+            {(dataItem: any) => renderDataItem(dataItem)}
+          </VirtualList>
 
-        <div className="flex justify-between items-baseline mt-2">
-          <div>
-            Total: {data.length} / {total}
+          <div className="flex justify-between items-baseline mt-2">
+            <div>
+              Total: {data.length} / {total}
+            </div>
+            <Button onClick={handleScroll} loading={isLoading}>
+              Load More
+            </Button>
+
+            <div></div>
           </div>
-          <Button onClick={handleScroll} loading={isLoading}>
-            Load More
-          </Button>
-
-          <div></div>
-        </div>
-      </List>
+        </List>
+      ) : (
+        <Empty />
+      )}
     </>
   );
 }

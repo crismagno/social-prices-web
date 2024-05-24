@@ -22,7 +22,13 @@ export function InputNumberCustomAntd<T extends object = any>({
   ...props
 }: Props<T>) {
   return (
-    <div className={`flex flex-col mt-4 mr-5 ${divClassName}`}>
+    <div
+      className={
+        divClassName
+          ? `${divClassName} flex flex-col `
+          : `flex flex-col mt-4 mr-5`
+      }
+    >
       <label className={`text-sm ${labelClassName}`}>{label}</label>
 
       <Controller

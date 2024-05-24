@@ -26,6 +26,7 @@ import { ICustomer } from "../../../shared/business/customers/customer.interface
 import AddressEnum from "../../../shared/business/enums/address.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
 import SalesEnum from "../../../shared/business/sales/sales.enum";
+import { IStore } from "../../../shared/business/stores/stores.interface";
 import UsersEnum from "../../../shared/business/users/users.enum";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
@@ -37,6 +38,10 @@ import {
 } from "../../../shared/utils/mock-data/interfaces";
 import { createAddressName } from "../../../shared/utils/string-extensions/string-extensions";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
+import {
+  AddProductsTable,
+  IProductToAddOnSale,
+} from "./components/AddProductsTable/AddProductsTable";
 import { SelectCustomer } from "./components/SelectCustomer/SelectCustomer";
 
 const customerFormSchema = z.object({
@@ -55,6 +60,7 @@ type TCustomerFormSchema = z.infer<typeof customerFormSchema>;
 const formSchema = z.object({
   customer: customerFormSchema,
   deliveryType: z.string(),
+  storeIds: z.array(z.string()).nonempty(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -73,7 +79,6 @@ export default function CreateSalePage() {
   );
 
   const {
-    register,
     handleSubmit,
     formState: { errors },
     control,
@@ -197,7 +202,7 @@ export default function CreateSalePage() {
         </Col>
       </Row>
 
-      <Row gutter={[16, 16]} className="mt-3">
+      <Row gutter={[8, 8]} className="mt-2">
         {/* Customer Info */}
         <Col xs={24} md={12}>
           <Card
@@ -475,6 +480,40 @@ export default function CreateSalePage() {
                 </SelectCustomAntd>
               </Col>
             </Row>
+          </Card>
+        </Col>
+      </Row>
+
+      <Row gutter={[8, 8]} className="mt-2">
+        <Col xs={24} md={12}>
+          <Card
+            title={
+              <div className="flex">
+                <label className="mr-2">Stores: </label>
+                <SelectCustomAntd
+                  controller={{ control, name: "storeIds" }}
+                  errorMessage={errors.storeIds?.message}
+                  placeholder={"Select stores"}
+                  mode="multiple"
+                  divClassName="mt-0"
+                  style={{ width: 300 }}
+                >
+                  {stores.map((store: IStore) => (
+                    <Select.Option key={store._id} value={store._id}>
+                      {store.name}
+                    </Select.Option>
+                  ))}
+                </SelectCustomAntd>
+              </div>
+            }
+          >
+            <AddProductsTable
+              selectedStoreIds={watch("storeIds")}
+              stores={stores}
+              onAddProductToSale={(productToAddOnSale: IProductToAddOnSale) => {
+                console.log(productToAddOnSale);
+              }}
+            />
           </Card>
         </Col>
       </Row>
