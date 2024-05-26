@@ -60,7 +60,7 @@ type TCustomerFormSchema = z.infer<typeof customerFormSchema>;
 const formSchema = z.object({
   customer: customerFormSchema,
   deliveryType: z.string(),
-  storeIds: z.array(z.string()).nonempty(),
+  storeIds: z.array(z.string()),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -102,6 +102,7 @@ export default function CreateSalePage() {
         phoneNumber: null,
       },
       deliveryType: SalesEnum.DeliveryType.DELIVERY,
+      storeIds: [],
     });
   }, []);
 
@@ -151,6 +152,8 @@ export default function CreateSalePage() {
         name: customer?.name ?? "",
         phoneNumber: customer?.phoneNumbers?.[0]?.number ?? null,
       },
+      storeIds: watch("storeIds") ?? [],
+      deliveryType: watch("deliveryType") ?? SalesEnum.DeliveryType.DELIVERY,
     });
 
     setSelectedCustomer(customer);
@@ -186,6 +189,8 @@ export default function CreateSalePage() {
         ...formValues!.customer,
         address,
       },
+      storeIds: watch("storeIds") ?? [],
+      deliveryType: watch("deliveryType") ?? SalesEnum.DeliveryType.DELIVERY,
     });
 
     setSelectedAddressUid(addressUid);
@@ -488,22 +493,26 @@ export default function CreateSalePage() {
         <Col xs={24} md={12}>
           <Card
             title={
-              <div className="flex">
-                <label className="mr-2">Stores: </label>
-                <SelectCustomAntd
-                  controller={{ control, name: "storeIds" }}
-                  errorMessage={errors.storeIds?.message}
-                  placeholder={"Select stores"}
-                  mode="multiple"
-                  divClassName="mt-0"
-                  style={{ width: 300 }}
-                >
-                  {stores.map((store: IStore) => (
-                    <Select.Option key={store._id} value={store._id}>
-                      {store.name}
-                    </Select.Option>
-                  ))}
-                </SelectCustomAntd>
+              <div className="flex justify-between">
+                <span>Products</span>
+
+                <span className="flex">
+                  <label className="mr-2">Select Stores: </label>
+                  <SelectCustomAntd
+                    controller={{ control, name: "storeIds" }}
+                    errorMessage={errors.storeIds?.message}
+                    placeholder={"Select stores"}
+                    mode="multiple"
+                    divClassName="mt-0"
+                    style={{ width: 300 }}
+                  >
+                    {stores.map((store: IStore) => (
+                      <Select.Option key={store._id} value={store._id}>
+                        {store.name}
+                      </Select.Option>
+                    ))}
+                  </SelectCustomAntd>
+                </span>
               </div>
             }
           >

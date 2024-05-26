@@ -163,15 +163,13 @@ export const AddProductsTable: React.FC<Props> = ({
             align: "center",
             render: (quantity: number, _, index: number) => {
               return (
-                <div className="flex flex-row justify-center items-baseline">
-                  <span>{quantity}</span>
+                <div className="flex flex-col">
+                  <span>Current: {quantity}</span>
 
-                  <Divider type="vertical" />
+                  <Divider style={{ margin: "7px 0px" }} />
 
                   <InputNumberCustomAntd
                     divClassName="w-28"
-                    formatter={formatterMoney}
-                    parser={parserMoney}
                     controller={{
                       control,
                       name: `products.${index}.quantity`,
@@ -188,13 +186,15 @@ export const AddProductsTable: React.FC<Props> = ({
             align: "center",
             render: (price: number, _, index: number) => {
               return (
-                <div className="flex flex-row justify-center items-baseline">
-                  <span>{price}</span>
+                <div className="flex flex-col">
+                  <span>Current: R${price}</span>
 
-                  <Divider type="vertical" />
+                  <Divider style={{ margin: "7px 0px" }} />
 
                   <InputNumberCustomAntd
                     divClassName="w-28"
+                    formatter={formatterMoney}
+                    parser={parserMoney}
                     controller={{
                       control,
                       name: `products.${index}.price`,
@@ -226,7 +226,7 @@ export const AddProductsTable: React.FC<Props> = ({
                 return (
                   <Tooltip
                     key={storeId}
-                    title={`Add product to store "${store.name}"`}
+                    title={`Add product by store "${store.name}"`}
                   >
                     <Button
                       size="small"
