@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { Button, Divider, Empty, Image, Tooltip } from "antd";
-import { includes, map } from "lodash";
+import { find, includes, map } from "lodash";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -38,15 +38,22 @@ type TFormSchema = z.infer<typeof formSchema>;
 
 export interface IProductToAddOnSale {
   productId: string;
-  storeId: string;
+  barCode: string;
   quantity: number;
   price: number;
+  name: string;
+  fileUrl: string | null;
+}
+
+export interface IStoreProductToAddOnSale {
+  storeId: string;
+  product: IProductToAddOnSale;
 }
 
 interface Props {
   selectedStoreIds: string[];
   stores: IStore[];
-  onAddProductToSale: (productToAddOnSale: IProductToAddOnSale) => void;
+  onAddProductToSale: (productToAddOnSale: IStoreProductToAddOnSale) => void;
 }
 
 export const AddProductsTable: React.FC<Props> = ({
@@ -94,7 +101,7 @@ export const AddProductsTable: React.FC<Props> = ({
   }, [selectedStoreIds]);
 
   const getStore = (storeId: string): IStore | undefined =>
-    stores.find((store) => store._id === storeId);
+    stores.find((store: IStore) => store._id === storeId);
 
   if (!selectedStoreIds?.length) {
     return <Empty />;
@@ -105,11 +112,20 @@ export const AddProductsTable: React.FC<Props> = ({
     storeId: string;
     index: number;
   }) => {
+    const product: IProduct | undefined = find(products, {
+      _id: params.productId,
+    });
+
     onAddProductToSale?.({
-      price: watch(`products.${params.index}.price`),
-      productId: params.productId,
-      quantity: watch(`products.${params.index}.quantity`) ?? 1,
       storeId: params.storeId,
+      product: {
+        price: watch(`products.${params.index}.price`),
+        productId: params.productId,
+        quantity: watch(`products.${params.index}.quantity`) ?? 1,
+        barCode: product?.barCode ?? "",
+        fileUrl: product?.filesUrl?.[0] ?? null,
+        name: product?.name ?? "",
+      },
     });
   };
 
@@ -136,22 +152,23 @@ export const AddProductsTable: React.FC<Props> = ({
                 <div className="flex flex-col justify-center items-center">
                   <Image
                     key={`${fileUrl}-${Date.now()}`}
-                    width={80}
+                    width={60}
                     src={fileUrl}
                     onError={() => (
                       <Image
                         key={`${fileUrl}-${Date.now()}`}
-                        width={80}
+                        width={60}
                         src={defaultAvatarImage}
                         alt="mainUrl"
-                        className="rounded-md"
+                        className="rounded-full"
                       />
                     )}
                     alt="mainUrl"
-                    className="rounded-md"
+                    className="rounded-full"
                   />
 
                   <span className="text-lg">{product.name}</span>
+                  <span className="text-xs">{product.barCode}</span>
                 </div>
               );
             },
@@ -186,7 +203,7 @@ export const AddProductsTable: React.FC<Props> = ({
             align: "center",
             render: (price: number, _, index: number) => {
               return (
-                <div className="flex flex-col">
+                <div className="flex flex-col justify-center items-center">
                   <span>Current: R${price}</span>
 
                   <Divider style={{ margin: "7px 0px" }} />
@@ -229,7 +246,7 @@ export const AddProductsTable: React.FC<Props> = ({
                     title={`Add product by store "${store.name}"`}
                   >
                     <Button
-                      size="small"
+                      size="middle"
                       className="mr-1 mt-1"
                       type="primary"
                       onClick={() =>

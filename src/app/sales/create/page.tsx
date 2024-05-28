@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 
-import { Card, Col, Image, Row, Select, Tooltip } from "antd";
-import { find, includes } from "lodash";
+import { Button, Card, Col, Empty, Image, Row, Select, Tooltip } from "antd";
+import { filter, find, includes } from "lodash";
 import moment from "moment";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { DeleteOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -20,6 +21,7 @@ import {
 } from "../../../components/common/Addresses/Addresses";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
+import { InputNumberCustomAntd } from "../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
@@ -36,11 +38,15 @@ import {
   ICountryMockData,
   IStateMockData,
 } from "../../../shared/utils/mock-data/interfaces";
-import { createAddressName } from "../../../shared/utils/string-extensions/string-extensions";
+import {
+  createAddressName,
+  formatterMoney,
+  parserMoney,
+} from "../../../shared/utils/string-extensions/string-extensions";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import {
   AddProductsTable,
-  IProductToAddOnSale,
+  IStoreProductToAddOnSale,
 } from "./components/AddProductsTable/AddProductsTable";
 import { SelectCustomer } from "./components/SelectCustomer/SelectCustomer";
 
@@ -57,10 +63,30 @@ const customerFormSchema = z.object({
 
 type TCustomerFormSchema = z.infer<typeof customerFormSchema>;
 
+const productFormSchema = z.object({
+  productId: z.string(),
+  barCode: z.string(),
+  name: z.string(),
+  note: z.string().nullable(),
+  quantity: z.number(),
+  price: z.number(),
+  fileUrl: z.string().nullable(),
+});
+
+type TProductFormSchema = z.infer<typeof productFormSchema>;
+
+const storeProductsFormSchema = z.object({
+  storeId: z.string(),
+  products: z.array(productFormSchema),
+});
+
+type TStoreProductFormSchema = z.infer<typeof storeProductsFormSchema>;
+
 const formSchema = z.object({
   customer: customerFormSchema,
   deliveryType: z.string(),
-  storeIds: z.array(z.string()),
+  selectedStoreIds: z.array(z.string()),
+  storesProducts: z.array(storeProductsFormSchema),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -88,6 +114,8 @@ export default function CreateSalePage() {
     resolver: zodResolver(formSchema),
   });
 
+  let storesProducts: TStoreProductFormSchema[] = watch("storesProducts");
+
   useEffect(() => {
     setFormValues({
       ...formValues,
@@ -102,7 +130,8 @@ export default function CreateSalePage() {
         phoneNumber: null,
       },
       deliveryType: SalesEnum.DeliveryType.DELIVERY,
-      storeIds: [],
+      selectedStoreIds: [],
+      storesProducts: [],
     });
   }, []);
 
@@ -152,8 +181,9 @@ export default function CreateSalePage() {
         name: customer?.name ?? "",
         phoneNumber: customer?.phoneNumbers?.[0]?.number ?? null,
       },
-      storeIds: watch("storeIds") ?? [],
+      selectedStoreIds: watch("selectedStoreIds") ?? [],
       deliveryType: watch("deliveryType") ?? SalesEnum.DeliveryType.DELIVERY,
+      storesProducts: storesProducts ?? [],
     });
 
     setSelectedCustomer(customer);
@@ -189,11 +219,126 @@ export default function CreateSalePage() {
         ...formValues!.customer,
         address,
       },
-      storeIds: watch("storeIds") ?? [],
+      selectedStoreIds: watch("selectedStoreIds") ?? [],
       deliveryType: watch("deliveryType") ?? SalesEnum.DeliveryType.DELIVERY,
+      storesProducts: storesProducts ?? [],
     });
 
     setSelectedAddressUid(addressUid);
+  };
+
+  const handleAddProductToSale = (
+    productToAddOnSale: IStoreProductToAddOnSale
+  ) => {
+    const storeProduct: TStoreProductFormSchema | undefined = find(
+      storesProducts,
+      { storeId: productToAddOnSale.storeId }
+    );
+
+    if (!storeProduct) {
+      storesProducts.push({
+        storeId: productToAddOnSale.storeId,
+        products: [
+          {
+            barCode: productToAddOnSale.product.barCode,
+            note: null,
+            price: productToAddOnSale.product.price,
+            productId: productToAddOnSale.product.productId,
+            quantity: productToAddOnSale.product.quantity,
+            name: productToAddOnSale.product.name,
+            fileUrl: productToAddOnSale.product.fileUrl,
+          },
+        ],
+      });
+    } else {
+      const storeProductProduct: TProductFormSchema | undefined = find(
+        storeProduct.products,
+        { productId: productToAddOnSale.product.productId }
+      );
+
+      if (storeProductProduct) {
+        storeProductProduct.barCode = productToAddOnSale.product.barCode;
+        storeProductProduct.note = null;
+        storeProductProduct.price = productToAddOnSale.product.price;
+        storeProductProduct.productId = productToAddOnSale.product.productId;
+        storeProductProduct.quantity += productToAddOnSale.product.quantity;
+        storeProductProduct.name = productToAddOnSale.product.name;
+        storeProductProduct.fileUrl = productToAddOnSale.product.fileUrl;
+      } else {
+        storeProduct.products.push({
+          barCode: productToAddOnSale.product.barCode,
+          note: null,
+          price: productToAddOnSale.product.price,
+          productId: productToAddOnSale.product.productId,
+          quantity: productToAddOnSale.product.quantity,
+          name: productToAddOnSale.product.name,
+          fileUrl: productToAddOnSale.product.fileUrl,
+        });
+      }
+    }
+
+    setFormValues({
+      ...formValues,
+      customer: formValues!.customer,
+      selectedStoreIds: watch("selectedStoreIds") ?? [],
+      deliveryType: watch("deliveryType") ?? SalesEnum.DeliveryType.DELIVERY,
+      storesProducts,
+    });
+  };
+
+  const handleRemoveAllProduct = () => {
+    setFormValues({
+      ...formValues,
+      customer: formValues!.customer,
+      selectedStoreIds: watch("selectedStoreIds") ?? [],
+      deliveryType: watch("deliveryType") ?? SalesEnum.DeliveryType.DELIVERY,
+      storesProducts: [],
+    });
+  };
+
+  const handleRemoveAllProductByStore = (storeId: string) => {
+    storesProducts = filter(
+      storesProducts,
+      (storeProducts: TStoreProductFormSchema) =>
+        storeProducts.storeId !== storeId
+    );
+
+    setFormValues({
+      ...formValues,
+      customer: formValues!.customer,
+      selectedStoreIds: watch("selectedStoreIds") ?? [],
+      deliveryType: watch("deliveryType") ?? SalesEnum.DeliveryType.DELIVERY,
+      storesProducts,
+    });
+  };
+
+  const handleRemoveProduct = (storeId: string, productId: string) => {
+    const storeProduct: TStoreProductFormSchema | undefined = find(
+      storesProducts,
+      { storeId }
+    );
+
+    if (storeProduct?.products?.length && storeProduct?.products?.length > 1) {
+      storeProduct.products = filter(
+        storeProduct.products,
+        (storeProductProduct: TProductFormSchema) =>
+          storeProductProduct.productId !== productId
+      );
+    } else {
+      storesProducts = filter(
+        storesProducts,
+        (storeProducts: TStoreProductFormSchema) =>
+          storeProducts.storeId !== storeId
+      );
+    }
+
+    setFormValues({
+      ...formValues,
+      customer: formValues!.customer,
+      selectedStoreIds: watch("selectedStoreIds") ?? [],
+      deliveryType: watch("deliveryType") ?? SalesEnum.DeliveryType.DELIVERY,
+      storesProducts,
+    });
   };
 
   return (
@@ -494,13 +639,13 @@ export default function CreateSalePage() {
           <Card
             title={
               <div className="flex justify-between">
-                <span>Products</span>
+                <span>Select Products</span>
 
                 <span className="flex">
                   <label className="mr-2">Select Stores: </label>
                   <SelectCustomAntd
-                    controller={{ control, name: "storeIds" }}
-                    errorMessage={errors.storeIds?.message}
+                    controller={{ control, name: "selectedStoreIds" }}
+                    errorMessage={errors.selectedStoreIds?.message}
                     placeholder={"Select stores"}
                     mode="multiple"
                     divClassName="mt-0"
@@ -517,12 +662,178 @@ export default function CreateSalePage() {
             }
           >
             <AddProductsTable
-              selectedStoreIds={watch("storeIds")}
+              selectedStoreIds={watch("selectedStoreIds")}
               stores={stores}
-              onAddProductToSale={(productToAddOnSale: IProductToAddOnSale) => {
-                console.log(productToAddOnSale);
-              }}
+              onAddProductToSale={handleAddProductToSale}
             />
+          </Card>
+        </Col>
+
+        <Col xs={24} md={12}>
+          <Card
+            title={
+              <div className="flex justify-between">
+                <label>Selected Products</label>
+                {storesProducts?.length > 1 ? (
+                  <Tooltip title="Remove All Products">
+                    <Button
+                      type="danger"
+                      icon={<DeleteOutlined />}
+                      onClick={handleRemoveAllProduct}
+                    />
+                  </Tooltip>
+                ) : null}
+              </div>
+            }
+          >
+            {storesProducts?.length ? (
+              storesProducts?.map(
+                (
+                  storeProduct: TStoreProductFormSchema,
+                  indexStoreProduct: number
+                ) => {
+                  const store: IStore | undefined = find(stores, {
+                    _id: storeProduct.storeId,
+                  });
+
+                  return (
+                    <div key={store?._id} className="my-2">
+                      <div
+                        className={`flex items-center border-b-2 border-slate-100 mb-1 w-full`}
+                      >
+                        <label className="my-2 text-lg font-semibold mr-2">
+                          {store?.name ?? ""}
+                        </label>
+
+                        {storeProduct.products.length > 1 ? (
+                          <Tooltip title="Remove All Products by Store">
+                            <Button
+                              type="danger"
+                              size="small"
+                              icon={<DeleteOutlined />}
+                              onClick={() =>
+                                handleRemoveAllProductByStore(
+                                  storeProduct.storeId
+                                )
+                              }
+                            />
+                          </Tooltip>
+                        ) : null}
+                      </div>
+
+                      <Row className="p-1 px-2 bg-zinc-50 text-black font-semibold">
+                        <Col xs={8}>Product</Col>
+                        <Col xs={4}>Quantity</Col>
+                        <Col xs={4}>Price</Col>
+                        <Col xs={6}>Note</Col>
+                        <Col xs={2}></Col>
+                      </Row>
+
+                      {storeProduct.products?.map(
+                        (
+                          storeProductProduct: TProductFormSchema,
+                          indexStoreProductProduct: number
+                        ) => {
+                          const fileUrl: string = storeProductProduct.fileUrl
+                            ? getImageUrl(storeProductProduct.fileUrl)
+                            : defaultAvatarImage;
+
+                          return (
+                            <Row
+                              key={storeProductProduct.productId}
+                              className="border-b border-slate-100 p-2"
+                            >
+                              <Col xs={8}>
+                                <div className="flex items-center">
+                                  <div className="mr-2">
+                                    <Image
+                                      key={`${fileUrl}-${Date.now()}`}
+                                      width={50}
+                                      src={fileUrl}
+                                      onError={() => (
+                                        <Image
+                                          key={`${fileUrl}-${Date.now()}`}
+                                          width={50}
+                                          src={defaultAvatarImage}
+                                          alt="mainUrl"
+                                          className="rounded-full"
+                                        />
+                                      )}
+                                      alt="mainUrl"
+                                      className="rounded-full"
+                                    />
+                                  </div>
+
+                                  <div className="flex flex-col">
+                                    <span className="text-base">
+                                      {storeProductProduct.name}
+                                    </span>
+
+                                    <span className="text-xs">
+                                      {storeProductProduct.barCode}
+                                    </span>
+                                  </div>
+                                </div>
+                              </Col>
+
+                              <Col xs={4}>
+                                <InputNumberCustomAntd
+                                  divClassName="w-28"
+                                  controller={{
+                                    control,
+                                    name: `storesProducts.${indexStoreProduct}.products.${indexStoreProductProduct}.quantity`,
+                                  }}
+                                />
+                              </Col>
+
+                              <Col xs={4}>
+                                <InputNumberCustomAntd
+                                  divClassName="w-28"
+                                  formatter={formatterMoney}
+                                  parser={parserMoney}
+                                  controller={{
+                                    control,
+                                    name: `storesProducts.${indexStoreProduct}.products.${indexStoreProductProduct}.price`,
+                                  }}
+                                />
+                              </Col>
+
+                              <Col xs={6}>
+                                <InputCustomAntd
+                                  divClassName="w-32"
+                                  controller={{
+                                    control,
+                                    name: `storesProducts.${indexStoreProduct}.products.${indexStoreProductProduct}.note`,
+                                  }}
+                                />
+                              </Col>
+
+                              <Col xs={2}>
+                                <Tooltip title="Remove Product">
+                                  <Button
+                                    type="danger"
+                                    size="small"
+                                    icon={<DeleteOutlined />}
+                                    onClick={() =>
+                                      handleRemoveProduct(
+                                        storeProduct.storeId,
+                                        storeProductProduct.productId
+                                      )
+                                    }
+                                  />
+                                </Tooltip>
+                              </Col>
+                            </Row>
+                          );
+                        }
+                      )}
+                    </div>
+                  );
+                }
+              )
+            ) : (
+              <Empty />
+            )}
           </Card>
         </Col>
       </Row>
