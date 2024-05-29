@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 
 import { Button, Card, Col, Empty, Image, Row, Select, Tooltip } from "antd";
-import { filter, find, includes } from "lodash";
+import { filter, find, includes, reduce } from "lodash";
 import moment from "moment";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -63,7 +63,7 @@ const customerFormSchema = z.object({
 
 type TCustomerFormSchema = z.infer<typeof customerFormSchema>;
 
-const productFormSchema = z.object({
+const saleStoreProductFormSchema = z.object({
   productId: z.string(),
   barCode: z.string(),
   name: z.string(),
@@ -73,23 +73,42 @@ const productFormSchema = z.object({
   fileUrl: z.string().nullable(),
 });
 
-type TProductFormSchema = z.infer<typeof productFormSchema>;
+type TSaleStoreProductFormSchema = z.infer<typeof saleStoreProductFormSchema>;
 
-const storeProductsFormSchema = z.object({
+const saleStoreFormSchema = z.object({
   storeId: z.string(),
-  products: z.array(productFormSchema),
+  products: z.array(saleStoreProductFormSchema),
 });
 
-type TStoreProductFormSchema = z.infer<typeof storeProductsFormSchema>;
+type TSaleStoreFormSchema = z.infer<typeof saleStoreFormSchema>;
+
+const showValueNoteFormSchema = z.object({
+  show: z.boolean(),
+  value: z.number().nullable(),
+  note: z.string().nullable(),
+});
+
+type TShowValueNoteFormSchema = z.infer<typeof showValueNoteFormSchema>;
 
 const formSchema = z.object({
   customer: customerFormSchema,
   deliveryType: z.string(),
   selectedStoreIds: z.array(z.string()),
-  storesProducts: z.array(storeProductsFormSchema),
+  saleStores: z.array(saleStoreFormSchema),
+  discount: showValueNoteFormSchema,
+  tax: showValueNoteFormSchema,
+  shipping: showValueNoteFormSchema,
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
+
+const generateShowValueNote = (): TShowValueNoteFormSchema => {
+  return {
+    show: false,
+    note: null,
+    value: 0,
+  };
+};
 
 export default function CreateSalePage() {
   const [formValues, setFormValues] = useState<TFormSchema>();
@@ -107,6 +126,7 @@ export default function CreateSalePage() {
   const {
     handleSubmit,
     formState: { errors },
+    setValue,
     control,
     watch,
   } = useForm<TFormSchema>({
@@ -114,9 +134,12 @@ export default function CreateSalePage() {
     resolver: zodResolver(formSchema),
   });
 
-  let storesProducts: TStoreProductFormSchema[] = watch("storesProducts");
+  let saleStores: TSaleStoreFormSchema[] = watch("saleStores");
+  let deliveryType: string = watch("deliveryType");
 
   useEffect(() => {
+    const showValueNote: TShowValueNoteFormSchema = generateShowValueNote();
+
     setFormValues({
       ...formValues,
       customer: {
@@ -131,7 +154,10 @@ export default function CreateSalePage() {
       },
       deliveryType: SalesEnum.DeliveryType.DELIVERY,
       selectedStoreIds: [],
-      storesProducts: [],
+      saleStores: [],
+      discount: showValueNote,
+      shipping: showValueNote,
+      tax: showValueNote,
     });
   }, []);
 
@@ -181,9 +207,12 @@ export default function CreateSalePage() {
         name: customer?.name ?? "",
         phoneNumber: customer?.phoneNumbers?.[0]?.number ?? null,
       },
-      selectedStoreIds: watch("selectedStoreIds") ?? [],
-      deliveryType: watch("deliveryType") ?? SalesEnum.DeliveryType.DELIVERY,
-      storesProducts: storesProducts ?? [],
+      selectedStoreIds: watch("selectedStoreIds"),
+      deliveryType,
+      saleStores,
+      discount: watch("discount"),
+      shipping: watch("shipping"),
+      tax: watch("tax"),
     });
 
     setSelectedCustomer(customer);
@@ -219,9 +248,12 @@ export default function CreateSalePage() {
         ...formValues!.customer,
         address,
       },
-      selectedStoreIds: watch("selectedStoreIds") ?? [],
-      deliveryType: watch("deliveryType") ?? SalesEnum.DeliveryType.DELIVERY,
-      storesProducts: storesProducts ?? [],
+      selectedStoreIds: watch("selectedStoreIds"),
+      deliveryType,
+      saleStores,
+      discount: watch("discount"),
+      shipping: watch("shipping"),
+      tax: watch("tax"),
     });
 
     setSelectedAddressUid(addressUid);
@@ -230,13 +262,12 @@ export default function CreateSalePage() {
   const handleAddProductToSale = (
     productToAddOnSale: IStoreProductToAddOnSale
   ) => {
-    const storeProduct: TStoreProductFormSchema | undefined = find(
-      storesProducts,
-      { storeId: productToAddOnSale.storeId }
-    );
+    const storeProduct: TSaleStoreFormSchema | undefined = find(saleStores, {
+      storeId: productToAddOnSale.storeId,
+    });
 
     if (!storeProduct) {
-      storesProducts.push({
+      saleStores.push({
         storeId: productToAddOnSale.storeId,
         products: [
           {
@@ -251,7 +282,7 @@ export default function CreateSalePage() {
         ],
       });
     } else {
-      const storeProductProduct: TProductFormSchema | undefined = find(
+      const storeProductProduct: TSaleStoreProductFormSchema | undefined = find(
         storeProduct.products,
         { productId: productToAddOnSale.product.productId }
       );
@@ -280,9 +311,12 @@ export default function CreateSalePage() {
     setFormValues({
       ...formValues,
       customer: formValues!.customer,
-      selectedStoreIds: watch("selectedStoreIds") ?? [],
-      deliveryType: watch("deliveryType") ?? SalesEnum.DeliveryType.DELIVERY,
-      storesProducts,
+      selectedStoreIds: watch("selectedStoreIds"),
+      deliveryType,
+      saleStores,
+      discount: watch("discount"),
+      shipping: watch("shipping"),
+      tax: watch("tax"),
     });
   };
 
@@ -290,55 +324,390 @@ export default function CreateSalePage() {
     setFormValues({
       ...formValues,
       customer: formValues!.customer,
-      selectedStoreIds: watch("selectedStoreIds") ?? [],
-      deliveryType: watch("deliveryType") ?? SalesEnum.DeliveryType.DELIVERY,
-      storesProducts: [],
+      selectedStoreIds: watch("selectedStoreIds"),
+      deliveryType,
+      saleStores: [],
+      discount: watch("discount"),
+      shipping: watch("shipping"),
+      tax: watch("tax"),
     });
   };
 
   const handleRemoveAllProductByStore = (storeId: string) => {
-    storesProducts = filter(
-      storesProducts,
-      (storeProducts: TStoreProductFormSchema) =>
-        storeProducts.storeId !== storeId
+    saleStores = filter(
+      saleStores,
+      (saleStore: TSaleStoreFormSchema) => saleStore.storeId !== storeId
     );
 
     setFormValues({
       ...formValues,
       customer: formValues!.customer,
-      selectedStoreIds: watch("selectedStoreIds") ?? [],
-      deliveryType: watch("deliveryType") ?? SalesEnum.DeliveryType.DELIVERY,
-      storesProducts,
+      selectedStoreIds: watch("selectedStoreIds"),
+      deliveryType,
+      saleStores,
+      discount: watch("discount"),
+      shipping: watch("shipping"),
+      tax: watch("tax"),
     });
   };
 
   const handleRemoveProduct = (storeId: string, productId: string) => {
-    const storeProduct: TStoreProductFormSchema | undefined = find(
-      storesProducts,
-      { storeId }
-    );
+    const saleStore: TSaleStoreFormSchema | undefined = find(saleStores, {
+      storeId,
+    });
 
-    if (storeProduct?.products?.length && storeProduct?.products?.length > 1) {
-      storeProduct.products = filter(
-        storeProduct.products,
-        (storeProductProduct: TProductFormSchema) =>
-          storeProductProduct.productId !== productId
+    if (saleStore?.products?.length && saleStore?.products?.length > 1) {
+      saleStore.products = filter(
+        saleStore.products,
+        (saleStoreProduct: TSaleStoreProductFormSchema) =>
+          saleStoreProduct.productId !== productId
       );
     } else {
-      storesProducts = filter(
-        storesProducts,
-        (storeProducts: TStoreProductFormSchema) =>
-          storeProducts.storeId !== storeId
+      saleStores = filter(
+        saleStores,
+        (saleStore: TSaleStoreFormSchema) => saleStore.storeId !== storeId
       );
     }
 
     setFormValues({
       ...formValues,
       customer: formValues!.customer,
-      selectedStoreIds: watch("selectedStoreIds") ?? [],
-      deliveryType: watch("deliveryType") ?? SalesEnum.DeliveryType.DELIVERY,
-      storesProducts,
+      selectedStoreIds: watch("selectedStoreIds"),
+      deliveryType,
+      saleStores,
+      discount: watch("discount"),
+      shipping: watch("shipping"),
+      tax: watch("tax"),
     });
+  };
+
+  const renderStoresProducts = () => {
+    if (!saleStores?.length) {
+      return <Empty />;
+    }
+
+    const elementArray: JSX.Element[] = saleStores.map(
+      (saleStore: TSaleStoreFormSchema, indexSaleStore: number) => {
+        const store: IStore | undefined = find(stores, {
+          _id: saleStore.storeId,
+        });
+
+        return (
+          <div key={store?._id} className="my-2">
+            <div
+              className={`flex items-center border-b-2 border-slate-100 mb-1 w-full`}
+            >
+              <label className="my-2 text-lg font-semibold mr-2">
+                {store?.name ?? ""}
+              </label>
+
+              {saleStore.products.length > 1 ? (
+                <Tooltip title="Remove All Products by Store">
+                  <Button
+                    type="danger"
+                    size="small"
+                    icon={<DeleteOutlined />}
+                    onClick={() =>
+                      handleRemoveAllProductByStore(saleStore.storeId)
+                    }
+                  />
+                </Tooltip>
+              ) : null}
+            </div>
+
+            <Row className="p-1 px-4 bg-zinc-50 text-black font-semibold">
+              <Col xs={8}>Product</Col>
+              <Col xs={4}>Quantity</Col>
+              <Col xs={4}>Price</Col>
+              <Col xs={6}>Note</Col>
+              <Col xs={2}></Col>
+            </Row>
+
+            {saleStore.products?.map(
+              (
+                saleStoreProduct: TSaleStoreProductFormSchema,
+                indexSaleStoreProduct: number
+              ) => {
+                const fileUrl: string = saleStoreProduct.fileUrl
+                  ? getImageUrl(saleStoreProduct.fileUrl)
+                  : defaultAvatarImage;
+
+                return (
+                  <Row
+                    key={saleStoreProduct.productId}
+                    className="border-b border-slate-100 p-2"
+                  >
+                    <Col xs={8}>
+                      <div className="flex items-center">
+                        <div className="mr-2">
+                          <Image
+                            key={`${fileUrl}-${Date.now()}`}
+                            width={50}
+                            src={fileUrl}
+                            onError={() => (
+                              <Image
+                                key={`${fileUrl}-${Date.now()}`}
+                                width={50}
+                                src={defaultAvatarImage}
+                                alt="mainUrl"
+                                className="rounded-full"
+                              />
+                            )}
+                            alt="mainUrl"
+                            className="rounded-full"
+                          />
+                        </div>
+
+                        <div className="flex flex-col">
+                          <span className="text-base">
+                            {saleStoreProduct.name}
+                          </span>
+
+                          <span className="text-xs">
+                            {saleStoreProduct.barCode}
+                          </span>
+                        </div>
+                      </div>
+                    </Col>
+
+                    <Col xs={4}>
+                      <InputNumberCustomAntd
+                        divClassName="w-28"
+                        controller={{
+                          control,
+                          name: `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}.quantity`,
+                        }}
+                      />
+                    </Col>
+
+                    <Col xs={4}>
+                      <InputNumberCustomAntd
+                        divClassName="w-28"
+                        formatter={formatterMoney}
+                        parser={parserMoney}
+                        controller={{
+                          control,
+                          name: `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}.price`,
+                        }}
+                      />
+                    </Col>
+
+                    <Col xs={6}>
+                      <InputCustomAntd
+                        divClassName="w-32"
+                        controller={{
+                          control,
+                          name: `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}.note`,
+                        }}
+                      />
+                    </Col>
+
+                    <Col xs={2}>
+                      <Tooltip title="Remove Product">
+                        <Button
+                          type="danger"
+                          size="small"
+                          icon={<DeleteOutlined />}
+                          onClick={() =>
+                            handleRemoveProduct(
+                              saleStore.storeId,
+                              saleStoreProduct.productId
+                            )
+                          }
+                        />
+                      </Tooltip>
+                    </Col>
+                  </Row>
+                );
+              }
+            )}
+          </div>
+        );
+      }
+    );
+
+    const productsTotals: {
+      quantity: number;
+      price: number;
+    } = reduce(
+      saleStores,
+      (accSaleStore, saleStore: TSaleStoreFormSchema) => {
+        const productsQuantityPrice = reduce(
+          saleStore.products,
+          (
+            accSaleStoreProduct,
+            saleStoreProduct: TSaleStoreProductFormSchema
+          ) => {
+            accSaleStoreProduct.quantity += saleStoreProduct.quantity;
+            accSaleStoreProduct.price += saleStoreProduct.price;
+            return accSaleStoreProduct;
+          },
+          {
+            quantity: 0,
+            price: 0,
+          }
+        );
+
+        accSaleStore.quantity += productsQuantityPrice.quantity;
+        accSaleStore.price += productsQuantityPrice.price;
+
+        return accSaleStore;
+      },
+      {
+        quantity: 0,
+        price: 0,
+      }
+    );
+
+    return (
+      <div>
+        {elementArray}
+
+        <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
+          <Col xs={8}>SubTotal:</Col>
+
+          <Col xs={4}>
+            <Tooltip title="Quantity products selected">
+              {productsTotals.quantity}
+            </Tooltip>
+          </Col>
+
+          <Col xs={12}>
+            <Tooltip title="Sum all prices products">
+              R${productsTotals.price.toFixed(2)}
+            </Tooltip>
+          </Col>
+        </Row>
+
+        <Row className="border-b px-4 border-slate-100 p-2">
+          <Col xs={8}>
+            <label className="font-semibold mr-2">Discount:</label>
+            <Tooltip title="Edit Discount">
+              <Button
+                icon={<EditOutlined />}
+                size="small"
+                onClick={() => {
+                  setValue("discount.show", !watch("discount.show"));
+                }}
+              />
+            </Tooltip>
+          </Col>
+
+          <Col xs={4}></Col>
+
+          <Col xs={12}>
+            {watch("discount.show") ? (
+              <InputNumberCustomAntd
+                divClassName="w-28"
+                formatter={formatterMoney}
+                parser={parserMoney}
+                controller={{
+                  control,
+                  name: `discount.value`,
+                }}
+              />
+            ) : (
+              <Tooltip title="Discount Value">
+                R$ {watch("discount.value")}
+              </Tooltip>
+            )}
+          </Col>
+        </Row>
+
+        {deliveryType === SalesEnum.DeliveryType.DELIVERY && (
+          <Row className="border-b px-4 border-slate-100 p-2">
+            <Col xs={8}>
+              <label className="font-semibold mr-2">Shipping:</label>
+
+              <Tooltip title="Edit Shipping">
+                <Button
+                  icon={<EditOutlined />}
+                  size="small"
+                  onClick={() => {
+                    setValue("shipping.show", !watch("shipping.show"));
+                  }}
+                />
+              </Tooltip>
+            </Col>
+
+            <Col xs={4}></Col>
+
+            <Col xs={12}>
+              {watch("shipping.show") ? (
+                <InputNumberCustomAntd
+                  divClassName="w-28"
+                  formatter={formatterMoney}
+                  parser={parserMoney}
+                  controller={{
+                    control,
+                    name: `shipping.value`,
+                  }}
+                />
+              ) : (
+                <Tooltip title="Shipping Value">
+                  R$ {watch("shipping.value")}
+                </Tooltip>
+              )}
+            </Col>
+          </Row>
+        )}
+
+        <Row className="border-b px-4 border-slate-100 p-2">
+          <Col xs={8}>
+            <label className="font-semibold mr-2">Tax:</label>
+            <Tooltip title="Edit Tax">
+              <Button
+                icon={<EditOutlined />}
+                size="small"
+                onClick={() => {
+                  setValue("tax.show", !watch("tax.show"));
+                }}
+              />
+            </Tooltip>
+          </Col>
+
+          <Col xs={4}></Col>
+
+          <Col xs={12}>
+            {watch("tax.show") ? (
+              <InputNumberCustomAntd
+                divClassName="w-28"
+                formatter={formatterMoney}
+                parser={parserMoney}
+                controller={{
+                  control,
+                  name: `tax.value`,
+                }}
+              />
+            ) : (
+              <Tooltip title="Tax Value">R$ {watch("tax.value")}</Tooltip>
+            )}
+          </Col>
+        </Row>
+
+        <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
+          <Col xs={8}>Total:</Col>
+
+          <Col xs={4}>
+            <Tooltip title="Quantity products selected">
+              {productsTotals.quantity}
+            </Tooltip>
+          </Col>
+
+          <Col xs={12}>
+            <Tooltip title="Sum all prices products">
+              R$
+              {(
+                productsTotals.price -
+                watch("discount.value") -
+                watch("tax.value") -
+                watch("shipping.value")
+              ).toFixed(2)}
+            </Tooltip>
+          </Col>
+        </Row>
+      </div>
+    );
   };
 
   return (
@@ -635,6 +1004,7 @@ export default function CreateSalePage() {
       </Row>
 
       <Row gutter={[8, 8]} className="mt-2">
+        {/* Select Products */}
         <Col xs={24} md={12}>
           <Card
             title={
@@ -669,12 +1039,14 @@ export default function CreateSalePage() {
           </Card>
         </Col>
 
+        {/* Selected Products */}
         <Col xs={24} md={12}>
           <Card
             title={
               <div className="flex justify-between">
                 <label>Selected Products</label>
-                {storesProducts?.length > 1 ? (
+
+                {saleStores?.length > 1 ? (
                   <Tooltip title="Remove All Products">
                     <Button
                       type="danger"
@@ -686,154 +1058,7 @@ export default function CreateSalePage() {
               </div>
             }
           >
-            {storesProducts?.length ? (
-              storesProducts?.map(
-                (
-                  storeProduct: TStoreProductFormSchema,
-                  indexStoreProduct: number
-                ) => {
-                  const store: IStore | undefined = find(stores, {
-                    _id: storeProduct.storeId,
-                  });
-
-                  return (
-                    <div key={store?._id} className="my-2">
-                      <div
-                        className={`flex items-center border-b-2 border-slate-100 mb-1 w-full`}
-                      >
-                        <label className="my-2 text-lg font-semibold mr-2">
-                          {store?.name ?? ""}
-                        </label>
-
-                        {storeProduct.products.length > 1 ? (
-                          <Tooltip title="Remove All Products by Store">
-                            <Button
-                              type="danger"
-                              size="small"
-                              icon={<DeleteOutlined />}
-                              onClick={() =>
-                                handleRemoveAllProductByStore(
-                                  storeProduct.storeId
-                                )
-                              }
-                            />
-                          </Tooltip>
-                        ) : null}
-                      </div>
-
-                      <Row className="p-1 px-2 bg-zinc-50 text-black font-semibold">
-                        <Col xs={8}>Product</Col>
-                        <Col xs={4}>Quantity</Col>
-                        <Col xs={4}>Price</Col>
-                        <Col xs={6}>Note</Col>
-                        <Col xs={2}></Col>
-                      </Row>
-
-                      {storeProduct.products?.map(
-                        (
-                          storeProductProduct: TProductFormSchema,
-                          indexStoreProductProduct: number
-                        ) => {
-                          const fileUrl: string = storeProductProduct.fileUrl
-                            ? getImageUrl(storeProductProduct.fileUrl)
-                            : defaultAvatarImage;
-
-                          return (
-                            <Row
-                              key={storeProductProduct.productId}
-                              className="border-b border-slate-100 p-2"
-                            >
-                              <Col xs={8}>
-                                <div className="flex items-center">
-                                  <div className="mr-2">
-                                    <Image
-                                      key={`${fileUrl}-${Date.now()}`}
-                                      width={50}
-                                      src={fileUrl}
-                                      onError={() => (
-                                        <Image
-                                          key={`${fileUrl}-${Date.now()}`}
-                                          width={50}
-                                          src={defaultAvatarImage}
-                                          alt="mainUrl"
-                                          className="rounded-full"
-                                        />
-                                      )}
-                                      alt="mainUrl"
-                                      className="rounded-full"
-                                    />
-                                  </div>
-
-                                  <div className="flex flex-col">
-                                    <span className="text-base">
-                                      {storeProductProduct.name}
-                                    </span>
-
-                                    <span className="text-xs">
-                                      {storeProductProduct.barCode}
-                                    </span>
-                                  </div>
-                                </div>
-                              </Col>
-
-                              <Col xs={4}>
-                                <InputNumberCustomAntd
-                                  divClassName="w-28"
-                                  controller={{
-                                    control,
-                                    name: `storesProducts.${indexStoreProduct}.products.${indexStoreProductProduct}.quantity`,
-                                  }}
-                                />
-                              </Col>
-
-                              <Col xs={4}>
-                                <InputNumberCustomAntd
-                                  divClassName="w-28"
-                                  formatter={formatterMoney}
-                                  parser={parserMoney}
-                                  controller={{
-                                    control,
-                                    name: `storesProducts.${indexStoreProduct}.products.${indexStoreProductProduct}.price`,
-                                  }}
-                                />
-                              </Col>
-
-                              <Col xs={6}>
-                                <InputCustomAntd
-                                  divClassName="w-32"
-                                  controller={{
-                                    control,
-                                    name: `storesProducts.${indexStoreProduct}.products.${indexStoreProductProduct}.note`,
-                                  }}
-                                />
-                              </Col>
-
-                              <Col xs={2}>
-                                <Tooltip title="Remove Product">
-                                  <Button
-                                    type="danger"
-                                    size="small"
-                                    icon={<DeleteOutlined />}
-                                    onClick={() =>
-                                      handleRemoveProduct(
-                                        storeProduct.storeId,
-                                        storeProductProduct.productId
-                                      )
-                                    }
-                                  />
-                                </Tooltip>
-                              </Col>
-                            </Row>
-                          );
-                        }
-                      )}
-                    </div>
-                  );
-                }
-              )
-            ) : (
-              <Empty />
-            )}
+            {renderStoresProducts()}
           </Card>
         </Col>
       </Row>

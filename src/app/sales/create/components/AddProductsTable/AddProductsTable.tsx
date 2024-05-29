@@ -67,12 +67,7 @@ export const AddProductsTable: React.FC<Props> = ({
 
   const [formValues, setFormValues] = useState<TFormSchema>();
 
-  const {
-    handleSubmit,
-    formState: { errors },
-    control,
-    watch,
-  } = useForm<TFormSchema>({
+  const { control, watch } = useForm<TFormSchema>({
     values: formValues,
     resolver: zodResolver(formSchema),
   });
@@ -138,7 +133,7 @@ export const AddProductsTable: React.FC<Props> = ({
         dataSource={products}
         columns={[
           {
-            title: "#",
+            title: "Product",
             dataIndex: "filesUrl",
             key: "filesUrl",
             align: "center",
@@ -149,26 +144,30 @@ export const AddProductsTable: React.FC<Props> = ({
                 : defaultAvatarImage;
 
               return (
-                <div className="flex flex-col justify-center items-center">
-                  <Image
-                    key={`${fileUrl}-${Date.now()}`}
-                    width={60}
-                    src={fileUrl}
-                    onError={() => (
-                      <Image
-                        key={`${fileUrl}-${Date.now()}`}
-                        width={60}
-                        src={defaultAvatarImage}
-                        alt="mainUrl"
-                        className="rounded-full"
-                      />
-                    )}
-                    alt="mainUrl"
-                    className="rounded-full"
-                  />
+                <div className="flex items-center">
+                  <div className="mr-2">
+                    <Image
+                      key={`${fileUrl}-${Date.now()}`}
+                      width={50}
+                      src={fileUrl}
+                      onError={() => (
+                        <Image
+                          key={`${fileUrl}-${Date.now()}`}
+                          width={50}
+                          src={defaultAvatarImage}
+                          alt="mainUrl"
+                          className="rounded-full"
+                        />
+                      )}
+                      alt="mainUrl"
+                      className="rounded-full"
+                    />
+                  </div>
 
-                  <span className="text-lg">{product.name}</span>
-                  <span className="text-xs">{product.barCode}</span>
+                  <div className="flex flex-col text-start">
+                    <span className="text-lg">{product.name}</span>
+                    <span className="text-xs">{product.barCode}</span>
+                  </div>
                 </div>
               );
             },
@@ -180,7 +179,7 @@ export const AddProductsTable: React.FC<Props> = ({
             align: "center",
             render: (quantity: number, _, index: number) => {
               return (
-                <div className="flex flex-col">
+                <div className="flex flex-col items-center">
                   <span>Current: {quantity}</span>
 
                   <Divider style={{ margin: "7px 0px" }} />
