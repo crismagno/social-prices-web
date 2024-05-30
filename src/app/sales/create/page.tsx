@@ -23,6 +23,7 @@ import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { InputNumberCustomAntd } from "../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import AddressEnum from "../../../shared/business/enums/address.enum";
@@ -49,6 +50,11 @@ import {
   IStoreProductToAddOnSale,
 } from "./components/AddProductsTable/AddProductsTable";
 import { SelectCustomer } from "./components/SelectCustomer/SelectCustomer";
+
+interface ISaleStoresProductsTotals {
+  subtotal: number;
+  quantity: number;
+}
 
 const customerFormSchema = z.object({
   customerId: z.string().nullable(),
@@ -134,6 +140,7 @@ export default function CreateSalePage() {
   });
 
   let saleStores: TSaleStoreFormSchema[] = watch("saleStores");
+
   let deliveryType: string = watch("deliveryType");
 
   useEffect(() => {
@@ -323,6 +330,71 @@ export default function CreateSalePage() {
     setValue("saleStores", saleStores);
   };
 
+  const getSaleStoresProductsTotals = (): ISaleStoresProductsTotals => {
+    const totals: ISaleStoresProductsTotals = reduce(
+      saleStores,
+      (
+        accSaleStore: ISaleStoresProductsTotals,
+        saleStore: TSaleStoreFormSchema
+      ) => {
+        const productsQuantityPrice = reduce(
+          saleStore.products,
+          (
+            accSaleStoreProduct: ISaleStoresProductsTotals,
+            saleStoreProduct: TSaleStoreProductFormSchema
+          ) => {
+            accSaleStoreProduct.quantity += saleStoreProduct.quantity;
+            accSaleStoreProduct.subtotal += saleStoreProduct.price;
+            return accSaleStoreProduct;
+          },
+          {
+            quantity: 0,
+            subtotal: 0,
+          }
+        );
+
+        accSaleStore.quantity += productsQuantityPrice.quantity;
+        accSaleStore.subtotal += productsQuantityPrice.subtotal;
+
+        return accSaleStore;
+      },
+      {
+        quantity: 0,
+        subtotal: 0,
+      }
+    );
+
+    return {
+      quantity: totals.quantity,
+      subtotal: totals.subtotal > 0 ? totals.subtotal : 0,
+    };
+  };
+
+  const saleStoresProductsTotals: ISaleStoresProductsTotals =
+    getSaleStoresProductsTotals();
+
+  const getTotalAfterDiscount = (): number => {
+    const discountValue: number = watch("discount.value") ?? 0;
+    const totalAfterDiscount: number =
+      saleStoresProductsTotals.subtotal - discountValue;
+
+    return totalAfterDiscount > 0 ? totalAfterDiscount : 0;
+  };
+
+  const totalAfterDiscount: number = getTotalAfterDiscount();
+
+  const getTotalFinal = (): number => {
+    const shippingValue: number = watch("shipping.value") ?? 0;
+
+    const taxValue: number = watch("tax.value") ?? 0;
+
+    const totalFinal: number = totalAfterDiscount + shippingValue + taxValue;
+
+    return totalFinal > 0 ? totalFinal : 0;
+  };
+
+  const totalFinal: number = getTotalFinal();
+
   const renderStoresProducts = () => {
     if (!saleStores?.length) {
       return <Empty />;
@@ -415,6 +487,7 @@ export default function CreateSalePage() {
                     <Col xs={4}>
                       <InputNumberCustomAntd
                         divClassName="w-28"
+                        min={0}
                         controller={{
                           control,
                           name: `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}.quantity`,
@@ -427,6 +500,7 @@ export default function CreateSalePage() {
                         divClassName="w-28"
                         formatter={formatterMoney}
                         parser={parserMoney}
+                        min={0}
                         controller={{
                           control,
                           name: `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}.price`,
@@ -435,8 +509,8 @@ export default function CreateSalePage() {
                     </Col>
 
                     <Col xs={6}>
-                      <InputCustomAntd
-                        divClassName="w-32"
+                      <TextareaCustomAntd
+                        divClassName="w-full pr-2"
                         controller={{
                           control,
                           name: `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}.note`,
@@ -468,59 +542,25 @@ export default function CreateSalePage() {
       }
     );
 
-    const productsTotals: {
-      quantity: number;
-      price: number;
-    } = reduce(
-      saleStores,
-      (accSaleStore, saleStore: TSaleStoreFormSchema) => {
-        const productsQuantityPrice = reduce(
-          saleStore.products,
-          (
-            accSaleStoreProduct,
-            saleStoreProduct: TSaleStoreProductFormSchema
-          ) => {
-            accSaleStoreProduct.quantity += saleStoreProduct.quantity;
-            accSaleStoreProduct.price += saleStoreProduct.price;
-            return accSaleStoreProduct;
-          },
-          {
-            quantity: 0,
-            price: 0,
-          }
-        );
-
-        accSaleStore.quantity += productsQuantityPrice.quantity;
-        accSaleStore.price += productsQuantityPrice.price;
-
-        return accSaleStore;
-      },
-      {
-        quantity: 0,
-        price: 0,
-      }
-    );
-
     return (
       <div>
+        {/* Selected Products */}
         {elementArray}
 
+        {/* Subtotal */}
         <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
           <Col xs={8}>SubTotal:</Col>
 
-          <Col xs={4}>
-            <Tooltip title="Quantity products selected">
-              {productsTotals.quantity}
-            </Tooltip>
-          </Col>
+          <Col xs={4}></Col>
 
           <Col xs={12}>
             <Tooltip title="Sum all prices products">
-              R${productsTotals.price.toFixed(2)}
+              R$ {saleStoresProductsTotals.subtotal.toFixed(2)}
             </Tooltip>
           </Col>
         </Row>
 
+        {/* Discount */}
         <Row className="border-b px-4 border-slate-100 p-2">
           <Col xs={8}>
             <label className="font-semibold mr-2">Discount:</label>
@@ -537,12 +577,14 @@ export default function CreateSalePage() {
 
           <Col xs={4}></Col>
 
-          <Col xs={12}>
+          <Col xs={5}>
             {watch("discount.show") ? (
               <InputNumberCustomAntd
                 divClassName="w-28"
                 formatter={formatterMoney}
                 parser={parserMoney}
+                min={0}
+                max={saleStoresProductsTotals.subtotal}
                 controller={{
                   control,
                   name: `discount.value`,
@@ -550,12 +592,42 @@ export default function CreateSalePage() {
               />
             ) : (
               <Tooltip title="Discount Value">
-                R$ {watch("discount.value")}
+                - R$ {watch("discount.value")}
+              </Tooltip>
+            )}
+          </Col>
+
+          <Col xs={7}>
+            {watch("discount.show") ? (
+              <TextareaCustomAntd
+                divClassName="w-full"
+                controller={{
+                  control,
+                  name: `discount.note`,
+                }}
+              />
+            ) : (
+              <Tooltip title={watch("discount.note")}>
+                {watch("discount.note")}
               </Tooltip>
             )}
           </Col>
         </Row>
 
+        {/* Total Discount */}
+        <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
+          <Col xs={8}>Total After Discount:</Col>
+
+          <Col xs={4}></Col>
+
+          <Col xs={12}>
+            <Tooltip title="Sum total after all discounts">
+              - R$ {totalAfterDiscount.toFixed(2)}
+            </Tooltip>
+          </Col>
+        </Row>
+
+        {/* Shipping */}
         {deliveryType === SalesEnum.DeliveryType.DELIVERY && (
           <Row className="border-b px-4 border-slate-100 p-2">
             <Col xs={8}>
@@ -574,12 +646,13 @@ export default function CreateSalePage() {
 
             <Col xs={4}></Col>
 
-            <Col xs={12}>
+            <Col xs={5}>
               {watch("shipping.show") ? (
                 <InputNumberCustomAntd
                   divClassName="w-28"
                   formatter={formatterMoney}
                   parser={parserMoney}
+                  min={0}
                   controller={{
                     control,
                     name: `shipping.value`,
@@ -591,9 +664,26 @@ export default function CreateSalePage() {
                 </Tooltip>
               )}
             </Col>
+
+            <Col xs={7}>
+              {watch("shipping.show") ? (
+                <TextareaCustomAntd
+                  divClassName="w-full"
+                  controller={{
+                    control,
+                    name: `shipping.note`,
+                  }}
+                />
+              ) : (
+                <Tooltip title={watch("shipping.note")}>
+                  {watch("shipping.note")}
+                </Tooltip>
+              )}
+            </Col>
           </Row>
         )}
 
+        {/* Tax */}
         <Row className="border-b px-4 border-slate-100 p-2">
           <Col xs={8}>
             <label className="font-semibold mr-2">Tax:</label>
@@ -610,12 +700,13 @@ export default function CreateSalePage() {
 
           <Col xs={4}></Col>
 
-          <Col xs={12}>
+          <Col xs={5}>
             {watch("tax.show") ? (
               <InputNumberCustomAntd
                 divClassName="w-28"
                 formatter={formatterMoney}
                 parser={parserMoney}
+                min={0}
                 controller={{
                   control,
                   name: `tax.value`,
@@ -625,26 +716,35 @@ export default function CreateSalePage() {
               <Tooltip title="Tax Value">R$ {watch("tax.value")}</Tooltip>
             )}
           </Col>
+
+          <Col xs={7}>
+            {watch("tax.show") ? (
+              <TextareaCustomAntd
+                divClassName="w-full"
+                controller={{
+                  control,
+                  name: `tax.note`,
+                }}
+              />
+            ) : (
+              <Tooltip title={watch("tax.note")}>{watch("tax.note")}</Tooltip>
+            )}
+          </Col>
         </Row>
 
+        {/* Total */}
         <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
           <Col xs={8}>Total:</Col>
 
           <Col xs={4}>
             <Tooltip title="Quantity products selected">
-              {productsTotals.quantity}
+              {saleStoresProductsTotals.quantity}
             </Tooltip>
           </Col>
 
           <Col xs={12}>
             <Tooltip title="Sum all prices products">
-              R$
-              {(
-                productsTotals.price -
-                watch("discount.value") -
-                watch("tax.value") -
-                watch("shipping.value")
-              ).toFixed(2)}
+              R$ {totalFinal.toFixed(2)}
             </Tooltip>
           </Col>
         </Row>

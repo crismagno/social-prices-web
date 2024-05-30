@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Button, Divider, Empty, Image, Tooltip } from "antd";
+import { Button, Divider, Empty, Image, message, Tooltip } from "antd";
 import { find, includes, map } from "lodash";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -107,20 +107,35 @@ export const AddProductsTable: React.FC<Props> = ({
       _id: productId,
     });
 
+    if (!product) {
+      message.error("Product not found");
+      return;
+    }
+
     const productForm: TProductFormSchema | undefined = find(
       getValues("products"),
       { productId }
     );
 
+    if (!productForm) {
+      message.error("Product not found");
+      return;
+    }
+
+    if (productForm.quantity <= 0) {
+      message.warning("Product quantity invalid");
+      return;
+    }
+
     onAddProductToSale?.({
       storeId,
       product: {
-        price: productForm?.price ?? 0,
+        price: productForm.price ?? 0,
         productId,
-        quantity: productForm?.quantity ?? 1,
-        barCode: product?.barCode ?? "",
-        fileUrl: product?.filesUrl?.[0] ?? null,
-        name: product?.name ?? "",
+        quantity: productForm.quantity,
+        barCode: product.barCode ?? "",
+        fileUrl: product.filesUrl?.[0] ?? null,
+        name: product.name,
       },
     });
   };
@@ -187,6 +202,7 @@ export const AddProductsTable: React.FC<Props> = ({
 
                   <InputNumberCustomAntd
                     divClassName="w-28"
+                    min={0}
                     controller={{
                       control,
                       name: `products.${index}.quantity`,
@@ -212,6 +228,7 @@ export const AddProductsTable: React.FC<Props> = ({
                     divClassName="w-28"
                     formatter={formatterMoney}
                     parser={parserMoney}
+                    min={0}
                     controller={{
                       control,
                       name: `products.${index}.price`,
