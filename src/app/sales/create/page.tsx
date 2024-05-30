@@ -8,7 +8,12 @@ import moment from "moment";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  CheckOutlined,
+  CloseOutlined,
+  DeleteOutlined,
+  EditOutlined,
+} from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -131,7 +136,6 @@ export default function CreateSalePage() {
     handleSubmit,
     formState: { errors },
     setValue,
-    getValues,
     control,
     watch,
   } = useForm<TFormSchema>({
@@ -564,15 +568,42 @@ export default function CreateSalePage() {
         <Row className="border-b px-4 border-slate-100 p-2">
           <Col xs={8}>
             <label className="font-semibold mr-2">Discount:</label>
-            <Tooltip title="Edit Discount">
-              <Button
-                icon={<EditOutlined />}
-                size="small"
-                onClick={() => {
-                  setValue("discount.show", !watch("discount.show"));
-                }}
-              />
-            </Tooltip>
+            {!watch("discount.show") ? (
+              <Tooltip title="Edit Discount">
+                <Button
+                  icon={<EditOutlined />}
+                  size="small"
+                  onClick={() => {
+                    setValue("discount.show", true);
+                  }}
+                />
+              </Tooltip>
+            ) : (
+              <Button.Group>
+                <Tooltip title="Use Discount">
+                  <Button
+                    icon={<CheckOutlined />}
+                    size="small"
+                    type="success"
+                    onClick={() => {
+                      setValue("discount.show", false);
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title="Remove Discount">
+                  <Button
+                    icon={<CloseOutlined />}
+                    size="small"
+                    type="danger"
+                    onClick={() => {
+                      setValue("discount.note", null);
+                      setValue("discount.value", 0);
+                      setValue("discount.show", false);
+                    }}
+                  />
+                </Tooltip>
+              </Button.Group>
+            )}
           </Col>
 
           <Col xs={4}></Col>
@@ -633,15 +664,42 @@ export default function CreateSalePage() {
             <Col xs={8}>
               <label className="font-semibold mr-2">Shipping:</label>
 
-              <Tooltip title="Edit Shipping">
-                <Button
-                  icon={<EditOutlined />}
-                  size="small"
-                  onClick={() => {
-                    setValue("shipping.show", !watch("shipping.show"));
-                  }}
-                />
-              </Tooltip>
+              {!watch("shipping.show") ? (
+                <Tooltip title="Edit Shipping">
+                  <Button
+                    icon={<EditOutlined />}
+                    size="small"
+                    onClick={() => {
+                      setValue("shipping.show", true);
+                    }}
+                  />
+                </Tooltip>
+              ) : (
+                <Button.Group>
+                  <Tooltip title="Use Shipping">
+                    <Button
+                      icon={<CheckOutlined />}
+                      size="small"
+                      type="success"
+                      onClick={() => {
+                        setValue("shipping.show", false);
+                      }}
+                    />
+                  </Tooltip>
+                  <Tooltip title="Remove Shipping">
+                    <Button
+                      icon={<CloseOutlined />}
+                      size="small"
+                      type="danger"
+                      onClick={() => {
+                        setValue("shipping.note", null);
+                        setValue("shipping.value", 0);
+                        setValue("shipping.show", false);
+                      }}
+                    />
+                  </Tooltip>
+                </Button.Group>
+              )}
             </Col>
 
             <Col xs={4}></Col>
@@ -687,15 +745,43 @@ export default function CreateSalePage() {
         <Row className="border-b px-4 border-slate-100 p-2">
           <Col xs={8}>
             <label className="font-semibold mr-2">Tax:</label>
-            <Tooltip title="Edit Tax">
-              <Button
-                icon={<EditOutlined />}
-                size="small"
-                onClick={() => {
-                  setValue("tax.show", !watch("tax.show"));
-                }}
-              />
-            </Tooltip>
+
+            {!watch("tax.show") ? (
+              <Tooltip title="Edit Tax">
+                <Button
+                  icon={<EditOutlined />}
+                  size="small"
+                  onClick={() => {
+                    setValue("tax.show", true);
+                  }}
+                />
+              </Tooltip>
+            ) : (
+              <Button.Group>
+                <Tooltip title="Use Tax">
+                  <Button
+                    icon={<CheckOutlined />}
+                    size="small"
+                    type="success"
+                    onClick={() => {
+                      setValue("tax.show", false);
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title="Remove Tax">
+                  <Button
+                    icon={<CloseOutlined />}
+                    size="small"
+                    type="danger"
+                    onClick={() => {
+                      setValue("tax.note", null);
+                      setValue("tax.value", 0);
+                      setValue("tax.show", false);
+                    }}
+                  />
+                </Tooltip>
+              </Button.Group>
+            )}
           </Col>
 
           <Col xs={4}></Col>
@@ -733,7 +819,7 @@ export default function CreateSalePage() {
         </Row>
 
         {/* Total */}
-        <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
+        <Row className="p-2 px-4 bg-emerald-50 text-black font-bold">
           <Col xs={8}>Total:</Col>
 
           <Col xs={4}>
