@@ -102,13 +102,11 @@ const formSchema = z.object({
 
 type TFormSchema = z.infer<typeof formSchema>;
 
-const generateShowValueNote = (): TShowValueNoteFormSchema => {
-  return {
-    show: false,
-    note: null,
-    value: 0,
-  };
-};
+const generateShowValueNote = (): TShowValueNoteFormSchema => ({
+  show: false,
+  note: null,
+  value: 0,
+});
 
 export default function CreateSalePage() {
   const [formValues, setFormValues] = useState<TFormSchema>();
@@ -127,6 +125,7 @@ export default function CreateSalePage() {
     handleSubmit,
     formState: { errors },
     setValue,
+    getValues,
     control,
     watch,
   } = useForm<TFormSchema>({
@@ -191,28 +190,19 @@ export default function CreateSalePage() {
         }
       : generateNewAddress();
 
-    setFormValues({
-      ...formValues,
-      customer: {
-        customerId: customer?._id ?? null,
-        about: null,
-        address,
-        birthDate: customer?.birthDate
-          ? moment(customer?.birthDate)
-              .utc()
-              .format(DatesEnum.Format.YYYYMMDD_DASHED)
-          : null,
-        email: customer?.email ?? "",
-        gender: customer?.gender ?? UsersEnum.Gender.MALE,
-        name: customer?.name ?? "",
-        phoneNumber: customer?.phoneNumbers?.[0]?.number ?? null,
-      },
-      selectedStoreIds: watch("selectedStoreIds"),
-      deliveryType,
-      saleStores,
-      discount: watch("discount"),
-      shipping: watch("shipping"),
-      tax: watch("tax"),
+    setValue("customer", {
+      customerId: customer?._id ?? null,
+      about: null,
+      address,
+      birthDate: customer?.birthDate
+        ? moment(customer?.birthDate)
+            .utc()
+            .format(DatesEnum.Format.YYYYMMDD_DASHED)
+        : null,
+      email: customer?.email ?? "",
+      gender: customer?.gender ?? UsersEnum.Gender.MALE,
+      name: customer?.name ?? "",
+      phoneNumber: customer?.phoneNumbers?.[0]?.number ?? null,
     });
 
     setSelectedCustomer(customer);
@@ -242,19 +232,7 @@ export default function CreateSalePage() {
         }
       : generateNewAddress();
 
-    setFormValues({
-      ...formValues,
-      customer: {
-        ...formValues!.customer,
-        address,
-      },
-      selectedStoreIds: watch("selectedStoreIds"),
-      deliveryType,
-      saleStores,
-      discount: watch("discount"),
-      shipping: watch("shipping"),
-      tax: watch("tax"),
-    });
+    setValue("customer.address", address);
 
     setSelectedAddressUid(addressUid);
   };
@@ -308,29 +286,11 @@ export default function CreateSalePage() {
       }
     }
 
-    setFormValues({
-      ...formValues,
-      customer: formValues!.customer,
-      selectedStoreIds: watch("selectedStoreIds"),
-      deliveryType,
-      saleStores,
-      discount: watch("discount"),
-      shipping: watch("shipping"),
-      tax: watch("tax"),
-    });
+    setValue("saleStores", saleStores);
   };
 
   const handleRemoveAllProduct = () => {
-    setFormValues({
-      ...formValues,
-      customer: formValues!.customer,
-      selectedStoreIds: watch("selectedStoreIds"),
-      deliveryType,
-      saleStores: [],
-      discount: watch("discount"),
-      shipping: watch("shipping"),
-      tax: watch("tax"),
-    });
+    setValue("saleStores", []);
   };
 
   const handleRemoveAllProductByStore = (storeId: string) => {
@@ -339,16 +299,7 @@ export default function CreateSalePage() {
       (saleStore: TSaleStoreFormSchema) => saleStore.storeId !== storeId
     );
 
-    setFormValues({
-      ...formValues,
-      customer: formValues!.customer,
-      selectedStoreIds: watch("selectedStoreIds"),
-      deliveryType,
-      saleStores,
-      discount: watch("discount"),
-      shipping: watch("shipping"),
-      tax: watch("tax"),
-    });
+    setValue("saleStores", saleStores);
   };
 
   const handleRemoveProduct = (storeId: string, productId: string) => {
@@ -369,16 +320,7 @@ export default function CreateSalePage() {
       );
     }
 
-    setFormValues({
-      ...formValues,
-      customer: formValues!.customer,
-      selectedStoreIds: watch("selectedStoreIds"),
-      deliveryType,
-      saleStores,
-      discount: watch("discount"),
-      shipping: watch("shipping"),
-      tax: watch("tax"),
-    });
+    setValue("saleStores", saleStores);
   };
 
   const renderStoresProducts = () => {
