@@ -22,16 +22,16 @@ import { createTableState } from "../../../../../shared/utils/table/table-state"
 import { ITableStateRequest } from "../../../../../shared/utils/table/table-state.interface";
 import { useFindProductsByUserTableState } from "../../../../products/useFindProductsByUserTableState";
 
-const productsFormSchema = z.object({
+const productFormSchema = z.object({
   productId: z.string(),
   quantity: z.number(),
   price: z.number(),
 });
 
-type TProductsFormSchema = z.infer<typeof productsFormSchema>;
+type TProductFormSchema = z.infer<typeof productFormSchema>;
 
 const formSchema = z.object({
-  products: z.array(productsFormSchema),
+  products: z.array(productFormSchema),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -67,7 +67,7 @@ export const AddProductsTable: React.FC<Props> = ({
 
   const [formValues, setFormValues] = useState<TFormSchema>();
 
-  const { control, watch } = useForm<TFormSchema>({
+  const { control, watch, getValues } = useForm<TFormSchema>({
     values: formValues,
     resolver: zodResolver(formSchema),
   });
@@ -79,7 +79,7 @@ export const AddProductsTable: React.FC<Props> = ({
     setFormValues({
       products: map(
         products,
-        (product: IProduct): TProductsFormSchema => ({
+        (product: IProduct): TProductFormSchema => ({
           price: product.price,
           productId: product._id,
           quantity: product.quantity,
@@ -102,21 +102,22 @@ export const AddProductsTable: React.FC<Props> = ({
     return <Empty />;
   }
 
-  const handleAddProductToSale = (params: {
-    productId: string;
-    storeId: string;
-    index: number;
-  }) => {
+  const handleAddProductToSale = (productId: string, storeId: string) => {
     const product: IProduct | undefined = find(products, {
-      _id: params.productId,
+      _id: productId,
     });
 
+    const productForm: TProductFormSchema | undefined = find(
+      getValues("products"),
+      { productId }
+    );
+
     onAddProductToSale?.({
-      storeId: params.storeId,
+      storeId,
       product: {
-        price: watch(`products.${params.index}.price`),
-        productId: params.productId,
-        quantity: watch(`products.${params.index}.quantity`) ?? 1,
+        price: productForm?.price ?? 0,
+        productId,
+        quantity: productForm?.quantity ?? 1,
         barCode: product?.barCode ?? "",
         fileUrl: product?.filesUrl?.[0] ?? null,
         name: product?.name ?? "",
@@ -226,7 +227,7 @@ export const AddProductsTable: React.FC<Props> = ({
             key: "storeIds",
             align: "center",
             width: 200,
-            render: (storeIds: string[], product: IProduct, index: number) => {
+            render: (storeIds: string[], product: IProduct) => {
               return storeIds.map((storeId: string) => {
                 const store: IStore | undefined = getStore(storeId);
 
@@ -249,11 +250,7 @@ export const AddProductsTable: React.FC<Props> = ({
                       className="mr-1 mt-1"
                       type="primary"
                       onClick={() =>
-                        handleAddProductToSale({
-                          productId: product._id,
-                          storeId,
-                          index,
-                        })
+                        handleAddProductToSale(product._id, storeId)
                       }
                       icon={<PlusOutlined />}
                     >
