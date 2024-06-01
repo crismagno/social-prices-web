@@ -42,7 +42,7 @@ import HrCustom from "../../../components/common/HrCustom/HrCustom";
 import ImageModal from "../../../components/common/ImageModal/ImageModal";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import {
-  generateNewAPhoneNumber,
+  generateNewPhoneNumber,
   phoneNumberFormSchema,
   PhoneNumbers,
 } from "../../../components/common/PhoneNumbers/PhoneNumbers";
@@ -144,7 +144,7 @@ export default function StoreDetailPage() {
               isCollapsed: index === 0,
             })
           )
-        : [generateNewAPhoneNumber(false)],
+        : [generateNewPhoneNumber(false)],
       status: store?.status ?? StoresEnum.Status.ACTIVE,
       categoriesIds: store?.categoriesIds ?? [],
     };
@@ -166,16 +166,13 @@ export default function StoreDetailPage() {
 
   const handleCreate = async (data: TFormSchema) => {
     try {
-      if (fileList.length === 0) {
-        message.warning("Please select a logo.");
-        return;
-      }
-
       setIsSUbmitting(true);
 
       const formData = new FormData();
 
-      formData.append("logo", fileList[0].originFileObj as RcFile);
+      if (fileList.length > 0) {
+        formData.append("logo", fileList[0].originFileObj as RcFile);
+      }
 
       const addresses: IAddress[] = data.addresses.map(
         (address): IAddress => ({

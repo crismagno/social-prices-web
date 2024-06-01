@@ -2,7 +2,18 @@
 
 import { useEffect, useState } from "react";
 
-import { Button, Card, Col, Empty, Image, Row, Select, Tooltip } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Descriptions,
+  Divider,
+  Empty,
+  Image,
+  Row,
+  Select,
+  Tooltip,
+} from "antd";
 import { filter, find, includes, reduce } from "lodash";
 import moment from "moment";
 import { useForm } from "react-hook-form";
@@ -11,8 +22,8 @@ import { z } from "zod";
 import {
   CheckOutlined,
   CloseOutlined,
-  DeleteOutlined,
   EditOutlined,
+  QuestionCircleTwoTone,
 } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -24,7 +35,15 @@ import {
   states,
   TAddressFormSchema,
 } from "../../../components/common/Addresses/Addresses";
+import ButtonCommon from "../../../components/common/ButtonCommon/ButtonCommon";
+import { IconTrash } from "../../../components/common/icons/icons";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+import {
+  generateNewSalePayment,
+  salePaymentFormSchema,
+  SalePayments,
+  TSalePaymentFormSchema,
+} from "../../../components/common/SalePayments/SalePayments";
 import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { InputNumberCustomAntd } from "../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
@@ -47,6 +66,7 @@ import {
 import {
   createAddressName,
   formatterMoney,
+  formatToMoneyDecimal,
   parserMoney,
 } from "../../../shared/utils/string-extensions/string-extensions";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
@@ -109,6 +129,7 @@ const formSchema = z.object({
   discount: showValueNoteFormSchema,
   tax: showValueNoteFormSchema,
   shipping: showValueNoteFormSchema,
+  payments: z.array(salePaymentFormSchema),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -147,6 +168,8 @@ export default function CreateSalePage() {
 
   let deliveryType: string = watch("deliveryType");
 
+  let payments: TSalePaymentFormSchema[] = watch("payments");
+
   useEffect(() => {
     const showValueNote: TShowValueNoteFormSchema = generateShowValueNote();
 
@@ -168,6 +191,7 @@ export default function CreateSalePage() {
       discount: showValueNote,
       shipping: showValueNote,
       tax: showValueNote,
+      payments: [generateNewSalePayment()],
     });
   }, []);
 
@@ -399,6 +423,24 @@ export default function CreateSalePage() {
 
   const totalFinal: number = getTotalFinal();
 
+  const getPayment = (): number => {
+    const total: number = reduce(
+      payments,
+      (acc: number, payment: TSalePaymentFormSchema) => {
+        acc += payment.amount;
+
+        return acc;
+      },
+      0
+    );
+
+    return total > 0 ? total : 0;
+  };
+
+  const totalPayment: number = getPayment();
+
+  const totalAfterPayment: number = totalFinal - totalPayment;
+
   const renderStoresProducts = () => {
     if (!saleStores?.length) {
       return <Empty />;
@@ -421,14 +463,15 @@ export default function CreateSalePage() {
 
               {saleStore.products.length > 1 ? (
                 <Tooltip title="Remove All Products by Store">
-                  <Button
-                    type="danger"
-                    size="small"
-                    icon={<DeleteOutlined />}
+                  <ButtonCommon
                     onClick={() =>
                       handleRemoveAllProductByStore(saleStore.storeId)
                     }
-                  />
+                    color="transparent"
+                    className="rounded-r-full rounded-l-full shadow-none"
+                  >
+                    {IconTrash("w-3 h-3 text-red-500 hover:text-red-600")}
+                  </ButtonCommon>
                 </Tooltip>
               ) : null}
             </div>
@@ -524,17 +567,18 @@ export default function CreateSalePage() {
 
                     <Col xs={2}>
                       <Tooltip title="Remove Product">
-                        <Button
-                          type="danger"
-                          size="small"
-                          icon={<DeleteOutlined />}
+                        <ButtonCommon
                           onClick={() =>
                             handleRemoveProduct(
                               saleStore.storeId,
                               saleStoreProduct.productId
                             )
                           }
-                        />
+                          color="transparent"
+                          className="rounded-r-full rounded-l-full shadow-none"
+                        >
+                          {IconTrash("w-3 h-3 text-red-500 hover:text-red-600")}
+                        </ButtonCommon>
                       </Tooltip>
                     </Col>
                   </Row>
@@ -844,7 +888,7 @@ export default function CreateSalePage() {
         <Col xs={24}>
           <div className="bg-white w-full py-3 px-5 rounded-md">
             <span className="text-lg mr-2">Sale Number:</span>
-            <span className="text-lg font-bold e-radius">{Date.now()}</span>
+            <span className="text-lg font-bold e-radius">{"SALE NUMBER"}</span>
           </div>
         </Col>
       </Row>
@@ -1137,11 +1181,21 @@ export default function CreateSalePage() {
           <Card
             title={
               <div className="flex justify-between">
-                <span>Select Products</span>
+                <div className="flex items-center">
+                  <label className="mr-2">Select Products</label>
+
+                  <Tooltip
+                    title="Here you can select what stores and products will be on sale, note: only will 
+                  show products available in stores selected"
+                  >
+                    <QuestionCircleTwoTone />
+                  </Tooltip>
+                </div>
 
                 <span className="flex">
                   <label className="mr-2">Select Stores: </label>
                   <SelectCustomAntd
+                    allowClear
                     controller={{ control, name: "selectedStoreIds" }}
                     errorMessage={errors.selectedStoreIds?.message}
                     placeholder={"Select stores"}
@@ -1172,21 +1226,79 @@ export default function CreateSalePage() {
           <Card
             title={
               <div className="flex justify-between">
-                <label>Selected Products</label>
+                <div className="flex items-center">
+                  <label className="mr-2">Selected Products</label>
+
+                  <Tooltip title="Here you can see what products has been selected and also you can edit in same time the product price, quantity and also add a note for this product if you need">
+                    <QuestionCircleTwoTone />
+                  </Tooltip>
+                </div>
 
                 {saleStores?.length > 1 ? (
                   <Tooltip title="Remove All Products">
-                    <Button
-                      type="danger"
-                      icon={<DeleteOutlined />}
+                    <ButtonCommon
                       onClick={handleRemoveAllProduct}
-                    />
+                      color="transparent"
+                      className="rounded-r-full rounded-l-full shadow-none"
+                    >
+                      {IconTrash("w-3 h-3 text-red-500 hover:text-red-600")}
+                    </ButtonCommon>
                   </Tooltip>
                 ) : null}
               </div>
             }
           >
             {renderStoresProducts()}
+          </Card>
+        </Col>
+      </Row>
+
+      <Row gutter={[8, 8]} className="mt-2">
+        <Col xs={24} md={12}>
+          <Card
+            title={
+              <div className="flex">
+                <label className="mr-2">Payment</label>
+                <Tooltip title="Here you can create which payments were made on the purchase">
+                  <QuestionCircleTwoTone />
+                </Tooltip>
+              </div>
+            }
+          >
+            <SalePayments control={control} errors={errors} />
+
+            <Divider />
+
+            <Descriptions
+              bordered
+              size="small"
+              labelStyle={{ width: 200 }}
+              className="w-2/3"
+            >
+              <Descriptions.Item label="Total Payment" span={3}>
+                {formatToMoneyDecimal(totalPayment)}
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Total" span={3}>
+                {formatToMoneyDecimal(totalFinal)}
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Total After Payment" span={3}>
+                {formatToMoneyDecimal(totalAfterPayment)}
+              </Descriptions.Item>
+            </Descriptions>
+          </Card>
+        </Col>
+
+        <Col xs={24} md={12}>
+          <Card
+            title={
+              <div className="flex justify-between">
+                <span>Confirmation</span>
+              </div>
+            }
+          >
+            <span>Confirmation</span>
           </Card>
         </Col>
       </Row>

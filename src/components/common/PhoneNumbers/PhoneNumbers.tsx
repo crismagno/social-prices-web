@@ -22,7 +22,7 @@ export const phoneNumberFormSchema = z.object({
 
 export type TPhoneNumberFormSchema = z.infer<typeof phoneNumberFormSchema>;
 
-export const generateNewAPhoneNumber = (
+export const generateNewPhoneNumber = (
   isCollapsed: boolean = true
 ): TPhoneNumberFormSchema => ({
   type: StoresEnum.Type.OTHER,
@@ -56,7 +56,7 @@ export const PhoneNumbers: React.FC<Props> = ({
     name: "phoneNumbers",
   });
 
-  const addNewPhoneNumber = () => appendPhone(generateNewAPhoneNumber(true));
+  const addNewPhoneNumber = () => appendPhone(generateNewPhoneNumber(true));
 
   const removeNewPhoneNumber = (index: number) => {
     removePhone(index);

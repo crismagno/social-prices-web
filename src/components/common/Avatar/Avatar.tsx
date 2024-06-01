@@ -13,6 +13,7 @@ interface Props {
   onClick?: (event?: any) => void;
   noUseAwsS3?: boolean;
   title?: string;
+  defaultImage?: string;
 }
 
 const Avatar: React.FC<Props> = ({
@@ -23,16 +24,19 @@ const Avatar: React.FC<Props> = ({
   onClick,
   noUseAwsS3,
   title,
+  defaultImage,
 }) => {
   className = `object-cover rounded-full shadow-md ${className}`;
 
   const [image, setImage] = useState<string>();
 
+  const defaultImageByParam: string = defaultImage ?? defaultAvatarImage;
+
   useEffect(() => {
-    let url: string = src ? getImageUrl(src) : defaultAvatarImage;
+    let url: string = src ? getImageUrl(src) : defaultImageByParam;
 
     if (noUseAwsS3) {
-      url = src ? src : defaultAvatarImage;
+      url = src ? src : defaultImageByParam;
     }
 
     setImage(url);
@@ -45,7 +49,7 @@ const Avatar: React.FC<Props> = ({
         alt={alt}
         className={className}
         onClick={onClick}
-        onError={() => setImage(defaultAvatarImage)}
+        onError={() => setImage(defaultImageByParam)}
         style={{ width, height: width }}
       />
     </Tooltip>

@@ -46,7 +46,7 @@ interface Props {
   className?: string;
 }
 
-const generateNewAPhoneNumber = (
+const generateNewPhoneNumber = (
   isCollapsed: boolean = true
 ): TPhoneNumberFormSchema => ({
   number: "",
@@ -64,7 +64,7 @@ const ProfileCardsPaymentsEdit: React.FC<Props> = ({ className = "" }) => {
           ...phoneNumber,
           isCollapsed: index === 0,
         }))
-      : [generateNewAPhoneNumber(false)],
+      : [generateNewPhoneNumber(false)],
   };
 
   const {
@@ -106,7 +106,7 @@ const ProfileCardsPaymentsEdit: React.FC<Props> = ({ className = "" }) => {
     }
   };
 
-  const addNewPhoneNumber = () => append(generateNewAPhoneNumber(true));
+  const addNewPhoneNumber = () => append(generateNewPhoneNumber(true));
 
   const removeNewPhoneNumber = (index: number) => {
     remove(index);

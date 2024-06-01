@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 
-import { Select } from "antd";
+import { Avatar, Select } from "antd";
 
 import { ICustomer } from "../../../../../shared/business/customers/customer.interface";
+import { defaultAvatarImage } from "../../../../../shared/utils/images/files-names";
+import { getImageUrl } from "../../../../../shared/utils/images/url-images";
 import { createTableState } from "../../../../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../../../../shared/utils/table/table-state.interface";
 import { useFindCustomersByOwnerOfUserTableState } from "../../../../customers/useFindCustomersByOwnerOfUserTableState";
 
-const containerHeight: number = 250;
+const containerHeight: number = 260;
 
 interface Props {
   onSelectCustomer?: (customer: ICustomer | null) => void;
@@ -84,12 +86,26 @@ export const SelectCustomer: React.FC<Props> = ({ onSelectCustomer }) => {
       style={{ width: 250 }}
     >
       <Select.Option key={"NEW_CUSTOMER"} value={null}>
-        New Customer
+        <div className="flex items-center">
+          <Avatar src={defaultAvatarImage} size={"small"} className="mr-2" />
+          <span>New Customer</span>
+        </div>
       </Select.Option>
 
       {customers?.map((customer: ICustomer) => (
         <Select.Option key={customer._id} value={customer._id}>
-          {customer.name}
+          <div className="flex items-center">
+            <Avatar
+              src={
+                customer.avatar
+                  ? getImageUrl(customer.avatar)
+                  : defaultAvatarImage
+              }
+              size={"small"}
+              className="mr-2"
+            />
+            <span>{customer.name}</span>
+          </div>
         </Select.Option>
       ))}
     </Select>

@@ -96,7 +96,7 @@ export const createPhoneNumberName = (phoneNumber: IPhoneNumber): string => {
   return phoneNumberName;
 };
 
-export const formatterMoney = (value: any) =>
+export const formatterMoney = (value: any): string =>
   `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
 export const parserMoney = (value: any) =>
@@ -107,3 +107,8 @@ export const getUserName = (user: IUser): string =>
 
 export const parseToUpperAndUnderline = (value: string): string =>
   value?.trim().toLocaleUpperCase().split(" ").join("_");
+
+export const formatToMoneyDecimal = (
+  value: number,
+  decimal: number = 2
+): string => `R$ ${value.toFixed(decimal)}`;

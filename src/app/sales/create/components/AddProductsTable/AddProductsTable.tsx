@@ -1,6 +1,16 @@
 import { useEffect, useState } from "react";
 
-import { Button, Divider, Empty, Image, message, Tooltip } from "antd";
+import {
+  Button,
+  Col,
+  Divider,
+  Empty,
+  Image,
+  message,
+  Row,
+  Select,
+  Tooltip,
+} from "antd";
 import { find, includes, map } from "lodash";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -10,6 +20,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { InputNumberCustomAntd } from "../../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import TableCustomAntd2 from "../../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
+import CategoriesEnum from "../../../../../shared/business/categories/categories.enum";
+import { ICategory } from "../../../../../shared/business/categories/categories.interface";
 import { IProduct } from "../../../../../shared/business/products/products.interface";
 import { IStore } from "../../../../../shared/business/stores/stores.interface";
 import { defaultAvatarImage } from "../../../../../shared/utils/images/files-names";
@@ -20,6 +32,7 @@ import {
 } from "../../../../../shared/utils/string-extensions/string-extensions";
 import { createTableState } from "../../../../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../../../../shared/utils/table/table-state.interface";
+import { useFindCategoriesByType } from "../../../../categories/useFindCategoriesByType";
 import { useFindProductsByUserTableState } from "../../../../products/useFindProductsByUserTableState";
 
 const productFormSchema = z.object({
@@ -67,13 +80,20 @@ export const AddProductsTable: React.FC<Props> = ({
 
   const [formValues, setFormValues] = useState<TFormSchema>();
 
-  const { control, watch, getValues } = useForm<TFormSchema>({
+  const [categoriesIds, setCategoriesIds] = useState<string[]>([]);
+
+  const [isActive, setIsActive] = useState<Array<boolean | null>>();
+
+  const { control, getValues } = useForm<TFormSchema>({
     values: formValues,
     resolver: zodResolver(formSchema),
   });
 
   const { isLoading, products, total } =
     useFindProductsByUserTableState(tableStateRequest);
+
+  const { categories, isLoading: isLoadingCategories } =
+    useFindCategoriesByType(CategoriesEnum.Type.PRODUCT);
 
   useEffect(() => {
     setFormValues({
@@ -91,9 +111,9 @@ export const AddProductsTable: React.FC<Props> = ({
   useEffect(() => {
     setTableStateRequest({
       ...tableStateRequest,
-      filters: { storeIds: selectedStoreIds },
+      filters: { storeIds: selectedStoreIds, categoriesIds, isActive },
     });
-  }, [selectedStoreIds]);
+  }, [selectedStoreIds, categoriesIds, isActive]);
 
   const getStore = (storeId: string): IStore | undefined =>
     stores.find((store: IStore) => store._id === storeId);
@@ -142,6 +162,46 @@ export const AddProductsTable: React.FC<Props> = ({
 
   return (
     <>
+      <Row gutter={[4, 4]}>
+        <Col md={8}>
+          <Select
+            onChange={setCategoriesIds}
+            allowClear
+            placeholder={"Filter by Categories"}
+            mode="multiple"
+            style={{ width: "100%" }}
+          >
+            {map(categories, (category: ICategory) => (
+              <Select.Option key={category._id} value={category._id}>
+                {category.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Col>
+
+        <Col md={3}>
+          <Select
+            onChange={(value: boolean | null) =>
+              setIsActive(value == null ? [] : [value])
+            }
+            placeholder={"Filter by Active"}
+            style={{ width: "100%" }}
+          >
+            <Select.Option key={"BOTH"} value={null}>
+              Both
+            </Select.Option>
+
+            <Select.Option key={"ACTIVE"} value={true}>
+              Active
+            </Select.Option>
+
+            <Select.Option key={"INACTIVE"} value={false}>
+              Inactive
+            </Select.Option>
+          </Select>
+        </Col>
+      </Row>
+
       <TableCustomAntd2<IProduct>
         rowKey={"_id"}
         tableStateRequest={tableStateRequest}
@@ -280,7 +340,7 @@ export const AddProductsTable: React.FC<Props> = ({
           },
         ]}
         search={{ placeholder: "Search products.." }}
-        loading={isLoading}
+        loading={isLoading || isLoadingCategories}
         pagination={{
           total,
         }}

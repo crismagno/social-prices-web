@@ -28,12 +28,14 @@ namespace SalesEnum {
     PIX = "PIX",
     CASH = "CASH",
     CARD = "CARD",
+    OTHER = "OTHER",
   }
 
   export const PaymentTypeLabels = {
     [PaymentType.PIX]: "PIX",
     [PaymentType.CASH]: "Cash",
     [PaymentType.CARD]: "Card",
+    [PaymentType.OTHER]: "Other",
   };
 
   export enum PaymentStatus {

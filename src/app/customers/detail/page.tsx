@@ -41,7 +41,7 @@ import HrCustom from "../../../components/common/HrCustom/HrCustom";
 import ImageModal from "../../../components/common/ImageModal/ImageModal";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import {
-  generateNewAPhoneNumber,
+  generateNewPhoneNumber,
   phoneNumberFormSchema,
   PhoneNumbers,
 } from "../../../components/common/PhoneNumbers/PhoneNumbers";
@@ -133,7 +133,7 @@ export default function CustomerDetailPage() {
               isCollapsed: index === 0,
             })
           )
-        : [generateNewAPhoneNumber(false)],
+        : [generateNewPhoneNumber(false)],
       gender: customer?.gender ?? UsersEnum.Gender.OTHER,
     };
 
