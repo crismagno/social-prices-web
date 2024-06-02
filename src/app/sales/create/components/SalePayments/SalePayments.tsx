@@ -84,7 +84,7 @@ export const SalePayments: React.FC<Props> = ({
       {fieldsPayments.map((_, index: number) => {
         return (
           <Row gutter={[8, 8]} key={index} className="mt-2">
-            <Col xs={8}>
+            <Col xs={9}>
               <SelectCustomAntd
                 divClassName="mt-0 mr-0"
                 className="w-full"

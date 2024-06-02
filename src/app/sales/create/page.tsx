@@ -84,8 +84,8 @@ interface ISaleStoresProductsTotals {
 
 const customerFormSchema = z.object({
   customerId: z.string().nullable(),
-  name: z.string(),
-  email: z.string(),
+  name: z.string().nonempty("Customer name is required"),
+  email: z.string().nonempty("Customer email is required"),
   address: addressFormSchema,
   phoneNumber: z.string().nullable(),
   about: z.string().nullable(),
@@ -116,7 +116,7 @@ type TSaleStoreFormSchema = z.infer<typeof saleStoreFormSchema>;
 
 const showValueNoteFormSchema = z.object({
   show: z.boolean(),
-  value: z.number().nullable(),
+  amount: z.number().nullable(),
   note: z.string().nullable(),
 });
 
@@ -138,10 +138,10 @@ const formSchema = z.object({
 
 type TFormSchema = z.infer<typeof formSchema>;
 
-const generateShowValueNote = (): TShowValueNoteFormSchema => ({
+const generateShowAmountNote = (): TShowValueNoteFormSchema => ({
   show: false,
   note: null,
-  value: 0,
+  amount: 0,
 });
 
 export default function CreateSalePage() {
@@ -169,7 +169,7 @@ export default function CreateSalePage() {
   });
 
   useEffect(() => {
-    const showValueNote: TShowValueNoteFormSchema = generateShowValueNote();
+    const showValueNote: TShowValueNoteFormSchema = generateShowAmountNote();
 
     setFormValues({
       ...formValues,
@@ -421,10 +421,10 @@ export default function CreateSalePage() {
     getSaleStoresProductsTotals();
 
   const getTotalAfterDiscount = (): number => {
-    const discountValue: number = watch("discount.value") ?? 0;
+    const discountAmount: number = watch("discount.amount") ?? 0;
 
     const totalAfterDiscount: number =
-      saleStoresProductsTotals.subtotal - discountValue;
+      saleStoresProductsTotals.subtotal - discountAmount;
 
     return totalAfterDiscount > 0 ? totalAfterDiscount : 0;
   };
@@ -432,11 +432,11 @@ export default function CreateSalePage() {
   const totalAfterDiscount: number = getTotalAfterDiscount();
 
   const getTotalFinal = (): number => {
-    const shippingValue: number = watch("shipping.value") ?? 0;
+    const shippingAmount: number = watch("shipping.amount") ?? 0;
 
-    const taxValue: number = watch("tax.value") ?? 0;
+    const taxAmount: number = watch("tax.amount") ?? 0;
 
-    const totalFinal: number = totalAfterDiscount + shippingValue + taxValue;
+    const totalFinal: number = totalAfterDiscount + shippingAmount + taxAmount;
 
     return totalFinal > 0 ? totalFinal : 0;
   };
@@ -662,7 +662,7 @@ export default function CreateSalePage() {
                     type="danger"
                     onClick={() => {
                       setValue("discount.note", null);
-                      setValue("discount.value", 0);
+                      setValue("discount.amount", 0);
                       setValue("discount.show", false);
                     }}
                   />
@@ -683,12 +683,12 @@ export default function CreateSalePage() {
                 max={saleStoresProductsTotals.subtotal}
                 controller={{
                   control,
-                  name: `discount.value`,
+                  name: `discount.amount`,
                 }}
               />
             ) : (
-              <Tooltip title="Discount Value">
-                - R$ {watch("discount.value")}
+              <Tooltip title="Discount amount">
+                - R$ {watch("discount.amount")}
               </Tooltip>
             )}
           </Col>
@@ -758,7 +758,7 @@ export default function CreateSalePage() {
                       type="danger"
                       onClick={() => {
                         setValue("shipping.note", null);
-                        setValue("shipping.value", 0);
+                        setValue("shipping.amount", 0);
                         setValue("shipping.show", false);
                       }}
                     />
@@ -778,12 +778,12 @@ export default function CreateSalePage() {
                   min={0}
                   controller={{
                     control,
-                    name: `shipping.value`,
+                    name: `shipping.amount`,
                   }}
                 />
               ) : (
-                <Tooltip title="Shipping Value">
-                  R$ {watch("shipping.value")}
+                <Tooltip title="Shipping amount">
+                  R$ {watch("shipping.amount")}
                 </Tooltip>
               )}
             </Col>
@@ -840,7 +840,7 @@ export default function CreateSalePage() {
                     type="danger"
                     onClick={() => {
                       setValue("tax.note", null);
-                      setValue("tax.value", 0);
+                      setValue("tax.amount", 0);
                       setValue("tax.show", false);
                     }}
                   />
@@ -860,11 +860,11 @@ export default function CreateSalePage() {
                 min={0}
                 controller={{
                   control,
-                  name: `tax.value`,
+                  name: `tax.amount`,
                 }}
               />
             ) : (
-              <Tooltip title="Tax Value">R$ {watch("tax.value")}</Tooltip>
+              <Tooltip title="Tax amount">R$ {watch("tax.amount")}</Tooltip>
             )}
           </Col>
 
@@ -926,7 +926,7 @@ export default function CreateSalePage() {
             }
             className="h-min-80"
           >
-            <Row>
+            <Row gutter={[8, 8]}>
               <Col xs={24} md={4}>
                 <Tooltip title="See avatar">
                   <Image
@@ -986,7 +986,7 @@ export default function CreateSalePage() {
                 <InputCustomAntd
                   controller={{ control, name: "customer.birthDate" }}
                   label="Birth Date"
-                  divClassName="mt-0 ml-3"
+                  divClassName="mt-0"
                   type="date"
                   placeholder={"Enter customer birthDate"}
                   errorMessage={errors?.customer?.birthDate?.message}
@@ -996,7 +996,7 @@ export default function CreateSalePage() {
                 <SelectCustomAntd
                   controller={{ control, name: "customer.gender" }}
                   label="Gender"
-                  divClassName="mt-1 ml-3"
+                  divClassName="mt-1"
                   errorMessage={errors.customer?.gender?.message}
                 >
                   {Object.keys(UsersEnum.Gender).map((gender: string) => (
@@ -1074,7 +1074,7 @@ export default function CreateSalePage() {
             }
             className="h-min-80"
           >
-            <Row>
+            <Row gutter={[8, 8]}>
               <Col xs={24} md={8}>
                 <SelectCustomAntd
                   controller={{
@@ -1132,7 +1132,7 @@ export default function CreateSalePage() {
                 <InputCustomAntd
                   controller={{ control, name: "customer.address.address1" }}
                   label="Address1"
-                  divClassName="mt-0 ml-3"
+                  divClassName="mt-0"
                   placeholder={"Enter address1"}
                   errorMessage={errors?.customer?.address?.address1?.message}
                   maxLength={200}
@@ -1141,7 +1141,7 @@ export default function CreateSalePage() {
                 <InputCustomAntd
                   controller={{ control, name: "customer.address.address2" }}
                   label="Address2"
-                  divClassName="mt-1 ml-3"
+                  divClassName="mt-1"
                   placeholder={"Enter address2"}
                   errorMessage={errors?.customer?.address?.address2?.message}
                   maxLength={200}
@@ -1150,7 +1150,7 @@ export default function CreateSalePage() {
                 <InputCustomAntd
                   controller={{ control, name: "customer.address.district" }}
                   label="District"
-                  divClassName="mt-1 ml-3"
+                  divClassName="mt-1"
                   placeholder={"Enter district"}
                   errorMessage={errors?.customer?.address?.district?.message}
                   maxLength={200}
@@ -1161,7 +1161,7 @@ export default function CreateSalePage() {
                 <InputCustomAntd
                   controller={{ control, name: "customer.address.zip" }}
                   label="Zipcode"
-                  divClassName="mt-0 ml-3"
+                  divClassName="mt-0"
                   placeholder={"Enter zip"}
                   errorMessage={errors?.customer?.address?.zip?.message}
                   maxLength={200}
@@ -1170,7 +1170,7 @@ export default function CreateSalePage() {
                 <InputCustomAntd
                   controller={{ control, name: "customer.address.description" }}
                   label="Description"
-                  divClassName="mt-1 ml-3"
+                  divClassName="mt-1"
                   placeholder={"Enter description"}
                   errorMessage={errors?.customer?.address?.description?.message}
                   maxLength={200}
@@ -1179,7 +1179,7 @@ export default function CreateSalePage() {
                 <SelectCustomAntd
                   controller={{ control, name: `customer.address.types` }}
                   label="Types"
-                  divClassName="mt-1 ml-3"
+                  divClassName="mt-1"
                   placeholder={"Select types"}
                   errorMessage={errors?.customer?.address?.types?.message?.toString()}
                   mode="multiple"
@@ -1274,7 +1274,9 @@ export default function CreateSalePage() {
             {renderStoresProducts()}
           </Card>
         </Col>
+      </Row>
 
+      <Row gutter={[8, 8]} className="mt-2">
         {/* Payment */}
         <Col xs={24} md={12}>
           <Card
@@ -1295,7 +1297,7 @@ export default function CreateSalePage() {
               bordered
               size="small"
               labelStyle={{ width: 200 }}
-              className="w-2/3"
+              className="md:w-2/3 sm:w-full"
             >
               <Descriptions.Item label="Total Payment" span={3}>
                 {formatToMoneyDecimal(totalPayment)}
