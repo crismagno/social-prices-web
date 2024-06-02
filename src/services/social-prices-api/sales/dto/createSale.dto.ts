@@ -74,4 +74,5 @@ export default class CreateSaleDto {
   status: SalesEnum.Status = SalesEnum.Status.STARTED;
   payments: SalePaymentDto[] = [];
   stores: SaleStoreDto[] = [];
+  isCreateSale: boolean = false;
 }

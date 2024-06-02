@@ -36,7 +36,9 @@ import {
   TAddressFormSchema,
 } from "../../../components/common/Addresses/Addresses";
 import ButtonCommon from "../../../components/common/ButtonCommon/ButtonCommon";
+import handleClientError from "../../../components/common/handleClientError/handleClientError";
 import { IconTrash } from "../../../components/common/icons/icons";
+import Loading from "../../../components/common/Loading/Loading";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { CheckboxCustomAntd } from "../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd";
 import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
@@ -44,6 +46,7 @@ import { InputNumberCustomAntd } from "../../../components/custom/antd/InputNumb
 import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
+import CreateSaleDto from "../../../services/social-prices-api/sales/dto/createSale.dto";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import AddressEnum from "../../../shared/business/enums/address.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
@@ -156,6 +159,8 @@ export default function CreateSalePage() {
   const [selectedAddressUid, setSelectedAddressUid] = useState<string | null>(
     null
   );
+
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const {
     handleSubmit,
@@ -372,7 +377,24 @@ export default function CreateSalePage() {
   const handleSeeSaleResume = () => {};
 
   const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
-    console.log(data);
+    try {
+      console.log(data);
+
+      setIsSubmitting(true);
+
+      const createSaleDto: CreateSaleDto = {};
+
+      // const response: ISale =
+      //   await serviceMethodsInstance.salesServiceMethods.createManual(
+      //     createSaleDto
+      //   );
+
+      // show sale number on modal screen and redirect to sales table
+    } catch (error) {
+      handleClientError(error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Calculation Part
@@ -905,6 +927,12 @@ export default function CreateSalePage() {
 
   return (
     <Layout subtitle="Create manual sale" title="Create Sale" hasBackButton>
+      {isSubmitting && (
+        <div className="h-full w-full absolute flex justify-center items-center bg-gray-500/30 top-0 left-0 z-50">
+          <Loading />
+        </div>
+      )}
+
       <Row gutter={[16, 16]} className="mt-5">
         <Col xs={24}>
           <div className="bg-white w-full py-3 px-5 rounded-md">
@@ -1380,6 +1408,7 @@ export default function CreateSalePage() {
                   type="success"
                   className="w-full text-center mt-5 h-10 font-bold text-lg"
                   onClick={handleSubmit(onSubmit)}
+                  loading={isSubmitting}
                 >
                   Create Sale
                 </Button>
