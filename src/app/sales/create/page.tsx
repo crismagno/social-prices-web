@@ -16,7 +16,7 @@ import {
 } from "antd";
 import { filter, find, includes, reduce } from "lodash";
 import moment from "moment";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import {
@@ -38,12 +38,7 @@ import {
 import ButtonCommon from "../../../components/common/ButtonCommon/ButtonCommon";
 import { IconTrash } from "../../../components/common/icons/icons";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
-import {
-  generateNewSalePayment,
-  salePaymentFormSchema,
-  SalePayments,
-  TSalePaymentFormSchema,
-} from "../../../components/common/SalePayments/SalePayments";
+import { CheckboxCustomAntd } from "../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd";
 import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { InputNumberCustomAntd } from "../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
@@ -74,6 +69,12 @@ import {
   AddProductsTable,
   IStoreProductToAddOnSale,
 } from "./components/AddProductsTable/AddProductsTable";
+import {
+  generateNewSalePayment,
+  salePaymentFormSchema,
+  SalePayments,
+  TSalePaymentFormSchema,
+} from "./components/SalePayments/SalePayments";
 import { SelectCustomer } from "./components/SelectCustomer/SelectCustomer";
 
 interface ISaleStoresProductsTotals {
@@ -130,6 +131,9 @@ const formSchema = z.object({
   tax: showValueNoteFormSchema,
   shipping: showValueNoteFormSchema,
   payments: z.array(salePaymentFormSchema),
+  note: z.string().nullable(),
+  status: z.string(),
+  isCreateQuote: z.boolean(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -164,12 +168,6 @@ export default function CreateSalePage() {
     resolver: zodResolver(formSchema),
   });
 
-  let saleStores: TSaleStoreFormSchema[] = watch("saleStores");
-
-  let deliveryType: string = watch("deliveryType");
-
-  let payments: TSalePaymentFormSchema[] = watch("payments");
-
   useEffect(() => {
     const showValueNote: TShowValueNoteFormSchema = generateShowValueNote();
 
@@ -192,12 +190,25 @@ export default function CreateSalePage() {
       shipping: showValueNote,
       tax: showValueNote,
       payments: [generateNewSalePayment()],
+      note: null,
+      status: SalesEnum.Status.STARTED,
+      isCreateQuote: false,
     });
   }, []);
 
   if (isLoadingStores) {
     return <LoadingFull />;
   }
+
+  // Variables Part
+
+  let saleStores: TSaleStoreFormSchema[] = watch("saleStores");
+
+  let deliveryType: string = watch("deliveryType");
+
+  let payments: TSalePaymentFormSchema[] = watch("payments");
+
+  // Handle Events Part
 
   const handleSelectCustomer = (customer: ICustomer | null) => {
     let firstAddress: IAddress | undefined = find(
@@ -358,6 +369,14 @@ export default function CreateSalePage() {
     setValue("saleStores", saleStores);
   };
 
+  const handleSeeSaleResume = () => {};
+
+  const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
+    console.log(data);
+  };
+
+  // Calculation Part
+
   const getSaleStoresProductsTotals = (): ISaleStoresProductsTotals => {
     const totals: ISaleStoresProductsTotals = reduce(
       saleStores,
@@ -403,6 +422,7 @@ export default function CreateSalePage() {
 
   const getTotalAfterDiscount = (): number => {
     const discountValue: number = watch("discount.value") ?? 0;
+
     const totalAfterDiscount: number =
       saleStoresProductsTotals.subtotal - discountValue;
 
@@ -423,7 +443,7 @@ export default function CreateSalePage() {
 
   const totalFinal: number = getTotalFinal();
 
-  const getPayment = (): number => {
+  const getTotalPayment = (): number => {
     const total: number = reduce(
       payments,
       (acc: number, payment: TSalePaymentFormSchema) => {
@@ -437,9 +457,11 @@ export default function CreateSalePage() {
     return total > 0 ? total : 0;
   };
 
-  const totalPayment: number = getPayment();
+  const totalPayment: number = getTotalPayment();
 
   const totalAfterPayment: number = totalFinal - totalPayment;
+
+  // Components Render Part
 
   const renderStoresProducts = () => {
     if (!saleStores?.length) {
@@ -462,7 +484,7 @@ export default function CreateSalePage() {
               </label>
 
               {saleStore.products.length > 1 ? (
-                <Tooltip title="Remove All Products by Store">
+                <Tooltip title="Remove all products by store">
                   <ButtonCommon
                     onClick={() =>
                       handleRemoveAllProductByStore(saleStore.storeId)
@@ -507,7 +529,6 @@ export default function CreateSalePage() {
                             src={fileUrl}
                             onError={() => (
                               <Image
-                                key={`${fileUrl}-${Date.now()}`}
                                 width={50}
                                 src={defaultAvatarImage}
                                 alt="mainUrl"
@@ -566,7 +587,7 @@ export default function CreateSalePage() {
                     </Col>
 
                     <Col xs={2}>
-                      <Tooltip title="Remove Product">
+                      <Tooltip title="Remove product">
                         <ButtonCommon
                           onClick={() =>
                             handleRemoveProduct(
@@ -1199,6 +1220,8 @@ export default function CreateSalePage() {
                     controller={{ control, name: "selectedStoreIds" }}
                     errorMessage={errors.selectedStoreIds?.message}
                     placeholder={"Select stores"}
+                    onClear={handleRemoveAllProduct}
+                    onDeselect={handleRemoveAllProductByStore}
                     mode="multiple"
                     divClassName="mt-0"
                     style={{ width: 300 }}
@@ -1235,7 +1258,7 @@ export default function CreateSalePage() {
                 </div>
 
                 {saleStores?.length > 1 ? (
-                  <Tooltip title="Remove All Products">
+                  <Tooltip title="Remove all products">
                     <ButtonCommon
                       onClick={handleRemoveAllProduct}
                       color="transparent"
@@ -1251,9 +1274,8 @@ export default function CreateSalePage() {
             {renderStoresProducts()}
           </Card>
         </Col>
-      </Row>
 
-      <Row gutter={[8, 8]} className="mt-2">
+        {/* Payment */}
         <Col xs={24} md={12}>
           <Card
             title={
@@ -1290,6 +1312,7 @@ export default function CreateSalePage() {
           </Card>
         </Col>
 
+        {/* Confirmation */}
         <Col xs={24} md={12}>
           <Card
             title={
@@ -1298,7 +1321,68 @@ export default function CreateSalePage() {
               </div>
             }
           >
-            <span>Confirmation</span>
+            <Row>
+              <Col xs={24}>
+                <TextareaCustomAntd
+                  controller={{ control, name: "note" }}
+                  label="Note"
+                  divClassName="mt-0"
+                  placeholder={"Enter any note if you need"}
+                  errorMessage={errors?.note?.message}
+                  maxLength={1000}
+                />
+              </Col>
+            </Row>
+
+            <Row>
+              <Col xs={24} md={8}>
+                <SelectCustomAntd
+                  controller={{
+                    control,
+                    name: `status`,
+                  }}
+                  label="Status"
+                  errorMessage={errors?.status?.message}
+                  placeholder={"Select sale status"}
+                  style={{ width: 200 }}
+                >
+                  {Object.keys(SalesEnum.Status).map((status: string) => (
+                    <Select.Option key={status} value={status}>
+                      {SalesEnum.StatusLabels[status as SalesEnum.Status]}
+                    </Select.Option>
+                  ))}
+                </SelectCustomAntd>
+              </Col>
+
+              <Col xs={24} md={8}>
+                <CheckboxCustomAntd
+                  controller={{ control, name: "isCreateQuote" }}
+                  label="Create Quote"
+                />
+              </Col>
+
+              <Col xs={24} md={8}>
+                <Button
+                  type="primary"
+                  className="mt-4"
+                  onClick={handleSeeSaleResume}
+                >
+                  See Resume
+                </Button>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col xs={24}>
+                <Button
+                  type="success"
+                  className="w-full text-center mt-5 h-10 font-bold text-lg"
+                  onClick={handleSubmit(onSubmit)}
+                >
+                  Create Sale
+                </Button>
+              </Col>
+            </Row>
           </Card>
         </Col>
       </Row>

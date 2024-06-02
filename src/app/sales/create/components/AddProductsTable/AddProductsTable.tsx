@@ -116,7 +116,7 @@ export const AddProductsTable: React.FC<Props> = ({
   }, [selectedStoreIds, categoriesIds, isActive]);
 
   const getStore = (storeId: string): IStore | undefined =>
-    stores.find((store: IStore) => store._id === storeId);
+    find(stores, { _id: storeId });
 
   if (!selectedStoreIds?.length) {
     return <Empty />;
@@ -181,6 +181,7 @@ export const AddProductsTable: React.FC<Props> = ({
 
         <Col md={3}>
           <Select
+            defaultValue={null}
             onChange={(value: boolean | null) =>
               setIsActive(value == null ? [] : [value])
             }
@@ -228,7 +229,6 @@ export const AddProductsTable: React.FC<Props> = ({
                       src={fileUrl}
                       onError={() => (
                         <Image
-                          key={`${fileUrl}-${Date.now()}`}
                           width={50}
                           src={defaultAvatarImage}
                           alt="mainUrl"
