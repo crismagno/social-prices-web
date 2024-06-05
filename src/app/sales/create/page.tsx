@@ -449,7 +449,10 @@ export default function CreateSalePage() {
   const totalAfterDiscount: number = getTotalAfterDiscount();
 
   const getTotalFinal = (): number => {
-    const shippingAmount: number = watch("shipping.amount") ?? 0;
+    const shippingAmount: number =
+      deliveryType === SalesEnum.DeliveryType.DELIVERY
+        ? watch("shipping.amount") ?? 0
+        : 0;
 
     const taxAmount: number = watch("tax.amount") ?? 0;
 
@@ -977,13 +980,15 @@ export default function CreateSalePage() {
             </Row>
             <Row>
               <Col xs={24} md={8}>
-                <Button
-                  type="primary"
-                  className="mt-4"
-                  onClick={handleSeeSaleResume}
-                >
-                  See Resume
-                </Button>
+                <Tooltip title="See sale resume">
+                  <Button
+                    type="primary"
+                    className="mt-4"
+                    onClick={handleSeeSaleResume}
+                  >
+                    See Resume
+                  </Button>
+                </Tooltip>
               </Col>
             </Row>
 
