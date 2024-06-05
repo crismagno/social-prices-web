@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 
 import {
+  Badge,
   Button,
   Card,
   Col,
   Descriptions,
   Divider,
-  Empty,
   Image,
   Row,
   Select,
@@ -19,12 +19,7 @@ import moment from "moment";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import {
-  CheckOutlined,
-  CloseOutlined,
-  EditOutlined,
-  QuestionCircleTwoTone,
-} from "@ant-design/icons";
+import { QuestionCircleTwoTone } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -35,14 +30,11 @@ import {
   states,
   TAddressFormSchema,
 } from "../../../components/common/Addresses/Addresses";
-import ButtonCommon from "../../../components/common/ButtonCommon/ButtonCommon";
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
-import { IconTrash } from "../../../components/common/icons/icons";
 import Loading from "../../../components/common/Loading/Loading";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { CheckboxCustomAntd } from "../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd";
 import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
-import { InputNumberCustomAntd } from "../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
@@ -63,9 +55,7 @@ import {
 } from "../../../shared/utils/mock-data/interfaces";
 import {
   createAddressName,
-  formatterMoney,
   formatToMoneyDecimal,
-  parserMoney,
 } from "../../../shared/utils/string-extensions/string-extensions";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import {
@@ -79,8 +69,9 @@ import {
   TSalePaymentFormSchema,
 } from "./components/SalePayments/SalePayments";
 import { SelectCustomer } from "./components/SelectCustomer/SelectCustomer";
+import { SelectedProductsList } from "./components/SelectedProductsList/SelectedProductsList";
 
-interface ISaleStoresProductsTotals {
+export interface ISaleStoresProductsTotals {
   subtotal: number;
   quantity: number;
 }
@@ -96,7 +87,7 @@ const customerFormSchema = z.object({
   gender: z.string().nullable(),
 });
 
-type TCustomerFormSchema = z.infer<typeof customerFormSchema>;
+export type TCustomerFormSchema = z.infer<typeof customerFormSchema>;
 
 const saleStoreProductFormSchema = z.object({
   productId: z.string(),
@@ -108,14 +99,16 @@ const saleStoreProductFormSchema = z.object({
   fileUrl: z.string().nullable(),
 });
 
-type TSaleStoreProductFormSchema = z.infer<typeof saleStoreProductFormSchema>;
+export type TSaleStoreProductFormSchema = z.infer<
+  typeof saleStoreProductFormSchema
+>;
 
 const saleStoreFormSchema = z.object({
   storeId: z.string(),
   products: z.array(saleStoreProductFormSchema),
 });
 
-type TSaleStoreFormSchema = z.infer<typeof saleStoreFormSchema>;
+export type TSaleStoreFormSchema = z.infer<typeof saleStoreFormSchema>;
 
 const showValueNoteFormSchema = z.object({
   show: z.boolean(),
@@ -123,7 +116,7 @@ const showValueNoteFormSchema = z.object({
   note: z.string().nullable(),
 });
 
-type TShowValueNoteFormSchema = z.infer<typeof showValueNoteFormSchema>;
+export type TShowValueNoteFormSchema = z.infer<typeof showValueNoteFormSchema>;
 
 const formSchema = z.object({
   customer: customerFormSchema,
@@ -137,9 +130,10 @@ const formSchema = z.object({
   note: z.string().nullable(),
   status: z.string(),
   isCreateQuote: z.boolean(),
+  paymentStatus: z.string(),
 });
 
-type TFormSchema = z.infer<typeof formSchema>;
+export type TFormSchema = z.infer<typeof formSchema>;
 
 const generateShowAmountNote = (): TShowValueNoteFormSchema => ({
   show: false,
@@ -198,6 +192,7 @@ export default function CreateSalePage() {
       note: null,
       status: SalesEnum.Status.STARTED,
       isCreateQuote: false,
+      paymentStatus: SalesEnum.PaymentStatus.PENDING,
     });
   }, []);
 
@@ -483,447 +478,7 @@ export default function CreateSalePage() {
 
   const totalAfterPayment: number = totalFinal - totalPayment;
 
-  // Components Render Part
-
-  const renderStoresProducts = () => {
-    if (!saleStores?.length) {
-      return <Empty />;
-    }
-
-    const elementArray: JSX.Element[] = saleStores.map(
-      (saleStore: TSaleStoreFormSchema, indexSaleStore: number) => {
-        const store: IStore | undefined = find(stores, {
-          _id: saleStore.storeId,
-        });
-
-        return (
-          <div key={store?._id} className="my-2">
-            <div
-              className={`flex items-center border-b-2 border-slate-100 mb-1 w-full`}
-            >
-              <label className="my-2 text-lg font-semibold mr-2">
-                {store?.name ?? ""}
-              </label>
-
-              {saleStore.products.length > 1 ? (
-                <Tooltip title="Remove all products by store">
-                  <ButtonCommon
-                    onClick={() =>
-                      handleRemoveAllProductByStore(saleStore.storeId)
-                    }
-                    color="transparent"
-                    className="rounded-r-full rounded-l-full shadow-none"
-                  >
-                    {IconTrash("w-3 h-3 text-red-500 hover:text-red-600")}
-                  </ButtonCommon>
-                </Tooltip>
-              ) : null}
-            </div>
-
-            <Row className="p-1 px-4 bg-zinc-50 text-black font-semibold">
-              <Col xs={8}>Product</Col>
-              <Col xs={4}>Quantity</Col>
-              <Col xs={4}>Price</Col>
-              <Col xs={6}>Note</Col>
-              <Col xs={2}></Col>
-            </Row>
-
-            {saleStore.products?.map(
-              (
-                saleStoreProduct: TSaleStoreProductFormSchema,
-                indexSaleStoreProduct: number
-              ) => {
-                const fileUrl: string = saleStoreProduct.fileUrl
-                  ? getImageUrl(saleStoreProduct.fileUrl)
-                  : defaultAvatarImage;
-
-                return (
-                  <Row
-                    key={saleStoreProduct.productId}
-                    className="border-b border-slate-100 p-2"
-                  >
-                    <Col xs={8}>
-                      <div className="flex items-center">
-                        <div className="mr-2">
-                          <Image
-                            key={`${fileUrl}-${Date.now()}`}
-                            width={50}
-                            src={fileUrl}
-                            onError={() => (
-                              <Image
-                                width={50}
-                                src={defaultAvatarImage}
-                                alt="mainUrl"
-                                className="rounded-full"
-                              />
-                            )}
-                            alt="mainUrl"
-                            className="rounded-full"
-                          />
-                        </div>
-
-                        <div className="flex flex-col">
-                          <span className="text-base">
-                            {saleStoreProduct.name}
-                          </span>
-
-                          <span className="text-xs">
-                            {saleStoreProduct.barCode}
-                          </span>
-                        </div>
-                      </div>
-                    </Col>
-
-                    <Col xs={4}>
-                      <InputNumberCustomAntd
-                        divClassName="w-28"
-                        min={0}
-                        controller={{
-                          control,
-                          name: `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}.quantity`,
-                        }}
-                      />
-                    </Col>
-
-                    <Col xs={4}>
-                      <InputNumberCustomAntd
-                        divClassName="w-28"
-                        formatter={formatterMoney}
-                        parser={parserMoney}
-                        min={0}
-                        controller={{
-                          control,
-                          name: `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}.price`,
-                        }}
-                      />
-                    </Col>
-
-                    <Col xs={6}>
-                      <TextareaCustomAntd
-                        divClassName="w-full pr-2"
-                        controller={{
-                          control,
-                          name: `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}.note`,
-                        }}
-                      />
-                    </Col>
-
-                    <Col xs={2}>
-                      <Tooltip title="Remove product">
-                        <ButtonCommon
-                          onClick={() =>
-                            handleRemoveProduct(
-                              saleStore.storeId,
-                              saleStoreProduct.productId
-                            )
-                          }
-                          color="transparent"
-                          className="rounded-r-full rounded-l-full shadow-none"
-                        >
-                          {IconTrash("w-3 h-3 text-red-500 hover:text-red-600")}
-                        </ButtonCommon>
-                      </Tooltip>
-                    </Col>
-                  </Row>
-                );
-              }
-            )}
-          </div>
-        );
-      }
-    );
-
-    return (
-      <div>
-        {/* Selected Products */}
-        {elementArray}
-
-        {/* Subtotal */}
-        <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
-          <Col xs={8}>SubTotal:</Col>
-
-          <Col xs={4}></Col>
-
-          <Col xs={12}>
-            <Tooltip title="Sum all prices products">
-              R$ {saleStoresProductsTotals.subtotal.toFixed(2)}
-            </Tooltip>
-          </Col>
-        </Row>
-
-        {/* Discount */}
-        <Row className="border-b px-4 border-slate-100 p-2">
-          <Col xs={8}>
-            <label className="font-semibold mr-2">Discount:</label>
-            {!watch("discount.show") ? (
-              <Tooltip title="Edit Discount">
-                <Button
-                  icon={<EditOutlined />}
-                  size="small"
-                  onClick={() => {
-                    setValue("discount.show", true);
-                  }}
-                />
-              </Tooltip>
-            ) : (
-              <Button.Group>
-                <Tooltip title="Use Discount">
-                  <Button
-                    icon={<CheckOutlined />}
-                    size="small"
-                    type="success"
-                    onClick={() => {
-                      setValue("discount.show", false);
-                    }}
-                  />
-                </Tooltip>
-                <Tooltip title="Remove Discount">
-                  <Button
-                    icon={<CloseOutlined />}
-                    size="small"
-                    type="danger"
-                    onClick={() => {
-                      setValue("discount.note", null);
-                      setValue("discount.amount", 0);
-                      setValue("discount.show", false);
-                    }}
-                  />
-                </Tooltip>
-              </Button.Group>
-            )}
-          </Col>
-
-          <Col xs={4}></Col>
-
-          <Col xs={5}>
-            {watch("discount.show") ? (
-              <InputNumberCustomAntd
-                divClassName="w-28"
-                formatter={formatterMoney}
-                parser={parserMoney}
-                min={0}
-                max={saleStoresProductsTotals.subtotal}
-                controller={{
-                  control,
-                  name: `discount.amount`,
-                }}
-              />
-            ) : (
-              <Tooltip title="Discount amount">
-                - R$ {watch("discount.amount")}
-              </Tooltip>
-            )}
-          </Col>
-
-          <Col xs={7}>
-            {watch("discount.show") ? (
-              <TextareaCustomAntd
-                divClassName="w-full"
-                controller={{
-                  control,
-                  name: `discount.note`,
-                }}
-              />
-            ) : (
-              <Tooltip title={watch("discount.note")}>
-                {watch("discount.note")}
-              </Tooltip>
-            )}
-          </Col>
-        </Row>
-
-        {/* Total Discount */}
-        <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
-          <Col xs={8}>Total After Discount:</Col>
-
-          <Col xs={4}></Col>
-
-          <Col xs={12}>
-            <Tooltip title="Sum total after all discounts">
-              - R$ {totalAfterDiscount.toFixed(2)}
-            </Tooltip>
-          </Col>
-        </Row>
-
-        {/* Shipping */}
-        {deliveryType === SalesEnum.DeliveryType.DELIVERY && (
-          <Row className="border-b px-4 border-slate-100 p-2">
-            <Col xs={8}>
-              <label className="font-semibold mr-2">Shipping:</label>
-
-              {!watch("shipping.show") ? (
-                <Tooltip title="Edit Shipping">
-                  <Button
-                    icon={<EditOutlined />}
-                    size="small"
-                    onClick={() => {
-                      setValue("shipping.show", true);
-                    }}
-                  />
-                </Tooltip>
-              ) : (
-                <Button.Group>
-                  <Tooltip title="Use Shipping">
-                    <Button
-                      icon={<CheckOutlined />}
-                      size="small"
-                      type="success"
-                      onClick={() => {
-                        setValue("shipping.show", false);
-                      }}
-                    />
-                  </Tooltip>
-                  <Tooltip title="Remove Shipping">
-                    <Button
-                      icon={<CloseOutlined />}
-                      size="small"
-                      type="danger"
-                      onClick={() => {
-                        setValue("shipping.note", null);
-                        setValue("shipping.amount", 0);
-                        setValue("shipping.show", false);
-                      }}
-                    />
-                  </Tooltip>
-                </Button.Group>
-              )}
-            </Col>
-
-            <Col xs={4}></Col>
-
-            <Col xs={5}>
-              {watch("shipping.show") ? (
-                <InputNumberCustomAntd
-                  divClassName="w-28"
-                  formatter={formatterMoney}
-                  parser={parserMoney}
-                  min={0}
-                  controller={{
-                    control,
-                    name: `shipping.amount`,
-                  }}
-                />
-              ) : (
-                <Tooltip title="Shipping amount">
-                  R$ {watch("shipping.amount")}
-                </Tooltip>
-              )}
-            </Col>
-
-            <Col xs={7}>
-              {watch("shipping.show") ? (
-                <TextareaCustomAntd
-                  divClassName="w-full"
-                  controller={{
-                    control,
-                    name: `shipping.note`,
-                  }}
-                />
-              ) : (
-                <Tooltip title={watch("shipping.note")}>
-                  {watch("shipping.note")}
-                </Tooltip>
-              )}
-            </Col>
-          </Row>
-        )}
-
-        {/* Tax */}
-        <Row className="border-b px-4 border-slate-100 p-2">
-          <Col xs={8}>
-            <label className="font-semibold mr-2">Tax:</label>
-
-            {!watch("tax.show") ? (
-              <Tooltip title="Edit Tax">
-                <Button
-                  icon={<EditOutlined />}
-                  size="small"
-                  onClick={() => {
-                    setValue("tax.show", true);
-                  }}
-                />
-              </Tooltip>
-            ) : (
-              <Button.Group>
-                <Tooltip title="Use Tax">
-                  <Button
-                    icon={<CheckOutlined />}
-                    size="small"
-                    type="success"
-                    onClick={() => {
-                      setValue("tax.show", false);
-                    }}
-                  />
-                </Tooltip>
-                <Tooltip title="Remove Tax">
-                  <Button
-                    icon={<CloseOutlined />}
-                    size="small"
-                    type="danger"
-                    onClick={() => {
-                      setValue("tax.note", null);
-                      setValue("tax.amount", 0);
-                      setValue("tax.show", false);
-                    }}
-                  />
-                </Tooltip>
-              </Button.Group>
-            )}
-          </Col>
-
-          <Col xs={4}></Col>
-
-          <Col xs={5}>
-            {watch("tax.show") ? (
-              <InputNumberCustomAntd
-                divClassName="w-28"
-                formatter={formatterMoney}
-                parser={parserMoney}
-                min={0}
-                controller={{
-                  control,
-                  name: `tax.amount`,
-                }}
-              />
-            ) : (
-              <Tooltip title="Tax amount">R$ {watch("tax.amount")}</Tooltip>
-            )}
-          </Col>
-
-          <Col xs={7}>
-            {watch("tax.show") ? (
-              <TextareaCustomAntd
-                divClassName="w-full"
-                controller={{
-                  control,
-                  name: `tax.note`,
-                }}
-              />
-            ) : (
-              <Tooltip title={watch("tax.note")}>{watch("tax.note")}</Tooltip>
-            )}
-          </Col>
-        </Row>
-
-        {/* Total */}
-        <Row className="p-2 px-4 bg-emerald-50 text-black font-bold">
-          <Col xs={8}>Total:</Col>
-
-          <Col xs={4}>
-            <Tooltip title="Quantity products selected">
-              {saleStoresProductsTotals.quantity}
-            </Tooltip>
-          </Col>
-
-          <Col xs={12}>
-            <Tooltip title="Sum all prices products">
-              R$ {totalFinal.toFixed(2)}
-            </Tooltip>
-          </Col>
-        </Row>
-      </div>
-    );
-  };
+  const isEnableCreateSale: boolean = saleStores?.length > 0;
 
   return (
     <Layout subtitle="Create manual sale" title="Create Sale" hasBackButton>
@@ -1274,33 +829,19 @@ export default function CreateSalePage() {
 
         {/* Selected Products */}
         <Col xs={24} md={12}>
-          <Card
-            title={
-              <div className="flex justify-between">
-                <div className="flex items-center">
-                  <label className="mr-2">Selected Products</label>
-
-                  <Tooltip title="Here you can see what products has been selected and also you can edit in same time the product price, quantity and also add a note for this product if you need">
-                    <QuestionCircleTwoTone />
-                  </Tooltip>
-                </div>
-
-                {saleStores?.length > 1 ? (
-                  <Tooltip title="Remove all products">
-                    <ButtonCommon
-                      onClick={handleRemoveAllProduct}
-                      color="transparent"
-                      className="rounded-r-full rounded-l-full shadow-none"
-                    >
-                      {IconTrash("w-3 h-3 text-red-500 hover:text-red-600")}
-                    </ButtonCommon>
-                  </Tooltip>
-                ) : null}
-              </div>
-            }
-          >
-            {renderStoresProducts()}
-          </Card>
+          <SelectedProductsList
+            stores={stores}
+            control={control}
+            watch={watch}
+            setValue={setValue}
+            handleRemoveAllProduct={handleRemoveAllProduct}
+            handleRemoveAllProductByStore={handleRemoveAllProductByStore}
+            handleRemoveProduct={handleRemoveProduct}
+            subtotal={saleStoresProductsTotals.subtotal}
+            quantity={saleStoresProductsTotals.quantity}
+            totalFinal={totalFinal}
+            totalAfterDiscount={totalAfterDiscount}
+          />
         </Col>
       </Row>
 
@@ -1327,12 +868,12 @@ export default function CreateSalePage() {
               labelStyle={{ width: 200 }}
               className="md:w-2/3 sm:w-full"
             >
-              <Descriptions.Item label="Total Payment" span={3}>
-                {formatToMoneyDecimal(totalPayment)}
-              </Descriptions.Item>
-
               <Descriptions.Item label="Total" span={3}>
                 {formatToMoneyDecimal(totalFinal)}
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Total Payment" span={3}>
+                {formatToMoneyDecimal(totalPayment)}
               </Descriptions.Item>
 
               <Descriptions.Item label="Total After Payment" span={3}>
@@ -1371,16 +912,59 @@ export default function CreateSalePage() {
                     control,
                     name: `status`,
                   }}
-                  label="Status"
+                  label="Sale Status"
                   errorMessage={errors?.status?.message}
                   placeholder={"Select sale status"}
                   style={{ width: 200 }}
                 >
                   {Object.keys(SalesEnum.Status).map((status: string) => (
                     <Select.Option key={status} value={status}>
-                      {SalesEnum.StatusLabels[status as SalesEnum.Status]}
+                      <span className="mr-1">
+                        {SalesEnum.StatusLabels[status as SalesEnum.Status]}
+                      </span>
+
+                      <Badge
+                        color={
+                          SalesEnum.StatusColors[status as SalesEnum.Status]
+                        }
+                      />
                     </Select.Option>
                   ))}
+                </SelectCustomAntd>
+              </Col>
+
+              <Col xs={24} md={8}>
+                <SelectCustomAntd
+                  controller={{
+                    control,
+                    name: `paymentStatus`,
+                  }}
+                  label="Payment Status"
+                  errorMessage={errors?.status?.message}
+                  placeholder={"Select payment status"}
+                  style={{ width: 200 }}
+                >
+                  {Object.keys(SalesEnum.PaymentStatus).map(
+                    (paymentStatus: string) => (
+                      <Select.Option key={paymentStatus} value={paymentStatus}>
+                        <span className="mr-1">
+                          {
+                            SalesEnum.PaymentStatusLabels[
+                              paymentStatus as SalesEnum.PaymentStatus
+                            ]
+                          }
+                        </span>
+
+                        <Badge
+                          color={
+                            SalesEnum.PaymentStatusColors[
+                              paymentStatus as SalesEnum.PaymentStatus
+                            ]
+                          }
+                        />
+                      </Select.Option>
+                    )
+                  )}
                 </SelectCustomAntd>
               </Col>
 
@@ -1390,7 +974,8 @@ export default function CreateSalePage() {
                   label="Create Quote"
                 />
               </Col>
-
+            </Row>
+            <Row>
               <Col xs={24} md={8}>
                 <Button
                   type="primary"
@@ -1406,6 +991,7 @@ export default function CreateSalePage() {
               <Col xs={24}>
                 <Button
                   type="success"
+                  disabled={!isEnableCreateSale}
                   className="w-full text-center mt-5 h-10 font-bold text-lg"
                   onClick={handleSubmit(onSubmit)}
                   loading={isSubmitting}

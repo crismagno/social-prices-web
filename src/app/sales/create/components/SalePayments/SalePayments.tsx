@@ -1,4 +1,4 @@
-import { Col, Row, Select, Tooltip } from "antd";
+import { Col, Row, Select, Tag, Tooltip } from "antd";
 import { useFieldArray } from "react-hook-form";
 import { z } from "zod";
 
@@ -97,11 +97,19 @@ export const SalePayments: React.FC<Props> = ({
                       key={salePaymentType}
                       value={salePaymentType}
                     >
-                      {
-                        SalesEnum.PaymentTypeLabels[
-                          salePaymentType as SalesEnum.PaymentType
-                        ]
-                      }
+                      <Tag
+                        color={
+                          SalesEnum.PaymentTypeColors[
+                            salePaymentType as SalesEnum.PaymentType
+                          ]
+                        }
+                      >
+                        {
+                          SalesEnum.PaymentTypeLabels[
+                            salePaymentType as SalesEnum.PaymentType
+                          ]
+                        }
+                      </Tag>
                     </Select.Option>
                   )
                 )}

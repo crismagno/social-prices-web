@@ -75,4 +75,5 @@ export default class CreateSaleDto {
   payments: SalePaymentDto[] = [];
   stores: SaleStoreDto[] = [];
   isCreateSale: boolean = false;
+  paymentStatus: SalesEnum.PaymentStatus = SalesEnum.PaymentStatus.PENDING;
 }

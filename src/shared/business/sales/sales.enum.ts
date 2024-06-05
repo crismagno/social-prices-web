@@ -38,6 +38,13 @@ namespace SalesEnum {
     [PaymentType.OTHER]: "Other",
   };
 
+  export const PaymentTypeColors = {
+    [PaymentType.PIX]: "blue",
+    [PaymentType.CASH]: "green",
+    [PaymentType.CARD]: "orange",
+    [PaymentType.OTHER]: "default",
+  };
+
   export enum PaymentStatus {
     COMPLETED = "COMPLETED",
     PENDING = "PENDING",
@@ -52,6 +59,14 @@ namespace SalesEnum {
     [PaymentStatus.PARTIALLY]: "Partially",
     [PaymentStatus.CANCELLED]: "Cancelled",
     [PaymentStatus.REFUNDED]: "Refunded",
+  };
+
+  export const PaymentStatusColors = {
+    [PaymentStatus.COMPLETED]: "green",
+    [PaymentStatus.PENDING]: "blue",
+    [PaymentStatus.PARTIALLY]: "purple",
+    [PaymentStatus.CANCELLED]: "red",
+    [PaymentStatus.REFUNDED]: "orange",
   };
 
   export enum Status {
