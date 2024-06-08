@@ -1,7 +1,8 @@
-import { InputNumber, InputNumberProps } from "antd";
+import { TextAreaProps } from "antd/es/input";
+import TextArea from "antd/es/input/TextArea";
 import { Control, Controller } from "react-hook-form";
 
-interface Props<T> extends InputNumberProps {
+interface Props<T> extends TextAreaProps {
   controller: {
     control: Control<any>;
     name: keyof T | string;
@@ -12,7 +13,7 @@ interface Props<T> extends InputNumberProps {
   errorMessage?: string;
 }
 
-export function InputNumberCustomAntd<T extends object = any>({
+export function TextareaCustomAntd<T extends object = any>({
   label,
   controller,
   divClassName,
@@ -35,7 +36,7 @@ export function InputNumberCustomAntd<T extends object = any>({
         control={controller.control}
         name={controller.name}
         render={({ field: { onChange, value, name, ref } }) => (
-          <InputNumber
+          <TextArea
             className="w-full"
             onChange={onChange}
             name={name}

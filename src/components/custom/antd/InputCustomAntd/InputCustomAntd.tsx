@@ -1,7 +1,7 @@
-import { InputNumber, InputNumberProps } from "antd";
+import { Input, InputProps } from "antd";
 import { Control, Controller } from "react-hook-form";
 
-interface Props<T> extends InputNumberProps {
+interface Props<T> extends InputProps {
   controller: {
     control: Control<any>;
     name: keyof T | string;
@@ -12,7 +12,7 @@ interface Props<T> extends InputNumberProps {
   errorMessage?: string;
 }
 
-export function InputNumberCustomAntd<T extends object = any>({
+export function InputCustomAntd<T extends object = any>({
   label,
   controller,
   divClassName,
@@ -35,7 +35,7 @@ export function InputNumberCustomAntd<T extends object = any>({
         control={controller.control}
         name={controller.name}
         render={({ field: { onChange, value, name, ref } }) => (
-          <InputNumber
+          <Input
             className="w-full"
             onChange={onChange}
             name={name}

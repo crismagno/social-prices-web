@@ -2,7 +2,7 @@ import { Select, SelectProps } from "antd";
 import { Control, Controller } from "react-hook-form";
 
 interface Props<T> extends SelectProps<T> {
-  controller: {
+  controller?: {
     control: Control<any>;
     name: keyof T | string;
   };
@@ -22,7 +22,13 @@ export function SelectCustomAntd<T extends object = any>({
   ...props
 }: Props<T>) {
   return (
-    <div className={`flex flex-col mt-4 mr-5 ${divClassName}`}>
+    <div
+      className={
+        divClassName
+          ? `${divClassName} flex flex-col `
+          : `flex flex-col mt-4 mr-5`
+      }
+    >
       <label className={`text-sm ${labelClassName}`}>{label}</label>
 
       <Controller

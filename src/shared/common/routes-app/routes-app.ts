@@ -31,6 +31,7 @@ const Urls = {
 
   // sales
   SALES: "/sales",
+  SALES_CREATE: "/sales/create",
 
   // sales
   CATEGORIES: "/categories",
