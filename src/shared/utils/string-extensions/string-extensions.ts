@@ -1,6 +1,7 @@
 import AddressEnum from "../../business/enums/address.enum";
 import { IAddress } from "../../business/interfaces/address.interface";
 import { IPhoneNumber } from "../../business/interfaces/phone-number";
+import IUser from "../../business/users/user.interface";
 import UsersEnum from "../../business/users/users.enum";
 
 export const createComma = (str: string): string =>
@@ -24,7 +25,7 @@ export const messengersToString = (messengers: string[]): string =>
     return acc;
   }, "");
 
-export const createUserAddressName = (address: IAddress | any): string => {
+export const createAddressName = (address: IAddress | any): string => {
   let addressName: string = "";
 
   if (address.countryCode || address.country) {
@@ -66,6 +67,7 @@ export const createUserAddressName = (address: IAddress | any): string => {
       },
       ""
     );
+
     addressName += ` (${typesToString})`;
   }
 
@@ -94,7 +96,7 @@ export const createPhoneNumberName = (phoneNumber: IPhoneNumber): string => {
   return phoneNumberName;
 };
 
-export const formatterMoney = (value: any) =>
+export const formatterMoney = (value: any): string =>
   `R$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
 export const parserMoney = (value: any) =>
@@ -105,3 +107,8 @@ export const getUserName = (user: IUser): string =>
 
 export const parseToUpperAndUnderline = (value: string): string =>
   value?.trim().toLocaleUpperCase().split(" ").join("_");
+
+export const formatToMoneyDecimal = (
+  value: number,
+  decimal: number = 2
+): string => `R$ ${value.toFixed(decimal)}`;

@@ -22,7 +22,7 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -42,11 +42,12 @@ import HrCustom from "../../../components/common/HrCustom/HrCustom";
 import ImageModal from "../../../components/common/ImageModal/ImageModal";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import {
-  generateNewAPhoneNumber,
+  generateNewPhoneNumber,
   phoneNumberFormSchema,
   PhoneNumbers,
 } from "../../../components/common/PhoneNumbers/PhoneNumbers";
-import { TagCategoryCustomAntd } from "../../../components/custom/antd/TagCategoryCustomAntd/TagCategoryCustomAntd";
+import { TagCategoryCustomAntd } from "../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
+import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import CreateStoreDto from "../../../services/social-prices-api/stores/dto/createStore.dto";
@@ -57,6 +58,7 @@ import AddressEnum from "../../../shared/business/enums/address.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
 import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number";
 import StoresEnum from "../../../shared/business/stores/stores.enum";
+import { IStore } from "../../../shared/business/stores/stores.interface";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getFileUrl } from "../../../shared/utils/images/helper";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
@@ -142,7 +144,7 @@ export default function StoreDetailPage() {
               isCollapsed: index === 0,
             })
           )
-        : [generateNewAPhoneNumber(false)],
+        : [generateNewPhoneNumber(false)],
       status: store?.status ?? StoresEnum.Status.ACTIVE,
       categoriesIds: store?.categoriesIds ?? [],
     };
@@ -156,24 +158,21 @@ export default function StoreDetailPage() {
 
   const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
     if (isEditMode) {
-      await updateStore(data);
+      await handleUpdate(data);
     } else {
-      await createStore(data);
+      await handleCreate(data);
     }
   };
 
-  const createStore = async (data: TFormSchema) => {
+  const handleCreate = async (data: TFormSchema) => {
     try {
-      if (fileList.length === 0) {
-        message.warning("Please select a logo.");
-        return;
-      }
-
       setIsSUbmitting(true);
 
       const formData = new FormData();
 
-      formData.append("logo", fileList[0].originFileObj as RcFile);
+      if (fileList.length > 0) {
+        formData.append("logo", fileList[0].originFileObj as RcFile);
+      }
 
       const addresses: IAddress[] = data.addresses.map(
         (address): IAddress => ({
@@ -228,7 +227,7 @@ export default function StoreDetailPage() {
     }
   };
 
-  const updateStore = async (data: TFormSchema) => {
+  const handleUpdate = async (data: TFormSchema) => {
     try {
       if (!store) {
         message.warning("Store not found to update!");
@@ -313,7 +312,7 @@ export default function StoreDetailPage() {
   return (
     <Layout
       subtitle={isEditMode ? "Edit store details" : "New store details"}
-      title={isEditMode ? "Edit store" : "New store"}
+      title={isEditMode ? `Edit store: ${store?.name}` : "New store"}
       hasBackButton
     >
       <Card className="h-min-80 mt-2">
@@ -394,77 +393,41 @@ export default function StoreDetailPage() {
               />
             </Col>
             <Col xs={8}>
-              <div className={`flex flex-col mt-4 mr-5`}>
-                <label className={`text-sm`}>Status</label>
-
-                <Controller
-                  control={control}
-                  name={`status`}
-                  render={({
-                    field: { onChange, onBlur, value, name, ref },
-                  }) => (
-                    <Select
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      name={name}
-                      value={value}
-                      ref={ref}
-                      placeholder={"Select status"}
-                    >
-                      {Object.keys(StoresEnum.Status).map((status: string) => (
-                        <Select.Option key={status} value={status}>
-                          <span className="mr-1">
-                            {
-                              StoresEnum.StatusLabel[
-                                status as StoresEnum.Status
-                              ]
-                            }
-                          </span>
-                          <Badge
-                            color={
-                              StoresEnum.StatusBadgeColor[
-                                status as StoresEnum.Status
-                              ]
-                            }
-                          />
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  )}
-                ></Controller>
-              </div>
+              <SelectCustomAntd<IStore>
+                controller={{ control, name: "status" }}
+                label="Status"
+                placeholder={"Select status"}
+                errorMessage={errors.status?.message}
+              >
+                {Object.keys(StoresEnum.Status).map((status: string) => (
+                  <Select.Option key={status} value={status}>
+                    <span className="mr-1">
+                      {StoresEnum.StatusLabel[status as StoresEnum.Status]}
+                    </span>
+                    <Badge
+                      color={
+                        StoresEnum.StatusBadgeColor[status as StoresEnum.Status]
+                      }
+                    />
+                  </Select.Option>
+                ))}
+              </SelectCustomAntd>
             </Col>
-            <Col xs={24} md={8}>
-              <div className={`flex flex-col mt-4 mr-5`}>
-                <label className={`text-sm`}>Categories</label>
 
-                <Controller
-                  control={control}
-                  name={`categoriesIds`}
-                  render={({
-                    field: { onChange, onBlur, value, name, ref },
-                  }) => (
-                    <Select
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      name={name}
-                      value={value}
-                      ref={ref}
-                      placeholder={"Select categories"}
-                      mode="multiple"
-                    >
-                      {categories.map((category: ICategory) => (
-                        <Select.Option key={category._id} value={category._id}>
-                          <TagCategoryCustomAntd
-                            category={category}
-                            useTag={false}
-                          />
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  )}
-                ></Controller>
-              </div>
+            <Col xs={24} md={8}>
+              <SelectCustomAntd<IStore>
+                controller={{ control, name: "categoriesIds" }}
+                label="Categories"
+                placeholder={"Select categories"}
+                mode="multiple"
+                errorMessage={errors.categoriesIds?.message}
+              >
+                {categories.map((category: ICategory) => (
+                  <Select.Option key={category._id} value={category._id}>
+                    <TagCategoryCustomAntd category={category} useTag={false} />
+                  </Select.Option>
+                ))}
+              </SelectCustomAntd>
             </Col>
           </Row>
 

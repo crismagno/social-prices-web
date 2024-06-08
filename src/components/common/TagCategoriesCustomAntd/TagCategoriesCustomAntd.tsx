@@ -1,9 +1,5 @@
-import {
-  ICategory,
-} from '../../../../shared/business/categories/categories.interface';
-import {
-  TagCategoryCustomAntd,
-} from '../TagCategoryCustomAntd/TagCategoryCustomAntd';
+import { ICategory } from "../../../shared/business/categories/categories.interface";
+import { TagCategoryCustomAntd } from "../TagCategoryCustomAntd/TagCategoryCustomAntd";
 
 interface Props {
   categories: ICategory[];

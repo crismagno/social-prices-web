@@ -5,6 +5,7 @@ namespace ProductsServiceEnum {
     FIND_BY_ID = "/products/:productId",
     FIND_BY_USER = "/products/user",
     FIND_BY_USER_TABLE_STATE = "/products/userTableState",
+    COUNT_BY_USER = "/products/user/count",
   }
 }
 

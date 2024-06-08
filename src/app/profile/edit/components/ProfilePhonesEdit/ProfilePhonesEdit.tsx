@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import handleClientError from "../../../../../components/common/handleClientError/handleClientError";
 import {
-  generateNewAPhoneNumber,
+  generateNewPhoneNumber,
   phoneNumberFormSchema,
   PhoneNumbers,
 } from "../../../../../components/common/PhoneNumbers/PhoneNumbers";
@@ -39,7 +39,7 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
           ...phoneNumber,
           isCollapsed: index === 0,
         }))
-      : [generateNewAPhoneNumber(false)],
+      : [generateNewPhoneNumber(false)],
   };
 
   const {

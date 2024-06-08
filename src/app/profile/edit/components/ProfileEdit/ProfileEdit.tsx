@@ -1,40 +1,26 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  Button,
-  Col,
-  message,
-  Row,
-} from 'antd';
-import moment from 'moment';
-import {
-  SubmitHandler,
-  useForm,
-} from 'react-hook-form';
-import z from 'zod';
+import { Button, Col, message, Row } from "antd";
+import moment from "moment";
+import { SubmitHandler, useForm } from "react-hook-form";
+import z from "zod";
 
-import { SaveOutlined } from '@ant-design/icons';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { SaveOutlined } from "@ant-design/icons";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import ContainerTitle
-  from '../../../../../components/common/ContainerTitle/ContainerTitle';
-import FormInput from '../../../../../components/common/FormInput/FormInput';
-import FormSelect, {
-  FormSelectOption,
-} from '../../../../../components/common/FormSelect/FormSelect';
-import FormTextarea
-  from '../../../../../components/common/FormTextarea/FormTextarea';
-import handleClientError
-  from '../../../../../components/common/handleClientError/handleClientError';
-import useAuthData from '../../../../../data/context/auth/useAuthData';
-import {
-  serviceMethodsInstance,
-} from '../../../../../services/social-prices-api/ServiceMethods';
-import IUser from '../../../../../shared/business/users/user.interface';
-import UsersEnum from '../../../../../shared/business/users/users.enum';
-import DatesEnum from '../../../../../shared/utils/dates/dates.enum';
+import ContainerTitle from "../../../../../components/common/ContainerTitle/ContainerTitle";
+import FormInput from "../../../../../components/common/FormInput/FormInput";
+import { FormSelectOption } from "../../../../../components/common/FormSelect/FormSelect";
+import FormTextarea from "../../../../../components/common/FormTextarea/FormTextarea";
+import handleClientError from "../../../../../components/common/handleClientError/handleClientError";
+import { SelectCustomAntd } from "../../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import useAuthData from "../../../../../data/context/auth/useAuthData";
+import { serviceMethodsInstance } from "../../../../../services/social-prices-api/ServiceMethods";
+import IUser from "../../../../../shared/business/users/user.interface";
+import UsersEnum from "../../../../../shared/business/users/users.enum";
+import DatesEnum from "../../../../../shared/utils/dates/dates.enum";
 
 interface Props {
   className?: string;
@@ -65,6 +51,7 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm<TFormSchema>({
     defaultValues,
     resolver: zodResolver(formSchema),
@@ -140,19 +127,18 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
           </Col>
 
           <Col xs={24} md={8}>
-            <FormSelect
+            <SelectCustomAntd<IUser>
+              controller={{ control, name: "gender" }}
               label="Gender"
+              errorMessage={errors.gender?.message}
               placeholder={"Select gender"}
-              defaultValue={user?.gender ?? UsersEnum.Gender.MALE}
-              register={register}
-              registerName="gender"
             >
               {Object.keys(UsersEnum.Gender).map((gender: string) => (
                 <FormSelectOption key={gender} value={gender}>
                   {UsersEnum.GenderLabels[gender as UsersEnum.Gender]}
                 </FormSelectOption>
               ))}
-            </FormSelect>
+            </SelectCustomAntd>
           </Col>
         </Row>
 

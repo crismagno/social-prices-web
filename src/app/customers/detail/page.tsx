@@ -2,7 +2,16 @@
 
 import { useEffect, useState } from "react";
 
-import { Button, Card, Col, message, Row, Tooltip, UploadFile } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  message,
+  Row,
+  Select,
+  Tooltip,
+  UploadFile,
+} from "antd";
 import { RcFile } from "antd/es/upload";
 import { isArray } from "class-validator";
 import moment from "moment";
@@ -26,23 +35,22 @@ import {
 } from "../../../components/common/Addresses/Addresses";
 import Avatar from "../../../components/common/Avatar/Avatar";
 import FormInput from "../../../components/common/FormInput/FormInput";
-import FormSelect, {
-  FormSelectOption,
-} from "../../../components/common/FormSelect/FormSelect";
 import FormTextarea from "../../../components/common/FormTextarea/FormTextarea";
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../../components/common/HrCustom/HrCustom";
 import ImageModal from "../../../components/common/ImageModal/ImageModal";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import {
-  generateNewAPhoneNumber,
+  generateNewPhoneNumber,
   phoneNumberFormSchema,
   PhoneNumbers,
 } from "../../../components/common/PhoneNumbers/PhoneNumbers";
+import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
 import CreateCustomerDto from "../../../services/social-prices-api/customers/dto/createCustomer.dto";
 import UpdateCustomerDto from "../../../services/social-prices-api/customers/dto/updateCustomer.dto";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
+import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import AddressEnum from "../../../shared/business/enums/address.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
 import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number";
@@ -111,7 +119,7 @@ export default function CustomerDetailPage() {
         .utc()
         .format(DatesEnum.Format.YYYYMMDD_DASHED),
       addresses: customer?.addresses.length
-        ? customer?.addresses.map((address: IAddress, index: number) => ({
+        ? customer.addresses.map((address: IAddress, index: number) => ({
             ...address,
             countryCode: address.country?.code,
             stateCode: address.state?.code ?? "",
@@ -125,7 +133,7 @@ export default function CustomerDetailPage() {
               isCollapsed: index === 0,
             })
           )
-        : [generateNewAPhoneNumber(false)],
+        : [generateNewPhoneNumber(false)],
       gender: customer?.gender ?? UsersEnum.Gender.OTHER,
     };
 
@@ -290,7 +298,7 @@ export default function CustomerDetailPage() {
   return (
     <Layout
       subtitle={isEditMode ? "Edit customer details" : "New customer details"}
-      title={isEditMode ? "Edit customer" : "New customer"}
+      title={isEditMode ? `Edit customer: ${customer?.name}` : "New customer"}
       hasBackButton
     >
       <Card className="h-min-80 mt-2">
@@ -358,19 +366,17 @@ export default function CustomerDetailPage() {
             </Col>
 
             <Col xs={24} md={12}>
-              <FormSelect
+              <SelectCustomAntd<ICustomer>
+                controller={{ control, name: "gender" }}
                 label="Gender"
-                placeholder={"Select gender"}
-                defaultValue={customer?.gender ?? UsersEnum.Gender.MALE}
-                register={register}
-                registerName="gender"
+                errorMessage={errors.gender?.message}
               >
                 {Object.keys(UsersEnum.Gender).map((gender: string) => (
-                  <FormSelectOption key={gender} value={gender}>
+                  <Select.Option key={gender} value={gender}>
                     {UsersEnum.GenderLabels[gender as UsersEnum.Gender]}
-                  </FormSelectOption>
+                  </Select.Option>
                 ))}
-              </FormSelect>
+              </SelectCustomAntd>
             </Col>
           </Row>
 

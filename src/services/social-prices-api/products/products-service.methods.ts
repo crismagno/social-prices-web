@@ -90,4 +90,18 @@ export default class ProductsServiceMethods extends ServiceMethodsBase {
 
     return response.data;
   }
+
+  public async countByUser(): Promise<number> {
+    const response = await this._fetchAxios.get<number>(
+      `${this._socialPricesApiV1}${ProductsServiceEnum.Methods.COUNT_BY_USER}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
 }

@@ -11,6 +11,12 @@ namespace UsersEnum {
     [Provider.OTHER]: "Other",
   };
 
+  export const ProviderColors = {
+    [Provider.GOOGLE]: "orange",
+    [Provider.SOCIAL_PRICES]: "blue",
+    [Provider.OTHER]: "gray",
+  };
+
   export enum Status {
     PENDING = "PENDING",
     ACTIVE = "ACTIVE",
