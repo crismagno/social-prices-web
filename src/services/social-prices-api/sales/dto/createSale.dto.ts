@@ -56,8 +56,8 @@ export class SaleBuyerDto {
 
 export class SaleStoreDto {
   storeId: string = "";
-  number: string = "";
-  customerId: string = "";
+  number: string | null = null;
+  customerId: string | null = null;
   products: SaleStoreProductDto[] = [];
   totals: SaleTotalsDto = {} as any;
 }
@@ -74,6 +74,6 @@ export default class CreateSaleDto {
   status: SalesEnum.Status = SalesEnum.Status.STARTED;
   payments: SalePaymentDto[] = [];
   stores: SaleStoreDto[] = [];
-  isCreateSale: boolean = false;
+  isCreateQuote: boolean = false;
   paymentStatus: SalesEnum.PaymentStatus = SalesEnum.PaymentStatus.PENDING;
 }

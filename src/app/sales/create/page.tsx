@@ -14,7 +14,7 @@ import {
   Select,
   Tooltip,
 } from "antd";
-import { filter, find, includes, reduce } from "lodash";
+import { filter, find, includes, map, reduce } from "lodash";
 import moment from "moment";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -38,11 +38,19 @@ import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd
 import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
-import CreateSaleDto from "../../../services/social-prices-api/sales/dto/createSale.dto";
+import useAuthData from "../../../data/context/auth/useAuthData";
+import CreateSaleDto, {
+  SalePaymentDto,
+  SaleStoreDto,
+} from "../../../services/social-prices-api/sales/dto/createSale.dto";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import AddressEnum from "../../../shared/business/enums/address.enum";
+import PhoneNumberEnum from "../../../shared/business/enums/phone-number.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
+import { ISale } from "../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../shared/business/sales/sales.enum";
+import { CreateAddressDto } from "../../../shared/business/shared/dtos/CreateAddress.dto";
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import UsersEnum from "../../../shared/business/users/users.enum";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
@@ -142,6 +150,8 @@ const generateShowAmountNote = (): TShowValueNoteFormSchema => ({
 });
 
 export default function CreateSalePage() {
+  const { user } = useAuthData();
+
   const [formValues, setFormValues] = useState<TFormSchema>();
 
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
@@ -371,27 +381,6 @@ export default function CreateSalePage() {
 
   const handleSeeSaleResume = () => {};
 
-  const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
-    try {
-      console.log(data);
-
-      setIsSubmitting(true);
-
-      const createSaleDto: CreateSaleDto = {};
-
-      // const response: ISale =
-      //   await serviceMethodsInstance.salesServiceMethods.createManual(
-      //     createSaleDto
-      //   );
-
-      // show sale number on modal screen and redirect to sales table
-    } catch (error) {
-      handleClientError(error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   // Calculation Part
 
   const getSaleStoresProductsTotals = (): ISaleStoresProductsTotals => {
@@ -482,6 +471,181 @@ export default function CreateSalePage() {
   const totalAfterPayment: number = totalFinal - totalPayment;
 
   const isEnableCreateSale: boolean = saleStores?.length > 0;
+
+  const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
+    try {
+      setIsSubmitting(true);
+
+      const address: CreateAddressDto = {
+        address1: data.customer.address.address1,
+        address2: data.customer.address.address2,
+        city: data.customer.address.city,
+        country: {
+          code: data.customer.address.countryCode,
+          name:
+            find(countries, { code: data.customer.address.countryCode })
+              ?.name ?? "",
+        },
+        description: data.customer.address.description,
+        district: data.customer.address.district,
+        state: {
+          code: data.customer.address.stateCode,
+          name:
+            find(states, { code: data.customer.address.stateCode })?.name ?? "",
+        },
+        types: data.customer.address.types as AddressEnum.Type[],
+        uid: data.customer.address.uid,
+        zip: data.customer.address.zip,
+      };
+
+      const saleNumber: string = `${Date.now()}`;
+
+      const dataSaleStoresLength: number = data.saleStores?.length ?? 0;
+
+      const dataDiscountAmount: number = data.discount.amount ?? 0;
+      const dataShippingAmount: number = data.shipping.amount ?? 0;
+      const dataTaxAmount: number = data.tax.amount ?? 0;
+
+      const dataDiscountAmountByStore: number =
+        dataDiscountAmount / dataSaleStoresLength;
+      const dataShippingAmountByStore: number =
+        dataShippingAmount / dataSaleStoresLength;
+      const dataTaxAmountByStore: number = dataTaxAmount / dataSaleStoresLength;
+
+      const createSaleDto: CreateSaleDto = {
+        buyer: {
+          address,
+          birthDate: data.customer.birthDate
+            ? moment(data.customer.birthDate).startOf("day").toDate()
+            : null,
+          email: data.customer.email,
+          gender: data.customer.gender as UsersEnum.Gender,
+          name: data.customer.name,
+          phoneNumber: {
+            messengers: [],
+            number: data.customer.phoneNumber ?? "",
+            type: PhoneNumberEnum.Type.OTHER,
+            uid: `${Date.now()}`,
+          },
+          userId: selectedCustomer?.userId ?? null,
+        },
+        createdByUserId: user!._id,
+        description: null,
+        header: {
+          shipping: {
+            address,
+          },
+          billing: {
+            address,
+          },
+          deliveryType: data.deliveryType as SalesEnum.DeliveryType,
+        },
+        isCreateQuote: data.isCreateQuote,
+        note: data.note,
+        number: saleNumber,
+        payments: map(
+          data.payments,
+          (payment: TSalePaymentFormSchema): SalePaymentDto => ({
+            amount: payment.amount,
+            provider: null,
+            status: data.paymentStatus as SalesEnum.PaymentStatus,
+            type: payment.type as SalesEnum.PaymentType,
+          })
+        ),
+        paymentStatus: data.paymentStatus as SalesEnum.PaymentStatus,
+        status: data.status as SalesEnum.Status,
+        type: SalesEnum.Type.MANUAL,
+        totals: {
+          discount: dataDiscountAmount
+            ? {
+                normal: dataDiscountAmount,
+              }
+            : null,
+          shippingAmount: dataShippingAmount,
+          taxAmount: dataTaxAmount,
+          subtotalAmount: saleStoresProductsTotals.subtotal,
+          totalFinalAmount: totalFinal,
+        },
+        stores: map(
+          data.saleStores,
+          (saleStore: TSaleStoreFormSchema): SaleStoreDto => {
+            const productsQuantityPrice = reduce(
+              saleStore.products,
+              (
+                accSaleStoreProduct: ISaleStoresProductsTotals,
+                saleStoreProduct: TSaleStoreProductFormSchema
+              ) => {
+                accSaleStoreProduct.quantity += saleStoreProduct.quantity;
+                accSaleStoreProduct.subtotal += saleStoreProduct.price;
+                return accSaleStoreProduct;
+              },
+              {
+                quantity: 0,
+                subtotal: 0,
+              }
+            );
+
+            const getTotalAfterDiscountByStore = (): number => {
+              const totalAfterDiscount: number =
+                productsQuantityPrice.subtotal - dataDiscountAmountByStore;
+
+              return totalAfterDiscount > 0 ? totalAfterDiscount : 0;
+            };
+
+            const totalAfterDiscountByStore: number =
+              getTotalAfterDiscountByStore();
+
+            const getTotalFinalByStore = (): number => {
+              const shippingAmount: number =
+                deliveryType === SalesEnum.DeliveryType.DELIVERY
+                  ? dataShippingAmountByStore
+                  : 0;
+
+              const totalFinal: number =
+                totalAfterDiscountByStore +
+                shippingAmount +
+                dataTaxAmountByStore;
+
+              return totalFinal > 0 ? totalFinal : 0;
+            };
+
+            const totalFinalAmountByStore: number = getTotalFinalByStore();
+
+            return {
+              customerId: data.customer?.customerId ?? null,
+              number: saleNumber,
+              products: saleStore.products,
+              storeId: saleStore.storeId,
+              totals: {
+                discount: dataDiscountAmountByStore
+                  ? {
+                      normal: dataDiscountAmountByStore,
+                    }
+                  : null,
+                shippingAmount: dataShippingAmountByStore,
+                subtotalAmount: productsQuantityPrice.subtotal,
+                taxAmount: dataTaxAmountByStore,
+                totalFinalAmount: totalFinalAmountByStore,
+              },
+            };
+          }
+        ),
+      };
+
+      const response: ISale =
+        await serviceMethodsInstance.salesServiceMethods.createManual(
+          createSaleDto
+        );
+
+      alert(JSON.stringify(response));
+
+      // show sale number on modal screen and redirect to sales table
+    } catch (error) {
+      handleClientError(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <Layout subtitle="Create manual sale" title="Create Sale" hasBackButton>
