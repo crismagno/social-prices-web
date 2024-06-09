@@ -172,6 +172,9 @@ export default function CustomersPage() {
           setTableStateRequest={setTableStateRequest}
           pagination={{
             total,
+            showTotal(totalCount: number, range: [number, number]) {
+              return `${range[0]}-${range[1]} of ${totalCount} items`;
+            },
           }}
         />
       </Card>

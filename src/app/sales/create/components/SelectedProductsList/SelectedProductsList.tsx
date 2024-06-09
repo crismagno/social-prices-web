@@ -150,7 +150,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                     <Col xs={4}>
                       <InputNumberCustomAntd
                         divClassName="w-28"
-                        min={0}
+                        min={1}
                         controller={{
                           control,
                           name: `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}.quantity`,

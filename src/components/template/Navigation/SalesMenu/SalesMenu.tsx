@@ -42,7 +42,10 @@ export const SalesMenu: React.FC<Props> = ({}) => {
           "Sales",
           null,
           null,
-          [getItem("Create Sale", Urls.SALES_CREATE, <ShoppingCartOutlined />)],
+          [
+            getItem("Sales", Urls.SALES, <ShoppingCartOutlined />),
+            getItem("Create Sale", Urls.SALES_CREATE, <ShoppingCartOutlined />),
+          ],
           "group"
         ),
       ]

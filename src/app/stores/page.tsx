@@ -209,6 +209,9 @@ export default function StoresPage() {
           }}
           pagination={{
             total,
+            showTotal(totalCount: number, range: [number, number]) {
+              return `${range[0]}-${range[1]} of ${totalCount} items`;
+            },
           }}
         />
       </Card>
