@@ -1147,7 +1147,7 @@ export default function CreateSalePage() {
                   onClick={handleSubmit(onSubmit)}
                   loading={isSubmitting}
                 >
-                  Create Sale
+                  CREATE SALE
                 </Button>
               </Col>
             </Row>
