@@ -1,16 +1,16 @@
 import { useState } from "react";
 
-import { Card, Image, Tag } from "antd";
+import { Card, Tag } from "antd";
 import moment from "moment";
 
+import { ButtonCreateSale } from "../../../../components/common/ButtonCreateSale/ButtonCreateSale";
+import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
 import { PhoneNumbersTag } from "../../../../components/common/PhoneNumbersTag/PhoneNumbersTag";
 import TableCustomAntd2 from "../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import { ICustomer } from "../../../../shared/business/customers/customer.interface";
 import { IPhoneNumber } from "../../../../shared/business/interfaces/phone-number";
 import UsersEnum from "../../../../shared/business/users/users.enum";
 import DatesEnum from "../../../../shared/utils/dates/dates.enum";
-import { defaultAvatarImage } from "../../../../shared/utils/images/files-names";
-import { getImageUrl } from "../../../../shared/utils/images/url-images";
 import { createTableState } from "../../../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../../../shared/utils/table/table-state.interface";
 import { useFindCustomersByOwnerOfUserTableState } from "../../../customers/useFindCustomersByOwnerOfUserTableState";
@@ -24,7 +24,7 @@ export const CustomersDashboardTable: React.FC = () => {
     useFindCustomersByOwnerOfUserTableState(tableStateRequest);
 
   return (
-    <Card className="h-min-80 mt-5">
+    <Card className="h-min-80 mt-5" extra={<ButtonCreateSale />}>
       <TableCustomAntd2<ICustomer>
         rowKey={"_id"}
         dataSource={customers}
@@ -34,29 +34,13 @@ export const CustomersDashboardTable: React.FC = () => {
             dataIndex: "avatar",
             key: "avatar",
             align: "center",
-            render: (avatar: string | null) => {
-              if (!avatar) {
-                return (
-                  <Image
-                    width={50}
-                    height={50}
-                    src={defaultAvatarImage}
-                    alt="mainUrl"
-                    className="rounded-full"
-                  />
-                );
-              }
-
-              return (
-                <Image
-                  width={50}
-                  height={50}
-                  src={getImageUrl(avatar)}
-                  alt="mainUrl"
-                  className="rounded-full"
-                />
-              );
-            },
+            render: (avatar: string | null) => (
+              <ImageOrDefault
+                className="rounded-full"
+                width={50}
+                src={avatar}
+              />
+            ),
           },
           {
             title: "Name",

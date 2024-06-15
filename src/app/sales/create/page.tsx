@@ -8,7 +8,6 @@ import {
   Button,
   Card,
   Col,
-  Image,
   Modal,
   Row,
   Select,
@@ -34,6 +33,7 @@ import {
   TAddressFormSchema,
 } from "../../../components/common/Addresses/Addresses";
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
+import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
 import Loading from "../../../components/common/Loading/Loading";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { CheckboxCustomAntd } from "../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd";
@@ -58,8 +58,6 @@ import { IStore } from "../../../shared/business/stores/stores.interface";
 import UsersEnum from "../../../shared/business/users/users.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
-import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
-import { getImageUrl } from "../../../shared/utils/images/url-images";
 import {
   ICityMockData,
   ICountryMockData,
@@ -686,26 +684,7 @@ export default function CreateSalePage() {
             <Row gutter={[8, 8]}>
               <Col xs={24} md={4}>
                 <Tooltip title="See avatar">
-                  <Image
-                    width={110}
-                    height={110}
-                    src={
-                      selectedCustomer?.avatar
-                        ? getImageUrl(selectedCustomer.avatar)
-                        : defaultAvatarImage
-                    }
-                    onError={() => (
-                      <Image
-                        width={110}
-                        height={110}
-                        src={defaultAvatarImage}
-                        alt="avatar"
-                        className="rounded-full shadow-md"
-                      />
-                    )}
-                    alt="avatar"
-                    className="rounded-full shadow-md"
-                  />
+                  <ImageOrDefault width={110} src={selectedCustomer?.avatar} />
                 </Tooltip>
               </Col>
 

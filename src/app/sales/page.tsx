@@ -3,27 +3,28 @@
 import { useState } from "react";
 
 import { Button, Card, Tag, Tooltip } from "antd";
-import { find, map } from "lodash";
+import { find, first, map } from "lodash";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
-import { EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { EditOutlined } from "@ant-design/icons";
 
+import { ButtonCreateSale } from "../../components/common/ButtonCreateSale/ButtonCreateSale";
+import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
+import { ICustomer } from "../../shared/business/customers/customer.interface";
 import {
   ISale,
   ISaleBuyer,
   ISaleStore,
-  ISaleTotals,
 } from "../../shared/business/sales/sale.interface";
 import SalesEnum from "../../shared/business/sales/sales.enum";
 import { IStore } from "../../shared/business/stores/stores.interface";
 import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
-import { formatToMoneyDecimal } from "../../shared/utils/string-extensions/string-extensions";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { useFindStoresByUser } from "../stores/useFindStoresByUser";
@@ -45,10 +46,6 @@ export default function SalesPage() {
     return <LoadingFull />;
   }
 
-  const handleCreateSale = () => {
-    router.push(Urls.SALES_CREATE);
-  };
-
   const handleEditSale = (sale: ISale) => {
     router.push(Urls.SALES_EDIT.replace(":saleId", sale._id));
   };
@@ -58,17 +55,7 @@ export default function SalesPage() {
       <Card
         title="Sales"
         className="h-min-80 mt-5"
-        extra={
-          <>
-            <Button
-              type="primary"
-              onClick={handleCreateSale}
-              icon={<PlusOutlined />}
-            >
-              Create Sale
-            </Button>
-          </>
-        }
+        extra={<ButtonCreateSale />}
       >
         <TableCustomAntd2<ISale>
           rowKey={"_id"}
@@ -91,11 +78,19 @@ export default function SalesPage() {
               dataIndex: "buyer",
               key: "buyer",
               align: "center",
-              render: (buyer: ISaleBuyer) => {
+              render: (buyer: ISaleBuyer, sale: ISale) => {
+                const customer: ICustomer | undefined = first(sale.stores)
+                  ?.customer as ICustomer;
+
                 return (
-                  <div className="flex flex-col">
-                    <div>{buyer.name}</div>
-                    <div className="text-xs">{buyer.email}</div>
+                  <div className="flex flex-row">
+                    <div className="mr-2">
+                      <ImageOrDefault src={customer?.avatar} />
+                    </div>
+                    <div className="flex flex-col justify-start items-start">
+                      <div>{buyer.name}</div>
+                      <div className="text-xs">{buyer.email}</div>
+                    </div>
                   </div>
                 );
               },
@@ -203,14 +198,6 @@ export default function SalesPage() {
                   );
                 });
               },
-            },
-            {
-              title: "Total Final",
-              dataIndex: "totals",
-              key: "totals",
-              align: "center",
-              render: (totals: ISaleTotals) =>
-                formatToMoneyDecimal(totals.totalFinalAmount),
             },
             {
               title: "Action",
