@@ -6,6 +6,7 @@ import { message } from "antd";
 import { useRouter } from "next/navigation";
 
 import AuthInput from "../../components/common/AuthInput/AuthInput";
+import Avatar from "../../components/common/Avatar/Avatar";
 import ButtonCommon from "../../components/common/ButtonCommon/ButtonCommon";
 import handleClientError from "../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../components/common/HrCustom/HrCustom";
@@ -15,7 +16,7 @@ import { serviceMethodsInstance } from "../../services/social-prices-api/Service
 import IUser from "../../shared/business/users/user.interface";
 
 export default function UpdateEmailPage() {
-  const { updateUserSession } = useAuthData();
+  const { updateUserSession, user } = useAuthData();
 
   const router = useRouter();
 
@@ -95,7 +96,8 @@ export default function UpdateEmailPage() {
           className="flex flex-col justify-center items-center 
           w-full h-full p-3 shadow-2xl bg-white rounded-lg"
         >
-          <span className="text-lg text-center mt-6">Update Email</span>
+          <span className="text-lg text-center mt-6 mb-4">Update Email</span>
+          <Avatar src={user?.avatar} alt="Image logo" width={100} />
 
           <form onSubmit={handleSendUpdateEmailCode} className="w-full">
             <AuthInput

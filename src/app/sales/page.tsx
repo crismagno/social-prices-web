@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { EditOutlined } from "@ant-design/icons";
 
 import { ButtonCreateSale } from "../../components/common/ButtonCreateSale/ButtonCreateSale";
+import { CustomRangeDatePicker } from "../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
 import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
@@ -50,6 +51,20 @@ export default function SalesPage() {
     router.push(Urls.SALES_EDIT.replace(":saleId", sale._id));
   };
 
+  const handleFilterSaleByCreatedAt = (
+    startDate: Date | null,
+    endDate: Date | null
+  ) => {
+    setTableStateRequest({
+      ...tableStateRequest,
+      filters: {
+        ...tableStateRequest?.filters,
+        createdAtRange: startDate && endDate ? { startDate, endDate } : null,
+      },
+      pagination: { pageSize: 10, skip: 0, current: undefined, total: 0 },
+    });
+  };
+
   return (
     <Layout subtitle="Sales information" title="Sales">
       <Card
@@ -57,6 +72,11 @@ export default function SalesPage() {
         className="h-min-80 mt-5"
         extra={<ButtonCreateSale />}
       >
+        <CustomRangeDatePicker
+          label="Created At:"
+          onChange={handleFilterSaleByCreatedAt}
+        />
+
         <TableCustomAntd2<ISale>
           rowKey={"_id"}
           tableStateRequest={tableStateRequest}
@@ -85,7 +105,7 @@ export default function SalesPage() {
                 return (
                   <div className="flex flex-row">
                     <div className="mr-2">
-                      <ImageOrDefault src={customer?.avatar} />
+                      <ImageOrDefault src={customer?.avatar} width={45} />
                     </div>
                     <div className="flex flex-col justify-start items-start">
                       <div>{buyer.name}</div>

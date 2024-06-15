@@ -6,12 +6,16 @@ import { message } from "antd";
 import { useRouter } from "next/navigation";
 
 import AuthInput from "../../components/common/AuthInput/AuthInput";
+import Avatar from "../../components/common/Avatar/Avatar";
 import ButtonCommon from "../../components/common/ButtonCommon/ButtonCommon";
 import HrCustom from "../../components/common/HrCustom/HrCustom";
 import Loading from "../../components/common/Loading/Loading";
+import useAuthData from "../../data/context/auth/useAuthData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
 
 export default function RecoverPasswordPage() {
+  const { user } = useAuthData();
+
   const router = useRouter();
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -88,7 +92,11 @@ export default function RecoverPasswordPage() {
           className="flex flex-col justify-center items-center 
           w-full h-full p-3 shadow-2xl bg-white rounded-lg"
         >
-          <span className="text-lg text-center mt-6">Recover Password</span>
+          <span className="text-lg text-center mt-6 mb-4">
+            Recover Password
+          </span>
+
+          <Avatar src={user?.avatar} alt="Image logo" width={100} />
 
           <form onSubmit={handleSendRecoverPasswordCode} className="w-full">
             <AuthInput

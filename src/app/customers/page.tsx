@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 
-import { Button, Card, Image, Tag, Tooltip } from "antd";
+import { Button, Card, Tag, Tooltip } from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
 import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 
+import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
 import { PhoneNumbersTag } from "../../components/common/PhoneNumbersTag/PhoneNumbersTag";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
@@ -17,8 +18,6 @@ import { IPhoneNumber } from "../../shared/business/interfaces/phone-number";
 import UsersEnum from "../../shared/business/users/users.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
-import { defaultAvatarImage } from "../../shared/utils/images/files-names";
-import { getImageUrl } from "../../shared/utils/images/url-images";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { useFindCustomersByOwnerOfUserTableState } from "./useFindCustomersByOwnerOfUserTableState";
@@ -47,15 +46,13 @@ export default function CustomersPage() {
         title="Customers"
         className="h-min-80 mt-5"
         extra={
-          <>
-            <Button
-              type="primary"
-              onClick={handleNewCustomer}
-              icon={<PlusOutlined />}
-            >
-              New Customer
-            </Button>
-          </>
+          <Button
+            type="primary"
+            onClick={handleNewCustomer}
+            icon={<PlusOutlined />}
+          >
+            New Customer
+          </Button>
         }
       >
         <TableCustomAntd2<ICustomer>
@@ -67,29 +64,9 @@ export default function CustomersPage() {
               dataIndex: "avatar",
               key: "avatar",
               align: "center",
-              render: (avatar: string | null) => {
-                if (!avatar) {
-                  return (
-                    <Image
-                      width={50}
-                      height={50}
-                      src={defaultAvatarImage}
-                      alt="mainUrl"
-                      className="rounded-full"
-                    />
-                  );
-                }
-
-                return (
-                  <Image
-                    width={50}
-                    height={50}
-                    src={getImageUrl(avatar)}
-                    alt="mainUrl"
-                    className="rounded-full"
-                  />
-                );
-              },
+              render: (avatar: string | null) => (
+                <ImageOrDefault src={avatar} width={50} />
+              ),
             },
             {
               title: "Name",

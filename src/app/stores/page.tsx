@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 
-import { Button, Card, Image, Tag, Tooltip } from "antd";
+import { Button, Card, Tag, Tooltip } from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
 import { EditOutlined, EnterOutlined, PlusOutlined } from "@ant-design/icons";
 
+import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
@@ -20,8 +21,6 @@ import { IStore } from "../../shared/business/stores/stores.interface";
 import Urls from "../../shared/common/routes-app/routes-app";
 import { sortArray } from "../../shared/utils/array/functions";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
-import { defaultAvatarImage } from "../../shared/utils/images/files-names";
-import { getImageUrl } from "../../shared/utils/images/url-images";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";
@@ -87,31 +86,9 @@ export default function StoresPage() {
               dataIndex: "logo",
               key: "logo",
               align: "center",
-              render: (logo: string) => {
-                if (!logo) {
-                  return (
-                    <Image
-                      width={50}
-                      height={50}
-                      src={defaultAvatarImage}
-                      alt="logo"
-                      className="rounded-full"
-                    />
-                  );
-                }
-
-                return (
-                  <Tooltip title="See logo">
-                    <Image
-                      width={50}
-                      height={50}
-                      src={getImageUrl(logo)}
-                      alt="logo"
-                      className="rounded-full"
-                    />
-                  </Tooltip>
-                );
-              },
+              render: (logo: string) => (
+                <ImageOrDefault src={logo} width={50} />
+              ),
             },
             {
               title: "Name",
