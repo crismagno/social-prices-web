@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { Avatar, Badge, Button, Card, Image, Tag, Tooltip } from "antd";
+import { find } from "lodash";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
@@ -60,7 +61,7 @@ export default function ProductsPage() {
   }
 
   const getStore = (storeId: string): IStore | undefined =>
-    stores.find((store) => store._id === storeId);
+    find(stores, { _id: storeId });
 
   const categoriesSort: ICategory[] = sortArray(categories, "name");
 
@@ -189,7 +190,7 @@ export default function ProductsPage() {
               dataIndex: "isActive",
               key: "isActive",
               align: "center",
-              filters: Object.keys(CommonEnum.YesNo).map((value) => ({
+              filters: Object.keys(CommonEnum.YesNo).map((value: string) => ({
                 value: value === CommonEnum.YesNo.YES,
                 text: CommonEnum.YesNoLabels[value as CommonEnum.YesNo],
               })),
@@ -204,7 +205,7 @@ export default function ProductsPage() {
               dataIndex: "storeIds",
               key: "storeIds",
               align: "center",
-              filters: stores.map((store) => ({
+              filters: stores.map((store: IStore) => ({
                 value: store._id,
                 text: store.name,
               })),

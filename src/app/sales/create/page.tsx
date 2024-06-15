@@ -201,7 +201,7 @@ export default function CreateSalePage() {
         phoneNumber: null,
       },
       deliveryType: SalesEnum.DeliveryType.DELIVERY,
-      selectedStoreIds: [],
+      selectedStoreIds: stores.length > 1 ? [stores[0]._id] : [],
       saleStores: [],
       discount: showValueNote,
       shipping: showValueNote,

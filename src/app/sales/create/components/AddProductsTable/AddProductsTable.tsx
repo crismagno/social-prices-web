@@ -102,7 +102,7 @@ export const AddProductsTable: React.FC<Props> = ({
         (product: IProduct): TProductFormSchema => ({
           price: product.price,
           productId: product._id,
-          quantity: product.quantity,
+          quantity: 1,
         })
       ),
     });
@@ -161,7 +161,7 @@ export const AddProductsTable: React.FC<Props> = ({
   };
 
   return (
-    <>
+    <div style={{ maxHeight: 800 }} className="overflow-auto">
       <Row gutter={[4, 4]}>
         <Col md={8}>
           <Select
@@ -256,13 +256,15 @@ export const AddProductsTable: React.FC<Props> = ({
             render: (quantity: number, _, index: number) => {
               return (
                 <div className="flex flex-col items-center">
-                  <span>Current: {quantity}</span>
+                  <span className={quantity <= 0 ? "text-red-600" : ""}>
+                    Current: {quantity}
+                  </span>
 
                   <Divider style={{ margin: "7px 0px" }} />
 
                   <InputNumberCustomAntd
                     divClassName="w-28"
-                    min={0}
+                    min={1}
                     controller={{
                       control,
                       name: `products.${index}.quantity`,
@@ -345,6 +347,6 @@ export const AddProductsTable: React.FC<Props> = ({
           total,
         }}
       />
-    </>
+    </div>
   );
 };
