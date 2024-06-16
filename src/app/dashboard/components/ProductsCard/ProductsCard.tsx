@@ -19,12 +19,18 @@ export const ProductsCard: React.FC = () => {
 
   const { isLoading, count } = useCountProductsByUser();
 
+  const handleGoToProducts = () => {
+    router.push(Urls.PRODUCTS);
+  };
+
   return (
     <Card
       loading={isLoading}
       cover={
         <div
+          onClick={handleGoToProducts}
           className="flex flex-col justify-center items-center w-full h-60 
+          cursor-pointer
             bg-gradient-to-tr from-green-700 to-blue-500 
           hover:from-green-800 hover:to-blue-600 text-white"
         >
@@ -35,7 +41,7 @@ export const ProductsCard: React.FC = () => {
       }
       actions={[
         <Tooltip key="table" title="See Products">
-          <TabletOutlined onClick={() => router.push(Urls.PRODUCTS)} />
+          <TabletOutlined onClick={handleGoToProducts} />
         </Tooltip>,
         <Tooltip key="plus" title="Create a new Product">
           <PlusOutlined onClick={() => router.push(Urls.NEW_PRODUCT)} />
