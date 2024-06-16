@@ -3,23 +3,25 @@
 import { useEffect, useState } from "react";
 
 import {
+  Alert,
   Badge,
   Button,
   Card,
   Col,
-  Descriptions,
-  Divider,
-  Image,
+  Modal,
   Row,
   Select,
+  Tag,
   Tooltip,
 } from "antd";
 import { filter, find, includes, map, reduce } from "lodash";
 import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { QuestionCircleTwoTone } from "@ant-design/icons";
+import { CheckCircleOutlined, QuestionCircleTwoTone } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -31,6 +33,7 @@ import {
   TAddressFormSchema,
 } from "../../../components/common/Addresses/Addresses";
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
+import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
 import Loading from "../../../components/common/Loading/Loading";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { CheckboxCustomAntd } from "../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd";
@@ -53,18 +56,14 @@ import SalesEnum from "../../../shared/business/sales/sales.enum";
 import { CreateAddressDto } from "../../../shared/business/shared/dtos/CreateAddress.dto";
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import UsersEnum from "../../../shared/business/users/users.enum";
+import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
-import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
-import { getImageUrl } from "../../../shared/utils/images/url-images";
 import {
   ICityMockData,
   ICountryMockData,
   IStateMockData,
 } from "../../../shared/utils/mock-data/interfaces";
-import {
-  createAddressName,
-  formatToMoneyDecimal,
-} from "../../../shared/utils/string-extensions/string-extensions";
+import { createAddressName } from "../../../shared/utils/string-extensions/string-extensions";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import {
   AddProductsTable,
@@ -150,6 +149,8 @@ const generateShowAmountNote = (): TShowValueNoteFormSchema => ({
 });
 
 export default function CreateSalePage() {
+  const router: AppRouterInstance = useRouter();
+
   const { user } = useAuthData();
 
   const [formValues, setFormValues] = useState<TFormSchema>();
@@ -165,6 +166,11 @@ export default function CreateSalePage() {
   );
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const [isOpenSaleSuccessfullyModal, setIsOpenSaleSuccessfullyModal] =
+    useState<boolean>(false);
+
+  const [sale, setSale] = useState<ISale | null>(null);
 
   const {
     handleSubmit,
@@ -193,7 +199,7 @@ export default function CreateSalePage() {
         phoneNumber: null,
       },
       deliveryType: SalesEnum.DeliveryType.DELIVERY,
-      selectedStoreIds: [],
+      selectedStoreIds: stores.length > 1 ? [stores[0]._id] : [],
       saleStores: [],
       discount: showValueNote,
       shipping: showValueNote,
@@ -498,18 +504,20 @@ export default function CreateSalePage() {
         zip: data.customer.address.zip,
       };
 
-      const saleNumber: string = `${Date.now()}`;
-
       const dataSaleStoresLength: number = data.saleStores?.length ?? 0;
 
       const dataDiscountAmount: number = data.discount.amount ?? 0;
+
       const dataShippingAmount: number = data.shipping.amount ?? 0;
+
       const dataTaxAmount: number = data.tax.amount ?? 0;
 
       const dataDiscountAmountByStore: number =
         dataDiscountAmount / dataSaleStoresLength;
+
       const dataShippingAmountByStore: number =
         dataShippingAmount / dataSaleStoresLength;
+
       const dataTaxAmountByStore: number = dataTaxAmount / dataSaleStoresLength;
 
       const createSaleDto: CreateSaleDto = {
@@ -529,8 +537,7 @@ export default function CreateSalePage() {
           },
           userId: selectedCustomer?.userId ?? null,
         },
-        createdByUserId: user!._id,
-        description: null,
+        createdByUserId: user?._id!,
         header: {
           shipping: {
             address,
@@ -542,7 +549,6 @@ export default function CreateSalePage() {
         },
         isCreateQuote: data.isCreateQuote,
         note: data.note,
-        number: saleNumber,
         payments: map(
           data.payments,
           (payment: TSalePaymentFormSchema): SalePaymentDto => ({
@@ -613,7 +619,6 @@ export default function CreateSalePage() {
 
             return {
               customerId: data.customer?.customerId ?? null,
-              number: saleNumber,
               products: saleStore.products,
               storeId: saleStore.storeId,
               totals: {
@@ -637,9 +642,9 @@ export default function CreateSalePage() {
           createSaleDto
         );
 
-      alert(JSON.stringify(response));
+      setSale(response);
 
-      // show sale number on modal screen and redirect to sales table
+      setIsOpenSaleSuccessfullyModal(true);
     } catch (error) {
       handleClientError(error);
     } finally {
@@ -658,8 +663,8 @@ export default function CreateSalePage() {
       <Row gutter={[16, 16]} className="mt-5">
         <Col xs={24}>
           <div className="bg-white w-full py-3 px-5 rounded-md">
-            <span className="text-lg mr-2">Sale Number:</span>
-            <span className="text-lg font-bold e-radius">{"SALE NUMBER"}</span>
+            <span className="text-lg mr-2">Sale Number: </span>
+            {sale?.number ? <Tag>{sale?.number}</Tag> : null}
           </div>
         </Col>
       </Row>
@@ -679,26 +684,7 @@ export default function CreateSalePage() {
             <Row gutter={[8, 8]}>
               <Col xs={24} md={4}>
                 <Tooltip title="See avatar">
-                  <Image
-                    width={110}
-                    height={110}
-                    src={
-                      selectedCustomer?.avatar
-                        ? getImageUrl(selectedCustomer.avatar)
-                        : defaultAvatarImage
-                    }
-                    onError={() => (
-                      <Image
-                        width={110}
-                        height={110}
-                        src={defaultAvatarImage}
-                        alt="avatar"
-                        className="rounded-full shadow-md"
-                      />
-                    )}
-                    alt="avatar"
-                    className="rounded-full shadow-md"
-                  />
+                  <ImageOrDefault width={110} src={selectedCustomer?.avatar} />
                 </Tooltip>
               </Col>
 
@@ -868,7 +854,7 @@ export default function CreateSalePage() {
                     .find(
                       (stateCity: ICityMockData) =>
                         stateCity.stateCode ===
-                        formValues?.customer?.address.stateCode
+                        watch("customer.address.stateCode")
                     )
                     ?.cities.map((city: string) => (
                       <Select.Option key={city} value={city}>
@@ -1015,39 +1001,13 @@ export default function CreateSalePage() {
       <Row gutter={[8, 8]} className="mt-2">
         {/* Payment */}
         <Col xs={24} md={12}>
-          <Card
-            title={
-              <div className="flex">
-                <label className="mr-2">Payment</label>
-                <Tooltip title="Here you can create which payments were made on the purchase">
-                  <QuestionCircleTwoTone />
-                </Tooltip>
-              </div>
-            }
-          >
-            <SalePayments control={control} errors={errors} />
-
-            <Divider />
-
-            <Descriptions
-              bordered
-              size="small"
-              labelStyle={{ width: 200 }}
-              className="md:w-2/3 sm:w-full"
-            >
-              <Descriptions.Item label="Total" span={3}>
-                {formatToMoneyDecimal(totalFinal)}
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Total Payment" span={3}>
-                {formatToMoneyDecimal(totalPayment)}
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Total After Payment" span={3}>
-                {formatToMoneyDecimal(totalAfterPayment)}
-              </Descriptions.Item>
-            </Descriptions>
-          </Card>
+          <SalePayments
+            control={control}
+            errors={errors}
+            totalFinal={totalFinal}
+            totalPayment={totalPayment}
+            totalAfterPayment={totalAfterPayment}
+          />
         </Col>
 
         {/* Confirmation */}
@@ -1146,6 +1106,7 @@ export default function CreateSalePage() {
               <Col xs={24} md={8}>
                 <Tooltip title="See sale resume">
                   <Button
+                    disabled
                     type="primary"
                     className="mt-4"
                     onClick={handleSeeSaleResume}
@@ -1165,13 +1126,34 @@ export default function CreateSalePage() {
                   onClick={handleSubmit(onSubmit)}
                   loading={isSubmitting}
                 >
-                  Create Sale
+                  CREATE SALE
                 </Button>
               </Col>
             </Row>
           </Card>
         </Col>
       </Row>
+
+      <Modal
+        title="Sale"
+        closable={false}
+        open={isOpenSaleSuccessfullyModal}
+        cancelButtonProps={{ hidden: true }}
+        onOk={() => router.push(Urls.SALES)}
+      >
+        <Alert
+          type="success"
+          icon={<CheckCircleOutlined />}
+          message={
+            <div>
+              <div>Sale has been created successfully!</div>
+              <div>
+                Sale Number: <b>{sale?.number}</b>
+              </div>
+            </div>
+          }
+        />
+      </Modal>
     </Layout>
   );
 }

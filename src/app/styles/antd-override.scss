@@ -6,6 +6,11 @@
   &:hover {
     background-color: #1677ff;
   }
+
+  &:disabled {
+    background-color: #dbdbdb;
+    color: #ffffff;
+  }
 }
 
 .ant-btn-danger {
@@ -15,6 +20,11 @@
   &:hover {
     background-color: FF4D4E;
     color: #fff;
+  }
+
+  &:disabled {
+    background-color: #dbdbdb;
+    color: #ffffff;
   }
 }
 
@@ -26,6 +36,11 @@
     background-color: #6e9cf3;
     color: #fff;
   }
+
+  &:disabled {
+    background-color: #dbdbdb;
+    color: #ffffff;
+  }
 }
 
 .ant-btn-warning {
@@ -35,6 +50,11 @@
   &:hover {
     background-color: #fff566;
     color: #000;
+  }
+
+  &:disabled {
+    background-color: #dbdbdb;
+    color: #ffffff;
   }
 }
 
@@ -46,6 +66,11 @@
     background-color: #fff;
     color: #000;
   }
+
+  &:disabled {
+    background-color: #dbdbdb;
+    color: #ffffff;
+  }
 }
 
 .ant-btn-success {
@@ -56,6 +81,11 @@
     background-color: #73d13d;
     color: #fff;
   }
+
+  &:disabled {
+    background-color: #dbdbdb;
+    color: #ffffff;
+  }
 }
 
 .ant-btn-danger {
@@ -65,5 +95,10 @@
   &:hover {
     background-color: #e2331f;
     color: #fff;
+  }
+
+  &:disabled {
+    background-color: #dbdbdb;
+    color: #ffffff;
   }
 }

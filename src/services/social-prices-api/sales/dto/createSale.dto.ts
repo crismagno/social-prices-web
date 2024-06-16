@@ -56,17 +56,14 @@ export class SaleBuyerDto {
 
 export class SaleStoreDto {
   storeId: string = "";
-  number: string | null = null;
   customerId: string | null = null;
   products: SaleStoreProductDto[] = [];
   totals: SaleTotalsDto = {} as any;
 }
 
 export default class CreateSaleDto {
-  description: string | null = null;
   createdByUserId: string = "";
   buyer: SaleBuyerDto | null = null;
-  number: string = "";
   type: SalesEnum.Type = SalesEnum.Type.MANUAL;
   totals: SaleTotalsDto = {} as any;
   header: SaleHeaderDto | null = null;

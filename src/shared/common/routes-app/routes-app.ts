@@ -32,6 +32,7 @@ const Urls = {
   // sales
   SALES: "/sales",
   SALES_CREATE: "/sales/create",
+  SALES_EDIT: "/sales/create?said=:saleId",
 
   // sales
   CATEGORIES: "/categories",

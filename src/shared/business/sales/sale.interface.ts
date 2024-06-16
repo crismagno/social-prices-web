@@ -1,3 +1,4 @@
+import { ICustomer } from "../customers/customer.interface";
 import { IAddress } from "../interfaces/address.interface";
 import { ICreatedAtEntity } from "../interfaces/created-at.interface";
 import { IPhoneNumber } from "../interfaces/phone-number";
@@ -27,6 +28,7 @@ export interface ISaleStore {
   products: ISaleStoreProduct[];
   totals: ISaleTotals;
   customerId: string | null;
+  customer?: ICustomer;
 }
 
 export interface ISaleTotals {

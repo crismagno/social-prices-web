@@ -120,11 +120,11 @@ export const SelectedProductsList: React.FC<Props> = ({
                         <div className="mr-2">
                           <Image
                             key={`${fileUrl}-${Date.now()}`}
-                            width={50}
+                            width={30}
                             src={fileUrl}
                             onError={() => (
                               <Image
-                                width={50}
+                                width={30}
                                 src={defaultAvatarImage}
                                 alt="mainUrl"
                                 className="rounded-full"
@@ -150,7 +150,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                     <Col xs={4}>
                       <InputNumberCustomAntd
                         divClassName="w-28"
-                        min={0}
+                        min={1}
                         controller={{
                           control,
                           name: `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}.quantity`,
@@ -172,7 +172,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                     </Col>
 
                     <Col xs={6}>
-                      <TextareaCustomAntd
+                      <InputNumberCustomAntd
                         divClassName="w-full pr-2"
                         controller={{
                           control,
@@ -235,7 +235,9 @@ export const SelectedProductsList: React.FC<Props> = ({
         </div>
       }
     >
-      {renderStoresProducts()}
+      <div style={{ maxHeight: 500 }} className="overflow-auto">
+        {renderStoresProducts()}
+      </div>
 
       {/* Resume totals */}
       <div className="mt-5">

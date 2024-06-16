@@ -16,7 +16,7 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
       createSaleDto,
       {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
       }
