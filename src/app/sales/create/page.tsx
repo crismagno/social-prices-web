@@ -775,7 +775,11 @@ export default function CreateSalePage() {
         <Col xs={24}>
           <div className="bg-white w-full py-3 px-5 rounded-md">
             <span className="text-lg mr-2">Sale Number: </span>
-            {saleById?.number ? <Tag>{saleById?.number}</Tag> : null}
+            {saleById?.number ? (
+              <Tag>
+                <label className="font-bold text-lg">{saleById?.number}</label>
+              </Tag>
+            ) : null}
           </div>
         </Col>
       </Row>
@@ -786,8 +790,10 @@ export default function CreateSalePage() {
           <Card
             title={
               <div className="flex">
-                <label className="mr-2">Customer: </label>
-                <SelectCustomer onSelectCustomer={handleSelectCustomer} />
+                <label className="mr-2">Customer </label>
+                {!isEditMode && (
+                  <SelectCustomer onSelectCustomer={handleSelectCustomer} />
+                )}
               </div>
             }
             className="h-min-80"
@@ -863,11 +869,7 @@ export default function CreateSalePage() {
             title={
               <div className="flex justify-between">
                 <div className="flex">
-                  <label className="mr-2">
-                    {selectedCustomer
-                      ? "Shipping Address: "
-                      : "Shipping Address"}{" "}
-                  </label>
+                  <label className="mr-2">Shipping Address</label>
 
                   {selectedCustomer && (
                     <Select
@@ -892,7 +894,7 @@ export default function CreateSalePage() {
                 </div>
 
                 <div className="flex">
-                  <label className="mr-2">Delivery Type:</label>
+                  <label className="mr-2">Delivery Type</label>
 
                   <SelectCustomAntd
                     controller={{
@@ -1061,7 +1063,7 @@ export default function CreateSalePage() {
                 </div>
 
                 <span className="flex">
-                  <label className="mr-2">Select Stores: </label>
+                  <label className="mr-2">Select Stores</label>
                   <SelectCustomAntd
                     allowClear
                     controller={{ control, name: "selectedStoreIds" }}
