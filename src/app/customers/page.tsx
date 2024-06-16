@@ -7,7 +7,11 @@ import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
-import { EditOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  PlusOutlined,
+  ShoppingCartOutlined,
+} from "@ant-design/icons";
 
 import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
 import { PhoneNumbersTag } from "../../components/common/PhoneNumbersTag/PhoneNumbersTag";
@@ -127,15 +131,30 @@ export default function CustomersPage() {
               dataIndex: "action",
               key: "action",
               align: "center",
-              render: (_: any, product: ICustomer) => {
+              render: (_: any, customer: ICustomer) => {
                 return (
                   <>
-                    <Tooltip title="Edit product">
+                    <Tooltip title="Edit Customer">
                       <Button
                         className="mr-1"
                         type="success"
-                        onClick={() => handleEditCustomer(product)}
+                        onClick={() => handleEditCustomer(customer)}
                         icon={<EditOutlined />}
+                      />
+                    </Tooltip>
+                    <Tooltip title="Create Sale">
+                      <Button
+                        className="mr-1"
+                        type="primary"
+                        onClick={() =>
+                          router.push(
+                            Urls.SALES_CREATE_BY_CUSTOMER.replace(
+                              ":customerId",
+                              customer._id
+                            )
+                          )
+                        }
+                        icon={<ShoppingCartOutlined />}
                       />
                     </Tooltip>
                   </>

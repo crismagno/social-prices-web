@@ -7,7 +7,12 @@ import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
-import { EditOutlined, EnterOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  EnterOutlined,
+  PlusOutlined,
+  ShoppingCartOutlined,
+} from "@ant-design/icons";
 
 import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
@@ -169,9 +174,25 @@ export default function StoresPage() {
                     </Tooltip>
                     <Tooltip title="Go to store">
                       <Button
+                        className="mr-1"
                         type="primary"
                         onClick={() => handleGotToStore(store)}
                         icon={<EnterOutlined />}
+                      />
+                    </Tooltip>
+                    <Tooltip title="Create Sale">
+                      <Button
+                        className="mr-1"
+                        type="primary"
+                        onClick={() =>
+                          router.push(
+                            Urls.SALES_CREATE_BY_STORE.replace(
+                              ":storeId",
+                              store._id
+                            )
+                          )
+                        }
+                        icon={<ShoppingCartOutlined />}
                       />
                     </Tooltip>
                   </>
