@@ -179,7 +179,7 @@ export default function StoresPage() {
               },
             },
           ]}
-          search={{ placeholder: "Search stores.." }}
+          search={{ placeholder: "Search stores..." }}
           loading={isLoading}
           expandable={{
             expandedRowRender: (store: IStore) => <StoreDetail store={store} />,

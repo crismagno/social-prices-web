@@ -95,6 +95,7 @@ export default function ProductDetailPage() {
   const isEditMode: boolean = !!productId && !!product;
 
   const {
+    watch,
     register,
     handleSubmit,
     formState: { errors },

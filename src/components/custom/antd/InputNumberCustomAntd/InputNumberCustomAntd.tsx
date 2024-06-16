@@ -10,6 +10,7 @@ interface Props<T> extends InputNumberProps {
   divClassName?: string;
   labelClassName?: string;
   errorMessage?: string;
+  className?: string;
 }
 
 export function InputNumberCustomAntd<T extends object = any>({
@@ -19,6 +20,7 @@ export function InputNumberCustomAntd<T extends object = any>({
   labelClassName,
   errorMessage,
   children,
+  className,
   ...props
 }: Props<T>) {
   return (
@@ -36,7 +38,7 @@ export function InputNumberCustomAntd<T extends object = any>({
         name={controller.name}
         render={({ field: { onChange, value, name, ref } }) => (
           <InputNumber
-            className="w-full"
+            className={className ? className : "w-full"}
             onChange={onChange}
             name={name}
             value={value}

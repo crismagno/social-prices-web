@@ -74,6 +74,7 @@ export default function SalesPage() {
       >
         <CustomRangeDatePicker
           label="Created At:"
+          showTime
           onChange={handleFilterSaleByCreatedAt}
         />
 
@@ -235,7 +236,7 @@ export default function SalesPage() {
               ),
             },
           ]}
-          search={{ placeholder: "Search sales.." }}
+          search={{ placeholder: "Search sales..." }}
           loading={isLoading}
           pagination={{
             total,

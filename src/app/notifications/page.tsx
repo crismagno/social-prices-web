@@ -134,7 +134,7 @@ export default function NotificationsPage() {
       <Card title="Notifications" className="h-min-80 mt-5">
         <Row>
           <Col xs={24}>
-            <label>Filter By Type: </label>
+            <label className="font-bold">Type: </label>
             <Select
               onChange={handleChangeType}
               className="w-52"
@@ -159,7 +159,7 @@ export default function NotificationsPage() {
               itemKey="_id"
               renderDataItem={renderDataItem}
               isLoading={isLoading}
-              search={{ onSearch, placeholder: "Search notifications.." }}
+              search={{ onSearch, placeholder: "Search notifications..." }}
               total={total}
             />
           </Col>

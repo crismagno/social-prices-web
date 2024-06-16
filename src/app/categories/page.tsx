@@ -124,7 +124,7 @@ export default function CategoriesPage() {
               },
             },
           ]}
-          search={{ placeholder: "Search categories.." }}
+          search={{ placeholder: "Search categories..." }}
           loading={isLoading}
           tableStateRequest={tableStateRequest}
           setTableStateRequest={setTableStateRequest}

@@ -5,7 +5,7 @@ import { serviceMethodsInstance } from "../../../services/social-prices-api/Serv
 import { IProduct } from "../../../shared/business/products/products.interface";
 
 export const useFindProductById = (
-  productsId: string | null
+  productId: string | null
 ): {
   isLoading: boolean;
   product: IProduct | null;
@@ -19,10 +19,10 @@ export const useFindProductById = (
     try {
       setIsLoading(true);
 
-      if (productsId) {
+      if (productId) {
         const response: IProduct =
           await serviceMethodsInstance.productsServiceMethods.findById(
-            productsId
+            productId
           );
 
         setProduct(response);
@@ -32,7 +32,7 @@ export const useFindProductById = (
     } finally {
       setIsLoading(false);
     }
-  }, [productsId]);
+  }, [productId]);
 
   useEffect(() => {
     fetchFindProductById();

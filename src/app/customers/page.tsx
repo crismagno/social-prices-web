@@ -143,7 +143,7 @@ export default function CustomersPage() {
               },
             },
           ]}
-          search={{ placeholder: "Search customers.." }}
+          search={{ placeholder: "Search customers..." }}
           loading={isLoading}
           tableStateRequest={tableStateRequest}
           setTableStateRequest={setTableStateRequest}

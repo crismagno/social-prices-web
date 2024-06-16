@@ -17,7 +17,11 @@ import {
 import { filter, find, includes, map, reduce } from "lodash";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter } from "next/navigation";
+import {
+  ReadonlyURLSearchParams,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -51,7 +55,11 @@ import { ICustomer } from "../../../shared/business/customers/customer.interface
 import AddressEnum from "../../../shared/business/enums/address.enum";
 import PhoneNumberEnum from "../../../shared/business/enums/phone-number.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
-import { ISale } from "../../../shared/business/sales/sale.interface";
+import {
+  ISale,
+  ISaleStore,
+  ISaleStoreProduct,
+} from "../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../shared/business/sales/sales.enum";
 import { CreateAddressDto } from "../../../shared/business/shared/dtos/CreateAddress.dto";
 import { IStore } from "../../../shared/business/stores/stores.interface";
@@ -65,6 +73,7 @@ import {
 } from "../../../shared/utils/mock-data/interfaces";
 import { createAddressName } from "../../../shared/utils/string-extensions/string-extensions";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
+import { useFindSaleById } from "../useFindSaleById";
 import {
   AddProductsTable,
   IStoreProductToAddOnSale,
@@ -149,13 +158,22 @@ const generateShowAmountNote = (): TShowValueNoteFormSchema => ({
 });
 
 export default function CreateSalePage() {
-  const router: AppRouterInstance = useRouter();
-
   const { user } = useAuthData();
 
-  const [formValues, setFormValues] = useState<TFormSchema>();
+  const router: AppRouterInstance = useRouter();
+
+  const searchParams: ReadonlyURLSearchParams = useSearchParams();
+
+  const saleId: string | null = searchParams.get("said");
+
+  const { sale: saleById, isLoading: isLoadingSaleById } =
+    useFindSaleById(saleId);
 
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
+
+  const isEditMode: boolean = !!saleId && !!saleById;
+
+  const [formValues, setFormValues] = useState<TFormSchema>();
 
   const [selectedCustomer, setSelectedCustomer] = useState<ICustomer | null>(
     null
@@ -186,33 +204,87 @@ export default function CreateSalePage() {
   useEffect(() => {
     const showValueNote: TShowValueNoteFormSchema = generateShowAmountNote();
 
+    const saleByIdStoreIds: string[] = map(saleById?.stores, "storeId");
+
+    const saleByIdSaleStores = map(
+      saleById?.stores,
+      (store: ISaleStore): TSaleStoreFormSchema => ({
+        storeId: store.storeId,
+        products: map(
+          store.products,
+          (storeProduct: ISaleStoreProduct): TSaleStoreProductFormSchema => ({
+            barCode: storeProduct.barCode,
+            fileUrl: null,
+            name: "",
+            note: storeProduct.note,
+            price: storeProduct.price,
+            productId: storeProduct.productId,
+            quantity: storeProduct.quantity,
+          })
+        ),
+      })
+    );
+
     setFormValues({
-      ...formValues,
       customer: {
         about: null,
-        address: generateNewAddress(),
-        birthDate: null,
+        address: saleById?.buyer?.address
+          ? {
+              address1: saleById.buyer.address.address1,
+              address2: saleById.buyer.address.address2,
+              city: saleById.buyer.address.city,
+              countryCode: saleById.buyer.address.country.code,
+              description: saleById.buyer.address.description,
+              district: saleById.buyer.address.district,
+              isCollapsed: false,
+              isValid: saleById.buyer.address.isValid,
+              stateCode: saleById.buyer.address.state!.code,
+              types: saleById.buyer.address.types,
+              uid: saleById.buyer.address.uid,
+              zip: saleById.buyer.address.zip,
+            }
+          : generateNewAddress(),
+        birthDate: saleById?.buyer?.birthDate
+          ? moment(saleById.buyer.birthDate)
+              .utc()
+              .format(DatesEnum.Format.YYYYMMDD_DASHED)
+          : null,
         customerId: null,
-        email: "",
-        gender: UsersEnum.Gender.MALE,
-        name: "",
-        phoneNumber: null,
+        email: saleById?.buyer?.email ?? "",
+        gender: saleById?.buyer?.gender ?? UsersEnum.Gender.MALE,
+        name: saleById?.buyer?.name ?? "",
+        phoneNumber: saleById?.buyer?.phoneNumber?.number ?? null,
       },
-      deliveryType: SalesEnum.DeliveryType.DELIVERY,
-      selectedStoreIds: stores.length > 1 ? [stores[0]._id] : [],
-      saleStores: [],
-      discount: showValueNote,
-      shipping: showValueNote,
-      tax: showValueNote,
-      payments: [generateNewSalePayment()],
-      note: null,
-      status: SalesEnum.Status.STARTED,
+      deliveryType:
+        saleById?.header?.deliveryType ?? SalesEnum.DeliveryType.DELIVERY,
+      selectedStoreIds: saleById
+        ? saleByIdStoreIds
+        : stores.length > 1
+        ? [stores[0]._id]
+        : [],
+      saleStores: saleByIdSaleStores,
+      discount: saleById
+        ? {
+            amount: saleById.totals.discount?.normal ?? 0,
+            note: "",
+            show: false,
+          }
+        : showValueNote,
+      shipping: saleById
+        ? { amount: saleById.totals.shippingAmount, note: "", show: false }
+        : showValueNote,
+      tax: saleById
+        ? { amount: saleById.totals.taxAmount, note: "", show: false }
+        : showValueNote,
+      payments: saleById ? saleById.payments : [generateNewSalePayment()],
+      note: saleById?.note ?? null,
+      status: saleById?.status ?? SalesEnum.Status.STARTED,
       isCreateQuote: false,
-      paymentStatus: SalesEnum.PaymentStatus.PENDING,
+      paymentStatus: saleById?.paymentStatus ?? SalesEnum.PaymentStatus.PENDING,
     });
-  }, []);
+  }, [saleById]);
 
-  if (isLoadingStores) {
+  if (isLoadingStores || isLoadingSaleById) {
     return <LoadingFull />;
   }
 
@@ -664,7 +736,7 @@ export default function CreateSalePage() {
         <Col xs={24}>
           <div className="bg-white w-full py-3 px-5 rounded-md">
             <span className="text-lg mr-2">Sale Number: </span>
-            {sale?.number ? <Tag>{sale?.number}</Tag> : null}
+            {saleById?.number ? <Tag>{saleById?.number}</Tag> : null}
           </div>
         </Col>
       </Row>
