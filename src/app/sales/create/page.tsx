@@ -213,6 +213,17 @@ export default function CreateSalePage() {
         (saleByIdStore: ISaleStore) => map(saleByIdStore.products, "productId")
       );
 
+      const customerId: string | null =
+        saleById?.stores?.[0].customerId ?? null;
+
+      const customerBySale: ICustomer | null = customerId
+        ? await serviceMethodsInstance.customersServiceMethods.findById(
+            customerId
+          )
+        : null;
+
+      setSelectedCustomer(customerBySale);
+
       const products: IProduct[] =
         await serviceMethodsInstance.productsServiceMethods.findByIds(
           saleByIdProductIds
@@ -267,7 +278,7 @@ export default function CreateSalePage() {
                 .utc()
                 .format(DatesEnum.Format.YYYYMMDD_DASHED)
             : null,
-          customerId: saleById?.stores?.[0].customerId ?? null,
+          customerId,
           email: saleById?.buyer?.email ?? "",
           gender: saleById?.buyer?.gender ?? UsersEnum.Gender.MALE,
           name: saleById?.buyer?.name ?? "",
@@ -871,7 +882,7 @@ export default function CreateSalePage() {
                 <div className="flex">
                   <label className="mr-2">Shipping Address</label>
 
-                  {selectedCustomer && (
+                  {selectedCustomer && !isEditMode && (
                     <Select
                       style={{ width: 250 }}
                       onChange={handleSelectAddress}
