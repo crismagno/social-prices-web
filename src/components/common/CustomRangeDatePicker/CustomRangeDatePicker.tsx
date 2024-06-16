@@ -10,7 +10,7 @@ interface Props {
 export const CustomRangeDatePicker: React.FC<Props> = ({ onChange, label }) => {
   return (
     <div>
-      {label && <label className="mr-2">{label}</label>}
+      {label && <label className="mr-2 font-bold">{label}</label>}
       <RangePicker
         showTime
         onChange={(value) => {
