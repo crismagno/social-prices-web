@@ -11,6 +11,7 @@ import {
 
 import ButtonCommon from "../../../../../components/common/ButtonCommon/ButtonCommon";
 import { IconTrash } from "../../../../../components/common/icons/icons";
+import { InputCustomAntd } from "../../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { InputNumberCustomAntd } from "../../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import { TextareaCustomAntd } from "../../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import SalesEnum from "../../../../../shared/business/sales/sales.enum";
@@ -172,7 +173,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                     </Col>
 
                     <Col xs={6}>
-                      <InputNumberCustomAntd
+                      <InputCustomAntd
                         divClassName="w-full pr-2"
                         controller={{
                           control,

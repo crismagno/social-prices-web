@@ -14,7 +14,7 @@ import {
   Tag,
   Tooltip,
 } from "antd";
-import { filter, find, includes, map, reduce } from "lodash";
+import { filter, find, flatMap, includes, map, reduce } from "lodash";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import {
@@ -55,6 +55,7 @@ import { ICustomer } from "../../../shared/business/customers/customer.interface
 import AddressEnum from "../../../shared/business/enums/address.enum";
 import PhoneNumberEnum from "../../../shared/business/enums/phone-number.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
+import { IProduct } from "../../../shared/business/products/products.interface";
 import {
   ISale,
   ISaleStore,
@@ -202,86 +203,115 @@ export default function CreateSalePage() {
   });
 
   useEffect(() => {
-    const showValueNote: TShowValueNoteFormSchema = generateShowAmountNote();
+    const componentMount = async () => {
+      const showValueNote: TShowValueNoteFormSchema = generateShowAmountNote();
 
-    const saleByIdStoreIds: string[] = map(saleById?.stores, "storeId");
+      const saleByIdStoreIds: string[] = map(saleById?.stores, "storeId");
 
-    const saleByIdSaleStores = map(
-      saleById?.stores,
-      (store: ISaleStore): TSaleStoreFormSchema => ({
-        storeId: store.storeId,
-        products: map(
-          store.products,
-          (storeProduct: ISaleStoreProduct): TSaleStoreProductFormSchema => ({
-            barCode: storeProduct.barCode,
-            fileUrl: null,
-            name: "",
-            note: storeProduct.note,
-            price: storeProduct.price,
-            productId: storeProduct.productId,
-            quantity: storeProduct.quantity,
-          })
-        ),
-      })
-    );
+      const saleByIdProductIds: string[] = flatMap(
+        saleById?.stores,
+        (saleByIdStore: ISaleStore) => map(saleByIdStore.products, "productId")
+      );
 
-    setFormValues({
-      customer: {
-        about: null,
-        address: saleById?.buyer?.address
-          ? {
-              address1: saleById.buyer.address.address1,
-              address2: saleById.buyer.address.address2,
-              city: saleById.buyer.address.city,
-              countryCode: saleById.buyer.address.country.code,
-              description: saleById.buyer.address.description,
-              district: saleById.buyer.address.district,
-              isCollapsed: false,
-              isValid: saleById.buyer.address.isValid,
-              stateCode: saleById.buyer.address.state!.code,
-              types: saleById.buyer.address.types,
-              uid: saleById.buyer.address.uid,
-              zip: saleById.buyer.address.zip,
+      const products: IProduct[] =
+        await serviceMethodsInstance.productsServiceMethods.findByIds(
+          saleByIdProductIds
+        );
+
+      const saleByIdSaleStores = map(
+        saleById?.stores,
+        (store: ISaleStore): TSaleStoreFormSchema => ({
+          storeId: store.storeId,
+          products: map(
+            store.products,
+            (storeProduct: ISaleStoreProduct): TSaleStoreProductFormSchema => {
+              const product: IProduct | undefined = find(products, {
+                _id: storeProduct.productId,
+              });
+
+              return {
+                barCode: storeProduct.barCode,
+                fileUrl: product?.mainUrl ?? null,
+                name: product?.name ?? "",
+                note: storeProduct.note,
+                price: storeProduct.price,
+                productId: storeProduct.productId,
+                quantity: storeProduct.quantity,
+              };
             }
-          : generateNewAddress(),
-        birthDate: saleById?.buyer?.birthDate
-          ? moment(saleById.buyer.birthDate)
-              .utc()
-              .format(DatesEnum.Format.YYYYMMDD_DASHED)
-          : null,
-        customerId: null,
-        email: saleById?.buyer?.email ?? "",
-        gender: saleById?.buyer?.gender ?? UsersEnum.Gender.MALE,
-        name: saleById?.buyer?.name ?? "",
-        phoneNumber: saleById?.buyer?.phoneNumber?.number ?? null,
-      },
-      deliveryType:
-        saleById?.header?.deliveryType ?? SalesEnum.DeliveryType.DELIVERY,
-      selectedStoreIds: saleById
-        ? saleByIdStoreIds
-        : stores.length > 1
-        ? [stores[0]._id]
-        : [],
-      saleStores: saleByIdSaleStores,
-      discount: saleById
-        ? {
-            amount: saleById.totals.discount?.normal ?? 0,
-            note: "",
-            show: false,
-          }
-        : showValueNote,
-      shipping: saleById
-        ? { amount: saleById.totals.shippingAmount, note: "", show: false }
-        : showValueNote,
-      tax: saleById
-        ? { amount: saleById.totals.taxAmount, note: "", show: false }
-        : showValueNote,
-      payments: saleById ? saleById.payments : [generateNewSalePayment()],
-      note: saleById?.note ?? null,
-      status: saleById?.status ?? SalesEnum.Status.STARTED,
-      isCreateQuote: false,
-      paymentStatus: saleById?.paymentStatus ?? SalesEnum.PaymentStatus.PENDING,
-    });
+          ),
+        })
+      );
+
+      setFormValues({
+        customer: {
+          about: null,
+          address: saleById?.buyer?.address
+            ? {
+                address1: saleById.buyer.address.address1,
+                address2: saleById.buyer.address.address2,
+                city: saleById.buyer.address.city,
+                countryCode: saleById.buyer.address.country.code,
+                description: saleById.buyer.address.description,
+                district: saleById.buyer.address.district,
+                isCollapsed: false,
+                isValid: saleById.buyer.address.isValid,
+                stateCode: saleById.buyer.address.state!.code,
+                types: saleById.buyer.address.types,
+                uid: saleById.buyer.address.uid,
+                zip: saleById.buyer.address.zip,
+              }
+            : generateNewAddress(),
+          birthDate: saleById?.buyer?.birthDate
+            ? moment(saleById.buyer.birthDate)
+                .utc()
+                .format(DatesEnum.Format.YYYYMMDD_DASHED)
+            : null,
+          customerId: saleById?.stores?.[0].customerId ?? null,
+          email: saleById?.buyer?.email ?? "",
+          gender: saleById?.buyer?.gender ?? UsersEnum.Gender.MALE,
+          name: saleById?.buyer?.name ?? "",
+          phoneNumber: saleById?.buyer?.phoneNumber?.number ?? null,
+        },
+        deliveryType:
+          saleById?.header?.deliveryType ?? SalesEnum.DeliveryType.DELIVERY,
+        selectedStoreIds: saleById
+          ? saleByIdStoreIds
+          : stores.length > 1
+          ? [stores[0]._id]
+          : [],
+        saleStores: saleByIdSaleStores,
+        discount: saleById?.totals.discount
+          ? {
+              amount: saleById.totals.discount.normal.amount,
+              note: saleById.totals.discount.normal.note,
+              show: false,
+            }
+          : showValueNote,
+        shipping: saleById?.totals.shipping
+          ? {
+              amount: saleById.totals.shipping.amount,
+              note: saleById.totals.shipping.note,
+              show: false,
+            }
+          : showValueNote,
+        tax: saleById?.totals.tax
+          ? {
+              amount: saleById.totals.tax.amount,
+              note: saleById.totals.tax.note,
+              show: false,
+            }
+          : showValueNote,
+        payments: saleById ? saleById.payments : [generateNewSalePayment()],
+        note: saleById?.note ?? null,
+        status: saleById?.status ?? SalesEnum.Status.STARTED,
+        isCreateQuote: false,
+        paymentStatus:
+          saleById?.paymentStatus ?? SalesEnum.PaymentStatus.PENDING,
+      });
+    };
+
+    componentMount();
   }, [saleById]);
 
   if (isLoadingStores || isLoadingSaleById) {
@@ -579,10 +609,13 @@ export default function CreateSalePage() {
       const dataSaleStoresLength: number = data.saleStores?.length ?? 0;
 
       const dataDiscountAmount: number = data.discount.amount ?? 0;
+      const dataDiscountNote: string | null = data.discount.note;
 
       const dataShippingAmount: number = data.shipping.amount ?? 0;
+      const dataShippingNote: string | null = data.shipping.note;
 
       const dataTaxAmount: number = data.tax.amount ?? 0;
+      const dataTaxNote: string | null = data.tax.note;
 
       const dataDiscountAmountByStore: number =
         dataDiscountAmount / dataSaleStoresLength;
@@ -636,11 +669,11 @@ export default function CreateSalePage() {
         totals: {
           discount: dataDiscountAmount
             ? {
-                normal: dataDiscountAmount,
+                normal: { amount: dataDiscountAmount, note: dataDiscountNote },
               }
             : null,
-          shippingAmount: dataShippingAmount,
-          taxAmount: dataTaxAmount,
+          shipping: { amount: dataShippingAmount, note: dataShippingNote },
+          tax: { amount: dataTaxAmount, note: dataTaxNote },
           subtotalAmount: saleStoresProductsTotals.subtotal,
           totalFinalAmount: totalFinal,
         },
@@ -696,12 +729,18 @@ export default function CreateSalePage() {
               totals: {
                 discount: dataDiscountAmountByStore
                   ? {
-                      normal: dataDiscountAmountByStore,
+                      normal: {
+                        amount: dataDiscountAmountByStore,
+                        note: dataDiscountNote,
+                      },
                     }
                   : null,
-                shippingAmount: dataShippingAmountByStore,
+                shipping: {
+                  amount: dataShippingAmountByStore,
+                  note: dataShippingNote,
+                },
                 subtotalAmount: productsQuantityPrice.subtotal,
-                taxAmount: dataTaxAmountByStore,
+                tax: { amount: dataTaxAmountByStore, note: dataTaxNote },
                 totalFinalAmount: totalFinalAmountByStore,
               },
             };
@@ -1167,12 +1206,14 @@ export default function CreateSalePage() {
                 </SelectCustomAntd>
               </Col>
 
-              <Col xs={24} md={8}>
-                <CheckboxCustomAntd
-                  controller={{ control, name: "isCreateQuote" }}
-                  label="Create Quote"
-                />
-              </Col>
+              {!isEditMode && (
+                <Col xs={24} md={8}>
+                  <CheckboxCustomAntd
+                    controller={{ control, name: "isCreateQuote" }}
+                    label="Create Quote"
+                  />
+                </Col>
+              )}
             </Row>
             <Row>
               <Col xs={24} md={8}>
