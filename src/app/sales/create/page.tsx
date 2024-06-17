@@ -11,7 +11,6 @@ import {
   Modal,
   Row,
   Select,
-  Tag,
   Tooltip,
 } from "antd";
 import { filter, find, flatMap, includes, map, reduce } from "lodash";
@@ -50,6 +49,7 @@ import CreateSaleDto, {
   SalePaymentDto,
   SaleStoreDto,
 } from "../../../services/social-prices-api/sales/dto/createSale.dto";
+import UpdateSaleDto from "../../../services/social-prices-api/sales/dto/updateSale.dto";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import AddressEnum from "../../../shared/business/enums/address.enum";
@@ -759,10 +759,25 @@ export default function CreateSalePage() {
         ),
       };
 
-      const response: ISale =
-        await serviceMethodsInstance.salesServiceMethods.createManual(
-          createSaleDto
-        );
+      let response: ISale | null = null;
+
+      if (isEditMode) {
+        const updateSaleDto: UpdateSaleDto = {
+          ...createSaleDto,
+          updatedByUserId: user!._id,
+          saleId: saleById!._id,
+        };
+
+        response =
+          await serviceMethodsInstance.salesServiceMethods.updateManual(
+            updateSaleDto
+          );
+      } else {
+        response =
+          await serviceMethodsInstance.salesServiceMethods.createManual(
+            createSaleDto
+          );
+      }
 
       setSale(response);
 
@@ -777,7 +792,7 @@ export default function CreateSalePage() {
   return (
     <Layout subtitle="Create manual sale" title="Create Sale" hasBackButton>
       {isSubmitting && (
-        <div className="h-full w-full absolute flex justify-center items-center bg-gray-500/30 top-0 left-0 z-50">
+        <div className="h-full w-full fixed flex justify-center items-center bg-gray-500/30 top-0 left-0 z-50">
           <Loading />
         </div>
       )}
@@ -787,9 +802,7 @@ export default function CreateSalePage() {
           <div className="bg-white w-full py-3 px-5 rounded-md">
             <span className="text-lg mr-2">Sale Number: </span>
             {saleById?.number ? (
-              <Tag>
-                <label className="font-bold text-lg">{saleById?.number}</label>
-              </Tag>
+              <label className="font-bold text-lg">{saleById?.number}</label>
             ) : null}
           </div>
         </Col>
@@ -1252,7 +1265,7 @@ export default function CreateSalePage() {
                   onClick={handleSubmit(onSubmit)}
                   loading={isSubmitting}
                 >
-                  CREATE SALE
+                  {isEditMode ? "SAVE" : "CREATE"} SALE
                 </Button>
               </Col>
             </Row>
@@ -1272,7 +1285,9 @@ export default function CreateSalePage() {
           icon={<CheckCircleOutlined />}
           message={
             <div>
-              <div>Sale has been created successfully!</div>
+              <div>
+                Sale has been {isEditMode ? "updated" : "created"} successfully!
+              </div>
               <div>
                 Sale Number: <b>{sale?.number}</b>
               </div>

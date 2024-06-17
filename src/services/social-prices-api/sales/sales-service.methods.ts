@@ -7,6 +7,7 @@ import {
 } from "../../../shared/utils/table/table-state.interface";
 import ServiceMethodsBase from "../ServiceMethods.base";
 import CreateSaleDto from "./dto/createSale.dto";
+import UpdateSaleDto from "./dto/updateSale.dto";
 import SalesServiceEnum from "./sales-service.enum";
 
 export default class SalesServiceMethods extends ServiceMethodsBase {
@@ -14,6 +15,21 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
     const response = await this._fetchAxios.post<ISale>(
       `${this._socialPricesApiV1}${SalesServiceEnum.Methods.CREATE_MANUAL}`,
       createSaleDto,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async updateManual(updateSaleDto: UpdateSaleDto): Promise<ISale> {
+    const response = await this._fetchAxios.post<ISale>(
+      `${this._socialPricesApiV1}${SalesServiceEnum.Methods.UPDATE_MANUAL}`,
+      updateSaleDto,
       {
         headers: {
           "Content-Type": "application/json",
