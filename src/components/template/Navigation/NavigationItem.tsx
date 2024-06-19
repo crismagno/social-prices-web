@@ -27,14 +27,17 @@ const NavigationItem: React.FC<Props> = ({
 }) => {
   const pathname = usePathname();
 
+  const isActivePath: boolean = pathname === url;
+
   const classNameActiveLink = (): string => `
     bg-slate-100 hover:bg-slate-200 
     dark:bg-slate-700 dark:text-yellow-200 dark:hover:bg-slate-900 
-    border-b-2 border-blue-500 transition-all
+    border-b-2 border-blue-500 transition-all text-blue-500 
   `;
 
-  const classNameDefault: string =
-    "flex flex-col justify-center items-center cursor-pointer";
+  const classNameDefault: string = `flex flex-col justify-center items-center cursor-pointer ${
+    isActivePath ? "text-blue-500 dark:text-yellow-200" : ""
+  } hover:text-blue-500 dark:hover:text-yellow-200`;
 
   const renderLink = () => {
     return children ? (
@@ -60,9 +63,9 @@ const NavigationItem: React.FC<Props> = ({
       flex items-center justify-center
        text-slate-800 hover:bg-gray-100 w-28 h-20 
        dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700
-       hover:border-b-2 hover:border-blue-500 transition-all 
+       hover:border-b-2 hover:border-blue-500 transition-all
        ${className} 
-       ${pathname === url ? classNameActiveLink() : ""}`}
+       ${isActivePath ? classNameActiveLink() : ""}`}
     >
       <Tooltip title={title}>
         {url ? (
