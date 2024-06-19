@@ -27,6 +27,7 @@ export default function CategoriesPage() {
 
   const [isCategoryDetailDrawerOpen, setIsCategoryDetailDrawerOpen] =
     useState<boolean>(false);
+
   const [categoryId, setCategoryId] = useState<string | undefined>();
 
   const handleNewCategory = () => {

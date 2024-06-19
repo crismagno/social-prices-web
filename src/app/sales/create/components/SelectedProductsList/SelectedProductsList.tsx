@@ -510,15 +510,17 @@ export const SelectedProductsList: React.FC<Props> = ({
 
         {/* Total */}
         <Row className="p-2 px-4 bg-emerald-50 text-black font-bold">
-          <Col xs={8}>Total:</Col>
+          <Col xs={7}></Col>
 
-          <Col xs={4}>
-            <Tooltip title="Quantity products selected">{quantity}</Tooltip>
+          <Col xs={5}>
+            <Tooltip title="Quantity products selected">
+              Qty: {quantity}
+            </Tooltip>
           </Col>
 
           <Col xs={12}>
             <Tooltip title="Sum all prices products">
-              R$ {totalFinal.toFixed(2)}
+              Total: R$ {totalFinal.toFixed(2)}
             </Tooltip>
           </Col>
         </Row>

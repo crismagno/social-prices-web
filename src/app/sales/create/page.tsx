@@ -137,7 +137,7 @@ export type TShowValueNoteFormSchema = z.infer<typeof showValueNoteFormSchema>;
 
 const formSchema = z.object({
   customer: customerFormSchema,
-  deliveryType: z.string(),
+  deliveryType: z.string().nonempty("Delivery type is required"),
   selectedStoreIds: z.array(z.string()),
   saleStores: z.array(saleStoreFormSchema),
   discount: showValueNoteFormSchema,
@@ -145,9 +145,9 @@ const formSchema = z.object({
   shipping: showValueNoteFormSchema,
   payments: z.array(salePaymentFormSchema),
   note: z.string().nullable(),
-  status: z.string(),
+  status: z.string().nonempty("Status is required"),
   isCreateQuote: z.boolean(),
-  paymentStatus: z.string(),
+  paymentStatus: z.string().nonempty("Payment status is required"),
 });
 
 export type TFormSchema = z.infer<typeof formSchema>;
@@ -158,6 +158,34 @@ const generateShowAmountNote = (): TShowValueNoteFormSchema => ({
   amount: 0,
 });
 
+const generateFormSchemaDefault = (): TFormSchema => {
+  const showValueNote: TShowValueNoteFormSchema = generateShowAmountNote();
+
+  return {
+    customer: {
+      about: null,
+      address: generateNewAddress(),
+      birthDate: null,
+      customerId: null,
+      email: "",
+      gender: UsersEnum.Gender.MALE,
+      name: "",
+      phoneNumber: null,
+    },
+    deliveryType: SalesEnum.DeliveryType.DELIVERY,
+    selectedStoreIds: [],
+    saleStores: [],
+    discount: showValueNote,
+    shipping: showValueNote,
+    tax: showValueNote,
+    payments: [generateNewSalePayment()],
+    note: null,
+    status: SalesEnum.Status.STARTED,
+    isCreateQuote: false,
+    paymentStatus: SalesEnum.PaymentStatus.PENDING,
+  };
+};
+
 export default function CreateSalePage() {
   const { user } = useAuthData();
 
@@ -165,16 +193,22 @@ export default function CreateSalePage() {
 
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
 
-  const saleId: string | null = searchParams.get("said");
+  const saleIdByParam: string | null = searchParams.get("said");
+
+  const customerIdByParam: string | null = searchParams.get("cid");
+
+  const storeIdByParam: string | null = searchParams.get("sid");
 
   const { sale: saleById, isLoading: isLoadingSaleById } =
-    useFindSaleById(saleId);
+    useFindSaleById(saleIdByParam);
 
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
-  const isEditMode: boolean = !!saleId && !!saleById;
+  const isEditMode: boolean = !!saleIdByParam && !!saleById;
 
-  const [formValues, setFormValues] = useState<TFormSchema>();
+  const [formValues, setFormValues] = useState<TFormSchema>(
+    generateFormSchemaDefault()
+  );
 
   const [selectedCustomer, setSelectedCustomer] = useState<ICustomer | null>(
     null
@@ -203,127 +237,150 @@ export default function CreateSalePage() {
   });
 
   useEffect(() => {
-    const componentMount = async () => {
-      const showValueNote: TShowValueNoteFormSchema = generateShowAmountNote();
+    const showValueNote: TShowValueNoteFormSchema = generateShowAmountNote();
 
-      const saleByIdStoreIds: string[] = map(saleById?.stores, "storeId");
+    if (saleById) {
+      const componentWillMountBySaleId = async () => {
+        const saleByIdStoreIds: string[] = map(saleById?.stores, "storeId");
 
-      const saleByIdProductIds: string[] = flatMap(
-        saleById?.stores,
-        (saleByIdStore: ISaleStore) => map(saleByIdStore.products, "productId")
-      );
-
-      const customerId: string | null =
-        saleById?.stores?.[0].customerId ?? null;
-
-      const customerBySale: ICustomer | null = customerId
-        ? await serviceMethodsInstance.customersServiceMethods.findById(
-            customerId
-          )
-        : null;
-
-      setSelectedCustomer(customerBySale);
-
-      const products: IProduct[] =
-        await serviceMethodsInstance.productsServiceMethods.findByIds(
-          saleByIdProductIds
+        const saleByIdProductIds: string[] = flatMap(
+          saleById?.stores,
+          (saleByIdStore: ISaleStore) =>
+            map(saleByIdStore.products, "productId")
         );
 
-      const saleByIdSaleStores = map(
-        saleById?.stores,
-        (store: ISaleStore): TSaleStoreFormSchema => ({
-          storeId: store.storeId,
-          products: map(
-            store.products,
-            (storeProduct: ISaleStoreProduct): TSaleStoreProductFormSchema => {
-              const product: IProduct | undefined = find(products, {
-                _id: storeProduct.productId,
-              });
+        const customerId: string | null =
+          saleById?.stores?.[0].customerId ?? null;
 
-              return {
-                barCode: storeProduct.barCode,
-                fileUrl: product?.mainUrl ?? null,
-                name: product?.name ?? "",
-                note: storeProduct.note,
-                price: storeProduct.price,
-                productId: storeProduct.productId,
-                quantity: storeProduct.quantity,
-              };
-            }
-          ),
-        })
-      );
+        const customerBySale: ICustomer | null = customerId
+          ? await serviceMethodsInstance.customersServiceMethods.findById(
+              customerId
+            )
+          : null;
 
-      setFormValues({
-        customer: {
-          about: null,
-          address: saleById?.buyer?.address
-            ? {
-                address1: saleById.buyer.address.address1,
-                address2: saleById.buyer.address.address2,
-                city: saleById.buyer.address.city,
-                countryCode: saleById.buyer.address.country.code,
-                description: saleById.buyer.address.description,
-                district: saleById.buyer.address.district,
-                isCollapsed: false,
-                isValid: saleById.buyer.address.isValid,
-                stateCode: saleById.buyer.address.state!.code,
-                types: saleById.buyer.address.types,
-                uid: saleById.buyer.address.uid,
-                zip: saleById.buyer.address.zip,
+        setSelectedCustomer(customerBySale);
+
+        const products: IProduct[] =
+          await serviceMethodsInstance.productsServiceMethods.findByIds(
+            saleByIdProductIds
+          );
+
+        const saleByIdSaleStores = map(
+          saleById?.stores,
+          (store: ISaleStore): TSaleStoreFormSchema => ({
+            storeId: store.storeId,
+            products: map(
+              store.products,
+              (
+                storeProduct: ISaleStoreProduct
+              ): TSaleStoreProductFormSchema => {
+                const product: IProduct | undefined = find(products, {
+                  _id: storeProduct.productId,
+                });
+
+                return {
+                  barCode: storeProduct.barCode,
+                  fileUrl: product?.mainUrl ?? null,
+                  name: product?.name ?? "",
+                  note: storeProduct.note,
+                  price: storeProduct.price,
+                  productId: storeProduct.productId,
+                  quantity: storeProduct.quantity,
+                };
               }
-            : generateNewAddress(),
-          birthDate: saleById?.buyer?.birthDate
-            ? moment(saleById.buyer.birthDate)
-                .utc()
-                .format(DatesEnum.Format.YYYYMMDD_DASHED)
-            : null,
-          customerId,
-          email: saleById?.buyer?.email ?? "",
-          gender: saleById?.buyer?.gender ?? UsersEnum.Gender.MALE,
-          name: saleById?.buyer?.name ?? "",
-          phoneNumber: saleById?.buyer?.phoneNumber?.number ?? null,
-        },
-        deliveryType:
-          saleById?.header?.deliveryType ?? SalesEnum.DeliveryType.DELIVERY,
-        selectedStoreIds: saleById
-          ? saleByIdStoreIds
-          : stores.length > 1
-          ? [stores[0]._id]
-          : [],
-        saleStores: saleByIdSaleStores,
-        discount: saleById?.totals.discount
-          ? {
-              amount: saleById.totals.discount.normal.amount,
-              note: saleById.totals.discount.normal.note,
-              show: false,
-            }
-          : showValueNote,
-        shipping: saleById?.totals.shipping
-          ? {
-              amount: saleById.totals.shipping.amount,
-              note: saleById.totals.shipping.note,
-              show: false,
-            }
-          : showValueNote,
-        tax: saleById?.totals.tax
-          ? {
-              amount: saleById.totals.tax.amount,
-              note: saleById.totals.tax.note,
-              show: false,
-            }
-          : showValueNote,
-        payments: saleById ? saleById.payments : [generateNewSalePayment()],
-        note: saleById?.note ?? null,
-        status: saleById?.status ?? SalesEnum.Status.STARTED,
-        isCreateQuote: false,
-        paymentStatus:
-          saleById?.paymentStatus ?? SalesEnum.PaymentStatus.PENDING,
-      });
-    };
+            ),
+          })
+        );
 
-    componentMount();
-  }, [saleById]);
+        setFormValues({
+          customer: {
+            about: null,
+            address: saleById?.buyer?.address
+              ? {
+                  address1: saleById.buyer.address.address1,
+                  address2: saleById.buyer.address.address2,
+                  city: saleById.buyer.address.city,
+                  countryCode: saleById.buyer.address.country.code,
+                  description: saleById.buyer.address.description,
+                  district: saleById.buyer.address.district,
+                  isCollapsed: false,
+                  isValid: saleById.buyer.address.isValid,
+                  stateCode: saleById.buyer.address.state!.code,
+                  types: saleById.buyer.address.types,
+                  uid: saleById.buyer.address.uid,
+                  zip: saleById.buyer.address.zip,
+                }
+              : generateNewAddress(),
+            birthDate: saleById?.buyer?.birthDate
+              ? moment(saleById.buyer.birthDate)
+                  .utc()
+                  .format(DatesEnum.Format.YYYYMMDD_DASHED)
+              : null,
+            customerId,
+            email: saleById?.buyer?.email ?? "",
+            gender: saleById?.buyer?.gender ?? UsersEnum.Gender.MALE,
+            name: saleById?.buyer?.name ?? "",
+            phoneNumber: saleById?.buyer?.phoneNumber?.number ?? null,
+          },
+          deliveryType:
+            saleById?.header?.deliveryType ?? SalesEnum.DeliveryType.DELIVERY,
+          selectedStoreIds: saleById
+            ? saleByIdStoreIds
+            : stores.length > 1
+            ? [stores[0]._id]
+            : [],
+          saleStores: saleByIdSaleStores,
+          discount: saleById?.totals.discount
+            ? {
+                amount: saleById.totals.discount.normal.amount,
+                note: saleById.totals.discount.normal.note,
+                show: false,
+              }
+            : showValueNote,
+          shipping: saleById?.totals.shipping
+            ? {
+                amount: saleById.totals.shipping.amount,
+                note: saleById.totals.shipping.note,
+                show: false,
+              }
+            : showValueNote,
+          tax: saleById?.totals.tax
+            ? {
+                amount: saleById.totals.tax.amount,
+                note: saleById.totals.tax.note,
+                show: false,
+              }
+            : showValueNote,
+          payments: saleById ? saleById.payments : [generateNewSalePayment()],
+          note: saleById?.note ?? null,
+          status: saleById?.status ?? SalesEnum.Status.STARTED,
+          isCreateQuote: false,
+          paymentStatus:
+            saleById?.paymentStatus ?? SalesEnum.PaymentStatus.PENDING,
+        });
+      };
+
+      componentWillMountBySaleId();
+      return;
+    }
+
+    if (customerIdByParam) {
+      const componentWillMountByCustomerIdParam = async () => {
+        const customer: ICustomer | null =
+          await serviceMethodsInstance.customersServiceMethods.findById(
+            customerIdByParam
+          );
+
+        handleSelectCustomer(customer);
+      };
+
+      componentWillMountByCustomerIdParam();
+    }
+
+    if (storeIdByParam) {
+      setValue("selectedStoreIds", [storeIdByParam]);
+    }
+  }, [saleById, customerIdByParam]);
 
   if (isLoadingStores || isLoadingSaleById) {
     return <LoadingFull />;
@@ -765,7 +822,7 @@ export default function CreateSalePage() {
         const updateSaleDto: UpdateSaleDto = {
           ...createSaleDto,
           updatedByUserId: user!._id,
-          saleId: saleById!._id,
+          saleIdByParam: saleById!._id,
         };
 
         response =
@@ -790,7 +847,13 @@ export default function CreateSalePage() {
   };
 
   return (
-    <Layout subtitle="Create manual sale" title="Create Sale" hasBackButton>
+    <Layout
+      subtitle={
+        isEditMode ? "Update information for manual sale" : "Create manual sale"
+      }
+      title={isEditMode ? "Update Sale" : "Create Sale"}
+      hasBackButton
+    >
       {isSubmitting && (
         <div className="h-full w-full fixed flex justify-center items-center bg-gray-500/30 top-0 left-0 z-50">
           <Loading />

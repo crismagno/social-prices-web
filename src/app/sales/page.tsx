@@ -110,7 +110,13 @@ export default function SalesPage() {
                       <ImageOrDefault src={customer?.avatar} width={45} />
                     </div>
                     <div className="flex flex-col justify-start items-start">
-                      <div>{buyer.name}</div>
+                      <Button
+                        type="link"
+                        className="p-0"
+                        onClick={() => router.push(Urls.CUSTOMERS)}
+                      >
+                        {buyer.name}
+                      </Button>
                       <div className="text-xs">{buyer.email}</div>
                     </div>
                   </div>
