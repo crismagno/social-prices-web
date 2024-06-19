@@ -33,15 +33,15 @@ import z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import FormInput from "../../../components/common/FormInput/FormInput";
-import FormTextarea from "../../../components/common/FormTextarea/FormTextarea";
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../../components/common/HrCustom/HrCustom";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { TagCategoryCustomAntd } from "../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
 import { CheckboxCustomAntd } from "../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd";
+import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { InputNumberCustomAntd } from "../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
 import CreateProductDto from "../../../services/social-prices-api/products/dto/createProduct.dto";
 import UpdateProductDto from "../../../services/social-prices-api/products/dto/updateProduct.dto";
@@ -330,38 +330,30 @@ export default function ProductDetailPage() {
 
           <Row gutter={[16, 16]}>
             <Col xs={24} md={8}>
-              <FormInput
+              <InputCustomAntd
+                controller={{ control, name: "name" }}
                 label="Name"
                 placeholder={"Enter name"}
-                defaultValue={product?.name}
-                register={register}
-                registerName="name"
-                registerOptions={{ required: true }}
                 errorMessage={errors.name?.message}
                 maxLength={200}
               />
             </Col>
 
             <Col xs={24} md={8}>
-              <FormInput
+              <InputCustomAntd
+                controller={{ control, name: "barCode" }}
                 label="Barcode"
                 placeholder={"Enter barcode"}
-                defaultValue={product?.barCode}
-                register={register}
-                registerName="barCode"
                 errorMessage={errors.barCode?.message}
                 maxLength={100}
-                divClassName="pl-0"
               />
             </Col>
 
             <Col xs={24} md={8}>
-              <FormInput
+              <InputCustomAntd
+                controller={{ control, name: "description" }}
                 label="Description"
                 placeholder={"Enter description"}
-                defaultValue={product?.description}
-                register={register}
-                registerName="description"
                 errorMessage={errors.description?.message}
                 maxLength={200}
               />
@@ -379,12 +371,10 @@ export default function ProductDetailPage() {
             </Col>
 
             <Col xs={24} md={8}>
-              <FormInput
+              <InputCustomAntd
+                controller={{ control, name: "quantity" }}
                 label="Quantity"
                 placeholder={"Enter quantity"}
-                defaultValue={product?.quantity}
-                register={register}
-                registerName="quantity"
                 type="number"
               />
             </Col>
@@ -454,12 +444,10 @@ export default function ProductDetailPage() {
 
           <Row>
             <Col xs={24}>
-              <FormTextarea
+              <TextareaCustomAntd
+                controller={{ control, name: "details" }}
                 label="Details"
                 placeholder={"Enter details"}
-                defaultValue={product?.details}
-                register={register}
-                registerName="details"
                 errorMessage={errors.details?.message}
                 rows={2}
               />

@@ -1,5 +1,5 @@
 import { Select, Tooltip } from "antd";
-import { useFieldArray } from "react-hook-form";
+import { Control, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 
 import AddressEnum from "../../../shared/business/enums/address.enum";
@@ -13,11 +13,11 @@ import {
   IStateMockData,
 } from "../../../shared/utils/mock-data/interfaces";
 import { createAddressName } from "../../../shared/utils/string-extensions/string-extensions";
+import { InputCustomAntd } from "../../custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../custom/antd/SelectCustomAntd/SelectCustomAntd";
 import ButtonCommon from "../ButtonCommon/ButtonCommon";
 import Collapse from "../Collapse/Collapse";
 import ContainerTitle from "../ContainerTitle/ContainerTitle";
-import FormInput from "../FormInput/FormInput";
 import { IconPlus, IconTrash } from "../icons/icons";
 
 export const countries: ICountryMockData[] = countriesMockData.filter(
@@ -45,14 +45,6 @@ export const addressFormSchema = z.object({
 
 export type TAddressFormSchema = z.infer<typeof addressFormSchema>;
 
-interface Props {
-  control: any;
-  watch: any;
-  register: any;
-  errors: any;
-  containerExtraHeader?: any;
-}
-
 export const generateNewAddress = (
   isCollapsed: boolean = true
 ): TAddressFormSchema => ({
@@ -69,6 +61,14 @@ export const generateNewAddress = (
   isCollapsed,
   types: [],
 });
+
+interface Props {
+  control: Control<any>;
+  watch: any;
+  register: any;
+  errors: any;
+  containerExtraHeader?: any;
+}
 
 export const Addresses: React.FC<Props> = ({
   control,
@@ -165,24 +165,18 @@ export const Addresses: React.FC<Props> = ({
                   ))}
                 </SelectCustomAntd>
 
-                <FormInput
+                <InputCustomAntd
+                  controller={{ control, name: `addresses.${index}.zip` }}
                   label="Zipcode"
                   placeholder={"Enter zipcode"}
-                  defaultValue={formAddress.zip}
-                  register={register}
-                  registerName={`addresses.${index}.zip`}
-                  registerOptions={{ required: true }}
                   errorMessage={errors?.addresses?.[index]?.zip?.message}
                   maxLength={20}
                 />
 
-                <FormInput
+                <InputCustomAntd
+                  controller={{ control, name: `addresses.${index}.district` }}
                   label="District"
                   placeholder={"Enter district"}
-                  defaultValue={formAddress.district}
-                  register={register}
-                  registerName={`addresses.${index}.district`}
-                  registerOptions={{ required: true }}
                   errorMessage={errors?.addresses?.[index]?.district?.message}
                   maxLength={200}
                 />
@@ -202,23 +196,21 @@ export const Addresses: React.FC<Props> = ({
                   ))}
                 </SelectCustomAntd>
 
-                <FormInput
+                <InputCustomAntd
+                  controller={{ control, name: `addresses.${index}.address1` }}
                   label="Address 1"
                   placeholder={"Enter address 1"}
-                  defaultValue={formAddress.address1}
-                  register={register}
-                  registerName={`addresses.${index}.address1`}
-                  registerOptions={{ required: true }}
                   errorMessage={errors?.addresses?.[index]?.address1?.message}
                   maxLength={200}
                 />
 
-                <FormInput
+                <InputCustomAntd
+                  controller={{
+                    control,
+                    name: `addresses.${index}.description`,
+                  }}
                   label="Description"
                   placeholder={"Enter description"}
-                  defaultValue={formAddress.description}
-                  register={register}
-                  registerName={`addresses.${index}.description`}
                   maxLength={400}
                 />
               </div>
@@ -242,12 +234,10 @@ export const Addresses: React.FC<Props> = ({
                     ))}
                 </SelectCustomAntd>
 
-                <FormInput
+                <InputCustomAntd
                   label="Address 2"
+                  controller={{ control, name: `addresses.${index}.address2` }}
                   placeholder={"Enter address 2"}
-                  defaultValue={formAddress.address2}
-                  register={register}
-                  registerName={`addresses.${index}.address2`}
                   maxLength={200}
                 />
 

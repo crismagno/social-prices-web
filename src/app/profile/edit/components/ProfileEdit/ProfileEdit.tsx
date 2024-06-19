@@ -11,11 +11,11 @@ import { SaveOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import ContainerTitle from "../../../../../components/common/ContainerTitle/ContainerTitle";
-import FormInput from "../../../../../components/common/FormInput/FormInput";
 import { FormSelectOption } from "../../../../../components/common/FormSelect/FormSelect";
-import FormTextarea from "../../../../../components/common/FormTextarea/FormTextarea";
 import handleClientError from "../../../../../components/common/handleClientError/handleClientError";
+import { InputCustomAntd } from "../../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { TextareaCustomAntd } from "../../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import useAuthData from "../../../../../data/context/auth/useAuthData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/ServiceMethods";
 import IUser from "../../../../../shared/business/users/user.interface";
@@ -99,29 +99,21 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
       >
         <Row>
           <Col xs={24} md={8}>
-            <FormInput
+            <InputCustomAntd
+              controller={{ control, name: "name" }}
               label="Name"
-              placeholder={"Enter name"}
-              defaultValue={user?.name ?? ""}
-              register={register}
-              registerName="name"
-              registerOptions={{ required: true }}
               errorMessage={errors.name?.message}
               maxLength={100}
+              placeholder={"Enter name"}
             />
           </Col>
 
           <Col xs={24} md={8}>
-            <FormInput
+            <InputCustomAntd
+              controller={{ control, name: "birthDate" }}
               label="Birth date"
               type="date"
               placeholder={"Enter birth date"}
-              defaultValue={moment(user?.birthDate)
-                .utc()
-                .format(DatesEnum.Format.YYYYMMDD_DASHED)}
-              register={register}
-              registerName="birthDate"
-              registerOptions={{ required: true }}
               errorMessage={errors.birthDate?.message}
             />
           </Col>
@@ -144,12 +136,10 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
 
         <Row>
           <Col xs={24}>
-            <FormTextarea
+            <TextareaCustomAntd
+              controller={{ control, name: "about" }}
               label="About"
               placeholder={"Enter about"}
-              defaultValue={user?.about ?? ""}
-              register={register}
-              registerName="about"
               rows={2}
             />
           </Col>

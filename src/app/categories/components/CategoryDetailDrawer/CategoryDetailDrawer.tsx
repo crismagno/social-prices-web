@@ -6,12 +6,12 @@ import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import FormInput from "../../../../components/common/FormInput/FormInput";
-import FormTextarea from "../../../../components/common/FormTextarea/FormTextarea";
 import handleClientError from "../../../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../../../components/common/HrCustom/HrCustom";
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
+import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { TextareaCustomAntd } from "../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import useAuthData from "../../../../data/context/auth/useAuthData";
 import CreateCategoryDto from "../../../../services/social-prices-api/categories/dto/createCategory.dto";
 import UpdateCategoryDto from "../../../../services/social-prices-api/categories/dto/updateCategory.dto";
@@ -162,13 +162,10 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
       <form onSubmit={handleSubmit(onSubmit)}>
         <Row gutter={[16, 16]} className="mt-10">
           <Col xs={24}>
-            <FormInput
+            <InputCustomAntd
+              controller={{ control, name: "name" }}
               label="Name"
               placeholder={"Enter name"}
-              defaultValue={category?.name}
-              register={register}
-              registerName="name"
-              registerOptions={{ required: true }}
               errorMessage={errors.name?.message}
               maxLength={200}
             />
@@ -189,12 +186,10 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
           </Col>
 
           <Col xs={24}>
-            <FormTextarea
+            <TextareaCustomAntd
+              controller={{ control, name: "description" }}
               label="Description"
               placeholder={"Enter description"}
-              defaultValue={category?.description}
-              register={register}
-              registerName="description"
               rows={2}
             />
           </Col>
