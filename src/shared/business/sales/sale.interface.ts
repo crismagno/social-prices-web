@@ -11,7 +11,7 @@ export interface ISale extends ICreatedAtEntity, IUpdatedAtEntity {
   description: string | null;
   createdByUserId: string | null;
   buyer: ISaleBuyer | null;
-  number: string;
+  number: number;
   type: SalesEnum.Type;
   totals: ISaleTotals;
   header: ISaleHeader;
@@ -24,7 +24,7 @@ export interface ISale extends ICreatedAtEntity, IUpdatedAtEntity {
 
 export interface ISaleStore {
   storeId: string;
-  number: string;
+  number: number;
   products: ISaleStoreProduct[];
   totals: ISaleTotals;
   customerId: string | null;

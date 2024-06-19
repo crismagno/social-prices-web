@@ -20,7 +20,7 @@ export const useFindStoreById = (
       setIsLoadingStore(true);
 
       if (storeId) {
-        const response: IStore =
+        const response: IStore | null =
           await serviceMethodsInstance.storesServiceMethods.findById(storeId);
 
         setStore(response);

@@ -20,7 +20,7 @@ export const useFindProductById = (
       setIsLoading(true);
 
       if (productId) {
-        const response: IProduct =
+        const response: IProduct | null =
           await serviceMethodsInstance.productsServiceMethods.findById(
             productId
           );

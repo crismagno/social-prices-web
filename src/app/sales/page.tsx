@@ -90,9 +90,9 @@ export default function SalesPage() {
               dataIndex: "number",
               key: "number",
               align: "center",
-              render: (_, sale: ISale) => {
-                return <strong className="mr-2">{sale.number}</strong>;
-              },
+              render: (number: string) => (
+                <strong className="mr-2">{number}</strong>
+              ),
             },
             {
               title: "Buyer",
@@ -100,8 +100,9 @@ export default function SalesPage() {
               key: "buyer",
               align: "center",
               render: (buyer: ISaleBuyer, sale: ISale) => {
-                const customer: ICustomer | undefined = first(sale.stores)
-                  ?.customer as ICustomer;
+                const customer: ICustomer | undefined = first(
+                  sale.stores
+                )?.customer;
 
                 return (
                   <div className="flex flex-row">
@@ -214,7 +215,7 @@ export default function SalesPage() {
 
                   return (
                     <Tag key={saleStore.storeId}>
-                      <span className="mr-1">{store.name ?? "No name"}</span>
+                      <span className="mr-1">{store.name}</span>
                     </Tag>
                   );
                 });

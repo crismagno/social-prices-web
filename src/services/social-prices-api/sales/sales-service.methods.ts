@@ -41,8 +41,8 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
-  public async findById(saleId: string): Promise<ISale> {
-    const response = await this._fetchAxios.get<ISale>(
+  public async findById(saleId: string): Promise<ISale | null> {
+    const response = await this._fetchAxios.get<ISale | null>(
       `${this._socialPricesApiV1}${SalesServiceEnum.Methods.FIND_BY_ID.replace(
         ":saleId",
         saleId

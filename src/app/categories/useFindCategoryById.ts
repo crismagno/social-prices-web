@@ -8,10 +8,10 @@ export const useFindCategoryById = (
   categoryId?: string
 ): {
   isLoading: boolean;
-  category?: ICategory;
+  category: ICategory | null;
   fetchFindCategoryById: () => Promise<void>;
 } => {
-  const [category, setCategory] = useState<ICategory | undefined>();
+  const [category, setCategory] = useState<ICategory | null>(null);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -20,7 +20,7 @@ export const useFindCategoryById = (
       setIsLoading(true);
 
       if (categoryId) {
-        const response: ICategory =
+        const response: ICategory | null =
           await serviceMethodsInstance.categoriesServiceMethods.findById(
             categoryId
           );
