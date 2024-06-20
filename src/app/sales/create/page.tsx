@@ -822,7 +822,7 @@ export default function CreateSalePage() {
         const updateSaleDto: UpdateSaleDto = {
           ...createSaleDto,
           updatedByUserId: user!._id,
-          saleIdByParam: saleById!._id,
+          saleId: saleById!._id,
         };
 
         response =

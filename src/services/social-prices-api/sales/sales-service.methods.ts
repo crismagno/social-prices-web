@@ -88,4 +88,23 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
 
     return response.data;
   }
+
+  public async deleteManual(saleId: string, userId: string): Promise<ISale> {
+    const response = await this._fetchAxios.delete<ISale>(
+      `${
+        this._socialPricesApiV1
+      }${SalesServiceEnum.Methods.DELETE_MANUAL.replace(
+        ":saleId",
+        saleId
+      ).replace(":userId", userId)}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
 }

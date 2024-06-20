@@ -2,20 +2,23 @@
 
 import { useState } from "react";
 
-import { Button, Card, Tag, Tooltip } from "antd";
+import { Button, Card, Modal, Tag, Tooltip } from "antd";
 import { find, first, map } from "lodash";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
-import { EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 import { ButtonCreateSale } from "../../components/common/ButtonCreateSale/ButtonCreateSale";
 import { CustomRangeDatePicker } from "../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
+import handleClientError from "../../components/common/handleClientError/handleClientError";
 import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
+import useAuthData from "../../data/context/auth/useAuthData";
+import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
 import { ICustomer } from "../../shared/business/customers/customer.interface";
 import {
   ISale,
@@ -32,16 +35,28 @@ import { useFindStoresByUser } from "../stores/useFindStoresByUser";
 import { useFindSalesByUserTableState } from "./useFindSalesByUserTableState";
 
 export default function SalesPage() {
+  const { user } = useAuthData();
   const router: AppRouterInstance = useRouter();
 
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<ISale> | undefined
   >(createTableState({ sort: { field: "createdAt", order: "ascend" } }));
 
+  const [isVisibleDeleteSaleModal, setIsVisibleDeleteSaleModal] =
+    useState<boolean>(false);
+
+  const [isDeletingSale, setIsDeletingSale] = useState<boolean>(false);
+
+  const [saleToDelete, setSaleToDelete] = useState<ISale | null>(null);
+
   const { isLoading, sales, total } =
     useFindSalesByUserTableState(tableStateRequest);
 
-  const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
+  const {
+    stores,
+    isLoading: isLoadingStores,
+    fetchFindStoresByUser,
+  } = useFindStoresByUser();
 
   if (isLoadingStores) {
     return <LoadingFull />;
@@ -49,6 +64,25 @@ export default function SalesPage() {
 
   const handleEditSale = (sale: ISale) => {
     router.push(Urls.SALES_EDIT.replace(":saleId", sale._id));
+  };
+
+  const handleDeleteSale = async (sale: ISale) => {
+    try {
+      setIsDeletingSale(true);
+
+      await serviceMethodsInstance.salesServiceMethods.deleteManual(
+        sale._id,
+        user!._id
+      );
+
+      await fetchFindStoresByUser();
+    } catch (error: any) {
+      handleClientError(error);
+    } finally {
+      setIsDeletingSale(false);
+      setSaleToDelete(null);
+      setIsVisibleDeleteSaleModal(false);
+    }
   };
 
   const handleFilterSaleByCreatedAt = (
@@ -233,13 +267,26 @@ export default function SalesPage() {
               key: "action",
               align: "center",
               render: (_, sale: ISale) => (
-                <Tooltip title="Edit Sale">
-                  <Button
-                    type="success"
-                    onClick={() => handleEditSale(sale)}
-                    icon={<EditOutlined />}
-                  />
-                </Tooltip>
+                <Button.Group>
+                  <Tooltip title="Edit Sale">
+                    <Button
+                      type="success"
+                      onClick={() => handleEditSale(sale)}
+                      icon={<EditOutlined />}
+                    />
+                  </Tooltip>
+                  <Tooltip title="Delete Sale">
+                    <Button
+                      loading={saleToDelete?._id === sale._id && isDeletingSale}
+                      type="danger"
+                      icon={<DeleteOutlined />}
+                      onClick={() => {
+                        setSaleToDelete(sale);
+                        setIsVisibleDeleteSaleModal(true);
+                      }}
+                    />
+                  </Tooltip>
+                </Button.Group>
               ),
             },
           ]}
@@ -253,6 +300,24 @@ export default function SalesPage() {
           }}
         />
       </Card>
+
+      <Modal
+        open={isVisibleDeleteSaleModal}
+        title={`Delete Manual Sale`}
+        destroyOnClose
+        onCancel={() => {
+          setSaleToDelete(null);
+          setIsVisibleDeleteSaleModal(false);
+        }}
+        onOk={async () => {
+          await handleDeleteSale(saleToDelete!);
+        }}
+        okText={"Yes"}
+        cancelText={"No"}
+      >
+        Are you sure delete sale? Sale Number:{" "}
+        <strong>{saleToDelete?.number ?? ""}</strong>
+      </Modal>
     </Layout>
   );
 }

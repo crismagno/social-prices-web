@@ -36,14 +36,6 @@ export default function CustomersPage() {
   const { isLoading, customers, total } =
     useFindCustomersByOwnerOfUserTableState(tableStateRequest);
 
-  const handleNewCustomer = () => {
-    router.push(Urls.NEW_CUSTOMER);
-  };
-
-  const handleEditCustomer = (customer: ICustomer) => {
-    router.push(Urls.EDIT_CUSTOMER.replace(":customerId", customer._id));
-  };
-
   return (
     <Layout subtitle="Manager my Customers" title="Customers" hasBackButton>
       <Card
@@ -52,7 +44,7 @@ export default function CustomersPage() {
         extra={
           <Button
             type="primary"
-            onClick={handleNewCustomer}
+            onClick={() => router.push(Urls.NEW_CUSTOMER)}
             icon={<PlusOutlined />}
           >
             New Customer
@@ -138,7 +130,14 @@ export default function CustomersPage() {
                       <Button
                         className="mr-1"
                         type="success"
-                        onClick={() => handleEditCustomer(customer)}
+                        onClick={() =>
+                          router.push(
+                            Urls.EDIT_CUSTOMER.replace(
+                              ":customerId",
+                              customer._id
+                            )
+                          )
+                        }
                         icon={<EditOutlined />}
                       />
                     </Tooltip>
