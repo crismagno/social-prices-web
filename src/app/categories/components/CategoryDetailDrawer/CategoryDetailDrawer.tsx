@@ -53,7 +53,6 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
   const [isSubmitting, setIsSUbmitting] = useState<boolean>(false);
 
   const {
-    register,
     handleSubmit,
     formState: { errors },
     control,

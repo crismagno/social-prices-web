@@ -52,11 +52,7 @@ export default function SalesPage() {
   const { isLoading, sales, total } =
     useFindSalesByUserTableState(tableStateRequest);
 
-  const {
-    stores,
-    isLoading: isLoadingStores,
-    fetchFindStoresByUser,
-  } = useFindStoresByUser();
+  const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
   if (isLoadingStores) {
     return <LoadingFull />;
@@ -75,7 +71,10 @@ export default function SalesPage() {
         user!._id
       );
 
-      await fetchFindStoresByUser();
+      setTableStateRequest({
+        ...tableStateRequest,
+        pagination: { pageSize: 10, skip: 0, current: undefined, total: 0 },
+      });
     } catch (error: any) {
       handleClientError(error);
     } finally {
