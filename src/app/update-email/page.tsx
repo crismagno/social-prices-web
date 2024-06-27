@@ -167,6 +167,7 @@ export default function UpdateEmailPage() {
           className="text-sm rounded-2xl px-4"
           onClick={() => router.back()}
           disabled={isSubmitting}
+          type="button"
           color="success"
         >
           Go Back

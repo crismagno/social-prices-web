@@ -9,12 +9,12 @@ import Urls from "../../../shared/common/routes-app/routes-app";
 export const ButtonCreateSale: React.FC = () => {
   const router: AppRouterInstance = useRouter();
 
-  const handleCreateSale = () => {
-    router.push(Urls.SALES_CREATE);
-  };
-
   return (
-    <Button type="primary" onClick={handleCreateSale} icon={<PlusOutlined />}>
+    <Button
+      type="primary"
+      onClick={() => router.push(Urls.SALES_CREATE)}
+      icon={<PlusOutlined />}
+    >
       Create Sale
     </Button>
   );

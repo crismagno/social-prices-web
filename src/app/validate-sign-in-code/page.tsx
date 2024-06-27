@@ -102,6 +102,7 @@ export default function ValidateSignInCodePage() {
             setUser(null);
             router.push(Urls.LOGIN);
           }}
+          type="button"
           disabled={isSubmitting}
         >
           Go to login
