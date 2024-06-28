@@ -34,8 +34,6 @@ import {
   states,
 } from "../../../components/common/Addresses/Addresses";
 import Avatar from "../../../components/common/Avatar/Avatar";
-import FormInput from "../../../components/common/FormInput/FormInput";
-import FormTextarea from "../../../components/common/FormTextarea/FormTextarea";
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../../components/common/HrCustom/HrCustom";
 import ImageModal from "../../../components/common/ImageModal/ImageModal";
@@ -45,7 +43,9 @@ import {
   phoneNumberFormSchema,
   PhoneNumbers,
 } from "../../../components/common/PhoneNumbers/PhoneNumbers";
+import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
 import CreateCustomerDto from "../../../services/social-prices-api/customers/dto/createCustomer.dto";
 import UpdateCustomerDto from "../../../services/social-prices-api/customers/dto/updateCustomer.dto";
@@ -326,41 +326,32 @@ export default function CustomerDetailPage() {
 
           <Row className="mt-10">
             <Col xs={24} md={12}>
-              <FormInput
+              <InputCustomAntd
+                controller={{ control, name: "name" }}
                 label="Name"
                 placeholder={"Enter name"}
-                defaultValue={customer?.name}
-                register={register}
-                registerName="name"
-                registerOptions={{ required: true }}
                 errorMessage={errors.name?.message}
                 maxLength={200}
               />
             </Col>
 
             <Col xs={24} md={12}>
-              <FormInput
+              <InputCustomAntd
+                controller={{ control, name: "email" }}
                 label="Email"
                 placeholder={"Enter email"}
-                defaultValue={customer?.email}
-                register={register}
-                registerName="email"
-                registerOptions={{ required: true }}
                 errorMessage={errors.email?.message}
                 maxLength={200}
                 type="email"
-                divClassName="pl-0"
               />
             </Col>
 
             <Col xs={24} md={12}>
-              <FormInput
+              <InputCustomAntd
+                controller={{ control, name: "birthDate" }}
                 label="Birth Date"
                 type="date"
                 placeholder={"Enter birth date"}
-                defaultValue={customer?.birthDate}
-                register={register}
-                registerName="birthDate"
                 errorMessage={errors.birthDate?.message}
               />
             </Col>
@@ -382,12 +373,10 @@ export default function CustomerDetailPage() {
 
           <Row>
             <Col xs={24}>
-              <FormTextarea
+              <TextareaCustomAntd
                 label="About"
+                controller={{ control, name: "about" }}
                 placeholder={"Enter about"}
-                defaultValue={customer?.about}
-                register={register}
-                registerName="about"
                 rows={2}
               />
             </Col>

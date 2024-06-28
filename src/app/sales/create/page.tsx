@@ -11,13 +11,16 @@ import {
   Modal,
   Row,
   Select,
-  Tag,
   Tooltip,
 } from "antd";
-import { filter, find, includes, map, reduce } from "lodash";
+import { filter, find, flatMap, includes, map, reduce } from "lodash";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter } from "next/navigation";
+import {
+  ReadonlyURLSearchParams,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -46,12 +49,18 @@ import CreateSaleDto, {
   SalePaymentDto,
   SaleStoreDto,
 } from "../../../services/social-prices-api/sales/dto/createSale.dto";
+import UpdateSaleDto from "../../../services/social-prices-api/sales/dto/updateSale.dto";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import AddressEnum from "../../../shared/business/enums/address.enum";
 import PhoneNumberEnum from "../../../shared/business/enums/phone-number.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
-import { ISale } from "../../../shared/business/sales/sale.interface";
+import { IProduct } from "../../../shared/business/products/products.interface";
+import {
+  ISale,
+  ISaleStore,
+  ISaleStoreProduct,
+} from "../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../shared/business/sales/sales.enum";
 import { CreateAddressDto } from "../../../shared/business/shared/dtos/CreateAddress.dto";
 import { IStore } from "../../../shared/business/stores/stores.interface";
@@ -65,6 +74,7 @@ import {
 } from "../../../shared/utils/mock-data/interfaces";
 import { createAddressName } from "../../../shared/utils/string-extensions/string-extensions";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
+import { useFindSaleById } from "../useFindSaleById";
 import {
   AddProductsTable,
   IStoreProductToAddOnSale,
@@ -127,7 +137,7 @@ export type TShowValueNoteFormSchema = z.infer<typeof showValueNoteFormSchema>;
 
 const formSchema = z.object({
   customer: customerFormSchema,
-  deliveryType: z.string(),
+  deliveryType: z.string().nonempty("Delivery type is required"),
   selectedStoreIds: z.array(z.string()),
   saleStores: z.array(saleStoreFormSchema),
   discount: showValueNoteFormSchema,
@@ -135,9 +145,9 @@ const formSchema = z.object({
   shipping: showValueNoteFormSchema,
   payments: z.array(salePaymentFormSchema),
   note: z.string().nullable(),
-  status: z.string(),
+  status: z.string().nonempty("Status is required"),
   isCreateQuote: z.boolean(),
-  paymentStatus: z.string(),
+  paymentStatus: z.string().nonempty("Payment status is required"),
 });
 
 export type TFormSchema = z.infer<typeof formSchema>;
@@ -148,14 +158,57 @@ const generateShowAmountNote = (): TShowValueNoteFormSchema => ({
   amount: 0,
 });
 
-export default function CreateSalePage() {
-  const router: AppRouterInstance = useRouter();
+const generateFormSchemaDefault = (): TFormSchema => {
+  const showValueNote: TShowValueNoteFormSchema = generateShowAmountNote();
 
+  return {
+    customer: {
+      about: null,
+      address: generateNewAddress(),
+      birthDate: null,
+      customerId: null,
+      email: "",
+      gender: UsersEnum.Gender.MALE,
+      name: "",
+      phoneNumber: null,
+    },
+    deliveryType: SalesEnum.DeliveryType.DELIVERY,
+    selectedStoreIds: [],
+    saleStores: [],
+    discount: showValueNote,
+    shipping: showValueNote,
+    tax: showValueNote,
+    payments: [generateNewSalePayment()],
+    note: null,
+    status: SalesEnum.Status.STARTED,
+    isCreateQuote: false,
+    paymentStatus: SalesEnum.PaymentStatus.PENDING,
+  };
+};
+
+export default function CreateSalePage() {
   const { user } = useAuthData();
 
-  const [formValues, setFormValues] = useState<TFormSchema>();
+  const router: AppRouterInstance = useRouter();
+
+  const searchParams: ReadonlyURLSearchParams = useSearchParams();
+
+  const saleIdByParam: string | null = searchParams.get("said");
+
+  const customerIdByParam: string | null = searchParams.get("cid");
+
+  const storeIdByParam: string | null = searchParams.get("sid");
+
+  const { sale: saleById, isLoading: isLoadingSaleById } =
+    useFindSaleById(saleIdByParam);
 
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
+
+  const isEditMode: boolean = !!saleIdByParam && !!saleById;
+
+  const [formValues, setFormValues] = useState<TFormSchema>(
+    generateFormSchemaDefault()
+  );
 
   const [selectedCustomer, setSelectedCustomer] = useState<ICustomer | null>(
     null
@@ -186,33 +239,150 @@ export default function CreateSalePage() {
   useEffect(() => {
     const showValueNote: TShowValueNoteFormSchema = generateShowAmountNote();
 
-    setFormValues({
-      ...formValues,
-      customer: {
-        about: null,
-        address: generateNewAddress(),
-        birthDate: null,
-        customerId: null,
-        email: "",
-        gender: UsersEnum.Gender.MALE,
-        name: "",
-        phoneNumber: null,
-      },
-      deliveryType: SalesEnum.DeliveryType.DELIVERY,
-      selectedStoreIds: stores.length > 1 ? [stores[0]._id] : [],
-      saleStores: [],
-      discount: showValueNote,
-      shipping: showValueNote,
-      tax: showValueNote,
-      payments: [generateNewSalePayment()],
-      note: null,
-      status: SalesEnum.Status.STARTED,
-      isCreateQuote: false,
-      paymentStatus: SalesEnum.PaymentStatus.PENDING,
-    });
-  }, []);
+    if (saleById) {
+      const componentWillMountBySaleId = async () => {
+        const saleByIdStoreIds: string[] = map(saleById?.stores, "storeId");
 
-  if (isLoadingStores) {
+        const saleByIdProductIds: string[] = flatMap(
+          saleById?.stores,
+          (saleByIdStore: ISaleStore) =>
+            map(saleByIdStore.products, "productId")
+        );
+
+        const customerId: string | null =
+          saleById?.stores?.[0].customerId ?? null;
+
+        const customerBySale: ICustomer | null = customerId
+          ? await serviceMethodsInstance.customersServiceMethods.findById(
+              customerId
+            )
+          : null;
+
+        setSelectedCustomer(customerBySale);
+
+        const products: IProduct[] =
+          await serviceMethodsInstance.productsServiceMethods.findByIds(
+            saleByIdProductIds
+          );
+
+        const saleByIdSaleStores = map(
+          saleById?.stores,
+          (store: ISaleStore): TSaleStoreFormSchema => ({
+            storeId: store.storeId,
+            products: map(
+              store.products,
+              (
+                storeProduct: ISaleStoreProduct
+              ): TSaleStoreProductFormSchema => {
+                const product: IProduct | undefined = find(products, {
+                  _id: storeProduct.productId,
+                });
+
+                return {
+                  barCode: storeProduct.barCode,
+                  fileUrl: product?.mainUrl ?? null,
+                  name: product?.name ?? "",
+                  note: storeProduct.note,
+                  price: storeProduct.price,
+                  productId: storeProduct.productId,
+                  quantity: storeProduct.quantity,
+                };
+              }
+            ),
+          })
+        );
+
+        setFormValues({
+          customer: {
+            about: null,
+            address: saleById?.buyer?.address
+              ? {
+                  address1: saleById.buyer.address.address1,
+                  address2: saleById.buyer.address.address2,
+                  city: saleById.buyer.address.city,
+                  countryCode: saleById.buyer.address.country.code,
+                  description: saleById.buyer.address.description,
+                  district: saleById.buyer.address.district,
+                  isCollapsed: false,
+                  isValid: saleById.buyer.address.isValid,
+                  stateCode: saleById.buyer.address.state!.code,
+                  types: saleById.buyer.address.types,
+                  uid: saleById.buyer.address.uid,
+                  zip: saleById.buyer.address.zip,
+                }
+              : generateNewAddress(),
+            birthDate: saleById?.buyer?.birthDate
+              ? moment(saleById.buyer.birthDate)
+                  .utc()
+                  .format(DatesEnum.Format.YYYYMMDD_DASHED)
+              : null,
+            customerId,
+            email: saleById?.buyer?.email ?? "",
+            gender: saleById?.buyer?.gender ?? UsersEnum.Gender.MALE,
+            name: saleById?.buyer?.name ?? "",
+            phoneNumber: saleById?.buyer?.phoneNumber?.number ?? null,
+          },
+          deliveryType:
+            saleById?.header?.deliveryType ?? SalesEnum.DeliveryType.DELIVERY,
+          selectedStoreIds: saleById
+            ? saleByIdStoreIds
+            : stores.length > 1
+            ? [stores[0]._id]
+            : [],
+          saleStores: saleByIdSaleStores,
+          discount: saleById?.totals.discount
+            ? {
+                amount: saleById.totals.discount.normal.amount,
+                note: saleById.totals.discount.normal.note,
+                show: false,
+              }
+            : showValueNote,
+          shipping: saleById?.totals.shipping
+            ? {
+                amount: saleById.totals.shipping.amount,
+                note: saleById.totals.shipping.note,
+                show: false,
+              }
+            : showValueNote,
+          tax: saleById?.totals.tax
+            ? {
+                amount: saleById.totals.tax.amount,
+                note: saleById.totals.tax.note,
+                show: false,
+              }
+            : showValueNote,
+          payments: saleById ? saleById.payments : [generateNewSalePayment()],
+          note: saleById?.note ?? null,
+          status: saleById?.status ?? SalesEnum.Status.STARTED,
+          isCreateQuote: false,
+          paymentStatus:
+            saleById?.paymentStatus ?? SalesEnum.PaymentStatus.PENDING,
+        });
+      };
+
+      componentWillMountBySaleId();
+      return;
+    }
+
+    if (customerIdByParam) {
+      const componentWillMountByCustomerIdParam = async () => {
+        const customer: ICustomer | null =
+          await serviceMethodsInstance.customersServiceMethods.findById(
+            customerIdByParam
+          );
+
+        handleSelectCustomer(customer);
+      };
+
+      componentWillMountByCustomerIdParam();
+    }
+
+    if (storeIdByParam) {
+      setValue("selectedStoreIds", [storeIdByParam]);
+    }
+  }, [saleById, customerIdByParam]);
+
+  if (isLoadingStores || isLoadingSaleById) {
     return <LoadingFull />;
   }
 
@@ -507,10 +677,13 @@ export default function CreateSalePage() {
       const dataSaleStoresLength: number = data.saleStores?.length ?? 0;
 
       const dataDiscountAmount: number = data.discount.amount ?? 0;
+      const dataDiscountNote: string | null = data.discount.note;
 
       const dataShippingAmount: number = data.shipping.amount ?? 0;
+      const dataShippingNote: string | null = data.shipping.note;
 
       const dataTaxAmount: number = data.tax.amount ?? 0;
+      const dataTaxNote: string | null = data.tax.note;
 
       const dataDiscountAmountByStore: number =
         dataDiscountAmount / dataSaleStoresLength;
@@ -564,11 +737,11 @@ export default function CreateSalePage() {
         totals: {
           discount: dataDiscountAmount
             ? {
-                normal: dataDiscountAmount,
+                normal: { amount: dataDiscountAmount, note: dataDiscountNote },
               }
             : null,
-          shippingAmount: dataShippingAmount,
-          taxAmount: dataTaxAmount,
+          shipping: { amount: dataShippingAmount, note: dataShippingNote },
+          tax: { amount: dataTaxAmount, note: dataTaxNote },
           subtotalAmount: saleStoresProductsTotals.subtotal,
           totalFinalAmount: totalFinal,
         },
@@ -624,12 +797,18 @@ export default function CreateSalePage() {
               totals: {
                 discount: dataDiscountAmountByStore
                   ? {
-                      normal: dataDiscountAmountByStore,
+                      normal: {
+                        amount: dataDiscountAmountByStore,
+                        note: dataDiscountNote,
+                      },
                     }
                   : null,
-                shippingAmount: dataShippingAmountByStore,
+                shipping: {
+                  amount: dataShippingAmountByStore,
+                  note: dataShippingNote,
+                },
                 subtotalAmount: productsQuantityPrice.subtotal,
-                taxAmount: dataTaxAmountByStore,
+                tax: { amount: dataTaxAmountByStore, note: dataTaxNote },
                 totalFinalAmount: totalFinalAmountByStore,
               },
             };
@@ -637,10 +816,25 @@ export default function CreateSalePage() {
         ),
       };
 
-      const response: ISale =
-        await serviceMethodsInstance.salesServiceMethods.createManual(
-          createSaleDto
-        );
+      let response: ISale | null = null;
+
+      if (isEditMode) {
+        const updateSaleDto: UpdateSaleDto = {
+          ...createSaleDto,
+          updatedByUserId: user!._id,
+          saleId: saleById!._id,
+        };
+
+        response =
+          await serviceMethodsInstance.salesServiceMethods.updateManual(
+            updateSaleDto
+          );
+      } else {
+        response =
+          await serviceMethodsInstance.salesServiceMethods.createManual(
+            createSaleDto
+          );
+      }
 
       setSale(response);
 
@@ -653,9 +847,15 @@ export default function CreateSalePage() {
   };
 
   return (
-    <Layout subtitle="Create manual sale" title="Create Sale" hasBackButton>
+    <Layout
+      subtitle={
+        isEditMode ? "Update information for manual sale" : "Create manual sale"
+      }
+      title={isEditMode ? "Update Sale" : "Create Sale"}
+      hasBackButton
+    >
       {isSubmitting && (
-        <div className="h-full w-full absolute flex justify-center items-center bg-gray-500/30 top-0 left-0 z-50">
+        <div className="h-full w-full fixed flex justify-center items-center bg-gray-500/30 top-0 left-0 z-50">
           <Loading />
         </div>
       )}
@@ -664,7 +864,9 @@ export default function CreateSalePage() {
         <Col xs={24}>
           <div className="bg-white w-full py-3 px-5 rounded-md">
             <span className="text-lg mr-2">Sale Number: </span>
-            {sale?.number ? <Tag>{sale?.number}</Tag> : null}
+            {saleById?.number ? (
+              <label className="font-bold text-lg">{saleById?.number}</label>
+            ) : null}
           </div>
         </Col>
       </Row>
@@ -675,8 +877,10 @@ export default function CreateSalePage() {
           <Card
             title={
               <div className="flex">
-                <label className="mr-2">Customer: </label>
-                <SelectCustomer onSelectCustomer={handleSelectCustomer} />
+                <label className="mr-2">Customer </label>
+                {!isEditMode && (
+                  <SelectCustomer onSelectCustomer={handleSelectCustomer} />
+                )}
               </div>
             }
             className="h-min-80"
@@ -752,13 +956,9 @@ export default function CreateSalePage() {
             title={
               <div className="flex justify-between">
                 <div className="flex">
-                  <label className="mr-2">
-                    {selectedCustomer
-                      ? "Shipping Address: "
-                      : "Shipping Address"}{" "}
-                  </label>
+                  <label className="mr-2">Shipping Address</label>
 
-                  {selectedCustomer && (
+                  {selectedCustomer && !isEditMode && (
                     <Select
                       style={{ width: 250 }}
                       onChange={handleSelectAddress}
@@ -781,7 +981,7 @@ export default function CreateSalePage() {
                 </div>
 
                 <div className="flex">
-                  <label className="mr-2">Delivery Type:</label>
+                  <label className="mr-2">Delivery Type</label>
 
                   <SelectCustomAntd
                     controller={{
@@ -950,7 +1150,7 @@ export default function CreateSalePage() {
                 </div>
 
                 <span className="flex">
-                  <label className="mr-2">Select Stores: </label>
+                  <label className="mr-2">Select Stores</label>
                   <SelectCustomAntd
                     allowClear
                     controller={{ control, name: "selectedStoreIds" }}
@@ -1095,12 +1295,14 @@ export default function CreateSalePage() {
                 </SelectCustomAntd>
               </Col>
 
-              <Col xs={24} md={8}>
-                <CheckboxCustomAntd
-                  controller={{ control, name: "isCreateQuote" }}
-                  label="Create Quote"
-                />
-              </Col>
+              {!isEditMode && (
+                <Col xs={24} md={8}>
+                  <CheckboxCustomAntd
+                    controller={{ control, name: "isCreateQuote" }}
+                    label="Create Quote"
+                  />
+                </Col>
+              )}
             </Row>
             <Row>
               <Col xs={24} md={8}>
@@ -1126,7 +1328,7 @@ export default function CreateSalePage() {
                   onClick={handleSubmit(onSubmit)}
                   loading={isSubmitting}
                 >
-                  CREATE SALE
+                  {isEditMode ? "SAVE" : "CREATE"} SALE
                 </Button>
               </Col>
             </Row>
@@ -1146,7 +1348,9 @@ export default function CreateSalePage() {
           icon={<CheckCircleOutlined />}
           message={
             <div>
-              <div>Sale has been created successfully!</div>
+              <div>
+                Sale has been {isEditMode ? "updated" : "created"} successfully!
+              </div>
               <div>
                 Sale Number: <b>{sale?.number}</b>
               </div>

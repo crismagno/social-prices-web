@@ -39,8 +39,8 @@ export default class CustomersServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
-  public async findById(customerId: string): Promise<ICustomer> {
-    const response = await this._fetchAxios.get<ICustomer>(
+  public async findById(customerId: string): Promise<ICustomer | null> {
+    const response = await this._fetchAxios.get<ICustomer | null>(
       `${
         this._socialPricesApiV1
       }${CustomersServiceEnum.Methods.FIND_BY_ID.replace(

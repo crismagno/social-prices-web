@@ -27,6 +27,7 @@ export default function CategoriesPage() {
 
   const [isCategoryDetailDrawerOpen, setIsCategoryDetailDrawerOpen] =
     useState<boolean>(false);
+
   const [categoryId, setCategoryId] = useState<string | undefined>();
 
   const handleNewCategory = () => {
@@ -124,7 +125,7 @@ export default function CategoriesPage() {
               },
             },
           ]}
-          search={{ placeholder: "Search categories.." }}
+          search={{ placeholder: "Search categories..." }}
           loading={isLoading}
           tableStateRequest={tableStateRequest}
           setTableStateRequest={setTableStateRequest}

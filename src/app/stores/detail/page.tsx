@@ -35,8 +35,6 @@ import {
   states,
 } from "../../../components/common/Addresses/Addresses";
 import Avatar from "../../../components/common/Avatar/Avatar";
-import FormInput from "../../../components/common/FormInput/FormInput";
-import FormTextarea from "../../../components/common/FormTextarea/FormTextarea";
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../../components/common/HrCustom/HrCustom";
 import ImageModal from "../../../components/common/ImageModal/ImageModal";
@@ -47,7 +45,9 @@ import {
   PhoneNumbers,
 } from "../../../components/common/PhoneNumbers/PhoneNumbers";
 import { TagCategoryCustomAntd } from "../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
+import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import CreateStoreDto from "../../../services/social-prices-api/stores/dto/createStore.dto";
@@ -340,41 +340,31 @@ export default function StoreDetailPage() {
 
           <Row gutter={[16, 16]} className="mt-10">
             <Col xs={24} md={8}>
-              <FormInput
+              <InputCustomAntd
+                controller={{ control, name: `name` }}
                 label="Name"
                 placeholder={"Enter name"}
-                defaultValue={store?.name}
-                register={register}
-                registerName="name"
-                registerOptions={{ required: true }}
                 errorMessage={errors.name?.message}
                 maxLength={200}
               />
             </Col>
 
             <Col xs={24} md={8}>
-              <FormInput
+              <InputCustomAntd
+                controller={{ control, name: `email` }}
                 label="Email"
                 placeholder={"Enter email"}
-                defaultValue={store?.email}
-                register={register}
-                registerName="email"
-                registerOptions={{ required: true }}
                 errorMessage={errors.email?.message}
                 maxLength={200}
                 type="email"
-                divClassName="pl-0"
               />
             </Col>
             <Col xs={24} md={8}>
-              <FormInput
+              <InputCustomAntd
+                controller={{ control, name: `startedAt` }}
                 label="Started At"
                 type="date"
                 placeholder={"Enter started at"}
-                defaultValue={store?.startedAt}
-                register={register}
-                registerName="startedAt"
-                registerOptions={{ required: true }}
                 errorMessage={errors.startedAt?.message}
               />
             </Col>
@@ -382,12 +372,10 @@ export default function StoreDetailPage() {
 
           <Row>
             <Col xs={24} md={8}>
-              <FormInput
+              <InputCustomAntd
+                controller={{ control, name: `description` }}
                 label="Description"
                 placeholder={"Enter description"}
-                defaultValue={store?.description}
-                register={register}
-                registerName="description"
                 errorMessage={errors.description?.message}
                 maxLength={200}
               />
@@ -433,12 +421,10 @@ export default function StoreDetailPage() {
 
           <Row>
             <Col xs={24}>
-              <FormTextarea
+              <TextareaCustomAntd
                 label="About"
+                controller={{ control, name: "about" }}
                 placeholder={"Enter about"}
-                defaultValue={store?.about}
-                register={register}
-                registerName="about"
                 rows={2}
               />
             </Col>

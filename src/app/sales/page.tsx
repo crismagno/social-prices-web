@@ -2,20 +2,23 @@
 
 import { useState } from "react";
 
-import { Button, Card, Tag, Tooltip } from "antd";
+import { Button, Card, Modal, Tag, Tooltip } from "antd";
 import { find, first, map } from "lodash";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
-import { EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 import { ButtonCreateSale } from "../../components/common/ButtonCreateSale/ButtonCreateSale";
 import { CustomRangeDatePicker } from "../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
+import handleClientError from "../../components/common/handleClientError/handleClientError";
 import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
+import useAuthData from "../../data/context/auth/useAuthData";
+import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
 import { ICustomer } from "../../shared/business/customers/customer.interface";
 import {
   ISale,
@@ -32,11 +35,19 @@ import { useFindStoresByUser } from "../stores/useFindStoresByUser";
 import { useFindSalesByUserTableState } from "./useFindSalesByUserTableState";
 
 export default function SalesPage() {
+  const { user } = useAuthData();
   const router: AppRouterInstance = useRouter();
 
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<ISale> | undefined
   >(createTableState({ sort: { field: "createdAt", order: "ascend" } }));
+
+  const [isVisibleDeleteSaleModal, setIsVisibleDeleteSaleModal] =
+    useState<boolean>(false);
+
+  const [isDeletingSale, setIsDeletingSale] = useState<boolean>(false);
+
+  const [saleToDelete, setSaleToDelete] = useState<ISale | null>(null);
 
   const { isLoading, sales, total } =
     useFindSalesByUserTableState(tableStateRequest);
@@ -49,6 +60,28 @@ export default function SalesPage() {
 
   const handleEditSale = (sale: ISale) => {
     router.push(Urls.SALES_EDIT.replace(":saleId", sale._id));
+  };
+
+  const handleDeleteSale = async (sale: ISale) => {
+    try {
+      setIsDeletingSale(true);
+
+      await serviceMethodsInstance.salesServiceMethods.deleteManual(
+        sale._id,
+        user!._id
+      );
+
+      setTableStateRequest({
+        ...tableStateRequest,
+        pagination: { pageSize: 10, skip: 0, current: undefined, total: 0 },
+      });
+    } catch (error: any) {
+      handleClientError(error);
+    } finally {
+      setIsDeletingSale(false);
+      setSaleToDelete(null);
+      setIsVisibleDeleteSaleModal(false);
+    }
   };
 
   const handleFilterSaleByCreatedAt = (
@@ -74,6 +107,7 @@ export default function SalesPage() {
       >
         <CustomRangeDatePicker
           label="Created At:"
+          showTime
           onChange={handleFilterSaleByCreatedAt}
         />
 
@@ -89,9 +123,9 @@ export default function SalesPage() {
               dataIndex: "number",
               key: "number",
               align: "center",
-              render: (_, sale: ISale) => {
-                return <strong className="mr-2">{sale.number}</strong>;
-              },
+              render: (number: string) => (
+                <strong className="mr-2">{number}</strong>
+              ),
             },
             {
               title: "Buyer",
@@ -99,8 +133,9 @@ export default function SalesPage() {
               key: "buyer",
               align: "center",
               render: (buyer: ISaleBuyer, sale: ISale) => {
-                const customer: ICustomer | undefined = first(sale.stores)
-                  ?.customer as ICustomer;
+                const customer: ICustomer | undefined = first(
+                  sale.stores
+                )?.customer;
 
                 return (
                   <div className="flex flex-row">
@@ -108,7 +143,13 @@ export default function SalesPage() {
                       <ImageOrDefault src={customer?.avatar} width={45} />
                     </div>
                     <div className="flex flex-col justify-start items-start">
-                      <div>{buyer.name}</div>
+                      <Button
+                        type="link"
+                        className="p-0"
+                        onClick={() => router.push(Urls.CUSTOMERS)}
+                      >
+                        {buyer.name}
+                      </Button>
                       <div className="text-xs">{buyer.email}</div>
                     </div>
                   </div>
@@ -213,7 +254,7 @@ export default function SalesPage() {
 
                   return (
                     <Tag key={saleStore.storeId}>
-                      <span className="mr-1">{store.name ?? "No name"}</span>
+                      <span className="mr-1">{store.name}</span>
                     </Tag>
                   );
                 });
@@ -225,17 +266,30 @@ export default function SalesPage() {
               key: "action",
               align: "center",
               render: (_, sale: ISale) => (
-                <Tooltip title="Edit Sale">
-                  <Button
-                    type="success"
-                    onClick={() => handleEditSale(sale)}
-                    icon={<EditOutlined />}
-                  />
-                </Tooltip>
+                <Button.Group>
+                  <Tooltip title="Edit Sale">
+                    <Button
+                      type="success"
+                      onClick={() => handleEditSale(sale)}
+                      icon={<EditOutlined />}
+                    />
+                  </Tooltip>
+                  <Tooltip title="Delete Sale">
+                    <Button
+                      loading={saleToDelete?._id === sale._id && isDeletingSale}
+                      type="danger"
+                      icon={<DeleteOutlined />}
+                      onClick={() => {
+                        setSaleToDelete(sale);
+                        setIsVisibleDeleteSaleModal(true);
+                      }}
+                    />
+                  </Tooltip>
+                </Button.Group>
               ),
             },
           ]}
-          search={{ placeholder: "Search sales.." }}
+          search={{ placeholder: "Search sales..." }}
           loading={isLoading}
           pagination={{
             total,
@@ -245,6 +299,24 @@ export default function SalesPage() {
           }}
         />
       </Card>
+
+      <Modal
+        open={isVisibleDeleteSaleModal}
+        title={`Delete Manual Sale`}
+        destroyOnClose
+        onCancel={() => {
+          setSaleToDelete(null);
+          setIsVisibleDeleteSaleModal(false);
+        }}
+        onOk={async () => {
+          await handleDeleteSale(saleToDelete!);
+        }}
+        okText={"Yes"}
+        cancelText={"No"}
+      >
+        Are you sure delete sale? Sale Number:{" "}
+        <strong>{saleToDelete?.number ?? ""}</strong>
+      </Modal>
     </Layout>
   );
 }

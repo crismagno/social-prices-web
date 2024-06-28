@@ -20,7 +20,7 @@ export const useFindCustomerById = (
       setIsLoading(true);
 
       if (customerId) {
-        const response: ICustomer =
+        const response: ICustomer | null =
           await serviceMethodsInstance.customersServiceMethods.findById(
             customerId
           );

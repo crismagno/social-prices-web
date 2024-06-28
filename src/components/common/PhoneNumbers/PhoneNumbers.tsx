@@ -5,11 +5,11 @@ import { z } from "zod";
 import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number";
 import StoresEnum from "../../../shared/business/stores/stores.enum";
 import { createPhoneNumberName } from "../../../shared/utils/string-extensions/string-extensions";
+import { InputCustomAntd } from "../../custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../custom/antd/SelectCustomAntd/SelectCustomAntd";
 import ButtonCommon from "../ButtonCommon/ButtonCommon";
 import Collapse from "../Collapse/Collapse";
 import ContainerTitle from "../ContainerTitle/ContainerTitle";
-import FormInput from "../FormInput/FormInput";
 import { IconPlus, IconTrash } from "../icons/icons";
 
 export const phoneNumberFormSchema = z.object({
@@ -136,13 +136,10 @@ export const PhoneNumbers: React.FC<Props> = ({
                 </div>
 
                 <div className="flex flex-col justify-start w-1/2">
-                  <FormInput
+                  <InputCustomAntd
+                    controller={{ control, name: `addresses.${index}.number` }}
                     label="Phone Number"
                     placeholder={"Enter phone number"}
-                    defaultValue={formPhoneNumber.number}
-                    register={register}
-                    registerName={`phoneNumbers.${index}.number`}
-                    registerOptions={{ required: true }}
                     errorMessage={
                       errors?.phoneNumbers?.[index]?.number?.message
                     }

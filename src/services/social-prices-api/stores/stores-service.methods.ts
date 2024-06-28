@@ -39,8 +39,8 @@ export default class StoresServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
-  public async findById(storeId: string): Promise<IStore> {
-    const response = await this._fetchAxios.get<IStore>(
+  public async findById(storeId: string): Promise<IStore | null> {
+    const response = await this._fetchAxios.get<IStore | null>(
       `${this._socialPricesApiV1}${StoresServiceEnum.Methods.FIND_BY_ID.replace(
         ":storeId",
         storeId

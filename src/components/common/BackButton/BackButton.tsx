@@ -1,8 +1,9 @@
 import { Button } from "antd";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
-const BackButton: React.FC = () => {
-  const router = useRouter();
+export const BackButton: React.FC = () => {
+  const router: AppRouterInstance = useRouter();
 
   return (
     <Button className="z-50" onClick={() => router.back()}>
@@ -10,5 +11,3 @@ const BackButton: React.FC = () => {
     </Button>
   );
 };
-
-export default BackButton;

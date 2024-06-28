@@ -15,12 +15,17 @@ export const CategoriesCard: React.FC = () => {
 
   const { isLoading, count } = useCountCategoriesByUser();
 
+  const handleGoToCategories = () => {
+    router.push(Urls.CATEGORIES);
+  };
+
   return (
     <Card
       loading={isLoading}
       cover={
         <div
-          className="flex flex-col justify-center items-center w-full h-60 
+          onClick={handleGoToCategories}
+          className="flex flex-col justify-center items-center w-full h-60 cursor-pointer
         bg-gradient-to-tr from-slate-600 to-pink-600 hover:from-slate-700 hover:to-pink-700 text-white"
         >
           <div className="flex flex-col justify-center items-center w-full h-full">
@@ -30,7 +35,7 @@ export const CategoriesCard: React.FC = () => {
       }
       actions={[
         <Tooltip key="table" title="See Categories">
-          <TabletOutlined onClick={() => router.push(Urls.CATEGORIES)} />
+          <TabletOutlined onClick={handleGoToCategories} />
         </Tooltip>,
       ]}
     >

@@ -15,12 +15,18 @@ export const StoresCard: React.FC = () => {
 
   const { isLoading, stores } = useFindStoresByUser();
 
+  const handleGoToStores = () => {
+    router.push(Urls.STORES);
+  };
+
   return (
     <Card
       loading={isLoading}
       cover={
         <div
+          onClick={handleGoToStores}
           className="flex flex-col justify-center items-center w-full h-60 
+          cursor-pointer
         bg-gradient-to-tr from-gray-700 to-yellow-600 hover:to-gray-800 hover:to-yellow-700 text-white"
         >
           <div className="flex flex-col justify-center items-center w-full h-full">
@@ -30,7 +36,7 @@ export const StoresCard: React.FC = () => {
       }
       actions={[
         <Tooltip key="table" title="See Stores">
-          <TabletOutlined onClick={() => router.push(Urls.STORES)} />
+          <TabletOutlined onClick={handleGoToStores} />
         </Tooltip>,
         <Tooltip key="plus" title="Create a new Store">
           <PlusOutlined onClick={() => router.push(Urls.NEW_STORE)} />

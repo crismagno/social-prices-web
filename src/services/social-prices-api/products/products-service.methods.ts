@@ -39,14 +39,29 @@ export default class ProductsServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
-  public async findById(productId: string): Promise<IProduct> {
-    const response = await this._fetchAxios.get<IProduct>(
+  public async findById(productId: string): Promise<IProduct | null> {
+    const response = await this._fetchAxios.get<IProduct | null>(
       `${
         this._socialPricesApiV1
       }${ProductsServiceEnum.Methods.FIND_BY_ID.replace(
         ":productId",
         productId
       )}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async findByIds(productIds: string[]): Promise<IProduct[]> {
+    const response = await this._fetchAxios.post<IProduct[]>(
+      `${this._socialPricesApiV1}${ProductsServiceEnum.Methods.FIND_BY_IDS}`,
+      productIds,
       {
         headers: {
           "Content-Type": "application/json",

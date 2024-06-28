@@ -8,7 +8,11 @@ import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
-import { EditOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  PlusOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
@@ -143,6 +147,23 @@ export default function ProductsPage() {
               dataIndex: "quantity",
               key: "quantity",
               align: "center",
+              render: (quantity: number) => {
+                return (
+                  <div className="flex">
+                    <div
+                      className={quantity <= 0 ? "text-red-600 mr-1" : "mr-1"}
+                    >
+                      {quantity}
+                    </div>
+
+                    {quantity <= 0 ? (
+                      <Tooltip title="Needs to be filled stock">
+                        <QuestionCircleOutlined style={{ color: "orange" }} />
+                      </Tooltip>
+                    ) : null}
+                  </div>
+                );
+              },
             },
             {
               title: "Price",
@@ -253,7 +274,7 @@ export default function ProductsPage() {
               },
             },
           ]}
-          search={{ placeholder: "Search products.." }}
+          search={{ placeholder: "Search products..." }}
           loading={isLoading}
           pagination={{
             total,

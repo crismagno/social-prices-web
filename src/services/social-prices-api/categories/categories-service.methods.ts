@@ -29,8 +29,8 @@ export default class CategoriesServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
-  public async findById(categoryId: string): Promise<ICategory> {
-    const response = await this._fetchAxios.get<ICategory>(
+  public async findById(categoryId: string): Promise<ICategory | null> {
+    const response = await this._fetchAxios.get<ICategory | null>(
       `${
         this._socialPricesApiV1
       }${CategoriesServiceEnum.Methods.FIND_BY_ID.replace(

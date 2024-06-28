@@ -7,7 +7,11 @@ import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
-import { EditOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  PlusOutlined,
+  ShoppingCartOutlined,
+} from "@ant-design/icons";
 
 import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
 import { PhoneNumbersTag } from "../../components/common/PhoneNumbersTag/PhoneNumbersTag";
@@ -32,14 +36,6 @@ export default function CustomersPage() {
   const { isLoading, customers, total } =
     useFindCustomersByOwnerOfUserTableState(tableStateRequest);
 
-  const handleNewCustomer = () => {
-    router.push(Urls.NEW_CUSTOMER);
-  };
-
-  const handleEditCustomer = (customer: ICustomer) => {
-    router.push(Urls.EDIT_CUSTOMER.replace(":customerId", customer._id));
-  };
-
   return (
     <Layout subtitle="Manager my Customers" title="Customers" hasBackButton>
       <Card
@@ -48,7 +44,7 @@ export default function CustomersPage() {
         extra={
           <Button
             type="primary"
-            onClick={handleNewCustomer}
+            onClick={() => router.push(Urls.NEW_CUSTOMER)}
             icon={<PlusOutlined />}
           >
             New Customer
@@ -127,15 +123,37 @@ export default function CustomersPage() {
               dataIndex: "action",
               key: "action",
               align: "center",
-              render: (_: any, product: ICustomer) => {
+              render: (_: any, customer: ICustomer) => {
                 return (
                   <>
-                    <Tooltip title="Edit product">
+                    <Tooltip title="Edit Customer">
                       <Button
                         className="mr-1"
                         type="success"
-                        onClick={() => handleEditCustomer(product)}
+                        onClick={() =>
+                          router.push(
+                            Urls.EDIT_CUSTOMER.replace(
+                              ":customerId",
+                              customer._id
+                            )
+                          )
+                        }
                         icon={<EditOutlined />}
+                      />
+                    </Tooltip>
+                    <Tooltip title="Create Sale">
+                      <Button
+                        className="mr-1"
+                        type="primary"
+                        onClick={() =>
+                          router.push(
+                            Urls.SALES_CREATE_BY_CUSTOMER.replace(
+                              ":customerId",
+                              customer._id
+                            )
+                          )
+                        }
+                        icon={<ShoppingCartOutlined />}
                       />
                     </Tooltip>
                   </>
@@ -143,7 +161,7 @@ export default function CustomersPage() {
               },
             },
           ]}
-          search={{ placeholder: "Search customers.." }}
+          search={{ placeholder: "Search customers..." }}
           loading={isLoading}
           tableStateRequest={tableStateRequest}
           setTableStateRequest={setTableStateRequest}

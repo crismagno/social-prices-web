@@ -3,6 +3,11 @@ import { CreateAddressDto } from "../../../../shared/business/shared/dtos/Create
 import { CreatePhoneNumberDto } from "../../../../shared/business/shared/dtos/CreatePhoneNumber.dto";
 import UsersEnum from "../../../../shared/business/users/users.enum";
 
+export class SaleAmountNoteDto {
+  amount: number = 0;
+  note: string | null = null;
+}
+
 export class SaleStoreProductDto {
   productId: string = "";
   price: number = 0;
@@ -12,7 +17,7 @@ export class SaleStoreProductDto {
 }
 
 export class SaleTotalsDiscountDto {
-  normal: number = 0;
+  normal: SaleAmountNoteDto = { amount: 0, note: null };
 }
 
 export class SalePaymentDto {
@@ -25,8 +30,8 @@ export class SalePaymentDto {
 export class SaleTotalsDto {
   subtotalAmount: number = 0;
   discount: SaleTotalsDiscountDto | null = null;
-  taxAmount: number | null = null;
-  shippingAmount: number | null = null;
+  tax: SaleAmountNoteDto | null = null;
+  shipping: SaleAmountNoteDto | null = null;
   totalFinalAmount: number = 0;
 }
 

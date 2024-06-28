@@ -15,12 +15,18 @@ export const CustomersCard: React.FC = () => {
 
   const { isLoading, count } = useCountCustomersByUser();
 
+  const handleGoToCustomers = () => {
+    router.push(Urls.CUSTOMERS);
+  };
+
   return (
     <Card
       loading={isLoading}
       cover={
         <div
+          onClick={handleGoToCustomers}
           className="flex flex-col justify-center items-center w-full h-60 
+          cursor-pointer
             bg-gradient-to-tr from-pink-700 to-blue-500 
             hover:from-pink-800 hover:to-blue-600 text-white"
         >
@@ -31,7 +37,7 @@ export const CustomersCard: React.FC = () => {
       }
       actions={[
         <Tooltip key="table" title="See Customers">
-          <TabletOutlined onClick={() => router.push(Urls.CUSTOMERS)} />
+          <TabletOutlined onClick={handleGoToCustomers} />
         </Tooltip>,
         <Tooltip key="plus" title="Create a new Customer">
           <PlusOutlined onClick={() => router.push(Urls.NEW_CUSTOMER)} />

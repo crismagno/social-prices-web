@@ -7,6 +7,7 @@ import {
 } from "../../../shared/utils/table/table-state.interface";
 import ServiceMethodsBase from "../ServiceMethods.base";
 import CreateSaleDto from "./dto/createSale.dto";
+import UpdateSaleDto from "./dto/updateSale.dto";
 import SalesServiceEnum from "./sales-service.enum";
 
 export default class SalesServiceMethods extends ServiceMethodsBase {
@@ -25,8 +26,23 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
-  public async findById(saleId: string): Promise<ISale> {
-    const response = await this._fetchAxios.get<ISale>(
+  public async updateManual(updateSaleDto: UpdateSaleDto): Promise<ISale> {
+    const response = await this._fetchAxios.post<ISale>(
+      `${this._socialPricesApiV1}${SalesServiceEnum.Methods.UPDATE_MANUAL}`,
+      updateSaleDto,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async findById(saleId: string): Promise<ISale | null> {
+    const response = await this._fetchAxios.get<ISale | null>(
       `${this._socialPricesApiV1}${SalesServiceEnum.Methods.FIND_BY_ID.replace(
         ":saleId",
         saleId
@@ -62,6 +78,25 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
   public async countByUser(): Promise<number> {
     const response = await this._fetchAxios.get<number>(
       `${this._socialPricesApiV1}${SalesServiceEnum.Methods.COUNT_BY_USER}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async deleteManual(saleId: string, userId: string): Promise<ISale> {
+    const response = await this._fetchAxios.delete<ISale>(
+      `${
+        this._socialPricesApiV1
+      }${SalesServiceEnum.Methods.DELETE_MANUAL.replace(
+        ":saleId",
+        saleId
+      ).replace(":userId", userId)}`,
       {
         headers: {
           "Content-Type": "application/json",

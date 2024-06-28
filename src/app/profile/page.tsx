@@ -7,7 +7,7 @@ import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, GoogleOutlined } from "@ant-design/icons";
 
 import { AddressesTag } from "../../components/common/AddressesTag/AddressesTag";
 import Avatar from "../../components/common/Avatar/Avatar";
@@ -112,6 +112,11 @@ export default function ProfilePage() {
                       user.loggedByAuthProvider ?? UsersEnum.Provider.OTHER
                     ]
                   }
+                  icon={
+                    user.loggedByAuthProvider === UsersEnum.Provider.GOOGLE ? (
+                      <GoogleOutlined />
+                    ) : null
+                  }
                 >
                   {
                     UsersEnum.ProviderLabels[
@@ -132,6 +137,11 @@ export default function ProfilePage() {
                     UsersEnum.ProviderColors[
                       user.authProvider ?? UsersEnum.Provider.OTHER
                     ]
+                  }
+                  icon={
+                    user.authProvider === UsersEnum.Provider.GOOGLE ? (
+                      <GoogleOutlined />
+                    ) : null
                   }
                 >
                   {

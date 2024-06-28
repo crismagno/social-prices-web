@@ -1,4 +1,4 @@
-import BackButton from "../../common/BackButton/BackButton";
+import { BackButton } from "../../common/BackButton/BackButton";
 
 interface Props {
   title: string;
