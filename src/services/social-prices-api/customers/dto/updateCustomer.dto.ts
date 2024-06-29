@@ -1,5 +1,5 @@
-import CreateCategoryDto from '../../categories/dto/createCategory.dto';
+import CreateCustomerDto from "./createCustomer.dto";
 
-export default class UpdateCustomerDto extends CreateCategoryDto {
+export default class UpdateCustomerDto extends CreateCustomerDto {
   customerId: string = "";
 }

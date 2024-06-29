@@ -52,20 +52,9 @@ export default function ProductsPage() {
 
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
-  const handleNewProduct = () => {
-    router.push(Urls.NEW_PRODUCT);
-  };
-
-  const handleEditProduct = (product: IProduct) => {
-    router.push(Urls.EDIT_PRODUCT.replace(":productId", product._id));
-  };
-
   if (isLoadingStores || isLoadingCategories) {
     return <LoadingFull />;
   }
-
-  const getStore = (storeId: string): IStore | undefined =>
-    find(stores, { _id: storeId });
 
   const categoriesSort: ICategory[] = sortArray(categories, "name");
 
@@ -75,15 +64,13 @@ export default function ProductsPage() {
         title="Products"
         className="h-min-80 mt-5"
         extra={
-          <>
-            <Button
-              type="primary"
-              onClick={handleNewProduct}
-              icon={<PlusOutlined />}
-            >
-              New Product
-            </Button>
-          </>
+          <Button
+            type="primary"
+            onClick={() => router.push(Urls.NEW_PRODUCT)}
+            icon={<PlusOutlined />}
+          >
+            New Product
+          </Button>
         }
       >
         <TableCustomAntd2<IProduct>
@@ -117,7 +104,7 @@ export default function ProductsPage() {
                     size="large"
                     maxStyle={{ color: "#f56a00", backgroundColor: "#fde3cf" }}
                   >
-                    {filesUrl.map((fileUrl) => (
+                    {filesUrl.map((fileUrl: string) => (
                       <Image
                         key={fileUrl}
                         width={40}
@@ -232,7 +219,9 @@ export default function ProductsPage() {
               })),
               render: (storeIds: string[]) => {
                 return storeIds.map((storeId: string) => {
-                  const store: IStore | undefined = getStore(storeId);
+                  const store: IStore | undefined = find(stores, {
+                    _id: storeId,
+                  });
 
                   if (!store) {
                     return null;
@@ -258,30 +247,25 @@ export default function ProductsPage() {
               dataIndex: "action",
               key: "action",
               align: "center",
-              render: (_: any, product: IProduct) => {
-                return (
-                  <>
-                    <Tooltip title="Edit product">
-                      <Button
-                        className="mr-1"
-                        type="success"
-                        onClick={() => handleEditProduct(product)}
-                        icon={<EditOutlined />}
-                      />
-                    </Tooltip>
-                  </>
-                );
-              },
+              render: (_: any, product: IProduct) => (
+                <Tooltip title="Edit product">
+                  <Button
+                    className="mr-1"
+                    type="success"
+                    onClick={() =>
+                      router.push(
+                        Urls.EDIT_PRODUCT.replace(":productId", product._id)
+                      )
+                    }
+                    icon={<EditOutlined />}
+                  />
+                </Tooltip>
+              ),
             },
           ]}
           search={{ placeholder: "Search products..." }}
           loading={isLoading}
-          pagination={{
-            total,
-            showTotal(totalCount: number, range: [number, number]) {
-              return `${range[0]}-${range[1]} of ${totalCount} items`;
-            },
-          }}
+          total={total}
         />
       </Card>
     </Layout>

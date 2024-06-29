@@ -30,31 +30,22 @@ export default function CategoriesPage() {
 
   const [categoryId, setCategoryId] = useState<string | undefined>();
 
-  const handleNewCategory = () => {
-    setCategoryId(undefined);
-    setIsCategoryDetailDrawerOpen(true);
-  };
-
-  const handleEditCategory = (category: ICategory) => {
-    setCategoryId(category._id);
-    setIsCategoryDetailDrawerOpen(true);
-  };
-
   return (
     <Layout subtitle="My Categories" title="Categories" hasBackButton>
       <Card
         title="Categories"
         className="h-min-80 mt-5"
         extra={
-          <>
-            <Button
-              type="primary"
-              onClick={handleNewCategory}
-              icon={<PlusOutlined />}
-            >
-              New Category
-            </Button>
-          </>
+          <Button
+            type="primary"
+            onClick={() => {
+              setCategoryId(undefined);
+              setIsCategoryDetailDrawerOpen(true);
+            }}
+            icon={<PlusOutlined />}
+          >
+            New Category
+          </Button>
         }
       >
         <TableCustomAntd2<ICategory>
@@ -109,32 +100,26 @@ export default function CategoriesPage() {
               dataIndex: "action",
               key: "action",
               align: "center",
-              render: (_: any, category: ICategory) => {
-                return (
-                  <>
-                    <Tooltip title="Edit category">
-                      <Button
-                        className="mr-1"
-                        type="success"
-                        onClick={() => handleEditCategory(category)}
-                        icon={<EditOutlined />}
-                      />
-                    </Tooltip>
-                  </>
-                );
-              },
+              render: (_: any, category: ICategory) => (
+                <Tooltip title="Edit category">
+                  <Button
+                    className="mr-1"
+                    type="success"
+                    onClick={() => {
+                      setCategoryId(category._id);
+                      setIsCategoryDetailDrawerOpen(true);
+                    }}
+                    icon={<EditOutlined />}
+                  />
+                </Tooltip>
+              ),
             },
           ]}
           search={{ placeholder: "Search categories..." }}
           loading={isLoading}
           tableStateRequest={tableStateRequest}
           setTableStateRequest={setTableStateRequest}
-          pagination={{
-            total,
-            showTotal(totalCount: number, range: [number, number]) {
-              return `${range[0]}-${range[1]} of ${totalCount} items`;
-            },
-          }}
+          total={total}
         />
 
         <CategoryDetailDrawer

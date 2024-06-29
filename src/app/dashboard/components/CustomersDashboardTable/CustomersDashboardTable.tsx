@@ -99,9 +99,7 @@ export const CustomersDashboardTable: React.FC = () => {
         loading={isLoading}
         tableStateRequest={tableStateRequest}
         setTableStateRequest={setTableStateRequest}
-        pagination={{
-          total,
-        }}
+        total={total}
       />
     </Card>
   );

@@ -141,6 +141,7 @@ export default function NotificationsPage() {
               placeholder="Select a Type"
             >
               <Select.Option value={null}>Select a Type</Select.Option>
+
               {Object.keys(NotificationsEnum.Type).map((type) => (
                 <Select.Option key={type} value={type}>
                   {NotificationsEnum.TypeLabels[type as NotificationsEnum.Type]}

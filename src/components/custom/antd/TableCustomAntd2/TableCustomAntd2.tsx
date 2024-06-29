@@ -22,14 +22,25 @@ interface Props<T> extends TableProps<T> {
     SetStateAction<ITableStateRequest<T> | undefined>
   >;
   tableStateRequest: ITableStateRequest<T> | undefined;
+  total?: number;
 }
 
 function TableCustomAntd2<T extends object = any>({
   search,
   setTableStateRequest,
   tableStateRequest,
+  total,
   ...props
 }: Props<T>) {
+  if (!props.pagination) {
+    props.pagination = {
+      total,
+      showTotal(totalCount: number, range: [number, number]) {
+        return `${range[0]}-${range[1]} of ${totalCount} items`;
+      },
+    };
+  }
+
   const [searchValue, setSearchValue] = useState<string>(search?.value ?? "");
 
   const renderSearch = () => {

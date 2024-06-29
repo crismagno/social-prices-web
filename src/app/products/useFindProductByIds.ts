@@ -9,7 +9,7 @@ export const useFindProductByIds = (
 ): {
   isLoading: boolean;
   products: IProduct[];
-  fetchFindProductByIds: () => void;
+  fetchFindProductByIds: () => Promise<void>;
 } => {
   const [products, setProducts] = useState<IProduct[]>([]);
 

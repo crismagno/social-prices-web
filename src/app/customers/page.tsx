@@ -141,6 +141,7 @@ export default function CustomersPage() {
                         icon={<EditOutlined />}
                       />
                     </Tooltip>
+
                     <Tooltip title="Create Sale">
                       <Button
                         className="mr-1"
@@ -165,12 +166,7 @@ export default function CustomersPage() {
           loading={isLoading}
           tableStateRequest={tableStateRequest}
           setTableStateRequest={setTableStateRequest}
-          pagination={{
-            total,
-            showTotal(totalCount: number, range: [number, number]) {
-              return `${range[0]}-${range[1]} of ${totalCount} items`;
-            },
-          }}
+          total={total}
         />
       </Card>
     </Layout>
