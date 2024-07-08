@@ -4,6 +4,7 @@ import { ICreatedAtEntity } from "../interfaces/created-at.interface";
 import { IPhoneNumber } from "../interfaces/phone-number";
 import { ISoftDeleteEntity } from "../interfaces/soft-delete.interface";
 import { IUpdatedAtEntity } from "../interfaces/updated-at.interface";
+import { IProduct } from "../products/products.interface";
 import UsersEnum from "../users/users.enum";
 import SalesEnum from "./sales.enum";
 
@@ -55,6 +56,7 @@ export interface ISalePayment {
 }
 
 export interface ISaleStoreProduct {
+  product?: IProduct;
   productId: string;
   price: number;
   quantity: number;

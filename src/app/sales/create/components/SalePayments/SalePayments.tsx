@@ -110,7 +110,7 @@ export const SalePayments: React.FC<Props> = ({
         }
         extraHeader={containerExtraHeader}
       >
-        {fieldsPayments.map((payment, index: number) => {
+        {fieldsPayments.map((_, index: number) => {
           return (
             <Row gutter={[8, 8]} key={index} className="mt-2">
               <Col xs={9}>

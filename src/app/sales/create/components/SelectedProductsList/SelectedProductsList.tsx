@@ -11,7 +11,6 @@ import {
 
 import ButtonCommon from "../../../../../components/common/ButtonCommon/ButtonCommon";
 import { IconTrash } from "../../../../../components/common/icons/icons";
-import { InputCustomAntd } from "../../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { InputNumberCustomAntd } from "../../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import { TextareaCustomAntd } from "../../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import SalesEnum from "../../../../../shared/business/sales/sales.enum";
@@ -20,6 +19,7 @@ import { defaultAvatarImage } from "../../../../../shared/utils/images/files-nam
 import { getImageUrl } from "../../../../../shared/utils/images/url-images";
 import {
   formatterMoney,
+  formatToMoneyDecimal,
   parserMoney,
 } from "../../../../../shared/utils/string-extensions/string-extensions";
 import {
@@ -96,10 +96,10 @@ export const SelectedProductsList: React.FC<Props> = ({
 
             <Row className="p-1 px-4 bg-zinc-50 text-black font-semibold">
               <Col xs={8}>Product</Col>
-              <Col xs={4}>Quantity</Col>
-              <Col xs={4}>Price</Col>
-              <Col xs={6}>Note</Col>
-              <Col xs={2}></Col>
+              <Col xs={5}>Quantity</Col>
+              <Col xs={5}>Price</Col>
+              <Col xs={5}>Total</Col>
+              <Col xs={1}></Col>
             </Row>
 
             {saleStore.products?.map(
@@ -110,6 +110,16 @@ export const SelectedProductsList: React.FC<Props> = ({
                 const fileUrl: string = saleStoreProduct.fileUrl
                   ? getImageUrl(saleStoreProduct.fileUrl)
                   : defaultAvatarImage;
+
+                const quantity: number =
+                  saleStores[indexSaleStore].products[indexSaleStoreProduct]
+                    .quantity;
+
+                const price: number =
+                  saleStores[indexSaleStore].products[indexSaleStoreProduct]
+                    .price;
+
+                const total: number = quantity * price;
 
                 return (
                   <Row
@@ -148,9 +158,9 @@ export const SelectedProductsList: React.FC<Props> = ({
                       </div>
                     </Col>
 
-                    <Col xs={4}>
+                    <Col xs={5}>
                       <InputNumberCustomAntd
-                        divClassName="w-28"
+                        divClassName="w-32"
                         min={1}
                         controller={{
                           control,
@@ -159,9 +169,9 @@ export const SelectedProductsList: React.FC<Props> = ({
                       />
                     </Col>
 
-                    <Col xs={4}>
+                    <Col xs={5}>
                       <InputNumberCustomAntd
-                        divClassName="w-28"
+                        divClassName="w-32"
                         formatter={formatterMoney}
                         parser={parserMoney}
                         min={0}
@@ -172,17 +182,13 @@ export const SelectedProductsList: React.FC<Props> = ({
                       />
                     </Col>
 
-                    <Col xs={6}>
-                      <InputCustomAntd
-                        divClassName="w-full pr-2"
-                        controller={{
-                          control,
-                          name: `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}.note`,
-                        }}
-                      />
+                    <Col xs={5}>
+                      <label className="mt-2 font-semibold">
+                        {formatToMoneyDecimal(total)}
+                      </label>
                     </Col>
 
-                    <Col xs={2}>
+                    <Col xs={1}>
                       <Tooltip title="Remove product">
                         <ButtonCommon
                           onClick={() =>
@@ -245,11 +251,11 @@ export const SelectedProductsList: React.FC<Props> = ({
         <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
           <Col xs={8}>SubTotal:</Col>
 
-          <Col xs={4}></Col>
+          <Col xs={10}></Col>
 
-          <Col xs={12}>
+          <Col xs={6}>
             <Tooltip title="Sum all prices products">
-              R$ {subtotal.toFixed(2)}
+              {formatToMoneyDecimal(subtotal)}
             </Tooltip>
           </Col>
         </Row>
@@ -296,9 +302,9 @@ export const SelectedProductsList: React.FC<Props> = ({
             )}
           </Col>
 
-          <Col xs={4}></Col>
+          <Col xs={10}></Col>
 
-          <Col xs={5}>
+          <Col xs={6}>
             {watch("discount.show") ? (
               <InputNumberCustomAntd
                 divClassName="w-28"
@@ -313,12 +319,13 @@ export const SelectedProductsList: React.FC<Props> = ({
               />
             ) : (
               <Tooltip title="Discount amount">
-                - R$ {watch("discount.amount")}
+                - {formatToMoneyDecimal(watch("discount.amount") ?? 0)}
               </Tooltip>
             )}
           </Col>
 
-          <Col xs={7}>
+          <Col xs={24} className="py-2">
+            <label className="font-semibold">Note: </label>
             {watch("discount.show") ? (
               <TextareaCustomAntd
                 divClassName="w-full"
@@ -339,11 +346,11 @@ export const SelectedProductsList: React.FC<Props> = ({
         <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
           <Col xs={8}>Total After Discount:</Col>
 
-          <Col xs={4}></Col>
+          <Col xs={10}></Col>
 
-          <Col xs={12}>
+          <Col xs={6}>
             <Tooltip title="Sum total after all discounts">
-              - R$ {totalAfterDiscount.toFixed(2)}
+              - {formatToMoneyDecimal(totalAfterDiscount)}
             </Tooltip>
           </Col>
         </Row>
@@ -392,9 +399,9 @@ export const SelectedProductsList: React.FC<Props> = ({
               )}
             </Col>
 
-            <Col xs={4}></Col>
+            <Col xs={10}></Col>
 
-            <Col xs={5}>
+            <Col xs={6}>
               {watch("shipping.show") ? (
                 <InputNumberCustomAntd
                   divClassName="w-28"
@@ -408,12 +415,13 @@ export const SelectedProductsList: React.FC<Props> = ({
                 />
               ) : (
                 <Tooltip title="Shipping amount">
-                  R$ {watch("shipping.amount")}
+                  {formatToMoneyDecimal(watch("shipping.amount") ?? 0)}
                 </Tooltip>
               )}
             </Col>
 
-            <Col xs={7}>
+            <Col xs={24}>
+              <label className="font-semibold">Note: </label>
               {watch("shipping.show") ? (
                 <TextareaCustomAntd
                   divClassName="w-full"
@@ -474,9 +482,9 @@ export const SelectedProductsList: React.FC<Props> = ({
             )}
           </Col>
 
-          <Col xs={4}></Col>
+          <Col xs={10}></Col>
 
-          <Col xs={5}>
+          <Col xs={6}>
             {watch("tax.show") ? (
               <InputNumberCustomAntd
                 divClassName="w-28"
@@ -489,11 +497,14 @@ export const SelectedProductsList: React.FC<Props> = ({
                 }}
               />
             ) : (
-              <Tooltip title="Tax amount">R$ {watch("tax.amount")}</Tooltip>
+              <Tooltip title="Tax amount">
+                {formatToMoneyDecimal(watch("tax.amount") ?? 0)}
+              </Tooltip>
             )}
           </Col>
 
-          <Col xs={7}>
+          <Col xs={24}>
+            <label className="font-semibold">Note: </label>
             {watch("tax.show") ? (
               <TextareaCustomAntd
                 divClassName="w-full"
@@ -510,17 +521,17 @@ export const SelectedProductsList: React.FC<Props> = ({
 
         {/* Total */}
         <Row className="p-2 px-4 bg-emerald-50 text-black font-bold">
-          <Col xs={7}></Col>
+          <Col xs={8}></Col>
 
-          <Col xs={5}>
+          <Col xs={10}>
             <Tooltip title="Quantity products selected">
               Qty: {quantity}
             </Tooltip>
           </Col>
 
-          <Col xs={12}>
+          <Col xs={6}>
             <Tooltip title="Sum all prices products">
-              Total: R$ {totalFinal.toFixed(2)}
+              Total: {formatToMoneyDecimal(totalFinal)}
             </Tooltip>
           </Col>
         </Row>

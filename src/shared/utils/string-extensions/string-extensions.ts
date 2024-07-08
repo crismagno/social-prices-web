@@ -111,4 +111,4 @@ export const parseToUpperAndUnderline = (value: string): string =>
 export const formatToMoneyDecimal = (
   value: number,
   decimal: number = 2
-): string => `R$ ${value.toFixed(decimal)}`;
+): string => `R$ ${value?.toFixed(decimal) ?? 0}`;

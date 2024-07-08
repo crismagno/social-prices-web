@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Card, Col, List, Row, Select, Tag } from "antd";
 import moment from "moment";
 
+import { IconBellAlert } from "../../components/common/icons/icons";
 import ListCustomAntd from "../../components/custom/antd/ListCustomAntd/ListCustomAntd";
 import Layout from "../../components/template/Layout/Layout";
 import useAppData from "../../data/context/app/useAppData";
@@ -102,17 +103,20 @@ export default function NotificationsPage() {
       <List.Item key={notification._id}>
         <List.Item.Meta
           title={
-            <>
-              <div>
-                {notification.title}
-                <Tag
-                  className="ml-2"
-                  color={NotificationsEnum.TypeColors[notification.type]}
-                >
-                  {NotificationsEnum.TypeLabels[notification.type]}
-                </Tag>
-              </div>
-            </>
+            <div className="flex">
+              {notification.title}
+              <Tag
+                className="ml-2"
+                color={NotificationsEnum.TypeColors[notification.type]}
+              >
+                {NotificationsEnum.TypeLabels[notification.type]}
+              </Tag>
+
+              <span>
+                {!notification.isSeen &&
+                  IconBellAlert("animate-pulse text-yellow-500 w-5 h-5")}
+              </span>
+            </div>
           }
           description={
             <div className="flex flex-col">

@@ -24,7 +24,11 @@ import {
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { CheckCircleOutlined, QuestionCircleTwoTone } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  EyeOutlined,
+  QuestionCircleTwoTone,
+} from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -85,6 +89,7 @@ import {
   SalePayments,
   TSalePaymentFormSchema,
 } from "./components/SalePayments/SalePayments";
+import { SaleResumeByCreate } from "./components/SaleResumeByCreate/SaleResumeByCreate";
 import { SelectCustomer } from "./components/SelectCustomer/SelectCustomer";
 import { SelectedProductsList } from "./components/SelectedProductsList/SelectedProductsList";
 
@@ -221,6 +226,9 @@ export default function CreateSalePage() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [isOpenSaleSuccessfullyModal, setIsOpenSaleSuccessfullyModal] =
+    useState<boolean>(false);
+
+  const [isOpenSaleResumeModal, setIsOpenSaleResumeModal] =
     useState<boolean>(false);
 
   const [sale, setSale] = useState<ISale | null>(null);
@@ -555,8 +563,6 @@ export default function CreateSalePage() {
     setValue("saleStores", saleStores);
   };
 
-  const handleSeeSaleResume = () => {};
-
   // Calculation Part
 
   const getSaleStoresProductsTotals = (): ISaleStoresProductsTotals => {
@@ -573,7 +579,8 @@ export default function CreateSalePage() {
             saleStoreProduct: TSaleStoreProductFormSchema
           ) => {
             accSaleStoreProduct.quantity += saleStoreProduct.quantity;
-            accSaleStoreProduct.subtotal += saleStoreProduct.price;
+            accSaleStoreProduct.subtotal +=
+              saleStoreProduct.price * saleStoreProduct.quantity;
             return accSaleStoreProduct;
           },
           {
@@ -755,7 +762,8 @@ export default function CreateSalePage() {
                 saleStoreProduct: TSaleStoreProductFormSchema
               ) => {
                 accSaleStoreProduct.quantity += saleStoreProduct.quantity;
-                accSaleStoreProduct.subtotal += saleStoreProduct.price;
+                accSaleStoreProduct.subtotal +=
+                  saleStoreProduct.price * saleStoreProduct.quantity;
                 return accSaleStoreProduct;
               },
               {
@@ -1308,10 +1316,10 @@ export default function CreateSalePage() {
               <Col xs={24} md={8}>
                 <Tooltip title="See sale resume">
                   <Button
-                    disabled
                     type="primary"
                     className="mt-4"
-                    onClick={handleSeeSaleResume}
+                    onClick={() => setIsOpenSaleResumeModal(true)}
+                    icon={<EyeOutlined />}
                   >
                     See Resume
                   </Button>
@@ -1356,6 +1364,26 @@ export default function CreateSalePage() {
               </div>
             </div>
           }
+        />
+      </Modal>
+
+      <Modal
+        title="Sale Resume"
+        open={isOpenSaleResumeModal}
+        cancelButtonProps={{ hidden: true }}
+        onOk={() => setIsOpenSaleResumeModal(false)}
+        onCancel={() => setIsOpenSaleResumeModal(false)}
+      >
+        <SaleResumeByCreate
+          formSchema={watch()}
+          selectedCustomer={selectedCustomer}
+          stores={stores}
+          subtotal={saleStoresProductsTotals.subtotal}
+          quantity={saleStoresProductsTotals.quantity}
+          totalFinal={totalFinal}
+          totalAfterDiscount={totalAfterDiscount}
+          totalPayment={totalPayment}
+          totalAfterPayment={totalAfterPayment}
         />
       </Modal>
     </Layout>

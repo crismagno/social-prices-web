@@ -8,13 +8,14 @@ import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 
 import { ButtonCreateSale } from "../../components/common/ButtonCreateSale/ButtonCreateSale";
 import { CustomRangeDatePicker } from "../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
 import handleClientError from "../../components/common/handleClientError/handleClientError";
 import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
+import { SaleResume } from "../../components/common/SaleResume/SaleResume";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
 import useAuthData from "../../data/context/auth/useAuthData";
@@ -36,6 +37,7 @@ import { useFindSalesByUserTableState } from "./useFindSalesByUserTableState";
 
 export default function SalesPage() {
   const { user } = useAuthData();
+
   const router: AppRouterInstance = useRouter();
 
   const [tableStateRequest, setTableStateRequest] = useState<
@@ -48,6 +50,12 @@ export default function SalesPage() {
   const [isDeletingSale, setIsDeletingSale] = useState<boolean>(false);
 
   const [saleToDelete, setSaleToDelete] = useState<ISale | null>(null);
+
+  const [isOpenSaleResumeModal, setIsOpenSaleResumeModal] =
+    useState<boolean>(false);
+
+  const [saleSelectedToResume, setSaleSelectedToResume] =
+    useState<ISale | null>(null);
 
   const { isLoading, sales, total } =
     useFindSalesByUserTableState(tableStateRequest);
@@ -97,6 +105,8 @@ export default function SalesPage() {
       pagination: { pageSize: 10, skip: 0, current: undefined, total: 0 },
     });
   };
+
+  console.log(sales[0]);
 
   return (
     <Layout subtitle="Sales information" title="Sales">
@@ -267,14 +277,24 @@ export default function SalesPage() {
               align: "center",
               render: (_, sale: ISale) => (
                 <Button.Group>
-                  <Tooltip title="Edit Sale">
+                  <Tooltip title="Edit sale">
                     <Button
                       type="success"
                       onClick={() => handleEditSale(sale)}
                       icon={<EditOutlined />}
                     />
                   </Tooltip>
-                  <Tooltip title="Delete Sale">
+                  <Tooltip title="See sale resume">
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        setSaleSelectedToResume(sale);
+                        setIsOpenSaleResumeModal(true);
+                      }}
+                      icon={<EyeOutlined />}
+                    />
+                  </Tooltip>
+                  <Tooltip title="Delete sale">
                     <Button
                       loading={saleToDelete?._id === sale._id && isDeletingSale}
                       type="danger"
@@ -291,12 +311,7 @@ export default function SalesPage() {
           ]}
           search={{ placeholder: "Search sales..." }}
           loading={isLoading}
-          pagination={{
-            total,
-            showTotal(totalCount: number, range: [number, number]) {
-              return `${range[0]}-${range[1]} of ${totalCount} items`;
-            },
-          }}
+          total={total}
         />
       </Card>
 
@@ -316,6 +331,22 @@ export default function SalesPage() {
       >
         Are you sure delete sale? Sale Number:{" "}
         <strong>{saleToDelete?.number ?? ""}</strong>
+      </Modal>
+
+      <Modal
+        title="Sale Resume"
+        open={isOpenSaleResumeModal}
+        cancelButtonProps={{ hidden: true }}
+        onOk={() => {
+          setSaleSelectedToResume(null);
+          setIsOpenSaleResumeModal(false);
+        }}
+        onCancel={() => {
+          setSaleSelectedToResume(null);
+          setIsOpenSaleResumeModal(false);
+        }}
+      >
+        <SaleResume sale={saleSelectedToResume} stores={stores} />
       </Modal>
     </Layout>
   );

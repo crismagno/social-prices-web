@@ -205,12 +205,7 @@ export default function StoresPage() {
           expandable={{
             expandedRowRender: (store: IStore) => <StoreDetail store={store} />,
           }}
-          pagination={{
-            total,
-            showTotal(totalCount: number, range: [number, number]) {
-              return `${range[0]}-${range[1]} of ${totalCount} items`;
-            },
-          }}
+          total={total}
         />
       </Card>
     </Layout>
