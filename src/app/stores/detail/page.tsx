@@ -1,6 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from 'react';
 
 import {
   Badge,
@@ -12,20 +15,23 @@ import {
   Select,
   Tooltip,
   UploadFile,
-} from "antd";
-import { RcFile } from "antd/es/upload";
-import { isArray } from "class-validator";
-import moment from "moment";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+} from 'antd';
+import { RcFile } from 'antd/es/upload';
+import { isArray } from 'class-validator';
+import moment from 'moment';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
 import {
   ReadonlyURLSearchParams,
   useRouter,
   useSearchParams,
-} from "next/navigation";
-import { SubmitHandler, useForm } from "react-hook-form";
-import z from "zod";
+} from 'next/navigation';
+import {
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
+import z from 'zod';
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
   Addresses,
@@ -33,46 +39,66 @@ import {
   countries,
   generateNewAddress,
   states,
-} from "../../../components/common/Addresses/Addresses";
-import Avatar from "../../../components/common/Avatar/Avatar";
-import handleClientError from "../../../components/common/handleClientError/handleClientError";
-import HrCustom from "../../../components/common/HrCustom/HrCustom";
-import ImageModal from "../../../components/common/ImageModal/ImageModal";
-import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+} from '../../../components/common/Addresses/Addresses';
+import Avatar from '../../../components/common/Avatar/Avatar';
+import handleClientError
+  from '../../../components/common/handleClientError/handleClientError';
+import HrCustom from '../../../components/common/HrCustom/HrCustom';
+import ImageModal from '../../../components/common/ImageModal/ImageModal';
+import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
 import {
   generateNewPhoneNumber,
   phoneNumberFormSchema,
   PhoneNumbers,
-} from "../../../components/common/PhoneNumbers/PhoneNumbers";
-import { TagCategoryCustomAntd } from "../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
-import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
-import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
-import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
-import Layout from "../../../components/template/Layout/Layout";
-import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
-import CreateStoreDto from "../../../services/social-prices-api/stores/dto/createStore.dto";
-import UpdateStoreDto from "../../../services/social-prices-api/stores/dto/updateStore.dto";
-import CategoriesEnum from "../../../shared/business/categories/categories.enum";
-import { ICategory } from "../../../shared/business/categories/categories.interface";
-import AddressEnum from "../../../shared/business/enums/address.enum";
-import { IAddress } from "../../../shared/business/interfaces/address.interface";
-import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number";
-import StoresEnum from "../../../shared/business/stores/stores.enum";
-import { IStore } from "../../../shared/business/stores/stores.interface";
-import DatesEnum from "../../../shared/utils/dates/dates.enum";
-import { getFileUrl } from "../../../shared/utils/images/helper";
-import { getImageUrl } from "../../../shared/utils/images/url-images";
-import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
-import { useFindStoreById } from "./useFindStoreById";
+} from '../../../components/common/PhoneNumbers/PhoneNumbers';
+import {
+  TagCategoryCustomAntd,
+} from '../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd';
+import {
+  InputCustomAntd,
+} from '../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
+import {
+  SelectCustomAntd,
+} from '../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
+import {
+  TextareaCustomAntd,
+} from '../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd';
+import Layout from '../../../components/template/Layout/Layout';
+import {
+  serviceMethodsInstance,
+} from '../../../services/social-prices-api/ServiceMethods';
+import CreateStoreDto
+  from '../../../services/social-prices-api/stores/dto/createStore.dto';
+import UpdateStoreDto
+  from '../../../services/social-prices-api/stores/dto/updateStore.dto';
+import CategoriesEnum
+  from '../../../shared/business/categories/categories.enum';
+import {
+  ICategory,
+} from '../../../shared/business/categories/categories.interface';
+import AddressEnum from '../../../shared/business/enums/address.enum';
+import {
+  IAddress,
+} from '../../../shared/business/interfaces/address.interface';
+import { IPhoneNumber } from '../../../shared/business/interfaces/phone-number';
+import StoresEnum from '../../../shared/business/stores/stores.enum';
+import { IStore } from '../../../shared/business/stores/stores.interface';
+import DatesEnum from '../../../shared/utils/dates/dates.enum';
+import { getFileUrl } from '../../../shared/utils/images/helper';
+import { getImageUrl } from '../../../shared/utils/images/url-images';
+import {
+  useFindCategoriesByType,
+} from '../../categories/useFindCategoriesByType';
+import { useFindStoreById } from './useFindStoreById';
 
 const formSchema = z.object({
-  name: z.string().nonempty("Name is required"),
-  email: z.string().email().nonempty("Email is required"),
+  name: z.string().trim().nonempty("Name is required"),
+  email: z.string().trim().email().nonempty("Email is required"),
   startedAt: z.string().nonempty("Started At is required"),
-  description: z.string().nullable(),
+  description: z.string().trim().nullable(),
   addresses: z.array(addressFormSchema),
   phoneNumbers: z.array(phoneNumberFormSchema),
-  about: z.string().nullable(),
+  about: z.string().trim().nullable(),
   status: z.string(),
   categoriesIds: z.array(z.string()),
 });

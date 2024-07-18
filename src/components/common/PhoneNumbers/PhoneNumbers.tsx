@@ -27,7 +27,7 @@ import {
 export const phoneNumberFormSchema = z.object({
   uid: z.string(),
   type: z.string().nonempty("Phone type is required"),
-  number: z.string().nonempty("Phone number is required"),
+  number: z.string().trim().nonempty("Phone number is required"),
   isCollapsed: z.boolean().optional(),
   messengers: z.array(z.string()),
 });

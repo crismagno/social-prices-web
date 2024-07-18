@@ -1,24 +1,41 @@
-import { Select, Tooltip } from "antd";
-import { Control, useFieldArray } from "react-hook-form";
-import { z } from "zod";
+import {
+  Select,
+  Tooltip,
+} from 'antd';
+import {
+  Control,
+  useFieldArray,
+} from 'react-hook-form';
+import { z } from 'zod';
 
-import AddressEnum from "../../../shared/business/enums/address.enum";
-import { IAddress } from "../../../shared/business/interfaces/address.interface";
-import citiesMockData from "../../../shared/utils/mock-data/brazil-cities.json";
-import statesMockData from "../../../shared/utils/mock-data/brazil-states.json";
-import countriesMockData from "../../../shared/utils/mock-data/countries.json";
+import AddressEnum from '../../../shared/business/enums/address.enum';
+import {
+  IAddress,
+} from '../../../shared/business/interfaces/address.interface';
+import citiesMockData from '../../../shared/utils/mock-data/brazil-cities.json';
+import statesMockData from '../../../shared/utils/mock-data/brazil-states.json';
+import countriesMockData from '../../../shared/utils/mock-data/countries.json';
 import {
   ICityMockData,
   ICountryMockData,
   IStateMockData,
-} from "../../../shared/utils/mock-data/interfaces";
-import { createAddressName } from "../../../shared/utils/string-extensions/string-extensions";
-import { InputCustomAntd } from "../../custom/antd/InputCustomAntd/InputCustomAntd";
-import { SelectCustomAntd } from "../../custom/antd/SelectCustomAntd/SelectCustomAntd";
-import ButtonCommon from "../ButtonCommon/ButtonCommon";
-import Collapse from "../Collapse/Collapse";
-import ContainerTitle from "../ContainerTitle/ContainerTitle";
-import { IconPlus, IconTrash } from "../icons/icons";
+} from '../../../shared/utils/mock-data/interfaces';
+import {
+  createAddressName,
+} from '../../../shared/utils/string-extensions/string-extensions';
+import {
+  InputCustomAntd,
+} from '../../custom/antd/InputCustomAntd/InputCustomAntd';
+import {
+  SelectCustomAntd,
+} from '../../custom/antd/SelectCustomAntd/SelectCustomAntd';
+import ButtonCommon from '../ButtonCommon/ButtonCommon';
+import Collapse from '../Collapse/Collapse';
+import ContainerTitle from '../ContainerTitle/ContainerTitle';
+import {
+  IconPlus,
+  IconTrash,
+} from '../icons/icons';
 
 export const countries: ICountryMockData[] = countriesMockData.filter(
   (country) => country.code === "BR"
@@ -29,16 +46,16 @@ export const states: IStateMockData[] = statesMockData;
 export const stateCities: ICityMockData[] = citiesMockData.states;
 
 export const addressFormSchema = z.object({
-  address1: z.string().nonempty("Address1 is required"),
-  address2: z.string().nullable(),
-  city: z.string().nonempty("City is required"),
+  address1: z.string().trim().nonempty("Address1 is required"),
+  address2: z.string().trim().nullable(),
+  city: z.string().trim().nonempty("City is required"),
   isValid: z.boolean(),
-  stateCode: z.string().nonempty("State is required"),
+  stateCode: z.string().trim().nonempty("State is required"),
   uid: z.string(),
-  zip: z.string().nonempty("Zipcode is required"),
-  description: z.string().nullable(),
-  countryCode: z.string().nonempty("Country is required"),
-  district: z.string().nonempty("District is required"),
+  zip: z.string().trim().nonempty("Zipcode is required"),
+  description: z.string().trim().nullable(),
+  countryCode: z.string().trim().nonempty("Country is required"),
+  district: z.string().trim().nonempty("District is required"),
   isCollapsed: z.boolean(),
   types: z.array(z.string()),
 });

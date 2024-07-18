@@ -1,8 +1,11 @@
 "use client";
 
-import "./styles.scss";
+import './styles.scss';
 
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from 'react';
 
 import {
   Button,
@@ -18,58 +21,84 @@ import {
   Upload,
   UploadFile,
   UploadProps,
-} from "antd";
-import ImgCrop from "antd-img-crop";
-import { RcFile } from "antd/es/upload";
-import { isArray } from "class-validator";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+} from 'antd';
+import ImgCrop from 'antd-img-crop';
+import { RcFile } from 'antd/es/upload';
+import { isArray } from 'class-validator';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
 import {
   ReadonlyURLSearchParams,
   useRouter,
   useSearchParams,
-} from "next/navigation";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import z from "zod";
+} from 'next/navigation';
+import {
+  Controller,
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
+import z from 'zod';
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import handleClientError from "../../../components/common/handleClientError/handleClientError";
-import HrCustom from "../../../components/common/HrCustom/HrCustom";
-import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
-import { TagCategoryCustomAntd } from "../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
-import { CheckboxCustomAntd } from "../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd";
-import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
-import { InputNumberCustomAntd } from "../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
-import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
-import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
-import Layout from "../../../components/template/Layout/Layout";
-import CreateProductDto from "../../../services/social-prices-api/products/dto/createProduct.dto";
-import UpdateProductDto from "../../../services/social-prices-api/products/dto/updateProduct.dto";
-import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
-import CategoriesEnum from "../../../shared/business/categories/categories.enum";
-import { ICategory } from "../../../shared/business/categories/categories.interface";
-import { IProduct } from "../../../shared/business/products/products.interface";
-import { IStore } from "../../../shared/business/stores/stores.interface";
-import { sortArray } from "../../../shared/utils/array/functions";
-import { getFileUrl } from "../../../shared/utils/images/helper";
-import { getImageUrl } from "../../../shared/utils/images/url-images";
+import handleClientError
+  from '../../../components/common/handleClientError/handleClientError';
+import HrCustom from '../../../components/common/HrCustom/HrCustom';
+import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
+import {
+  TagCategoryCustomAntd,
+} from '../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd';
+import {
+  CheckboxCustomAntd,
+} from '../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd';
+import {
+  InputCustomAntd,
+} from '../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
+import {
+  InputNumberCustomAntd,
+} from '../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd';
+import {
+  SelectCustomAntd,
+} from '../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
+import {
+  TextareaCustomAntd,
+} from '../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd';
+import Layout from '../../../components/template/Layout/Layout';
+import CreateProductDto
+  from '../../../services/social-prices-api/products/dto/createProduct.dto';
+import UpdateProductDto
+  from '../../../services/social-prices-api/products/dto/updateProduct.dto';
+import {
+  serviceMethodsInstance,
+} from '../../../services/social-prices-api/ServiceMethods';
+import CategoriesEnum
+  from '../../../shared/business/categories/categories.enum';
+import {
+  ICategory,
+} from '../../../shared/business/categories/categories.interface';
+import { IProduct } from '../../../shared/business/products/products.interface';
+import { IStore } from '../../../shared/business/stores/stores.interface';
+import { sortArray } from '../../../shared/utils/array/functions';
+import { getFileUrl } from '../../../shared/utils/images/helper';
+import { getImageUrl } from '../../../shared/utils/images/url-images';
 import {
   formatterMoney,
   parserMoney,
-} from "../../../shared/utils/string-extensions/string-extensions";
-import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
-import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
-import { useFindProductById } from "./useFindProductById";
+} from '../../../shared/utils/string-extensions/string-extensions';
+import {
+  useFindCategoriesByType,
+} from '../../categories/useFindCategoriesByType';
+import { useFindStoresByUser } from '../../stores/useFindStoresByUser';
+import { useFindProductById } from './useFindProductById';
 
 const formSchema = z.object({
-  name: z.string().nonempty("Name is required"),
+  name: z.string().trim().nonempty("Name is required"),
   quantity: z.any().optional(),
-  description: z.string().optional(),
-  details: z.string().optional(),
+  description: z.string().trim().optional(),
+  details: z.string().trim().optional(),
   price: z.any().optional(),
   isActive: z.boolean(),
   storeIds: z.array(z.string()),
-  barCode: z.string().optional(),
+  barCode: z.string().trim().optional(),
   QRCode: z.string().optional(),
   categoriesIds: z.array(z.string()),
 });

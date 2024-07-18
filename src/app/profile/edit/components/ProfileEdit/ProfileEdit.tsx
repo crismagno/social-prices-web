@@ -1,36 +1,56 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Button, Col, message, Row } from "antd";
-import moment from "moment";
-import { SubmitHandler, useForm } from "react-hook-form";
-import z from "zod";
+import {
+  Button,
+  Col,
+  message,
+  Row,
+} from 'antd';
+import moment from 'moment';
+import {
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
+import z from 'zod';
 
-import { SaveOutlined } from "@ant-design/icons";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { SaveOutlined } from '@ant-design/icons';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import ContainerTitle from "../../../../../components/common/ContainerTitle/ContainerTitle";
-import { FormSelectOption } from "../../../../../components/common/FormSelect/FormSelect";
-import handleClientError from "../../../../../components/common/handleClientError/handleClientError";
-import { InputCustomAntd } from "../../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
-import { SelectCustomAntd } from "../../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
-import { TextareaCustomAntd } from "../../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
-import useAuthData from "../../../../../data/context/auth/useAuthData";
-import { serviceMethodsInstance } from "../../../../../services/social-prices-api/ServiceMethods";
-import IUser from "../../../../../shared/business/users/user.interface";
-import UsersEnum from "../../../../../shared/business/users/users.enum";
-import DatesEnum from "../../../../../shared/utils/dates/dates.enum";
+import ContainerTitle
+  from '../../../../../components/common/ContainerTitle/ContainerTitle';
+import {
+  FormSelectOption,
+} from '../../../../../components/common/FormSelect/FormSelect';
+import handleClientError
+  from '../../../../../components/common/handleClientError/handleClientError';
+import {
+  InputCustomAntd,
+} from '../../../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
+import {
+  SelectCustomAntd,
+} from '../../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
+import {
+  TextareaCustomAntd,
+} from '../../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd';
+import useAuthData from '../../../../../data/context/auth/useAuthData';
+import {
+  serviceMethodsInstance,
+} from '../../../../../services/social-prices-api/ServiceMethods';
+import IUser from '../../../../../shared/business/users/user.interface';
+import UsersEnum from '../../../../../shared/business/users/users.enum';
+import DatesEnum from '../../../../../shared/utils/dates/dates.enum';
 
 interface Props {
   className?: string;
 }
 
 const formSchema = z.object({
-  name: z.string().nonempty("Name is required"),
+  name: z.string().trim().nonempty("Name is required"),
   birthDate: z.string().nonempty("Birth date is required"),
   gender: z.string().nullable(),
-  about: z.string().nullable(),
+  about: z.string().trim().nullable(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
