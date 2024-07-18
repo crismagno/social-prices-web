@@ -32,6 +32,7 @@ import LocalStorageEnum
 import LocalStorageUserMethods
   from '../../../shared/common/local-storage/methods/local-storage-user.methods';
 import Urls from '../../../shared/common/routes-app/routes-app';
+import { sleep } from '../../../shared/utils/functions/functions';
 
 const googleProvider: GoogleAuthProvider = new GoogleAuthProvider();
 googleProvider.addScope("https://www.googleapis.com/auth/contacts.readonly");
@@ -359,6 +360,9 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       _settingSession(newUser);
 
       router.push(Urls.DASHBOARD);
+
+      await sleep(5000);
+
       return true;
     } catch (error: any) {
       throw error;
