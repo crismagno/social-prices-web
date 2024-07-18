@@ -1,11 +1,14 @@
 "use client";
 
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, {
+  AxiosRequestConfig,
+  AxiosResponse,
+} from 'axios';
 
 export default class FetchAxios {
   //#region Private Properties
 
-  private _defaultConfig: AxiosRequestConfig<any>;
+  private readonly _defaultConfig: AxiosRequestConfig<any>;
 
   //#endregion
 
