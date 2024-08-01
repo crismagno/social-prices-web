@@ -81,7 +81,6 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
       <PhoneNumbers
         control={control}
         errors={errors}
-        register={register}
         watch={watch}
         containerExtraHeader={
           <Button

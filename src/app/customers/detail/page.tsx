@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect, useState } from "react";
 
 import {
   Button,
@@ -14,23 +11,20 @@ import {
   Select,
   Tooltip,
   UploadFile,
-} from 'antd';
-import { RcFile } from 'antd/es/upload';
-import { isArray } from 'class-validator';
-import moment from 'moment';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+} from "antd";
+import { RcFile } from "antd/es/upload";
+import { isArray } from "class-validator";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import {
   ReadonlyURLSearchParams,
   useRouter,
   useSearchParams,
-} from 'next/navigation';
-import {
-  SubmitHandler,
-  useForm,
-} from 'react-hook-form';
-import z from 'zod';
+} from "next/navigation";
+import { SubmitHandler, useForm } from "react-hook-form";
+import z from "zod";
 
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   Addresses,
@@ -38,48 +32,33 @@ import {
   countries,
   generateNewAddress,
   states,
-} from '../../../components/common/Addresses/Addresses';
-import Avatar from '../../../components/common/Avatar/Avatar';
-import handleClientError
-  from '../../../components/common/handleClientError/handleClientError';
-import HrCustom from '../../../components/common/HrCustom/HrCustom';
-import ImageModal from '../../../components/common/ImageModal/ImageModal';
-import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
+} from "../../../components/common/Addresses/Addresses";
+import Avatar from "../../../components/common/Avatar/Avatar";
+import handleClientError from "../../../components/common/handleClientError/handleClientError";
+import HrCustom from "../../../components/common/HrCustom/HrCustom";
+import ImageModal from "../../../components/common/ImageModal/ImageModal";
+import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import {
   generateNewPhoneNumber,
   phoneNumberFormSchema,
   PhoneNumbers,
-} from '../../../components/common/PhoneNumbers/PhoneNumbers';
-import {
-  InputCustomAntd,
-} from '../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
-import {
-  SelectCustomAntd,
-} from '../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
-import {
-  TextareaCustomAntd,
-} from '../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd';
-import Layout from '../../../components/template/Layout/Layout';
-import CreateCustomerDto
-  from '../../../services/social-prices-api/customers/dto/createCustomer.dto';
-import UpdateCustomerDto
-  from '../../../services/social-prices-api/customers/dto/updateCustomer.dto';
-import {
-  serviceMethodsInstance,
-} from '../../../services/social-prices-api/ServiceMethods';
-import {
-  ICustomer,
-} from '../../../shared/business/customers/customer.interface';
-import AddressEnum from '../../../shared/business/enums/address.enum';
-import {
-  IAddress,
-} from '../../../shared/business/interfaces/address.interface';
-import { IPhoneNumber } from '../../../shared/business/interfaces/phone-number';
-import UsersEnum from '../../../shared/business/users/users.enum';
-import DatesEnum from '../../../shared/utils/dates/dates.enum';
-import { getFileUrl } from '../../../shared/utils/images/helper';
-import { getImageUrl } from '../../../shared/utils/images/url-images';
-import { useFindCustomerById } from './useFindCustomerById';
+} from "../../../components/common/PhoneNumbers/PhoneNumbers";
+import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
+import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
+import Layout from "../../../components/template/Layout/Layout";
+import CreateCustomerDto from "../../../services/social-prices-api/customers/dto/createCustomer.dto";
+import UpdateCustomerDto from "../../../services/social-prices-api/customers/dto/updateCustomer.dto";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
+import { ICustomer } from "../../../shared/business/customers/customer.interface";
+import AddressEnum from "../../../shared/business/enums/address.enum";
+import { IAddress } from "../../../shared/business/interfaces/address.interface";
+import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number";
+import UsersEnum from "../../../shared/business/users/users.enum";
+import DatesEnum from "../../../shared/utils/dates/dates.enum";
+import { getFileUrl } from "../../../shared/utils/images/helper";
+import { getImageUrl } from "../../../shared/utils/images/url-images";
+import { useFindCustomerById } from "./useFindCustomerById";
 
 const formSchema = z.object({
   name: z.string().trim().nonempty("Name is required"),
@@ -403,19 +382,9 @@ export default function CustomerDetailPage() {
             </Col>
           </Row>
 
-          <Addresses
-            control={control}
-            errors={errors}
-            register={register}
-            watch={watch}
-          />
+          <Addresses control={control} errors={errors} watch={watch} />
 
-          <PhoneNumbers
-            control={control}
-            errors={errors}
-            register={register}
-            watch={watch}
-          />
+          <PhoneNumbers control={control} errors={errors} watch={watch} />
 
           <HrCustom className="my-7" />
 

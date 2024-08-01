@@ -103,7 +103,6 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
       <Addresses
         control={control}
         errors={errors}
-        register={register}
         watch={watch}
         containerExtraHeader={
           <Button

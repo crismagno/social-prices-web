@@ -1,41 +1,24 @@
-import {
-  Select,
-  Tooltip,
-} from 'antd';
-import {
-  Control,
-  useFieldArray,
-} from 'react-hook-form';
-import { z } from 'zod';
+import { Select, Tooltip } from "antd";
+import { Control, useFieldArray } from "react-hook-form";
+import { z } from "zod";
 
-import AddressEnum from '../../../shared/business/enums/address.enum';
-import {
-  IAddress,
-} from '../../../shared/business/interfaces/address.interface';
-import citiesMockData from '../../../shared/utils/mock-data/brazil-cities.json';
-import statesMockData from '../../../shared/utils/mock-data/brazil-states.json';
-import countriesMockData from '../../../shared/utils/mock-data/countries.json';
+import AddressEnum from "../../../shared/business/enums/address.enum";
+import { IAddress } from "../../../shared/business/interfaces/address.interface";
+import citiesMockData from "../../../shared/utils/mock-data/brazil-cities.json";
+import statesMockData from "../../../shared/utils/mock-data/brazil-states.json";
+import countriesMockData from "../../../shared/utils/mock-data/countries.json";
 import {
   ICityMockData,
   ICountryMockData,
   IStateMockData,
-} from '../../../shared/utils/mock-data/interfaces';
-import {
-  createAddressName,
-} from '../../../shared/utils/string-extensions/string-extensions';
-import {
-  InputCustomAntd,
-} from '../../custom/antd/InputCustomAntd/InputCustomAntd';
-import {
-  SelectCustomAntd,
-} from '../../custom/antd/SelectCustomAntd/SelectCustomAntd';
-import ButtonCommon from '../ButtonCommon/ButtonCommon';
-import Collapse from '../Collapse/Collapse';
-import ContainerTitle from '../ContainerTitle/ContainerTitle';
-import {
-  IconPlus,
-  IconTrash,
-} from '../icons/icons';
+} from "../../../shared/utils/mock-data/interfaces";
+import { createAddressName } from "../../../shared/utils/string-extensions/string-extensions";
+import { InputCustomAntd } from "../../custom/antd/InputCustomAntd/InputCustomAntd";
+import { SelectCustomAntd } from "../../custom/antd/SelectCustomAntd/SelectCustomAntd";
+import ButtonCommon from "../ButtonCommon/ButtonCommon";
+import Collapse from "../Collapse/Collapse";
+import ContainerTitle from "../ContainerTitle/ContainerTitle";
+import { IconPlus, IconTrash } from "../icons/icons";
 
 export const countries: ICountryMockData[] = countriesMockData.filter(
   (country) => country.code === "BR"
@@ -82,7 +65,6 @@ export const generateNewAddress = (
 interface Props {
   control: Control<any>;
   watch: any;
-  register: any;
   errors: any;
   containerExtraHeader?: any;
 }
@@ -90,7 +72,6 @@ interface Props {
 export const Addresses: React.FC<Props> = ({
   control,
   watch,
-  register,
   errors,
   containerExtraHeader,
 }) => {
