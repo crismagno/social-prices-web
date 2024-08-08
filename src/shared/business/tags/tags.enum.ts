@@ -14,6 +14,9 @@ namespace TagsEnum {
     [Type.PRODUCT]: "Product",
     [Type.CUSTOMER]: "Customer",
   };
+
+  export const defaultTagColor: string = "black";
+  export const defaultTagSize: number = 30;
 }
 
 export default TagsEnum;

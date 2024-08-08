@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { Button, Col, Drawer, message, Row, Select } from "antd";
+import { sortBy } from "lodash";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -9,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import handleClientError from "../../../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../../../components/common/HrCustom/HrCustom";
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
+import { ColorPickerCustomAntd } from "../../../../components/custom/antd/ColorPickerCustomAntd/ColorPickerCustomAntd";
 import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
@@ -24,7 +26,7 @@ const formSchema = z.object({
   name: z.string().trim().nonempty("Name is required"),
   type: z.string().nonempty("Type is required"),
   description: z.string().trim().nullable(),
-  color: z.string().trim().nullable(),
+  color: z.any().nullable(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -97,7 +99,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
         userId: user!._id,
         type: data.type as TagsEnum.Type,
         description: data.description,
-        color: data.color,
+        color: data.color.toHexString(),
       };
 
       const newTag: ITag =
@@ -122,7 +124,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
         type: data.type as TagsEnum.Type,
         tagId: tagId!,
         description: data.description,
-        color: data.color,
+        color: data.color.toHexString(),
       };
 
       const tagUpdated: ITag =
@@ -173,7 +175,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
               label="Type"
               errorMessage={errors.type?.message}
             >
-              {Object.keys(TagsEnum.Type).map((type: string) => (
+              {sortBy(Object.keys(TagsEnum.Type)).map((type: string) => (
                 <Select.Option key={type} value={type}>
                   {TagsEnum.TypeLabels[type as TagsEnum.Type]}
                 </Select.Option>
@@ -187,6 +189,17 @@ export const TagDetailDrawer: React.FC<Props> = ({
               label="Description"
               placeholder={"Enter description"}
               rows={2}
+            />
+          </Col>
+
+          <Col xs={24}>
+            <ColorPickerCustomAntd
+              controller={{ control, name: "color" }}
+              label="Color"
+              defaultValue="#1677ff"
+              showText
+              allowClear
+              size="large"
             />
           </Col>
         </Row>

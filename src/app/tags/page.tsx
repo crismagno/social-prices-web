@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Button, Card, Tag, Tooltip } from "antd";
 import moment from "moment";
 
-import { EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { EditOutlined, PlusOutlined, TagFilled } from "@ant-design/icons";
 
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
@@ -68,6 +68,16 @@ export default function TagsPage() {
               dataIndex: "color",
               key: "color",
               align: "center",
+              render: (color: string | null) => {
+                return (
+                  <TagFilled
+                    style={{
+                      color: color ?? TagsEnum.defaultTagColor,
+                      fontSize: TagsEnum.defaultTagSize,
+                    }}
+                  />
+                );
+              },
             },
             {
               title: "Description",
