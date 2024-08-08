@@ -200,6 +200,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
               showText
               allowClear
               size="large"
+              style={{ width: 150 }}
             />
           </Col>
         </Row>
