@@ -68,16 +68,14 @@ export default function TagsPage() {
               dataIndex: "color",
               key: "color",
               align: "center",
-              render: (color: string | null) => {
-                return (
-                  <TagFilled
-                    style={{
-                      color: color ?? TagsEnum.defaultTagColor,
-                      fontSize: TagsEnum.defaultTagSize,
-                    }}
-                  />
-                );
-              },
+              render: (color: string | null) => (
+                <TagFilled
+                  style={{
+                    color: color ?? TagsEnum.defaultTagColor,
+                    fontSize: TagsEnum.defaultTagSize,
+                  }}
+                />
+              ),
             },
             {
               title: "Description",
