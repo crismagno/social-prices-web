@@ -13,40 +13,40 @@ import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomA
 import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import useAuthData from "../../../../data/context/auth/useAuthData";
-import CreateCategoryDto from "../../../../services/social-prices-api/categories/dto/createCategory.dto";
-import UpdateCategoryDto from "../../../../services/social-prices-api/categories/dto/updateCategory.dto";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/ServiceMethods";
-import CategoriesEnum from "../../../../shared/business/categories/categories.enum";
-import { ICategory } from "../../../../shared/business/categories/categories.interface";
-import { parseToUpperAndUnderline } from "../../../../shared/utils/string-extensions/string-extensions";
-import { useFindCategoryById } from "../../useFindCategoryById";
+import CreateTagDto from "../../../../services/social-prices-api/tags/dto/createTag.dto";
+import UpdateTagDto from "../../../../services/social-prices-api/tags/dto/updateTag.dto";
+import TagsEnum from "../../../../shared/business/tags/tags.enum";
+import { ITag } from "../../../../shared/business/tags/tags.interface";
+import { useFindTagById } from "../../useFindTagById";
 
 const formSchema = z.object({
   name: z.string().trim().nonempty("Name is required"),
   type: z.string().nonempty("Type is required"),
   description: z.string().trim().nullable(),
+  color: z.string().trim().nullable(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
 
 interface Props {
   isOpen: boolean;
-  categoryId?: string;
+  tagId?: string;
   onClose: () => void;
-  onOk: (category: ICategory) => void;
+  onOk: (tag: ITag) => void;
 }
 
-export const CategoryDetailDrawer: React.FC<Props> = ({
+export const TagDetailDrawer: React.FC<Props> = ({
   isOpen,
   onClose,
   onOk,
-  categoryId,
+  tagId,
 }) => {
   const { user } = useAuthData();
 
-  const { isLoading, category } = useFindCategoryById(categoryId);
+  const { isLoading, tag } = useFindTagById(tagId);
 
-  const isEditMode: boolean = !!categoryId && !!category;
+  const isEditMode: boolean = !!tagId && !!tag;
 
   const [formValues, setFormValues] = useState<TFormSchema>();
 
@@ -63,19 +63,20 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
 
   useEffect(() => {
     const values: TFormSchema = {
-      name: category?.name ?? "",
-      type: category?.type ?? CategoriesEnum.Type.PRODUCT,
-      description: category?.description ?? null,
+      name: tag?.name ?? "",
+      type: tag?.type ?? TagsEnum.Type.ANY,
+      description: tag?.description ?? null,
+      color: tag?.color ?? null,
     };
 
     setFormValues(values);
-  }, [category]);
+  }, [tag]);
 
-  if (categoryId && isLoading) {
+  if (tagId && isLoading) {
     return <LoadingFull />;
   }
 
-  if (categoryId && !category) {
+  if (tagId && !tag) {
     return null;
   }
 
@@ -91,22 +92,20 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
     try {
       setIsSUbmitting(true);
 
-      const createCategoryDto: CreateCategoryDto = {
-        code: parseToUpperAndUnderline(data.name),
+      const createTagDto: CreateTagDto = {
         name: data.name,
-        ownerUserId: user!._id,
-        type: data.type as CategoriesEnum.Type,
+        userId: user!._id,
+        type: data.type as TagsEnum.Type,
         description: data.description,
+        color: data.color,
       };
 
-      const newCategory: ICategory =
-        await serviceMethodsInstance.categoriesServiceMethods.create(
-          createCategoryDto
-        );
+      const newTag: ITag =
+        await serviceMethodsInstance.tagsServiceMethods.create(createTagDto);
 
-      message.success("Your category has been created successfully!");
+      message.success("Your tag has been created successfully!");
 
-      onOk(newCategory);
+      onOk(newTag);
     } catch (error) {
       handleClientError(error);
     } finally {
@@ -118,23 +117,20 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
     try {
       setIsSUbmitting(true);
 
-      const updateCategoryDto: UpdateCategoryDto = {
-        code: parseToUpperAndUnderline(data.name),
+      const updateTagDto: UpdateTagDto = {
         name: data.name,
-        ownerUserId: user!._id,
-        type: data.type as CategoriesEnum.Type,
-        categoryId: categoryId!,
+        type: data.type as TagsEnum.Type,
+        tagId: tagId!,
         description: data.description,
+        color: data.color,
       };
 
-      const categoryUpdated: ICategory =
-        await serviceMethodsInstance.categoriesServiceMethods.update(
-          updateCategoryDto
-        );
+      const tagUpdated: ITag =
+        await serviceMethodsInstance.tagsServiceMethods.update(updateTagDto);
 
-      message.success("Your category has been updated successfully!");
+      message.success("Your tag has been updated successfully!");
 
-      onOk(categoryUpdated);
+      onOk(tagUpdated);
     } catch (error) {
       handleClientError(error);
     } finally {
@@ -145,8 +141,9 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
   const handleClose = () => {
     setFormValues({
       name: "",
-      type: CategoriesEnum.Type.PRODUCT,
+      type: TagsEnum.Type.ANY,
       description: null,
+      color: null,
     });
 
     onClose();
@@ -154,7 +151,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
 
   return (
     <Drawer
-      title={categoryId ? `Update Category: ${category?.name}` : "New Category"}
+      title={tagId ? `Update Tag: ${tag?.name}` : "New Tag"}
       onClose={handleClose}
       open={isOpen}
     >
@@ -171,14 +168,14 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
           </Col>
 
           <Col xs={24}>
-            <SelectCustomAntd<ICategory>
+            <SelectCustomAntd<ITag>
               controller={{ control, name: "type" }}
               label="Type"
               errorMessage={errors.type?.message}
             >
-              {Object.keys(CategoriesEnum.Type).map((type: string) => (
+              {Object.keys(TagsEnum.Type).map((type: string) => (
                 <Select.Option key={type} value={type}>
-                  {CategoriesEnum.TypeLabels[type as CategoriesEnum.Type]}
+                  {TagsEnum.TypeLabels[type as TagsEnum.Type]}
                 </Select.Option>
               ))}
             </SelectCustomAntd>

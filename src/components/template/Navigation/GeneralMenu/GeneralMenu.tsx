@@ -4,49 +4,29 @@ import { Menu, MenuProps } from "antd";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
-import {
-  AppstoreOutlined,
-  BlockOutlined,
-  HomeOutlined,
-  TeamOutlined,
-} from "@ant-design/icons";
+import { TagOutlined } from "@ant-design/icons";
 
 import Urls from "../../../../shared/common/routes-app/routes-app";
-import { IconBuildingStoreFront } from "../../../common/icons/icons";
+import { IconQuestion } from "../../../common/icons/icons";
 import { getItem, MenuItem } from "../../../utils/navigation/navigation";
 import NavigationItem from "../NavigationItem";
 
 interface Props {}
 
-export const StoresMenu: React.FC<Props> = ({}) => {
+export const GeneralMenu: React.FC<Props> = ({}) => {
   const router: AppRouterInstance = useRouter();
 
   const items: MenuItem[] = [
     getItem(
-      <NavigationItem
-        icon={IconBuildingStoreFront()}
-        text="Stores"
-        url={Urls.STORES}
-      />,
-      Urls.STORES,
+      <NavigationItem icon={IconQuestion()} text="General" url={Urls.TAGS} />,
+      "sub1",
       null,
       [
         getItem(
-          "Stores",
+          "Tags",
           null,
           null,
-          [
-            getItem("Stores", Urls.STORES, <HomeOutlined />),
-            getItem("Customers", Urls.CUSTOMERS, <TeamOutlined />),
-            getItem("Categories", Urls.CATEGORIES, <BlockOutlined />),
-          ],
-          "group"
-        ),
-        getItem(
-          "Products",
-          null,
-          null,
-          [getItem("Products", Urls.PRODUCTS, <AppstoreOutlined />)],
+          [getItem("Tags", Urls.TAGS, <TagOutlined />)],
           "group"
         ),
       ]

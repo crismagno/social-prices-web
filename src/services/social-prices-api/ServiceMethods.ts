@@ -5,6 +5,7 @@ import NotificationsServiceMethods from "./notifications/notifications-service.m
 import ProductsServiceMethods from "./products/products-service.methods";
 import SalesServiceMethods from "./sales/sales-service.methods";
 import StoresServiceMethods from "./stores/stores-service.methods";
+import TagsServiceMethods from "./tags/tags-service.methods";
 import UsersServiceMethods from "./users/users-service.methods";
 
 export default class ServiceMethods {
@@ -16,6 +17,7 @@ export default class ServiceMethods {
   public customersServiceMethods: CustomersServiceMethods;
   public notificationsServiceMethods: NotificationsServiceMethods;
   public salesServiceMethods: SalesServiceMethods;
+  public tagsServiceMethods: TagsServiceMethods;
 
   constructor() {
     this.authServiceMethods = new AuthServiceMethods();
@@ -26,6 +28,7 @@ export default class ServiceMethods {
     this.customersServiceMethods = new CustomersServiceMethods();
     this.notificationsServiceMethods = new NotificationsServiceMethods();
     this.salesServiceMethods = new SalesServiceMethods();
+    this.tagsServiceMethods = new TagsServiceMethods();
   }
 }
 

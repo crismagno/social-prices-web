@@ -36,8 +36,11 @@ const Urls = {
   SALES_CREATE_BY_CUSTOMER: "/sales/create?cid=:customerId",
   SALES_CREATE_BY_STORE: "/sales/create?sid=:storeId",
 
-  // sales
+  // categories
   CATEGORIES: "/categories",
+
+  // tags
+  TAGS: "/tags",
 };
 
 export default Urls;

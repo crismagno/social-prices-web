@@ -8,24 +8,8 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 
 import Urls from "../../../../shared/common/routes-app/routes-app";
 import { IconCart } from "../../../common/icons/icons";
+import { getItem, MenuItem } from "../../../utils/navigation/navigation";
 import NavigationItem from "../NavigationItem";
-
-type MenuItem = Required<MenuProps>["items"][number];
-
-const getItem = (
-  label: React.ReactNode,
-  key?: React.Key | null,
-  icon?: React.ReactNode,
-  children?: MenuItem[],
-  type?: "group"
-): MenuItem =>
-  ({
-    key,
-    icon,
-    children,
-    label,
-    type,
-  } as MenuItem);
 
 interface Props {}
 

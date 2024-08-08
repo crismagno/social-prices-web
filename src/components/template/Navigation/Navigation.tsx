@@ -14,6 +14,7 @@ import {
   IconHome,
   IconLogout,
 } from "../../common/icons/icons";
+import { GeneralMenu } from "./GeneralMenu/GeneralMenu";
 import NavigationItem from "./NavigationItem";
 import { SalesMenu } from "./SalesMenu/SalesMenu";
 import { StoresMenu } from "./StoresMenu/StoresMenu";
@@ -74,6 +75,8 @@ const Navigation: React.FC<Props> = ({}) => {
         <StoresMenu />
 
         <SalesMenu />
+
+        <GeneralMenu />
       </ul>
 
       <ul className="flex flex-row">
