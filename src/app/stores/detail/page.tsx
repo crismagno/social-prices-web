@@ -45,6 +45,7 @@ import {
   PhoneNumbers,
 } from "../../../components/common/PhoneNumbers/PhoneNumbers";
 import { TagCategoryCustomAntd } from "../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
+import { TagTagCustomAntd } from "../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
 import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
@@ -167,7 +168,7 @@ export default function StoreDetailPage() {
     setFormValues(values);
   }, [store]);
 
-  if ((storeId && isLoadingStore) || isLoadingCategories) {
+  if ((storeId && isLoadingStore) || isLoadingCategories || isLoadingTags) {
     return <LoadingFull />;
   }
 
@@ -447,7 +448,7 @@ export default function StoreDetailPage() {
               >
                 {tags.map((tag: ITag) => (
                   <Select.Option key={tag._id} value={tag._id}>
-                    {tag.name}
+                    <TagTagCustomAntd tag={tag} useTag={false} />
                   </Select.Option>
                 ))}
               </SelectCustomAntd>
