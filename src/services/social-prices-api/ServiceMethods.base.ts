@@ -18,13 +18,7 @@ export default abstract class ServiceMethodsBase {
   }
 
   public formatAuthorizationWithToken(): string {
-    const user: IUser | null = this.getUser();
-
-    if (!user) {
-      throw new Error(
-        "Unauthorized user not found! Please contact the support. Code: UUNT"
-      );
-    }
+    const user: IUser = this.getUserOrFail();
 
     const token: string | null = user.authToken;
 
@@ -37,18 +31,12 @@ export default abstract class ServiceMethodsBase {
     return this.formatAuthorization(token);
   }
 
-  public getUser = (): IUser | null => {
-    const user: IUser | null = LocalStorageUserMethods.getUser();
-
-    return user;
-  };
-
-  public getOwnerUserOrFail = (): IUser => {
+  public getUserOrFail = (): IUser => {
     const user: IUser | null = LocalStorageUserMethods.getUser();
 
     if (!user) {
       throw new Error(
-        "User not found[1]! Please contact the support. Code: UONT"
+        "User not found[1]! Please contact the support. Code: UNT"
       );
     }
 

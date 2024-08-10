@@ -15,12 +15,12 @@ import TagsServiceEnum from "./tags-service.enum";
 
 export default class TagsServiceMethods extends ServiceMethodsBase {
   public async findByType(type: TagsEnum.Type): Promise<ITag[]> {
-    const ownerUser: IUser = this.getOwnerUserOrFail();
+    const user: IUser = this.getUserOrFail();
 
     const response = await this._fetchAxios.get<ITag[]>(
       `${this._socialPricesApiV1}${TagsServiceEnum.Methods.FIND_BY_TYPE.replace(
         ":userId",
-        ownerUser._id
+        user._id
       ).replace(":type", type)}`,
       {
         headers: {
@@ -53,14 +53,14 @@ export default class TagsServiceMethods extends ServiceMethodsBase {
   public async findByUserTableState(
     tableState?: ITableStateRequest<ITag>
   ): Promise<ITableStateResponse<ITag[]>> {
-    const ownerUser: IUser = this.getOwnerUserOrFail();
+    const user: IUser = this.getUserOrFail();
 
     const response = await this._fetchAxios.post<ITableStateResponse<ITag[]>>(
       `${
         this._socialPricesApiV1
       }${TagsServiceEnum.Methods.FIND_BY_USER_TABLE_STATE.replace(
         ":userId",
-        ownerUser._id
+        user._id
       )}`,
       tableState,
       {
