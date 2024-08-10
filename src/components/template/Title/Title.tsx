@@ -1,7 +1,9 @@
+import { ReactElement } from "react";
+
 import { BackButton } from "../../common/BackButton/BackButton";
 
 interface Props {
-  title: string;
+  title: string | ReactElement;
   subtitle?: string;
   hasBackButton?: boolean;
 }

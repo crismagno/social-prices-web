@@ -1,7 +1,9 @@
+import { ReactElement } from "react";
+
 import Title from "../Title/Title";
 
 interface Props {
-  title: string;
+  title: string | ReactElement;
   subtitle?: string;
   hasBackButton?: boolean;
 }

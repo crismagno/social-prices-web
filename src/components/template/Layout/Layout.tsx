@@ -1,5 +1,7 @@
 "use client";
 
+import { ReactElement } from "react";
+
 import useAppData from "../../../data/context/app/useAppData";
 import ForceAuth from "../../auth/ForceAuth/ForceAuth";
 import Content from "../Content/Content";
@@ -7,7 +9,7 @@ import Header from "../Header/Header";
 import Navigation from "../Navigation/Navigation";
 
 interface Props {
-  title: string;
+  title: string | ReactElement;
   subtitle?: string;
   children?: any;
   hasBackButton?: boolean;
