@@ -1,4 +1,4 @@
-import UsersEnum from '../../../../shared/business/users/users.enum';
+import UsersEnum from "../../../../shared/business/users/users.enum";
 
 export default class CreateCustomerDto {
   email: string | null = null;
@@ -8,4 +8,5 @@ export default class CreateCustomerDto {
   about: string | null = null;
   addresses: any[] = [];
   phoneNumbers: any[] = [];
+  tagsIds: string[] = [];
 }

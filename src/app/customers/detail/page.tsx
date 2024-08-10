@@ -43,6 +43,7 @@ import {
   phoneNumberFormSchema,
   PhoneNumbers,
 } from "../../../components/common/PhoneNumbers/PhoneNumbers";
+import { TagTagCustomAntd } from "../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
 import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
@@ -54,10 +55,14 @@ import { ICustomer } from "../../../shared/business/customers/customer.interface
 import AddressEnum from "../../../shared/business/enums/address.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
 import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number";
+import TagsEnum from "../../../shared/business/tags/tags.enum";
+import { ITag } from "../../../shared/business/tags/tags.interface";
 import UsersEnum from "../../../shared/business/users/users.enum";
+import { sortArray } from "../../../shared/utils/array/functions";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getFileUrl } from "../../../shared/utils/images/helper";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
+import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindCustomerById } from "./useFindCustomerById";
 
 const formSchema = z.object({
@@ -68,6 +73,7 @@ const formSchema = z.object({
   about: z.string().trim().nullable(),
   birthDate: z.string().nullable(),
   gender: z.string().nullable(),
+  tagsIds: z.array(z.string()),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -81,12 +87,15 @@ export default function CustomerDetailPage() {
 
   const { customer, isLoading } = useFindCustomerById(customerId);
 
+  const { tags, isLoading: isLoadingTags } = useFindTagsByType(
+    TagsEnum.Type.CUSTOMER
+  );
+
   const [formValues, setFormValues] = useState<TFormSchema>();
 
   const isEditMode: boolean = !!customerId && !!customer;
 
   const {
-    register,
     handleSubmit,
     formState: { errors },
     control,
@@ -135,12 +144,13 @@ export default function CustomerDetailPage() {
           )
         : [generateNewPhoneNumber(false)],
       gender: customer?.gender ?? UsersEnum.Gender.OTHER,
+      tagsIds: customer?.tagsIds ?? [],
     };
 
     setFormValues(values);
   }, [customer]);
 
-  if (customerId && isLoading) {
+  if ((customerId && isLoading) || isLoadingTags) {
     return <LoadingFull />;
   }
 
@@ -189,6 +199,7 @@ export default function CustomerDetailPage() {
         name: data.name,
         gender: data.gender as UsersEnum.Gender,
         phoneNumbers: data.phoneNumbers,
+        tagsIds: data.tagsIds,
       };
 
       for (const property of Object.keys(createCustomerDto)) {
@@ -255,6 +266,7 @@ export default function CustomerDetailPage() {
         name: data.name,
         gender: data.gender as UsersEnum.Gender,
         phoneNumbers: data.phoneNumbers,
+        tagsIds: data.tagsIds,
         customerId: customer._id,
       };
 
@@ -365,6 +377,22 @@ export default function CustomerDetailPage() {
                 {Object.keys(UsersEnum.Gender).map((gender: string) => (
                   <Select.Option key={gender} value={gender}>
                     {UsersEnum.GenderLabels[gender as UsersEnum.Gender]}
+                  </Select.Option>
+                ))}
+              </SelectCustomAntd>
+            </Col>
+
+            <Col xs={24} md={12}>
+              <SelectCustomAntd<ICustomer>
+                controller={{ control, name: "tagsIds" }}
+                label="Tags"
+                errorMessage={errors.tagsIds?.message}
+                placeholder={"Select tags"}
+                mode="multiple"
+              >
+                {sortArray(tags, "name").map((tag: ITag) => (
+                  <Select.Option key={tag._id} value={tag._id}>
+                    <TagTagCustomAntd tag={tag} useTag={false} />
                   </Select.Option>
                 ))}
               </SelectCustomAntd>

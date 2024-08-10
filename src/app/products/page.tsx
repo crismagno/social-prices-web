@@ -25,6 +25,7 @@ import { ICategory } from "../../shared/business/categories/categories.interface
 import { IProduct } from "../../shared/business/products/products.interface";
 import StoresEnum from "../../shared/business/stores/stores.enum";
 import { IStore } from "../../shared/business/stores/stores.interface";
+import TagsEnum from "../../shared/business/tags/tags.enum";
 import { ITag } from "../../shared/business/tags/tags.interface";
 import CommonEnum from "../../shared/common/enums/common.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
@@ -54,12 +55,12 @@ export default function ProductsPage() {
     useFindCategoriesByType(CategoriesEnum.Type.PRODUCT);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    CategoriesEnum.Type.PRODUCT
+    TagsEnum.Type.PRODUCT
   );
 
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
-  if (isLoadingStores || isLoadingCategories) {
+  if (isLoadingStores || isLoadingCategories || isLoadingTags) {
     return <LoadingFull />;
   }
 

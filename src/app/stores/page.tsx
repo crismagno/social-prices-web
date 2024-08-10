@@ -24,6 +24,7 @@ import CategoriesEnum from "../../shared/business/categories/categories.enum";
 import { ICategory } from "../../shared/business/categories/categories.interface";
 import StoresEnum from "../../shared/business/stores/stores.enum";
 import { IStore } from "../../shared/business/stores/stores.interface";
+import TagsEnum from "../../shared/business/tags/tags.enum";
 import { ITag } from "../../shared/business/tags/tags.interface";
 import Urls from "../../shared/common/routes-app/routes-app";
 import { sortArray } from "../../shared/utils/array/functions";
@@ -49,7 +50,7 @@ export default function StoresPage() {
     useFindCategoriesByType(CategoriesEnum.Type.STORE);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    CategoriesEnum.Type.STORE
+    TagsEnum.Type.STORE
   );
 
   const handleNewStore = () => {

@@ -14,16 +14,22 @@ import {
 } from "@ant-design/icons";
 
 import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
+import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import { PhoneNumbersTag } from "../../components/common/PhoneNumbersTag/PhoneNumbersTag";
+import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
 import { ICustomer } from "../../shared/business/customers/customer.interface";
 import { IPhoneNumber } from "../../shared/business/interfaces/phone-number";
+import TagsEnum from "../../shared/business/tags/tags.enum";
+import { ITag } from "../../shared/business/tags/tags.interface";
 import UsersEnum from "../../shared/business/users/users.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
+import { sortArray } from "../../shared/utils/array/functions";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
+import { useFindTagsByType } from "../tags/useFindTagsByType";
 import { useFindCustomersByOwnerOfUserTableState } from "./useFindCustomersByOwnerOfUserTableState";
 
 export default function CustomersPage() {
@@ -35,6 +41,16 @@ export default function CustomersPage() {
 
   const { isLoading, customers, total } =
     useFindCustomersByOwnerOfUserTableState(tableStateRequest);
+
+  const { tags, isLoading: isLoadingTags } = useFindTagsByType(
+    TagsEnum.Type.CUSTOMER
+  );
+
+  if (isLoadingTags) {
+    return <LoadingFull />;
+  }
+
+  const tagsSort: ITag[] = sortArray(tags, "name");
 
   return (
     <Layout subtitle="Manager my Customers" title="Customers" hasBackButton>
@@ -119,16 +135,28 @@ export default function CustomersPage() {
                 moment(birthDate).format(DatesEnum.Format.DDMMYYY),
             },
             {
+              title: "Tags",
+              dataIndex: "tagsIds",
+              key: "tagsIds",
+              filters: tagsSort.map((tag: ITag) => ({
+                text: tag.name,
+                value: tag._id,
+              })),
+              align: "center",
+              render: (tagsIds: string[]) => (
+                <TagTagsCustomAntd tags={tagsSort} tagsIds={tagsIds} />
+              ),
+            },
+            {
               title: "Action",
               dataIndex: "action",
               key: "action",
               align: "center",
               render: (_: any, customer: ICustomer) => {
                 return (
-                  <>
+                  <Button.Group>
                     <Tooltip title="Edit Customer">
                       <Button
-                        className="mr-1"
                         type="success"
                         onClick={() =>
                           router.push(
@@ -144,7 +172,6 @@ export default function CustomersPage() {
 
                     <Tooltip title="Create Sale">
                       <Button
-                        className="mr-1"
                         type="primary"
                         onClick={() =>
                           router.push(
@@ -157,7 +184,7 @@ export default function CustomersPage() {
                         icon={<ShoppingCartOutlined />}
                       />
                     </Tooltip>
-                  </>
+                  </Button.Group>
                 );
               },
             },
