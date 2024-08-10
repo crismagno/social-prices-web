@@ -15,7 +15,11 @@ const ForceAuth = ({ children }: any) => {
 
   const router: AppRouterInstance = useRouter();
 
-  if (!isLoading && user?.email) {
+  if (isLoading) {
+    return <LoadingFull />;
+  }
+
+  if (user?.email) {
     return (
       <>
         <Head>
@@ -33,10 +37,6 @@ const ForceAuth = ({ children }: any) => {
         {children}
       </>
     );
-  }
-
-  if (isLoading) {
-    return <LoadingFull />;
   }
 
   router.push(Urls.LOGIN);

@@ -20,6 +20,7 @@ import CreateTagDto from "../../../../services/social-prices-api/tags/dto/create
 import UpdateTagDto from "../../../../services/social-prices-api/tags/dto/updateTag.dto";
 import TagsEnum from "../../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../../shared/business/tags/tags.interface";
+import { parseColorPickerToHexString } from "../../../../shared/utils/antd/color-picker/color-picker";
 import { useFindTagById } from "../../useFindTagById";
 
 const formSchema = z.object({
@@ -99,7 +100,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
         userId: user!._id,
         type: data.type as TagsEnum.Type,
         description: data.description,
-        color: data.color.toHexString(),
+        color: parseColorPickerToHexString(data.color),
       };
 
       const newTag: ITag =
@@ -124,7 +125,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
         type: data.type as TagsEnum.Type,
         tagId: tagId!,
         description: data.description,
-        color: data.color.toHexString(),
+        color: parseColorPickerToHexString(data.color),
       };
 
       const tagUpdated: ITag =
@@ -200,7 +201,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
               showText
               allowClear
               size="large"
-              style={{ width: 150 }}
+              style={{ width: 120 }}
             />
           </Col>
         </Row>
