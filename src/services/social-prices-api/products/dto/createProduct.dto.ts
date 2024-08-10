@@ -9,4 +9,5 @@ export default class CreateProductDto {
   storeIds: string[] = [];
   QRCode: string | null = null;
   categoriesIds: string[] = [];
+  tagsIds: string[] = [];
 }

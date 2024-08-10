@@ -1,11 +1,8 @@
 "use client";
 
-import './styles.scss';
+import "./styles.scss";
 
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect, useState } from "react";
 
 import {
   Button,
@@ -21,74 +18,52 @@ import {
   Upload,
   UploadFile,
   UploadProps,
-} from 'antd';
-import ImgCrop from 'antd-img-crop';
-import { RcFile } from 'antd/es/upload';
-import { isArray } from 'class-validator';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+} from "antd";
+import ImgCrop from "antd-img-crop";
+import { RcFile } from "antd/es/upload";
+import { isArray } from "class-validator";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import {
   ReadonlyURLSearchParams,
   useRouter,
   useSearchParams,
-} from 'next/navigation';
-import {
-  Controller,
-  SubmitHandler,
-  useForm,
-} from 'react-hook-form';
-import z from 'zod';
+} from "next/navigation";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import z from "zod";
 
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import handleClientError
-  from '../../../components/common/handleClientError/handleClientError';
-import HrCustom from '../../../components/common/HrCustom/HrCustom';
-import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
-import {
-  TagCategoryCustomAntd,
-} from '../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd';
-import {
-  CheckboxCustomAntd,
-} from '../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd';
-import {
-  InputCustomAntd,
-} from '../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
-import {
-  InputNumberCustomAntd,
-} from '../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd';
-import {
-  SelectCustomAntd,
-} from '../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
-import {
-  TextareaCustomAntd,
-} from '../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd';
-import Layout from '../../../components/template/Layout/Layout';
-import CreateProductDto
-  from '../../../services/social-prices-api/products/dto/createProduct.dto';
-import UpdateProductDto
-  from '../../../services/social-prices-api/products/dto/updateProduct.dto';
-import {
-  serviceMethodsInstance,
-} from '../../../services/social-prices-api/ServiceMethods';
-import CategoriesEnum
-  from '../../../shared/business/categories/categories.enum';
-import {
-  ICategory,
-} from '../../../shared/business/categories/categories.interface';
-import { IProduct } from '../../../shared/business/products/products.interface';
-import { IStore } from '../../../shared/business/stores/stores.interface';
-import { sortArray } from '../../../shared/utils/array/functions';
-import { getFileUrl } from '../../../shared/utils/images/helper';
-import { getImageUrl } from '../../../shared/utils/images/url-images';
+import handleClientError from "../../../components/common/handleClientError/handleClientError";
+import HrCustom from "../../../components/common/HrCustom/HrCustom";
+import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+import { TagCategoryCustomAntd } from "../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
+import { TagTagCustomAntd } from "../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
+import { CheckboxCustomAntd } from "../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd";
+import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
+import { InputNumberCustomAntd } from "../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
+import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
+import Layout from "../../../components/template/Layout/Layout";
+import CreateProductDto from "../../../services/social-prices-api/products/dto/createProduct.dto";
+import UpdateProductDto from "../../../services/social-prices-api/products/dto/updateProduct.dto";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
+import CategoriesEnum from "../../../shared/business/categories/categories.enum";
+import { ICategory } from "../../../shared/business/categories/categories.interface";
+import { IProduct } from "../../../shared/business/products/products.interface";
+import { IStore } from "../../../shared/business/stores/stores.interface";
+import TagsEnum from "../../../shared/business/tags/tags.enum";
+import { ITag } from "../../../shared/business/tags/tags.interface";
+import { sortArray } from "../../../shared/utils/array/functions";
+import { getFileUrl } from "../../../shared/utils/images/helper";
+import { getImageUrl } from "../../../shared/utils/images/url-images";
 import {
   formatterMoney,
   parserMoney,
-} from '../../../shared/utils/string-extensions/string-extensions';
-import {
-  useFindCategoriesByType,
-} from '../../categories/useFindCategoriesByType';
-import { useFindStoresByUser } from '../../stores/useFindStoresByUser';
-import { useFindProductById } from './useFindProductById';
+} from "../../../shared/utils/string-extensions/string-extensions";
+import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
+import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
+import { useFindTagsByType } from "../../tags/useFindTagsByType";
+import { useFindProductById } from "./useFindProductById";
 
 const formSchema = z.object({
   name: z.string().trim().nonempty("Name is required"),
@@ -101,6 +76,7 @@ const formSchema = z.object({
   barCode: z.string().trim().optional(),
   QRCode: z.string().optional(),
   categoriesIds: z.array(z.string()),
+  tagsIds: z.array(z.string()),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -114,6 +90,10 @@ export default function ProductDetailPage() {
 
   const { categories, isLoading: isLoadingCategories } =
     useFindCategoriesByType(CategoriesEnum.Type.PRODUCT);
+
+  const { tags, isLoading: isLoadingTags } = useFindTagsByType(
+    TagsEnum.Type.PRODUCT
+  );
 
   const productId: string | null = searchParams.get("pid");
 
@@ -165,12 +145,18 @@ export default function ProductDetailPage() {
       storeIds: product?.storeIds ?? [],
       QRCode: product?.QRCode ?? "",
       categoriesIds: product?.categoriesIds ?? [],
+      tagsIds: product?.tagsIds ?? [],
     };
 
     setFormValues(values);
   }, [product]);
 
-  if ((productId && isLoading) || isLoadingStores || isLoadingCategories) {
+  if (
+    (productId && isLoading) ||
+    isLoadingStores ||
+    isLoadingCategories ||
+    isLoadingTags
+  ) {
     return <LoadingFull />;
   }
 
@@ -223,6 +209,7 @@ export default function ProductDetailPage() {
         barCode: data.barCode ?? null,
         QRCode: data.QRCode ?? null,
         categoriesIds: data.categoriesIds ?? [],
+        tagsIds: data.tagsIds ?? [],
       };
 
       for (const property of Object.keys(createProductDto)) {
@@ -287,6 +274,7 @@ export default function ProductDetailPage() {
         QRCode: data.QRCode ?? null,
         deletedFilesUrl,
         categoriesIds: data.categoriesIds ?? [],
+        tagsIds: data.tagsIds ?? [],
       };
 
       for (const property of Object.keys(updateProductDto)) {
@@ -434,6 +422,21 @@ export default function ProductDetailPage() {
                 {sortArray(categories, "name").map((category: ICategory) => (
                   <Select.Option key={category._id} value={category._id}>
                     <TagCategoryCustomAntd category={category} useTag={false} />
+                  </Select.Option>
+                ))}
+              </SelectCustomAntd>
+            </Col>
+            <Col xs={24} md={8}>
+              <SelectCustomAntd<IProduct>
+                controller={{ control, name: "tagsIds" }}
+                label="Tags"
+                errorMessage={errors.tagsIds?.message}
+                placeholder={"Select tags"}
+                mode="multiple"
+              >
+                {sortArray(tags, "name").map((tag: ITag) => (
+                  <Select.Option key={tag._id} value={tag._id}>
+                    <TagTagCustomAntd tag={tag} useTag={false} />
                   </Select.Option>
                 ))}
               </SelectCustomAntd>

@@ -16,6 +16,7 @@ import {
 
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
+import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import YesNo from "../../components/common/YesNo/YesNo";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
@@ -24,6 +25,7 @@ import { ICategory } from "../../shared/business/categories/categories.interface
 import { IProduct } from "../../shared/business/products/products.interface";
 import StoresEnum from "../../shared/business/stores/stores.enum";
 import { IStore } from "../../shared/business/stores/stores.interface";
+import { ITag } from "../../shared/business/tags/tags.interface";
 import CommonEnum from "../../shared/common/enums/common.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 import { sortArray } from "../../shared/utils/array/functions";
@@ -35,6 +37,7 @@ import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";
 import { useFindStoresByUser } from "../stores/useFindStoresByUser";
+import { useFindTagsByType } from "../tags/useFindTagsByType";
 import { useFindProductsByUserTableState } from "./useFindProductsByUserTableState";
 
 export default function ProductsPage() {
@@ -50,6 +53,10 @@ export default function ProductsPage() {
   const { categories, isLoading: isLoadingCategories } =
     useFindCategoriesByType(CategoriesEnum.Type.PRODUCT);
 
+  const { tags, isLoading: isLoadingTags } = useFindTagsByType(
+    CategoriesEnum.Type.PRODUCT
+  );
+
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
   if (isLoadingStores || isLoadingCategories) {
@@ -57,6 +64,8 @@ export default function ProductsPage() {
   }
 
   const categoriesSort: ICategory[] = sortArray(categories, "name");
+
+  const tagsSort: ITag[] = sortArray(tags, "name");
 
   return (
     <Layout subtitle="My Products" title="Products" hasBackButton>
@@ -173,6 +182,19 @@ export default function ProductsPage() {
                   categories={categoriesSort}
                   categoriesIds={categoriesIds}
                 />
+              ),
+            },
+            {
+              title: "Tags",
+              dataIndex: "tagsIds",
+              key: "tagsIds",
+              filters: tagsSort.map((tag: ITag) => ({
+                text: tag.name,
+                value: tag._id,
+              })),
+              align: "center",
+              render: (tagsIds: string[]) => (
+                <TagTagsCustomAntd tags={tagsSort} tagsIds={tagsIds} />
               ),
             },
             {
