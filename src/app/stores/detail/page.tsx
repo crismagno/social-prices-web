@@ -50,7 +50,6 @@ import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd
 import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
-import useAuthData from "../../../data/context/auth/useAuthData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import CreateStoreDto from "../../../services/social-prices-api/stores/dto/createStore.dto";
 import UpdateStoreDto from "../../../services/social-prices-api/stores/dto/updateStore.dto";
@@ -86,10 +85,6 @@ const formSchema = z.object({
 type TFormSchema = z.infer<typeof formSchema>;
 
 export default function StoreDetailPage() {
-  const { user } = useAuthData();
-
-  const userId: string = user?._id ?? "";
-
   const router: AppRouterInstance = useRouter();
 
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
@@ -102,7 +97,6 @@ export default function StoreDetailPage() {
     useFindCategoriesByType(CategoriesEnum.Type.STORE);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    userId,
     TagsEnum.Type.STORE
   );
 
@@ -111,7 +105,6 @@ export default function StoreDetailPage() {
   const isEditMode: boolean = !!storeId && !!store;
 
   const {
-    register,
     handleSubmit,
     formState: { errors },
     control,

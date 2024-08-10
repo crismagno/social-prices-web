@@ -2,6 +2,7 @@
 
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../shared/business/tags/tags.interface";
+import IUser from "../../../shared/business/users/user.interface";
 import {
   ITableStateRequest,
   ITableStateResponse,
@@ -13,14 +14,13 @@ import UpdateTagDto from "./dto/updateTag.dto";
 import TagsServiceEnum from "./tags-service.enum";
 
 export default class TagsServiceMethods extends ServiceMethodsBase {
-  public async findByType(
-    userId: string,
-    type: TagsEnum.Type
-  ): Promise<ITag[]> {
+  public async findByType(type: TagsEnum.Type): Promise<ITag[]> {
+    const ownerUser: IUser = this.getOwnerUserOrFail();
+
     const response = await this._fetchAxios.get<ITag[]>(
       `${this._socialPricesApiV1}${TagsServiceEnum.Methods.FIND_BY_TYPE.replace(
         ":userId",
-        userId
+        ownerUser._id
       ).replace(":type", type)}`,
       {
         headers: {
@@ -51,15 +51,16 @@ export default class TagsServiceMethods extends ServiceMethodsBase {
   }
 
   public async findByUserTableState(
-    userId: string,
     tableState?: ITableStateRequest<ITag>
   ): Promise<ITableStateResponse<ITag[]>> {
+    const ownerUser: IUser = this.getOwnerUserOrFail();
+
     const response = await this._fetchAxios.post<ITableStateResponse<ITag[]>>(
       `${
         this._socialPricesApiV1
       }${TagsServiceEnum.Methods.FIND_BY_USER_TABLE_STATE.replace(
         ":userId",
-        userId
+        ownerUser._id
       )}`,
       tableState,
       {

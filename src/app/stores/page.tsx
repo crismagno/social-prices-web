@@ -20,7 +20,6 @@ import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCu
 import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
-import useAuthData from "../../data/context/auth/useAuthData";
 import CategoriesEnum from "../../shared/business/categories/categories.enum";
 import { ICategory } from "../../shared/business/categories/categories.interface";
 import StoresEnum from "../../shared/business/stores/stores.enum";
@@ -37,10 +36,6 @@ import { StoreDetail } from "./components/StoreDetail/StoreDetail";
 import { useFindStoresByUserTableState } from "./useFindStoresByUserTableState";
 
 export default function StoresPage() {
-  const { user } = useAuthData();
-
-  const userId: string = user?._id ?? "";
-
   const router: AppRouterInstance = useRouter();
 
   const [tableStateRequest, setTableStateRequest] = useState<
@@ -54,7 +49,6 @@ export default function StoresPage() {
     useFindCategoriesByType(CategoriesEnum.Type.STORE);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    userId,
     CategoriesEnum.Type.STORE
   );
 

@@ -9,7 +9,6 @@ import { EditOutlined, PlusOutlined, TagFilled } from "@ant-design/icons";
 
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
-import useAuthData from "../../data/context/auth/useAuthData";
 import TagsEnum from "../../shared/business/tags/tags.enum";
 import { ITag } from "../../shared/business/tags/tags.interface";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
@@ -19,16 +18,12 @@ import { TagDetailDrawer } from "./components/TagDetailDrawer/TagDetailDrawer";
 import { useFindTagsByUserTableState } from "./useFindTagsByUserTableState";
 
 export default function TagsPage() {
-  const { user } = useAuthData();
-
-  const userId: string = user?._id ?? "";
-
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<ITag> | undefined
   >(createTableState({ sort: { field: "createdAt", order: "ascend" } }));
 
   const { isLoading, tags, total, fetchFindTagsByUserTableState } =
-    useFindTagsByUserTableState(userId, tableStateRequest);
+    useFindTagsByUserTableState(tableStateRequest);
 
   const [isTagDetailDrawerOpen, setIsTagDetailDrawerOpen] =
     useState<boolean>(false);

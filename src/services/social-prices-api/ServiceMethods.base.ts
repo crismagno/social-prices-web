@@ -1,5 +1,6 @@
 "use client";
 
+import IUser from "../../shared/business/users/user.interface";
 import LocalStorageUserMethods from "../../shared/common/local-storage/methods/local-storage-user.methods";
 import FetchAxios from "../../shared/utils/fetch/fetch-axios";
 
@@ -17,12 +18,40 @@ export default abstract class ServiceMethodsBase {
   }
 
   public formatAuthorizationWithToken(): string {
-    const token: string | null = LocalStorageUserMethods.getUserToken();
+    const user: IUser | null = this.getUser();
+
+    if (!user) {
+      throw new Error(
+        "Unauthorized user not found! Please contact the support. Code: UUNT"
+      );
+    }
+
+    const token: string | null = user.authToken;
 
     if (!token) {
-      throw new Error("Unauthorized! Please contact the support. Code: UNT");
+      throw new Error(
+        "Unauthorized user! Please contact the support. Code: UNT"
+      );
     }
 
     return this.formatAuthorization(token);
   }
+
+  public getUser = (): IUser | null => {
+    const user: IUser | null = LocalStorageUserMethods.getUser();
+
+    return user;
+  };
+
+  public getOwnerUserOrFail = (): IUser => {
+    const user: IUser | null = LocalStorageUserMethods.getUser();
+
+    if (!user) {
+      throw new Error(
+        "User not found[1]! Please contact the support. Code: UONT"
+      );
+    }
+
+    return user;
+  };
 }

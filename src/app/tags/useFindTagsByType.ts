@@ -6,7 +6,6 @@ import TagsEnum from "../../shared/business/tags/tags.enum";
 import { ITag } from "../../shared/business/tags/tags.interface";
 
 export const useFindTagsByType = (
-  userId: string,
   type: TagsEnum.Type
 ): {
   isLoading: boolean;
@@ -22,10 +21,7 @@ export const useFindTagsByType = (
       setIsLoading(true);
 
       const response: ITag[] =
-        await serviceMethodsInstance.tagsServiceMethods.findByType(
-          userId,
-          type
-        );
+        await serviceMethodsInstance.tagsServiceMethods.findByType(type);
 
       setTags(response);
     } catch (error: any) {
@@ -33,7 +29,7 @@ export const useFindTagsByType = (
     } finally {
       setIsLoading(false);
     }
-  }, [userId, type]);
+  }, [type]);
 
   useEffect(() => {
     fetchFindTagsByType();

@@ -9,7 +9,6 @@ import {
 } from "../../shared/utils/table/table-state.interface";
 
 export const useFindTagsByUserTableState = (
-  userId: string,
   tableState?: ITableStateRequest<ITag>
 ): {
   isLoading: boolean;
@@ -27,22 +26,19 @@ export const useFindTagsByUserTableState = (
     try {
       setIsLoading(true);
 
-      if (userId) {
-        const response: ITableStateResponse<ITag[]> =
-          await serviceMethodsInstance.tagsServiceMethods.findByUserTableState(
-            userId,
-            tableState
-          );
+      const response: ITableStateResponse<ITag[]> =
+        await serviceMethodsInstance.tagsServiceMethods.findByUserTableState(
+          tableState
+        );
 
-        setTags(response.data);
-        setTotal(response.total);
-      }
+      setTags(response.data);
+      setTotal(response.total);
     } catch (error: any) {
       handleClientError(error);
     } finally {
       setIsLoading(false);
     }
-  }, [tableState, userId]);
+  }, [tableState]);
 
   useEffect(() => {
     fetchFindTagsByUserTableState();
