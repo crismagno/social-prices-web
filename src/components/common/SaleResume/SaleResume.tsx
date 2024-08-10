@@ -13,6 +13,7 @@ import {
 } from "../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../shared/business/sales/sales.enum";
 import { IStore } from "../../../shared/business/stores/stores.interface";
+import { ITag } from "../../../shared/business/tags/tags.interface";
 import UsersEnum from "../../../shared/business/users/users.enum";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
@@ -22,13 +23,15 @@ import {
   formatToMoneyDecimal,
 } from "../../../shared/utils/string-extensions/string-extensions";
 import { ImageOrDefault } from "../ImageOrDefault/ImageOrDefault";
+import { TagTagsCustomAntd } from "../TagTagsCustomAntd/TagTagsCustomAntd";
 
 interface Props {
   sale: ISale | null;
   stores: IStore[];
+  tags: ITag[];
 }
 
-export const SaleResume: React.FC<Props> = ({ sale, stores }) => {
+export const SaleResume: React.FC<Props> = ({ sale, stores, tags }) => {
   let saleStores: ISaleStore[] = sale?.stores ?? [];
 
   const customer: ICustomer | undefined = sale?.stores?.[0].customer;
@@ -320,6 +323,12 @@ export const SaleResume: React.FC<Props> = ({ sale, stores }) => {
       <div className="flex pr-10 mt-2">
         <label className="font-semibold mr-1">Note: </label>
         <label>{sale.note}</label>
+      </div>
+
+      <Divider />
+      <div className="flex pr-10 mt-2">
+        <label className="font-semibold mr-1">Tags: </label>
+        <TagTagsCustomAntd tags={tags} tagsIds={sale.tagsIds} useTag />
       </div>
 
       <Divider />

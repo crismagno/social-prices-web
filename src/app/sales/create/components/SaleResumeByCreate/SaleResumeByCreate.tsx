@@ -2,9 +2,11 @@ import { Col, Divider, Empty, Image, Row } from "antd";
 import { find } from "lodash";
 
 import { ImageOrDefault } from "../../../../../components/common/ImageOrDefault/ImageOrDefault";
+import { TagTagsCustomAntd } from "../../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import { ICustomer } from "../../../../../shared/business/customers/customer.interface";
 import SalesEnum from "../../../../../shared/business/sales/sales.enum";
 import { IStore } from "../../../../../shared/business/stores/stores.interface";
+import { ITag } from "../../../../../shared/business/tags/tags.interface";
 import UsersEnum from "../../../../../shared/business/users/users.enum";
 import { defaultAvatarImage } from "../../../../../shared/utils/images/files-names";
 import { getImageUrl } from "../../../../../shared/utils/images/url-images";
@@ -23,6 +25,7 @@ interface Props {
   formSchema: TFormSchema;
   selectedCustomer: ICustomer | null;
   stores: IStore[];
+  tags: ITag[];
   subtotal: number;
   quantity: number;
   totalFinal: number;
@@ -35,6 +38,7 @@ export const SaleResumeByCreate: React.FC<Props> = ({
   formSchema,
   selectedCustomer,
   stores,
+  tags,
   subtotal,
   quantity,
   totalFinal,
@@ -288,6 +292,12 @@ export const SaleResumeByCreate: React.FC<Props> = ({
       <div className="flex pr-10 mt-2">
         <label className="font-semibold mr-1">Note: </label>
         <label>{formSchema.note}</label>
+      </div>
+
+      <Divider />
+      <div className="flex pr-10 mt-2">
+        <label className="font-semibold mr-1">Tags: </label>
+        <TagTagsCustomAntd tags={tags} tagsIds={formSchema.tagsIds} useTag />
       </div>
 
       <Divider />

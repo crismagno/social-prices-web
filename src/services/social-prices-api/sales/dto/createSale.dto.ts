@@ -78,4 +78,5 @@ export default class CreateSaleDto {
   stores: SaleStoreDto[] = [];
   isCreateQuote: boolean = false;
   paymentStatus: SalesEnum.PaymentStatus = SalesEnum.PaymentStatus.PENDING;
+  tagsIds: string[] = [];
 }

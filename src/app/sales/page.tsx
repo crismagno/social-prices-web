@@ -1,65 +1,44 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  Button,
-  Card,
-  Modal,
-  Tag,
-  Tooltip,
-} from 'antd';
-import {
-  find,
-  first,
-  map,
-} from 'lodash';
-import moment from 'moment';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
-import { useRouter } from 'next/navigation';
+import { Button, Card, Modal, Tag, Tooltip } from "antd";
+import { find, first, map } from "lodash";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import { useRouter } from "next/navigation";
 
-import {
-  DeleteOutlined,
-  EditOutlined,
-  EyeOutlined,
-} from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 
-import {
-  ButtonCreateSale,
-} from '../../components/common/ButtonCreateSale/ButtonCreateSale';
-import {
-  CustomRangeDatePicker,
-} from '../../components/common/CustomRangeDatePicker/CustomRangeDatePicker';
-import handleClientError
-  from '../../components/common/handleClientError/handleClientError';
-import {
-  ImageOrDefault,
-} from '../../components/common/ImageOrDefault/ImageOrDefault';
-import LoadingFull from '../../components/common/LoadingFull/LoadingFull';
-import { SaleResume } from '../../components/common/SaleResume/SaleResume';
-import TableCustomAntd2
-  from '../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
-import Layout from '../../components/template/Layout/Layout';
-import useAuthData from '../../data/context/auth/useAuthData';
-import {
-  serviceMethodsInstance,
-} from '../../services/social-prices-api/ServiceMethods';
-import { ICustomer } from '../../shared/business/customers/customer.interface';
+import { ButtonCreateSale } from "../../components/common/ButtonCreateSale/ButtonCreateSale";
+import { CustomRangeDatePicker } from "../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
+import handleClientError from "../../components/common/handleClientError/handleClientError";
+import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
+import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
+import { SaleResume } from "../../components/common/SaleResume/SaleResume";
+import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
+import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
+import Layout from "../../components/template/Layout/Layout";
+import useAuthData from "../../data/context/auth/useAuthData";
+import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
+import { ICustomer } from "../../shared/business/customers/customer.interface";
 import {
   ISale,
   ISaleBuyer,
   ISaleStore,
-} from '../../shared/business/sales/sale.interface';
-import SalesEnum from '../../shared/business/sales/sales.enum';
-import { IStore } from '../../shared/business/stores/stores.interface';
-import Urls from '../../shared/common/routes-app/routes-app';
-import DatesEnum from '../../shared/utils/dates/dates.enum';
-import { createTableState } from '../../shared/utils/table/table-state';
-import {
-  ITableStateRequest,
-} from '../../shared/utils/table/table-state.interface';
-import { useFindStoresByUser } from '../stores/useFindStoresByUser';
-import { useFindSalesByUserTableState } from './useFindSalesByUserTableState';
+} from "../../shared/business/sales/sale.interface";
+import SalesEnum from "../../shared/business/sales/sales.enum";
+import { IStore } from "../../shared/business/stores/stores.interface";
+import TagsEnum from "../../shared/business/tags/tags.enum";
+import { ITag } from "../../shared/business/tags/tags.interface";
+import Urls from "../../shared/common/routes-app/routes-app";
+import { sortArray } from "../../shared/utils/array/functions";
+import DatesEnum from "../../shared/utils/dates/dates.enum";
+import { createTableState } from "../../shared/utils/table/table-state";
+import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
+import { useFindStoresByUser } from "../stores/useFindStoresByUser";
+import { useFindTagsByType } from "../tags/useFindTagsByType";
+import { useFindSalesByUserTableState } from "./useFindSalesByUserTableState";
 
 export default function SalesPage() {
   const { user } = useAuthData();
@@ -88,9 +67,15 @@ export default function SalesPage() {
 
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
-  if (isLoadingStores) {
+  const { tags, isLoading: isLoadingTags } = useFindTagsByType(
+    TagsEnum.Type.SALE
+  );
+
+  if (isLoadingStores || isLoadingTags) {
     return <LoadingFull />;
   }
+
+  const tagsSort: ITag[] = sortArray(tags, "name");
 
   const handleEditSale = (sale: ISale) => {
     router.push(Urls.SALES_EDIT.replace(":saleId", sale._id));
@@ -297,6 +282,19 @@ export default function SalesPage() {
               },
             },
             {
+              title: "Tags",
+              dataIndex: "tagsIds",
+              key: "tagsIds",
+              filters: tagsSort.map((tag: ITag) => ({
+                text: tag.name,
+                value: tag._id,
+              })),
+              align: "center",
+              render: (tagsIds: string[]) => (
+                <TagTagsCustomAntd tags={tagsSort} tagsIds={tagsIds} />
+              ),
+            },
+            {
               title: "Action",
               dataIndex: "action",
               key: "action",
@@ -372,7 +370,7 @@ export default function SalesPage() {
           setIsOpenSaleResumeModal(false);
         }}
       >
-        <SaleResume sale={saleSelectedToResume} stores={stores} />
+        <SaleResume sale={saleSelectedToResume} stores={stores} tags={tags} />
       </Modal>
     </Layout>
   );
