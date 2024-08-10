@@ -1,6 +1,6 @@
 "use client";
 
-import CategoriesEnum from "../../../shared/business/categories/categories.enum";
+import TagsEnum from "../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../shared/business/tags/tags.interface";
 import {
   ITableStateRequest,
@@ -15,7 +15,7 @@ import TagsServiceEnum from "./tags-service.enum";
 export default class TagsServiceMethods extends ServiceMethodsBase {
   public async findByType(
     userId: string,
-    type: CategoriesEnum.Type
+    type: TagsEnum.Type
   ): Promise<ITag[]> {
     const response = await this._fetchAxios.get<ITag[]>(
       `${this._socialPricesApiV1}${TagsServiceEnum.Methods.FIND_BY_TYPE.replace(

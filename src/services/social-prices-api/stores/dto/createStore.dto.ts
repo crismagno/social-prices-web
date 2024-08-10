@@ -1,4 +1,4 @@
-import StoresEnum from '../../../../shared/business/stores/stores.enum';
+import StoresEnum from "../../../../shared/business/stores/stores.enum";
 
 export default class CreateStoreDto {
   name: string = "";
@@ -10,4 +10,5 @@ export default class CreateStoreDto {
   phoneNumbers: any[] = [];
   status: StoresEnum.Status = StoresEnum.Status.ACTIVE;
   categoriesIds: string[] = [];
+  tagsIds: string[] = [];
 }

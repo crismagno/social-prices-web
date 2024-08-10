@@ -49,6 +49,7 @@ import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd
 import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
+import useAuthData from "../../../data/context/auth/useAuthData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import CreateStoreDto from "../../../services/social-prices-api/stores/dto/createStore.dto";
 import UpdateStoreDto from "../../../services/social-prices-api/stores/dto/updateStore.dto";
@@ -59,10 +60,13 @@ import { IAddress } from "../../../shared/business/interfaces/address.interface"
 import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number";
 import StoresEnum from "../../../shared/business/stores/stores.enum";
 import { IStore } from "../../../shared/business/stores/stores.interface";
+import TagsEnum from "../../../shared/business/tags/tags.enum";
+import { ITag } from "../../../shared/business/tags/tags.interface";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getFileUrl } from "../../../shared/utils/images/helper";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
+import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindStoreById } from "./useFindStoreById";
 
 const formSchema = z.object({
@@ -75,11 +79,16 @@ const formSchema = z.object({
   about: z.string().trim().nullable(),
   status: z.string(),
   categoriesIds: z.array(z.string()),
+  tagsIds: z.array(z.string()),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
 
 export default function StoreDetailPage() {
+  const { user } = useAuthData();
+
+  const userId: string = user?._id ?? "";
+
   const router: AppRouterInstance = useRouter();
 
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
@@ -90,6 +99,11 @@ export default function StoreDetailPage() {
 
   const { categories, isLoading: isLoadingCategories } =
     useFindCategoriesByType(CategoriesEnum.Type.STORE);
+
+  const { tags, isLoading: isLoadingTags } = useFindTagsByType(
+    userId,
+    TagsEnum.Type.STORE
+  );
 
   const [formValues, setFormValues] = useState<TFormSchema>();
 
@@ -147,6 +161,7 @@ export default function StoreDetailPage() {
         : [generateNewPhoneNumber(false)],
       status: store?.status ?? StoresEnum.Status.ACTIVE,
       categoriesIds: store?.categoriesIds ?? [],
+      tagsIds: store?.tagsIds ?? [],
     };
 
     setFormValues(values);
@@ -203,6 +218,7 @@ export default function StoreDetailPage() {
         about: data.about,
         status: data.status as StoresEnum.Status,
         categoriesIds: data.categoriesIds,
+        tagsIds: data.tagsIds,
       };
 
       for (const property of Object.keys(createStoreDto)) {
@@ -272,6 +288,7 @@ export default function StoreDetailPage() {
         about: data.about,
         status: data.status as StoresEnum.Status,
         categoriesIds: data.categoriesIds,
+        tagsIds: data.tagsIds,
       };
 
       for (const property of Object.keys(updateStoreDto)) {
@@ -413,6 +430,24 @@ export default function StoreDetailPage() {
                 {categories.map((category: ICategory) => (
                   <Select.Option key={category._id} value={category._id}>
                     <TagCategoryCustomAntd category={category} useTag={false} />
+                  </Select.Option>
+                ))}
+              </SelectCustomAntd>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col xs={24} md={8}>
+              <SelectCustomAntd<IStore>
+                controller={{ control, name: "tagsIds" }}
+                label="Tags"
+                placeholder={"Select tags"}
+                mode="multiple"
+                errorMessage={errors.tagsIds?.message}
+              >
+                {tags.map((tag: ITag) => (
+                  <Select.Option key={tag._id} value={tag._id}>
+                    {tag.name}
                   </Select.Option>
                 ))}
               </SelectCustomAntd>

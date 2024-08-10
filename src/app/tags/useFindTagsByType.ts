@@ -1,0 +1,47 @@
+import { useCallback, useEffect, useState } from "react";
+
+import handleClientError from "../../components/common/handleClientError/handleClientError";
+import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
+import TagsEnum from "../../shared/business/tags/tags.enum";
+import { ITag } from "../../shared/business/tags/tags.interface";
+
+export const useFindTagsByType = (
+  userId: string,
+  type: TagsEnum.Type
+): {
+  isLoading: boolean;
+  tags: ITag[];
+  fetchFindTagsByType: () => Promise<void>;
+} => {
+  const [tags, setTags] = useState<ITag[]>([]);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const fetchFindTagsByType = useCallback(async () => {
+    try {
+      setIsLoading(true);
+
+      const response: ITag[] =
+        await serviceMethodsInstance.tagsServiceMethods.findByType(
+          userId,
+          type
+        );
+
+      setTags(response);
+    } catch (error: any) {
+      handleClientError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [userId, type]);
+
+  useEffect(() => {
+    fetchFindTagsByType();
+  }, [fetchFindTagsByType]);
+
+  return {
+    isLoading,
+    tags,
+    fetchFindTagsByType,
+  };
+};
