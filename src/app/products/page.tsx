@@ -199,24 +199,6 @@ export default function ProductsPage() {
               ),
             },
             {
-              title: "Created At",
-              dataIndex: "createdAt",
-              key: "createdAt",
-              align: "center",
-              render: (createdAt: Date) =>
-                moment(createdAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
-              sorter: true,
-            },
-            {
-              title: "Updated At",
-              dataIndex: "updatedAt",
-              key: "updatedAt",
-              align: "center",
-              render: (updatedAt: Date) =>
-                moment(updatedAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
-              sorter: true,
-            },
-            {
               title: "Active",
               dataIndex: "isActive",
               key: "isActive",
@@ -264,6 +246,24 @@ export default function ProductsPage() {
                   );
                 });
               },
+            },
+            {
+              title: "Created At",
+              dataIndex: "createdAt",
+              key: "createdAt",
+              align: "center",
+              render: (createdAt: Date) =>
+                moment(createdAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
+              sorter: true,
+            },
+            {
+              title: "Updated At",
+              dataIndex: "updatedAt",
+              key: "updatedAt",
+              align: "center",
+              render: (updatedAt: Date) =>
+                moment(updatedAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
+              sorter: true,
             },
             {
               title: "Action",

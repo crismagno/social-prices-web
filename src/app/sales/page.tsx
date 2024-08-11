@@ -47,7 +47,7 @@ export default function SalesPage() {
 
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<ISale> | undefined
-  >(createTableState({ sort: { field: "createdAt", order: "ascend" } }));
+  >(createTableState({ sort: { field: "createdAt", order: "descend" } }));
 
   const [isVisibleDeleteSaleModal, setIsVisibleDeleteSaleModal] =
     useState<boolean>(false);
@@ -246,15 +246,6 @@ export default function SalesPage() {
               ),
             },
             {
-              title: "Created At",
-              dataIndex: "createdAt",
-              key: "createdAt",
-              align: "center",
-              render: (createdAt: Date) =>
-                moment(createdAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
-              sorter: true,
-            },
-            {
               title: "Stores",
               dataIndex: "stores",
               key: "stores",
@@ -293,6 +284,15 @@ export default function SalesPage() {
               render: (tagsIds: string[]) => (
                 <TagTagsCustomAntd tags={tagsSort} tagsIds={tagsIds} />
               ),
+            },
+            {
+              title: "Created At",
+              dataIndex: "createdAt",
+              key: "createdAt",
+              align: "center",
+              render: (createdAt: Date) =>
+                moment(createdAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
+              sorter: true,
             },
             {
               title: "Action",

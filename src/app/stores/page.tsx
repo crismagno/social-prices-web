@@ -118,24 +118,6 @@ export default function StoresPage() {
               align: "center",
             },
             {
-              title: "Created At",
-              dataIndex: "createdAt",
-              key: "createdAt",
-              align: "center",
-              render: (createdAt: Date) =>
-                moment(createdAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
-              sorter: true,
-            },
-            {
-              title: "Updated At",
-              dataIndex: "updatedAt",
-              key: "updatedAt",
-              align: "center",
-              render: (updatedAt: Date) =>
-                moment(updatedAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
-              sorter: true,
-            },
-            {
               title: "Categories",
               dataIndex: "categoriesIds",
               key: "categoriesIds",
@@ -178,6 +160,24 @@ export default function StoresPage() {
                   {StoresEnum.StatusLabel[status]}
                 </Tag>
               ),
+            },
+            {
+              title: "Created At",
+              dataIndex: "createdAt",
+              key: "createdAt",
+              align: "center",
+              render: (createdAt: Date) =>
+                moment(createdAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
+              sorter: true,
+            },
+            {
+              title: "Updated At",
+              dataIndex: "updatedAt",
+              key: "updatedAt",
+              align: "center",
+              render: (updatedAt: Date) =>
+                moment(updatedAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
+              sorter: true,
             },
             {
               title: "Action",
