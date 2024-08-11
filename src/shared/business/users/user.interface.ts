@@ -1,8 +1,8 @@
-import { IAddress } from '../interfaces/address.interface';
-import { ICreatedAtEntity } from '../interfaces/created-at.interface';
-import { IPhoneNumber } from '../interfaces/phone-number';
-import { IUpdatedAtEntity } from '../interfaces/updated-at.interface';
-import UsersEnum from './users.enum';
+import { IAddress } from "../interfaces/address.interface";
+import { ICreatedAtEntity } from "../interfaces/created-at.interface";
+import { IPhoneNumber } from "../interfaces/phone-number";
+import { IUpdatedAtEntity } from "../interfaces/updated-at.interface";
+import UsersEnum from "./users.enum";
 
 export default interface IUser extends ICreatedAtEntity, IUpdatedAtEntity {
   readonly _id: string;
@@ -23,4 +23,5 @@ export default interface IUser extends ICreatedAtEntity, IUpdatedAtEntity {
   gender: UsersEnum.Gender | null;
   loggedByAuthProvider: UsersEnum.Provider;
   about: string | null;
+  type: UsersEnum.Type;
 }

@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { createContext, useCallback, useEffect, useState } from "react";
 
 import {
   Auth,
@@ -14,25 +9,21 @@ import {
   signInWithPopup,
   signOut,
   User,
-} from 'firebase/auth';
-import Cookies from 'js-cookie';
-import { useRouter } from 'next/navigation';
+} from "firebase/auth";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
-import handleClientError
-  from '../../../components/common/handleClientError/handleClientError';
-import firebaseApp from '../../../services/firebase/config';
-import {
-  serviceMethodsInstance,
-} from '../../../services/social-prices-api/ServiceMethods';
-import IUser from '../../../shared/business/users/user.interface';
-import UsersEnum from '../../../shared/business/users/users.enum';
-import CookiesEnum from '../../../shared/common/cookies/cookies.enum';
-import LocalStorageEnum
-  from '../../../shared/common/local-storage/local-storage.enum';
-import LocalStorageUserMethods
-  from '../../../shared/common/local-storage/methods/local-storage-user.methods';
-import Urls from '../../../shared/common/routes-app/routes-app';
-import { sleep } from '../../../shared/utils/functions/functions';
+import handleClientError from "../../../components/common/handleClientError/handleClientError";
+import firebaseApp from "../../../services/firebase/config";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
+import PhoneNumberEnum from "../../../shared/business/enums/phone-number.enum";
+import IUser from "../../../shared/business/users/user.interface";
+import UsersEnum from "../../../shared/business/users/users.enum";
+import CookiesEnum from "../../../shared/common/cookies/cookies.enum";
+import LocalStorageEnum from "../../../shared/common/local-storage/local-storage.enum";
+import LocalStorageUserMethods from "../../../shared/common/local-storage/methods/local-storage-user.methods";
+import Urls from "../../../shared/common/routes-app/routes-app";
+import { sleep } from "../../../shared/utils/functions/functions";
 
 const googleProvider: GoogleAuthProvider = new GoogleAuthProvider();
 googleProvider.addScope("https://www.googleapis.com/auth/contacts.readonly");
@@ -84,7 +75,7 @@ const __normalizeUser = async (userFirebase: User): Promise<IUser> => {
     phoneNumbers: userFirebase.phoneNumber
       ? [
           {
-            type: UsersEnum.Type.OTHER,
+            type: PhoneNumberEnum.Type.OTHER,
             number: userFirebase.phoneNumber,
             uid: Date.now().toString(),
             messengers: [],
@@ -101,6 +92,7 @@ const __normalizeUser = async (userFirebase: User): Promise<IUser> => {
     about: null,
     createdAt: now,
     updatedAt: now,
+    type: UsersEnum.Type.COMMON,
   };
 };
 
@@ -236,6 +228,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
         phoneNumbers: userNormalized.phoneNumbers ?? [],
         uid: userNormalized.uid,
         about: null,
+        type: userNormalized.type,
       });
 
     responseUser.providerId = userNormalized.providerId;
@@ -298,6 +291,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
           extraDataProvider: null,
           phoneNumbers: [],
           uid: null,
+          type: UsersEnum.Type.COMMON,
         });
 
       response.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;

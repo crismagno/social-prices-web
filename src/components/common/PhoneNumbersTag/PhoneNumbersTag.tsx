@@ -1,7 +1,7 @@
 import { Tag, Tooltip } from "antd";
 
+import PhoneNumberEnum from "../../../shared/business/enums/phone-number.enum";
 import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number";
-import UsersEnum from "../../../shared/business/users/users.enum";
 import { messengersToString } from "../../../shared/utils/string-extensions/string-extensions";
 
 interface Props {
@@ -19,7 +19,7 @@ export const PhoneNumbersTag: React.FC<Props> = ({ phoneNumbers }) => {
       title={messengersToString(phoneNumber.messengers)}
     >
       <Tag key={phoneNumber.number}>{`${
-        UsersEnum.TypeLabels[phoneNumber.type]
+        PhoneNumberEnum.TypeLabels[phoneNumber.type]
       } - ${phoneNumber.number}`}</Tag>
     </Tooltip>
   ));

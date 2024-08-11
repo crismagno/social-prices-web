@@ -1,8 +1,8 @@
 import AddressEnum from "../../business/enums/address.enum";
+import PhoneNumberEnum from "../../business/enums/phone-number.enum";
 import { IAddress } from "../../business/interfaces/address.interface";
 import { IPhoneNumber } from "../../business/interfaces/phone-number";
 import IUser from "../../business/users/user.interface";
-import UsersEnum from "../../business/users/users.enum";
 
 export const createComma = (str: string): string =>
   str?.trim() ? ", " + str : str;
@@ -11,14 +11,14 @@ export const messengersToString = (messengers: string[]): string =>
   messengers.reduce((acc, curr, index) => {
     if (index !== 0) {
       acc += `, ${
-        UsersEnum.PhoneNumberMessengerLabels[
-          curr as UsersEnum.PhoneNumberMessenger
+        PhoneNumberEnum.PhoneNumberMessengerLabels[
+          curr as PhoneNumberEnum.PhoneNumberMessenger
         ]
       }`;
     } else {
       acc =
-        UsersEnum.PhoneNumberMessengerLabels[
-          curr as UsersEnum.PhoneNumberMessenger
+        PhoneNumberEnum.PhoneNumberMessengerLabels[
+          curr as PhoneNumberEnum.PhoneNumberMessenger
         ];
     }
 
@@ -78,7 +78,7 @@ export const createPhoneNumberName = (phoneNumber: IPhoneNumber): string => {
   let phoneNumberName: string = "";
 
   if (phoneNumber?.type) {
-    phoneNumberName += UsersEnum.TypeLabels[phoneNumber.type];
+    phoneNumberName += PhoneNumberEnum.TypeLabels[phoneNumber.type];
   }
 
   if (phoneNumber.number) {

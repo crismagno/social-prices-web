@@ -22,9 +22,9 @@ import {
 } from "../../../../../components/common/icons/icons";
 import useAuthData from "../../../../../data/context/auth/useAuthData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/ServiceMethods";
+import PhoneNumberEnum from "../../../../../shared/business/enums/phone-number.enum";
 import { IPhoneNumber } from "../../../../../shared/business/interfaces/phone-number";
 import IUser from "../../../../../shared/business/users/user.interface";
-import UsersEnum from "../../../../../shared/business/users/users.enum";
 import { createPhoneNumberName } from "../../../../../shared/utils/string-extensions/string-extensions";
 
 const phoneNumberFormSchema = z.object({
@@ -50,7 +50,7 @@ const generateNewPhoneNumber = (
   isCollapsed: boolean = true
 ): TPhoneNumberFormSchema => ({
   number: "",
-  type: UsersEnum.Type.OTHER,
+  type: PhoneNumberEnum.Type.OTHER,
   isCollapsed,
   uid: Date.now().toString(),
 });
@@ -198,11 +198,17 @@ const ProfileCardsPaymentsEdit: React.FC<Props> = ({ className = "" }) => {
                         errors?.phoneNumbers?.[index]?.type?.message
                       }
                     >
-                      {Object.keys(UsersEnum.Type).map((phoneType: string) => (
-                        <FormSelectOption key={phoneType} value={phoneType}>
-                          {UsersEnum.TypeLabels[phoneType as UsersEnum.Type]}
-                        </FormSelectOption>
-                      ))}
+                      {Object.keys(PhoneNumberEnum.Type).map(
+                        (phoneType: string) => (
+                          <FormSelectOption key={phoneType} value={phoneType}>
+                            {
+                              PhoneNumberEnum.TypeLabels[
+                                phoneType as PhoneNumberEnum.Type
+                              ]
+                            }
+                          </FormSelectOption>
+                        )
+                      )}
                     </FormSelect>
                   </div>
 

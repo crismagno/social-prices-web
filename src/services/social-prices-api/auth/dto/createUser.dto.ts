@@ -1,7 +1,5 @@
-import {
-  IPhoneNumber,
-} from '../../../../shared/business/interfaces/phone-number';
-import UsersEnum from '../../../../shared/business/users/users.enum';
+import { IPhoneNumber } from "../../../../shared/business/interfaces/phone-number";
+import UsersEnum from "../../../../shared/business/users/users.enum";
 
 export default class CreateUserDto {
   email: string = "";
@@ -12,4 +10,5 @@ export default class CreateUserDto {
   phoneNumbers: IPhoneNumber[] = [];
   extraDataProvider: any | null = null;
   about: string | null = null;
+  type: UsersEnum.Type = UsersEnum.Type.COMMON;
 }
