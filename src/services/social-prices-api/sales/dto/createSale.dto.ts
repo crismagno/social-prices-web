@@ -1,7 +1,7 @@
+import PersonEnum from "../../../../shared/business/enums/person.enum";
 import SalesEnum from "../../../../shared/business/sales/sales.enum";
 import { CreateAddressDto } from "../../../../shared/business/shared/dtos/CreateAddress.dto";
 import { CreatePhoneNumberDto } from "../../../../shared/business/shared/dtos/CreatePhoneNumber.dto";
-import UsersEnum from "../../../../shared/business/users/users.enum";
 
 export class SaleAmountNoteDto {
   amount: number = 0;
@@ -54,7 +54,7 @@ export class SaleBuyerDto {
   email: string = "";
   name: string = "";
   birthDate: Date | null = null;
-  gender: UsersEnum.Gender | null = null;
+  gender: PersonEnum.Gender | null = null;
   phoneNumber: CreatePhoneNumberDto | null = null;
   address: CreateAddressDto | null = null;
 }

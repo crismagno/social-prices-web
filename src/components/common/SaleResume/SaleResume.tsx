@@ -3,6 +3,7 @@ import { find, reduce } from "lodash";
 import moment from "moment";
 
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
+import PersonEnum from "../../../shared/business/enums/person.enum";
 import { IProduct } from "../../../shared/business/products/products.interface";
 import {
   ISale,
@@ -14,7 +15,6 @@ import {
 import SalesEnum from "../../../shared/business/sales/sales.enum";
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import { ITag } from "../../../shared/business/tags/tags.interface";
-import UsersEnum from "../../../shared/business/users/users.enum";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
@@ -213,7 +213,7 @@ export const SaleResume: React.FC<Props> = ({ sale, stores, tags }) => {
 
         <label>
           {moment(buyer.birthDate).format(DatesEnum.Format.MMDDYYYY)} /{" "}
-          {UsersEnum.GenderLabels[customer.gender as UsersEnum.Gender]}
+          {PersonEnum.GenderLabels[customer.gender as PersonEnum.Gender]}
         </label>
 
         <div className="text-center">

@@ -1,8 +1,8 @@
+import PersonEnum from "../enums/person.enum";
 import { IAddress } from "../interfaces/address.interface";
 import { ICreatedAtEntity } from "../interfaces/created-at.interface";
 import { IPhoneNumber } from "../interfaces/phone-number";
 import { IUpdatedAtEntity } from "../interfaces/updated-at.interface";
-import UsersEnum from "../users/users.enum";
 
 export interface ICustomer extends ICreatedAtEntity, IUpdatedAtEntity {
   readonly _id: string;
@@ -13,7 +13,7 @@ export interface ICustomer extends ICreatedAtEntity, IUpdatedAtEntity {
   name: string | null;
   birthDate: Date | null;
   addresses: IAddress[];
-  gender: UsersEnum.Gender | null;
+  gender: PersonEnum.Gender | null;
   about: string | null;
   phoneNumbers: IPhoneNumber[];
   tagsIds: string[];

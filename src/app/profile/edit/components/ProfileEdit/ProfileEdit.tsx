@@ -1,46 +1,26 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  Button,
-  Col,
-  message,
-  Row,
-} from 'antd';
-import moment from 'moment';
-import {
-  SubmitHandler,
-  useForm,
-} from 'react-hook-form';
-import z from 'zod';
+import { Button, Col, message, Row } from "antd";
+import moment from "moment";
+import { SubmitHandler, useForm } from "react-hook-form";
+import z from "zod";
 
-import { SaveOutlined } from '@ant-design/icons';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { SaveOutlined } from "@ant-design/icons";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import ContainerTitle
-  from '../../../../../components/common/ContainerTitle/ContainerTitle';
-import {
-  FormSelectOption,
-} from '../../../../../components/common/FormSelect/FormSelect';
-import handleClientError
-  from '../../../../../components/common/handleClientError/handleClientError';
-import {
-  InputCustomAntd,
-} from '../../../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
-import {
-  SelectCustomAntd,
-} from '../../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
-import {
-  TextareaCustomAntd,
-} from '../../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd';
-import useAuthData from '../../../../../data/context/auth/useAuthData';
-import {
-  serviceMethodsInstance,
-} from '../../../../../services/social-prices-api/ServiceMethods';
-import IUser from '../../../../../shared/business/users/user.interface';
-import UsersEnum from '../../../../../shared/business/users/users.enum';
-import DatesEnum from '../../../../../shared/utils/dates/dates.enum';
+import ContainerTitle from "../../../../../components/common/ContainerTitle/ContainerTitle";
+import { FormSelectOption } from "../../../../../components/common/FormSelect/FormSelect";
+import handleClientError from "../../../../../components/common/handleClientError/handleClientError";
+import { InputCustomAntd } from "../../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
+import { SelectCustomAntd } from "../../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { TextareaCustomAntd } from "../../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
+import useAuthData from "../../../../../data/context/auth/useAuthData";
+import { serviceMethodsInstance } from "../../../../../services/social-prices-api/ServiceMethods";
+import PersonEnum from "../../../../../shared/business/enums/person.enum";
+import IUser from "../../../../../shared/business/users/user.interface";
+import DatesEnum from "../../../../../shared/utils/dates/dates.enum";
 
 interface Props {
   className?: string;
@@ -63,7 +43,7 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
     birthDate: moment(user?.birthDate)
       .utc()
       .format(DatesEnum.Format.YYYYMMDD_DASHED),
-    gender: user?.gender ?? UsersEnum.Gender.OTHER,
+    gender: user?.gender ?? PersonEnum.Gender.OTHER,
     about: user?.about ?? null,
   };
 
@@ -87,7 +67,7 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
         await serviceMethodsInstance.usersServiceMethods.updateUser({
           birthDate: moment(data.birthDate).toDate(),
           name: data.name,
-          gender: data.gender as UsersEnum.Gender,
+          gender: data.gender as PersonEnum.Gender,
           about: data.about,
         });
 
@@ -145,9 +125,9 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
               errorMessage={errors.gender?.message}
               placeholder={"Select gender"}
             >
-              {Object.keys(UsersEnum.Gender).map((gender: string) => (
+              {Object.keys(PersonEnum.Gender).map((gender: string) => (
                 <FormSelectOption key={gender} value={gender}>
-                  {UsersEnum.GenderLabels[gender as UsersEnum.Gender]}
+                  {PersonEnum.GenderLabels[gender as PersonEnum.Gender]}
                 </FormSelectOption>
               ))}
             </SelectCustomAntd>

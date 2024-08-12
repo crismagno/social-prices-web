@@ -58,6 +58,7 @@ import UpdateSaleDto from "../../../services/social-prices-api/sales/dto/updateS
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import AddressEnum from "../../../shared/business/enums/address.enum";
+import PersonEnum from "../../../shared/business/enums/person.enum";
 import PhoneNumberEnum from "../../../shared/business/enums/phone-number.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
 import { IProduct } from "../../../shared/business/products/products.interface";
@@ -71,7 +72,6 @@ import { CreateAddressDto } from "../../../shared/business/shared/dtos/CreateAdd
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../shared/business/tags/tags.interface";
-import UsersEnum from "../../../shared/business/users/users.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import { sortArray } from "../../../shared/utils/array/functions";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
@@ -179,7 +179,7 @@ const generateFormSchemaDefault = (): TFormSchema => {
       birthDate: null,
       customerId: null,
       email: "",
-      gender: UsersEnum.Gender.MALE,
+      gender: PersonEnum.Gender.MALE,
       name: "",
       phoneNumber: null,
     },
@@ -337,7 +337,7 @@ export default function CreateSalePage() {
               : null,
             customerId,
             email: saleById?.buyer?.email ?? "",
-            gender: saleById?.buyer?.gender ?? UsersEnum.Gender.MALE,
+            gender: saleById?.buyer?.gender ?? PersonEnum.Gender.MALE,
             name: saleById?.buyer?.name ?? "",
             phoneNumber: saleById?.buyer?.phoneNumber?.number ?? null,
           },
@@ -452,7 +452,7 @@ export default function CreateSalePage() {
             .format(DatesEnum.Format.YYYYMMDD_DASHED)
         : null,
       email: customer?.email ?? "",
-      gender: customer?.gender ?? UsersEnum.Gender.MALE,
+      gender: customer?.gender ?? PersonEnum.Gender.MALE,
       name: customer?.name ?? "",
       phoneNumber: customer?.phoneNumbers?.[0]?.number ?? null,
     });
@@ -719,7 +719,7 @@ export default function CreateSalePage() {
             ? moment(data.customer.birthDate).startOf("day").toDate()
             : null,
           email: data.customer.email,
-          gender: data.customer.gender as UsersEnum.Gender,
+          gender: data.customer.gender as PersonEnum.Gender,
           name: data.customer.name,
           phoneNumber: {
             messengers: [],
@@ -960,9 +960,9 @@ export default function CreateSalePage() {
                   divClassName="mt-1"
                   errorMessage={errors.customer?.gender?.message}
                 >
-                  {Object.keys(UsersEnum.Gender).map((gender: string) => (
+                  {Object.keys(PersonEnum.Gender).map((gender: string) => (
                     <Select.Option key={gender} value={gender}>
-                      {UsersEnum.GenderLabels[gender as UsersEnum.Gender]}
+                      {PersonEnum.GenderLabels[gender as PersonEnum.Gender]}
                     </Select.Option>
                   ))}
                 </SelectCustomAntd>

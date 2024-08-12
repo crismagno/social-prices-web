@@ -53,11 +53,11 @@ import UpdateCustomerDto from "../../../services/social-prices-api/customers/dto
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import AddressEnum from "../../../shared/business/enums/address.enum";
+import PersonEnum from "../../../shared/business/enums/person.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
 import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../shared/business/tags/tags.interface";
-import UsersEnum from "../../../shared/business/users/users.enum";
 import { sortArray } from "../../../shared/utils/array/functions";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getFileUrl } from "../../../shared/utils/images/helper";
@@ -143,7 +143,7 @@ export default function CustomerDetailPage() {
             })
           )
         : [generateNewPhoneNumber(false)],
-      gender: customer?.gender ?? UsersEnum.Gender.OTHER,
+      gender: customer?.gender ?? PersonEnum.Gender.OTHER,
       tagsIds: customer?.tagsIds ?? [],
     };
 
@@ -197,7 +197,7 @@ export default function CustomerDetailPage() {
         birthDate: moment(data.birthDate).toDate(),
         email: data.email,
         name: data.name,
-        gender: data.gender as UsersEnum.Gender,
+        gender: data.gender as PersonEnum.Gender,
         phoneNumbers: data.phoneNumbers,
         tagsIds: data.tagsIds,
       };
@@ -264,7 +264,7 @@ export default function CustomerDetailPage() {
         birthDate: moment(data.birthDate).toDate(),
         email: data.email,
         name: data.name,
-        gender: data.gender as UsersEnum.Gender,
+        gender: data.gender as PersonEnum.Gender,
         phoneNumbers: data.phoneNumbers,
         tagsIds: data.tagsIds,
         customerId: customer._id,
@@ -374,9 +374,9 @@ export default function CustomerDetailPage() {
                 label="Gender"
                 errorMessage={errors.gender?.message}
               >
-                {Object.keys(UsersEnum.Gender).map((gender: string) => (
+                {Object.keys(PersonEnum.Gender).map((gender: string) => (
                   <Select.Option key={gender} value={gender}>
-                    {UsersEnum.GenderLabels[gender as UsersEnum.Gender]}
+                    {PersonEnum.GenderLabels[gender as PersonEnum.Gender]}
                   </Select.Option>
                 ))}
               </SelectCustomAntd>

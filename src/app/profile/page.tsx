@@ -27,6 +27,7 @@ import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import { PhoneNumbersTag } from "../../components/common/PhoneNumbersTag/PhoneNumbersTag";
 import Layout from "../../components/template/Layout/Layout";
 import useAuthData from "../../data/context/auth/useAuthData";
+import PersonEnum from "../../shared/business/enums/person.enum";
 import UsersEnum from "../../shared/business/users/users.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
@@ -236,14 +237,14 @@ export default function ProfilePage() {
                 description={
                   <Tag
                     color={
-                      UsersEnum.GenderColors[
-                        user.gender ?? UsersEnum.Gender.OTHER
+                      PersonEnum.GenderColors[
+                        user.gender ?? PersonEnum.Gender.OTHER
                       ]
                     }
                   >
                     {
-                      UsersEnum.GenderLabels[
-                        user.gender ?? UsersEnum.Gender.OTHER
+                      PersonEnum.GenderLabels[
+                        user.gender ?? PersonEnum.Gender.OTHER
                       ]
                     }
                   </Tag>

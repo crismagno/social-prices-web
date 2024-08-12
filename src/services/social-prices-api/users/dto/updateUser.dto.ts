@@ -1,8 +1,8 @@
-import UsersEnum from '../../../../shared/business/users/users.enum';
+import PersonEnum from "../../../../shared/business/enums/person.enum";
 
 export default class UpdateUserDto {
   name: string = "";
   birthDate: Date = new Date();
-  gender: UsersEnum.Gender | null = null;
+  gender: PersonEnum.Gender | null = null;
   about: string | null = null;
 }

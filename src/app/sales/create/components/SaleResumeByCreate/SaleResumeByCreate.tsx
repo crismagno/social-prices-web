@@ -4,10 +4,10 @@ import { find } from "lodash";
 import { ImageOrDefault } from "../../../../../components/common/ImageOrDefault/ImageOrDefault";
 import { TagTagsCustomAntd } from "../../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import { ICustomer } from "../../../../../shared/business/customers/customer.interface";
+import PersonEnum from "../../../../../shared/business/enums/person.enum";
 import SalesEnum from "../../../../../shared/business/sales/sales.enum";
 import { IStore } from "../../../../../shared/business/stores/stores.interface";
 import { ITag } from "../../../../../shared/business/tags/tags.interface";
-import UsersEnum from "../../../../../shared/business/users/users.enum";
 import { defaultAvatarImage } from "../../../../../shared/utils/images/files-names";
 import { getImageUrl } from "../../../../../shared/utils/images/url-images";
 import {
@@ -162,8 +162,8 @@ export const SaleResumeByCreate: React.FC<Props> = ({
         <label>
           {formSchema.customer.birthDate} /{" "}
           {
-            UsersEnum.GenderLabels[
-              formSchema.customer.gender as UsersEnum.Gender
+            PersonEnum.GenderLabels[
+              formSchema.customer.gender as PersonEnum.Gender
             ]
           }
         </label>

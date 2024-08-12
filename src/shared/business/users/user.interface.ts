@@ -1,3 +1,4 @@
+import PersonEnum from "../enums/person.enum";
 import { IAddress } from "../interfaces/address.interface";
 import { ICreatedAtEntity } from "../interfaces/created-at.interface";
 import { IPhoneNumber } from "../interfaces/phone-number";
@@ -20,7 +21,7 @@ export default interface IUser extends ICreatedAtEntity, IUpdatedAtEntity {
   extraDataProvider: any | null;
   birthDate: Date | null;
   addresses: IAddress[];
-  gender: UsersEnum.Gender | null;
+  gender: PersonEnum.Gender | null;
   loggedByAuthProvider: UsersEnum.Provider;
   about: string | null;
   type: UsersEnum.Type;

@@ -20,10 +20,10 @@ import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/Tag
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
 import { ICustomer } from "../../shared/business/customers/customer.interface";
+import PersonEnum from "../../shared/business/enums/person.enum";
 import { IPhoneNumber } from "../../shared/business/interfaces/phone-number";
 import TagsEnum from "../../shared/business/tags/tags.enum";
 import { ITag } from "../../shared/business/tags/tags.interface";
-import UsersEnum from "../../shared/business/users/users.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 import { sortArray } from "../../shared/utils/array/functions";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
@@ -111,17 +111,17 @@ export default function CustomersPage() {
               dataIndex: "gender",
               key: "gender",
               align: "center",
-              filters: Object.keys(UsersEnum.Gender).map((gender: string) => ({
-                text: UsersEnum.GenderLabels[gender as UsersEnum.Gender],
+              filters: Object.keys(PersonEnum.Gender).map((gender: string) => ({
+                text: PersonEnum.GenderLabels[gender as PersonEnum.Gender],
                 value: gender,
               })),
-              render: (gender: UsersEnum.Gender | null) => (
+              render: (gender: PersonEnum.Gender | null) => (
                 <Tag
                   color={
-                    UsersEnum.GenderColors[gender ?? UsersEnum.Gender.OTHER]
+                    PersonEnum.GenderColors[gender ?? PersonEnum.Gender.OTHER]
                   }
                 >
-                  {UsersEnum.GenderLabels[gender ?? UsersEnum.Gender.OTHER]}
+                  {PersonEnum.GenderLabels[gender ?? PersonEnum.Gender.OTHER]}
                 </Tag>
               ),
             },
