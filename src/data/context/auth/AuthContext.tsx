@@ -23,7 +23,10 @@ import CookiesEnum from "../../../shared/common/cookies/cookies.enum";
 import LocalStorageEnum from "../../../shared/common/local-storage/local-storage.enum";
 import LocalStorageUserMethods from "../../../shared/common/local-storage/methods/local-storage-user.methods";
 import Urls from "../../../shared/common/routes-app/routes-app";
-import { sleep } from "../../../shared/utils/functions/functions";
+import {
+  makeRandomCode,
+  sleep,
+} from "../../../shared/utils/functions/functions";
 
 const googleProvider: GoogleAuthProvider = new GoogleAuthProvider();
 googleProvider.addScope("https://www.googleapis.com/auth/contacts.readonly");
@@ -221,7 +224,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     const responseUser: IUser =
       await serviceMethodsInstance.authServiceMethods.signUp({
         email: `${userNormalized.email}`,
-        password: `${process.env.NEXT_PUBLIC_SOCIAL_PRICES_SIGN_UP_PASSWORD_TEMP}`,
+        password: makeRandomCode(10),
         authProvider: userNormalized.authProvider,
         avatar: userNormalized.avatar,
         extraDataProvider: userNormalized.extraDataProvider,
