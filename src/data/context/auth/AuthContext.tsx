@@ -96,6 +96,7 @@ const __normalizeUser = async (userFirebase: User): Promise<IUser> => {
     createdAt: now,
     updatedAt: now,
     type: UsersEnum.Type.COMPANY,
+    employee: null,
   };
 };
 

@@ -1,3 +1,4 @@
+import { IEmployee } from "../employees/employee.interface";
 import PersonEnum from "../enums/person.enum";
 import { IAddress } from "../interfaces/address.interface";
 import { ICreatedAtEntity } from "../interfaces/created-at.interface";
@@ -25,4 +26,5 @@ export default interface IUser extends ICreatedAtEntity, IUpdatedAtEntity {
   loggedByAuthProvider: UsersEnum.Provider;
   about: string | null;
   type: UsersEnum.Type;
+  employee: IEmployee | null;
 }
