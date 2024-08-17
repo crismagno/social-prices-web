@@ -92,7 +92,7 @@ const __normalizeUser = async (userFirebase: User): Promise<IUser> => {
     about: null,
     createdAt: now,
     updatedAt: now,
-    type: UsersEnum.Type.COMMON,
+    type: UsersEnum.Type.COMPANY,
   };
 };
 
@@ -291,7 +291,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
           extraDataProvider: null,
           phoneNumbers: [],
           uid: null,
-          type: UsersEnum.Type.COMMON,
+          type: UsersEnum.Type.COMPANY,
         });
 
       response.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;
