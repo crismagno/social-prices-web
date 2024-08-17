@@ -5,6 +5,14 @@ export const getImageAwsUrl = (filename: string): string =>
   `${process.env.NEXT_PUBLIC_BUCKET_SOCIAL_PRICES_AWS_S3}/${filename}`;
 
 export const getImageUrl = (filename: string): string => {
+  if (!filename?.trim()) {
+    return "";
+  }
+
+  if (filename.startsWith("http://") || filename.startsWith("https://")) {
+    return filename;
+  }
+
   const apiUseLocalFiles: boolean =
     `${process.env.NEXT_PUBLIC_SOCIAL_PRICES_API_USE_LOCAL_FILES}` === "true";
 

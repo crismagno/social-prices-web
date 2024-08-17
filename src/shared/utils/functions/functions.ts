@@ -15,7 +15,7 @@ export const makeRandomCode = (lengthCode: number = 6): string => {
   return result.toUpperCase();
 };
 
-export const randomHash = (): string => {
+export const makeRandom = (): string => {
   const randomNumber: number = Math.floor(
     1000000000 + Math.random() * 9000000000
   );
