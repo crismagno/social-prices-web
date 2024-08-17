@@ -39,6 +39,13 @@ interface Props {
   onOk: (tag: ITag) => void;
 }
 
+const initialTag = (): TFormSchema => ({
+  name: "",
+  type: TagsEnum.Type.ANY,
+  description: null,
+  color: null,
+});
+
 export const TagDetailDrawer: React.FC<Props> = ({
   isOpen,
   onClose,
@@ -108,6 +115,8 @@ export const TagDetailDrawer: React.FC<Props> = ({
 
       message.success("Your tag has been created successfully!");
 
+      setFormValues(initialTag());
+
       onOk(newTag);
     } catch (error) {
       handleClientError(error);
@@ -132,6 +141,8 @@ export const TagDetailDrawer: React.FC<Props> = ({
         await serviceMethodsInstance.tagsServiceMethods.update(updateTagDto);
 
       message.success("Your tag has been updated successfully!");
+
+      setFormValues(initialTag());
 
       onOk(tagUpdated);
     } catch (error) {

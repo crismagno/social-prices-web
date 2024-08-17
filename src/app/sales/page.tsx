@@ -19,7 +19,6 @@ import { SaleResume } from "../../components/common/SaleResume/SaleResume";
 import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
-import useAuthData from "../../data/context/auth/useAuthData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
 import { ICustomer } from "../../shared/business/customers/customer.interface";
 import {
@@ -41,8 +40,6 @@ import { useFindTagsByType } from "../tags/useFindTagsByType";
 import { useFindSalesByUserTableState } from "./useFindSalesByUserTableState";
 
 export default function SalesPage() {
-  const { user } = useAuthData();
-
   const router: AppRouterInstance = useRouter();
 
   const [tableStateRequest, setTableStateRequest] = useState<
@@ -85,10 +82,7 @@ export default function SalesPage() {
     try {
       setIsDeletingSale(true);
 
-      await serviceMethodsInstance.salesServiceMethods.deleteManual(
-        sale._id,
-        user!._id
-      );
+      await serviceMethodsInstance.salesServiceMethods.deleteManual(sale._id);
 
       setTableStateRequest({
         ...tableStateRequest,

@@ -19,9 +19,9 @@ export default class TagsServiceMethods extends ServiceMethodsBase {
 
     const response = await this._fetchAxios.get<ITag[]>(
       `${this._socialPricesApiV1}${TagsServiceEnum.Methods.FIND_BY_TYPE.replace(
-        ":userId",
-        user._id
-      ).replace(":type", type)}`,
+        ":type",
+        type
+      )}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -56,12 +56,7 @@ export default class TagsServiceMethods extends ServiceMethodsBase {
     const user: IUser = this.getUserOrFail();
 
     const response = await this._fetchAxios.post<ITableStateResponse<ITag[]>>(
-      `${
-        this._socialPricesApiV1
-      }${TagsServiceEnum.Methods.FIND_BY_USER_TABLE_STATE.replace(
-        ":userId",
-        user._id
-      )}`,
+      `${this._socialPricesApiV1}${TagsServiceEnum.Methods.FIND_BY_USER_TABLE_STATE}`,
       tableState,
       {
         headers: {
