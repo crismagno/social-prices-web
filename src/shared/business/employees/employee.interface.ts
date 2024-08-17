@@ -3,7 +3,7 @@ import { IAddress } from "../interfaces/address.interface";
 import { ICreatedAtEntity } from "../interfaces/created-at.interface";
 import { IPhoneNumber } from "../interfaces/phone-number";
 import { IUpdatedAtEntity } from "../interfaces/updated-at.interface";
-import EmployeeEnum from "./employee.enum";
+import EmployeesEnum from "./employees.enum";
 
 export interface IEmployee extends ICreatedAtEntity, IUpdatedAtEntity {
   readonly _id: string;
@@ -19,6 +19,6 @@ export interface IEmployee extends ICreatedAtEntity, IUpdatedAtEntity {
   phoneNumbers: IPhoneNumber[];
   tagsIds: string[];
   about: string | null;
-  level: EmployeeEnum.Level;
-  status: EmployeeEnum.Status;
+  level: EmployeesEnum.Level;
+  status: EmployeesEnum.Status;
 }
