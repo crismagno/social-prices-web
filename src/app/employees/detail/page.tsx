@@ -25,6 +25,7 @@ import {
 import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 
+import { QuestionCircleTwoTone } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -365,7 +366,19 @@ export default function EmployeeDetailPage() {
             <Col xs={24} md={8}>
               <InputCustomAntd
                 controller={{ control, name: "password" }}
-                label="Password"
+                label={
+                  <div>
+                    <span>Password</span>
+                    {isEditMode && (
+                      <Tooltip
+                        title="If you want to update 'password' you just need type on input."
+                        className="ml-1"
+                      >
+                        <QuestionCircleTwoTone />
+                      </Tooltip>
+                    )}
+                  </div>
+                }
                 placeholder={"Enter password"}
                 type="password"
                 errorMessage={errors.password?.message}

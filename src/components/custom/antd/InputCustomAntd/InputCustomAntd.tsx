@@ -6,7 +6,7 @@ interface Props<T> extends InputProps {
     control: Control<any>;
     name: keyof T | string;
   };
-  label?: string;
+  label?: any;
   divClassName?: string;
   labelClassName?: string;
   errorMessage?: string;
