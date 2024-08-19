@@ -34,16 +34,31 @@ export function InputCustomAntd<T extends object = any>({
       <Controller
         control={controller.control}
         name={controller.name}
-        render={({ field: { onChange, value, name, ref } }) => (
-          <Input
-            className="w-full"
-            onChange={onChange}
-            name={name}
-            value={value}
-            ref={ref}
-            {...props}
-          />
-        )}
+        render={({ field: { onChange, value, name, ref } }) => {
+          if (props.type === "password") {
+            return (
+              <Input.Password
+                className="w-full"
+                onChange={onChange}
+                name={name}
+                value={value}
+                ref={ref}
+                {...props}
+              />
+            );
+          } else {
+            return (
+              <Input
+                className="w-full"
+                onChange={onChange}
+                name={name}
+                value={value}
+                ref={ref}
+                {...props}
+              />
+            );
+          }
+        }}
       ></Controller>
 
       {errorMessage && (

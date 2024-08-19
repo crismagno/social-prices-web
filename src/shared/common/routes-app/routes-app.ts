@@ -24,7 +24,7 @@ const Urls = {
   NEW_PRODUCT: "/products/detail",
   EDIT_PRODUCT: "/products/detail?pid=:productId",
 
-  // products
+  // customers
   CUSTOMERS: "/customers",
   NEW_CUSTOMER: "/customers/detail",
   EDIT_CUSTOMER: "/customers/detail?cid=:customerId",
@@ -41,6 +41,11 @@ const Urls = {
 
   // tags
   TAGS: "/tags",
+
+  // employees
+  EMPLOYEES: "/employees",
+  NEW_EMPLOYEE: "/employees/detail",
+  EDIT_EMPLOYEE: "/employees/detail?empid=:employeeId",
 };
 
 export default Urls;

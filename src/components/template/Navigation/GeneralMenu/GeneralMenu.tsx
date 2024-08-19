@@ -4,7 +4,7 @@ import { Menu, MenuProps } from "antd";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
-import { TagOutlined } from "@ant-design/icons";
+import { TagOutlined, TeamOutlined } from "@ant-design/icons";
 
 import Urls from "../../../../shared/common/routes-app/routes-app";
 import { IconQuestion } from "../../../common/icons/icons";
@@ -27,6 +27,13 @@ export const GeneralMenu: React.FC<Props> = ({}) => {
           null,
           null,
           [getItem("Tags", Urls.TAGS, <TagOutlined />)],
+          "group"
+        ),
+        getItem(
+          "Employees",
+          null,
+          null,
+          [getItem("Employees", Urls.EMPLOYEES, <TeamOutlined />)],
           "group"
         ),
       ]

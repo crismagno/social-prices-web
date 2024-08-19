@@ -9,6 +9,7 @@ import {
   message,
   Row,
   Select,
+  Tag,
   Tooltip,
   UploadFile,
 } from "antd";
@@ -48,10 +49,11 @@ import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd
 import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
-import CreateCustomerDto from "../../../services/social-prices-api/customers/dto/createCustomer.dto";
-import UpdateCustomerDto from "../../../services/social-prices-api/customers/dto/updateCustomer.dto";
+import CreateEmployeeDto from "../../../services/social-prices-api/employees/dto/createEmployee.dto";
+import UpdateEmployeeDto from "../../../services/social-prices-api/employees/dto/updateEmployee.dto";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
-import { ICustomer } from "../../../shared/business/customers/customer.interface";
+import { IEmployee } from "../../../shared/business/employees/employee.interface";
+import EmployeesEnum from "../../../shared/business/employees/employees.enum";
 import AddressEnum from "../../../shared/business/enums/address.enum";
 import PersonEnum from "../../../shared/business/enums/person.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
@@ -63,37 +65,39 @@ import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getFileUrl } from "../../../shared/utils/images/helper";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
-import { useFindCustomerById } from "./useFindCustomerById";
+import { useFindEmployeeById } from "./useFindEmployeeById";
 
 const formSchema = z.object({
   name: z.string().trim().nonempty("Name is required"),
   email: z.string().trim().email().nonempty("Email is required"),
-  addresses: z.array(addressFormSchema),
-  phoneNumbers: z.array(phoneNumberFormSchema),
-  about: z.string().trim().nullable(),
+  password: z.string().nullable(),
   birthDate: z.string().nullable(),
   gender: z.string().nullable(),
+  addresses: z.array(addressFormSchema),
+  phoneNumbers: z.array(phoneNumberFormSchema),
   tagsIds: z.array(z.string()),
+  about: z.string().trim().nullable(),
+  level: z.string().trim().nonempty("Level is required"),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
 
-export default function CustomerDetailPage() {
+export default function EmployeeDetailPage() {
   const router: AppRouterInstance = useRouter();
 
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
 
-  const customerId: string | null = searchParams.get("cid");
+  const employeeId: string | null = searchParams.get("empid");
 
-  const { customer, isLoading } = useFindCustomerById(customerId);
+  const { employee, isLoading } = useFindEmployeeById(employeeId);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    TagsEnum.Type.CUSTOMER
+    TagsEnum.Type.EMPLOYEE
   );
 
   const [formValues, setFormValues] = useState<TFormSchema>();
 
-  const isEditMode: boolean = !!customerId && !!customer;
+  const isEditMode: boolean = !!employeeId && !!employee;
 
   const {
     handleSubmit,
@@ -115,42 +119,44 @@ export default function CustomerDetailPage() {
   const [avatarUrl, setAvatarUrl] = useState<string | null>();
 
   useEffect(() => {
-    if (customer?.avatar) {
-      const url: string = getImageUrl(customer.avatar);
+    if (employee?.avatar) {
+      const url: string = getImageUrl(employee.avatar);
       setAvatarUrl(url);
     }
 
     const values: TFormSchema = {
-      about: customer?.about ?? null,
-      name: customer?.name ?? "",
-      email: customer?.email ?? "",
-      birthDate: moment(customer?.birthDate)
+      about: employee?.about ?? null,
+      name: employee?.name ?? "",
+      email: employee?.email ?? "",
+      password: "",
+      birthDate: moment(employee?.birthDate)
         .utc()
         .format(DatesEnum.Format.YYYYMMDD_DASHED),
-      addresses: customer?.addresses.length
-        ? customer.addresses.map((address: IAddress, index: number) => ({
+      addresses: employee?.addresses.length
+        ? employee.addresses.map((address: IAddress, index: number) => ({
             ...address,
             countryCode: address.country?.code,
             stateCode: address.state?.code ?? "",
             isCollapsed: index === 0,
           }))
         : [generateNewAddress(false)],
-      phoneNumbers: customer?.phoneNumbers.length
-        ? customer?.phoneNumbers.map(
+      phoneNumbers: employee?.phoneNumbers.length
+        ? employee?.phoneNumbers.map(
             (phoneNumber: IPhoneNumber, index: number) => ({
               ...phoneNumber,
               isCollapsed: index === 0,
             })
           )
         : [generateNewPhoneNumber(false)],
-      gender: customer?.gender ?? PersonEnum.Gender.OTHER,
-      tagsIds: customer?.tagsIds ?? [],
+      gender: employee?.gender ?? PersonEnum.Gender.OTHER,
+      tagsIds: employee?.tagsIds ?? [],
+      level: employee?.level ?? EmployeesEnum.Level.EMPLOYEE,
     };
 
     setFormValues(values);
-  }, [customer]);
+  }, [employee]);
 
-  if ((customerId && isLoading) || isLoadingTags) {
+  if ((employeeId && isLoading) || isLoadingTags) {
     return <LoadingFull />;
   }
 
@@ -165,6 +171,11 @@ export default function CustomerDetailPage() {
   const handleCreate = async (data: TFormSchema) => {
     try {
       setIsSUbmitting(true);
+
+      if (!data.password?.trim()) {
+        message.warning("Password is required!");
+        return;
+      }
 
       const formData = new FormData();
 
@@ -191,7 +202,7 @@ export default function CustomerDetailPage() {
         })
       );
 
-      const createCustomerDto: CreateCustomerDto = {
+      const createEmployeeDto: CreateEmployeeDto = {
         about: data.about ?? "",
         addresses,
         birthDate: moment(data.birthDate).toDate(),
@@ -200,10 +211,12 @@ export default function CustomerDetailPage() {
         gender: data.gender as PersonEnum.Gender,
         phoneNumbers: data.phoneNumbers,
         tagsIds: data.tagsIds,
+        level: data.level as EmployeesEnum.Level,
+        password: data.password,
       };
 
-      for (const property of Object.keys(createCustomerDto)) {
-        let value: any = createCustomerDto[property];
+      for (const property of Object.keys(createEmployeeDto)) {
+        let value: any = createEmployeeDto[property];
 
         if (isArray(value)) {
           value = JSON.stringify(value);
@@ -212,9 +225,9 @@ export default function CustomerDetailPage() {
         formData.append([`${property}`], value);
       }
 
-      await serviceMethodsInstance.customersServiceMethods.create(formData);
+      await serviceMethodsInstance.employeesServiceMethods.create(formData);
 
-      message.success("Your customer has been created successfully!");
+      message.success("Your employee has been created successfully!");
 
       router.back();
     } catch (error) {
@@ -226,8 +239,8 @@ export default function CustomerDetailPage() {
 
   const handleUpdate = async (data: TFormSchema) => {
     try {
-      if (!customer) {
-        message.warning("Customer not found to update!");
+      if (!employee) {
+        message.warning("Employee not found to update!");
         return;
       }
 
@@ -258,7 +271,7 @@ export default function CustomerDetailPage() {
         })
       );
 
-      const updateCustomerDto: UpdateCustomerDto = {
+      const updateEmployeeDto: UpdateEmployeeDto = {
         about: data.about ?? "",
         addresses,
         birthDate: moment(data.birthDate).toDate(),
@@ -267,11 +280,13 @@ export default function CustomerDetailPage() {
         gender: data.gender as PersonEnum.Gender,
         phoneNumbers: data.phoneNumbers,
         tagsIds: data.tagsIds,
-        customerId: customer._id,
+        employeeId: employee._id,
+        level: data.level as EmployeesEnum.Level,
+        password: data.password,
       };
 
-      for (const property of Object.keys(updateCustomerDto)) {
-        let value: keyof UpdateCustomerDto = updateCustomerDto[property];
+      for (const property of Object.keys(updateEmployeeDto)) {
+        let value: any = updateEmployeeDto[property];
 
         if (isArray(value)) {
           value = JSON.stringify(value);
@@ -280,9 +295,9 @@ export default function CustomerDetailPage() {
         formData.append([`${property}`], value);
       }
 
-      await serviceMethodsInstance.customersServiceMethods.update(formData);
+      await serviceMethodsInstance.employeesServiceMethods.update(formData);
 
-      message.success("Your customer has been updated successfully!");
+      message.success("Your employee has been updated successfully!");
 
       router.back();
     } catch (error) {
@@ -296,8 +311,8 @@ export default function CustomerDetailPage() {
     setIsVisibleAvatarModal(false);
     setFileList(fileList);
 
-    let url: string | null = customer?.avatar
-      ? getImageUrl(customer.avatar)
+    let url: string | null = employee?.avatar
+      ? getImageUrl(employee.avatar)
       : null;
 
     if (fileList.length) {
@@ -309,8 +324,8 @@ export default function CustomerDetailPage() {
 
   return (
     <Layout
-      subtitle={isEditMode ? "Edit customer details" : "New customer details"}
-      title={isEditMode ? `Edit customer: ${customer?.name}` : "New customer"}
+      subtitle={isEditMode ? "Edit employee details" : "New employee details"}
+      title={isEditMode ? `Edit employee: ${employee?.name}` : "New employee"}
       hasBackButton
     >
       <Card className="h-min-80 mt-2">
@@ -349,6 +364,17 @@ export default function CustomerDetailPage() {
 
             <Col xs={24} md={8}>
               <InputCustomAntd
+                controller={{ control, name: "password" }}
+                label="Password"
+                placeholder={"Enter password"}
+                type="password"
+                errorMessage={errors.password?.message}
+                maxLength={200}
+              />
+            </Col>
+
+            <Col xs={24} md={8}>
+              <InputCustomAntd
                 controller={{ control, name: "email" }}
                 label="Email"
                 placeholder={"Enter email"}
@@ -369,7 +395,7 @@ export default function CustomerDetailPage() {
             </Col>
 
             <Col xs={24} md={8}>
-              <SelectCustomAntd<ICustomer>
+              <SelectCustomAntd<IEmployee>
                 controller={{ control, name: "gender" }}
                 label="Gender"
                 errorMessage={errors.gender?.message}
@@ -383,7 +409,7 @@ export default function CustomerDetailPage() {
             </Col>
 
             <Col xs={24} md={8}>
-              <SelectCustomAntd<ICustomer>
+              <SelectCustomAntd<IEmployee>
                 controller={{ control, name: "tagsIds" }}
                 label="Tags"
                 errorMessage={errors.tagsIds?.message}
@@ -393,6 +419,26 @@ export default function CustomerDetailPage() {
                 {sortArray(tags, "name").map((tag: ITag) => (
                   <Select.Option key={tag._id} value={tag._id}>
                     <TagTagCustomAntd tag={tag} useTag={false} />
+                  </Select.Option>
+                ))}
+              </SelectCustomAntd>
+            </Col>
+
+            <Col xs={24} md={8}>
+              <SelectCustomAntd<IEmployee>
+                controller={{ control, name: "level" }}
+                label="Level"
+                errorMessage={errors.level?.message}
+              >
+                {Object.keys(EmployeesEnum.Level).map((level: string) => (
+                  <Select.Option key={level} value={level}>
+                    <Tag
+                      color={
+                        EmployeesEnum.LevelColors[level as EmployeesEnum.Level]
+                      }
+                    >
+                      {EmployeesEnum.LevelLabels[level as EmployeesEnum.Level]}
+                    </Tag>
                   </Select.Option>
                 ))}
               </SelectCustomAntd>
