@@ -5,5 +5,6 @@ export interface ISoftDeleteEntity {
 export interface ISoftDelete {
   isDeleted: boolean;
   deletedAt: Date;
-  deletedBy: string;
+  deletedByUserId: string;
+  deletedByEmployeeId: string | null;
 }
