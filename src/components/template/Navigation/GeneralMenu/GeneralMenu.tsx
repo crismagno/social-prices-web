@@ -23,7 +23,7 @@ export const GeneralMenu: React.FC<Props> = ({}) => {
       null,
       [
         getItem(
-          "Tags",
+          "General",
           null,
           null,
           [getItem("Tags", Urls.TAGS, <TagOutlined />)],

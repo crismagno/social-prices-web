@@ -11,7 +11,7 @@ const Loading: React.FC<LoadingProps> = ({ height, width, element }) => {
     <div className="flex justify-center items-center h-full w-full">
       {element}
       <Image
-        src={"/loading.gif"}
+        src={"/assets/loading.gif"}
         alt="loading"
         width={width ?? 50}
         height={height ?? 50}
