@@ -6,6 +6,7 @@ namespace SalesServiceEnum {
     CREATE_MANUAL = "/sales/createManual",
     UPDATE_MANUAL = "/sales/updateManual",
     DELETE_MANUAL = "/sales/deleteManual/:saleId",
+    GET_SALES_ANALYTICS = "/sales/getSalesAnalytics",
   }
 }
 

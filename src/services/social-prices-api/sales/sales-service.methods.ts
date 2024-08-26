@@ -9,6 +9,10 @@ import ServiceMethodsBase from "../ServiceMethods.base";
 import CreateSaleDto from "./dto/createSale.dto";
 import UpdateSaleDto from "./dto/updateSale.dto";
 import SalesServiceEnum from "./sales-service.enum";
+import {
+  IGetSalesAnalyticsParams,
+  IGetSalesAnalyticsResponse,
+} from "./sales-service.types";
 
 export default class SalesServiceMethods extends ServiceMethodsBase {
   public async createManual(createSaleDto: CreateSaleDto): Promise<ISale> {
@@ -94,6 +98,23 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
       `${
         this._socialPricesApiV1
       }${SalesServiceEnum.Methods.DELETE_MANUAL.replace(":saleId", saleId)}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async getSalesAnalytics(
+    params: IGetSalesAnalyticsParams
+  ): Promise<IGetSalesAnalyticsResponse> {
+    const response = await this._fetchAxios.post<IGetSalesAnalyticsResponse>(
+      `${this._socialPricesApiV1}${SalesServiceEnum.Methods.GET_SALES_ANALYTICS}`,
+      params,
       {
         headers: {
           "Content-Type": "application/json",

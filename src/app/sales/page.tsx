@@ -37,6 +37,7 @@ import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { useFindStoresByUser } from "../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../tags/useFindTagsByType";
+import { SalesChart } from "./components/SalesChart/SalesChart";
 import { useFindSalesByUserTableState } from "./useFindSalesByUserTableState";
 
 export default function SalesPage() {
@@ -111,10 +112,10 @@ export default function SalesPage() {
     });
   };
 
-  console.log(sales[0]);
-
   return (
     <Layout subtitle="Sales information" title="Sales">
+      <SalesChart />
+
       <Card
         title="Sales"
         className="h-min-80 mt-5"
