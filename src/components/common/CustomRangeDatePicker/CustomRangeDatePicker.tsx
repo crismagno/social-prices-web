@@ -1,4 +1,9 @@
 import { DatePicker } from "antd";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import moment from "moment";
+
+dayjs.extend(customParseFormat);
 
 const { RangePicker } = DatePicker;
 
@@ -6,26 +11,32 @@ interface Props {
   label?: string;
   onChange: (startDate: Date | null, endDate: Date | null) => void;
   showTime?: boolean;
-  value?: any;
+  defaultValue?: [moment.Moment, moment.Moment];
+  format?: string;
 }
 
 export const CustomRangeDatePicker: React.FC<Props> = ({
   onChange,
   label,
   showTime = false,
-  value,
-  ...props
+  defaultValue,
+  format,
 }) => {
   return (
     <div>
       {label && <label className="mr-2 font-bold">{label}</label>}
       <RangePicker
-        value={value}
+        defaultValue={
+          defaultValue && [
+            dayjs(defaultValue?.[0].format(format), format),
+            dayjs(defaultValue?.[1].format(format), format),
+          ]
+        }
+        format={format}
         showTime={showTime}
         onChange={(value) => {
           onChange(value?.[0]?.toDate() ?? null, value?.[1]?.toDate() ?? null);
         }}
-        {...props}
       />
     </div>
   );
