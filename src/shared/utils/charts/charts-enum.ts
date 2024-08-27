@@ -12,6 +12,10 @@ namespace ChartsEnum {
     [PeriodType.MONTH]: "Month",
     [PeriodType.YEAR]: "Year",
   };
+
+  export const OthersName: string = "Others";
+
+  export const DefaultItemsLength: number = 5;
 }
 
 export default ChartsEnum;

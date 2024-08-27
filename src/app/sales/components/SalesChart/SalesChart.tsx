@@ -1,22 +1,13 @@
 import React, { useState } from "react";
 
-import {
-  Avatar,
-  Badge,
-  Button,
-  Card,
-  Col,
-  List,
-  Row,
-  Select,
-  Tooltip,
-} from "antd";
+import { Badge, Button, Card, Col, List, Row, Select, Tooltip } from "antd";
 import { map } from "lodash";
 import moment from "moment";
 
 import { ReloadOutlined } from "@ant-design/icons";
 
 import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
+import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
 import Loading from "../../../../components/common/Loading/Loading";
 import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
 import { IGetSalesAnalyticsParams } from "../../../../services/social-prices-api/sales/sales-service.types";
@@ -224,30 +215,16 @@ export const SalesChart: React.FC<Props> = ({ title }) => {
         </Col>
 
         <Col xs={8}>
-          <SalesChartProducts
-            data={[
-              { name: "Product A", total: 400, url: "" },
-              { name: "Product B", total: 300, url: "" },
-              { name: "Product C", total: 300, url: "" },
-              { name: "Product D", total: 200, url: "" },
-              { name: "Product E", total: 200, url: "" },
-            ]}
-          />
+          <SalesChartProducts data={salesAnalytics?.chartDataProducts ?? []} />
         </Col>
 
         <Col xs={6}>
           <List
-            dataSource={[
-              { name: "Product A", total: 400, url: "" },
-              { name: "Product B", total: 300, url: "" },
-              { name: "Product C", total: 300, url: "" },
-              { name: "Product D", total: 200, url: "" },
-              { name: "Product E", total: 200, url: "" },
-            ]}
+            dataSource={salesAnalytics?.chartDataProducts}
             renderItem={(item) => (
               <List.Item>
                 <List.Item.Meta
-                  avatar={<Avatar src={item.url} />}
+                  avatar={<ImageOrDefault src={item.mainUrl} />}
                   title={<a href="https://ant.design">{item.name}</a>}
                   description={`Total: ${item.total}`}
                 />

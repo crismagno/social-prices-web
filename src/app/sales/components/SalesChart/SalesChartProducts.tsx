@@ -2,8 +2,10 @@ import React, { useState } from "react";
 
 import { Pie, PieChart, ResponsiveContainer, Sector } from "recharts";
 
+import { IChartDataProductItem } from "../../../../shared/utils/charts/charts-types";
+
 interface Props {
-  data: any[];
+  data: IChartDataProductItem[];
 }
 
 export const SalesChartProducts: React.FC<Props> = ({ data }) => {
