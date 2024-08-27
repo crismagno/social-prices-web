@@ -42,7 +42,7 @@ const Navigation: React.FC<Props> = ({}) => {
       className="max-h-24 flex flex-row
       shadow-lg shadow-slate-600 dark:shadow-white 
      bg-white dark:bg-gray-800 dark:text-white w-screen overflow-x-auto
-      fixed bottom-0 left-0"
+      fixed bottom-0 left-0 z-50"
     >
       <ul className="flex flex-row grow">
         <NavigationItem

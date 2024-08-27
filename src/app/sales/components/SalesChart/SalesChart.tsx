@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 
-import { Badge, Card, Col, Row, Select } from "antd";
+import {
+  Avatar,
+  Badge,
+  Button,
+  Card,
+  Col,
+  List,
+  Row,
+  Select,
+  Tooltip,
+} from "antd";
 import { map } from "lodash";
 import moment from "moment";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+
+import { ReloadOutlined } from "@ant-design/icons";
 
 import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
 import Loading from "../../../../components/common/Loading/Loading";
@@ -22,30 +25,29 @@ import SalesEnum from "../../../../shared/business/sales/sales.enum";
 import { IStore } from "../../../../shared/business/stores/stores.interface";
 import TagsEnum from "../../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../../shared/business/tags/tags.interface";
-import { IRangeDate } from "../../../../shared/common/interfaces/global";
 import ChartsEnum from "../../../../shared/utils/charts/charts-enum";
 import DatesEnum from "../../../../shared/utils/dates/dates.enum";
 import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../../tags/useFindTagsByType";
 import { useGetSalesAnalytics } from "../../useGetSalesAnalytics";
+import { SalesChartPeriodType } from "./SalesChartPeriodType";
+import { SalesChartProducts } from "./SalesChartProducts";
 
 interface Props {
   title?: string;
 }
 
-const defaultRangeDate = (): IRangeDate => ({
-  startDate: moment().startOf("year").toDate(),
-  endDate: moment().toDate(),
+const defaultGetSalesAnalyticsParams = createGetSalesAnalyticsParams({
+  periodType: ChartsEnum.PeriodType.MONTH,
+  rangeDate: {
+    startDate: moment().startOf("year").toDate(),
+    endDate: moment().toDate(),
+  },
 });
 
 export const SalesChart: React.FC<Props> = ({ title }) => {
   const [getSalesAnalyticsParams, setGetSalesAnalyticsParams] =
-    useState<IGetSalesAnalyticsParams>(
-      createGetSalesAnalyticsParams({
-        periodType: ChartsEnum.PeriodType.MONTH,
-        rangeDate: defaultRangeDate(),
-      })
-    );
+    useState<IGetSalesAnalyticsParams>(defaultGetSalesAnalyticsParams);
 
   const { isLoading, salesAnalytics } = useGetSalesAnalytics(
     getSalesAnalyticsParams
@@ -99,7 +101,7 @@ export const SalesChart: React.FC<Props> = ({ title }) => {
               });
             }}
           >
-            {stores.map((store: IStore) => (
+            {map(stores, (store: IStore) => (
               <Select.Option key={store._id} value={store._id}>
                 {store.name}
               </Select.Option>
@@ -121,9 +123,9 @@ export const SalesChart: React.FC<Props> = ({ title }) => {
               });
             }}
           >
-            {map(Object.keys(SalesEnum.Type), (type: string) => (
+            {map(Object.keys(SalesEnum.Type), (type: SalesEnum.Type) => (
               <Select.Option key={type} value={type}>
-                {SalesEnum.TypeLabels[type as SalesEnum.Type]}
+                {SalesEnum.TypeLabels[type]}
               </Select.Option>
             ))}
           </Select>
@@ -143,21 +145,17 @@ export const SalesChart: React.FC<Props> = ({ title }) => {
               });
             }}
           >
-            {map(Object.keys(SalesEnum.Status), (status: string) => (
+            {map(Object.keys(SalesEnum.Status), (status: SalesEnum.Status) => (
               <Select.Option key={status} value={status}>
-                <span className="mr-1">
-                  {SalesEnum.StatusLabels[status as SalesEnum.Status]}
-                </span>
+                <span className="mr-1">{SalesEnum.StatusLabels[status]}</span>
 
-                <Badge
-                  color={SalesEnum.StatusColors[status as SalesEnum.Status]}
-                />
+                <Badge color={SalesEnum.StatusColors[status]} />
               </Select.Option>
             ))}
           </Select>
         </Col>
 
-        <Col md={4}>
+        <Col md={3}>
           <label className="mr-1 font-bold">Tags:</label>
           <Select
             allowClear
@@ -177,6 +175,17 @@ export const SalesChart: React.FC<Props> = ({ title }) => {
               </Select.Option>
             ))}
           </Select>
+        </Col>
+        <Col md={1}>
+          <Tooltip title="Reload filters">
+            <Button
+              className="mt-5"
+              icon={<ReloadOutlined />}
+              onClick={() =>
+                setGetSalesAnalyticsParams(defaultGetSalesAnalyticsParams)
+              }
+            />
+          </Tooltip>
         </Col>
       </Row>
 
@@ -208,31 +217,45 @@ export const SalesChart: React.FC<Props> = ({ title }) => {
       </Row>
 
       <Row gutter={[16, 16]}>
-        <Col xs={24}>
-          <ResponsiveContainer width={800} height={400}>
-            <AreaChart
-              width={500}
-              height={400}
-              data={salesAnalytics?.chartDataPeriodType}
-              margin={{
-                top: 10,
-                right: 30,
-                left: 0,
-                bottom: 0,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Area
-                type="monotone"
-                dataKey="total"
-                stroke="#1677FE"
-                fill="#1677FE"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
+        <Col xs={10}>
+          <SalesChartPeriodType
+            data={salesAnalytics?.chartDataPeriodType ?? []}
+          />
+        </Col>
+
+        <Col xs={8}>
+          <SalesChartProducts
+            data={[
+              { name: "Product A", total: 400, url: "" },
+              { name: "Product B", total: 300, url: "" },
+              { name: "Product C", total: 300, url: "" },
+              { name: "Product D", total: 200, url: "" },
+              { name: "Product E", total: 200, url: "" },
+            ]}
+          />
+        </Col>
+
+        <Col xs={6}>
+          <List
+            dataSource={[
+              { name: "Product A", total: 400, url: "" },
+              { name: "Product B", total: 300, url: "" },
+              { name: "Product C", total: 300, url: "" },
+              { name: "Product D", total: 200, url: "" },
+              { name: "Product E", total: 200, url: "" },
+            ]}
+            renderItem={(item) => (
+              <List.Item>
+                <List.Item.Meta
+                  avatar={<Avatar src={item.url} />}
+                  title={<a href="https://ant.design">{item.name}</a>}
+                  description={`Total: ${item.total}`}
+                />
+                <div>content</div>
+              </List.Item>
+            )}
+            loading={isLoading}
+          />
         </Col>
       </Row>
     </Card>
