@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 
-import { Badge, Button, Card, Col, List, Row, Select, Tooltip } from "antd";
+import { Badge, Button, Card, Col, Row, Select, Tooltip } from "antd";
 import { map } from "lodash";
 import moment from "moment";
 
 import { ReloadOutlined } from "@ant-design/icons";
 
 import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
-import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
 import Loading from "../../../../components/common/Loading/Loading";
 import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
 import { IGetSalesAnalyticsParams } from "../../../../services/social-prices-api/sales/sales-service.types";
@@ -21,6 +20,7 @@ import DatesEnum from "../../../../shared/utils/dates/dates.enum";
 import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../../tags/useFindTagsByType";
 import { useGetSalesAnalytics } from "../../useGetSalesAnalytics";
+import { SalesChartListProducts } from "./SalesChartListProducts";
 import { SalesChartPeriodType } from "./SalesChartPeriodType";
 import { SalesChartProducts } from "./SalesChartProducts";
 
@@ -219,19 +219,8 @@ export const SalesChart: React.FC<Props> = ({ title }) => {
         </Col>
 
         <Col xs={6}>
-          <List
-            dataSource={salesAnalytics?.chartDataProducts}
-            renderItem={(item) => (
-              <List.Item>
-                <List.Item.Meta
-                  avatar={<ImageOrDefault src={item.mainUrl} />}
-                  title={<a href="https://ant.design">{item.name}</a>}
-                  description={`Total: ${item.total}`}
-                />
-                <div>content</div>
-              </List.Item>
-            )}
-            loading={isLoading}
+          <SalesChartListProducts
+            data={salesAnalytics?.chartDataProducts ?? []}
           />
         </Col>
       </Row>
