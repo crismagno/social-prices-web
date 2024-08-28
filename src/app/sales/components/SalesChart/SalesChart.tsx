@@ -167,6 +167,7 @@ export const SalesChart: React.FC<Props> = ({ title }) => {
             ))}
           </Select>
         </Col>
+
         <Col md={1}>
           <Tooltip title="Reload filters">
             <Button
@@ -180,48 +181,25 @@ export const SalesChart: React.FC<Props> = ({ title }) => {
         </Col>
       </Row>
 
-      <Row gutter={[8, 8]} className="mt-3">
-        <Col md={3}>
-          <label className="mr-1 font-bold">Period type:</label>
-
-          <Select
-            style={{ width: 100 }}
-            value={getSalesAnalyticsParams.periodType}
-            defaultValue={ChartsEnum.PeriodType.MONTH}
+      <Row gutter={[16, 16]} className="mt-3">
+        <Col md={10}>
+          <SalesChartPeriodType
             onChange={(periodType: ChartsEnum.PeriodType) => {
               setGetSalesAnalyticsParams({
                 ...getSalesAnalyticsParams,
                 periodType,
               });
             }}
-          >
-            {map(
-              Object.keys(ChartsEnum.PeriodType),
-              (periodType: ChartsEnum.PeriodType) => (
-                <Select.Option key={periodType} value={periodType}>
-                  {ChartsEnum.PeriodTypeLabel[periodType]}
-                </Select.Option>
-              )
-            )}
-          </Select>
-        </Col>
-      </Row>
-
-      <Row gutter={[16, 16]}>
-        <Col xs={10}>
-          <SalesChartPeriodType
-            data={salesAnalytics?.chartDataPeriodType ?? []}
+            salesAnalytics={salesAnalytics}
           />
         </Col>
 
-        <Col xs={8}>
-          <SalesChartProducts data={salesAnalytics?.chartDataProducts ?? []} />
+        <Col md={8}>
+          <SalesChartProducts salesAnalytics={salesAnalytics} />
         </Col>
 
-        <Col xs={6}>
-          <SalesChartListProducts
-            data={salesAnalytics?.chartDataProducts ?? []}
-          />
+        <Col md={6}>
+          <SalesChartListProducts salesAnalytics={salesAnalytics} />
         </Col>
       </Row>
     </Card>

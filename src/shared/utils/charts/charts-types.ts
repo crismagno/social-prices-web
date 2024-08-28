@@ -6,6 +6,7 @@ export interface IChartDateTotalItem {
 export interface IChartDataPeriodTypeItem {
   total: number;
   name: any;
+  quantity: number;
 }
 
 export interface IChartDataProductItem {
@@ -13,4 +14,5 @@ export interface IChartDataProductItem {
   name: any;
   productId: string;
   mainUrl?: string;
+  quantity: number;
 }

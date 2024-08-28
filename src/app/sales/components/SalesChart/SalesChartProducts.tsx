@@ -2,16 +2,28 @@ import React, { useState } from "react";
 
 import { Pie, PieChart, ResponsiveContainer, Sector } from "recharts";
 
+import SelectByQuantityOrTotal from "../../../../components/common/SelectByQuantityOrTotal/SelectByQuantityOrTotal";
+import { IGetSalesAnalyticsResponse } from "../../../../services/social-prices-api/sales/sales-service.types";
+import CommonEnum from "../../../../shared/common/enums/common.enum";
 import { IChartDataProductItem } from "../../../../shared/utils/charts/charts-types";
+import { getImageUrl } from "../../../../shared/utils/images/url-images";
+import { formatToMoneyDecimal } from "../../../../shared/utils/string-extensions/string-extensions";
 
 interface Props {
-  data: IChartDataProductItem[];
+  salesAnalytics: IGetSalesAnalyticsResponse | null;
 }
 
-export const SalesChartProducts: React.FC<Props> = ({ data }) => {
+export const SalesChartProducts: React.FC<Props> = ({ salesAnalytics }) => {
   const [pieActiveIndex, setPieActiveIndex] = useState<number>(0);
 
-  const renderActiveShape = (props) => {
+  const [data, setData] = useState<IChartDataProductItem[]>(
+    salesAnalytics?.chartDataProductsByTotal ?? []
+  );
+
+  const [quantityOrTotal, setQuantityOrTotal] =
+    useState<CommonEnum.QuantityOrTotal>(CommonEnum.QuantityOrTotal.TOTAL);
+
+  const renderActiveShape = (props: any) => {
     const RADIAN = Math.PI / 180;
     const {
       cx,
@@ -38,9 +50,17 @@ export const SalesChartProducts: React.FC<Props> = ({ data }) => {
 
     return (
       <g>
-        <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+        <text x={cx} y={cy + 15} dy={8} textAnchor="middle" fill={fill}>
           {payload.name}
         </text>
+        <image
+          x={cx - 20}
+          y={cy - 35}
+          dy={8}
+          width={40}
+          height={40}
+          href={getImageUrl(payload?.mainUrl)} // Replace with your image URL
+        />
         <Sector
           cx={cx}
           cy={cy}
@@ -70,7 +90,11 @@ export const SalesChartProducts: React.FC<Props> = ({ data }) => {
           y={ey}
           textAnchor={textAnchor}
           fill="#333"
-        >{`PV ${value}`}</text>
+        >
+          {quantityOrTotal === CommonEnum.QuantityOrTotal.TOTAL
+            ? `Total: ${formatToMoneyDecimal(value)}`
+            : `Qty: ${value}`}
+        </text>
         <text
           x={ex + (cos >= 0 ? 1 : -1) * 12}
           y={ey}
@@ -85,21 +109,39 @@ export const SalesChartProducts: React.FC<Props> = ({ data }) => {
   };
 
   return (
-    <ResponsiveContainer width="100%" height={370}>
-      <PieChart width={400} height={400}>
-        <Pie
-          activeIndex={pieActiveIndex}
-          activeShape={renderActiveShape}
-          data={data}
-          cx="40%"
-          cy="50%"
-          innerRadius={100}
-          outerRadius={120}
-          fill="#1677FE"
-          dataKey="total"
-          onMouseEnter={(_, index) => setPieActiveIndex(index)}
-        />
-      </PieChart>
-    </ResponsiveContainer>
+    <>
+      <SelectByQuantityOrTotal
+        label="Products by Highest Sales Revenue: "
+        onChange={(quantityOrTotal: CommonEnum.QuantityOrTotal) => {
+          setQuantityOrTotal(quantityOrTotal);
+          setData(
+            quantityOrTotal === CommonEnum.QuantityOrTotal.TOTAL
+              ? salesAnalytics?.chartDataProductsByTotal ?? []
+              : salesAnalytics?.chartDataProductsByQuantity ?? []
+          );
+        }}
+      />
+
+      <ResponsiveContainer width="100%" height={370}>
+        <PieChart width={400} height={400}>
+          <Pie
+            activeIndex={pieActiveIndex}
+            activeShape={renderActiveShape}
+            data={data}
+            cx="51%"
+            cy="50%"
+            innerRadius={80}
+            outerRadius={100}
+            fill="#1677FE"
+            dataKey={
+              quantityOrTotal === CommonEnum.QuantityOrTotal.TOTAL
+                ? "total"
+                : "quantity"
+            }
+            onMouseEnter={(_, index) => setPieActiveIndex(index)}
+          />
+        </PieChart>
+      </ResponsiveContainer>
+    </>
   );
 };

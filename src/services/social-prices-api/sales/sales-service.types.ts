@@ -18,5 +18,6 @@ export interface IGetSalesAnalyticsParams {
 
 export interface IGetSalesAnalyticsResponse {
   chartDataPeriodType: IChartDataPeriodTypeItem[];
-  chartDataProducts: IChartDataProductItem[];
+  chartDataProductsByTotal: IChartDataProductItem[];
+  chartDataProductsByQuantity: IChartDataProductItem[];
 }
