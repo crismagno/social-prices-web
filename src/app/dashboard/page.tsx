@@ -13,7 +13,7 @@ import { StoresCard } from "./components/StoresCard/StoresCard";
 export default function DashboardPage() {
   return (
     <Layout subtitle="Dashboard information" title="Dashboard">
-      <SalesChart cardClassName="mt-3" />
+      <SalesChart cardClassName="mt-5" />
 
       <div className="p-2"></div>
 
