@@ -26,6 +26,8 @@ import { SalesChartProducts } from "./SalesChartProducts";
 
 interface Props {
   title?: string;
+  isShowHeader?: boolean;
+  cardClassName?: string;
 }
 
 const defaultGetSalesAnalyticsParams = createGetSalesAnalyticsParams({
@@ -36,7 +38,11 @@ const defaultGetSalesAnalyticsParams = createGetSalesAnalyticsParams({
   },
 });
 
-export const SalesChart: React.FC<Props> = ({ title }) => {
+export const SalesChart: React.FC<Props> = ({
+  title,
+  isShowHeader = true,
+  cardClassName,
+}) => {
   const [getSalesAnalyticsParams, setGetSalesAnalyticsParams] =
     useState<IGetSalesAnalyticsParams>(defaultGetSalesAnalyticsParams);
 
@@ -55,7 +61,11 @@ export const SalesChart: React.FC<Props> = ({ title }) => {
   }
 
   return (
-    <Card title={title ?? "Sales Chart"} className="mt-5">
+    <Card
+      title={title ?? "Sales Chart"}
+      className={cardClassName}
+      headStyle={{ display: isShowHeader ? "" : "none" }}
+    >
       <Row gutter={[8, 8]}>
         <Col md={6}>
           <CustomRangeDatePicker
@@ -184,6 +194,7 @@ export const SalesChart: React.FC<Props> = ({ title }) => {
       <Row gutter={[16, 16]} className="mt-3">
         <Col md={10}>
           <SalesChartPeriodType
+            periodType={getSalesAnalyticsParams.periodType!}
             onChange={(periodType: ChartsEnum.PeriodType) => {
               setGetSalesAnalyticsParams({
                 ...getSalesAnalyticsParams,

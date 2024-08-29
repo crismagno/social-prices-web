@@ -68,6 +68,7 @@ export class SaleStoreDto {
 
 export default class CreateSaleDto {
   createdByUserId: string = "";
+  createdByEmployeeId: string = "";
   buyer: SaleBuyerDto | null = null;
   type: SalesEnum.Type = SalesEnum.Type.MANUAL;
   totals: SaleTotalsDto = {} as any;

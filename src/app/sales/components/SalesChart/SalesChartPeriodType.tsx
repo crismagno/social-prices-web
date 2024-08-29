@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { Select } from "antd";
+import { Divider, Select } from "antd";
 import { map } from "lodash";
 import {
   Area,
@@ -20,27 +20,26 @@ import { formatToMoneyDecimal } from "../../../../shared/utils/string-extensions
 interface Props {
   salesAnalytics: IGetSalesAnalyticsResponse | null;
   onChange: (periodType: ChartsEnum.PeriodType) => void;
+  periodType: ChartsEnum.PeriodType;
 }
 
 export const SalesChartPeriodType: React.FC<Props> = ({
   salesAnalytics,
   onChange,
+  periodType,
 }) => {
-  const [periodType, setPeriodType] = useState<ChartsEnum.PeriodType>(
-    ChartsEnum.PeriodType.MONTH
-  );
+  const allTotalAndQuantity = salesAnalytics?.chartDataPeriodType?.reduce(
+    (acc, curr: IChartDataPeriodTypeItem) => {
+      acc.total += curr.total;
+      acc.quantity += curr.quantity;
 
-  const allTotal: number =
-    salesAnalytics?.chartDataPeriodType?.reduce(
-      (acc: number, curr: IChartDataPeriodTypeItem) => (acc += curr.total),
-      0
-    ) ?? 0;
-
-  const allQuantity: number =
-    salesAnalytics?.chartDataPeriodType?.reduce(
-      (acc: number, curr: IChartDataPeriodTypeItem) => (acc += curr.quantity),
-      0
-    ) ?? 0;
+      return acc;
+    },
+    {
+      total: 0,
+      quantity: 0,
+    }
+  ) || { total: 0, quantity: 0 };
 
   const renderTooltip = (props: any) => {
     const { active, payload } = props;
@@ -51,9 +50,15 @@ export const SalesChartPeriodType: React.FC<Props> = ({
 
     const item: IChartDataPeriodTypeItem = payload[0].payload;
 
-    const percentageByTotal: number = (item?.total * 100) / allTotal;
+    const itemTotal: number = item?.total ?? 0;
 
-    const percentageByQuantity: number = (item?.quantity * 100) / allQuantity;
+    const itemQuantity: number = item?.quantity ?? 0;
+
+    const percentageByTotal: number =
+      (itemTotal * 100) / allTotalAndQuantity.total;
+
+    const percentageByQuantity: number =
+      (itemQuantity * 100) / allTotalAndQuantity.quantity;
 
     return (
       <div
@@ -77,14 +82,7 @@ export const SalesChartPeriodType: React.FC<Props> = ({
       <div>
         <label className="font-semibold mr-2">Sales Revenue by Period: </label>
 
-        <Select
-          style={{ width: 120 }}
-          value={periodType}
-          onChange={(value: ChartsEnum.PeriodType) => {
-            setPeriodType(value);
-            onChange(value);
-          }}
-        >
+        <Select style={{ width: 120 }} value={periodType} onChange={onChange}>
           {map(
             Object.keys(ChartsEnum.PeriodType),
             (periodTypeParam: ChartsEnum.PeriodType) => (
@@ -96,30 +94,39 @@ export const SalesChartPeriodType: React.FC<Props> = ({
         </Select>
       </div>
 
-      <ResponsiveContainer width={"100%"} height={370}>
-        <AreaChart
-          data={salesAnalytics?.chartDataPeriodType}
-          margin={{
-            top: 10,
-            right: 30,
-            left: -20,
-            bottom: 0,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          {/* <Tooltip /> */}
+      <div>
+        <ResponsiveContainer width={"100%"} height={370}>
+          <AreaChart
+            data={salesAnalytics?.chartDataPeriodType}
+            margin={{
+              top: 10,
+              right: 30,
+              left: -20,
+              bottom: 0,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
 
-          <Tooltip content={renderTooltip} />
-          <Area
-            type="monotone"
-            dataKey="total"
-            stroke="#1677FE"
-            fill="#1677FE"
-          />
-        </AreaChart>
-      </ResponsiveContainer>
+            <Tooltip content={renderTooltip} />
+            <Area
+              type="monotone"
+              dataKey="total"
+              stroke="#1677FE"
+              fill="#1677FE"
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+
+        <div className="text-center mt-1">
+          <span>Total: {formatToMoneyDecimal(allTotalAndQuantity.total)}</span>
+
+          <Divider type="vertical" />
+
+          <span>Quantity: {allTotalAndQuantity.quantity}</span>
+        </div>
+      </div>
     </>
   );
 };

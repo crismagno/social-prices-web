@@ -3,6 +3,7 @@
 import { Col, Row } from "antd";
 
 import Layout from "../../components/template/Layout/Layout";
+import { SalesChart } from "../sales/components/SalesChart/SalesChart";
 import { CategoriesCard } from "./components/CategoriesCard/CategoriesCard";
 import { CustomersCard } from "./components/CustomersCard/CustomersCard";
 import { CustomersDashboardTable } from "./components/CustomersDashboardTable/CustomersDashboardTable";
@@ -12,7 +13,10 @@ import { StoresCard } from "./components/StoresCard/StoresCard";
 export default function DashboardPage() {
   return (
     <Layout subtitle="Dashboard information" title="Dashboard">
-      <div className="p-5"></div>
+      <SalesChart cardClassName="mt-3" />
+
+      <div className="p-2"></div>
+
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} md={6}>
           <StoresCard />
@@ -31,7 +35,7 @@ export default function DashboardPage() {
         </Col>
       </Row>
 
-      <Row className="mt-10">
+      <Row>
         <Col xs={24}>
           <CustomersDashboardTable />
         </Col>

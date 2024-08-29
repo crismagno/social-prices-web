@@ -730,6 +730,7 @@ export default function CreateSalePage() {
           userId: selectedCustomer?.userId ?? null,
         },
         createdByUserId: user?._id!,
+        createdByEmployeeId: user?.employee?._id!,
         header: {
           shipping: {
             address,
@@ -843,6 +844,7 @@ export default function CreateSalePage() {
         const updateSaleDto: UpdateSaleDto = {
           ...createSaleDto,
           updatedByUserId: user!._id,
+          updatedByEmployeeId: user?.employee?._id!,
           saleId: saleById!._id,
         };
 

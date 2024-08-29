@@ -59,7 +59,7 @@ export const SalesChartProducts: React.FC<Props> = ({ salesAnalytics }) => {
           dy={8}
           width={40}
           height={40}
-          href={getImageUrl(payload?.mainUrl)} // Replace with your image URL
+          href={getImageUrl(payload?.mainUrl)}
         />
         <Sector
           cx={cx}
@@ -102,7 +102,7 @@ export const SalesChartProducts: React.FC<Props> = ({ salesAnalytics }) => {
           textAnchor={textAnchor}
           fill="#999"
         >
-          {`(Rate ${(percent * 100).toFixed(2)}%)`}
+          {`(Percent: ${(percent * 100).toFixed(2)}%)`}
         </text>
       </g>
     );

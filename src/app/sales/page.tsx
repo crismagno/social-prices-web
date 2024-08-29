@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Button, Card, Modal, Tag, Tooltip } from "antd";
+import { Button, Card, Collapse, Modal, Tag, Tooltip } from "antd";
 import { find, first, map } from "lodash";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
@@ -114,11 +114,23 @@ export default function SalesPage() {
 
   return (
     <Layout subtitle="Sales information" title="Sales">
-      <SalesChart />
+      <Collapse
+        className="mt-5"
+        defaultActiveKey={["1"]}
+        style={{ backgroundColor: "#fff", boxShadow: "none" }}
+        ghost
+        items={[
+          {
+            key: "1",
+            label: <span className="font-semibold text-base">Sales Chart</span>,
+            children: <SalesChart isShowHeader={false} />,
+          },
+        ]}
+      />
 
       <Card
         title="Sales"
-        className="h-min-80 mt-5"
+        className="h-min-80 mt-2"
         extra={<ButtonCreateSale />}
       >
         <CustomRangeDatePicker

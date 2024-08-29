@@ -10,6 +10,7 @@ import {
 export default class UpdateSaleDto {
   saleId: string = "";
   updatedByUserId: string = "";
+  updatedByEmployeeId: string = "";
   buyer: SaleBuyerDto | null = null;
   type: SalesEnum.Type = SalesEnum.Type.MANUAL;
   totals: SaleTotalsDto = {} as any;
