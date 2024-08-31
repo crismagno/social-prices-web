@@ -15,7 +15,7 @@ namespace ChartsEnum {
 
   export const OthersName: string = "Others";
 
-  export const DefaultItemsLength: number = 5;
+  export const DefaultItemsLength: number = 4;
 
   export const Colors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#3FC734"];
 }

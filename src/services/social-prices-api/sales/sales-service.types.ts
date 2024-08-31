@@ -1,5 +1,5 @@
 import SalesEnum from "../../../shared/business/sales/sales.enum";
-import { IRangeDate } from "../../../shared/common/interfaces/global";
+import { IRangeDate } from "../../../shared/common/interfaces/global.interface";
 import ChartsEnum from "../../../shared/utils/charts/charts-enum";
 import {
   IChartDataPeriodTypeItem,

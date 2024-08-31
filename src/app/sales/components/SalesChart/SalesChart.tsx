@@ -6,6 +6,7 @@ import moment from "moment";
 
 import { ReloadOutlined } from "@ant-design/icons";
 
+import { ButtonCreateSale } from "../../../../components/common/ButtonCreateSale/ButtonCreateSale";
 import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
 import Loading from "../../../../components/common/Loading/Loading";
 import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
@@ -27,6 +28,7 @@ import { SalesChartProducts } from "./SalesChartProducts";
 interface Props {
   title?: string;
   isShowHeader?: boolean;
+  isShowButtonCreateSale?: boolean;
   cardClassName?: string;
 }
 
@@ -41,6 +43,7 @@ const defaultGetSalesAnalyticsParams = createGetSalesAnalyticsParams({
 export const SalesChart: React.FC<Props> = ({
   title,
   isShowHeader = true,
+  isShowButtonCreateSale = false,
   cardClassName,
 }) => {
   const [getSalesAnalyticsParams, setGetSalesAnalyticsParams] =
@@ -63,6 +66,7 @@ export const SalesChart: React.FC<Props> = ({
   return (
     <Card
       title={title ?? "Sales Chart"}
+      extra={isShowButtonCreateSale && <ButtonCreateSale />}
       className={cardClassName}
       headStyle={{ display: isShowHeader ? "" : "none" }}
     >

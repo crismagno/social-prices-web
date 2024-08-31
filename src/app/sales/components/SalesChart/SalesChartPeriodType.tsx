@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Divider, Select } from "antd";
-import { map } from "lodash";
+import { map, reduce } from "lodash";
 import {
   Area,
   AreaChart,
@@ -13,6 +13,7 @@ import {
 } from "recharts";
 
 import { IGetSalesAnalyticsResponse } from "../../../../services/social-prices-api/sales/sales-service.types";
+import { ITotalQuantity } from "../../../../shared/common/interfaces/global.interface";
 import ChartsEnum from "../../../../shared/utils/charts/charts-enum";
 import { IChartDataPeriodTypeItem } from "../../../../shared/utils/charts/charts-types";
 import { formatToMoneyDecimal } from "../../../../shared/utils/string-extensions/string-extensions";
@@ -28,8 +29,9 @@ export const SalesChartPeriodType: React.FC<Props> = ({
   onChange,
   periodType,
 }) => {
-  const allTotalAndQuantity = salesAnalytics?.chartDataPeriodType?.reduce(
-    (acc, curr: IChartDataPeriodTypeItem) => {
+  const totalQuantityByData: ITotalQuantity = reduce(
+    salesAnalytics?.chartDataPeriodType,
+    (acc: ITotalQuantity, curr: IChartDataPeriodTypeItem) => {
       acc.total += curr.total;
       acc.quantity += curr.quantity;
 
@@ -55,10 +57,10 @@ export const SalesChartPeriodType: React.FC<Props> = ({
     const itemQuantity: number = item?.quantity ?? 0;
 
     const percentageByTotal: number =
-      (itemTotal * 100) / allTotalAndQuantity.total;
+      (itemTotal * 100) / totalQuantityByData.total;
 
     const percentageByQuantity: number =
-      (itemQuantity * 100) / allTotalAndQuantity.quantity;
+      (itemQuantity * 100) / totalQuantityByData.quantity;
 
     return (
       <div
@@ -120,11 +122,19 @@ export const SalesChartPeriodType: React.FC<Props> = ({
         </ResponsiveContainer>
 
         <div className="text-center mt-1">
-          <span>Total: {formatToMoneyDecimal(allTotalAndQuantity.total)}</span>
+          <span className="font-semibold">
+            Total:
+            <span className="ml-1">
+              {formatToMoneyDecimal(totalQuantityByData.total)}
+            </span>
+          </span>
 
           <Divider type="vertical" />
 
-          <span>Quantity: {allTotalAndQuantity.quantity}</span>
+          <span className="font-semibold">
+            Quantity:
+            <span className="ml-1">{totalQuantityByData.quantity}</span>
+          </span>
         </div>
       </div>
     </>

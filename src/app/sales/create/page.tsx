@@ -399,8 +399,10 @@ export default function CreateSalePage() {
 
     if (storeIdByParam) {
       setValue("selectedStoreIds", [storeIdByParam]);
+    } else {
+      setValue("selectedStoreIds", stores.length ? [stores[0]._id] : []);
     }
-  }, [saleById, customerIdByParam]);
+  }, [saleById, customerIdByParam, stores]);
 
   if (isLoadingStores || isLoadingSaleById || isLoadingTags) {
     return <LoadingFull />;

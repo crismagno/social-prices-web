@@ -1,7 +1,7 @@
 import { Tag, Tooltip } from "antd";
 
 import PhoneNumberEnum from "../../../shared/business/enums/phone-number.enum";
-import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number";
+import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number.interface";
 import { messengersToString } from "../../../shared/utils/string-extensions/string-extensions";
 
 interface Props {

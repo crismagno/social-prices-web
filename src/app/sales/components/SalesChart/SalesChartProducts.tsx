@@ -128,7 +128,7 @@ export const SalesChartProducts: React.FC<Props> = ({ salesAnalytics }) => {
             activeIndex={pieActiveIndex}
             activeShape={renderActiveShape}
             data={data}
-            cx="51%"
+            cx="50%"
             cy="50%"
             innerRadius={80}
             outerRadius={100}

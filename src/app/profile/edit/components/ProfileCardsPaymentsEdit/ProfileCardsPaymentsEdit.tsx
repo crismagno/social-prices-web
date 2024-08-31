@@ -23,7 +23,7 @@ import {
 import useAuthData from "../../../../../data/context/auth/useAuthData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/ServiceMethods";
 import PhoneNumberEnum from "../../../../../shared/business/enums/phone-number.enum";
-import { IPhoneNumber } from "../../../../../shared/business/interfaces/phone-number";
+import { IPhoneNumber } from "../../../../../shared/business/interfaces/phone-number.interface";
 import IUser from "../../../../../shared/business/users/user.interface";
 import { createPhoneNumberName } from "../../../../../shared/utils/string-extensions/string-extensions";
 

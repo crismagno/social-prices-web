@@ -1,7 +1,7 @@
 import PersonEnum from "../enums/person.enum";
 import { IAddress } from "../interfaces/address.interface";
 import { ICreatedAtEntity } from "../interfaces/created-at.interface";
-import { IPhoneNumber } from "../interfaces/phone-number";
+import { IPhoneNumber } from "../interfaces/phone-number.interface";
 import { IUpdatedAtEntity } from "../interfaces/updated-at.interface";
 import EmployeesEnum from "./employees.enum";
 

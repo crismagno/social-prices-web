@@ -9,7 +9,7 @@ import { PhoneNumbersTag } from "../../../../components/common/PhoneNumbersTag/P
 import TableCustomAntd2 from "../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import { ICustomer } from "../../../../shared/business/customers/customer.interface";
 import PersonEnum from "../../../../shared/business/enums/person.enum";
-import { IPhoneNumber } from "../../../../shared/business/interfaces/phone-number";
+import { IPhoneNumber } from "../../../../shared/business/interfaces/phone-number.interface";
 import DatesEnum from "../../../../shared/utils/dates/dates.enum";
 import { createTableState } from "../../../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../../../shared/utils/table/table-state.interface";
@@ -24,7 +24,7 @@ export const CustomersDashboardTable: React.FC = () => {
     useFindCustomersByOwnerOfUserTableState(tableStateRequest);
 
   return (
-    <Card className="h-min-80 mt-5" extra={<ButtonCreateSale />}>
+    <Card className="h-min-80 mt-3" extra={<ButtonCreateSale />}>
       <TableCustomAntd2<ICustomer>
         rowKey={"_id"}
         dataSource={customers}

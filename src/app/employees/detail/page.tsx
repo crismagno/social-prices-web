@@ -58,7 +58,7 @@ import EmployeesEnum from "../../../shared/business/employees/employees.enum";
 import AddressEnum from "../../../shared/business/enums/address.enum";
 import PersonEnum from "../../../shared/business/enums/person.enum";
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
-import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number";
+import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number.interface";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../shared/business/tags/tags.interface";
 import { sortArray } from "../../../shared/utils/array/functions";

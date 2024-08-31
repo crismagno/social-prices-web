@@ -21,7 +21,7 @@ import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/Tabl
 import Layout from "../../components/template/Layout/Layout";
 import { ICustomer } from "../../shared/business/customers/customer.interface";
 import PersonEnum from "../../shared/business/enums/person.enum";
-import { IPhoneNumber } from "../../shared/business/interfaces/phone-number";
+import { IPhoneNumber } from "../../shared/business/interfaces/phone-number.interface";
 import TagsEnum from "../../shared/business/tags/tags.enum";
 import { ITag } from "../../shared/business/tags/tags.interface";
 import Urls from "../../shared/common/routes-app/routes-app";
