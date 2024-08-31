@@ -12,6 +12,7 @@ import {
   EditOutlined,
   PlusOutlined,
   QuestionCircleOutlined,
+  ShoppingCartOutlined,
 } from "@ant-design/icons";
 
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
@@ -271,18 +272,33 @@ export default function ProductsPage() {
               key: "action",
               align: "center",
               render: (_: any, product: IProduct) => (
-                <Tooltip title="Edit product">
-                  <Button
-                    className="mr-1"
-                    type="success"
-                    onClick={() =>
-                      router.push(
-                        Urls.EDIT_PRODUCT.replace(":productId", product._id)
-                      )
-                    }
-                    icon={<EditOutlined />}
-                  />
-                </Tooltip>
+                <Button.Group>
+                  <Tooltip title="Edit product">
+                    <Button
+                      type="success"
+                      onClick={() =>
+                        router.push(
+                          Urls.EDIT_PRODUCT.replace(":productId", product._id)
+                        )
+                      }
+                      icon={<EditOutlined />}
+                    />
+                  </Tooltip>
+                  <Tooltip title="Create Sale">
+                    <Button
+                      type="primary"
+                      onClick={() =>
+                        router.push(
+                          Urls.SALES_CREATE_BY_PRODUCT.replace(
+                            ":productId",
+                            product._id
+                          )
+                        )
+                      }
+                      icon={<ShoppingCartOutlined />}
+                    />
+                  </Tooltip>
+                </Button.Group>
               ),
             },
           ]}

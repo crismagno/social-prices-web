@@ -211,6 +211,8 @@ export default function CreateSalePage() {
 
   const storeIdByParam: string | null = searchParams.get("sid");
 
+  const productIdByParam: string | null = searchParams.get("pid");
+
   const { sale: saleById, isLoading: isLoadingSaleById } =
     useFindSaleById(saleIdByParam);
 
@@ -384,6 +386,45 @@ export default function CreateSalePage() {
       return;
     }
 
+    const initialSelectedStoreId: string = storeIdByParam ?? stores?.[0]?._id;
+
+    if (productIdByParam) {
+      const componentWillMountByProductIdParam = async () => {
+        const product: IProduct | null =
+          await serviceMethodsInstance.productsServiceMethods.findById(
+            productIdByParam
+          );
+
+        if (product) {
+          const firstStoreIdByProduct: string = product.storeIds[0];
+
+          setValue("saleStores", [
+            {
+              storeId: firstStoreIdByProduct ?? initialSelectedStoreId,
+              products: [
+                {
+                  barCode: product.barCode!,
+                  fileUrl: product.mainUrl!,
+                  name: product.name,
+                  note: null,
+                  price: product.price,
+                  productId: product._id,
+                  quantity: 1,
+                },
+              ],
+            },
+          ]);
+          setValue("selectedStoreIds", [firstStoreIdByProduct]);
+        } else {
+          setValue("selectedStoreIds", [initialSelectedStoreId]);
+        }
+      };
+
+      componentWillMountByProductIdParam();
+    } else {
+      setValue("selectedStoreIds", [initialSelectedStoreId]);
+    }
+
     if (customerIdByParam) {
       const componentWillMountByCustomerIdParam = async () => {
         const customer: ICustomer | null =
@@ -395,12 +436,6 @@ export default function CreateSalePage() {
       };
 
       componentWillMountByCustomerIdParam();
-    }
-
-    if (storeIdByParam) {
-      setValue("selectedStoreIds", [storeIdByParam]);
-    } else {
-      setValue("selectedStoreIds", stores.length ? [stores[0]._id] : []);
     }
   }, [saleById, customerIdByParam, stores]);
 
