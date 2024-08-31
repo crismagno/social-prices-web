@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Button, Card, Modal, Tag, Tooltip } from "antd";
+import { Button, Card, Col, Modal, Row, Tag, Tooltip } from "antd";
 import { find, first, map } from "lodash";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
@@ -16,10 +16,12 @@ import handleClientError from "../../../../components/common/handleClientError/h
 import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
 import { SaleResume } from "../../../../components/common/SaleResume/SaleResume";
+import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
 import { TagTagsCustomAntd } from "../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import TableCustomAntd2 from "../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/ServiceMethods";
 import { ICustomer } from "../../../../shared/business/customers/customer.interface";
+import { IProduct } from "../../../../shared/business/products/products.interface";
 import {
   ISale,
   ISaleBuyer,
@@ -119,11 +121,37 @@ const SalesTable: React.FC<Props> = ({}) => {
         className="h-min-80 mt-2"
         extra={<ButtonCreateSale />}
       >
-        <CustomRangeDatePicker
-          label="Created At:"
-          showTime
-          onChange={handleFilterSaleByCreatedAt}
-        />
+        <Row gutter={[16, 16]}>
+          <Col md={6}>
+            <CustomRangeDatePicker
+              label="Created At:"
+              showTime
+              onChange={handleFilterSaleByCreatedAt}
+            />
+          </Col>
+
+          <Col md={6}>
+            <label className="mr-1 font-bold">Products:</label>
+            <SelectProducts
+              selectedProductIds={tableStateRequest?.filters?.productIds ?? []}
+              onSelectProducts={(selectProducts: IProduct[]) => {
+                setTableStateRequest({
+                  ...tableStateRequest,
+                  filters: {
+                    ...tableStateRequest?.filters,
+                    productIds: map(selectProducts, "_id"),
+                  },
+                  pagination: {
+                    pageSize: 10,
+                    skip: 0,
+                    current: undefined,
+                    total: 0,
+                  },
+                });
+              }}
+            />
+          </Col>
+        </Row>
 
         <TableCustomAntd2<ISale>
           rowKey={"_id"}

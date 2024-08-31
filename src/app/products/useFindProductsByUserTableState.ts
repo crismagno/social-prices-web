@@ -31,7 +31,12 @@ export const useFindProductsByUserTableState = (
           tableState
         );
 
-      setProducts(response.data);
+      if (tableState?.useConcat) {
+        setProducts((value) => [...value, ...response.data]);
+      } else {
+        setProducts(response.data);
+      }
+
       setTotal(response.total);
     } catch (error: any) {
       handleClientError(error);

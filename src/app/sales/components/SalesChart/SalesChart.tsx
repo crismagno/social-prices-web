@@ -9,9 +9,11 @@ import { ReloadOutlined } from "@ant-design/icons";
 import { ButtonCreateSale } from "../../../../components/common/ButtonCreateSale/ButtonCreateSale";
 import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
 import Loading from "../../../../components/common/Loading/Loading";
+import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
 import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
 import { IGetSalesAnalyticsParams } from "../../../../services/social-prices-api/sales/sales-service.types";
 import { createGetSalesAnalyticsParams } from "../../../../services/social-prices-api/sales/sales-service.utils";
+import { IProduct } from "../../../../shared/business/products/products.interface";
 import SalesEnum from "../../../../shared/business/sales/sales.enum";
 import { IStore } from "../../../../shared/business/stores/stores.interface";
 import TagsEnum from "../../../../shared/business/tags/tags.enum";
@@ -92,7 +94,7 @@ export const SalesChart: React.FC<Props> = ({
           />
         </Col>
 
-        <Col md={6}>
+        <Col md={4}>
           <label className="mr-1 font-bold">Stores:</label>
           <Select
             allowClear
@@ -115,6 +117,19 @@ export const SalesChart: React.FC<Props> = ({
         </Col>
 
         <Col md={4}>
+          <label className="mr-1 font-bold">Products:</label>
+          <SelectProducts
+            selectedProductIds={getSalesAnalyticsParams.productIds ?? []}
+            onSelectProducts={(selectProducts: IProduct[]) => {
+              setGetSalesAnalyticsParams({
+                ...getSalesAnalyticsParams,
+                productIds: map(selectProducts, "_id"),
+              });
+            }}
+          />
+        </Col>
+
+        <Col md={3}>
           <label className="mr-1 font-bold">Types:</label>
           <Select
             allowClear
@@ -136,7 +151,7 @@ export const SalesChart: React.FC<Props> = ({
           </Select>
         </Col>
 
-        <Col md={4}>
+        <Col md={3}>
           <label className="mr-1 font-bold">Status:</label>
           <Select
             allowClear
