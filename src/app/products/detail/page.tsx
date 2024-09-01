@@ -72,7 +72,7 @@ const formSchema = z.object({
   details: z.string().trim().optional(),
   price: z.any().optional(),
   isActive: z.boolean(),
-  storeIds: z.array(z.string()),
+  storeIds: z.array(z.string()).min(1, "Should select at least one store"),
   barCode: z.string().trim().optional(),
   QRCode: z.string().optional(),
   categoriesIds: z.array(z.string()),

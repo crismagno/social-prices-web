@@ -75,22 +75,24 @@ export const SalesChartListProducts: React.FC<Props> = ({ salesAnalytics }) => {
                     {item.quantity}
                   </div>
 
-                  <Tooltip title="Create Sale By Product">
-                    <Button
-                      className="ml-3"
-                      type="primary"
-                      size="small"
-                      onClick={() =>
-                        router.push(
-                          Urls.SALES_CREATE_BY_PRODUCT.replace(
-                            ":productId",
-                            item.productId
+                  {item.productId && (
+                    <Tooltip title="Create Sale By Product">
+                      <Button
+                        className="ml-3"
+                        type="primary"
+                        size="small"
+                        onClick={() =>
+                          router.push(
+                            Urls.SALES_CREATE_BY_PRODUCT.replace(
+                              ":productId",
+                              item.productId
+                            )
                           )
-                        )
-                      }
-                      icon={<ShoppingCartOutlined />}
-                    />
-                  </Tooltip>
+                        }
+                        icon={<ShoppingCartOutlined />}
+                      />
+                    </Tooltip>
+                  )}
                 </div>
               }
             />
