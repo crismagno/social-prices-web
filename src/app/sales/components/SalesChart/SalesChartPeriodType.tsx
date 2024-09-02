@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Divider, Select } from "antd";
-import { map, reduce } from "lodash";
+import { find, map, reduce } from "lodash";
 import {
   Area,
   AreaChart,
@@ -29,8 +29,11 @@ export const SalesChartPeriodType: React.FC<Props> = ({
   onChange,
   periodType,
 }) => {
+  const chartDataPeriodType: IChartDataPeriodTypeItem[] =
+    salesAnalytics?.chartDataPeriodType ?? [];
+
   const totalQuantityByData: ITotalQuantity = reduce(
-    salesAnalytics?.chartDataPeriodType,
+    chartDataPeriodType,
     (acc: ITotalQuantity, curr: IChartDataPeriodTypeItem) => {
       acc.total += curr.total;
       acc.quantity += curr.quantity;
@@ -79,6 +82,63 @@ export const SalesChartPeriodType: React.FC<Props> = ({
     );
   };
 
+  const renderXAxis = (tickProps: any) => {
+    const { x, y, payload } = tickProps;
+    const { value } = payload;
+
+    const valueFormatted: string = `${value}${ChartsEnum.PeriodTypeShortLabel[periodType]}`;
+
+    const item: IChartDataPeriodTypeItem | undefined = find(
+      chartDataPeriodType,
+      { name: value }
+    );
+
+    const itemTotal: number = item?.total ?? 0;
+
+    const percentageByTotal: number =
+      (itemTotal * 100) / totalQuantityByData.total;
+
+    return (
+      <>
+        <text
+          style={{ fontSize: "0.7rem" }}
+          textAnchor="middle"
+          x={x}
+          y={y + 8}
+        >
+          {valueFormatted}
+        </text>
+        <text
+          fill="#1677FE"
+          style={{ fontSize: "0.6rem" }}
+          textAnchor="middle"
+          x={x}
+          y={y + 20}
+        >
+          {percentageByTotal}%
+        </text>
+      </>
+    );
+  };
+
+  const renderYAxis = (tickProps: any) => {
+    const { x, y, payload } = tickProps;
+    const { value } = payload;
+
+    return (
+      <>
+        <text
+          style={{ fontSize: "0.6rem" }}
+          textAnchor="middle"
+          x={x - 24}
+          y={y + 4}
+        >
+          {formatToMoneyDecimal(value)}
+        </text>
+      </>
+    );
+  };
+
   return (
     <>
       <div>
@@ -96,20 +156,20 @@ export const SalesChartPeriodType: React.FC<Props> = ({
         </Select>
       </div>
 
-      <div>
-        <ResponsiveContainer width={"100%"} height={370}>
+      <div className="ml-5">
+        <ResponsiveContainer width={"100%"} height={390}>
           <AreaChart
-            data={salesAnalytics?.chartDataPeriodType}
+            data={chartDataPeriodType}
             margin={{
               top: 10,
-              right: 30,
-              left: -20,
-              bottom: 0,
+              right: 0,
+              left: 0,
+              bottom: 10,
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
+            <XAxis dataKey="name" tick={renderXAxis} />
+            <YAxis tick={renderYAxis} />
 
             <Tooltip content={renderTooltip} />
             <Area

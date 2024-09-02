@@ -5,6 +5,7 @@ namespace DatesEnum {
     DDMMYYYYhhmmss: "DD/MM/YYYY hh:mm:ss",
     MMDDYYYY: "MM/DD/YYYY",
     DDMMYYY: "DD/MM/YYYY",
+    ha: "h a",
   };
 }
 

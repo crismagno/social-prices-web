@@ -13,6 +13,20 @@ namespace ChartsEnum {
     [PeriodType.YEAR]: "Year",
   };
 
+  export const PeriodTypeShortLabel = {
+    [PeriodType.HOUR]: "h",
+    [PeriodType.DAY]: "d",
+    [PeriodType.MONTH]: "m",
+    [PeriodType.YEAR]: "y",
+  };
+
+  export const PeriodTypePropertyMoment = {
+    [PeriodType.HOUR]: "hour",
+    [PeriodType.DAY]: "day",
+    [PeriodType.MONTH]: "month",
+    [PeriodType.YEAR]: "year",
+  };
+
   export const OthersName: string = "Others";
 
   export const DefaultItemsLength: number = 4;

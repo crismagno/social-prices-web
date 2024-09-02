@@ -37,7 +37,7 @@ interface Props {
 const defaultGetSalesAnalyticsParams = createGetSalesAnalyticsParams({
   periodType: ChartsEnum.PeriodType.MONTH,
   rangeDate: {
-    startDate: moment().startOf("year").toDate(),
+    startDate: moment().startOf("month").toDate(),
     endDate: moment().toDate(),
   },
 });
