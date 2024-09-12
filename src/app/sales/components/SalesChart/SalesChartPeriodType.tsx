@@ -105,17 +105,19 @@ export const SalesChartPeriodType: React.FC<Props> = ({
           textAnchor="middle"
           x={x}
           y={y + 8}
+          rotate={10}
         >
           {valueFormatted}
         </text>
         <text
           fill="#1677FE"
-          style={{ fontSize: "0.6rem" }}
+          style={{ fontSize: "0.5rem" }}
           textAnchor="middle"
           x={x}
           y={y + 20}
+          rotate={10}
         >
-          {percentageByTotal}%
+          {percentageByTotal.toFixed(1)}%
         </text>
       </>
     );
