@@ -100,7 +100,7 @@ export default function LoginPage() {
           onChange={setEmail}
           label="User"
           type="text"
-          placeholder="Type email or email"
+          placeholder="Type email or username"
         />
 
         <AuthInput

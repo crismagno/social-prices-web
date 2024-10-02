@@ -93,10 +93,10 @@ export const SalesChartPeriodType: React.FC<Props> = ({
       { name: value }
     );
 
-    const itemTotal: number = item?.total ?? 0;
+    const itemTotal: number = item?.total || 0;
 
     const percentageByTotal: number =
-      (itemTotal * 100) / totalQuantityByData.total;
+      (itemTotal * 100) / totalQuantityByData.total || 0;
 
     return (
       <>
