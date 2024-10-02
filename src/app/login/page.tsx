@@ -22,7 +22,7 @@ export default function LoginPage() {
 
   const [mode, setMode] = useState<LoginEnum.Mode>(LoginEnum.Mode.LOGIN);
 
-  const [email, setEmail] = useState<string>();
+  const [emailOrUsername, setEmailOrUsername] = useState<string>();
 
   const [password, setPassword] = useState<string>();
 
@@ -36,7 +36,7 @@ export default function LoginPage() {
     try {
       setIsSubmitting(true);
 
-      if (!email || !password) {
+      if (!emailOrUsername || !password) {
         throw new Error("Please enter with your credentials!");
       }
 
@@ -45,11 +45,11 @@ export default function LoginPage() {
       }
 
       if (mode === LoginEnum.Mode.CREATE) {
-        await create(email, password);
+        await create(emailOrUsername, password);
         return;
       }
 
-      await login(email, password);
+      await login(emailOrUsername, password);
     } catch (error: any) {
       handleClientError(error);
     } finally {
@@ -96,11 +96,15 @@ export default function LoginPage() {
         </h1>
 
         <AuthInput
-          value={email}
-          onChange={setEmail}
+          value={emailOrUsername}
+          onChange={setEmailOrUsername}
           label="User"
           type="text"
-          placeholder="Type email or username"
+          placeholder={
+            mode === LoginEnum.Mode.LOGIN
+              ? "Type email or username"
+              : "Type email"
+          }
         />
 
         <AuthInput

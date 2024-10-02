@@ -6,11 +6,14 @@ import AuthServiceEnum from "./auth-service.enum";
 import CreateUserDto from "./dto/createUser.dto";
 
 export default class AuthServiceMethods extends ServiceMethodsBase {
-  public async signIn(email: string, password: string): Promise<IUser> {
+  public async signIn(
+    emailOrUsername: string,
+    password: string
+  ): Promise<IUser> {
     const response = await this._fetchAxios.post<IUser>(
       `${this._socialPricesApiV1}${AuthServiceEnum.Methods.SIGN_IN}`,
       {
-        email,
+        emailOrUsername,
         password,
       }
     );

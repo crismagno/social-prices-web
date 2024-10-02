@@ -40,8 +40,8 @@ export interface IAuthContext {
   isLoading: boolean;
   loginGoogle: () => Promise<void>;
   validateSignInCode: (codeValue: string) => Promise<boolean>;
-  login: (username: string, password: string) => Promise<void>;
-  create: (username: string, password: string) => Promise<void>;
+  login: (emailOrUsername: string, password: string) => Promise<void>;
+  create: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   setUser: (user: IUser | null) => void;
   updateUserSession: (newUser: IUser | null) => void;
@@ -259,13 +259,13 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     }
   };
 
-  const login = async (username: string, password: string) => {
+  const login = async (emailOrUsername: string, password: string) => {
     try {
       setIsLoading(true);
 
       const response: IUser =
         await serviceMethodsInstance.authServiceMethods.signIn(
-          username,
+          emailOrUsername,
           password
         );
 
