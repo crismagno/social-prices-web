@@ -1,6 +1,7 @@
 const Urls = {
   DASHBOARD: "/dashboard",
   LOGIN: "/login",
+  LOGIN_EMPLOYEE: "/login-employee",
   LOGOUT: "/logout",
   SETTINGS: "/settings",
   NOTIFICATIONS: "/notifications",

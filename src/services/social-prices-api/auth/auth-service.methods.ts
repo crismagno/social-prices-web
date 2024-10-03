@@ -1,5 +1,6 @@
 "use client";
 
+import { ISearchEmployee } from "../../../shared/business/employees/employees.types";
 import IUser from "../../../shared/business/users/user.interface";
 import ServiceMethodsBase from "../ServiceMethods.base";
 import AuthServiceEnum from "./auth-service.enum";
@@ -16,6 +17,21 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
         emailOrUsername,
         password,
       }
+    );
+
+    return response.data;
+  }
+
+  public async searchEmployees(
+    emailOrUsername: string
+  ): Promise<ISearchEmployee[]> {
+    const response = await this._fetchAxios.get<ISearchEmployee[]>(
+      `${
+        this._socialPricesApiV1
+      }${AuthServiceEnum.Methods.SEARCH_EMPLOYEES.replace(
+        ":emailOrUsername",
+        emailOrUsername
+      )}`
     );
 
     return response.data;
