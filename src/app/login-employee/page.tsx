@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import AuthInput from "../../components/common/AuthInput/AuthInput";
@@ -54,9 +55,11 @@ export default function LoginPage() {
   return (
     <div className="relative flex flex-row h-screen">
       <div className="hidden md:block md:w-2-1/2 lg:w-2/3">
-        <img
-          src="https://source.unsplash.com/random"
+        <Image
+          src="/assets/images-random/social-prices-logo-test.webp"
           alt="Images on side"
+          width={1000}
+          height={1000}
           className="h-screen w-full object-cover"
         />
       </div>
@@ -81,6 +84,13 @@ export default function LoginPage() {
           placeholder="Type email or username"
         />
 
+        <button
+          className="mt-4 bg-green-500 hover:bg-green-400 text-white rounded-lg py-3 px-4"
+          onClick={handleSearchEmployee}
+        >
+          Search
+        </button>
+
         <AuthInput
           value={password}
           onChange={setPassword}
@@ -91,10 +101,12 @@ export default function LoginPage() {
         />
 
         <button
-          className="mt-4 bg-green-500 hover:bg-green-400 text-white rounded-lg py-3 px-4"
-          onClick={handleSearchEmployee}
+          className="mt-4 bg-indigo-500 hover:bg-indigo-400 text-white rounded-lg py-3 px-4"
+          onClick={() => {
+            alert("Criar o login com password");
+          }}
         >
-          Search
+          Login
         </button>
 
         <hr className="border-gray-300 my-6 w-full" />

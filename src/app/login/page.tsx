@@ -163,7 +163,7 @@ export default function LoginPage() {
         <button
           type="button"
           onClick={() => router.push(Urls.LOGIN_EMPLOYEE)}
-          className="bg-green-400 hover:bg-green-500 text-white rounded-lg py-3 px-4 mt-4
+          className="bg-green-500 hover:bg-green-400 text-white rounded-lg py-3 px-4 mt-4
            flex justify-center items-center"
         >
           {IconUsers("mr-3")}
