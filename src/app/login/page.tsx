@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 
 import AuthInput from "../../components/common/AuthInput/AuthInput";
 import handleClientError from "../../components/common/handleClientError/handleClientError";
+import { IconUsers } from "../../components/common/icons/icons";
 import Loading from "../../components/common/Loading/Loading";
 import useAuthData from "../../data/context/auth/useAuthData";
 import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
@@ -157,6 +158,18 @@ export default function LoginPage() {
             className="mr-1"
           />
           Enter with Google
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            alert("Create login by employee page!");
+          }}
+          className="bg-green-400 hover:bg-green-500 text-white rounded-lg py-3 px-4 mt-4
+           flex justify-center items-center"
+        >
+          {IconUsers("mr-3")}
+          Enter as a Employee
         </button>
 
         <p className="mt-8">
