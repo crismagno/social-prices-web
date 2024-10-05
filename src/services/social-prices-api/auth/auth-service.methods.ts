@@ -89,4 +89,45 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
       return false;
     }
   }
+
+  public async signInEmployee(
+    username: string,
+    password: string
+  ): Promise<IUser> {
+    const response = await this._fetchAxios.post<IUser>(
+      `${this._socialPricesApiV1}${AuthServiceEnum.Methods.SIGN_IN_EMPLOYEE}`,
+      {
+        username,
+        password,
+      }
+    );
+
+    return response.data;
+  }
+
+  public async validateSignInEmployeeCode(
+    token: string,
+    codeValue: string
+  ): Promise<boolean> {
+    try {
+      const response = await this._fetchAxios.get<boolean>(
+        `${
+          this._socialPricesApiV1
+        }${AuthServiceEnum.Methods.VALIDATE_SIGN_IN_EMPLOYEE_CODE.replace(
+          ":codeValue",
+          codeValue
+        )}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: this.formatAuthorization(token),
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error: any) {
+      return false;
+    }
+  }
 }

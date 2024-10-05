@@ -21,7 +21,7 @@ import Urls from "../../shared/common/routes-app/routes-app";
 export default function LoginPage() {
   useForceRedirect(Urls.LOGIN_EMPLOYEE);
 
-  const { loginGoogle, login, create } = useAuthData();
+  const { loginEmployee } = useAuthData();
 
   const router = useRouter();
 
@@ -77,18 +77,15 @@ export default function LoginPage() {
     try {
       setIsSubmitting(true);
 
+      if (!selectedSearchEmployee?.employeeUsername) {
+        throw new Error("Selected employee invalid!");
+      }
+
       if (!password) {
         throw new Error("Please enter with your password!");
       }
 
-      // const response: ISearchEmployee[] =
-      //   await serviceMethodsInstance.authServiceMethods.searchEmployees(
-      //     emailOrUsername
-      //   );
-
-      // if (response?.length === 0) {
-      //   message.error("Please enter with correct, email or username valid");
-      // }
+      await loginEmployee(selectedSearchEmployee.employeeUsername, password);
     } catch (error: any) {
       handleClientError(error);
     } finally {

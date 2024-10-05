@@ -40,7 +40,9 @@ export interface IAuthContext {
   isLoading: boolean;
   loginGoogle: () => Promise<void>;
   validateSignInCode: (codeValue: string) => Promise<boolean>;
+  validateSignInEmployeeCode: (codeValue: string) => Promise<boolean>;
   login: (emailOrUsername: string, password: string) => Promise<void>;
+  loginEmployee: (username: string, password: string) => Promise<void>;
   create: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   setUser: (user: IUser | null) => void;
@@ -52,11 +54,13 @@ const AuthContext = createContext<IAuthContext>({
   isLoading: true,
   isLogged: false,
   validateSignInCode: async (codeValue: string): Promise<any> => {},
+  validateSignInEmployeeCode: async (codeValue: string): Promise<any> => {},
   setUser: (user: IUser | null): void => {},
   updateUserSession: (newUser: IUser | null): void => {},
   loginGoogle: async (): Promise<void> => {},
   logout: async (): Promise<void> => {},
   login: async (): Promise<void> => {},
+  loginEmployee: async (): Promise<void> => {},
   create: async (): Promise<void> => {},
 });
 
@@ -281,6 +285,28 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     }
   };
 
+  const loginEmployee = async (username: string, password: string) => {
+    try {
+      setIsLoading(true);
+
+      const response: IUser =
+        await serviceMethodsInstance.authServiceMethods.signInEmployee(
+          username,
+          password
+        );
+
+      response.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;
+
+      setUser(response);
+
+      router.push(Urls.VALIDATE_SIGN_IN_EMPLOYEE_CODE);
+    } catch (error: any) {
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const create = async (email: string, password: string) => {
     try {
       setIsLoading(true);
@@ -384,6 +410,48 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     _settingSession(userUpdated);
   };
 
+  const validateSignInEmployeeCode = async (
+    codeValue: string
+  ): Promise<boolean> => {
+    try {
+      if (!user?.authToken) {
+        router.push(Urls.LOGIN_EMPLOYEE);
+        return false;
+      }
+
+      setIsLoading(true);
+
+      const isValidateSignInEmployeeCode: boolean =
+        await serviceMethodsInstance.authServiceMethods.validateSignInEmployeeCode(
+          user.authToken,
+          codeValue
+        );
+
+      if (!isValidateSignInEmployeeCode) {
+        return false;
+      }
+
+      const userResponse: IUser =
+        await serviceMethodsInstance.usersServiceMethods.getUserByToken(
+          user.authToken!
+        );
+
+      const newUser: IUser = __mergeUserUpdated(user, userResponse);
+
+      _settingSession(newUser);
+
+      router.push(Urls.DASHBOARD);
+
+      await sleep(5000);
+
+      return true;
+    } catch (error: any) {
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   /**
    * Method main to mount app data
    */
@@ -429,8 +497,10 @@ export const AuthProvider = ({ children }: { children?: any }) => {
         isLoading,
         logout,
         login,
+        loginEmployee,
         create,
         validateSignInCode,
+        validateSignInEmployeeCode,
         setUser,
         updateUserSession,
       }}
