@@ -73,9 +73,11 @@ export default function LoginPage() {
   return (
     <div className="relative flex flex-row h-screen">
       <div className="hidden md:block md:w-2-1/2 lg:w-2/3">
-        <img
-          src="https://source.unsplash.com/random"
+        <Image
+          src="/assets/images-random/social-prices-logo-test.webp"
           alt="Images on side"
+          width={1000}
+          height={1000}
           className="h-screen w-full object-cover"
         />
       </div>
