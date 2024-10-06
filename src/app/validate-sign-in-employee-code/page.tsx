@@ -16,7 +16,7 @@ import Urls from "../../shared/common/routes-app/routes-app";
 export default function ValidateSignInEmployeeCodePage() {
   useForceRedirect(Urls.VALIDATE_SIGN_IN_EMPLOYEE_CODE);
 
-  const { user, validateSignInEmployeeCode, setUser } = useAuthData();
+  const { employee, validateSignInEmployeeCode, setUser } = useAuthData();
 
   const router = useRouter();
 
@@ -63,15 +63,11 @@ export default function ValidateSignInEmployeeCodePage() {
           className="flex flex-col justify-center items-center w-full h-full
           p-3 shadow-2xl bg-white rounded-lg"
         >
-          <Avatar src={user?.employee?.avatar} alt="Image logo" width={100} />
+          <Avatar src={employee?.avatar} alt="Image logo" width={100} />
 
-          <span className="text-xs text-center mt-1">
-            {user?.employee?.username}
-          </span>
+          <span className="text-xs text-center mt-1">{employee?.username}</span>
 
-          <span className="text-xs text-center mt-1">
-            {user?.employee?.email}
-          </span>
+          <span className="text-xs text-center mt-1">{employee?.email}</span>
 
           <span className="text-lg text-center mt-4">Sign In Code</span>
 
