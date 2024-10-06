@@ -2,7 +2,6 @@
 
 import { IAuthLogin } from "../../../shared/business/auth/auth.types";
 import { ISearchEmployee } from "../../../shared/business/employees/employees.types";
-import IUser from "../../../shared/business/users/user.interface";
 import ServiceMethodsBase from "../ServiceMethods.base";
 import AuthServiceEnum from "./auth-service.enum";
 import CreateUserDto from "./dto/createUser.dto";
@@ -94,8 +93,8 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
   public async signInEmployee(
     username: string,
     password: string
-  ): Promise<IUser> {
-    const response = await this._fetchAxios.post<IUser>(
+  ): Promise<IAuthLogin> {
+    const response = await this._fetchAxios.post<IAuthLogin>(
       `${this._socialPricesApiV1}${AuthServiceEnum.Methods.SIGN_IN_EMPLOYEE}`,
       {
         username,

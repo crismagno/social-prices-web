@@ -355,15 +355,15 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     try {
       setIsLoading(true);
 
-      const response: IUser =
+      const response: IAuthLogin =
         await serviceMethodsInstance.authServiceMethods.signInEmployee(
           username,
           password
         );
 
-      response.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;
+      response.user.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;
 
-      setUser(response);
+      setUser(response.user);
       setEmployee(response.employee);
       setAuthToken(response.authToken);
 
