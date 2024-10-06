@@ -2,7 +2,6 @@
 
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../shared/business/tags/tags.interface";
-import IUser from "../../../shared/business/users/user.interface";
 import {
   ITableStateRequest,
   ITableStateResponse,
@@ -15,8 +14,6 @@ import TagsServiceEnum from "./tags-service.enum";
 
 export default class TagsServiceMethods extends ServiceMethodsBase {
   public async findByType(type: TagsEnum.Type): Promise<ITag[]> {
-    const user: IUser = this.getUserOrFail();
-
     const response = await this._fetchAxios.get<ITag[]>(
       `${this._socialPricesApiV1}${TagsServiceEnum.Methods.FIND_BY_TYPE.replace(
         ":type",
@@ -53,8 +50,6 @@ export default class TagsServiceMethods extends ServiceMethodsBase {
   public async findByUserTableState(
     tableState?: ITableStateRequest<ITag>
   ): Promise<ITableStateResponse<ITag[]>> {
-    const user: IUser = this.getUserOrFail();
-
     const response = await this._fetchAxios.post<ITableStateResponse<ITag[]>>(
       `${this._socialPricesApiV1}${TagsServiceEnum.Methods.FIND_BY_USER_TABLE_STATE}`,
       tableState,

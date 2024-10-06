@@ -1,7 +1,6 @@
 "use client";
 
-import IUser from "../../shared/business/users/user.interface";
-import LocalStorageUserMethods from "../../shared/common/local-storage/methods/local-storage-user.methods";
+import LocalStorageAuthTokenMethods from "../../shared/common/local-storage/methods/local-storage-auth-token.methods";
 import FetchAxios from "../../shared/utils/fetch/fetch-axios";
 
 export default abstract class ServiceMethodsBase {
@@ -18,9 +17,7 @@ export default abstract class ServiceMethodsBase {
   }
 
   public formatAuthorizationWithToken(): string {
-    const user: IUser = this.getUserOrFail();
-
-    const token: string | null = user.authToken;
+    const token: string | null = this.getAuthTokenOrFail();
 
     if (!token) {
       throw new Error(
@@ -31,15 +28,16 @@ export default abstract class ServiceMethodsBase {
     return this.formatAuthorization(token);
   }
 
-  public getUserOrFail = (): IUser => {
-    const user: IUser | null = LocalStorageUserMethods.getUser();
+  public getAuthTokenOrFail = (): string => {
+    const authToken: string | null =
+      LocalStorageAuthTokenMethods.getAuthToken();
 
-    if (!user) {
+    if (!authToken) {
       throw new Error(
-        "User not found[1]! Please contact the support. Code: UNT"
+        "Token not found[1]! Please contact the support. Code: TNF"
       );
     }
 
-    return user;
+    return authToken;
   };
 }

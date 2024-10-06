@@ -16,11 +16,14 @@ import { useRouter } from "next/navigation";
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
 import firebaseApp from "../../../services/firebase/config";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
+import { IAuthLogin } from "../../../shared/business/auth/auth.types";
+import { IEmployee } from "../../../shared/business/employees/employee.interface";
 import PhoneNumberEnum from "../../../shared/business/enums/phone-number.enum";
 import IUser from "../../../shared/business/users/user.interface";
 import UsersEnum from "../../../shared/business/users/users.enum";
 import CookiesEnum from "../../../shared/common/cookies/cookies.enum";
-import LocalStorageEnum from "../../../shared/common/local-storage/local-storage.enum";
+import LocalStorageAuthTokenMethods from "../../../shared/common/local-storage/methods/local-storage-auth-token.methods";
+import LocalStorageEmployeeMethods from "../../../shared/common/local-storage/methods/local-storage-employee.methods";
 import LocalStorageUserMethods from "../../../shared/common/local-storage/methods/local-storage-user.methods";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import {
@@ -36,6 +39,8 @@ auth.languageCode = "it";
 
 export interface IAuthContext {
   user: IUser | null;
+  employee: IEmployee | null;
+  authToken: string | null;
   isLogged: boolean;
   isLoading: boolean;
   loginGoogle: () => Promise<void>;
@@ -51,6 +56,8 @@ export interface IAuthContext {
 
 const AuthContext = createContext<IAuthContext>({
   user: null,
+  employee: null,
+  authToken: null,
   isLoading: true,
   isLogged: false,
   validateSignInCode: async (codeValue: string): Promise<any> => {},
@@ -64,7 +71,9 @@ const AuthContext = createContext<IAuthContext>({
   create: async (): Promise<void> => {},
 });
 
-const __normalizeUser = async (userFirebase: User): Promise<IUser> => {
+const __normalizeUserFromFirebase = async (
+  userFirebase: User
+): Promise<IUser> => {
   const providerToken: string = await userFirebase.getIdToken();
 
   const now: Date = new Date();
@@ -114,11 +123,29 @@ const __managerCookie = (isLogged: boolean) => {
   }
 };
 
-const __managerLocalStorage = (user: IUser | null) => {
-  if (user) {
-    localStorage.setItem(LocalStorageEnum.keys.USER, JSON.stringify(user));
+const __managerLocalStorage = (
+  params: {
+    user: IUser | null;
+    employee: IEmployee | null;
+    authToken: string | null;
+  } | null = null
+) => {
+  if (params?.user) {
+    LocalStorageUserMethods.setUser(params.user);
   } else {
-    localStorage.removeItem(LocalStorageEnum.keys.USER);
+    LocalStorageUserMethods.removeUser();
+  }
+
+  if (params?.employee) {
+    LocalStorageEmployeeMethods.setEmployee(params.employee);
+  } else {
+    LocalStorageEmployeeMethods.removeEmployee();
+  }
+
+  if (params?.authToken) {
+    LocalStorageAuthTokenMethods.setAuthToken(params.authToken);
+  } else {
+    LocalStorageAuthTokenMethods.removeAuthToken();
   }
 };
 
@@ -138,43 +165,62 @@ const __mergeUserUpdated = (currentUser: IUser, newUser: IUser): IUser => {
 export const AuthProvider = ({ children }: { children?: any }) => {
   const [user, setUser] = useState<IUser | null>(null);
 
+  const [employee, setEmployee] = useState<IEmployee | null>(null);
+
+  const [authToken, setAuthToken] = useState<string | null>(null);
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [isLogged, setIsLogged] = useState<boolean>(false);
 
   const router = useRouter();
 
-  const _settingSession = (user: IUser | null) => {
-    if (user?.email) {
-      setUser(user);
+  const _settingSession = (
+    params: {
+      user: IUser | null;
+      employee: IEmployee | null;
+      authToken: string | null;
+    } | null = null
+  ) => {
+    if (params?.user?.email) {
+      setUser(params.user);
+      setEmployee(params.employee);
+      setAuthToken(params.authToken);
       __managerCookie(true);
-      __managerLocalStorage(user);
+      __managerLocalStorage(params);
       setIsLoading(false);
       setIsLoading(false);
       setIsLogged(true);
-      return user.email;
+
+      return params.user.email;
     }
 
     setUser(null);
+    setEmployee(null);
+    setAuthToken(null);
     __managerCookie(false);
-    __managerLocalStorage(null);
+    __managerLocalStorage();
     setIsLoading(false);
     setIsLogged(false);
+
     return null;
   };
 
-  const _validateToken = async (userParam: IUser): Promise<IUser | null> => {
+  const _validateToken = async (
+    userParam: IUser,
+    authTokenParam: string
+  ): Promise<IUser | null> => {
     try {
       setIsLoading(true);
 
-      if (!userParam.authToken) {
-        _settingSession(null);
+      if (!userParam || !authTokenParam) {
+        _settingSession();
         return null;
       }
 
       const isValidToken: boolean =
         await serviceMethodsInstance.authServiceMethods.validateToken(
-          userParam.authToken
+          authTokenParam
         );
 
       if (isValidToken) {
@@ -183,11 +229,15 @@ export const AuthProvider = ({ children }: { children?: any }) => {
 
         const newUser: IUser = __mergeUserUpdated(userParam, userResponse);
 
-        _settingSession(newUser);
-        return newUser;
+        _settingSession({
+          authToken: LocalStorageAuthTokenMethods.getAuthToken(),
+          employee: LocalStorageEmployeeMethods.getEmployee(),
+          user: newUser,
+        });
+        return userResponse;
       }
 
-      _settingSession(null);
+      _settingSession();
 
       if (userParam?.authProvider === UsersEnum.Provider.GOOGLE) {
         await signOut(auth);
@@ -206,27 +256,39 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     const userFromLocalStorage: IUser | null =
       LocalStorageUserMethods.getUser();
 
-    if (userFirebase?.email && userFromLocalStorage) {
-      const userNormalized: IUser = await __normalizeUser(userFirebase);
+    const authTokenFromLocalStorage: string | null =
+      LocalStorageAuthTokenMethods.getAuthToken();
+
+    if (
+      userFirebase?.email &&
+      userFromLocalStorage &&
+      authTokenFromLocalStorage
+    ) {
+      const userNormalized: IUser = await __normalizeUserFromFirebase(
+        userFirebase
+      );
 
       userFromLocalStorage.providerId = userNormalized.providerId;
       userFromLocalStorage.providerToken = userNormalized.providerToken;
 
       const userValidateToken: IUser | null = await _validateToken(
-        userFromLocalStorage
+        userFromLocalStorage,
+        authTokenFromLocalStorage
       );
 
       return userValidateToken?.email;
     }
 
-    _settingSession(null);
+    _settingSession();
     return null;
   };
 
   const _createOrSignInUserByLoginGoogle = async (userFirebase: User) => {
-    const userNormalized: IUser = await __normalizeUser(userFirebase);
+    const userNormalized: IUser = await __normalizeUserFromFirebase(
+      userFirebase
+    );
 
-    const responseUser: IUser =
+    const response: IUser =
       await serviceMethodsInstance.authServiceMethods.signUp({
         email: `${userNormalized.email}`,
         password: makeRandomCode(10),
@@ -239,11 +301,13 @@ export const AuthProvider = ({ children }: { children?: any }) => {
         type: userNormalized.type,
       });
 
-    responseUser.providerId = userNormalized.providerId;
-    responseUser.providerToken = userNormalized.providerToken;
-    responseUser.loggedByAuthProvider = UsersEnum.Provider.GOOGLE;
+    response.providerId = userNormalized.providerId;
+    response.providerToken = userNormalized.providerToken;
+    response.loggedByAuthProvider = UsersEnum.Provider.GOOGLE;
 
-    setUser(responseUser);
+    setUser(response);
+    setEmployee(response.employee);
+    setAuthToken(response.authToken);
 
     router.push(Urls.VALIDATE_SIGN_IN_CODE);
 
@@ -267,15 +331,17 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     try {
       setIsLoading(true);
 
-      const response: IUser =
+      const response: IAuthLogin =
         await serviceMethodsInstance.authServiceMethods.signIn(
           emailOrUsername,
           password
         );
 
-      response.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;
+      response.user.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;
 
-      setUser(response);
+      setUser(response.user);
+      setEmployee(response.employee);
+      setAuthToken(response.authToken);
 
       router.push(Urls.VALIDATE_SIGN_IN_CODE);
     } catch (error: any) {
@@ -298,6 +364,8 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       response.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;
 
       setUser(response);
+      setEmployee(response.employee);
+      setAuthToken(response.authToken);
 
       router.push(Urls.VALIDATE_SIGN_IN_EMPLOYEE_CODE);
     } catch (error: any) {
@@ -327,6 +395,8 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       response.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;
 
       setUser(response);
+      setEmployee(response.employee);
+      setAuthToken(response.authToken);
 
       router.push(Urls.VALIDATE_SIGN_IN_CODE);
     } catch (error: any) {
@@ -344,7 +414,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
         await signOut(auth);
       }
 
-      _settingSession(null);
+      _settingSession();
 
       router.push(Urls.LOGIN);
     } catch (error: any) {
@@ -357,7 +427,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
 
   const validateSignInCode = async (codeValue: string): Promise<boolean> => {
     try {
-      if (!user?.authToken) {
+      if (!user || !authToken) {
         router.push(Urls.LOGIN);
         return false;
       }
@@ -366,7 +436,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
 
       const isValidateSignInCode: boolean =
         await serviceMethodsInstance.authServiceMethods.validateSignInCode(
-          user.authToken,
+          authToken,
           codeValue
         );
 
@@ -376,12 +446,16 @@ export const AuthProvider = ({ children }: { children?: any }) => {
 
       const userResponse: IUser =
         await serviceMethodsInstance.usersServiceMethods.getUserByToken(
-          user.authToken!
+          authToken
         );
 
       const newUser: IUser = __mergeUserUpdated(user, userResponse);
 
-      _settingSession(newUser);
+      _settingSession({
+        authToken: newUser.authToken,
+        employee: newUser.employee,
+        user: newUser,
+      });
 
       router.push(Urls.DASHBOARD);
 
@@ -401,20 +475,24 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     }
 
     if (!user) {
-      _settingSession(null);
+      _settingSession();
       return;
     }
 
     const userUpdated: IUser = __mergeUserUpdated(user, newUser);
 
-    _settingSession(userUpdated);
+    _settingSession({
+      authToken: LocalStorageAuthTokenMethods.getAuthToken(),
+      employee: LocalStorageEmployeeMethods.getEmployee(),
+      user: userUpdated,
+    });
   };
 
   const validateSignInEmployeeCode = async (
     codeValue: string
   ): Promise<boolean> => {
     try {
-      if (!user?.authToken) {
+      if (!user || !authToken) {
         router.push(Urls.LOGIN_EMPLOYEE);
         return false;
       }
@@ -423,7 +501,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
 
       const isValidateSignInEmployeeCode: boolean =
         await serviceMethodsInstance.authServiceMethods.validateSignInEmployeeCode(
-          user.authToken,
+          authToken,
           codeValue
         );
 
@@ -433,12 +511,16 @@ export const AuthProvider = ({ children }: { children?: any }) => {
 
       const userResponse: IUser =
         await serviceMethodsInstance.usersServiceMethods.getUserByToken(
-          user.authToken!
+          authToken
         );
 
       const newUser: IUser = __mergeUserUpdated(user, userResponse);
 
-      _settingSession(newUser);
+      _settingSession({
+        authToken: newUser.authToken,
+        employee: newUser.employee,
+        user: newUser,
+      });
 
       router.push(Urls.DASHBOARD);
 
@@ -461,15 +543,18 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     );
 
     if (hasNoCookieAuth) {
-      _settingSession(null);
+      _settingSession();
       return;
     }
 
     const userFromLocalStorage: IUser | null =
       LocalStorageUserMethods.getUser();
 
-    if (!userFromLocalStorage) {
-      _settingSession(null);
+    const authTokenFromLocalStorage: string | null =
+      LocalStorageAuthTokenMethods.getAuthToken();
+
+    if (!userFromLocalStorage || !authTokenFromLocalStorage) {
+      _settingSession();
       return;
     }
 
@@ -481,7 +566,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       return () => cancel();
     }
 
-    await _validateToken(userFromLocalStorage);
+    await _validateToken(userFromLocalStorage, authTokenFromLocalStorage);
   }, []);
 
   useEffect(() => {
@@ -492,6 +577,8 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     <AuthContext.Provider
       value={{
         user,
+        employee,
+        authToken,
         isLogged,
         loginGoogle,
         isLoading,

@@ -14,9 +14,11 @@ export default class LocalStorageUserMethods {
     return null;
   };
 
-  public static getUserToken = (): string | null => {
-    const user: IUser | null = this.getUser();
+  public static setUser = (user: IUser): void => {
+    localStorage.setItem(LocalStorageEnum.keys.USER, JSON.stringify(user));
+  };
 
-    return user?.authToken ?? null;
+  public static removeUser = (): void => {
+    localStorage.removeItem(LocalStorageEnum.keys.USER);
   };
 }

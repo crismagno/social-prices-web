@@ -10,7 +10,7 @@ namespace UsersServiceEnum {
     UPLOAD_AVATAR = "/users/uploadAvatar",
     GET_AVATAR_IMAGE = "/users/avatars",
     REMOVE_AVATAR = "/users/removeAvatar",
-    SEND_UPDATE_EMAIL_CODE = "/users/sendUpdateEmailCod/:email",
+    SEND_UPDATE_EMAIL_CODE = "/users/sendUpdateEmailCode/:email",
     UPDATE_EMAIL = "/users/updateEmail",
   }
 }
