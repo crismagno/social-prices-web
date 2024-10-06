@@ -288,7 +288,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       userFirebase
     );
 
-    const response: IUser =
+    const response: IAuthLogin =
       await serviceMethodsInstance.authServiceMethods.signUp({
         email: `${userNormalized.email}`,
         password: makeRandomCode(10),
@@ -301,11 +301,11 @@ export const AuthProvider = ({ children }: { children?: any }) => {
         type: userNormalized.type,
       });
 
-    response.providerId = userNormalized.providerId;
-    response.providerToken = userNormalized.providerToken;
-    response.loggedByAuthProvider = UsersEnum.Provider.GOOGLE;
+    response.user.providerId = userNormalized.providerId;
+    response.user.providerToken = userNormalized.providerToken;
+    response.user.loggedByAuthProvider = UsersEnum.Provider.GOOGLE;
 
-    setUser(response);
+    setUser(response.user);
     setEmployee(response.employee);
     setAuthToken(response.authToken);
 
@@ -379,7 +379,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     try {
       setIsLoading(true);
 
-      const response: IUser =
+      const response: IAuthLogin =
         await serviceMethodsInstance.authServiceMethods.signUp({
           email: email,
           password,
@@ -392,9 +392,9 @@ export const AuthProvider = ({ children }: { children?: any }) => {
           type: UsersEnum.Type.COMPANY,
         });
 
-      response.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;
+      response.user.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;
 
-      setUser(response);
+      setUser(response.user);
       setEmployee(response.employee);
       setAuthToken(response.authToken);
 

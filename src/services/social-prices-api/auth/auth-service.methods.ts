@@ -38,8 +38,8 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
-  public async signUp(createUserDto: CreateUserDto): Promise<IUser> {
-    const response = await this._fetchAxios.post<IUser>(
+  public async signUp(createUserDto: CreateUserDto): Promise<IAuthLogin> {
+    const response = await this._fetchAxios.post<IAuthLogin>(
       `${this._socialPricesApiV1}${AuthServiceEnum.Methods.SIGN_UP}`,
       createUserDto
     );
