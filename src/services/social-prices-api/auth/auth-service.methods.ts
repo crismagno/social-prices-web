@@ -1,6 +1,9 @@
 "use client";
 
-import { IAuthLogin } from "../../../shared/business/auth/auth.types";
+import {
+  IAuthLogin,
+  IAuthUserEmployee,
+} from "../../../shared/business/auth/auth.types";
 import { ISearchEmployee } from "../../../shared/business/employees/employees.types";
 import ServiceMethodsBase from "../ServiceMethods.base";
 import AuthServiceEnum from "./auth-service.enum";
@@ -129,5 +132,33 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
     } catch (error: any) {
       return false;
     }
+  }
+
+  public async getAuthUserEmployee(): Promise<IAuthUserEmployee> {
+    const response = await this._fetchAxios.get<IAuthUserEmployee>(
+      `${this._socialPricesApiV1}${AuthServiceEnum.Methods.GET_AUTH_USER_EMPLOYEE}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async getAuthLoginByToken(authToken: string): Promise<IAuthLogin> {
+    const response = await this._fetchAxios.get<IAuthLogin>(
+      `${this._socialPricesApiV1}${AuthServiceEnum.Methods.GET_AUTH_LOGIN_BY_TOKEN}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorization(authToken),
+        },
+      }
+    );
+
+    return response.data;
   }
 }

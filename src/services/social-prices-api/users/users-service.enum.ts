@@ -1,7 +1,5 @@
 namespace UsersServiceEnum {
   export enum Methods {
-    GET_USER = "/users/getUser",
-    GET_USER_BY_TOKEN = "/users/getUserByToken",
     SEND_RECOVER_PASSWORD_CODE = "/users/sendRecoverPasswordCode/:email",
     RECOVER_PASSWORD = "/users/recoverPassword",
     UPDATE_USER = "/users/updateUser",

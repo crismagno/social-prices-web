@@ -10,34 +10,6 @@ import UpdateUserPhoneNumbersDto from "./dto/updateUserPhoneNumbers.dto";
 import UsersServiceEnum from "./users-service.enum";
 
 export default class UsersServiceMethods extends ServiceMethodsBase {
-  public async getUser(): Promise<IUser> {
-    const response = await this._fetchAxios.get<IUser>(
-      `${this._socialPricesApiV1}${UsersServiceEnum.Methods.GET_USER}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.formatAuthorizationWithToken(),
-        },
-      }
-    );
-
-    return response.data;
-  }
-
-  public async getUserByToken(token: string): Promise<IUser> {
-    const response = await this._fetchAxios.get<IUser>(
-      `${this._socialPricesApiV1}${UsersServiceEnum.Methods.GET_USER_BY_TOKEN}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.formatAuthorization(token),
-        },
-      }
-    );
-
-    return response.data;
-  }
-
   public async sendRecoverPasswordCode(email: string): Promise<IUser> {
     const response = await this._fetchAxios.get<IUser>(
       `${

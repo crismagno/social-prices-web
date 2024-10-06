@@ -16,7 +16,10 @@ import { useRouter } from "next/navigation";
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
 import firebaseApp from "../../../services/firebase/config";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
-import { IAuthLogin } from "../../../shared/business/auth/auth.types";
+import {
+  IAuthLogin,
+  IAuthUserEmployee,
+} from "../../../shared/business/auth/auth.types";
 import { IEmployee } from "../../../shared/business/employees/employee.interface";
 import PhoneNumberEnum from "../../../shared/business/enums/phone-number.enum";
 import IUser from "../../../shared/business/users/user.interface";
@@ -224,17 +227,17 @@ export const AuthProvider = ({ children }: { children?: any }) => {
         );
 
       if (isValidToken) {
-        const userResponse: IUser =
-          await serviceMethodsInstance.usersServiceMethods.getUser();
+        const response: IAuthUserEmployee =
+          await serviceMethodsInstance.authServiceMethods.getAuthUserEmployee();
 
-        const newUser: IUser = __mergeUserUpdated(userParam, userResponse);
+        const newUser: IUser = __mergeUserUpdated(userParam, response.user);
 
         _settingSession({
           authToken: LocalStorageAuthTokenMethods.getAuthToken(),
-          employee: LocalStorageEmployeeMethods.getEmployee(),
+          employee: response.employee,
           user: newUser,
         });
-        return userResponse;
+        return response.user;
       }
 
       _settingSession();
@@ -444,16 +447,16 @@ export const AuthProvider = ({ children }: { children?: any }) => {
         return false;
       }
 
-      const userResponse: IUser =
-        await serviceMethodsInstance.usersServiceMethods.getUserByToken(
+      const response: IAuthLogin =
+        await serviceMethodsInstance.authServiceMethods.getAuthLoginByToken(
           authToken
         );
 
-      const newUser: IUser = __mergeUserUpdated(user, userResponse);
+      const newUser: IUser = __mergeUserUpdated(user, response.user);
 
       _settingSession({
-        authToken: newUser.authToken,
-        employee: newUser.employee,
+        authToken: response.authToken,
+        employee: response.employee,
         user: newUser,
       });
 
@@ -509,16 +512,16 @@ export const AuthProvider = ({ children }: { children?: any }) => {
         return false;
       }
 
-      const userResponse: IUser =
-        await serviceMethodsInstance.usersServiceMethods.getUserByToken(
+      const response: IAuthLogin =
+        await serviceMethodsInstance.authServiceMethods.getAuthLoginByToken(
           authToken
         );
 
-      const newUser: IUser = __mergeUserUpdated(user, userResponse);
+      const newUser: IUser = __mergeUserUpdated(user, response.user);
 
       _settingSession({
-        authToken: newUser.authToken,
-        employee: newUser.employee,
+        authToken: response.authToken,
+        employee: response.employee,
         user: newUser,
       });
 
