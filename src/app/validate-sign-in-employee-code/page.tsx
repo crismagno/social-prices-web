@@ -29,6 +29,7 @@ export default function ValidateSignInEmployeeCodePage() {
 
     try {
       setIsSubmitting(true);
+
       if (!codeValue.trim()) {
         setCodeValue("");
 
@@ -106,7 +107,7 @@ export default function ValidateSignInEmployeeCodePage() {
           className="text-sm rounded-2xl px-4"
           onClick={() => {
             setUser(null);
-            router.push(Urls.LOGIN);
+            router.push(Urls.LOGIN_EMPLOYEE);
           }}
           type="button"
           disabled={isSubmitting}
