@@ -43,7 +43,6 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
   };
 
   const {
-    register,
     handleSubmit,
     watch,
     control,

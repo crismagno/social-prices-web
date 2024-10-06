@@ -89,7 +89,6 @@ const __normalizeUserFromFirebase = async (
     avatar: userFirebase.photoURL,
     providerId: userFirebase.providerId,
     authProvider: UsersEnum.Provider.GOOGLE,
-    authToken: null,
     extraDataProvider: null,
     phoneNumbers: userFirebase.phoneNumber
       ? [
@@ -112,7 +111,6 @@ const __normalizeUserFromFirebase = async (
     createdAt: now,
     updatedAt: now,
     type: UsersEnum.Type.COMPANY,
-    employee: null,
   };
 };
 
@@ -158,10 +156,6 @@ const __mergeUserUpdated = (currentUser: IUser, newUser: IUser): IUser => {
     providerId: currentUser.providerId,
     providerToken: currentUser.providerToken,
     loggedByAuthProvider: currentUser.loggedByAuthProvider,
-    authToken:
-      newUser.authToken && newUser.authToken !== currentUser.authToken
-        ? newUser.authToken
-        : currentUser.authToken,
   };
 };
 

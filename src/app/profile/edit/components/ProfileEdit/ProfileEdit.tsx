@@ -48,7 +48,6 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
   };
 
   const {
-    register,
     handleSubmit,
     formState: { errors },
     control,
