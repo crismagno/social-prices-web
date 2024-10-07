@@ -10,14 +10,14 @@ import useAuthData from "../../data/context/auth/useAuthData";
 import CookiesEnum from "../../shared/common/cookies/cookies.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 
-const useForceRedirect = (routeDefault: string = Urls.LOGIN) => {
+const useForceRedirect = (routeToRedirect: string = Urls.LOGIN): boolean => {
   const { user } = useAuthData();
 
   const router: AppRouterInstance = useRouter();
 
   useEffect(() => {
     if (!user) {
-      router.push(routeDefault);
+      router.push(routeToRedirect);
       return;
     }
 

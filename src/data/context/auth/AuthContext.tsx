@@ -178,7 +178,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       employee: IEmployee | null;
       authToken: string | null;
     } | null = null
-  ) => {
+  ): string | null => {
     if (params?.user?.email) {
       setUser(params.user);
       setEmployee(params.employee);
@@ -231,6 +231,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
           employee: response.employee,
           user: newUser,
         });
+
         return response.user;
       }
 
@@ -241,6 +242,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       }
 
       router.push(Urls.LOGIN);
+
       return null;
     } catch (error: any) {
       return null;
@@ -249,7 +251,9 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     }
   };
 
-  const _settingSessionFirebase = async (userFirebase: User | null) => {
+  const _settingSessionFirebase = async (
+    userFirebase: User | null
+  ): Promise<string | null | undefined> => {
     const userFromLocalStorage: IUser | null =
       LocalStorageUserMethods.getUser();
 
@@ -277,6 +281,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     }
 
     _settingSession();
+
     return null;
   };
 
@@ -466,7 +471,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     }
   };
 
-  const updateUserSession = (newUser: IUser | null): void => {
+  const updateUserSession = (newUser: IUser | null) => {
     if (!newUser) {
       return;
     }
