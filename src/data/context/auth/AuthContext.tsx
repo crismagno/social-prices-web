@@ -186,7 +186,6 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       __managerCookie(true);
       __managerLocalStorage(params);
       setIsLoading(false);
-      setIsLoading(false);
       setIsLogged(true);
 
       return params.user.email;
