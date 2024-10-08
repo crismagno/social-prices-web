@@ -165,7 +165,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
 
   return (
     <Drawer
-      title={tagId ? `Update Tag: ${tag?.name}` : "New Tag"}
+      title={tagId ? `Edit Tag: ${tag?.name}` : "New Tag"}
       onClose={handleClose}
       open={isOpen}
     >
