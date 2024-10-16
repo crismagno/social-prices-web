@@ -1,5 +1,8 @@
 "use client";
 
+import { message } from "antd";
+
+import AuthEnum from "../../../shared/business/auth/auth.enum";
 import {
   IAuthLogin,
   IAuthUserEmployee,
@@ -63,7 +66,18 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
 
       return response.data;
     } catch (error: any) {
-      return false;
+      if (
+        error?.response?.data?.error?.error ===
+          AuthEnum.AuthErrors.UNAUTHORIZED ||
+        error?.response?.status === AuthEnum.Status.Unauthorized ||
+        error?.response?.statusText === AuthEnum.StatusText
+      ) {
+        return false;
+      }
+
+      message.error("Please reload page!");
+
+      return true;
     }
   }
 

@@ -17,7 +17,7 @@ import Urls from "../../shared/common/routes-app/routes-app";
 export default function LoginPage() {
   useForceRedirect();
 
-  const { loginGoogle, login, create } = useAuthData();
+  const { loginGoogle, login, create, isLoading } = useAuthData();
 
   const router = useRouter();
 
@@ -82,7 +82,7 @@ export default function LoginPage() {
         />
       </div>
 
-      {isSubmitting && (
+      {(isSubmitting || isLoading) && (
         <div className="h-full w-full absolute flex justify-center items-center bg-gray-500/30 top-0 z-50">
           <Loading />
         </div>

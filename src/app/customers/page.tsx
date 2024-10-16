@@ -11,6 +11,7 @@ import {
   EditOutlined,
   PlusOutlined,
   ShoppingCartOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 
 import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
@@ -58,13 +59,26 @@ export default function CustomersPage() {
         title="Customers"
         className="h-min-80 mt-5"
         extra={
-          <Button
-            type="primary"
-            onClick={() => router.push(Urls.NEW_CUSTOMER)}
-            icon={<PlusOutlined />}
-          >
-            New Customer
-          </Button>
+          <>
+            <Button
+              type="primary"
+              onClick={() => {
+                alert("Create upload customers functionality");
+              }}
+              className="mr-2"
+              icon={<UploadOutlined />}
+            >
+              Upload
+            </Button>
+
+            <Button
+              type="primary"
+              onClick={() => router.push(Urls.NEW_CUSTOMER)}
+              icon={<PlusOutlined />}
+            >
+              New Customer
+            </Button>
+          </>
         }
       >
         <TableCustomAntd2<ICustomer>
