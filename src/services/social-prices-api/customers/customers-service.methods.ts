@@ -90,4 +90,19 @@ export default class CustomersServiceMethods extends ServiceMethodsBase {
 
     return response.data;
   }
+
+  public async uploadCustomers(formData: FormData): Promise<ICustomer> {
+    const response = await this._fetchAxios.post<ICustomer>(
+      `${this._socialPricesApiV1}${CustomersServiceEnum.Methods.UPLOAD_CUSTOMERS}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
 }

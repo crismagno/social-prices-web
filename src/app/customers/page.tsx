@@ -31,6 +31,7 @@ import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { useFindTagsByType } from "../tags/useFindTagsByType";
+import { CustomersUploadDrawer } from "./components/CustomersUploadDrawer/CustomersUploadDrawer";
 import { useFindCustomersByOwnerOfUserTableState } from "./useFindCustomersByOwnerOfUserTableState";
 
 export default function CustomersPage() {
@@ -42,6 +43,9 @@ export default function CustomersPage() {
 
   const { isLoading, customers, total } =
     useFindCustomersByOwnerOfUserTableState(tableStateRequest);
+
+  const [isCustomerUploadDrawerOpen, setIsCustomerUploadDrawerOpen] =
+    useState<boolean>(false);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
     TagsEnum.Type.CUSTOMER
@@ -62,9 +66,7 @@ export default function CustomersPage() {
           <>
             <Button
               type="primary"
-              onClick={() => {
-                alert("Create upload customers functionality");
-              }}
+              onClick={() => setIsCustomerUploadDrawerOpen(true)}
               className="mr-2"
               icon={<UploadOutlined />}
             >
@@ -210,6 +212,11 @@ export default function CustomersPage() {
           total={total}
         />
       </Card>
+
+      <CustomersUploadDrawer
+        isOpen={isCustomerUploadDrawerOpen}
+        onClose={() => setIsCustomerUploadDrawerOpen(false)}
+      />
     </Layout>
   );
 }
