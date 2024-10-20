@@ -2,6 +2,7 @@ import AuthServiceMethods from "./auth/auth-service.methods";
 import CategoriesServiceMethods from "./categories/categories-service.methods";
 import CustomersServiceMethods from "./customers/customers-service.methods";
 import EmployeesServiceMethods from "./employees/employees-service.methods";
+import FilesServiceMethods from "./files/files-service.methods";
 import NotificationsServiceMethods from "./notifications/notifications-service.methods";
 import ProductsServiceMethods from "./products/products-service.methods";
 import SalesServiceMethods from "./sales/sales-service.methods";
@@ -20,6 +21,7 @@ export default class ServiceMethods {
   public salesServiceMethods: SalesServiceMethods;
   public tagsServiceMethods: TagsServiceMethods;
   public employeesServiceMethods: EmployeesServiceMethods;
+  public filesServiceMethods: FilesServiceMethods;
 
   constructor() {
     this.authServiceMethods = new AuthServiceMethods();
@@ -32,6 +34,7 @@ export default class ServiceMethods {
     this.salesServiceMethods = new SalesServiceMethods();
     this.tagsServiceMethods = new TagsServiceMethods();
     this.employeesServiceMethods = new EmployeesServiceMethods();
+    this.filesServiceMethods = new FilesServiceMethods();
   }
 }
 

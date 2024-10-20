@@ -5,12 +5,9 @@ import { useState } from "react";
 import { Button, Divider, message, Upload, UploadFile } from "antd";
 import { RcFile } from "antd/es/upload";
 
-import {
-  DownloadOutlined,
-  InboxOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
+import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
 
+import { DownloadFile } from "../../../../components/common/DownloadFile/DownloadFile";
 import handleClientError from "../../../../components/common/handleClientError/handleClientError";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/ServiceMethods";
 
@@ -24,8 +21,6 @@ export const CustomersUpload: React.FC<Props> = ({ maxFilesToUpload = 5 }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const [isUploading, setIsUploading] = useState<boolean>(false);
-
-  const handleDownloadExample = () => {};
 
   const handleUpload = async () => {
     try {
@@ -72,15 +67,15 @@ export const CustomersUpload: React.FC<Props> = ({ maxFilesToUpload = 5 }) => {
 
   return (
     <div>
-      <Button
-        type="success"
-        className="my-2"
-        onClick={handleDownloadExample}
+      <DownloadFile
+        filename="social-prices-customers-template.xlsx"
+        btnProps={{
+          className: "my-1",
+          type: "success",
+        }}
         loading={isUploading}
-        icon={<DownloadOutlined />}
-      >
-        Download Template File
-      </Button>
+        btnLabel="Download Template File"
+      />
 
       <Divider className="my-2" />
 
