@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Button, ButtonProps } from "antd";
 
@@ -8,19 +8,20 @@ import { serviceMethodsInstance } from "../../../services/social-prices-api/Serv
 import handleClientError from "../handleClientError/handleClientError";
 
 interface Props {
-  loading?: boolean;
   btnProps?: ButtonProps;
   btnLabel?: string;
   filename: string;
 }
 export const DownloadFile: React.FC<Props> = ({
-  loading,
   btnProps,
   btnLabel,
   filename,
 }) => {
+  const [isDownloading, setIsDownloading] = useState<boolean>(false);
+
   const handleDownloadFile = async () => {
     try {
+      setIsDownloading(true);
       const response: Buffer =
         await serviceMethodsInstance.filesServiceMethods.download(filename);
 
@@ -33,6 +34,8 @@ export const DownloadFile: React.FC<Props> = ({
       link.remove();
     } catch (error: any) {
       handleClientError(error);
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -40,7 +43,7 @@ export const DownloadFile: React.FC<Props> = ({
     <>
       <Button
         onClick={handleDownloadFile}
-        loading={loading}
+        loading={isDownloading}
         icon={<DownloadOutlined />}
         {...btnProps}
       >

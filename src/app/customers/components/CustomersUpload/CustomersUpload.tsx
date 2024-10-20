@@ -73,7 +73,6 @@ export const CustomersUpload: React.FC<Props> = ({ maxFilesToUpload = 5 }) => {
           className: "my-1",
           type: "success",
         }}
-        loading={isUploading}
         btnLabel="Download Template File"
       />
 
