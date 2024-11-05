@@ -22,6 +22,7 @@ export const DownloadFile: React.FC<Props> = ({
   const handleDownloadFile = async () => {
     try {
       setIsDownloading(true);
+
       const response: Buffer =
         await serviceMethodsInstance.filesServiceMethods.download(filename);
 

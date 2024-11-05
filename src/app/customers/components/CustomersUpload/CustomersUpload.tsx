@@ -39,6 +39,7 @@ export const CustomersUpload: React.FC<Props> = ({ maxFilesToUpload = 5 }) => {
       message.info(
         "Your files are been processed! We will send a notification when ready, or any information related to process."
       );
+
       setFileList([]);
     } catch (error) {
       handleClientError(error);
