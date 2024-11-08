@@ -2,7 +2,11 @@
 
 import { createContext, useEffect, useState } from "react";
 
+import { message } from "antd";
 import { Manager, Socket } from "socket.io-client";
+
+import { ICustomerUploadTemplateFileError } from "../../../shared/business/customers/customers.type";
+import useAuthData from "../auth/useAuthData";
 
 export interface ISocketContext {
   socket: Socket | null;
@@ -13,6 +17,8 @@ const SocketContext = createContext<ISocketContext>({
 });
 
 export const SocketProvider = ({ children }: { children?: any }) => {
+  const { employee, isLogged } = useAuthData();
+
   const [socket, setSocket] = useState<Socket | null>(null);
 
   const socketOnInitialListeners = (socket: Socket) => {
@@ -65,6 +71,18 @@ export const SocketProvider = ({ children }: { children?: any }) => {
       disconnectSocket();
     };
   }, []);
+
+  useEffect(() => {
+    if (socket?.connected && employee && isLogged) {
+      socket.on(
+        `upload-customers-response-to-employee-${employee._id}`,
+        (data: ICustomerUploadTemplateFileError[]) => {
+          console.log(data);
+          message.info("Upload Customers Finished!");
+        }
+      );
+    }
+  }, [socket, employee, isLogged]);
 
   return (
     <SocketContext.Provider
