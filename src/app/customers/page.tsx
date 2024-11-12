@@ -18,8 +18,10 @@ import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDe
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import { PhoneNumbersTag } from "../../components/common/PhoneNumbersTag/PhoneNumbersTag";
 import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
+import { UploadFilesDrawer } from "../../components/common/UploadFilesDrawer/UploadFilesDrawer";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
+import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
 import { ICustomer } from "../../shared/business/customers/customer.interface";
 import PersonEnum from "../../shared/business/enums/person.enum";
 import { IPhoneNumber } from "../../shared/business/interfaces/phone-number.interface";
@@ -31,7 +33,6 @@ import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { useFindTagsByType } from "../tags/useFindTagsByType";
-import { CustomersUploadDrawer } from "./components/CustomersUploadDrawer/CustomersUploadDrawer";
 import { useFindCustomersByOwnerOfUserTableState } from "./useFindCustomersByOwnerOfUserTableState";
 
 export default function CustomersPage() {
@@ -213,9 +214,17 @@ export default function CustomersPage() {
         />
       </Card>
 
-      <CustomersUploadDrawer
+      <UploadFilesDrawer
         isOpen={isCustomerUploadDrawerOpen}
         onClose={() => setIsCustomerUploadDrawerOpen(false)}
+        onUploadFiles={async (formData: FormData) =>
+          await serviceMethodsInstance.customersServiceMethods.uploadCustomers(
+            formData
+          )
+        }
+        downloadFileName="social-prices-customers-template.xlsx"
+        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        title="Upload Customers"
       />
     </Layout>
   );

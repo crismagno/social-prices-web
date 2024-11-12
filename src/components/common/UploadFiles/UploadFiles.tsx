@@ -12,14 +12,14 @@ import handleClientError from "../handleClientError/handleClientError";
 
 const { Dragger } = Upload;
 
-interface Props {
+export interface UploadFilesProps {
   maxFilesToUpload?: number;
   downloadFileName?: string;
   accept?: string;
   onUploadFiles: (formData: FormData) => Promise<any> | any | void;
 }
 
-export const UploadFiles: React.FC<Props> = ({
+export const UploadFiles: React.FC<UploadFilesProps> = ({
   maxFilesToUpload = 5,
   downloadFileName,
   accept,
