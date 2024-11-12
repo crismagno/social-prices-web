@@ -45,7 +45,7 @@ export default function CustomersPage() {
   const { isLoading, customers, total } =
     useFindCustomersByOwnerOfUserTableState(tableStateRequest);
 
-  const [isCustomerUploadDrawerOpen, setIsCustomerUploadDrawerOpen] =
+  const [isUploadFilesDrawerOpen, setIsUploadFilesDrawerOpen] =
     useState<boolean>(false);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
@@ -67,7 +67,7 @@ export default function CustomersPage() {
           <>
             <Button
               type="primary"
-              onClick={() => setIsCustomerUploadDrawerOpen(true)}
+              onClick={() => setIsUploadFilesDrawerOpen(true)}
               className="mr-2"
               icon={<UploadOutlined />}
             >
@@ -215,8 +215,8 @@ export default function CustomersPage() {
       </Card>
 
       <UploadFilesDrawer
-        isOpen={isCustomerUploadDrawerOpen}
-        onClose={() => setIsCustomerUploadDrawerOpen(false)}
+        isOpen={isUploadFilesDrawerOpen}
+        onClose={() => setIsUploadFilesDrawerOpen(false)}
         onUploadFiles={async (formData: FormData) =>
           await serviceMethodsInstance.customersServiceMethods.uploadCustomers(
             formData
