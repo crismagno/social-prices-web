@@ -17,7 +17,7 @@ export const CustomersUploadDrawer: React.FC<Props> = ({ isOpen, onClose }) => {
       width={"50%"}
     >
       <UploadFiles
-        uploadMethod={async (formData: FormData) =>
+        onUploadFiles={async (formData: FormData) =>
           await serviceMethodsInstance.customersServiceMethods.uploadCustomers(
             formData
           )

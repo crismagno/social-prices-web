@@ -16,14 +16,14 @@ interface Props {
   maxFilesToUpload?: number;
   downloadFileName?: string;
   accept?: string;
-  uploadMethod: (formData: FormData) => Promise<any> | any | void;
+  onUploadFiles: (formData: FormData) => Promise<any> | any | void;
 }
 
 export const UploadFiles: React.FC<Props> = ({
   maxFilesToUpload = 5,
   downloadFileName,
   accept,
-  uploadMethod,
+  onUploadFiles,
 }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
@@ -39,7 +39,7 @@ export const UploadFiles: React.FC<Props> = ({
         formData.append("files", fileList[i] as RcFile);
       }
 
-      await uploadMethod?.(formData);
+      await onUploadFiles?.(formData);
 
       message.info(
         "Your files are been processed! We will send a notification when ready, or any information related to process."
