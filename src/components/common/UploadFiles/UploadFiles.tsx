@@ -7,17 +7,24 @@ import { RcFile } from "antd/es/upload";
 
 import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
 
-import { DownloadFile } from "../../../../components/common/DownloadFile/DownloadFile";
-import handleClientError from "../../../../components/common/handleClientError/handleClientError";
-import { serviceMethodsInstance } from "../../../../services/social-prices-api/ServiceMethods";
+import { DownloadFile } from "../DownloadFile/DownloadFile";
+import handleClientError from "../handleClientError/handleClientError";
 
 const { Dragger } = Upload;
 
 interface Props {
   maxFilesToUpload?: number;
+  downloadFileName?: string;
+  accept?: string;
+  uploadMethod: (formData: FormData) => Promise<any> | any | void;
 }
 
-export const CustomersUpload: React.FC<Props> = ({ maxFilesToUpload = 5 }) => {
+export const UploadFiles: React.FC<Props> = ({
+  maxFilesToUpload = 5,
+  downloadFileName,
+  accept,
+  uploadMethod,
+}) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -32,9 +39,7 @@ export const CustomersUpload: React.FC<Props> = ({ maxFilesToUpload = 5 }) => {
         formData.append("files", fileList[i] as RcFile);
       }
 
-      await serviceMethodsInstance.customersServiceMethods.uploadCustomers(
-        formData
-      );
+      await uploadMethod?.(formData);
 
       message.info(
         "Your files are been processed! We will send a notification when ready, or any information related to process."
@@ -57,7 +62,9 @@ export const CustomersUpload: React.FC<Props> = ({ maxFilesToUpload = 5 }) => {
 
   const onBeforeUpload = (_: RcFile, files: RcFile[]) => {
     if (fileList.length + files.length > maxFilesToUpload) {
-      message.error("Max bulk files to upload reached. Max 5 files!");
+      message.error(
+        `Max bulk files to upload reached. Max ${maxFilesToUpload} files!`
+      );
       return;
     }
 
@@ -68,14 +75,16 @@ export const CustomersUpload: React.FC<Props> = ({ maxFilesToUpload = 5 }) => {
 
   return (
     <div>
-      <DownloadFile
-        filename="social-prices-customers-template.xlsx"
-        btnProps={{
-          className: "my-1",
-          type: "success",
-        }}
-        btnLabel="Download Template File"
-      />
+      {downloadFileName && (
+        <DownloadFile
+          filename={downloadFileName}
+          btnProps={{
+            className: "my-1",
+            type: "success",
+          }}
+          btnLabel="Download Template File"
+        />
+      )}
 
       <Divider className="my-2" />
 
@@ -83,7 +92,7 @@ export const CustomersUpload: React.FC<Props> = ({ maxFilesToUpload = 5 }) => {
         <Dragger
           className="w-full"
           multiple
-          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          accept={accept}
           onRemove={onRemoveUpload}
           beforeUpload={onBeforeUpload}
           fileList={fileList}

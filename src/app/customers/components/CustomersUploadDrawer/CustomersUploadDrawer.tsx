@@ -1,6 +1,7 @@
 import { Drawer } from "antd";
 
-import { CustomersUpload } from "../CustomersUpload/CustomersUpload";
+import { UploadFiles } from "../../../../components/common/UploadFiles/UploadFiles";
+import { serviceMethodsInstance } from "../../../../services/social-prices-api/ServiceMethods";
 
 interface Props {
   isOpen: boolean;
@@ -15,7 +16,15 @@ export const CustomersUploadDrawer: React.FC<Props> = ({ isOpen, onClose }) => {
       open={isOpen}
       width={"50%"}
     >
-      <CustomersUpload />
+      <UploadFiles
+        uploadMethod={async (formData: FormData) =>
+          await serviceMethodsInstance.customersServiceMethods.uploadCustomers(
+            formData
+          )
+        }
+        downloadFileName="social-prices-customers-template.xlsx"
+        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      />
     </Drawer>
   );
 };
