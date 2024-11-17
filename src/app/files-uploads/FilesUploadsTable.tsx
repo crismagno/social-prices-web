@@ -57,15 +57,6 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
               align: "center",
             },
             {
-              title: "Type",
-              dataIndex: "type",
-              key: "type",
-              align: "center",
-              render: (type: FilesUploadsEnum.Type) => (
-                <Tag>{FilesUploadsEnum.TypeLabels[type]}</Tag>
-              ),
-            },
-            {
               title: "Status",
               dataIndex: "status",
               key: "status",
