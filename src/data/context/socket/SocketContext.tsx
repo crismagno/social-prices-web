@@ -77,8 +77,13 @@ export const SocketProvider = ({ children }: { children?: any }) => {
       socket.on(
         `upload-customers-response-to-employee-${employee._id}`,
         (data: ICustomerUploadTemplateFileError[]) => {
-          console.log(data);
-          message.info("Upload Customers Finished!");
+          if (data.length > 0) {
+            message.error(
+              "Upload Customers Error on some file, please check on customer upload table!"
+            );
+          } else {
+            message.info("Upload Customers Completed!");
+          }
         }
       );
     }

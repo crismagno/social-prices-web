@@ -1,6 +1,6 @@
 "use client";
 
-import { RefObject, useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 
 import { Button, Card, Tag, Tooltip } from "antd";
 import moment from "moment";
@@ -21,6 +21,8 @@ import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/Tag
 import { UploadFilesDrawer } from "../../components/common/UploadFilesDrawer/UploadFilesDrawer";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
+import useAuthData from "../../data/context/auth/useAuthData";
+import useSocketData from "../../data/context/socket/useSocketData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
 import { ICustomer } from "../../shared/business/customers/customer.interface";
 import PersonEnum from "../../shared/business/enums/person.enum";
@@ -41,6 +43,10 @@ import { useFindTagsByType } from "../tags/useFindTagsByType";
 import { useFindCustomersByOwnerOfUserTableState } from "./useFindCustomersByOwnerOfUserTableState";
 
 export default function CustomersPage() {
+  const { user } = useAuthData();
+
+  const { socket } = useSocketData();
+
   const router: AppRouterInstance = useRouter();
 
   const [tableStateRequest, setTableStateRequest] = useState<
@@ -56,8 +62,24 @@ export default function CustomersPage() {
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
     TagsEnum.Type.CUSTOMER
   );
+
   const filesUploadsTableRef: RefObject<IFilesUploadsTableRefProps> =
     useRef<IFilesUploadsTableRefProps>(null);
+
+  useEffect(() => {
+    if (socket && filesUploadsTableRef && user) {
+      socket.on(
+        `response-upload-customers-file-to-user-${user._id}`,
+        async () => {
+          await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();
+        }
+      );
+
+      return () => {
+        socket.off(`response-upload-customers-file-to-user-${user._id}`);
+      };
+    }
+  }, [socket, filesUploadsTableRef, user]);
 
   if (isLoadingTags) {
     return <LoadingFull />;
@@ -225,11 +247,13 @@ export default function CustomersPage() {
         width={"70%"}
         isOpen={isUploadFilesDrawerOpen}
         onClose={() => setIsUploadFilesDrawerOpen(false)}
-        onUploadFiles={async (formData: FormData) =>
+        onUploadFiles={async (formData: FormData) => {
           await serviceMethodsInstance.customersServiceMethods.uploadCustomers(
             formData
-          )
-        }
+          );
+
+          await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();
+        }}
         downloadFileName="social-prices-customers-template.xlsx"
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         title="Upload Customers"
