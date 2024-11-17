@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { RefObject, useRef, useState } from "react";
 
 import { Button, Card, Tag, Tooltip } from "antd";
 import moment from "moment";
@@ -24,6 +24,7 @@ import Layout from "../../components/template/Layout/Layout";
 import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
 import { ICustomer } from "../../shared/business/customers/customer.interface";
 import PersonEnum from "../../shared/business/enums/person.enum";
+import FilesUploadsEnum from "../../shared/business/files-uploads/files-uploads.enum";
 import { IPhoneNumber } from "../../shared/business/interfaces/phone-number.interface";
 import TagsEnum from "../../shared/business/tags/tags.enum";
 import { ITag } from "../../shared/business/tags/tags.interface";
@@ -32,6 +33,10 @@ import { sortArray } from "../../shared/utils/array/functions";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
+import {
+  FilesUploadsTable,
+  IFilesUploadsTableRefProps,
+} from "../files-uploads/FilesUploadsTable";
 import { useFindTagsByType } from "../tags/useFindTagsByType";
 import { useFindCustomersByOwnerOfUserTableState } from "./useFindCustomersByOwnerOfUserTableState";
 
@@ -51,6 +56,8 @@ export default function CustomersPage() {
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
     TagsEnum.Type.CUSTOMER
   );
+  const filesUploadsTableRef: RefObject<IFilesUploadsTableRefProps> =
+    useRef<IFilesUploadsTableRefProps>(null);
 
   if (isLoadingTags) {
     return <LoadingFull />;
@@ -215,6 +222,7 @@ export default function CustomersPage() {
       </Card>
 
       <UploadFilesDrawer
+        width={"70%"}
         isOpen={isUploadFilesDrawerOpen}
         onClose={() => setIsUploadFilesDrawerOpen(false)}
         onUploadFiles={async (formData: FormData) =>
@@ -225,7 +233,12 @@ export default function CustomersPage() {
         downloadFileName="social-prices-customers-template.xlsx"
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         title="Upload Customers"
-      />
+      >
+        <FilesUploadsTable
+          type={FilesUploadsEnum.Type.UPLOAD_CUSTOMERS}
+          ref={filesUploadsTableRef}
+        />
+      </UploadFilesDrawer>
     </Layout>
   );
 }
