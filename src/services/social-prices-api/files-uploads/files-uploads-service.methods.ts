@@ -47,8 +47,8 @@ export default class FilesUploadsServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
-  public async downloadErrors(fileUploadId: string): Promise<any> {
-    const response = await this._fetchAxios.get<any>(
+  public async downloadErrors(fileUploadId: string): Promise<Buffer> {
+    const response = await this._fetchAxios.get<Buffer>(
       `${
         this._socialPricesApiV1
       }${FilesUploadsServiceEnum.Methods.DOWNLOAD_ERRORS.replace(
@@ -57,9 +57,9 @@ export default class FilesUploadsServiceMethods extends ServiceMethodsBase {
       )}`,
       {
         headers: {
-          "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
+        responseType: "blob",
       }
     );
 

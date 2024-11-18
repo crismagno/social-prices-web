@@ -57,10 +57,18 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
       try {
         setDownloadingErrors({ fileUploadId, isDownloading: true });
 
-        const response: any =
+        const response: Buffer =
           await serviceMethodsInstance.filesUploadsServiceMethods.downloadErrors(
             fileUploadId
           );
+
+        const url: string = window.URL.createObjectURL(new Blob([response]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "fileUploadErrors.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
       } catch (error: any) {
         handleClientError(error);
       } finally {
@@ -139,6 +147,8 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
               align: "center",
               render: (_: any, fileUpload: IFileUpload) => {
                 if (fileUpload.status === FilesUploadsEnum.Status.ERROR) {
+                  const fileUploadId: string = fileUpload._id;
+
                   return (
                     <Button.Group>
                       <Tooltip title="Download Errors">
@@ -146,13 +156,13 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
                           type="danger"
                           disabled={
                             downloadingErrors?.isDownloading &&
-                            downloadingErrors.fileUploadId !== fileUpload._id
+                            downloadingErrors.fileUploadId !== fileUploadId
                           }
                           loading={
                             downloadingErrors?.isDownloading &&
-                            downloadingErrors.fileUploadId === fileUpload._id
+                            downloadingErrors.fileUploadId === fileUploadId
                           }
-                          onClick={() => handleDownloadErrors(fileUpload._id)}
+                          onClick={() => handleDownloadErrors(fileUploadId)}
                           icon={<DownloadOutlined />}
                         />
                       </Tooltip>
