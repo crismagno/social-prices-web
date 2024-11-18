@@ -1,4 +1,4 @@
-export interface ICustomerUploadTemplateRow {
+export interface ICustomerFileUploadTemplateRow {
   rowNumber: number;
   name: string;
   email?: string;
@@ -18,25 +18,4 @@ export interface ICustomerUploadTemplateRow {
   phoneType?: string;
   phoneNumber?: string | number;
   phoneMessengers?: string;
-}
-
-export interface ICustomerUploadTemplateFileError {
-  filename: string;
-  fileNumber: number;
-  rowsError: ICustomerUploadTemplateRowError[];
-  processError?: string;
-}
-
-export interface ICustomerUploadTemplateRowError {
-  rowNumber: number;
-  reasons: ICustomerUploadTemplateRowErrorReason[];
-}
-
-export type CustomerUploadTemplateRowErrorPropertyKeys =
-  | keyof ICustomerUploadTemplateRow
-  | "other";
-
-export interface ICustomerUploadTemplateRowErrorReason {
-  property: CustomerUploadTemplateRowErrorPropertyKeys;
-  message: string;
 }

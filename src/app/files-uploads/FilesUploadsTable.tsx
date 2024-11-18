@@ -5,7 +5,9 @@ import moment from "moment";
 
 import { DownloadOutlined } from "@ant-design/icons";
 
+import handleClientError from "../../components/common/handleClientError/handleClientError";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
+import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
 import { IFileUpload } from "../../shared/business/files-uploads/file-upload.interface";
 import FilesUploadsEnum from "../../shared/business/files-uploads/files-uploads.enum";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
@@ -33,6 +35,11 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
       })
     );
 
+    const [downloadingErrors, setDownloadingErrors] = useState<{
+      fileUploadId: string;
+      isDownloading: boolean;
+    } | null>(null);
+
     const {
       isLoading,
       filesUploads,
@@ -43,6 +50,23 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
     useImperativeHandle(ref, () => ({
       fetchFindFilesUploadsByUserTableState,
     }));
+
+    const handleDownloadErrors = async (
+      fileUploadId: string
+    ): Promise<void> => {
+      try {
+        setDownloadingErrors({ fileUploadId, isDownloading: true });
+
+        const response: any =
+          await serviceMethodsInstance.filesUploadsServiceMethods.downloadErrors(
+            fileUploadId
+          );
+      } catch (error: any) {
+        handleClientError(error);
+      } finally {
+        setDownloadingErrors(null);
+      }
+    };
 
     return (
       <Card title="Files Uploads" className="h-min-80 mt-5">
@@ -114,19 +138,29 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
               key: "action",
               align: "center",
               render: (_: any, fileUpload: IFileUpload) => {
-                return (
-                  fileUpload.errors && (
+                if (fileUpload.status === FilesUploadsEnum.Status.ERROR) {
+                  return (
                     <Button.Group>
                       <Tooltip title="Download Errors">
                         <Button
-                          type="default"
-                          onClick={() => alert("download errors....")}
+                          type="danger"
+                          disabled={
+                            downloadingErrors?.isDownloading &&
+                            downloadingErrors.fileUploadId !== fileUpload._id
+                          }
+                          loading={
+                            downloadingErrors?.isDownloading &&
+                            downloadingErrors.fileUploadId === fileUpload._id
+                          }
+                          onClick={() => handleDownloadErrors(fileUpload._id)}
                           icon={<DownloadOutlined />}
                         />
                       </Tooltip>
                     </Button.Group>
-                  )
-                );
+                  );
+                }
+
+                return null;
               },
             },
           ]}

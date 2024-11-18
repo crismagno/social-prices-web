@@ -5,7 +5,8 @@ import { createContext, useEffect, useState } from "react";
 import { message } from "antd";
 import { Manager, Socket } from "socket.io-client";
 
-import { ICustomerUploadTemplateFileError } from "../../../shared/business/customers/customers.type";
+import { ICustomerFileUploadTemplateRow } from "../../../shared/business/customers/customers.type";
+import { IFileUploadTemplateError } from "../../../shared/business/files-uploads/files-uploads.type";
 import useAuthData from "../auth/useAuthData";
 
 export interface ISocketContext {
@@ -76,10 +77,10 @@ export const SocketProvider = ({ children }: { children?: any }) => {
     if (socket?.connected && employee && isLogged) {
       socket.on(
         `upload-customers-response-to-employee-${employee._id}`,
-        (data: ICustomerUploadTemplateFileError[]) => {
+        (data: IFileUploadTemplateError<ICustomerFileUploadTemplateRow>[]) => {
           if (data.length > 0) {
-            message.error(
-              "Upload Customers Error on some file, please check on customer upload table!"
+            message.warning(
+              "Upload Customers has completed but there are error on some file, please check on customer upload table!"
             );
           } else {
             message.info("Upload Customers Completed!");

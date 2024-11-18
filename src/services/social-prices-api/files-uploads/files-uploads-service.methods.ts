@@ -46,4 +46,23 @@ export default class FilesUploadsServiceMethods extends ServiceMethodsBase {
 
     return response.data;
   }
+
+  public async downloadErrors(fileUploadId: string): Promise<any> {
+    const response = await this._fetchAxios.get<any>(
+      `${
+        this._socialPricesApiV1
+      }${FilesUploadsServiceEnum.Methods.DOWNLOAD_ERRORS.replace(
+        ":fileUploadId",
+        fileUploadId
+      )}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
 }
