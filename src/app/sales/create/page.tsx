@@ -199,7 +199,7 @@ const generateFormSchemaDefault = (): TFormSchema => {
 };
 
 export default function CreateSalePage() {
-  const { user } = useAuthData();
+  const { user, employee } = useAuthData();
 
   const router: AppRouterInstance = useRouter();
 
@@ -767,7 +767,7 @@ export default function CreateSalePage() {
           userId: selectedCustomer?.userId ?? null,
         },
         createdByUserId: user?._id!,
-        createdByEmployeeId: user?.employee?._id!,
+        createdByEmployeeId: employee?._id!,
         header: {
           shipping: {
             address,
@@ -881,7 +881,7 @@ export default function CreateSalePage() {
         const updateSaleDto: UpdateSaleDto = {
           ...createSaleDto,
           updatedByUserId: user!._id,
-          updatedByEmployeeId: user?.employee?._id!,
+          updatedByEmployeeId: employee?._id!,
           saleId: saleById!._id,
         };
 
