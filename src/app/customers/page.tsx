@@ -53,8 +53,12 @@ export default function CustomersPage() {
     ITableStateRequest<ICustomer> | undefined
   >(createTableState({ sort: { field: "createdAt", order: "ascend" } }));
 
-  const { isLoading, customers, total } =
-    useFindCustomersByOwnerOfUserTableState(tableStateRequest);
+  const {
+    isLoading,
+    customers,
+    total,
+    fetchFindCustomersByOwnerOfUserTableState,
+  } = useFindCustomersByOwnerOfUserTableState(tableStateRequest);
 
   const [isUploadFilesDrawerOpen, setIsUploadFilesDrawerOpen] =
     useState<boolean>(false);
@@ -72,6 +76,7 @@ export default function CustomersPage() {
         `response-upload-customers-file-to-user-${user._id}`,
         async () => {
           await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();
+          await fetchFindCustomersByOwnerOfUserTableState();
         }
       );
 
