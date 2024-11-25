@@ -39,6 +39,10 @@ export const SocketProvider = ({ children }: { children?: any }) => {
 
   const connectSocket = (): void => {
     try {
+      if (socket?.connected) {
+        return;
+      }
+
       const manager = new Manager(process.env.NEXT_PUBLIC_URL_SOCKET_IO, {
         transports: ["websocket", "polling"],
         forceNew: true,
