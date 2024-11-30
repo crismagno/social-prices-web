@@ -113,7 +113,7 @@ export default function EmployeeDetailPage() {
   const [isVisibleEditAvatarModal, setIsVisibleAvatarModal] =
     useState<boolean>(false);
 
-  const [isSubmitting, setIsSUbmitting] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
@@ -171,7 +171,7 @@ export default function EmployeeDetailPage() {
 
   const handleCreate = async (data: TFormSchema) => {
     try {
-      setIsSUbmitting(true);
+      setIsSubmitting(true);
 
       if (!data.password?.trim()) {
         message.warning("Password is required!");
@@ -234,7 +234,7 @@ export default function EmployeeDetailPage() {
     } catch (error) {
       handleClientError(error);
     } finally {
-      setIsSUbmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -245,7 +245,7 @@ export default function EmployeeDetailPage() {
         return;
       }
 
-      setIsSUbmitting(true);
+      setIsSubmitting(true);
 
       const formData = new FormData();
 
@@ -304,7 +304,7 @@ export default function EmployeeDetailPage() {
     } catch (error) {
       handleClientError(error);
     } finally {
-      setIsSUbmitting(false);
+      setIsSubmitting(false);
     }
   };
 

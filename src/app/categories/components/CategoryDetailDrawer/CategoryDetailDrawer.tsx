@@ -50,7 +50,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
 
   const [formValues, setFormValues] = useState<TFormSchema>();
 
-  const [isSubmitting, setIsSUbmitting] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const {
     handleSubmit,
@@ -89,7 +89,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
 
   const handleCreate = async (data: TFormSchema) => {
     try {
-      setIsSUbmitting(true);
+      setIsSubmitting(true);
 
       const createCategoryDto: CreateCategoryDto = {
         code: parseToUpperAndUnderline(data.name),
@@ -110,13 +110,13 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
     } catch (error) {
       handleClientError(error);
     } finally {
-      setIsSUbmitting(false);
+      setIsSubmitting(false);
     }
   };
 
   const handleUpdate = async (data: TFormSchema) => {
     try {
-      setIsSUbmitting(true);
+      setIsSubmitting(true);
 
       const updateCategoryDto: UpdateCategoryDto = {
         code: parseToUpperAndUnderline(data.name),
@@ -138,7 +138,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
     } catch (error) {
       handleClientError(error);
     } finally {
-      setIsSUbmitting(false);
+      setIsSubmitting(false);
     }
   };
 

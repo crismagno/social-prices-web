@@ -52,11 +52,11 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
     resolver: zodResolver(formSchema),
   });
 
-  const [isSubmitting, setIsSUbmitting] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<TFormSchema> = async (data) => {
     try {
-      setIsSUbmitting(true);
+      setIsSubmitting(true);
 
       const response: IUser =
         await serviceMethodsInstance.usersServiceMethods.updateUserPhoneNumbers(
@@ -71,7 +71,7 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
     } catch (error) {
       handleClientError(error);
     } finally {
-      setIsSUbmitting(false);
+      setIsSubmitting(false);
     }
   };
 

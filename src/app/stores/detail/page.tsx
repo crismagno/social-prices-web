@@ -117,7 +117,7 @@ export default function StoreDetailPage() {
   const [isVisibleEditAvatarModal, setIsVisibleAvatarModal] =
     useState<boolean>(false);
 
-  const [isSubmitting, setIsSUbmitting] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
@@ -175,7 +175,7 @@ export default function StoreDetailPage() {
 
   const handleCreate = async (data: TFormSchema) => {
     try {
-      setIsSUbmitting(true);
+      setIsSubmitting(true);
 
       const formData = new FormData();
 
@@ -233,7 +233,7 @@ export default function StoreDetailPage() {
     } catch (error) {
       handleClientError(error);
     } finally {
-      setIsSUbmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -244,7 +244,7 @@ export default function StoreDetailPage() {
         return;
       }
 
-      setIsSUbmitting(true);
+      setIsSubmitting(true);
 
       const formData = new FormData();
 
@@ -303,7 +303,7 @@ export default function StoreDetailPage() {
     } catch (error) {
       handleClientError(error);
     } finally {
-      setIsSUbmitting(false);
+      setIsSubmitting(false);
     }
   };
 

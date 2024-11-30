@@ -1,3 +1,5 @@
+import PersonEnum from "../enums/person.enum";
+
 export interface ICustomerFileUploadTemplateRow {
   rowNumber: number;
   name: string;
@@ -18,4 +20,12 @@ export interface ICustomerFileUploadTemplateRow {
   phoneType?: string;
   phoneNumber?: string | number;
   phoneMessengers?: string;
+}
+
+export interface IFiltersDownloadCustomers {
+  search: string;
+  gender: PersonEnum.Gender;
+  tagsIds: string[];
+  sortField: string;
+  sortOrder: string;
 }

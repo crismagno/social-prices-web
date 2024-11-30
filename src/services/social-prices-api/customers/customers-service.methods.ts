@@ -1,6 +1,7 @@
 "use client";
 
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
+import { IFiltersDownloadCustomers } from "../../../shared/business/customers/customers.type";
 import {
   ITableStateRequest,
   ITableStateResponse,
@@ -100,6 +101,23 @@ export default class CustomersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async downloadCustomers(
+    filters: IFiltersDownloadCustomers
+  ): Promise<Buffer> {
+    const response = await this._fetchAxios.post<Buffer>(
+      `${this._socialPricesApiV1}${CustomersServiceEnum.Methods.DOWNLOAD_CUSTOMERS}`,
+      filters,
+      {
+        headers: {
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+        responseType: "blob",
       }
     );
 

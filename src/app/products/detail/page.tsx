@@ -112,7 +112,7 @@ export default function ProductDetailPage() {
     resolver: zodResolver(formSchema),
   });
 
-  const [isSubmitting, setIsSUbmitting] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
@@ -190,7 +190,7 @@ export default function ProductDetailPage() {
         return;
       }
 
-      setIsSUbmitting(true);
+      setIsSubmitting(true);
 
       const formData = new FormData();
 
@@ -230,7 +230,7 @@ export default function ProductDetailPage() {
     } catch (error) {
       handleClientError(error);
     } finally {
-      setIsSUbmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -241,7 +241,7 @@ export default function ProductDetailPage() {
         return;
       }
 
-      setIsSUbmitting(true);
+      setIsSubmitting(true);
 
       const deletedFilesUrl: string[] = product!.filesUrl.filter(
         (fileUrl: string) => {
@@ -295,7 +295,7 @@ export default function ProductDetailPage() {
     } catch (error) {
       handleClientError(error);
     } finally {
-      setIsSUbmitting(false);
+      setIsSubmitting(false);
     }
   };
 

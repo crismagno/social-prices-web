@@ -60,7 +60,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
 
   const [formValues, setFormValues] = useState<TFormSchema>();
 
-  const [isSubmitting, setIsSUbmitting] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const {
     handleSubmit,
@@ -100,7 +100,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
 
   const handleCreate = async (data: TFormSchema) => {
     try {
-      setIsSUbmitting(true);
+      setIsSubmitting(true);
 
       const createTagDto: CreateTagDto = {
         name: data.name,
@@ -121,13 +121,13 @@ export const TagDetailDrawer: React.FC<Props> = ({
     } catch (error) {
       handleClientError(error);
     } finally {
-      setIsSUbmitting(false);
+      setIsSubmitting(false);
     }
   };
 
   const handleUpdate = async (data: TFormSchema) => {
     try {
-      setIsSUbmitting(true);
+      setIsSubmitting(true);
 
       const updateTagDto: UpdateTagDto = {
         name: data.name,
@@ -148,7 +148,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
     } catch (error) {
       handleClientError(error);
     } finally {
-      setIsSUbmitting(false);
+      setIsSubmitting(false);
     }
   };
 

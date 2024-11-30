@@ -56,11 +56,11 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
     resolver: zodResolver(formSchema),
   });
 
-  const [isSubmitting, setIsSUbmitting] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
     try {
-      setIsSUbmitting(true);
+      setIsSubmitting(true);
 
       const response: IUser =
         await serviceMethodsInstance.usersServiceMethods.updateUser({
@@ -76,7 +76,7 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
     } catch (error) {
       handleClientError(error);
     } finally {
-      setIsSUbmitting(false);
+      setIsSubmitting(false);
     }
   };
 

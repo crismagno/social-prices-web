@@ -8,6 +8,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
 import {
+  DownloadOutlined,
   EditOutlined,
   PlusOutlined,
   ShoppingCartOutlined,
@@ -40,6 +41,7 @@ import {
   IFilesUploadsTableRefProps,
 } from "../files-uploads/FilesUploadsTable";
 import { useFindTagsByType } from "../tags/useFindTagsByType";
+import { DownloadCustomersDrawer } from "./components/DownloadCustomersDrawer/DownloadCustomersDrawer";
 import { useFindCustomersByOwnerOfUserTableState } from "./useFindCustomersByOwnerOfUserTableState";
 
 export default function CustomersPage() {
@@ -61,6 +63,9 @@ export default function CustomersPage() {
   } = useFindCustomersByOwnerOfUserTableState(tableStateRequest);
 
   const [isUploadFilesDrawerOpen, setIsUploadFilesDrawerOpen] =
+    useState<boolean>(false);
+
+  const [isDownloadCustomersDrawerOpen, setIsDownloadCustomersDrawerOpen] =
     useState<boolean>(false);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
@@ -99,6 +104,15 @@ export default function CustomersPage() {
         className="h-min-80 mt-5"
         extra={
           <>
+            <Button
+              type="primary"
+              onClick={() => setIsDownloadCustomersDrawerOpen(true)}
+              className="mr-2"
+              icon={<DownloadOutlined />}
+            >
+              Download
+            </Button>
+
             <Button
               type="primary"
               onClick={() => setIsUploadFilesDrawerOpen(true)}
@@ -268,6 +282,13 @@ export default function CustomersPage() {
           ref={filesUploadsTableRef}
         />
       </UploadFilesDrawer>
+
+      <DownloadCustomersDrawer
+        isOpen={isDownloadCustomersDrawerOpen}
+        onClose={() => setIsDownloadCustomersDrawerOpen(false)}
+        title="Download Customers"
+        tags={tagsSort}
+      />
     </Layout>
   );
 }
