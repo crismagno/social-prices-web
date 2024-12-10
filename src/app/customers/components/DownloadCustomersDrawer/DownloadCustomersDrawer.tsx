@@ -139,7 +139,11 @@ export const DownloadCustomersDrawer: React.FC<Props> = ({
             >
               {Object.keys(CustomersEnum.SortField).map((sortField: string) => (
                 <Select.Option key={sortField} value={sortField}>
-                  {CustomersEnum.SortFieldLabels[sortField]}
+                  {
+                    CustomersEnum.SortFieldLabels[
+                      sortField as CustomersEnum.SortField
+                    ]
+                  }
                 </Select.Option>
               ))}
             </SelectCustomAntd>
@@ -155,7 +159,11 @@ export const DownloadCustomersDrawer: React.FC<Props> = ({
               {Object.keys(TableStateEnum.SortOrder).map(
                 (sortOrder: string) => (
                   <Select.Option key={sortOrder} value={sortOrder}>
-                    {TableStateEnum.SortOrderLabels[sortOrder]}
+                    {
+                      TableStateEnum.SortOrderLabels[
+                        sortOrder as TableStateEnum.SortOrder
+                      ]
+                    }
                   </Select.Option>
                 )
               )}
