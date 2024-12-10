@@ -141,6 +141,8 @@ export const SalesChartPeriodType: React.FC<Props> = ({
     );
   };
 
+  console.log(chartDataPeriodType);
+
   return (
     <>
       <div>
