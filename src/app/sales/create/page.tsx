@@ -53,6 +53,7 @@ import useAuthData from "../../../data/context/auth/useAuthData";
 import CreateSaleDto, {
   SalePaymentDto,
   SaleStoreDto,
+  SaleStoreProductDto,
 } from "../../../services/social-prices-api/sales/dto/createSale.dto";
 import UpdateSaleDto from "../../../services/social-prices-api/sales/dto/updateSale.dto";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
@@ -80,6 +81,10 @@ import {
   ICountryMockData,
   IStateMockData,
 } from "../../../shared/utils/mock-data/interfaces";
+import {
+  getPercentageByValue,
+  getValueByPercentage,
+} from "../../../shared/utils/numbers/numbers";
 import { createAddressName } from "../../../shared/utils/string-extensions/string-extensions";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
@@ -851,7 +856,28 @@ export default function CreateSalePage() {
 
             return {
               customerId: data.customer?.customerId ?? null,
-              products: saleStore.products,
+              products: map(
+                saleStore.products,
+                (saleStoreProduct): SaleStoreProductDto => {
+                  const saleStoreProductPercentage: number =
+                    getPercentageByValue(
+                      saleStoreProduct.price * saleStoreProduct.quantity,
+                      productsQuantityPrice.subtotal
+                    );
+
+                  const discountByPercentage: number = getValueByPercentage(
+                    saleStoreProductPercentage,
+                    dataDiscountAmountByStore
+                  );
+
+                  return {
+                    ...saleStoreProduct,
+                    discount: discountByPercentage
+                      ? { distributedAmount: +discountByPercentage.toFixed(2) }
+                      : null,
+                  };
+                }
+              ),
               storeId: saleStore.storeId,
               totals: {
                 discount: dataDiscountAmountByStore

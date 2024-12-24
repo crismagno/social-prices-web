@@ -3,6 +3,10 @@ import SalesEnum from "../../../../shared/business/sales/sales.enum";
 import { CreateAddressDto } from "../../../../shared/business/shared/dtos/CreateAddress.dto";
 import { CreatePhoneNumberDto } from "../../../../shared/business/shared/dtos/CreatePhoneNumber.dto";
 
+export class SaleStoreProductDiscountDto {
+  distributedAmount: number | null = null;
+}
+
 export class SaleAmountNoteDto {
   amount: number = 0;
   note: string | null = null;
@@ -14,6 +18,7 @@ export class SaleStoreProductDto {
   quantity: number = 0;
   barCode: string = "";
   note: string | null = null;
+  discount: SaleStoreProductDiscountDto | null = null;
 }
 
 export class SaleTotalsDiscountDto {
