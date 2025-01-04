@@ -164,6 +164,7 @@ const formSchema = z.object({
   isCreateQuote: z.boolean(),
   paymentStatus: z.string().nonempty("Payment status is required"),
   tagsIds: z.array(z.string()),
+  deliveryAt: z.string().nullable(),
 });
 
 export type TFormSchema = z.infer<typeof formSchema>;
@@ -200,6 +201,7 @@ const generateFormSchemaDefault = (): TFormSchema => {
     isCreateQuote: false,
     paymentStatus: SalesEnum.PaymentStatus.PENDING,
     tagsIds: [],
+    deliveryAt: null,
   };
 };
 
@@ -384,6 +386,11 @@ export default function CreateSalePage() {
           paymentStatus:
             saleById?.paymentStatus ?? SalesEnum.PaymentStatus.PENDING,
           tagsIds: saleById?.tagsIds ?? [],
+          deliveryAt: saleById?.deliveryAt
+            ? moment(saleById.deliveryAt)
+                .utc()
+                .format(DatesEnum.Format.YYYYMMDD_DASHED)
+            : null,
         });
       };
 
@@ -899,6 +906,7 @@ export default function CreateSalePage() {
             };
           }
         ),
+        deliveryAt: data.deliveryAt ? moment(data.deliveryAt).toDate() : null,
       };
 
       let response: ISale | null = null;
@@ -1409,6 +1417,21 @@ export default function CreateSalePage() {
                 </Col>
               )}
             </Row>
+
+            <Row className="mt-3">
+              <Col xs={24} md={8}>
+                <InputCustomAntd
+                  controller={{ control, name: "deliveryAt" }}
+                  label="Delivery Date"
+                  divClassName="mt-0"
+                  type="date"
+                  placeholder={"Enter deliveryAt"}
+                  errorMessage={errors?.deliveryAt?.message}
+                  maxLength={200}
+                />
+              </Col>
+            </Row>
+
             <Row>
               <Col xs={24} md={8}>
                 <Tooltip title="See sale resume">

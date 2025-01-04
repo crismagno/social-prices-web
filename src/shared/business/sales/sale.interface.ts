@@ -28,6 +28,7 @@ export interface ISale
   stores: ISaleStore[];
   paymentStatus: SalesEnum.PaymentStatus;
   tagsIds: string[];
+  deliveryAt: Date | null;
 }
 
 export interface ISaleStore {
