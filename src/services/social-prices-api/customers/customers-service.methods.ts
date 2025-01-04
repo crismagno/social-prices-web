@@ -92,8 +92,8 @@ export default class CustomersServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
-  public async uploadCustomers(formData: FormData): Promise<ICustomer> {
-    const response = await this._fetchAxios.post<ICustomer>(
+  public async uploadCustomers(formData: FormData): Promise<void> {
+    const response = await this._fetchAxios.post<void>(
       `${this._socialPricesApiV1}${CustomersServiceEnum.Methods.UPLOAD_CUSTOMERS}`,
       formData,
       {

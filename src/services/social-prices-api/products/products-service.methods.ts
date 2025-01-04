@@ -119,4 +119,19 @@ export default class ProductsServiceMethods extends ServiceMethodsBase {
 
     return response.data;
   }
+
+  public async uploadProducts(formData: FormData): Promise<void> {
+    const response = await this._fetchAxios.post<void>(
+      `${this._socialPricesApiV1}${ProductsServiceEnum.Methods.UPLOAD_PRODUCTS}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
 }
