@@ -24,6 +24,9 @@ import CategoriesEnum from "../../../../../shared/business/categories/categories
 import { ICategory } from "../../../../../shared/business/categories/categories.interface";
 import { IProduct } from "../../../../../shared/business/products/products.interface";
 import { IStore } from "../../../../../shared/business/stores/stores.interface";
+import TagsEnum from "../../../../../shared/business/tags/tags.enum";
+import { ITag } from "../../../../../shared/business/tags/tags.interface";
+import { sortArray } from "../../../../../shared/utils/array/functions";
 import { defaultAvatarImage } from "../../../../../shared/utils/images/files-names";
 import { getImageUrl } from "../../../../../shared/utils/images/url-images";
 import {
@@ -34,6 +37,7 @@ import { createTableState } from "../../../../../shared/utils/table/table-state"
 import { ITableStateRequest } from "../../../../../shared/utils/table/table-state.interface";
 import { useFindCategoriesByType } from "../../../../categories/useFindCategoriesByType";
 import { useFindProductsByUserTableState } from "../../../../products/useFindProductsByUserTableState";
+import { useFindTagsByType } from "../../../../tags/useFindTagsByType";
 
 const productFormSchema = z.object({
   productId: z.string(),
@@ -82,6 +86,8 @@ export const AddProductsTable: React.FC<Props> = ({
 
   const [categoriesIds, setCategoriesIds] = useState<string[]>([]);
 
+  const [tagsIds, setTagsIds] = useState<string[]>([]);
+
   const [isActive, setIsActive] = useState<Array<boolean | null>>();
 
   const { control, getValues } = useForm<TFormSchema>({
@@ -94,6 +100,10 @@ export const AddProductsTable: React.FC<Props> = ({
 
   const { categories, isLoading: isLoadingCategories } =
     useFindCategoriesByType(CategoriesEnum.Type.PRODUCT);
+
+  const { tags, isLoading: isLoadingTags } = useFindTagsByType(
+    TagsEnum.Type.SALE
+  );
 
   useEffect(() => {
     setFormValues({
@@ -111,9 +121,9 @@ export const AddProductsTable: React.FC<Props> = ({
   useEffect(() => {
     setTableStateRequest({
       ...tableStateRequest,
-      filters: { storeIds: selectedStoreIds, categoriesIds, isActive },
+      filters: { storeIds: selectedStoreIds, categoriesIds, tagsIds, isActive },
     });
-  }, [selectedStoreIds, categoriesIds, isActive]);
+  }, [selectedStoreIds, categoriesIds, tagsIds, isActive]);
 
   const getStore = (storeId: string): IStore | undefined =>
     find(stores, { _id: storeId });
@@ -174,6 +184,22 @@ export const AddProductsTable: React.FC<Props> = ({
             {map(categories, (category: ICategory) => (
               <Select.Option key={category._id} value={category._id}>
                 {category.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Col>
+
+        <Col md={8}>
+          <Select
+            onChange={setTagsIds}
+            allowClear
+            placeholder={"Filter by Tags"}
+            mode="multiple"
+            style={{ width: "100%" }}
+          >
+            {map(sortArray(tags, "name"), (tag: ITag) => (
+              <Select.Option key={tag._id} value={tag._id}>
+                {tag.name}
               </Select.Option>
             ))}
           </Select>
@@ -342,7 +368,7 @@ export const AddProductsTable: React.FC<Props> = ({
           },
         ]}
         search={{ placeholder: "Search products.." }}
-        loading={isLoading || isLoadingCategories}
+        loading={isLoading || isLoadingCategories || isLoadingTags}
         pagination={{
           total,
         }}
