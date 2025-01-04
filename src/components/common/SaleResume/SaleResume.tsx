@@ -212,8 +212,10 @@ export const SaleResume: React.FC<Props> = ({ sale, stores, tags }) => {
         </label>
 
         <label>
-          {moment(buyer.birthDate).format(DatesEnum.Format.MMDDYYYY)} /{" "}
-          {PersonEnum.GenderLabels[customer.gender as PersonEnum.Gender]}
+          {buyer.birthDate
+            ? moment(buyer.birthDate).format(DatesEnum.Format.MMDDYYYY)
+            : ""}{" "}
+          / {PersonEnum.GenderLabels[customer.gender as PersonEnum.Gender]}
         </label>
 
         <div className="text-center">
@@ -316,6 +318,15 @@ export const SaleResume: React.FC<Props> = ({ sale, stores, tags }) => {
       <div className="flex justify-between pr-10 mt-2">
         <label className="font-semibold">Payment Status: </label>
         <label>{SalesEnum.PaymentStatusLabels[sale.paymentStatus]}</label>
+      </div>
+
+      <div className="flex justify-between pr-10 mt-2">
+        <label className="font-semibold">Delivery At: </label>
+        <label>
+          {sale.deliveryAt
+            ? moment(sale.deliveryAt).format(DatesEnum.Format.DDMMYYY)
+            : ""}
+        </label>
       </div>
 
       <Divider />

@@ -1,3 +1,5 @@
+import moment from "moment";
+
 namespace SalesEnum {
   export enum Type {
     MANUAL = "MANUAL",
@@ -101,6 +103,49 @@ namespace SalesEnum {
     [Status.PENDING]: "blue",
     [Status.REFUNDED]: "orange",
   };
+
+  export const getDeliveryAtColor = (deliveryAt: Date | null): string => {
+    if (!deliveryAt) {
+      return "gray";
+    }
+
+    const differenceDays: number = moment(deliveryAt).diff(new Date(), "days");
+
+    if (differenceDays < 1) {
+      return "red";
+    }
+
+    if (differenceDays === 1) {
+      return "orange";
+    }
+
+    if (differenceDays >= 2 && differenceDays <= 4) {
+      return "blue";
+    }
+
+    if (differenceDays > 4) {
+      return "green";
+    }
+
+    return "gray";
+  };
+
+  export const getDeliveryAtDifferenceDays = (
+    deliveryAt: Date | null
+  ): number => {
+    if (!deliveryAt) {
+      return 0;
+    }
+
+    return moment(deliveryAt).diff(new Date(), "days");
+  };
+
+  export const StatusToShowDeliveryAt = [
+    Status.PENDING,
+    Status.PROCESSING,
+    Status.STARTED,
+    Status.STOPPED,
+  ];
 }
 
 export default SalesEnum;

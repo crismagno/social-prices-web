@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import { Button, Card, Col, Modal, Row, Tag, Tooltip } from "antd";
-import { find, first, map } from "lodash";
+import { Badge, Button, Card, Col, Modal, Row, Tag, Tooltip } from "antd";
+import { find, first, includes, map } from "lodash";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
@@ -313,6 +313,42 @@ const SalesTable: React.FC<Props> = ({}) => {
               align: "center",
               render: (createdAt: Date) =>
                 moment(createdAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
+              sorter: true,
+            },
+            {
+              title: "Delivery At",
+              dataIndex: "deliveryAt",
+              key: "deliveryAt",
+              align: "center",
+              render: (deliveryAt: Date | null, sale: ISale) => {
+                if (!deliveryAt) {
+                  return null;
+                }
+
+                return (
+                  <>
+                    <span>
+                      {moment(deliveryAt).format(DatesEnum.Format.DDMMYYY)}
+                    </span>
+
+                    {includes(
+                      SalesEnum.StatusToShowDeliveryAt,
+                      sale.status
+                    ) && (
+                      <Tooltip title="Days Remaining">
+                        <Badge
+                          offset={[5, -5]}
+                          color={SalesEnum.getDeliveryAtColor(deliveryAt)}
+                          count={SalesEnum.getDeliveryAtDifferenceDays(
+                            deliveryAt
+                          )}
+                          showZero
+                        />
+                      </Tooltip>
+                    )}
+                  </>
+                );
+              },
               sorter: true,
             },
             {
