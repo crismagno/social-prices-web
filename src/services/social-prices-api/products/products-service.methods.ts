@@ -1,6 +1,7 @@
 "use client";
 
 import { IProduct } from "../../../shared/business/products/products.interface";
+import { IFiltersDownloadProducts } from "../../../shared/business/products/products.type";
 import {
   ITableStateRequest,
   ITableStateResponse,
@@ -129,6 +130,23 @@ export default class ProductsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async downloadProducts(
+    filters: IFiltersDownloadProducts
+  ): Promise<Buffer> {
+    const response = await this._fetchAxios.post<Buffer>(
+      `${this._socialPricesApiV1}${ProductsServiceEnum.Methods.DOWNLOAD_PRODUCTS}`,
+      filters,
+      {
+        headers: {
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+        responseType: "blob",
       }
     );
 

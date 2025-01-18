@@ -9,6 +9,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
 import {
+  DownloadOutlined,
   EditOutlined,
   PlusOutlined,
   QuestionCircleOutlined,
@@ -50,6 +51,7 @@ import {
 } from "../files-uploads/FilesUploadsTable";
 import { useFindStoresByUser } from "../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../tags/useFindTagsByType";
+import { DownloadProductsDrawer } from "./components/DownloadProductsDrawer/DownloadProductsDrawer";
 import { useFindProductsByUserTableState } from "./useFindProductsByUserTableState";
 
 export default function ProductsPage() {
@@ -76,6 +78,9 @@ export default function ProductsPage() {
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
   const [isUploadFilesDrawerOpen, setIsUploadFilesDrawerOpen] =
+    useState<boolean>(false);
+
+  const [isDownloadProductsDrawerOpen, setIsDownloadProductsDrawerOpen] =
     useState<boolean>(false);
 
   const filesUploadsTableRef: RefObject<IFilesUploadsTableRefProps> =
@@ -112,6 +117,15 @@ export default function ProductsPage() {
         className="h-min-80 mt-5"
         extra={
           <>
+            <Button
+              type="primary"
+              onClick={() => setIsDownloadProductsDrawerOpen(true)}
+              className="mr-2"
+              icon={<DownloadOutlined />}
+            >
+              Download
+            </Button>
+
             <Button
               type="primary"
               onClick={() => setIsUploadFilesDrawerOpen(true)}
@@ -375,6 +389,15 @@ export default function ProductsPage() {
           ref={filesUploadsTableRef}
         />
       </UploadFilesDrawer>
+
+      <DownloadProductsDrawer
+        isOpen={isDownloadProductsDrawerOpen}
+        onClose={() => setIsDownloadProductsDrawerOpen(false)}
+        title="Download Products"
+        tags={tagsSort}
+        categories={categories}
+        stores={stores}
+      />
     </Layout>
   );
 }

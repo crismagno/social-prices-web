@@ -8,6 +8,7 @@ namespace ProductsServiceEnum {
     FIND_BY_USER_TABLE_STATE = "/products/userTableState",
     COUNT_BY_USER = "/products/user/count",
     UPLOAD_PRODUCTS = "/products/uploadProducts",
+    DOWNLOAD_PRODUCTS = "/products/downloadProducts",
   }
 }
 
