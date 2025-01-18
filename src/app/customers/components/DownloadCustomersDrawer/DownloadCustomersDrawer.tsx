@@ -94,6 +94,7 @@ export const DownloadCustomersDrawer: React.FC<Props> = ({
               placeholder={"Search customers..."}
               errorMessage={errors.search?.message}
               maxLength={200}
+              allowClear
             />
           </Col>
 
@@ -104,6 +105,7 @@ export const DownloadCustomersDrawer: React.FC<Props> = ({
               errorMessage={errors.tagsIds?.message}
               placeholder={"Select tags"}
               mode="multiple"
+              allowClear
             >
               {tags.map((tag: ITag) => (
                 <Select.Option key={tag._id} value={tag._id}>

@@ -107,6 +107,7 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
               placeholder={"Search products..."}
               errorMessage={errors.search?.message}
               maxLength={200}
+              allowClear
             />
           </Col>
 
@@ -117,6 +118,7 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
               errorMessage={errors.tagsIds?.message}
               placeholder={"Select tags"}
               mode="multiple"
+              allowClear
             >
               {tags.map((tag: ITag) => (
                 <Select.Option key={tag._id} value={tag._id}>
@@ -133,6 +135,7 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
               errorMessage={errors.categoriesIds?.message}
               placeholder={"Select categories"}
               mode="multiple"
+              allowClear
             >
               {categories.map((category: ICategory) => (
                 <Select.Option key={category._id} value={category._id}>
@@ -149,6 +152,7 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
               errorMessage={errors.storeIds?.message}
               placeholder={"Select stores"}
               mode="multiple"
+              allowClear
             >
               {stores.map((store: IStore) => (
                 <Select.Option key={store._id} value={store._id}>
