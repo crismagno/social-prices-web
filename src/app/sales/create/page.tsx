@@ -123,7 +123,7 @@ export type TCustomerFormSchema = z.infer<typeof customerFormSchema>;
 
 const saleStoreProductFormSchema = z.object({
   productId: z.string(),
-  barCode: z.string(),
+  barcode: z.string(),
   name: z.string(),
   note: z.string().nullable(),
   quantity: z.number(),
@@ -307,7 +307,7 @@ export default function CreateSalePage() {
                 });
 
                 return {
-                  barCode: storeProduct.barCode,
+                  barcode: storeProduct.barcode,
                   fileUrl: product?.mainUrl ?? null,
                   name: product?.name ?? "",
                   note: storeProduct.note,
@@ -415,7 +415,7 @@ export default function CreateSalePage() {
               storeId: firstStoreIdByProduct ?? initialSelectedStoreId,
               products: [
                 {
-                  barCode: product.barCode!,
+                  barcode: product.barcode!,
                   fileUrl: product.mainUrl!,
                   name: product.name,
                   note: null,
@@ -550,7 +550,7 @@ export default function CreateSalePage() {
         storeId: productToAddOnSale.storeId,
         products: [
           {
-            barCode: productToAddOnSale.product.barCode,
+            barcode: productToAddOnSale.product.barcode,
             note: null,
             price: productToAddOnSale.product.price,
             productId: productToAddOnSale.product.productId,
@@ -567,7 +567,7 @@ export default function CreateSalePage() {
       );
 
       if (storeProductProduct) {
-        storeProductProduct.barCode = productToAddOnSale.product.barCode;
+        storeProductProduct.barcode = productToAddOnSale.product.barcode;
         storeProductProduct.note = null;
         storeProductProduct.price = productToAddOnSale.product.price;
         storeProductProduct.productId = productToAddOnSale.product.productId;
@@ -576,7 +576,7 @@ export default function CreateSalePage() {
         storeProductProduct.fileUrl = productToAddOnSale.product.fileUrl;
       } else {
         storeProduct.products.push({
-          barCode: productToAddOnSale.product.barCode,
+          barcode: productToAddOnSale.product.barcode,
           note: null,
           price: productToAddOnSale.product.price,
           productId: productToAddOnSale.product.productId,

@@ -55,7 +55,7 @@ type TFormSchema = z.infer<typeof formSchema>;
 
 export interface IProductToAddOnSale {
   productId: string;
-  barCode: string;
+  barcode: string;
   quantity: number;
   price: number;
   name: string;
@@ -163,7 +163,7 @@ export const AddProductsTable: React.FC<Props> = ({
         price: productForm.price ?? 0,
         productId,
         quantity: productForm.quantity,
-        barCode: product.barCode ?? "",
+        barcode: product.barcode ?? "",
         fileUrl: product.filesUrl?.[0] ?? null,
         name: product.name,
       },
@@ -268,7 +268,7 @@ export const AddProductsTable: React.FC<Props> = ({
 
                   <div className="flex flex-col text-start">
                     <span className="text-lg">{product.name}</span>
-                    <span className="text-xs">{product.barCode}</span>
+                    <span className="text-xs">{product.barcode}</span>
                   </div>
                 </div>
               );

@@ -182,9 +182,9 @@ export default function ProductsPage() {
               align: "center",
             },
             {
-              title: "BarCode",
-              dataIndex: "barCode",
-              key: "barCode",
+              title: "Barcode",
+              dataIndex: "barcode",
+              key: "barcode",
               align: "center",
             },
             {

@@ -171,7 +171,7 @@ export const SaleResume: React.FC<Props> = ({ sale, stores, tags }) => {
                           </span>
 
                           <span className="text-xs">
-                            {saleStoreProduct.barCode}
+                            {saleStoreProduct.barcode}
                           </span>
                         </div>
                       </div>

@@ -73,7 +73,7 @@ const formSchema = z.object({
   price: z.any().optional(),
   isActive: z.boolean(),
   storeIds: z.array(z.string()).min(1, "Should select at least one store"),
-  barCode: z.string().trim().optional(),
+  barcode: z.string().trim().optional(),
   QRCode: z.string().optional(),
   categoriesIds: z.array(z.string()),
   tagsIds: z.array(z.string()),
@@ -137,7 +137,7 @@ export default function ProductDetailPage() {
     const values: TFormSchema = {
       name: product?.name ?? "",
       description: product?.description ?? "",
-      barCode: product?.barCode ?? "",
+      barcode: product?.barcode ?? "",
       details: product?.details ?? "",
       isActive: product ? product.isActive : true,
       price: product?.price ?? 0,
@@ -185,10 +185,10 @@ export default function ProductDetailPage() {
 
   const createProduct = async (data: TFormSchema) => {
     try {
-      if (fileList.length === 0) {
-        message.warning("Please select a image.");
-        return;
-      }
+      // if (fileList.length === 0) {
+      //   message.warning("Please select a image.");
+      //   return;
+      // }
 
       setIsSubmitting(true);
 
@@ -206,7 +206,7 @@ export default function ProductDetailPage() {
         price: data.price ?? 0,
         quantity: data.quantity ?? 0,
         storeIds: data.storeIds,
-        barCode: data.barCode ?? null,
+        barcode: data.barcode ?? null,
         QRCode: data.QRCode ?? null,
         categoriesIds: data.categoriesIds ?? [],
         tagsIds: data.tagsIds ?? [],
@@ -236,10 +236,10 @@ export default function ProductDetailPage() {
 
   const updateProduct = async (data: TFormSchema) => {
     try {
-      if (fileList.length === 0) {
-        message.warning("Please select a image.");
-        return;
-      }
+      // if (fileList.length === 0) {
+      //   message.warning("Please select a image.");
+      //   return;
+      // }
 
       setIsSubmitting(true);
 
@@ -268,7 +268,7 @@ export default function ProductDetailPage() {
         name: data.name,
         price: data.price ?? 0,
         quantity: data.quantity ?? 0,
-        barCode: data.barCode ?? null,
+        barcode: data.barcode ?? null,
         storeIds: data.storeIds,
         productId: product!._id,
         QRCode: data.QRCode ?? null,
@@ -356,10 +356,10 @@ export default function ProductDetailPage() {
 
             <Col xs={24} md={8}>
               <InputCustomAntd
-                controller={{ control, name: "barCode" }}
+                controller={{ control, name: "barcode" }}
                 label="Barcode"
                 placeholder={"Enter barcode"}
-                errorMessage={errors.barCode?.message}
+                errorMessage={errors.barcode?.message}
                 maxLength={100}
               />
             </Col>

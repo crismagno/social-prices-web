@@ -13,7 +13,7 @@ export interface IProduct extends ICreatedAtEntity, IUpdatedAtEntity {
   storeIds: string[];
   filesUrl: string[];
   mainUrl: string | null;
-  barCode: string | null;
+  barcode: string | null;
   QRCode: string | null;
   categoriesIds: string[];
   tagsIds: string[];

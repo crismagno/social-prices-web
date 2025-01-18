@@ -1,6 +1,6 @@
 export default class CreateProductDto {
   name: string = "";
-  barCode: string | null = null;
+  barcode: string | null = null;
   details: string | null = null;
   quantity: number = 0;
   description: string | null = null;

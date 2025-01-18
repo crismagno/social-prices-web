@@ -16,7 +16,7 @@ export class SaleStoreProductDto {
   productId: string = "";
   price: number = 0;
   quantity: number = 0;
-  barCode: string = "";
+  barcode: string = "";
   note: string | null = null;
   discount: SaleStoreProductDiscountDto | null = null;
 }
