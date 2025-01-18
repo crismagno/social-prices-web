@@ -1,7 +1,7 @@
 import { Tag } from "antd";
 
 import { IAddress } from "../../../shared/business/interfaces/address.interface";
-import { createAddressName } from "../../../shared/utils/string-extensions/string-extensions";
+import { createAddressName } from "../../../shared/utils/strings/string-extensions";
 
 interface Props {
   addresses: IAddress[];

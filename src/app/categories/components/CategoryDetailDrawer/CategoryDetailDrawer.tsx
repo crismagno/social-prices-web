@@ -18,7 +18,7 @@ import UpdateCategoryDto from "../../../../services/social-prices-api/categories
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/ServiceMethods";
 import CategoriesEnum from "../../../../shared/business/categories/categories.enum";
 import { ICategory } from "../../../../shared/business/categories/categories.interface";
-import { parseToUpperAndUnderline } from "../../../../shared/utils/string-extensions/string-extensions";
+import { parseToUpperAndUnderline } from "../../../../shared/utils/strings/string-extensions";
 import { useFindCategoryById } from "../../useFindCategoryById";
 
 const formSchema = z.object({

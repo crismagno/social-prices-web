@@ -87,7 +87,20 @@ export const SocketProvider = ({ children }: { children?: any }) => {
               "Upload Customers has completed but there are error on some file, please check on customer upload table!"
             );
           } else {
-            message.info("Upload Customers Completed!");
+            message.success("Upload Customers Completed!");
+          }
+        }
+      );
+
+      socket.on(
+        `upload-products-response-to-employee-${employee._id}`,
+        (data: IFileUploadTemplateError<ICustomerFileUploadTemplateRow>[]) => {
+          if (data.length > 0) {
+            message.warning(
+              "Upload Products has completed but there are error on some file, please check on product upload table!"
+            );
+          } else {
+            message.success("Upload Products Completed!");
           }
         }
       );

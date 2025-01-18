@@ -25,7 +25,7 @@ import { serviceMethodsInstance } from "../../../../../services/social-prices-ap
 import PhoneNumberEnum from "../../../../../shared/business/enums/phone-number.enum";
 import { IPhoneNumber } from "../../../../../shared/business/interfaces/phone-number.interface";
 import IUser from "../../../../../shared/business/users/user.interface";
-import { createPhoneNumberName } from "../../../../../shared/utils/string-extensions/string-extensions";
+import { createPhoneNumberName } from "../../../../../shared/utils/strings/string-extensions";
 
 const phoneNumberFormSchema = z.object({
   uid: z.string(),

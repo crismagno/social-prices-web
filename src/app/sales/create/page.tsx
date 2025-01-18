@@ -85,7 +85,7 @@ import {
   getPercentageByValue,
   getValueByPercentage,
 } from "../../../shared/utils/numbers/numbers";
-import { createAddressName } from "../../../shared/utils/string-extensions/string-extensions";
+import { createAddressName } from "../../../shared/utils/strings/string-extensions";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindSaleById } from "../useFindSaleById";

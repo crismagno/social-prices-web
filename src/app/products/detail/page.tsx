@@ -59,7 +59,7 @@ import { getImageUrl } from "../../../shared/utils/images/url-images";
 import {
   formatterMoney,
   parserMoney,
-} from "../../../shared/utils/string-extensions/string-extensions";
+} from "../../../shared/utils/strings/string-extensions";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";

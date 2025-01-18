@@ -21,7 +21,7 @@ import {
   formatterMoney,
   formatToMoneyDecimal,
   parserMoney,
-} from "../../../../../shared/utils/string-extensions/string-extensions";
+} from "../../../../../shared/utils/strings/string-extensions";
 import {
   TFormSchema,
   TSaleStoreFormSchema,

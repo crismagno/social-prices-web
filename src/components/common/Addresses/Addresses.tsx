@@ -12,7 +12,7 @@ import {
   ICountryMockData,
   IStateMockData,
 } from "../../../shared/utils/mock-data/interfaces";
-import { createAddressName } from "../../../shared/utils/string-extensions/string-extensions";
+import { createAddressName } from "../../../shared/utils/strings/string-extensions";
 import { InputCustomAntd } from "../../custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../custom/antd/SelectCustomAntd/SelectCustomAntd";
 import ButtonCommon from "../ButtonCommon/ButtonCommon";

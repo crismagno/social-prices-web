@@ -40,7 +40,7 @@ import { sortArray } from "../../shared/utils/array/functions";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../shared/utils/images/files-names";
 import { getImageUrl } from "../../shared/utils/images/url-images";
-import { formatterMoney } from "../../shared/utils/string-extensions/string-extensions";
+import { formatterMoney } from "../../shared/utils/strings/string-extensions";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";

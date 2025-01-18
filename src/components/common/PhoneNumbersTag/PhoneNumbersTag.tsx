@@ -2,7 +2,7 @@ import { Tag, Tooltip } from "antd";
 
 import PhoneNumberEnum from "../../../shared/business/enums/phone-number.enum";
 import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number.interface";
-import { messengersToString } from "../../../shared/utils/string-extensions/string-extensions";
+import { messengersToString } from "../../../shared/utils/strings/string-extensions";
 
 interface Props {
   phoneNumbers: IPhoneNumber[];
