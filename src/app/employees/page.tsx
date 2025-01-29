@@ -32,6 +32,7 @@ import { useFindEmployeesByUserTableState } from "./useFindEmployeesByUserTableS
 
 export default function EmployeesPage() {
   const { employee } = useAuthData();
+
   const router: AppRouterInstance = useRouter();
 
   const [tableStateRequest, setTableStateRequest] = useState<
@@ -57,13 +58,15 @@ export default function EmployeesPage() {
         title="Employees"
         className="h-min-80 mt-5"
         extra={
-          <Button
-            type="primary"
-            onClick={() => router.push(Urls.NEW_EMPLOYEE)}
-            icon={<PlusOutlined />}
-          >
-            New Employee
-          </Button>
+          employee?.level !== EmployeesEnum.Level.EMPLOYEE && (
+            <Button
+              type="primary"
+              onClick={() => router.push(Urls.NEW_EMPLOYEE)}
+              icon={<PlusOutlined />}
+            >
+              New Employee
+            </Button>
+          )
         }
       >
         <TableCustomAntd2<IEmployee>

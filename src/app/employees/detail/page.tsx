@@ -50,6 +50,7 @@ import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd
 import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
+import useAuthData from "../../../data/context/auth/useAuthData";
 import CreateEmployeeDto from "../../../services/social-prices-api/employees/dto/createEmployee.dto";
 import UpdateEmployeeDto from "../../../services/social-prices-api/employees/dto/updateEmployee.dto";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
@@ -84,13 +85,16 @@ const formSchema = z.object({
 type TFormSchema = z.infer<typeof formSchema>;
 
 export default function EmployeeDetailPage() {
+  const { employee } = useAuthData();
+
   const router: AppRouterInstance = useRouter();
 
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
 
   const employeeId: string | null = searchParams.get("empid");
 
-  const { employee, isLoading } = useFindEmployeeById(employeeId);
+  const { employee: employeeToEdit, isLoading } =
+    useFindEmployeeById(employeeId);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
     TagsEnum.Type.EMPLOYEE
@@ -98,7 +102,7 @@ export default function EmployeeDetailPage() {
 
   const [formValues, setFormValues] = useState<TFormSchema>();
 
-  const isEditMode: boolean = !!employeeId && !!employee;
+  const isEditMode: boolean = !!employeeId && !!employeeToEdit;
 
   const {
     handleSubmit,
@@ -120,42 +124,42 @@ export default function EmployeeDetailPage() {
   const [avatarUrl, setAvatarUrl] = useState<string | null>();
 
   useEffect(() => {
-    if (employee?.avatar) {
-      const url: string = getImageUrl(employee.avatar);
+    if (employeeToEdit?.avatar) {
+      const url: string = getImageUrl(employeeToEdit.avatar);
       setAvatarUrl(url);
     }
 
     const values: TFormSchema = {
-      about: employee?.about ?? null,
-      name: employee?.name ?? "",
-      email: employee?.email ?? "",
+      about: employeeToEdit?.about ?? null,
+      name: employeeToEdit?.name ?? "",
+      email: employeeToEdit?.email ?? "",
       password: "",
-      birthDate: moment(employee?.birthDate)
+      birthDate: moment(employeeToEdit?.birthDate)
         .utc()
         .format(DatesEnum.Format.YYYYMMDD_DASHED),
-      addresses: employee?.addresses.length
-        ? employee.addresses.map((address: IAddress, index: number) => ({
+      addresses: employeeToEdit?.addresses.length
+        ? employeeToEdit.addresses.map((address: IAddress, index: number) => ({
             ...address,
             countryCode: address.country?.code,
             stateCode: address.state?.code ?? "",
             isCollapsed: index === 0,
           }))
         : [generateNewAddress(false)],
-      phoneNumbers: employee?.phoneNumbers.length
-        ? employee?.phoneNumbers.map(
+      phoneNumbers: employeeToEdit?.phoneNumbers.length
+        ? employeeToEdit?.phoneNumbers.map(
             (phoneNumber: IPhoneNumber, index: number) => ({
               ...phoneNumber,
               isCollapsed: index === 0,
             })
           )
         : [generateNewPhoneNumber(false)],
-      gender: employee?.gender ?? PersonEnum.Gender.OTHER,
-      tagsIds: employee?.tagsIds ?? [],
-      level: employee?.level ?? EmployeesEnum.Level.EMPLOYEE,
+      gender: employeeToEdit?.gender ?? PersonEnum.Gender.OTHER,
+      tagsIds: employeeToEdit?.tagsIds ?? [],
+      level: employeeToEdit?.level ?? EmployeesEnum.Level.EMPLOYEE,
     };
 
     setFormValues(values);
-  }, [employee]);
+  }, [employeeToEdit]);
 
   if ((employeeId && isLoading) || isLoadingTags) {
     return <LoadingFull />;
@@ -240,7 +244,7 @@ export default function EmployeeDetailPage() {
 
   const handleUpdate = async (data: TFormSchema) => {
     try {
-      if (!employee) {
+      if (!employeeToEdit) {
         message.warning("Employee not found to update!");
         return;
       }
@@ -281,7 +285,7 @@ export default function EmployeeDetailPage() {
         gender: data.gender as PersonEnum.Gender,
         phoneNumbers: data.phoneNumbers,
         tagsIds: data.tagsIds,
-        employeeId: employee._id,
+        employeeId: employeeToEdit._id,
         level: data.level as EmployeesEnum.Level,
         password: data.password,
       };
@@ -312,8 +316,8 @@ export default function EmployeeDetailPage() {
     setIsVisibleAvatarModal(false);
     setFileList(fileList);
 
-    let url: string | null = employee?.avatar
-      ? getImageUrl(employee.avatar)
+    let url: string | null = employeeToEdit?.avatar
+      ? getImageUrl(employeeToEdit.avatar)
       : null;
 
     if (fileList.length) {
@@ -326,7 +330,9 @@ export default function EmployeeDetailPage() {
   return (
     <Layout
       subtitle={isEditMode ? "Edit employee details" : "New employee details"}
-      title={isEditMode ? `Edit employee: ${employee?.name}` : "New employee"}
+      title={
+        isEditMode ? `Edit employee: ${employeeToEdit?.name}` : "New employee"
+      }
       hasBackButton
     >
       <Card className="h-min-80 mt-2">
@@ -443,17 +449,25 @@ export default function EmployeeDetailPage() {
                 label="Level"
                 errorMessage={errors.level?.message}
               >
-                {Object.keys(EmployeesEnum.Level).map((level: string) => (
-                  <Select.Option key={level} value={level}>
-                    <Tag
-                      color={
-                        EmployeesEnum.LevelColors[level as EmployeesEnum.Level]
-                      }
-                    >
-                      {EmployeesEnum.LevelLabels[level as EmployeesEnum.Level]}
-                    </Tag>
-                  </Select.Option>
-                ))}
+                {EmployeesEnum.getLevelsByEmployeeLevel(employee?.level!).map(
+                  (level: string) => (
+                    <Select.Option key={level} value={level}>
+                      <Tag
+                        color={
+                          EmployeesEnum.LevelColors[
+                            level as EmployeesEnum.Level
+                          ]
+                        }
+                      >
+                        {
+                          EmployeesEnum.LevelLabels[
+                            level as EmployeesEnum.Level
+                          ]
+                        }
+                      </Tag>
+                    </Select.Option>
+                  )
+                )}
               </SelectCustomAntd>
             </Col>
           </Row>
