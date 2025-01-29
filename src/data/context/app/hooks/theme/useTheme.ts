@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import ThemeEnum from "../../../../../shared/common/enums/theme.enum";
-import LocalStorageThemeMethods from "../../../../../shared/common/local-storage/methods/local-storage-theme.methods";
+import { localStorageMethodsInstance } from "../../../../../shared/common/local-storage/local-storage-methods";
 
 export interface IAppContextTheme {
   theme: ThemeEnum.Theme;
@@ -24,12 +24,14 @@ export const useTheme = (): IAppContextTheme => {
 
     setTheme(selectedTheme);
 
-    LocalStorageThemeMethods.setTheme(selectedTheme);
+    localStorageMethodsInstance.localStorageThemeMethods.setTheme(
+      selectedTheme
+    );
   };
 
   useEffect(() => {
     const selectedTheme: ThemeEnum.Theme | null =
-      LocalStorageThemeMethods.getTheme();
+      localStorageMethodsInstance.localStorageThemeMethods.getTheme();
 
     if (selectedTheme) {
       setTheme(selectedTheme);

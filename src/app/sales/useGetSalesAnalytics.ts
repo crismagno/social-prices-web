@@ -5,7 +5,7 @@ import {
   IGetSalesAnalyticsParams,
   IGetSalesAnalyticsResponse,
 } from "../../services/social-prices-api/sales/sales-service.types";
-import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 
 export const useGetSalesAnalytics = (
   params: IGetSalesAnalyticsParams

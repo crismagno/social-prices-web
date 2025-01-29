@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import handleClientError from "../../components/common/handleClientError/handleClientError";
-import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import { ITag } from "../../shared/business/tags/tags.interface";
 import {
   ITableStateRequest,

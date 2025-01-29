@@ -14,7 +14,7 @@ import handleClientError from "../../components/common/handleClientError/handleC
 import Loading from "../../components/common/Loading/Loading";
 import useAuthData from "../../data/context/auth/useAuthData";
 import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
-import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import { ISearchEmployee } from "../../shared/business/employees/employees.types";
 import Urls from "../../shared/common/routes-app/routes-app";
 

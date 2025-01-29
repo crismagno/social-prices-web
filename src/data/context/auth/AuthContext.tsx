@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
 import firebaseApp from "../../../services/firebase/config";
-import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import {
   IAuthLogin,
   IAuthUserEmployee,
@@ -25,9 +25,7 @@ import PhoneNumberEnum from "../../../shared/business/enums/phone-number.enum";
 import IUser from "../../../shared/business/users/user.interface";
 import UsersEnum from "../../../shared/business/users/users.enum";
 import CookiesEnum from "../../../shared/common/cookies/cookies.enum";
-import LocalStorageAuthTokenMethods from "../../../shared/common/local-storage/methods/local-storage-auth-token.methods";
-import LocalStorageEmployeeMethods from "../../../shared/common/local-storage/methods/local-storage-employee.methods";
-import LocalStorageUserMethods from "../../../shared/common/local-storage/methods/local-storage-user.methods";
+import { localStorageMethodsInstance } from "../../../shared/common/local-storage/local-storage-methods";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import {
   makeRandomCode,
@@ -132,21 +130,25 @@ const __managerLocalStorage = (
   } | null = null
 ) => {
   if (params?.user) {
-    LocalStorageUserMethods.setUser(params.user);
+    localStorageMethodsInstance.localStorageUserMethods.setUser(params.user);
   } else {
-    LocalStorageUserMethods.removeUser();
+    localStorageMethodsInstance.localStorageUserMethods.removeUser();
   }
 
   if (params?.employee) {
-    LocalStorageEmployeeMethods.setEmployee(params.employee);
+    localStorageMethodsInstance.localStorageEmployeeMethods.setEmployee(
+      params.employee
+    );
   } else {
-    LocalStorageEmployeeMethods.removeEmployee();
+    localStorageMethodsInstance.localStorageEmployeeMethods.removeEmployee();
   }
 
   if (params?.authToken) {
-    LocalStorageAuthTokenMethods.setAuthToken(params.authToken);
+    localStorageMethodsInstance.localStorageAuthTokenMethods.setAuthToken(
+      params.authToken
+    );
   } else {
-    LocalStorageAuthTokenMethods.removeAuthToken();
+    localStorageMethodsInstance.localStorageAuthTokenMethods.removeAuthToken();
   }
 };
 
@@ -226,7 +228,8 @@ export const AuthProvider = ({ children }: { children?: any }) => {
         const newUser: IUser = __mergeUserUpdated(userParam, response.user);
 
         _settingSession({
-          authToken: LocalStorageAuthTokenMethods.getAuthToken(),
+          authToken:
+            localStorageMethodsInstance.localStorageAuthTokenMethods.getAuthToken(),
           employee: response.employee,
           user: newUser,
         });
@@ -254,10 +257,10 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     userFirebase: User | null
   ): Promise<string | null | undefined> => {
     const userFromLocalStorage: IUser | null =
-      LocalStorageUserMethods.getUser();
+      localStorageMethodsInstance.localStorageUserMethods.getUser();
 
     const authTokenFromLocalStorage: string | null =
-      LocalStorageAuthTokenMethods.getAuthToken();
+      localStorageMethodsInstance.localStorageAuthTokenMethods.getAuthToken();
 
     if (
       userFirebase?.email &&
@@ -483,8 +486,10 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     const userUpdated: IUser = __mergeUserUpdated(user, newUser);
 
     _settingSession({
-      authToken: LocalStorageAuthTokenMethods.getAuthToken(),
-      employee: LocalStorageEmployeeMethods.getEmployee(),
+      authToken:
+        localStorageMethodsInstance.localStorageAuthTokenMethods.getAuthToken(),
+      employee:
+        localStorageMethodsInstance.localStorageEmployeeMethods.getEmployee(),
       user: userUpdated,
     });
   };
@@ -549,10 +554,10 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     }
 
     const userFromLocalStorage: IUser | null =
-      LocalStorageUserMethods.getUser();
+      localStorageMethodsInstance.localStorageUserMethods.getUser();
 
     const authTokenFromLocalStorage: string | null =
-      LocalStorageAuthTokenMethods.getAuthToken();
+      localStorageMethodsInstance.localStorageAuthTokenMethods.getAuthToken();
 
     if (!userFromLocalStorage || !authTokenFromLocalStorage) {
       _settingSession();

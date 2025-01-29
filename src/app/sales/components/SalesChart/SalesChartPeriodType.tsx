@@ -16,7 +16,7 @@ import { IGetSalesAnalyticsResponse } from "../../../../services/social-prices-a
 import { ITotalQuantity } from "../../../../shared/common/interfaces/global.interface";
 import ChartsEnum from "../../../../shared/utils/charts/charts-enum";
 import { IChartDataPeriodTypeItem } from "../../../../shared/utils/charts/charts-types";
-import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string-extensions";
+import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
 
 interface Props {
   salesAnalytics: IGetSalesAnalyticsResponse | null;

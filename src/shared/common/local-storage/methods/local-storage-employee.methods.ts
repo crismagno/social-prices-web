@@ -2,7 +2,7 @@ import { IEmployee } from "../../../business/employees/employee.interface";
 import LocalStorageEnum from "../local-storage.enum";
 
 export default class LocalStorageEmployeeMethods {
-  public static getEmployee = (): IEmployee | null => {
+  public getEmployee = (): IEmployee | null => {
     const item: string | null = localStorage.getItem(
       LocalStorageEnum.keys.EMPLOYEE
     );
@@ -14,14 +14,14 @@ export default class LocalStorageEmployeeMethods {
     return null;
   };
 
-  public static setEmployee = (employee: IEmployee | null): void => {
+  public setEmployee = (employee: IEmployee | null): void => {
     localStorage.setItem(
       LocalStorageEnum.keys.EMPLOYEE,
       JSON.stringify(employee)
     );
   };
 
-  public static removeEmployee = (): void => {
+  public removeEmployee = (): void => {
     localStorage.removeItem(LocalStorageEnum.keys.EMPLOYEE);
   };
 }

@@ -32,7 +32,7 @@ import { getImageUrl } from "../../../../../shared/utils/images/url-images";
 import {
   formatterMoney,
   parserMoney,
-} from "../../../../../shared/utils/strings/string-extensions";
+} from "../../../../../shared/utils/strings/string";
 import { createTableState } from "../../../../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../../../../shared/utils/table/table-state.interface";
 import { useFindCategoriesByType } from "../../../../categories/useFindCategoriesByType";

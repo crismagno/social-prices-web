@@ -19,7 +19,7 @@ import { SaleResume } from "../../../../components/common/SaleResume/SaleResume"
 import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
 import { TagTagsCustomAntd } from "../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import TableCustomAntd2 from "../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
-import { serviceMethodsInstance } from "../../../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import { ICustomer } from "../../../../shared/business/customers/customer.interface";
 import { IProduct } from "../../../../shared/business/products/products.interface";
 import {

@@ -46,7 +46,7 @@ import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCust
 import Layout from "../../../components/template/Layout/Layout";
 import CreateProductDto from "../../../services/social-prices-api/products/dto/createProduct.dto";
 import UpdateProductDto from "../../../services/social-prices-api/products/dto/updateProduct.dto";
-import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import CategoriesEnum from "../../../shared/business/categories/categories.enum";
 import { ICategory } from "../../../shared/business/categories/categories.interface";
 import { IProduct } from "../../../shared/business/products/products.interface";
@@ -59,7 +59,7 @@ import { getImageUrl } from "../../../shared/utils/images/url-images";
 import {
   formatterMoney,
   parserMoney,
-} from "../../../shared/utils/strings/string-extensions";
+} from "../../../shared/utils/strings/string";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";

@@ -12,7 +12,7 @@ import handleClientError from "../../components/common/handleClientError/handleC
 import HrCustom from "../../components/common/HrCustom/HrCustom";
 import Loading from "../../components/common/Loading/Loading";
 import useAuthData from "../../data/context/auth/useAuthData";
-import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import IUser from "../../shared/business/users/user.interface";
 
 export default function UpdateEmailPage() {

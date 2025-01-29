@@ -21,7 +21,7 @@ import { getImageUrl } from "../../../shared/utils/images/url-images";
 import {
   createAddressName,
   formatToMoneyDecimal,
-} from "../../../shared/utils/strings/string-extensions";
+} from "../../../shared/utils/strings/string";
 import { ImageOrDefault } from "../ImageOrDefault/ImageOrDefault";
 import { TagTagsCustomAntd } from "../TagTagsCustomAntd/TagTagsCustomAntd";
 

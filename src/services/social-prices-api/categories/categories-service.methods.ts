@@ -6,7 +6,7 @@ import {
   ITableStateRequest,
   ITableStateResponse,
 } from "../../../shared/utils/table/table-state.interface";
-import ServiceMethodsBase from "../ServiceMethods.base";
+import ServiceMethodsBase from "../service-methods.base";
 import CategoriesServiceEnum from "./categories-service.enum";
 import CreateCategoryDto from "./dto/createCategory.dto";
 import CreateCategoryMultiDto from "./dto/createCategoryMulti.dto";

@@ -7,7 +7,7 @@ import { IGetSalesAnalyticsResponse } from "../../../../services/social-prices-a
 import CommonEnum from "../../../../shared/common/enums/common.enum";
 import { IChartDataProductItem } from "../../../../shared/utils/charts/charts-types";
 import { getImageUrl } from "../../../../shared/utils/images/url-images";
-import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string-extensions";
+import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
 
 interface Props {
   salesAnalytics: IGetSalesAnalyticsResponse | null;

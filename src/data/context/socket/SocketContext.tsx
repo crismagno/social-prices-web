@@ -78,7 +78,7 @@ export const SocketProvider = ({ children }: { children?: any }) => {
   }, []);
 
   useEffect(() => {
-    if (socket?.connected && employee && isLogged) {
+    if (socket?.connected && employee?._id && isLogged) {
       socket.on(
         `upload-customers-response-to-employee-${employee._id}`,
         (data: IFileUploadTemplateError<ICustomerFileUploadTemplateRow>[]) => {
@@ -105,7 +105,7 @@ export const SocketProvider = ({ children }: { children?: any }) => {
         }
       );
     }
-  }, [socket, employee, isLogged]);
+  }, [socket, employee?._id, isLogged]);
 
   return (
     <SocketContext.Provider

@@ -52,7 +52,7 @@ import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCust
 import Layout from "../../../components/template/Layout/Layout";
 import CreateEmployeeDto from "../../../services/social-prices-api/employees/dto/createEmployee.dto";
 import UpdateEmployeeDto from "../../../services/social-prices-api/employees/dto/updateEmployee.dto";
-import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import { IEmployee } from "../../../shared/business/employees/employee.interface";
 import EmployeesEnum from "../../../shared/business/employees/employees.enum";
 import AddressEnum from "../../../shared/business/enums/address.enum";

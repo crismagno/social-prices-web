@@ -14,7 +14,7 @@ import CommonEnum from "../../../../shared/common/enums/common.enum";
 import { ITotalQuantity } from "../../../../shared/common/interfaces/global.interface";
 import Urls from "../../../../shared/common/routes-app/routes-app";
 import { IChartDataProductItem } from "../../../../shared/utils/charts/charts-types";
-import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string-extensions";
+import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
 
 interface Props {
   salesAnalytics: IGetSalesAnalyticsResponse | null;

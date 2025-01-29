@@ -27,7 +27,7 @@ import {
   formatterMoney,
   formatToMoneyDecimal,
   parserMoney,
-} from "../../../../../shared/utils/strings/string-extensions";
+} from "../../../../../shared/utils/strings/string";
 import { TFormSchema } from "../../page";
 
 export const salePaymentFormSchema = z.object({

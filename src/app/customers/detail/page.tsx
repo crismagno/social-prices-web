@@ -50,7 +50,7 @@ import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCust
 import Layout from "../../../components/template/Layout/Layout";
 import CreateCustomerDto from "../../../services/social-prices-api/customers/dto/createCustomer.dto";
 import UpdateCustomerDto from "../../../services/social-prices-api/customers/dto/updateCustomer.dto";
-import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import AddressEnum from "../../../shared/business/enums/address.enum";
 import PersonEnum from "../../../shared/business/enums/person.enum";

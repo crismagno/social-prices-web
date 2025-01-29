@@ -24,7 +24,7 @@ import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/Tabl
 import Layout from "../../components/template/Layout/Layout";
 import useAuthData from "../../data/context/auth/useAuthData";
 import useSocketData from "../../data/context/socket/useSocketData";
-import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import { ICustomer } from "../../shared/business/customers/customer.interface";
 import PersonEnum from "../../shared/business/enums/person.enum";
 import FilesUploadsEnum from "../../shared/business/files-uploads/files-uploads.enum";

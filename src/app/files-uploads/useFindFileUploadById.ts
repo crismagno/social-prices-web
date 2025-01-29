@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import handleClientError from "../../components/common/handleClientError/handleClientError";
-import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import { IFileUpload } from "../../shared/business/files-uploads/file-upload.interface";
 
 export const useFindFileUploadById = (

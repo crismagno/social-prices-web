@@ -8,7 +8,7 @@ import {
   IAuthUserEmployee,
 } from "../../../shared/business/auth/auth.types";
 import { ISearchEmployee } from "../../../shared/business/employees/employees.types";
-import ServiceMethodsBase from "../ServiceMethods.base";
+import ServiceMethodsBase from "../service-methods.base";
 import AuthServiceEnum from "./auth-service.enum";
 import CreateUserDto from "./dto/createUser.dto";
 

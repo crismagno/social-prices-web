@@ -12,9 +12,8 @@ import { TagCategoryCustomAntd } from "../../../../components/common/TagCategory
 import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
 import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
-import { serviceMethodsInstance } from "../../../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import { ICategory } from "../../../../shared/business/categories/categories.interface";
-import CustomersEnum from "../../../../shared/business/customers/customers.enum";
 import ProductsEnum from "../../../../shared/business/products/products.enum";
 import { IFiltersDownloadProducts } from "../../../../shared/business/products/products.type";
 import { IStore } from "../../../../shared/business/stores/stores.interface";
@@ -67,7 +66,7 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
       categoriesIds: [],
       storeIds: [],
       isActive: null,
-      sortField: CustomersEnum.SortField.createdAt,
+      sortField: ProductsEnum.SortField.createdAt,
       sortOrder: TableStateEnum.SortOrder.ascend,
     },
     resolver: zodResolver(formSchema),

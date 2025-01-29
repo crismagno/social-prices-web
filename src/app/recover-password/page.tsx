@@ -11,7 +11,7 @@ import ButtonCommon from "../../components/common/ButtonCommon/ButtonCommon";
 import HrCustom from "../../components/common/HrCustom/HrCustom";
 import Loading from "../../components/common/Loading/Loading";
 import useAuthData from "../../data/context/auth/useAuthData";
-import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 
 export default function RecoverPasswordPage() {
   const { user } = useAuthData();

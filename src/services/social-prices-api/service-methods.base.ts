@@ -1,6 +1,6 @@
 "use client";
 
-import LocalStorageAuthTokenMethods from "../../shared/common/local-storage/methods/local-storage-auth-token.methods";
+import { localStorageMethodsInstance } from "../../shared/common/local-storage/local-storage-methods";
 import FetchAxios from "../../shared/utils/fetch/fetch-axios";
 
 export default abstract class ServiceMethodsBase {
@@ -30,7 +30,7 @@ export default abstract class ServiceMethodsBase {
 
   public getAuthTokenOrFail = (): string => {
     const authToken: string | null =
-      LocalStorageAuthTokenMethods.getAuthToken();
+      localStorageMethodsInstance.localStorageAuthTokenMethods.getAuthToken();
 
     if (!authToken) {
       throw new Error(

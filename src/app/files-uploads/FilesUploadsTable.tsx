@@ -7,7 +7,7 @@ import { DownloadOutlined } from "@ant-design/icons";
 
 import handleClientError from "../../components/common/handleClientError/handleClientError";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
-import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import { IFileUpload } from "../../shared/business/files-uploads/file-upload.interface";
 import FilesUploadsEnum from "../../shared/business/files-uploads/files-uploads.enum";
 import DatesEnum from "../../shared/utils/dates/dates.enum";

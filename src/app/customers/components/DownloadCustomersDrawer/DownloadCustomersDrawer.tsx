@@ -11,7 +11,7 @@ import handleClientError from "../../../../components/common/handleClientError/h
 import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
 import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
-import { serviceMethodsInstance } from "../../../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import CustomersEnum from "../../../../shared/business/customers/customers.enum";
 import { IFiltersDownloadCustomers } from "../../../../shared/business/customers/customers.type";
 import PersonEnum from "../../../../shared/business/enums/person.enum";

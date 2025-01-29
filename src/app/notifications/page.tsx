@@ -9,7 +9,7 @@ import { IconBellAlert } from "../../components/common/icons/icons";
 import ListCustomAntd from "../../components/custom/antd/ListCustomAntd/ListCustomAntd";
 import Layout from "../../components/template/Layout/Layout";
 import useAppData from "../../data/context/app/useAppData";
-import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import { INotification } from "../../shared/business/notifications/notification.interface";
 import NotificationsEnum from "../../shared/business/notifications/notifications.enum";
 import DatesEnum from "../../shared/utils/dates/dates.enum";

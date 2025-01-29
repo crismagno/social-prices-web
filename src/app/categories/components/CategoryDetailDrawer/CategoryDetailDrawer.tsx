@@ -15,10 +15,10 @@ import { TextareaCustomAntd } from "../../../../components/custom/antd/TextareaC
 import useAuthData from "../../../../data/context/auth/useAuthData";
 import CreateCategoryDto from "../../../../services/social-prices-api/categories/dto/createCategory.dto";
 import UpdateCategoryDto from "../../../../services/social-prices-api/categories/dto/updateCategory.dto";
-import { serviceMethodsInstance } from "../../../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import CategoriesEnum from "../../../../shared/business/categories/categories.enum";
 import { ICategory } from "../../../../shared/business/categories/categories.interface";
-import { parseToUpperAndUnderline } from "../../../../shared/utils/strings/string-extensions";
+import { parseToUpperAndUnderline } from "../../../../shared/utils/strings/string";
 import { useFindCategoryById } from "../../useFindCategoryById";
 
 const formSchema = z.object({

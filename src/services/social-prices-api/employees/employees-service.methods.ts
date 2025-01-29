@@ -5,7 +5,7 @@ import {
   ITableStateRequest,
   ITableStateResponse,
 } from "../../../shared/utils/table/table-state.interface";
-import ServiceMethodsBase from "../ServiceMethods.base";
+import ServiceMethodsBase from "../service-methods.base";
 import EmployeesServiceEnum from "./employees-service.enum";
 
 export default class EmployeesServiceMethods extends ServiceMethodsBase {

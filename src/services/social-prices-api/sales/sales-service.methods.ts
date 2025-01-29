@@ -5,7 +5,7 @@ import {
   ITableStateRequest,
   ITableStateResponse,
 } from "../../../shared/utils/table/table-state.interface";
-import ServiceMethodsBase from "../ServiceMethods.base";
+import ServiceMethodsBase from "../service-methods.base";
 import CreateSaleDto from "./dto/createSale.dto";
 import UpdateSaleDto from "./dto/updateSale.dto";
 import SalesServiceEnum from "./sales-service.enum";

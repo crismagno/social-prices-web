@@ -26,7 +26,7 @@ import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/Tabl
 import Layout from "../../components/template/Layout/Layout";
 import useAuthData from "../../data/context/auth/useAuthData";
 import useSocketData from "../../data/context/socket/useSocketData";
-import { serviceMethodsInstance } from "../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import CategoriesEnum from "../../shared/business/categories/categories.enum";
 import { ICategory } from "../../shared/business/categories/categories.interface";
 import FilesUploadsEnum from "../../shared/business/files-uploads/files-uploads.enum";
@@ -41,7 +41,7 @@ import { sortArray } from "../../shared/utils/array/functions";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../shared/utils/images/files-names";
 import { getImageUrl } from "../../shared/utils/images/url-images";
-import { formatterMoney } from "../../shared/utils/strings/string-extensions";
+import { formatterMoney } from "../../shared/utils/strings/string";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";

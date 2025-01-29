@@ -1,6 +1,6 @@
 "use client";
 
-import ServiceMethodsBase from "../ServiceMethods.base";
+import ServiceMethodsBase from "../service-methods.base";
 import FilesServiceEnum from "./files-service.enum";
 
 export default class FilesServiceMethods extends ServiceMethodsBase {

@@ -6,7 +6,7 @@ import {
   ITableStateRequest,
   ITableStateResponse,
 } from "../../../shared/utils/table/table-state.interface";
-import ServiceMethodsBase from "../ServiceMethods.base";
+import ServiceMethodsBase from "../service-methods.base";
 import CreateTagDto from "./dto/createTag.dto";
 import CreateTagMultiDto from "./dto/createTagMulti.dto";
 import UpdateTagDto from "./dto/updateTag.dto";

@@ -18,7 +18,7 @@ import {
 } from "../../../../../components/common/Addresses/Addresses";
 import handleClientError from "../../../../../components/common/handleClientError/handleClientError";
 import useAuthData from "../../../../../data/context/auth/useAuthData";
-import { serviceMethodsInstance } from "../../../../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../../../../services/social-prices-api/service-methods";
 import AddressEnum from "../../../../../shared/business/enums/address.enum";
 import { IAddress } from "../../../../../shared/business/interfaces/address.interface";
 import IUser from "../../../../../shared/business/users/user.interface";

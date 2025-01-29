@@ -56,7 +56,7 @@ import CreateSaleDto, {
   SaleStoreProductDto,
 } from "../../../services/social-prices-api/sales/dto/createSale.dto";
 import UpdateSaleDto from "../../../services/social-prices-api/sales/dto/updateSale.dto";
-import { serviceMethodsInstance } from "../../../services/social-prices-api/ServiceMethods";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import AddressEnum from "../../../shared/business/enums/address.enum";
 import PersonEnum from "../../../shared/business/enums/person.enum";
@@ -85,7 +85,7 @@ import {
   getPercentageByValue,
   getValueByPercentage,
 } from "../../../shared/utils/numbers/numbers";
-import { createAddressName } from "../../../shared/utils/strings/string-extensions";
+import { createAddressName } from "../../../shared/utils/strings/string";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindSaleById } from "../useFindSaleById";

@@ -1,7 +1,7 @@
 "use client";
 
 import IUser from "../../../shared/business/users/user.interface";
-import ServiceMethodsBase from "../ServiceMethods.base";
+import ServiceMethodsBase from "../service-methods.base";
 import RecoverPasswordDto from "./dto/recoverPassword.dto";
 import UpdateEmailDto from "./dto/updateEmail.dto";
 import UpdateUserDto from "./dto/updateUser.dto";

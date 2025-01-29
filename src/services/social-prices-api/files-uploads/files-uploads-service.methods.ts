@@ -5,7 +5,7 @@ import {
   ITableStateRequest,
   ITableStateResponse,
 } from "../../../shared/utils/table/table-state.interface";
-import ServiceMethodsBase from "../ServiceMethods.base";
+import ServiceMethodsBase from "../service-methods.base";
 import FilesUploadsServiceEnum from "./files-uploads-service.enum";
 
 export default class FilesUploadsServiceMethods extends ServiceMethodsBase {

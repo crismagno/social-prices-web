@@ -2,7 +2,7 @@ import IUser from "../../../business/users/user.interface";
 import LocalStorageEnum from "../local-storage.enum";
 
 export default class LocalStorageUserMethods {
-  public static getUser = (): IUser | null => {
+  public getUser = (): IUser | null => {
     const item: string | null = localStorage.getItem(
       LocalStorageEnum.keys.USER
     );
@@ -14,11 +14,11 @@ export default class LocalStorageUserMethods {
     return null;
   };
 
-  public static setUser = (user: IUser): void => {
+  public setUser = (user: IUser): void => {
     localStorage.setItem(LocalStorageEnum.keys.USER, JSON.stringify(user));
   };
 
-  public static removeUser = (): void => {
+  public removeUser = (): void => {
     localStorage.removeItem(LocalStorageEnum.keys.USER);
   };
 }

@@ -33,7 +33,7 @@ import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../shared/utils/images/files-names";
 import { getImageUrl } from "../../shared/utils/images/url-images";
-import { getUserName } from "../../shared/utils/strings/string-extensions";
+import { getUserName } from "../../shared/utils/strings/string";
 
 export default function ProfilePage() {
   const { user } = useAuthData();
