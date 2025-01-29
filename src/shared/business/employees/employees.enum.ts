@@ -34,6 +34,18 @@ namespace EmployeesEnum {
     [Status.ACTIVE]: "success",
     [Status.STOPPED]: "red",
   };
+
+  export const getLevelsByEmployeeLevel = (level: Level): string[] => {
+    if (level === Level.ADMIN) {
+      return Object.keys(Level);
+    }
+
+    if (level === Level.MASTER) {
+      return [Level.EMPLOYEE];
+    }
+
+    return [];
+  };
 }
 
 export default EmployeesEnum;

@@ -15,6 +15,7 @@ import { PhoneNumbersTag } from "../../components/common/PhoneNumbersTag/PhoneNu
 import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
+import useAuthData from "../../data/context/auth/useAuthData";
 import { IEmployee } from "../../shared/business/employees/employee.interface";
 import EmployeesEnum from "../../shared/business/employees/employees.enum";
 import PersonEnum from "../../shared/business/enums/person.enum";
@@ -30,6 +31,7 @@ import { useFindTagsByType } from "../tags/useFindTagsByType";
 import { useFindEmployeesByUserTableState } from "./useFindEmployeesByUserTableState";
 
 export default function EmployeesPage() {
+  const { employee } = useAuthData();
   const router: AppRouterInstance = useRouter();
 
   const [tableStateRequest, setTableStateRequest] = useState<
@@ -154,12 +156,12 @@ export default function EmployeesPage() {
               title: "Level",
               dataIndex: "level",
               key: "level",
-              filters: Object.keys(EmployeesEnum.Level).map(
-                (level: string) => ({
-                  text: EmployeesEnum.LevelLabels[level as EmployeesEnum.Level],
-                  value: level,
-                })
-              ),
+              filters: EmployeesEnum.getLevelsByEmployeeLevel(
+                employee?.level!
+              ).map((level: string) => ({
+                text: EmployeesEnum.LevelLabels[level as EmployeesEnum.Level],
+                value: level,
+              })),
               align: "center",
               render: (level: EmployeesEnum.Level) => (
                 <Tag color={EmployeesEnum.LevelColors[level]}>
