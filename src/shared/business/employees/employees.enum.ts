@@ -35,6 +35,16 @@ namespace EmployeesEnum {
     [Status.STOPPED]: "red",
   };
 
+  export enum SortField {
+    birthDate = "birthDate",
+    createdAt = "createdAt",
+  }
+
+  export const SortFieldLabels = {
+    [SortField.birthDate]: "Birth Date",
+    [SortField.createdAt]: "Created At",
+  };
+
   export const getLevelsByEmployeeLevel = (level: Level): string[] => {
     if (level === Level.ADMIN) {
       return Object.keys(Level);

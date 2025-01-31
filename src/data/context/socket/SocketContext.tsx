@@ -6,7 +6,9 @@ import { message } from "antd";
 import { Manager, Socket } from "socket.io-client";
 
 import { ICustomerFileUploadTemplateRow } from "../../../shared/business/customers/customers.type";
+import { IEmployeeFileUploadTemplateRow } from "../../../shared/business/employees/employees.types";
 import { IFileUploadTemplateError } from "../../../shared/business/files-uploads/files-uploads.type";
+import { IProductFileUploadTemplateRow } from "../../../shared/business/products/products.type";
 import useAuthData from "../auth/useAuthData";
 
 export interface ISocketContext {
@@ -94,13 +96,26 @@ export const SocketProvider = ({ children }: { children?: any }) => {
 
       socket.on(
         `upload-products-response-to-employee-${employee._id}`,
-        (data: IFileUploadTemplateError<ICustomerFileUploadTemplateRow>[]) => {
+        (data: IFileUploadTemplateError<IProductFileUploadTemplateRow>[]) => {
           if (data.length > 0) {
             message.warning(
               "Upload Products has completed but there are error on some file, please check on product upload table!"
             );
           } else {
             message.success("Upload Products Completed!");
+          }
+        }
+      );
+
+      socket.on(
+        `upload-employees-response-to-employee-${employee._id}`,
+        (data: IFileUploadTemplateError<IEmployeeFileUploadTemplateRow>[]) => {
+          if (data.length > 0) {
+            message.warning(
+              "Upload Employees has completed but there are error on some file, please check on product upload table!"
+            );
+          } else {
+            message.success("Upload Employees Completed!");
           }
         }
       );

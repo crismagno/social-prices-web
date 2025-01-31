@@ -1,6 +1,7 @@
 "use client";
 
 import { IEmployee } from "../../../shared/business/employees/employee.interface";
+import { IFiltersDownloadEmployees } from "../../../shared/business/employees/employees.types";
 import {
   ITableStateRequest,
   ITableStateResponse,
@@ -99,6 +100,38 @@ export default class EmployeesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async uploadEmployees(formData: FormData): Promise<void> {
+    const response = await this._fetchAxios.post<void>(
+      `${this._socialPricesApiV1}${EmployeesServiceEnum.Methods.UPLOAD_EMPLOYEES}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async downloadEmployees(
+    filters: IFiltersDownloadEmployees
+  ): Promise<Buffer> {
+    const response = await this._fetchAxios.post<Buffer>(
+      `${this._socialPricesApiV1}${EmployeesServiceEnum.Methods.DOWNLOAD_EMPLOYEES}`,
+      filters,
+      {
+        headers: {
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+        responseType: "blob",
       }
     );
 
