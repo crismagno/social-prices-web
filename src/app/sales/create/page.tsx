@@ -483,7 +483,7 @@ export default function CreateSalePage() {
           description: firstAddress.description,
           district: firstAddress.district,
           isValid: firstAddress.isValid,
-          types: [...firstAddress.types],
+          types: firstAddress.types,
           uid: firstAddress.uid,
           zip: firstAddress.zip,
           isCollapsed: true,
