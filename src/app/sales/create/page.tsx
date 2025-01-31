@@ -483,7 +483,7 @@ export default function CreateSalePage() {
           description: firstAddress.description,
           district: firstAddress.district,
           isValid: firstAddress.isValid,
-          types: firstAddress.types,
+          types: [...firstAddress.types],
           uid: firstAddress.uid,
           zip: firstAddress.zip,
           isCollapsed: true,
@@ -505,6 +505,8 @@ export default function CreateSalePage() {
       name: customer?.name ?? "",
       phoneNumber: customer?.phoneNumbers?.[0]?.number ?? null,
     });
+
+    setValue("customer.address.types", address.types);
 
     setSelectedCustomer(customer);
 
