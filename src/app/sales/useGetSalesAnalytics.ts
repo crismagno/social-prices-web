@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 
 import handleClientError from "../../components/common/handleClientError/handleClientError";
+import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import {
   IGetSalesAnalyticsParams,
   IGetSalesAnalyticsResponse,
-} from "../../services/social-prices-api/sales/sales-service.types";
-import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
+} from "../../shared/business/sales/sales.type";
 
 export const useGetSalesAnalytics = (
   params: IGetSalesAnalyticsParams

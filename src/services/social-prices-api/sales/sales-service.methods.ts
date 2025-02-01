@@ -2,6 +2,12 @@
 
 import { ISale } from "../../../shared/business/sales/sale.interface";
 import {
+  IGetSalesAnalyticsParams,
+  IGetSalesAnalyticsResponse,
+  IGetSalesBalanceParams,
+  IGetSalesBalanceResponse,
+} from "../../../shared/business/sales/sales.type";
+import {
   ITableStateRequest,
   ITableStateResponse,
 } from "../../../shared/utils/table/table-state.interface";
@@ -9,10 +15,6 @@ import ServiceMethodsBase from "../service-methods.base";
 import CreateSaleDto from "./dto/createSale.dto";
 import UpdateSaleDto from "./dto/updateSale.dto";
 import SalesServiceEnum from "./sales-service.enum";
-import {
-  IGetSalesAnalyticsParams,
-  IGetSalesAnalyticsResponse,
-} from "./sales-service.types";
 
 export default class SalesServiceMethods extends ServiceMethodsBase {
   public async createManual(createSaleDto: CreateSaleDto): Promise<ISale> {
@@ -114,6 +116,23 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
   ): Promise<IGetSalesAnalyticsResponse> {
     const response = await this._fetchAxios.post<IGetSalesAnalyticsResponse>(
       `${this._socialPricesApiV1}${SalesServiceEnum.Methods.GET_SALES_ANALYTICS}`,
+      params,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async getSalesBalance(
+    params: IGetSalesBalanceParams
+  ): Promise<IGetSalesBalanceResponse> {
+    const response = await this._fetchAxios.post<IGetSalesBalanceResponse>(
+      `${this._socialPricesApiV1}${SalesServiceEnum.Methods.GET_SALES_BALANCE}`,
       params,
       {
         headers: {

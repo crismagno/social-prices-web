@@ -1,4 +1,4 @@
-import { IGetSalesAnalyticsParams } from "./sales-service.types";
+import { IGetSalesAnalyticsParams } from "./sales.type";
 
 export const createGetSalesAnalyticsParams = (
   params?: IGetSalesAnalyticsParams

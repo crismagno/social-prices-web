@@ -9,7 +9,7 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 
 import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
 import SelectByQuantityOrTotal from "../../../../components/common/SelectByQuantityOrTotal/SelectByQuantityOrTotal";
-import { IGetSalesAnalyticsResponse } from "../../../../services/social-prices-api/sales/sales-service.types";
+import { IGetSalesAnalyticsResponse } from "../../../../shared/business/sales/sales.type";
 import CommonEnum from "../../../../shared/common/enums/common.enum";
 import { ITotalQuantity } from "../../../../shared/common/interfaces/global.interface";
 import Urls from "../../../../shared/common/routes-app/routes-app";

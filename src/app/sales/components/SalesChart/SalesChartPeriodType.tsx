@@ -12,7 +12,7 @@ import {
   YAxis,
 } from "recharts";
 
-import { IGetSalesAnalyticsResponse } from "../../../../services/social-prices-api/sales/sales-service.types";
+import { IGetSalesAnalyticsResponse } from "../../../../shared/business/sales/sales.type";
 import { ITotalQuantity } from "../../../../shared/common/interfaces/global.interface";
 import ChartsEnum from "../../../../shared/utils/charts/charts-enum";
 import { IChartDataPeriodTypeItem } from "../../../../shared/utils/charts/charts-types";

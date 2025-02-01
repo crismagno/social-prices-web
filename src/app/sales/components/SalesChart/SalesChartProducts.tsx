@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Pie, PieChart, ResponsiveContainer, Sector } from "recharts";
 
 import SelectByQuantityOrTotal from "../../../../components/common/SelectByQuantityOrTotal/SelectByQuantityOrTotal";
-import { IGetSalesAnalyticsResponse } from "../../../../services/social-prices-api/sales/sales-service.types";
+import { IGetSalesAnalyticsResponse } from "../../../../shared/business/sales/sales.type";
 import CommonEnum from "../../../../shared/common/enums/common.enum";
 import { IChartDataProductItem } from "../../../../shared/utils/charts/charts-types";
 import { getImageUrl } from "../../../../shared/utils/images/url-images";

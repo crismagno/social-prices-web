@@ -11,10 +11,10 @@ import { CustomRangeDatePicker } from "../../../../components/common/CustomRange
 import Loading from "../../../../components/common/Loading/Loading";
 import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
 import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
-import { IGetSalesAnalyticsParams } from "../../../../services/social-prices-api/sales/sales-service.types";
-import { createGetSalesAnalyticsParams } from "../../../../services/social-prices-api/sales/sales-service.utils";
 import { IProduct } from "../../../../shared/business/products/products.interface";
 import SalesEnum from "../../../../shared/business/sales/sales.enum";
+import { IGetSalesAnalyticsParams } from "../../../../shared/business/sales/sales.type";
+import { createGetSalesAnalyticsParams } from "../../../../shared/business/sales/sales.utils";
 import { IStore } from "../../../../shared/business/stores/stores.interface";
 import TagsEnum from "../../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../../shared/business/tags/tags.interface";
