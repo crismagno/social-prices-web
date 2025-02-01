@@ -31,6 +31,7 @@ import CategoriesEnum from "../../shared/business/categories/categories.enum";
 import { ICategory } from "../../shared/business/categories/categories.interface";
 import FilesUploadsEnum from "../../shared/business/files-uploads/files-uploads.enum";
 import { IProduct } from "../../shared/business/products/products.interface";
+import SocketsEnum from "../../shared/business/sockets/sockets.enum";
 import StoresEnum from "../../shared/business/stores/stores.enum";
 import { IStore } from "../../shared/business/stores/stores.interface";
 import TagsEnum from "../../shared/business/tags/tags.enum";
@@ -89,7 +90,7 @@ export default function ProductsPage() {
   useEffect(() => {
     if (socket && filesUploadsTableRef && user) {
       socket.on(
-        `response-upload-products-file-to-user-${user._id}`,
+        SocketsEnum.EventNames.RESPONSE_UPLOAD_PRODUCTS_FILE_TO_USER(user._id),
         async () => {
           await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();
           await fetchFindProductsByUserTableState();
@@ -97,7 +98,9 @@ export default function ProductsPage() {
       );
 
       return () => {
-        socket.off(`response-upload-products-file-to-user-${user._id}`);
+        socket.off(
+          SocketsEnum.EventNames.RESPONSE_UPLOAD_PRODUCTS_FILE_TO_USER(user._id)
+        );
       };
     }
   }, [socket, filesUploadsTableRef, user]);

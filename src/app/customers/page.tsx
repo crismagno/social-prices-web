@@ -29,6 +29,7 @@ import { ICustomer } from "../../shared/business/customers/customer.interface";
 import PersonEnum from "../../shared/business/enums/person.enum";
 import FilesUploadsEnum from "../../shared/business/files-uploads/files-uploads.enum";
 import { IPhoneNumber } from "../../shared/business/interfaces/phone-number.interface";
+import SocketsEnum from "../../shared/business/sockets/sockets.enum";
 import TagsEnum from "../../shared/business/tags/tags.enum";
 import { ITag } from "../../shared/business/tags/tags.interface";
 import Urls from "../../shared/common/routes-app/routes-app";
@@ -78,7 +79,7 @@ export default function CustomersPage() {
   useEffect(() => {
     if (socket && filesUploadsTableRef && user) {
       socket.on(
-        `response-upload-customers-file-to-user-${user._id}`,
+        SocketsEnum.EventNames.RESPONSE_UPLOAD_CUSTOMERS_FILE_TO_USER(user._id),
         async () => {
           await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();
           await fetchFindCustomersByOwnerOfUserTableState();
@@ -86,7 +87,11 @@ export default function CustomersPage() {
       );
 
       return () => {
-        socket.off(`response-upload-customers-file-to-user-${user._id}`);
+        socket.off(
+          SocketsEnum.EventNames.RESPONSE_UPLOAD_CUSTOMERS_FILE_TO_USER(
+            user._id
+          )
+        );
       };
     }
   }, [socket, filesUploadsTableRef, user]);

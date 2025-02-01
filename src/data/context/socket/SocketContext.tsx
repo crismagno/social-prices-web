@@ -9,6 +9,7 @@ import { ICustomerFileUploadTemplateRow } from "../../../shared/business/custome
 import { IEmployeeFileUploadTemplateRow } from "../../../shared/business/employees/employees.types";
 import { IFileUploadTemplateError } from "../../../shared/business/files-uploads/files-uploads.type";
 import { IProductFileUploadTemplateRow } from "../../../shared/business/products/products.type";
+import SocketsEnum from "../../../shared/business/sockets/sockets.enum";
 import useAuthData from "../auth/useAuthData";
 
 export interface ISocketContext {
@@ -82,7 +83,9 @@ export const SocketProvider = ({ children }: { children?: any }) => {
   useEffect(() => {
     if (socket?.connected && employee?._id && isLogged) {
       socket.on(
-        `upload-customers-response-to-employee-${employee._id}`,
+        SocketsEnum.EventNames.UPLOAD_CUSTOMERS_RESPONSE_TO_EMPLOYEE(
+          employee._id
+        ),
         (data: IFileUploadTemplateError<ICustomerFileUploadTemplateRow>[]) => {
           if (data.length > 0) {
             message.warning(
@@ -95,7 +98,9 @@ export const SocketProvider = ({ children }: { children?: any }) => {
       );
 
       socket.on(
-        `upload-products-response-to-employee-${employee._id}`,
+        SocketsEnum.EventNames.UPLOAD_PRODUCTS_RESPONSE_TO_EMPLOYEE(
+          employee._id
+        ),
         (data: IFileUploadTemplateError<IProductFileUploadTemplateRow>[]) => {
           if (data.length > 0) {
             message.warning(
@@ -108,7 +113,9 @@ export const SocketProvider = ({ children }: { children?: any }) => {
       );
 
       socket.on(
-        `upload-employees-response-to-employee-${employee._id}`,
+        SocketsEnum.EventNames.UPLOAD_EMPLOYEES_RESPONSE_TO_EMPLOYEE(
+          employee._id
+        ),
         (data: IFileUploadTemplateError<IEmployeeFileUploadTemplateRow>[]) => {
           if (data.length > 0) {
             message.warning(
