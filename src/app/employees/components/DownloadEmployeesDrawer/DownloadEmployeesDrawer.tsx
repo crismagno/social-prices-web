@@ -21,8 +21,8 @@ import TableStateEnum from "../../../../shared/utils/table/table-state.enum";
 const formSchema = z.object({
   search: z.string().nullable(),
   gender: z.string().nullable(),
-  level: z.string().nullable(),
-  status: z.string().nullable(),
+  level: z.array(z.string()),
+  status: z.array(z.string()),
   tagsIds: z.array(z.string()),
   sortField: z.string().nullable(),
   sortOrder: z.string().nullable(),
@@ -55,8 +55,8 @@ export const DownloadEmployeesDrawer: React.FC<Props> = ({
     values: {
       gender: null,
       search: null,
-      level: null,
-      status: null,
+      level: [],
+      status: [],
       tagsIds: [],
       sortField: EmployeesEnum.SortField.createdAt,
       sortOrder: TableStateEnum.SortOrder.ascend,
@@ -123,11 +123,10 @@ export const DownloadEmployeesDrawer: React.FC<Props> = ({
             <SelectCustomAntd
               controller={{ control, name: "level" }}
               label="Level"
+              mode="multiple"
+              allowClear
               errorMessage={errors.level?.message}
             >
-              <Select.Option key={"SELECT_ALL"} value={null}>
-                - Select -
-              </Select.Option>
               {Object.keys(EmployeesEnum.Level).map((level: string) => (
                 <Select.Option key={level} value={level}>
                   <Tag
@@ -146,11 +145,10 @@ export const DownloadEmployeesDrawer: React.FC<Props> = ({
             <SelectCustomAntd
               controller={{ control, name: "status" }}
               label="Status"
+              mode="multiple"
+              allowClear
               errorMessage={errors.status?.message}
             >
-              <Select.Option key={"SELECT_ALL"} value={null}>
-                - Select -
-              </Select.Option>
               {Object.keys(EmployeesEnum.Status).map((status: string) => (
                 <Select.Option key={status} value={status}>
                   {EmployeesEnum.StatusLabels[status as EmployeesEnum.Status]}
