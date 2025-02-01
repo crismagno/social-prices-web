@@ -109,7 +109,7 @@ namespace SalesEnum {
       return "gray";
     }
 
-    const differenceDays: number = moment(deliveryAt).diff(new Date(), "days");
+    const differenceDays: number = getDeliveryAtDifferenceDays(deliveryAt);
 
     if (differenceDays < 1) {
       return "red";
@@ -137,7 +137,9 @@ namespace SalesEnum {
       return 0;
     }
 
-    return moment(deliveryAt).diff(new Date(), "days");
+    const todayStartDay: Date = moment().startOf("day").toDate();
+
+    return moment(deliveryAt).diff(todayStartDay, "days");
   };
 
   export const StatusToShowDeliveryAt = [

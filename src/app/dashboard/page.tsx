@@ -3,6 +3,7 @@
 import { Col, Row } from "antd";
 
 import Layout from "../../components/template/Layout/Layout";
+import { SalesBalance } from "../sales/components/SalesBalance/SalesBalance";
 import { SalesChart } from "../sales/components/SalesChart/SalesChart";
 import SalesTable from "../sales/components/SalesTable/SalesTable";
 import { CategoriesCard } from "./components/CategoriesCard/CategoriesCard";
@@ -30,6 +31,8 @@ export default function DashboardPage() {
           <CategoriesCard />
         </Col>
       </Row>
+
+      <SalesBalance />
 
       <SalesChart cardClassName="mt-2" />
 

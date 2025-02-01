@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Badge, Button, Card, Col, Row, Select, Tooltip } from "antd";
+import { Badge, Button, Card, Col, Divider, Row, Select, Tooltip } from "antd";
 import { map } from "lodash";
 import moment from "moment";
 
@@ -211,7 +211,7 @@ export const SalesChart: React.FC<Props> = ({
       </Row>
 
       <Row gutter={[16, 16]} className="mt-3">
-        <Col md={10}>
+        <Col md={16}>
           <SalesChartPeriodType
             periodType={getSalesAnalyticsParams.periodType!}
             onChange={(periodType: ChartsEnum.PeriodType) => {
@@ -225,11 +225,15 @@ export const SalesChart: React.FC<Props> = ({
         </Col>
 
         <Col md={8}>
-          <SalesChartProducts salesAnalytics={salesAnalytics} />
-        </Col>
-
-        <Col md={6}>
           <SalesChartListProducts salesAnalytics={salesAnalytics} />
+        </Col>
+      </Row>
+
+      <Divider />
+
+      <Row gutter={[16, 16]} className="mt-2">
+        <Col md={12}>
+          <SalesChartProducts salesAnalytics={salesAnalytics} />
         </Col>
       </Row>
     </Card>
