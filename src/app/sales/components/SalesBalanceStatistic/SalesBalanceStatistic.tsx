@@ -5,8 +5,12 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
 import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
-import { IGetSalesBalanceTotalsResponse } from "../../../../shared/business/sales/sales.type";
+import {
+  IGetSalesBalanceTotalsResponse,
+  IGetSalesProductBalanceResponse,
+} from "../../../../shared/business/sales/sales.type";
 import Urls from "../../../../shared/common/routes-app/routes-app";
+import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
 
 interface Props {
   className?: string;
@@ -18,14 +22,15 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
   className,
   title,
   salesBalanceTotals = {
-    productQuantity: 0,
-    productTotal: 0,
     quantity: 0,
     total: 0,
-    product: undefined,
+    productsBalance: [],
   },
 }) => {
   const router: AppRouterInstance = useRouter();
+
+  const firstProductBalance: IGetSalesProductBalanceResponse | undefined =
+    salesBalanceTotals?.productsBalance?.[0];
 
   return (
     <Card className={`p-1 text-family-1 ${className}`}>
@@ -33,9 +38,8 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
 
       <div className="my-2 flex items-center text-family-1">
         <div>
-          <label className="color-black-1">$</label>
           <label className="color-black-1 text-3xl">
-            {salesBalanceTotals.total}
+            {formatToMoneyDecimal(salesBalanceTotals.total)}
           </label>
         </div>
 
@@ -55,26 +59,26 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
         <div
           className="flex flex-row items-center justify-start w-full border p-2 rounded-lg cursor-pointer"
           onClick={() =>
-            salesBalanceTotals?.product &&
+            firstProductBalance?.product &&
             router.push(
               Urls.SALES_CREATE_BY_PRODUCT.replace(
                 ":productId",
-                salesBalanceTotals?.product?._id
+                firstProductBalance.product?._id
               )
             )
           }
         >
           <div className="mr-5 flex items-center">
-            <ImageOrDefault src={salesBalanceTotals?.product?.mainUrl} />
+            <ImageOrDefault src={firstProductBalance?.product?.mainUrl} />
           </div>
 
           <div className="flex flex-col">
             <label className="color-black-1 text-base">
-              {salesBalanceTotals?.product?.name}
+              {firstProductBalance?.product?.name}
             </label>
             <label className="color-gray-1 text-sm">
-              Total: {salesBalanceTotals?.productTotal} | Qty:{" "}
-              {salesBalanceTotals?.productQuantity}
+              Total: {formatToMoneyDecimal(firstProductBalance?.total)} | Qty:{" "}
+              {firstProductBalance?.quantity}
             </label>
           </div>
         </div>
