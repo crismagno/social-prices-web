@@ -14,6 +14,7 @@ import {
   IconHome,
   IconLogout,
 } from "../../common/icons/icons";
+import { EmployeeProfileButton } from "../EmployeeProfileButton/EmployeeProfileButton";
 import { GeneralMenu } from "./GeneralMenu/GeneralMenu";
 import NavigationItem from "./NavigationItem";
 import { SalesMenu } from "./SalesMenu/SalesMenu";
@@ -79,13 +80,15 @@ const Navigation: React.FC<Props> = ({}) => {
         <GeneralMenu />
       </ul>
 
-      <ul className="flex flex-row">
+      <ul className="flex items-center">
+        <EmployeeProfileButton />
+
         <NavigationItem
           icon={IconLogout}
           text={"Logout"}
           onClick={() => setShowLogoutModal(true)}
           className="
-            text-red-600 hover:bg-red-400 hover:text-white
+            text-red-600 hover:bg-red-400 hover:text-white ml-2
             dark:text-white dark:hover:bg-slate-700"
         />
       </ul>

@@ -14,7 +14,11 @@ export const EmployeeProfileButton: React.FC = () => {
   }
 
   return (
-    <div className="flex items-center text-slate-950 bg-white py-1 pl-1 pr-5 rounded-full border">
+    <div
+      className="flex items-center py-1 pl-1 pr-5 rounded-full border shadow-sm
+      bg-gradient-to-tr from-slate-300 to bg-white text-slate-950
+    "
+    >
       <ImageOrDefault src={employee.avatar} />
 
       <div className="flex flex-col items-start justify-start ml-3 text-sm">
