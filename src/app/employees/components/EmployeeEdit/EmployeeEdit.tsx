@@ -81,6 +81,7 @@ interface Props {
   onEmployeeToEdit?: (employee: IEmployee | null) => void;
   onSave: (employee: IEmployee) => void;
   onCancel: (employee: IEmployee | null) => void;
+  isFromProfile?: boolean;
 }
 
 export const EmployeeEdit: React.FC<Props> = ({
@@ -88,6 +89,7 @@ export const EmployeeEdit: React.FC<Props> = ({
   onEmployeeToEdit,
   onSave,
   onCancel,
+  isFromProfile = false,
 }) => {
   const { employee } = useAuthData();
 
@@ -331,6 +333,10 @@ export const EmployeeEdit: React.FC<Props> = ({
     setAvatarUrl(url);
   };
 
+  const employeeLevels: string[] = isFromProfile
+    ? Object.keys(EmployeesEnum.Level)
+    : EmployeesEnum.getLevelsByEmployeeLevel(employee?.level!);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex justify-center w-full">
@@ -444,20 +450,19 @@ export const EmployeeEdit: React.FC<Props> = ({
             controller={{ control, name: "level" }}
             label="Level"
             errorMessage={errors.level?.message}
+            disabled={isFromProfile}
           >
-            {EmployeesEnum.getLevelsByEmployeeLevel(employee?.level!).map(
-              (level: string) => (
-                <Select.Option key={level} value={level}>
-                  <Tag
-                    color={
-                      EmployeesEnum.LevelColors[level as EmployeesEnum.Level]
-                    }
-                  >
-                    {EmployeesEnum.LevelLabels[level as EmployeesEnum.Level]}
-                  </Tag>
-                </Select.Option>
-              )
-            )}
+            {employeeLevels.map((level: string) => (
+              <Select.Option key={level} value={level}>
+                <Tag
+                  color={
+                    EmployeesEnum.LevelColors[level as EmployeesEnum.Level]
+                  }
+                >
+                  {EmployeesEnum.LevelLabels[level as EmployeesEnum.Level]}
+                </Tag>
+              </Select.Option>
+            ))}
           </SelectCustomAntd>
         </Col>
       </Row>

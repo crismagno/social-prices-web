@@ -42,6 +42,7 @@ export const EmployeeProfileButton: React.FC = () => {
           </Tag>
         </div>
       </div>
+
       <EmployeeEditDrawer
         employeeId={employee._id}
         isOpen={isEmployeeEditDrawerOpen}
@@ -53,6 +54,7 @@ export const EmployeeProfileButton: React.FC = () => {
           setIsEmployeeEditDrawerOpen(false);
           setEmployee(newEmployee);
         }}
+        isFromProfile
       />
     </>
   );

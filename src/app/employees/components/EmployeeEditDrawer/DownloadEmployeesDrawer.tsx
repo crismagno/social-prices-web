@@ -10,6 +10,7 @@ interface Props {
   title?: string;
   width?: string | number;
   employeeId: string | null;
+  isFromProfile?: boolean;
 }
 
 export const EmployeeEditDrawer: React.FC<Props> = ({
@@ -19,13 +20,20 @@ export const EmployeeEditDrawer: React.FC<Props> = ({
   width = "50%",
   employeeId,
   onCancel,
+  isFromProfile,
 }) => {
   return (
-    <Drawer title={title} onClose={onCancel} open={isOpen} width={width}>
+    <Drawer
+      title={title}
+      onClose={() => onCancel(null)}
+      open={isOpen}
+      width={width}
+    >
       <EmployeeEdit
         employeeId={employeeId}
         onCancel={onCancel}
         onSave={onSave}
+        isFromProfile={isFromProfile}
       />
     </Drawer>
   );
