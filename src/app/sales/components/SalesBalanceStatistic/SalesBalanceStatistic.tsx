@@ -1,10 +1,12 @@
 import React from "react";
 
-import { Card, Divider, Tooltip } from "antd";
+import { Card, Divider } from "antd";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
-import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
+import { ShoppingCartOutlined } from "@ant-design/icons";
+
+import { AvatarDescription } from "../../../../components/common/AvatarDescription/AvatarDescription";
 import {
   IGetSalesBalanceTotalsResponse,
   IGetSalesProductBalanceResponse,
@@ -29,8 +31,65 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
 }) => {
   const router: AppRouterInstance = useRouter();
 
-  const firstProductBalance: IGetSalesProductBalanceResponse | undefined =
+  const productBalance: IGetSalesProductBalanceResponse | undefined =
     salesBalanceTotals?.productsBalance?.[0];
+
+  const renderProductsBalance = () => {
+    if (salesBalanceTotals.productsBalance?.length) {
+      return (
+        <>
+          {salesBalanceTotals.productsBalance.map(
+            (
+              productBalance: IGetSalesProductBalanceResponse,
+              index: number
+            ) => {
+              return (
+                <AvatarDescription
+                  key={index}
+                  src={productBalance?.product?.mainUrl}
+                  buttonIcon={<ShoppingCartOutlined />}
+                  buttonTooltip="Create Sale By Product"
+                  onClickButton={() =>
+                    router.push(
+                      Urls.SALES_CREATE_BY_PRODUCT.replace(
+                        ":productId",
+                        productBalance.product?._id!
+                      )
+                    )
+                  }
+                  title={productBalance?.product?.name}
+                  subtitle={`Total: ${formatToMoneyDecimal(
+                    productBalance?.total
+                  )} | Qty: ${productBalance?.quantity}`}
+                  className={index > 0 ? "ml-2" : ""}
+                />
+              );
+            }
+          )}
+        </>
+      );
+    }
+
+    return (
+      <AvatarDescription
+        src={productBalance?.product?.mainUrl}
+        buttonIcon={<ShoppingCartOutlined />}
+        buttonTooltip="Create Sale By Product"
+        onClickButton={() =>
+          router.push(
+            Urls.SALES_CREATE_BY_PRODUCT.replace(
+              ":productId",
+              productBalance.product?._id!
+            )
+          )
+        }
+        title={productBalance?.product?.name}
+        subtitle={`Total: ${formatToMoneyDecimal(
+          productBalance?.total
+        )} | Qty: ${productBalance?.quantity}`}
+      />
+    );
+  };
 
   return (
     <Card className={`p-1 text-family-1 ${className}`}>
@@ -55,34 +114,9 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
 
       <Divider type="horizontal" className="my-3" />
 
-      <Tooltip title="Create Sale By Product">
-        <div
-          className="flex flex-row items-center justify-start w-full border p-2 rounded-lg cursor-pointer"
-          onClick={() =>
-            firstProductBalance?.product &&
-            router.push(
-              Urls.SALES_CREATE_BY_PRODUCT.replace(
-                ":productId",
-                firstProductBalance.product?._id
-              )
-            )
-          }
-        >
-          <div className="mr-5 flex items-center">
-            <ImageOrDefault src={firstProductBalance?.product?.mainUrl} />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="color-black-1 text-base">
-              {firstProductBalance?.product?.name}
-            </label>
-            <label className="color-gray-1 text-sm">
-              Total: {formatToMoneyDecimal(firstProductBalance?.total)} | Qty:{" "}
-              {firstProductBalance?.quantity}
-            </label>
-          </div>
-        </div>
-      </Tooltip>
+      <div className="flex w-full overflow-y-hidden pb-2">
+        {renderProductsBalance()}
+      </div>
     </Card>
   );
 };

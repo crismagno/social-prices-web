@@ -30,18 +30,21 @@ export const SalesBalance: React.FC<Props> = ({ className }) => {
             salesBalanceTotals={salesBalance?.hour}
           />
         </Col>
+
         <Col xs={24} sm={12} md={6}>
           <SalesBalanceStatistic
             title="Day Balance"
             salesBalanceTotals={salesBalance?.day}
           />
         </Col>
+
         <Col xs={24} sm={12} md={6}>
           <SalesBalanceStatistic
             title="Month Balance"
             salesBalanceTotals={salesBalance?.month}
           />
         </Col>
+
         <Col xs={24} sm={12} md={6}>
           <SalesBalanceStatistic
             title="Annual Balance"
