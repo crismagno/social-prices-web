@@ -1,14 +1,23 @@
 import { ReactElement } from "react";
 
+import { Divider } from "antd";
+
 import { BackButton } from "../../common/BackButton/BackButton";
+import { EmployeeProfileButton } from "../EmployeeProfileButton/EmployeeProfileButton";
 
 interface Props {
   title: string | ReactElement;
   subtitle?: string;
   hasBackButton?: boolean;
+  hasEmployeeProfileButton?: boolean;
 }
 
-const Title: React.FC<Props> = ({ subtitle, title, hasBackButton }) => {
+const Title: React.FC<Props> = ({
+  subtitle,
+  title,
+  hasBackButton,
+  hasEmployeeProfileButton = true,
+}) => {
   return (
     <div className="flex justify-between items-end">
       <div>
@@ -23,11 +32,19 @@ const Title: React.FC<Props> = ({ subtitle, title, hasBackButton }) => {
         )}
       </div>
 
-      {hasBackButton && (
-        <div>
-          <BackButton />
-        </div>
-      )}
+      <div className="flex items-center">
+        {hasEmployeeProfileButton && <EmployeeProfileButton />}
+
+        {hasEmployeeProfileButton && hasBackButton && (
+          <Divider type="vertical" />
+        )}
+
+        {hasBackButton && (
+          <div>
+            <BackButton />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
