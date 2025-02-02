@@ -52,6 +52,7 @@ export interface IAuthContext {
   create: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   setUser: (user: IUser | null) => void;
+  setEmployee: (employee: IEmployee | null) => void;
   updateUserSession: (newUser: IUser | null) => void;
 }
 
@@ -64,6 +65,7 @@ const AuthContext = createContext<IAuthContext>({
   validateSignInCode: async (codeValue: string): Promise<any> => {},
   validateSignInEmployeeCode: async (codeValue: string): Promise<any> => {},
   setUser: (user: IUser | null): void => {},
+  setEmployee: (employee: IEmployee | null): void => {},
   updateUserSession: (newUser: IUser | null): void => {},
   loginGoogle: async (): Promise<void> => {},
   logout: async (): Promise<void> => {},
@@ -596,6 +598,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
         validateSignInEmployeeCode,
         setUser,
         updateUserSession,
+        setEmployee,
       }}
     >
       {children}

@@ -1,35 +1,59 @@
 "use client";
 
+import { useState } from "react";
+
 import { Tag, Tooltip } from "antd";
 
+import { EmployeeEditDrawer } from "../../../app/employees/components/EmployeeEditDrawer/DownloadEmployeesDrawer";
 import useAuthData from "../../../data/context/auth/useAuthData";
+import { IEmployee } from "../../../shared/business/employees/employee.interface";
 import EmployeesEnum from "../../../shared/business/employees/employees.enum";
 import { ImageOrDefault } from "../../common/ImageOrDefault/ImageOrDefault";
 
 export const EmployeeProfileButton: React.FC = () => {
-  const { employee } = useAuthData();
+  const { employee, setEmployee } = useAuthData();
+
+  const [isEmployeeEditDrawerOpen, setIsEmployeeEditDrawerOpen] =
+    useState<boolean>(false);
 
   if (!employee) {
     return null;
   }
 
   return (
-    <div
-      className="flex items-center py-1 pl-1 pr-5 rounded-full border shadow-sm
-      bg-gradient-to-tr from-slate-300 to bg-white text-slate-950 w-48
+    <>
+      <div
+        className="flex items-center py-1 pl-1 pr-5 rounded-full border shadow-sm
+      bg-gradient-to-tr from-slate-300 to bg-white text-slate-950 w-48 cursor-pointer
     "
-    >
-      <ImageOrDefault src={employee.avatar} />
+        onClick={() => {
+          setIsEmployeeEditDrawerOpen(true);
+        }}
+      >
+        <ImageOrDefault src={employee.avatar} />
 
-      <div className="flex flex-col items-start justify-start ml-3 text-sm">
-        <Tooltip title={employee.name}>
-          <label className="w-28  truncate">{employee.name}</label>
-        </Tooltip>
+        <div className="flex flex-col items-start justify-start ml-3 text-sm">
+          <Tooltip title={employee.name} className="cursor-pointer">
+            <label className="w-28  truncate">{employee.name}</label>
+          </Tooltip>
 
-        <Tag color={EmployeesEnum.LevelColors[employee.level]}>
-          {EmployeesEnum.LevelLabels[employee.level]}
-        </Tag>
+          <Tag color={EmployeesEnum.LevelColors[employee.level]}>
+            {EmployeesEnum.LevelLabels[employee.level]}
+          </Tag>
+        </div>
       </div>
-    </div>
+      <EmployeeEditDrawer
+        employeeId={employee._id}
+        isOpen={isEmployeeEditDrawerOpen}
+        title={employee.name}
+        onCancel={() => {
+          setIsEmployeeEditDrawerOpen(false);
+        }}
+        onSave={(newEmployee: IEmployee) => {
+          setIsEmployeeEditDrawerOpen(false);
+          setEmployee(newEmployee);
+        }}
+      />
+    </>
   );
 };
