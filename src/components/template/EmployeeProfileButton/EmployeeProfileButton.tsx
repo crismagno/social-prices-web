@@ -24,7 +24,7 @@ export const EmployeeProfileButton: React.FC = () => {
     <>
       <div
         className="flex items-center py-1 pl-1 pr-5 rounded-full border shadow-sm
-      bg-gradient-to-tr from-slate-300 to bg-white text-slate-950 w-48 cursor-pointer
+      bg-gradient-to-tr from-slate-200 to bg-white text-slate-950 w-48 cursor-pointer
     "
         onClick={() => {
           setIsEmployeeEditDrawerOpen(true);

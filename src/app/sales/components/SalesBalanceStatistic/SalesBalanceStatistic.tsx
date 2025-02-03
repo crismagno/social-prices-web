@@ -75,18 +75,22 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
         src={productBalance?.product?.mainUrl}
         buttonIcon={<ShoppingCartOutlined />}
         buttonTooltip="Create Sale By Product"
-        onClickButton={() =>
-          router.push(
-            Urls.SALES_CREATE_BY_PRODUCT.replace(
-              ":productId",
-              productBalance.product?._id!
-            )
-          )
+        onClickButton={
+          productBalance?.product
+            ? () =>
+                router.push(
+                  Urls.SALES_CREATE_BY_PRODUCT.replace(
+                    ":productId",
+                    productBalance.product?._id!
+                  )
+                )
+            : undefined
         }
+        styleLeft={{ width: productBalance?.product ? 282 : 318 }}
         title={productBalance?.product?.name}
         subtitle={`Total: ${formatToMoneyDecimal(
           productBalance?.total
-        )} | Qty: ${productBalance?.quantity}`}
+        )} | Qty: ${productBalance?.quantity ?? 0}`}
       />
     );
   };

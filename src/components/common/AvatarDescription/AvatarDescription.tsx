@@ -14,6 +14,7 @@ interface Props {
   buttonIcon?: any;
   buttonTooltip?: string;
   className?: string;
+  styleLeft?: any;
 }
 
 export const AvatarDescription: React.FC<Props> = ({
@@ -24,12 +25,16 @@ export const AvatarDescription: React.FC<Props> = ({
   title,
   buttonTooltip,
   className,
+  styleLeft,
 }) => {
   return (
     <div
       className={`flex items-end justify-between border p-2 rounded-lg ${className}`}
     >
-      <div className="flex flex-row items-center" style={{ width: 282 }}>
+      <div
+        className="flex flex-row items-center"
+        style={styleLeft ?? { width: 282 }}
+      >
         <div className="mr-5 flex items-center">
           <ImageOrDefault src={src} />
         </div>
