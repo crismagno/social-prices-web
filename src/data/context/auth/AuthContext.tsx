@@ -54,6 +54,7 @@ export interface IAuthContext {
   setUser: (user: IUser | null) => void;
   setEmployee: (employee: IEmployee | null) => void;
   updateUserSession: (newUser: IUser | null) => void;
+  updateEmployeeSession: (newEmployee: IEmployee | null) => void;
 }
 
 const AuthContext = createContext<IAuthContext>({
@@ -67,6 +68,7 @@ const AuthContext = createContext<IAuthContext>({
   setUser: (user: IUser | null): void => {},
   setEmployee: (employee: IEmployee | null): void => {},
   updateUserSession: (newUser: IUser | null): void => {},
+  updateEmployeeSession: (newEmployee: IEmployee | null): void => {},
   loginGoogle: async (): Promise<void> => {},
   logout: async (): Promise<void> => {},
   login: async (): Promise<void> => {},
@@ -542,6 +544,24 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     }
   };
 
+  const updateEmployeeSession = (newEmployee: IEmployee | null) => {
+    if (!newEmployee) {
+      return;
+    }
+
+    if (!employee) {
+      _settingSession();
+      return;
+    }
+
+    _settingSession({
+      authToken:
+        localStorageMethodsInstance.localStorageAuthTokenMethods.getAuthToken(),
+      employee: newEmployee,
+      user: localStorageMethodsInstance.localStorageUserMethods.getUser(),
+    });
+  };
+
   /**
    * Method main to mount app data
    */
@@ -599,6 +619,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
         setUser,
         updateUserSession,
         setEmployee,
+        updateEmployeeSession,
       }}
     >
       {children}

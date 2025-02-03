@@ -11,7 +11,7 @@ import EmployeesEnum from "../../../shared/business/employees/employees.enum";
 import { ImageOrDefault } from "../../common/ImageOrDefault/ImageOrDefault";
 
 export const EmployeeProfileButton: React.FC = () => {
-  const { employee, setEmployee } = useAuthData();
+  const { employee, updateEmployeeSession } = useAuthData();
 
   const [isEmployeeEditDrawerOpen, setIsEmployeeEditDrawerOpen] =
     useState<boolean>(false);
@@ -53,7 +53,7 @@ export const EmployeeProfileButton: React.FC = () => {
         }}
         onSave={(newEmployee: IEmployee) => {
           setIsEmployeeEditDrawerOpen(false);
-          setEmployee(newEmployee);
+          updateEmployeeSession(newEmployee);
         }}
         isFromProfile
       />
