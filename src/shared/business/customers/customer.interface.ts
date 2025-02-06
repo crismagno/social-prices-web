@@ -17,4 +17,5 @@ export interface ICustomer extends ICreatedAtEntity, IUpdatedAtEntity {
   about: string | null;
   phoneNumbers: IPhoneNumber[];
   tagsIds: string[];
+  uniqName: string | null;
 }

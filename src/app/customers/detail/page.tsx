@@ -74,6 +74,7 @@ const formSchema = z.object({
   birthDate: z.string().nullable(),
   gender: z.string().nullable(),
   tagsIds: z.array(z.string()),
+  uniqName: z.string().trim().nullable(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -145,6 +146,7 @@ export default function CustomerDetailPage() {
         : [generateNewPhoneNumber(false)],
       gender: customer?.gender ?? PersonEnum.Gender.OTHER,
       tagsIds: customer?.tagsIds ?? [],
+      uniqName: customer?.uniqName ?? null,
     };
 
     setFormValues(values);
@@ -200,6 +202,7 @@ export default function CustomerDetailPage() {
         gender: data.gender as PersonEnum.Gender,
         phoneNumbers: data.phoneNumbers,
         tagsIds: data.tagsIds,
+        uniqName: data.uniqName,
       };
 
       for (const property of Object.keys(createCustomerDto)) {
@@ -268,6 +271,7 @@ export default function CustomerDetailPage() {
         phoneNumbers: data.phoneNumbers,
         tagsIds: data.tagsIds,
         customerId: customer._id,
+        uniqName: data.uniqName,
       };
 
       for (const property of Object.keys(updateCustomerDto)) {
@@ -343,6 +347,16 @@ export default function CustomerDetailPage() {
                 label="Name"
                 placeholder={"Enter name"}
                 errorMessage={errors.name?.message}
+                maxLength={200}
+              />
+            </Col>
+
+            <Col xs={24} md={8}>
+              <InputCustomAntd
+                controller={{ control, name: "uniqName" }}
+                label="Uniq Name"
+                placeholder={"Enter uniq name"}
+                errorMessage={errors.uniqName?.message}
                 maxLength={200}
               />
             </Col>

@@ -157,6 +157,12 @@ export default function CustomersPage() {
               align: "center",
             },
             {
+              title: "Uniq Name",
+              dataIndex: "uniqName",
+              key: "uniqName",
+              align: "center",
+            },
+            {
               title: "Email",
               dataIndex: "email",
               key: "email",
