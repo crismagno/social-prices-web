@@ -278,10 +278,10 @@ export default function CustomerDetailPage() {
         let value: keyof UpdateCustomerDto = updateCustomerDto[property];
 
         if (isArray(value)) {
-          value = JSON.stringify(value);
+          value = JSON.stringify(value) as keyof UpdateCustomerDto;
         }
 
-        formData.append([`${property}`], value);
+        formData.append([`${property}`] as any, value);
       }
 
       await serviceMethodsInstance.customersServiceMethods.update(formData);

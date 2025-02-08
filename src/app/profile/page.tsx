@@ -27,6 +27,7 @@ import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import { PhoneNumbersTag } from "../../components/common/PhoneNumbersTag/PhoneNumbersTag";
 import Layout from "../../components/template/Layout/Layout";
 import useAuthData from "../../data/context/auth/useAuthData";
+import EmployeesEnum from "../../shared/business/employees/employees.enum";
 import PersonEnum from "../../shared/business/enums/person.enum";
 import UsersEnum from "../../shared/business/users/users.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
@@ -36,7 +37,7 @@ import { getImageUrl } from "../../shared/utils/images/url-images";
 import { getUserName } from "../../shared/utils/strings/string";
 
 export default function ProfilePage() {
-  const { user } = useAuthData();
+  const { user, employee } = useAuthData();
 
   const router: AppRouterInstance = useRouter();
 
@@ -72,15 +73,17 @@ export default function ProfilePage() {
           />
         </Modal>
 
-        <div className="flex justify-end relative">
-          <Button
-            type="success"
-            onClick={() => router.push(Urls.PROFILE_EDIT)}
-            className="px-3 shadow-lg"
-            icon={<EditOutlined />}
-          >
-            Edit
-          </Button>
+        <div className="flex justify-end relative h-8">
+          {employee?.level !== EmployeesEnum.Level.EMPLOYEE && (
+            <Button
+              type="success"
+              onClick={() => router.push(Urls.PROFILE_EDIT)}
+              className="px-3 shadow-lg"
+              icon={<EditOutlined />}
+            >
+              Edit
+            </Button>
+          )}
         </div>
 
         <div className="flex flex-col justify-center items-center text-center mt-20 mb-5">
