@@ -11,7 +11,6 @@ export default function SalesPage() {
     <Layout subtitle="Sales information" title="Sales" hasBackButton>
       <Collapse
         className="mt-5"
-        defaultActiveKey={["1"]}
         style={{ backgroundColor: "#fff", boxShadow: "none" }}
         ghost
         items={[

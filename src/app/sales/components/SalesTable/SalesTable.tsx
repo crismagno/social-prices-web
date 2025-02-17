@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { RefObject, useRef, useState } from "react";
 
 import { Badge, Button, Card, Col, Modal, Row, Tag, Tooltip } from "antd";
 import { find, first, includes, map } from "lodash";
@@ -8,7 +8,12 @@ import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
-import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 
 import { ButtonCreateSale } from "../../../../components/common/ButtonCreateSale/ButtonCreateSale";
 import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
@@ -18,9 +23,11 @@ import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
 import { SaleResume } from "../../../../components/common/SaleResume/SaleResume";
 import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
 import { TagTagsCustomAntd } from "../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
+import { UploadFilesDrawer } from "../../../../components/common/UploadFilesDrawer/UploadFilesDrawer";
 import TableCustomAntd2 from "../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import { ICustomer } from "../../../../shared/business/customers/customer.interface";
+import FilesUploadsEnum from "../../../../shared/business/files-uploads/files-uploads.enum";
 import { IProduct } from "../../../../shared/business/products/products.interface";
 import {
   ISale,
@@ -36,6 +43,10 @@ import { sortArray } from "../../../../shared/utils/array/functions";
 import DatesEnum from "../../../../shared/utils/dates/dates.enum";
 import { createTableState } from "../../../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../../../shared/utils/table/table-state.interface";
+import {
+  FilesUploadsTable,
+  IFilesUploadsTableRefProps,
+} from "../../../files-uploads/FilesUploadsTable";
 import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../../tags/useFindTagsByType";
 import { useFindSalesByUserTableState } from "../../useFindSalesByUserTableState";
@@ -61,6 +72,12 @@ const SalesTable: React.FC<Props> = ({}) => {
 
   const [saleSelectedToResume, setSaleSelectedToResume] =
     useState<ISale | null>(null);
+
+  const [isUploadFilesDrawerOpen, setIsUploadFilesDrawerOpen] =
+    useState<boolean>(false);
+
+  const filesUploadsTableRef: RefObject<IFilesUploadsTableRefProps> =
+    useRef<IFilesUploadsTableRefProps>(null);
 
   const { isLoading, sales, total } =
     useFindSalesByUserTableState(tableStateRequest);
@@ -119,7 +136,20 @@ const SalesTable: React.FC<Props> = ({}) => {
       <Card
         title="Sales"
         className="h-min-80 mt-2"
-        extra={<ButtonCreateSale />}
+        extra={
+          <>
+            <Button
+              type="primary"
+              onClick={() => setIsUploadFilesDrawerOpen(true)}
+              className="mr-2"
+              icon={<UploadOutlined />}
+            >
+              Upload
+            </Button>
+
+            <ButtonCreateSale />
+          </>
+        }
       >
         <Row gutter={[16, 16]}>
           <Col md={6}>
@@ -429,6 +459,26 @@ const SalesTable: React.FC<Props> = ({}) => {
       >
         <SaleResume sale={saleSelectedToResume} stores={stores} tags={tags} />
       </Modal>
+
+      <UploadFilesDrawer
+        width={"70%"}
+        isOpen={isUploadFilesDrawerOpen}
+        onClose={() => setIsUploadFilesDrawerOpen(false)}
+        onUploadFiles={async (formData: FormData) => {
+          // await serviceMethodsInstance.salesServiceMethods.uploadCustomers(
+          //   formData
+          // );
+          await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();
+        }}
+        downloadFileName="social-prices-sales-template.xlsx"
+        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        title="Upload Sales"
+      >
+        <FilesUploadsTable
+          type={FilesUploadsEnum.Type.UPLOAD_SALES}
+          ref={filesUploadsTableRef}
+        />
+      </UploadFilesDrawer>
     </>
   );
 };
