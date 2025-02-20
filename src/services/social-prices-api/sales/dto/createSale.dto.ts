@@ -40,6 +40,18 @@ export class SaleTotalsDto {
   totalFinalAmount: number = 0;
 }
 
+export class SaleStoreTotalsDiscountDto {
+  distributedAmount: number | null = null;
+}
+
+export class SaleStoreTotalsDto {
+  subtotalAmount: number = 0;
+  discount: SaleStoreTotalsDiscountDto | null = null;
+  tax: SaleAmountNoteDto | null = null;
+  shipping: SaleAmountNoteDto | null = null;
+  totalFinalAmount: number = 0;
+}
+
 export class SaleHeaderBillingDto {
   address: CreateAddressDto | null = null;
 }
@@ -68,7 +80,7 @@ export class SaleStoreDto {
   storeId: string = "";
   customerId: string | null = null;
   products: SaleStoreProductDto[] = [];
-  totals: SaleTotalsDto = {} as any;
+  totals: SaleStoreTotalsDto = {} as any;
 }
 
 export default class CreateSaleDto {

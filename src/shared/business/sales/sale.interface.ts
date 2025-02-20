@@ -31,21 +31,33 @@ export interface ISale
   deliveryAt: Date | null;
 }
 
-export interface ISaleStore {
-  storeId: string;
-  number: number;
-  products: ISaleStoreProduct[];
-  totals: ISaleTotals;
-  customerId: string | null;
-  customer?: ICustomer;
-}
-
 export interface ISaleTotals {
   subtotalAmount: number;
   discount: ISaleTotalsDiscount | null;
   tax: ISaleAmountNote | null;
   shipping: ISaleAmountNote | null;
   totalFinalAmount: number;
+}
+
+export interface ISaleStore {
+  storeId: string;
+  number: number;
+  products: ISaleStoreProduct[];
+  totals: ISaleStoreTotals;
+  customerId: string | null;
+  customer?: ICustomer;
+}
+
+export interface ISaleStoreTotals {
+  subtotalAmount: number;
+  discount: ISaleStoreTotalsDiscount | null;
+  tax: ISaleAmountNote | null;
+  shipping: ISaleAmountNote | null;
+  totalFinalAmount: number;
+}
+
+export interface ISaleStoreTotalsDiscount {
+  distributedAmount: number | null;
 }
 
 export interface ISaleTotalsDiscount {

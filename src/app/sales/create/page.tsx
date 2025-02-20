@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect, useState } from "react";
 
 import {
   Alert,
@@ -15,34 +12,24 @@ import {
   Row,
   Select,
   Tooltip,
-} from 'antd';
-import {
-  filter,
-  find,
-  flatMap,
-  includes,
-  map,
-  reduce,
-} from 'lodash';
-import moment from 'moment';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+} from "antd";
+import { filter, find, flatMap, includes, map, reduce } from "lodash";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import {
   ReadonlyURLSearchParams,
   useRouter,
   useSearchParams,
-} from 'next/navigation';
-import {
-  SubmitHandler,
-  useForm,
-} from 'react-hook-form';
-import { z } from 'zod';
+} from "next/navigation";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
 
 import {
   CheckCircleOutlined,
   EyeOutlined,
   QuestionCircleTwoTone,
-} from '@ant-design/icons';
-import { zodResolver } from '@hookform/resolvers/zod';
+} from "@ant-design/icons";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   addressFormSchema,
@@ -51,96 +38,70 @@ import {
   stateCities,
   states,
   TAddressFormSchema,
-} from '../../../components/common/Addresses/Addresses';
-import handleClientError
-  from '../../../components/common/handleClientError/handleClientError';
-import {
-  ImageOrDefault,
-} from '../../../components/common/ImageOrDefault/ImageOrDefault';
-import Loading from '../../../components/common/Loading/Loading';
-import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
-import {
-  TagTagCustomAntd,
-} from '../../../components/common/TagTagCustomAntd/TagTagCustomAntd';
-import {
-  CheckboxCustomAntd,
-} from '../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd';
-import {
-  InputCustomAntd,
-} from '../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
-import {
-  SelectCustomAntd,
-} from '../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
-import {
-  TextareaCustomAntd,
-} from '../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd';
-import Layout from '../../../components/template/Layout/Layout';
-import useAuthData from '../../../data/context/auth/useAuthData';
+} from "../../../components/common/Addresses/Addresses";
+import handleClientError from "../../../components/common/handleClientError/handleClientError";
+import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
+import Loading from "../../../components/common/Loading/Loading";
+import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+import { TagTagCustomAntd } from "../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
+import { CheckboxCustomAntd } from "../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd";
+import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
+import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
+import Layout from "../../../components/template/Layout/Layout";
+import useAuthData from "../../../data/context/auth/useAuthData";
 import CreateSaleDto, {
   SalePaymentDto,
   SaleStoreDto,
   SaleStoreProductDto,
-} from '../../../services/social-prices-api/sales/dto/createSale.dto';
-import UpdateSaleDto
-  from '../../../services/social-prices-api/sales/dto/updateSale.dto';
-import {
-  serviceMethodsInstance,
-} from '../../../services/social-prices-api/service-methods';
-import {
-  ICustomer,
-} from '../../../shared/business/customers/customer.interface';
-import AddressEnum from '../../../shared/business/enums/address.enum';
-import PersonEnum from '../../../shared/business/enums/person.enum';
-import PhoneNumberEnum from '../../../shared/business/enums/phone-number.enum';
-import {
-  IAddress,
-} from '../../../shared/business/interfaces/address.interface';
-import { IProduct } from '../../../shared/business/products/products.interface';
+} from "../../../services/social-prices-api/sales/dto/createSale.dto";
+import UpdateSaleDto from "../../../services/social-prices-api/sales/dto/updateSale.dto";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
+import { ICustomer } from "../../../shared/business/customers/customer.interface";
+import AddressEnum from "../../../shared/business/enums/address.enum";
+import PersonEnum from "../../../shared/business/enums/person.enum";
+import PhoneNumberEnum from "../../../shared/business/enums/phone-number.enum";
+import { IAddress } from "../../../shared/business/interfaces/address.interface";
+import { IProduct } from "../../../shared/business/products/products.interface";
 import {
   ISale,
   ISaleStore,
   ISaleStoreProduct,
-} from '../../../shared/business/sales/sale.interface';
-import SalesEnum from '../../../shared/business/sales/sales.enum';
-import {
-  CreateAddressDto,
-} from '../../../shared/business/shared/dtos/CreateAddress.dto';
-import { IStore } from '../../../shared/business/stores/stores.interface';
-import TagsEnum from '../../../shared/business/tags/tags.enum';
-import { ITag } from '../../../shared/business/tags/tags.interface';
-import Urls from '../../../shared/common/routes-app/routes-app';
-import { sortArray } from '../../../shared/utils/array/functions';
-import DatesEnum from '../../../shared/utils/dates/dates.enum';
+} from "../../../shared/business/sales/sale.interface";
+import SalesEnum from "../../../shared/business/sales/sales.enum";
+import { CreateAddressDto } from "../../../shared/business/shared/dtos/CreateAddress.dto";
+import { IStore } from "../../../shared/business/stores/stores.interface";
+import TagsEnum from "../../../shared/business/tags/tags.enum";
+import { ITag } from "../../../shared/business/tags/tags.interface";
+import Urls from "../../../shared/common/routes-app/routes-app";
+import { sortArray } from "../../../shared/utils/array/functions";
+import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import {
   ICityMockData,
   ICountryMockData,
   IStateMockData,
-} from '../../../shared/utils/mock-data/interfaces';
+} from "../../../shared/utils/mock-data/interfaces";
 import {
   getPercentageByValue,
   getValueByPercentage,
-} from '../../../shared/utils/numbers/numbers';
-import { createAddressName } from '../../../shared/utils/strings/string';
-import { useFindStoresByUser } from '../../stores/useFindStoresByUser';
-import { useFindTagsByType } from '../../tags/useFindTagsByType';
-import { useFindSaleById } from '../useFindSaleById';
+} from "../../../shared/utils/numbers/numbers";
+import { createAddressName } from "../../../shared/utils/strings/string";
+import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
+import { useFindTagsByType } from "../../tags/useFindTagsByType";
+import { useFindSaleById } from "../useFindSaleById";
 import {
   AddProductsTable,
   IStoreProductToAddOnSale,
-} from './components/AddProductsTable/AddProductsTable';
+} from "./components/AddProductsTable/AddProductsTable";
 import {
   generateNewSalePayment,
   salePaymentFormSchema,
   SalePayments,
   TSalePaymentFormSchema,
-} from './components/SalePayments/SalePayments';
-import {
-  SaleResumeByCreate,
-} from './components/SaleResumeByCreate/SaleResumeByCreate';
-import { SelectCustomer } from './components/SelectCustomer/SelectCustomer';
-import {
-  SelectedProductsList,
-} from './components/SelectedProductsList/SelectedProductsList';
+} from "./components/SalePayments/SalePayments";
+import { SaleResumeByCreate } from "./components/SaleResumeByCreate/SaleResumeByCreate";
+import { SelectCustomer } from "./components/SelectCustomer/SelectCustomer";
+import { SelectedProductsList } from "./components/SelectedProductsList/SelectedProductsList";
 
 export interface ISaleStoresProductsTotals {
   subtotal: number;
@@ -930,10 +891,7 @@ export default function CreateSalePage() {
               totals: {
                 discount: dataDiscountAmountByStore
                   ? {
-                      normal: {
-                        amount: dataDiscountAmountByStore,
-                        note: dataDiscountNote,
-                      },
+                      distributedAmount: dataDiscountAmountByStore,
                     }
                   : null,
                 shipping: {
