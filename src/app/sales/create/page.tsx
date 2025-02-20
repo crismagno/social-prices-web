@@ -882,7 +882,9 @@ export default function CreateSalePage() {
                   return {
                     ...saleStoreProduct,
                     discount: discountByPercentage
-                      ? { distributedAmount: +discountByPercentage.toFixed(2) }
+                      ? {
+                          distributedAmount: +discountByPercentage.toFixed(2),
+                        }
                       : null,
                   };
                 }
