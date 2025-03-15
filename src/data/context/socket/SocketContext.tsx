@@ -82,6 +82,7 @@ export const SocketProvider = ({ children }: { children?: any }) => {
 
   useEffect(() => {
     if (socket?.connected && employee?._id && isLogged) {
+      // Customers
       socket.on(
         SocketsEnum.EventNames.UPLOAD_CUSTOMERS_RESPONSE_TO_EMPLOYEE(
           employee._id
@@ -89,7 +90,7 @@ export const SocketProvider = ({ children }: { children?: any }) => {
         (data: IFileUploadTemplateError<ICustomerFileUploadTemplateRow>[]) => {
           if (data.length > 0) {
             message.warning(
-              "Upload Customers has completed but there are error on some file, please check on customer upload table!"
+              "Upload Customers has completed but there are error on some file, please check on customers upload table!"
             );
           } else {
             message.success("Upload Customers Completed!");
@@ -97,6 +98,7 @@ export const SocketProvider = ({ children }: { children?: any }) => {
         }
       );
 
+      // Products
       socket.on(
         SocketsEnum.EventNames.UPLOAD_PRODUCTS_RESPONSE_TO_EMPLOYEE(
           employee._id
@@ -104,7 +106,7 @@ export const SocketProvider = ({ children }: { children?: any }) => {
         (data: IFileUploadTemplateError<IProductFileUploadTemplateRow>[]) => {
           if (data.length > 0) {
             message.warning(
-              "Upload Products has completed but there are error on some file, please check on product upload table!"
+              "Upload Products has completed but there are error on some file, please check on products upload table!"
             );
           } else {
             message.success("Upload Products Completed!");
@@ -112,6 +114,7 @@ export const SocketProvider = ({ children }: { children?: any }) => {
         }
       );
 
+      // Employees
       socket.on(
         SocketsEnum.EventNames.UPLOAD_EMPLOYEES_RESPONSE_TO_EMPLOYEE(
           employee._id
@@ -119,10 +122,24 @@ export const SocketProvider = ({ children }: { children?: any }) => {
         (data: IFileUploadTemplateError<IEmployeeFileUploadTemplateRow>[]) => {
           if (data.length > 0) {
             message.warning(
-              "Upload Employees has completed but there are error on some file, please check on product upload table!"
+              "Upload Employees has completed but there are error on some file, please check on employees upload table!"
             );
           } else {
             message.success("Upload Employees Completed!");
+          }
+        }
+      );
+
+      // Sales
+      socket.on(
+        SocketsEnum.EventNames.UPLOAD_SALES_RESPONSE_TO_EMPLOYEE(employee._id),
+        (data: IFileUploadTemplateError<IEmployeeFileUploadTemplateRow>[]) => {
+          if (data.length > 0) {
+            message.warning(
+              "Upload Sales has completed but there are error on some file, please check on sales upload table!"
+            );
+          } else {
+            message.success("Upload Sales Completed!");
           }
         }
       );

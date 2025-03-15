@@ -1,6 +1,6 @@
 "use client";
 
-import { RefObject, useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 
 import { Badge, Button, Card, Col, Modal, Row, Tag, Tooltip } from "antd";
 import { find, first, includes, map } from "lodash";
@@ -25,6 +25,8 @@ import SelectProducts from "../../../../components/common/SelectProducts/SelectP
 import { TagTagsCustomAntd } from "../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import { UploadFilesDrawer } from "../../../../components/common/UploadFilesDrawer/UploadFilesDrawer";
 import TableCustomAntd2 from "../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
+import useAuthData from "../../../../data/context/auth/useAuthData";
+import useSocketData from "../../../../data/context/socket/useSocketData";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import { ICustomer } from "../../../../shared/business/customers/customer.interface";
 import FilesUploadsEnum from "../../../../shared/business/files-uploads/files-uploads.enum";
@@ -35,6 +37,7 @@ import {
   ISaleStore,
 } from "../../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../../shared/business/sales/sales.enum";
+import SocketsEnum from "../../../../shared/business/sockets/sockets.enum";
 import { IStore } from "../../../../shared/business/stores/stores.interface";
 import TagsEnum from "../../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../../shared/business/tags/tags.interface";
@@ -54,6 +57,10 @@ import { useFindSalesByUserTableState } from "../../useFindSalesByUserTableState
 interface Props {}
 
 const SalesTable: React.FC<Props> = ({}) => {
+  const { user } = useAuthData();
+
+  const { socket } = useSocketData();
+
   const router: AppRouterInstance = useRouter();
 
   const [tableStateRequest, setTableStateRequest] = useState<
@@ -79,7 +86,7 @@ const SalesTable: React.FC<Props> = ({}) => {
   const filesUploadsTableRef: RefObject<IFilesUploadsTableRefProps> =
     useRef<IFilesUploadsTableRefProps>(null);
 
-  const { isLoading, sales, total } =
+  const { isLoading, sales, total, fetchFindSalesByUserTableState } =
     useFindSalesByUserTableState(tableStateRequest);
 
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
@@ -87,6 +94,24 @@ const SalesTable: React.FC<Props> = ({}) => {
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
     TagsEnum.Type.SALE
   );
+
+  useEffect(() => {
+    if (socket && filesUploadsTableRef && user) {
+      socket.on(
+        SocketsEnum.EventNames.RESPONSE_UPLOAD_SALES_FILE_TO_USER(user._id),
+        async () => {
+          await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();
+          await fetchFindSalesByUserTableState();
+        }
+      );
+
+      return () => {
+        socket.off(
+          SocketsEnum.EventNames.RESPONSE_UPLOAD_SALES_FILE_TO_USER(user._id)
+        );
+      };
+    }
+  }, [socket, filesUploadsTableRef, user]);
 
   if (isLoadingStores || isLoadingTags) {
     return <LoadingFull />;
