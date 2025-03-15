@@ -35,7 +35,7 @@ interface Props {
   setValue: UseFormSetValue<TFormSchema>;
   handleRemoveAllProduct: () => void;
   handleRemoveAllProductByStore: (storeId: string) => void;
-  handleRemoveProduct: (storeId: string, productId: string) => void;
+  handleRemoveProduct: (storeId: string, indexToRemove: number) => void;
   subtotal: number;
   quantity: number;
   totalFinal: number;
@@ -123,7 +123,7 @@ export const SelectedProductsList: React.FC<Props> = ({
 
                 return (
                   <Row
-                    key={saleStoreProduct.productId}
+                    key={`${saleStoreProduct.productId}-${indexSaleStoreProduct}`}
                     className="border-b border-slate-100 p-2"
                   >
                     <Col xs={8}>
@@ -194,7 +194,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                           onClick={() =>
                             handleRemoveProduct(
                               saleStore.storeId,
-                              saleStoreProduct.productId
+                              indexSaleStoreProduct
                             )
                           }
                           color="transparent"

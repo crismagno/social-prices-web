@@ -563,30 +563,15 @@ export default function CreateSalePage() {
         ],
       });
     } else {
-      const storeProductProduct: TSaleStoreProductFormSchema | undefined = find(
-        storeProduct.products,
-        { productId: productToAddOnSale.product.productId }
-      );
-
-      if (storeProductProduct) {
-        storeProductProduct.barcode = productToAddOnSale.product.barcode;
-        storeProductProduct.note = null;
-        storeProductProduct.price = productToAddOnSale.product.price;
-        storeProductProduct.productId = productToAddOnSale.product.productId;
-        storeProductProduct.quantity += productToAddOnSale.product.quantity;
-        storeProductProduct.name = productToAddOnSale.product.name;
-        storeProductProduct.fileUrl = productToAddOnSale.product.fileUrl;
-      } else {
-        storeProduct.products.push({
-          barcode: productToAddOnSale.product.barcode,
-          note: null,
-          price: productToAddOnSale.product.price,
-          productId: productToAddOnSale.product.productId,
-          quantity: productToAddOnSale.product.quantity,
-          name: productToAddOnSale.product.name,
-          fileUrl: productToAddOnSale.product.fileUrl,
-        });
-      }
+      storeProduct.products.push({
+        barcode: productToAddOnSale.product.barcode,
+        note: null,
+        price: productToAddOnSale.product.price,
+        productId: productToAddOnSale.product.productId,
+        quantity: productToAddOnSale.product.quantity,
+        name: productToAddOnSale.product.name,
+        fileUrl: productToAddOnSale.product.fileUrl,
+      });
     }
 
     setValue("saleStores", saleStores);
@@ -605,7 +590,7 @@ export default function CreateSalePage() {
     setValue("saleStores", saleStores);
   };
 
-  const handleRemoveProduct = (storeId: string, productId: string) => {
+  const handleRemoveProduct = (storeId: string, indexToRemove: number) => {
     const saleStore: TSaleStoreFormSchema | undefined = find(saleStores, {
       storeId,
     });
@@ -613,8 +598,8 @@ export default function CreateSalePage() {
     if (saleStore?.products?.length && saleStore?.products?.length > 1) {
       saleStore.products = filter(
         saleStore.products,
-        (saleStoreProduct: TSaleStoreProductFormSchema) =>
-          saleStoreProduct.productId !== productId
+        (_, indexSaleStoreProduct: number) =>
+          indexSaleStoreProduct !== indexToRemove
       );
     } else {
       saleStores = filter(
