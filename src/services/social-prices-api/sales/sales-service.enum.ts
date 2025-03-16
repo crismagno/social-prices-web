@@ -8,6 +8,8 @@ namespace SalesServiceEnum {
     DELETE_MANUAL = "/sales/deleteManual/:saleId",
     GET_SALES_ANALYTICS = "/sales/getSalesAnalytics",
     GET_SALES_BALANCE = "/sales/getSalesBalance",
+    UPLOAD_SALES = "/sales/uploadSales",
+    DOWNLOAD_SALES = "/sales/downloadSales",
   }
 }
 

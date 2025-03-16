@@ -9,6 +9,7 @@ import { ICustomerFileUploadTemplateRow } from "../../../shared/business/custome
 import { IEmployeeFileUploadTemplateRow } from "../../../shared/business/employees/employees.types";
 import { IFileUploadTemplateError } from "../../../shared/business/files-uploads/files-uploads.type";
 import { IProductFileUploadTemplateRow } from "../../../shared/business/products/products.type";
+import { ISaleFileUploadTemplateRow } from "../../../shared/business/sales/sales.type";
 import SocketsEnum from "../../../shared/business/sockets/sockets.enum";
 import useAuthData from "../auth/useAuthData";
 
@@ -133,7 +134,7 @@ export const SocketProvider = ({ children }: { children?: any }) => {
       // Sales
       socket.on(
         SocketsEnum.EventNames.UPLOAD_SALES_RESPONSE_TO_EMPLOYEE(employee._id),
-        (data: IFileUploadTemplateError<IEmployeeFileUploadTemplateRow>[]) => {
+        (data: IFileUploadTemplateError<ISaleFileUploadTemplateRow>[]) => {
           if (data.length > 0) {
             message.warning(
               "Upload Sales has completed but there are error on some file, please check on sales upload table!"

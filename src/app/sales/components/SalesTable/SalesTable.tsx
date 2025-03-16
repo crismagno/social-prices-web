@@ -490,9 +490,9 @@ const SalesTable: React.FC<Props> = ({}) => {
         isOpen={isUploadFilesDrawerOpen}
         onClose={() => setIsUploadFilesDrawerOpen(false)}
         onUploadFiles={async (formData: FormData) => {
-          // await serviceMethodsInstance.salesServiceMethods.uploadCustomers(
-          //   formData
-          // );
+          await serviceMethodsInstance.salesServiceMethods.uploadSales(
+            formData
+          );
           await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();
         }}
         downloadFileName="social-prices-sales-template.xlsx"

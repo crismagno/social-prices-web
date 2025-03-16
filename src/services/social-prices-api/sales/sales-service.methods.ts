@@ -2,6 +2,7 @@
 
 import { ISale } from "../../../shared/business/sales/sale.interface";
 import {
+  IFiltersDownloadSales,
   IGetSalesAnalyticsParams,
   IGetSalesAnalyticsResponse,
   IGetSalesBalanceParams,
@@ -139,6 +140,36 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async uploadSales(formData: FormData): Promise<void> {
+    const response = await this._fetchAxios.post<void>(
+      `${this._socialPricesApiV1}${SalesServiceEnum.Methods.UPLOAD_SALES}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async downloadSales(filters: IFiltersDownloadSales): Promise<Buffer> {
+    const response = await this._fetchAxios.post<Buffer>(
+      `${this._socialPricesApiV1}${SalesServiceEnum.Methods.DOWNLOAD_SALES}`,
+      filters,
+      {
+        headers: {
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+        responseType: "blob",
       }
     );
 
