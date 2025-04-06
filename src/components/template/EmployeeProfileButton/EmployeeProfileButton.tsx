@@ -27,9 +27,7 @@ export const EmployeeProfileButton: React.FC = () => {
         bg-gradient-to-tr from-white to-slate-100  text-slate-950 hover:from-slate-100 hover:to-slate-200 w-48 
         cursor-pointer
     "
-        onClick={() => {
-          setIsEmployeeEditDrawerOpen(true);
-        }}
+        onClick={() => setIsEmployeeEditDrawerOpen(true)}
       >
         <ImageOrDefault src={employee.avatar} />
 
@@ -48,9 +46,7 @@ export const EmployeeProfileButton: React.FC = () => {
         employeeId={employee._id}
         isOpen={isEmployeeEditDrawerOpen}
         title={employee.name}
-        onCancel={() => {
-          setIsEmployeeEditDrawerOpen(false);
-        }}
+        onCancel={() => setIsEmployeeEditDrawerOpen(false)}
         onSave={(newEmployee: IEmployee) => {
           setIsEmployeeEditDrawerOpen(false);
           updateEmployeeSession(newEmployee);
