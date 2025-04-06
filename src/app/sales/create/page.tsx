@@ -165,6 +165,7 @@ const formSchema = z.object({
   paymentStatus: z.string().nonempty("Payment status is required"),
   tagsIds: z.array(z.string()),
   deliveryAt: z.string().nullable(),
+  createdDate: z.string().nullable(),
 });
 
 export type TFormSchema = z.infer<typeof formSchema>;
@@ -202,6 +203,7 @@ const generateFormSchemaDefault = (): TFormSchema => {
     paymentStatus: SalesEnum.PaymentStatus.PENDING,
     tagsIds: [],
     deliveryAt: null,
+    createdDate: null,
   };
 };
 
@@ -388,6 +390,11 @@ export default function CreateSalePage() {
           tagsIds: saleById?.tagsIds ?? [],
           deliveryAt: saleById?.deliveryAt
             ? moment(saleById.deliveryAt)
+                .utc()
+                .format(DatesEnum.Format.YYYYMMDD_DASHED)
+            : null,
+          createdDate: saleById?.createdDate
+            ? moment(saleById.createdDate)
                 .utc()
                 .format(DatesEnum.Format.YYYYMMDD_DASHED)
             : null,
@@ -893,6 +900,9 @@ export default function CreateSalePage() {
           }
         ),
         deliveryAt: data.deliveryAt ? moment(data.deliveryAt).toDate() : null,
+        createdDate: data.createdDate
+          ? moment(data.createdDate).toDate()
+          : null,
       };
 
       let response: ISale | null = null;
@@ -1405,7 +1415,7 @@ export default function CreateSalePage() {
             </Row>
 
             <Row className="mt-3">
-              <Col xs={24} md={8}>
+              <Col xs={24} md={8} className="pr-5">
                 <InputCustomAntd
                   controller={{ control, name: "deliveryAt" }}
                   label="Delivery Date"
@@ -1413,7 +1423,17 @@ export default function CreateSalePage() {
                   type="date"
                   placeholder={"Enter deliveryAt"}
                   errorMessage={errors?.deliveryAt?.message}
-                  maxLength={200}
+                />
+              </Col>
+
+              <Col xs={24} md={8} className="pr-5">
+                <InputCustomAntd
+                  controller={{ control, name: "createdDate" }}
+                  label="Created Date"
+                  divClassName="mt-0"
+                  type="date"
+                  placeholder={"Enter createdDate"}
+                  errorMessage={errors?.createdDate?.message}
                 />
               </Col>
             </Row>

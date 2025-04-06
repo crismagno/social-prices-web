@@ -98,4 +98,5 @@ export default class CreateSaleDto {
   paymentStatus: SalesEnum.PaymentStatus = SalesEnum.PaymentStatus.PENDING;
   tagsIds: string[] = [];
   deliveryAt: Date | null = null;
+  createdDate: Date | null = null;
 }
