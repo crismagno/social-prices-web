@@ -14,6 +14,6 @@ export const createTableState = <T>(
     },
     search: params?.search,
     sort: params?.sort,
-    useConcat: false,
+    useConcat: params?.useConcat ?? false,
   };
 };
