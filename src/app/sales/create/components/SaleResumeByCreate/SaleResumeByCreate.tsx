@@ -303,6 +303,17 @@ export const SaleResumeByCreate: React.FC<Props> = ({
         </label>
       </div>
 
+      <div className="flex justify-between pr-10 mt-2">
+        <label className="font-semibold">Created Date: </label>
+        <label>
+          {formSchema.createdDate
+            ? moment(formSchema.createdDate).format(
+                DatesEnum.Format.DDMMYYYYhhmmss
+              )
+            : ""}
+        </label>
+      </div>
+
       <Divider />
 
       <div className="flex pr-10 mt-2">
