@@ -314,6 +314,11 @@ export const SaleResumeByCreate: React.FC<Props> = ({
         </label>
       </div>
 
+      <div className="flex justify-between pr-10 mt-2">
+        <label className="font-semibold">Sale Number Manual: </label>
+        <label>{formSchema.numberManual ?? ""}</label>
+      </div>
+
       <Divider />
 
       <div className="flex pr-10 mt-2">

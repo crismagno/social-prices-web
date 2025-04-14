@@ -166,6 +166,7 @@ const formSchema = z.object({
   tagsIds: z.array(z.string()),
   deliveryAt: z.string().nullable(),
   createdDate: z.string().nullable(),
+  numberManual: z.string().nullable(),
 });
 
 export type TFormSchema = z.infer<typeof formSchema>;
@@ -204,6 +205,7 @@ const generateFormSchemaDefault = (): TFormSchema => {
     tagsIds: [],
     deliveryAt: null,
     createdDate: null,
+    numberManual: null,
   };
 };
 
@@ -398,6 +400,7 @@ export default function CreateSalePage() {
                 .utc()
                 .format(DatesEnum.Format.YYYYMMDD_DASHED)
             : null,
+          numberManual: saleById?.numberManual ?? null,
         });
       };
 
@@ -903,6 +906,7 @@ export default function CreateSalePage() {
         createdDate: data.createdDate
           ? moment(data.createdDate).toDate()
           : null,
+        numberManual: data.numberManual?.trim() ?? null,
       };
 
       let response: ISale | null = null;
@@ -1432,8 +1436,17 @@ export default function CreateSalePage() {
                   label="Created Date"
                   divClassName="mt-0"
                   type="date"
-                  placeholder={"Enter createdDate"}
+                  placeholder={"Enter created date"}
                   errorMessage={errors?.createdDate?.message}
+                />
+              </Col>
+              <Col xs={24} md={8} className="pr-5">
+                <InputCustomAntd
+                  controller={{ control, name: "numberManual" }}
+                  label="Sale Number Manual"
+                  divClassName="mt-0"
+                  placeholder={"Enter sale number manual"}
+                  errorMessage={errors?.numberManual?.message}
                 />
               </Col>
             </Row>

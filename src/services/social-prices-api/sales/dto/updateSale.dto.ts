@@ -24,4 +24,5 @@ export default class UpdateSaleDto {
   tagsIds: string[] = [];
   deliveryAt: Date | null = null;
   createdDate: Date | null = null;
+  numberManual: string | null = null;
 }

@@ -30,6 +30,7 @@ export interface ISale
   tagsIds: string[];
   deliveryAt: Date | null;
   createdDate: Date | null;
+  numberManual: string | null;
 }
 
 export interface ISaleTotals {

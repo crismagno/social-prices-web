@@ -338,6 +338,11 @@ export const SaleResume: React.FC<Props> = ({ sale, stores, tags }) => {
         </label>
       </div>
 
+      <div className="flex justify-between pr-10 mt-2">
+        <label className="font-semibold">Sale Number Manual: </label>
+        <label>{sale.numberManual ?? ""}</label>
+      </div>
+
       <Divider />
 
       <div className="flex pr-10 mt-2">
