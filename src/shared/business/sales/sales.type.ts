@@ -79,6 +79,9 @@ export interface ISaleFileUploadTemplateRow {
   saleStatus?: string;
   paymentStatus?: string;
   deliveryDate?: string;
+  deliveryType?: string;
+  createdDate?: string;
+  saleNumberManual?: string;
 }
 
 export interface IFiltersDownloadSales {
