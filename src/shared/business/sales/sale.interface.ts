@@ -13,7 +13,6 @@ export interface ISale
     IUpdatedAtEntity,
     ISoftDeleteEntity {
   readonly _id: string;
-  description: string | null;
   createdByUserId: string | null;
   updatedByUserId: string | null;
   createdByEmployeeId: string | null;
