@@ -31,6 +31,7 @@ export interface ISale
   deliveryAt: Date | null;
   createdDate: Date | null;
   numberManual: string | null;
+  uploadFilename: string | null;
 }
 
 export interface ISaleTotals {

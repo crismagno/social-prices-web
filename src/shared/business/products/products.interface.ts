@@ -17,4 +17,5 @@ export interface IProduct extends ICreatedAtEntity, IUpdatedAtEntity {
   QRCode: string | null;
   categoriesIds: string[];
   tagsIds: string[];
+  uploadFilename: string | null;
 }

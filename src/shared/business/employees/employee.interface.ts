@@ -22,4 +22,5 @@ export interface IEmployee extends ICreatedAtEntity, IUpdatedAtEntity {
   level: EmployeesEnum.Level;
   status: EmployeesEnum.Status;
   isMain: boolean;
+  uploadFilename: string | null;
 }

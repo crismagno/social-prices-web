@@ -18,4 +18,5 @@ export interface ICustomer extends ICreatedAtEntity, IUpdatedAtEntity {
   phoneNumbers: IPhoneNumber[];
   tagsIds: string[];
   uniqName: string | null;
+  uploadFilename: string | null;
 }
