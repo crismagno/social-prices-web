@@ -152,11 +152,13 @@ namespace SalesEnum {
   export enum SortField {
     deliveryAt = "deliveryAt",
     createdAt = "createdAt",
+    createdDate = "createdDate",
   }
 
   export const SortFieldLabels = {
     [SortField.deliveryAt]: "Delivery At",
     [SortField.createdAt]: "Created At",
+    [SortField.createdDate]: "Created Date",
   };
 }
 
