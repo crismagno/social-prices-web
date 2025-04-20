@@ -15,11 +15,15 @@ const containerHeight: number = 260;
 interface Props {
   onSelectProducts?: (selectedProducts: IProduct[]) => void;
   selectedProductIds: string[];
+  label?: any;
+  labelClassName?: string;
 }
 
 const SelectProducts: React.FC<Props> = ({
   onSelectProducts,
   selectedProductIds,
+  label,
+  labelClassName = "",
 }) => {
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<IProduct> | undefined
@@ -68,44 +72,49 @@ const SelectProducts: React.FC<Props> = ({
   };
 
   return (
-    <Select
-      onPopupScroll={onPopupScroll}
-      onSearch={onSearch}
-      showSearch
-      mode="multiple"
-      value={selectedProductIds}
-      onChange={(productIds: string[]) => {
-        const selectedProducts: IProduct[] = filter(
-          products,
-          (product: IProduct) => includes(productIds, product._id)
-        );
-        onSelectProducts?.(selectedProducts);
-      }}
-      dropdownStyle={{
-        maxHeight: containerHeight,
-      }}
-      allowClear
-      listHeight={containerHeight}
-      filterOption={false}
-      style={{ width: "100%" }}
-    >
-      {products?.map((product: IProduct) => (
-        <Select.Option key={product._id} value={product._id}>
-          <div className="flex items-center">
-            <Avatar
-              src={
-                product.mainUrl
-                  ? getImageUrl(product.mainUrl)
-                  : defaultAvatarImage
-              }
-              size={"small"}
-              className="mr-2"
-            />
-            <span>{product.name}</span>
-          </div>
-        </Select.Option>
-      ))}
-    </Select>
+    <>
+      {label && (
+        <label className={`mr-1 font-bold ${labelClassName}`}>{label}</label>
+      )}
+      <Select
+        onPopupScroll={onPopupScroll}
+        onSearch={onSearch}
+        showSearch
+        mode="multiple"
+        value={selectedProductIds}
+        onChange={(productIds: string[]) => {
+          const selectedProducts: IProduct[] = filter(
+            products,
+            (product: IProduct) => includes(productIds, product._id)
+          );
+          onSelectProducts?.(selectedProducts);
+        }}
+        dropdownStyle={{
+          maxHeight: containerHeight,
+        }}
+        allowClear
+        listHeight={containerHeight}
+        filterOption={false}
+        style={{ width: "100%" }}
+      >
+        {products?.map((product: IProduct) => (
+          <Select.Option key={product._id} value={product._id}>
+            <div className="flex items-center">
+              <Avatar
+                src={
+                  product.mainUrl
+                    ? getImageUrl(product.mainUrl)
+                    : defaultAvatarImage
+                }
+                size={"small"}
+                className="mr-2"
+              />
+              <span>{product.name}</span>
+            </div>
+          </Select.Option>
+        ))}
+      </Select>
+    </>
   );
 };
 

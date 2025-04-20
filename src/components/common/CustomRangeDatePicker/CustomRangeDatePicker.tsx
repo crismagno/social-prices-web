@@ -13,6 +13,7 @@ interface Props {
   showTime?: boolean;
   defaultValue?: [moment.Moment, moment.Moment];
   format?: string;
+  labelClassName?: string;
 }
 
 export const CustomRangeDatePicker: React.FC<Props> = ({
@@ -21,10 +22,13 @@ export const CustomRangeDatePicker: React.FC<Props> = ({
   showTime = false,
   defaultValue,
   format,
+  labelClassName = "",
 }) => {
   return (
     <div>
-      {label && <label className="mr-2 font-bold">{label}</label>}
+      {label && (
+        <label className={`mr-2 font-bold ${labelClassName}`}>{label}</label>
+      )}
       <RangePicker
         defaultValue={
           defaultValue && [

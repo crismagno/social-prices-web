@@ -117,8 +117,8 @@ export const SalesChart: React.FC<Props> = ({
         </Col>
 
         <Col md={4}>
-          <label className="mr-1 font-bold">Products:</label>
           <SelectProducts
+            label={"Products"}
             selectedProductIds={getSalesAnalyticsParams.productIds ?? []}
             onSelectProducts={(selectProducts: IProduct[]) => {
               setGetSalesAnalyticsParams({

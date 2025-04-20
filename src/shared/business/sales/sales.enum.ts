@@ -148,6 +148,16 @@ namespace SalesEnum {
     Status.STARTED,
     Status.STOPPED,
   ];
+
+  export enum SortField {
+    deliveryAt = "deliveryAt",
+    createdAt = "createdAt",
+  }
+
+  export const SortFieldLabels = {
+    [SortField.deliveryAt]: "Delivery At",
+    [SortField.createdAt]: "Created At",
+  };
 }
 
 export default SalesEnum;

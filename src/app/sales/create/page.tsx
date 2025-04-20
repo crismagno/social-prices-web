@@ -2,17 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import {
-  Alert,
-  Badge,
-  Button,
-  Card,
-  Col,
-  Modal,
-  Row,
-  Select,
-  Tooltip,
-} from "antd";
+import { Alert, Button, Card, Col, Modal, Row, Select, Tooltip } from "antd";
 import { filter, find, flatMap, includes, map, reduce } from "lodash";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
@@ -41,6 +31,7 @@ import {
 } from "../../../components/common/Addresses/Addresses";
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
 import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
+import { LabelBadgeCustomAntd } from "../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
 import Loading from "../../../components/common/Loading/Loading";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { TagTagCustomAntd } from "../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
@@ -1359,11 +1350,10 @@ export default function CreateSalePage() {
                 >
                   {Object.keys(SalesEnum.Status).map((status: string) => (
                     <Select.Option key={status} value={status}>
-                      <span className="mr-1">
-                        {SalesEnum.StatusLabels[status as SalesEnum.Status]}
-                      </span>
-
-                      <Badge
+                      <LabelBadgeCustomAntd
+                        label={
+                          SalesEnum.StatusLabels[status as SalesEnum.Status]
+                        }
                         color={
                           SalesEnum.StatusColors[status as SalesEnum.Status]
                         }
@@ -1387,15 +1377,12 @@ export default function CreateSalePage() {
                   {Object.keys(SalesEnum.PaymentStatus).map(
                     (paymentStatus: string) => (
                       <Select.Option key={paymentStatus} value={paymentStatus}>
-                        <span className="mr-1">
-                          {
+                        <LabelBadgeCustomAntd
+                          label={
                             SalesEnum.PaymentStatusLabels[
                               paymentStatus as SalesEnum.PaymentStatus
                             ]
                           }
-                        </span>
-
-                        <Badge
                           color={
                             SalesEnum.PaymentStatusColors[
                               paymentStatus as SalesEnum.PaymentStatus

@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 
 import {
   DeleteOutlined,
+  DownloadOutlined,
   EditOutlined,
   EyeOutlined,
   UploadOutlined,
@@ -53,6 +54,7 @@ import {
 import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../../tags/useFindTagsByType";
 import { useFindSalesByUserTableState } from "../../useFindSalesByUserTableState";
+import { DownloadSalesDrawer } from "../DownloadSalesDrawer/DownloadSalesDrawer";
 
 interface Props {}
 
@@ -81,6 +83,9 @@ const SalesTable: React.FC<Props> = ({}) => {
     useState<ISale | null>(null);
 
   const [isUploadFilesDrawerOpen, setIsUploadFilesDrawerOpen] =
+    useState<boolean>(false);
+
+  const [isDownloadSalesDrawerOpen, setIsDownloadSalesDrawerOpen] =
     useState<boolean>(false);
 
   const filesUploadsTableRef: RefObject<IFilesUploadsTableRefProps> =
@@ -165,6 +170,15 @@ const SalesTable: React.FC<Props> = ({}) => {
           <>
             <Button
               type="primary"
+              onClick={() => setIsDownloadSalesDrawerOpen(true)}
+              className="mr-2"
+              icon={<DownloadOutlined />}
+            >
+              Download
+            </Button>
+
+            <Button
+              type="primary"
               onClick={() => setIsUploadFilesDrawerOpen(true)}
               className="mr-2"
               icon={<UploadOutlined />}
@@ -186,8 +200,8 @@ const SalesTable: React.FC<Props> = ({}) => {
           </Col>
 
           <Col md={6}>
-            <label className="mr-1 font-bold">Products:</label>
             <SelectProducts
+              label={"Products"}
               selectedProductIds={tableStateRequest?.filters?.productIds ?? []}
               onSelectProducts={(selectProducts: IProduct[]) => {
                 setTableStateRequest({
@@ -504,6 +518,14 @@ const SalesTable: React.FC<Props> = ({}) => {
           ref={filesUploadsTableRef}
         />
       </UploadFilesDrawer>
+
+      <DownloadSalesDrawer
+        isOpen={isDownloadSalesDrawerOpen}
+        onClose={() => setIsDownloadSalesDrawerOpen(false)}
+        tags={tagsSort}
+        title="Download Sales"
+        stores={stores}
+      />
     </>
   );
 };
