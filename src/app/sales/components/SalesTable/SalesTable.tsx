@@ -230,12 +230,25 @@ const SalesTable: React.FC<Props> = ({}) => {
           className="overflow-auto"
           columns={[
             {
-              title: "Sale Number",
+              title: "Number",
               dataIndex: "number",
               key: "number",
               align: "center",
-              render: (number: string) => (
-                <strong className="mr-2">{number}</strong>
+              render: (number: string, saleNum) => (
+                <>
+                  <strong className="mr-2">{number}</strong>
+                </>
+              ),
+            },
+            {
+              title: "Number Manual",
+              dataIndex: "numberManual",
+              key: "numberManual",
+              align: "center",
+              render: (numberManual: string) => (
+                <>
+                  <strong className="mr-2">{numberManual}</strong>
+                </>
               ),
             },
             {
@@ -382,6 +395,15 @@ const SalesTable: React.FC<Props> = ({}) => {
               align: "center",
               render: (createdAt: Date) =>
                 moment(createdAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
+              sorter: true,
+            },
+            {
+              title: "Created Date",
+              dataIndex: "createdDate",
+              key: "createdDate",
+              align: "center",
+              render: (createdDate: Date) =>
+                moment(createdDate).format(DatesEnum.Format.DDMMYYYYhhmmss),
               sorter: true,
             },
             {

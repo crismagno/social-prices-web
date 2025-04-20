@@ -268,8 +268,6 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
                   key={`download-filter-sales-store-${store._id}`}
                   value={store._id}
                 >
-                  {store.name}
-
                   <LabelBadgeCustomAntd
                     label={store.name}
                     color={StoresEnum.StatusBadgeColor[store.status]}
