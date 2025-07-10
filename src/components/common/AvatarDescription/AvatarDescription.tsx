@@ -11,6 +11,7 @@ interface Props {
   title?: string;
   subtitle?: string;
   onClickButton?: (event: any) => void | Promise<void>;
+  onClickTitleButton?: (event: any) => void | Promise<void>;
   buttonIcon?: any;
   buttonTooltip?: string;
   className?: string;
@@ -21,6 +22,7 @@ export const AvatarDescription: React.FC<Props> = ({
   src,
   buttonIcon,
   onClickButton,
+  onClickTitleButton,
   subtitle,
   title,
   buttonTooltip,
@@ -40,7 +42,12 @@ export const AvatarDescription: React.FC<Props> = ({
         </div>
 
         <div className="flex flex-col">
-          <label className="color-black-1 text-base">{title}</label>
+          <label
+            className="text-base cursor-pointer hover:text-blue-500"
+            onClick={onClickTitleButton}
+          >
+            {title}
+          </label>
           <label className="color-gray-1 text-sm">{subtitle}</label>
         </div>
       </div>

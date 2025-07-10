@@ -43,6 +43,8 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
               productBalance: IGetSalesProductBalanceResponse,
               index: number
             ) => {
+              const productId: string = productBalance.product?._id!;
+
               return (
                 <AvatarDescription
                   key={index}
@@ -53,8 +55,13 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
                     router.push(
                       Urls.SALES_CREATE_BY_PRODUCT.replace(
                         ":productId",
-                        productBalance.product?._id!
+                        productId
                       )
+                    )
+                  }
+                  onClickTitleButton={() =>
+                    router.push(
+                      Urls.EDIT_PRODUCT.replace(":productId", productId)
                     )
                   }
                   title={productBalance?.product?.name}
