@@ -6,6 +6,7 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
+  Legend,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -123,7 +124,7 @@ export const SalesChartPeriodType: React.FC<Props> = ({
     );
   };
 
-  const renderYAxis = (tickProps: any) => {
+  const renderYAxisTotal = (tickProps: any) => {
     const { x, y, payload } = tickProps;
     const { value } = payload;
 
@@ -136,6 +137,24 @@ export const SalesChartPeriodType: React.FC<Props> = ({
           y={y + 4}
         >
           {formatToMoneyDecimal(value)}
+        </text>
+      </>
+    );
+  };
+
+  const renderYAxisQuantity = (tickProps: any) => {
+    const { x, y, payload } = tickProps;
+    const { value } = payload;
+
+    return (
+      <>
+        <text
+          style={{ fontSize: "0.6rem" }}
+          textAnchor="middle"
+          x={x + 5}
+          y={y + 4}
+        >
+          {value}
         </text>
       </>
     );
@@ -171,15 +190,23 @@ export const SalesChartPeriodType: React.FC<Props> = ({
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" tick={renderXAxis} />
-            <YAxis tick={renderYAxis} />
+            <YAxis tick={renderYAxisTotal} yAxisId="total" />
+            <YAxis
+              tick={renderYAxisQuantity}
+              yAxisId="quantity"
+              orientation="right"
+            />
 
             <Tooltip content={renderTooltip} />
+            <Legend />
+
             <Area
               type="monotone"
               dataKey="total"
               stroke="#8dc5f8"
               fillOpacity={0.5}
               fill="#8dc5f8"
+              yAxisId="total"
             />
             <Area
               type="monotone"
@@ -187,6 +214,7 @@ export const SalesChartPeriodType: React.FC<Props> = ({
               stroke="#1f1f1f"
               fillOpacity={1}
               fill="url(#colorPv)"
+              yAxisId="quantity"
             />
           </AreaChart>
         </ResponsiveContainer>
