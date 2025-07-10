@@ -177,8 +177,16 @@ export const SalesChartPeriodType: React.FC<Props> = ({
             <Area
               type="monotone"
               dataKey="total"
-              stroke="#1677FE"
-              fill="#1677FE"
+              stroke="#8dc5f8"
+              fillOpacity={0.5}
+              fill="#8dc5f8"
+            />
+            <Area
+              type="monotone"
+              dataKey="quantity"
+              stroke="#1f1f1f"
+              fillOpacity={1}
+              fill="url(#colorPv)"
             />
           </AreaChart>
         </ResponsiveContainer>

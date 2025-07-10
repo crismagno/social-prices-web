@@ -67,11 +67,17 @@ export const SalesChartListProducts: React.FC<Props> = ({ salesAnalytics }) => {
           <List.Item>
             <List.Item.Meta
               avatar={<ImageOrDefault src={item.mainUrl} />}
-              title={<a href={Urls.PRODUCTS}>{item.name}</a>}
+              title={
+                <a
+                  href={Urls.EDIT_PRODUCT.replace(":productId", item.productId)}
+                >
+                  {item.name}
+                </a>
+              }
               description={
                 <div className="flex justify-between">
                   <div>
-                    Total: ${formatToMoneyDecimal(item.total)} | Qty: $
+                    Total: {formatToMoneyDecimal(item.total)} | Qty:{" "}
                     {item.quantity}
                   </div>
 
