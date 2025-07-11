@@ -151,10 +151,10 @@ export const SalesChartPeriodType: React.FC<Props> = ({
         <text
           style={{ fontSize: "0.6rem" }}
           textAnchor="middle"
-          x={x + 5}
+          x={x + 15}
           y={y + 4}
         >
-          {value}
+          Qty: {value}
         </text>
       </>
     );
