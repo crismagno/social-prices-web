@@ -11,10 +11,12 @@ import {
   Input,
   message,
   Modal,
+  Popover,
   QRCode,
   Row,
   Select,
   Space,
+  Tag,
   Upload,
   UploadFile,
   UploadProps,
@@ -31,6 +33,7 @@ import {
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 
+import { QuestionCircleTwoTone } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
@@ -357,7 +360,32 @@ export default function ProductDetailPage() {
             <Col xs={24} md={8}>
               <InputCustomAntd
                 controller={{ control, name: "barcode" }}
-                label="Barcode"
+                label={
+                  <>
+                    <span>Barcode</span>
+                    {product?.previousBarcodes?.length && (
+                      <Popover
+                        content={
+                          <ul>
+                            {product.previousBarcodes.map(
+                              (previousBarcode: string, index: number) => (
+                                <li
+                                  key={`previousBarcode_${index}`}
+                                  className="mt-1"
+                                >
+                                  <Tag>{previousBarcode}</Tag>
+                                </li>
+                              )
+                            )}
+                          </ul>
+                        }
+                        title="Previous Barcodes"
+                      >
+                        <QuestionCircleTwoTone className="ml-1" />
+                      </Popover>
+                    )}
+                  </>
+                }
                 placeholder={"Enter barcode"}
                 errorMessage={errors.barcode?.message}
                 maxLength={100}
