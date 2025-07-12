@@ -5,6 +5,7 @@ import { Col, Row } from "antd";
 import Layout from "../../components/template/Layout/Layout";
 import { SalesBalance } from "../sales/components/SalesBalance/SalesBalance";
 import { SalesChart } from "../sales/components/SalesChart/SalesChart";
+import { SalesChartsStatistics } from "../sales/components/SalesChartsStatistics/SalesChartsStatistics";
 import SalesTable from "../sales/components/SalesTable/SalesTable";
 import { CategoriesCard } from "./components/CategoriesCard/CategoriesCard";
 import { CustomersCard } from "./components/CustomersCard/CustomersCard";
@@ -33,6 +34,8 @@ export default function DashboardPage() {
       </Row>
 
       <SalesBalance />
+
+      <SalesChartsStatistics />
 
       <SalesChart cardClassName="mt-2" />
 
