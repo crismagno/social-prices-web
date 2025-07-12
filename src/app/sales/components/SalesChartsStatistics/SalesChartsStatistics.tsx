@@ -12,7 +12,7 @@ interface Props {
 
 export const SalesChartsStatistics: React.FC<Props> = ({ className }) => {
   return (
-    <Card className={`my-2 ${className}`}>
+    <Card className={`my-2 ${className}`} title="Sales Statistics">
       <Row gutter={[2, 2]}>
         <Col xs={24} sm={24} md={12}>
           <SalesChartStatistic

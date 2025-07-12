@@ -22,7 +22,11 @@ export const SalesBalance: React.FC<Props> = ({ className }) => {
   const { salesBalance, isLoading } = useGetSalesBalance(salesBalanceParams);
 
   return (
-    <Card className={`my-2 ${className}`} loading={isLoading}>
+    <Card
+      className={`my-2 ${className}`}
+      loading={isLoading}
+      title="Sales Balance"
+    >
       <Row gutter={[10, 10]}>
         <Col xs={24} sm={12} md={6}>
           <SalesBalanceStatistic
