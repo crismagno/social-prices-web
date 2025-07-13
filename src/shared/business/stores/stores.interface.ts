@@ -22,4 +22,6 @@ export interface IStore
   about: string | null;
   categoriesIds: string[];
   tagsIds: string[];
+  cnpj: string | null;
+  type: StoresEnum.Type | null;
 }

@@ -22,7 +22,6 @@ import {
 import { InputNumberCustomAntd } from "../../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import { SelectCustomAntd } from "../../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import SalesEnum from "../../../../../shared/business/sales/sales.enum";
-import StoresEnum from "../../../../../shared/business/stores/stores.enum";
 import {
   formatterMoney,
   formatToMoneyDecimal,
@@ -38,7 +37,7 @@ export const salePaymentFormSchema = z.object({
 export type TSalePaymentFormSchema = z.infer<typeof salePaymentFormSchema>;
 
 export const generateNewSalePayment = (): TSalePaymentFormSchema => ({
-  type: StoresEnum.Type.OTHER,
+  type: SalesEnum.PaymentType.OTHER,
   amount: 0,
 });
 

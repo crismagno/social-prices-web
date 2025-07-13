@@ -2,8 +2,8 @@ import { Select, Tooltip } from "antd";
 import { useFieldArray } from "react-hook-form";
 import { z } from "zod";
 
+import PhoneNumberEnum from "../../../shared/business/enums/phone-number.enum";
 import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number.interface";
-import StoresEnum from "../../../shared/business/stores/stores.enum";
 import { createPhoneNumberName } from "../../../shared/utils/strings/string";
 import { InputCustomAntd } from "../../custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../custom/antd/SelectCustomAntd/SelectCustomAntd";
@@ -25,7 +25,7 @@ export type TPhoneNumberFormSchema = z.infer<typeof phoneNumberFormSchema>;
 export const generateNewPhoneNumber = (
   isCollapsed: boolean = true
 ): TPhoneNumberFormSchema => ({
-  type: StoresEnum.Type.OTHER,
+  type: PhoneNumberEnum.Type.OTHER,
   number: "",
   isCollapsed,
   uid: Date.now().toString(),
@@ -125,11 +125,17 @@ export const PhoneNumbers: React.FC<Props> = ({
                     label="Type"
                     errorMessage={errors?.phoneNumbers?.[index]?.type?.message}
                   >
-                    {Object.keys(StoresEnum.Type).map((phoneType: string) => (
-                      <Select.Option key={phoneType} value={phoneType}>
-                        {StoresEnum.TypeLabels[phoneType as StoresEnum.Type]}
-                      </Select.Option>
-                    ))}
+                    {Object.keys(PhoneNumberEnum.Type).map(
+                      (phoneType: string) => (
+                        <Select.Option key={phoneType} value={phoneType}>
+                          {
+                            PhoneNumberEnum.TypeLabels[
+                              phoneType as PhoneNumberEnum.Type
+                            ]
+                          }
+                        </Select.Option>
+                      )
+                    )}
                   </SelectCustomAntd>
                 </div>
 
@@ -161,15 +167,15 @@ export const PhoneNumbers: React.FC<Props> = ({
                     placeholder={"Select messengers"}
                     mode="multiple"
                   >
-                    {Object.keys(StoresEnum.PhoneNumberMessenger).map(
+                    {Object.keys(PhoneNumberEnum.PhoneNumberMessenger).map(
                       (phoneMessenger: string) => (
                         <Select.Option
                           key={phoneMessenger}
                           value={phoneMessenger}
                         >
                           {
-                            StoresEnum.PhoneNumberMessengerLabels[
-                              phoneMessenger as StoresEnum.PhoneNumberMessenger
+                            PhoneNumberEnum.PhoneNumberMessengerLabels[
+                              phoneMessenger as PhoneNumberEnum.PhoneNumberMessenger
                             ]
                           }
                         </Select.Option>

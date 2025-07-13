@@ -80,6 +80,8 @@ const formSchema = z.object({
   status: z.string(),
   categoriesIds: z.array(z.string()),
   tagsIds: z.array(z.string()),
+  cnpj: z.string().trim().nullable(),
+  type: z.string().trim().nullable(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -156,6 +158,8 @@ export default function StoreDetailPage() {
       status: store?.status ?? StoresEnum.Status.ACTIVE,
       categoriesIds: store?.categoriesIds ?? [],
       tagsIds: store?.tagsIds ?? [],
+      cnpj: store?.cnpj ?? null,
+      type: store?.type ?? null,
     };
 
     setFormValues(values);
@@ -213,6 +217,8 @@ export default function StoreDetailPage() {
         status: data.status as StoresEnum.Status,
         categoriesIds: data.categoriesIds,
         tagsIds: data.tagsIds,
+        cnpj: data.cnpj,
+        type: data.type as StoresEnum.Type,
       };
 
       for (const property of Object.keys(createStoreDto)) {
@@ -283,6 +289,8 @@ export default function StoreDetailPage() {
         status: data.status as StoresEnum.Status,
         categoriesIds: data.categoriesIds,
         tagsIds: data.tagsIds,
+        cnpj: data.cnpj,
+        type: data.type as StoresEnum.Type,
       };
 
       for (const property of Object.keys(updateStoreDto)) {
@@ -428,9 +436,7 @@ export default function StoreDetailPage() {
                 ))}
               </SelectCustomAntd>
             </Col>
-          </Row>
 
-          <Row>
             <Col xs={24} md={8}>
               <SelectCustomAntd<IStore>
                 controller={{ control, name: "tagsIds" }}
@@ -442,6 +448,30 @@ export default function StoreDetailPage() {
                 {tags.map((tag: ITag) => (
                   <Select.Option key={tag._id} value={tag._id}>
                     <TagTagCustomAntd tag={tag} useTag={false} />
+                  </Select.Option>
+                ))}
+              </SelectCustomAntd>
+            </Col>
+
+            <Col xs={24} md={8}>
+              <InputCustomAntd
+                controller={{ control, name: `cnpj` }}
+                label="Cnpj / Cpf"
+                placeholder={"Enter cnpj/cpf"}
+                errorMessage={errors.cnpj?.message}
+              />
+            </Col>
+
+            <Col xs={24} md={8}>
+              <SelectCustomAntd<IStore>
+                controller={{ control, name: "type" }}
+                label="Type"
+                placeholder={"Select type"}
+                errorMessage={errors.type?.message}
+              >
+                {Object.keys(StoresEnum.Type).map((type: string) => (
+                  <Select.Option key={type} value={type}>
+                    {StoresEnum.TypeLabels[type as StoresEnum.Type]}
                   </Select.Option>
                 ))}
               </SelectCustomAntd>

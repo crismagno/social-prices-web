@@ -11,4 +11,6 @@ export default class CreateStoreDto {
   status: StoresEnum.Status = StoresEnum.Status.ACTIVE;
   categoriesIds: string[] = [];
   tagsIds: string[] = [];
+  cnpj: string | null = null;
+  type: StoresEnum.Type | null = null;
 }
