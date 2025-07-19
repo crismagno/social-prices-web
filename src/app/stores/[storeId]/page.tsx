@@ -39,6 +39,9 @@ import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
+import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
+import { SalesChartsStatistics } from "../../sales/components/SalesChartsStatistics/SalesChartsStatistics";
+import SalesTable from "../../sales/components/SalesTable/SalesTable";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindStoreById } from "../detail/useFindStoreById";
 
@@ -239,20 +242,30 @@ export default function StorePage() {
             </ContainerTitle>
           </Col>
         </Row>
-
-        <Modal
-          open={previewOpen}
-          footer={null}
-          onCancel={() => setPreviewOpen(false)}
-        >
-          <Image
-            alt="preview image"
-            style={{ width: "100%" }}
-            preview={false}
-            src={store?.logo ? getImageUrl(store.logo) : defaultAvatarImage}
-          />
-        </Modal>
       </Card>
+
+      <SalesBalance storeId={store._id} />
+
+      <SalesChartsStatistics storeId={store._id} />
+
+      <Row>
+        <Col xs={24}>
+          <SalesTable storeId={store._id} />
+        </Col>
+      </Row>
+
+      <Modal
+        open={previewOpen}
+        footer={null}
+        onCancel={() => setPreviewOpen(false)}
+      >
+        <Image
+          alt="preview image"
+          style={{ width: "100%" }}
+          preview={false}
+          src={store?.logo ? getImageUrl(store.logo) : defaultAvatarImage}
+        />
+      </Modal>
     </Layout>
   );
 }

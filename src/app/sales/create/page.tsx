@@ -399,7 +399,8 @@ export default function CreateSalePage() {
       return;
     }
 
-    const initialSelectedStoreId: string = storeIdByParam ?? stores?.[0]?._id;
+    const initialSelectedStoreIdFromParam: string =
+      storeIdByParam ?? stores?.[0]?._id;
 
     if (productIdByParam) {
       const componentWillMountByProductIdParam = async () => {
@@ -411,9 +412,12 @@ export default function CreateSalePage() {
         if (product) {
           const firstStoreIdByProduct: string = product.storeIds[0];
 
+          const selectedStoreIdFromParam: string =
+            initialSelectedStoreIdFromParam ?? firstStoreIdByProduct;
+
           setValue("saleStores", [
             {
-              storeId: firstStoreIdByProduct ?? initialSelectedStoreId,
+              storeId: selectedStoreIdFromParam,
               products: [
                 {
                   barcode: product.barcode!,
@@ -427,15 +431,15 @@ export default function CreateSalePage() {
               ],
             },
           ]);
-          setValue("selectedStoreIds", [firstStoreIdByProduct]);
+          setValue("selectedStoreIds", [selectedStoreIdFromParam]);
         } else {
-          setValue("selectedStoreIds", [initialSelectedStoreId]);
+          setValue("selectedStoreIds", [initialSelectedStoreIdFromParam]);
         }
       };
 
       componentWillMountByProductIdParam();
     } else {
-      setValue("selectedStoreIds", [initialSelectedStoreId]);
+      setValue("selectedStoreIds", [initialSelectedStoreIdFromParam]);
     }
 
     if (customerIdByParam) {

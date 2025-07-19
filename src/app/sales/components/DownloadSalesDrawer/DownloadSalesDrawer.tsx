@@ -52,6 +52,7 @@ interface Props {
   width?: string | number;
   tags: ITag[];
   stores: IStore[];
+  storeId?: string;
 }
 
 export const DownloadSalesDrawer: React.FC<Props> = ({
@@ -61,6 +62,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
   width = "50%",
   tags = [],
   stores = [],
+  storeId,
 }) => {
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
 
@@ -80,7 +82,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
       deliveryTypes: [],
       status: [],
       paymentStatus: [],
-      storeIds: [],
+      storeIds: storeId ? [storeId] : [],
       sortField: SalesEnum.SortField.createdAt,
       sortOrder: TableStateEnum.SortOrder.ascend,
     },

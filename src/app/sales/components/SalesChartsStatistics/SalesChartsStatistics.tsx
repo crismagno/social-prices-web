@@ -8,9 +8,13 @@ import { SalesChartStatistic } from "./SalesChartStatistic";
 
 interface Props {
   className?: string;
+  storeId?: string;
 }
 
-export const SalesChartsStatistics: React.FC<Props> = ({ className }) => {
+export const SalesChartsStatistics: React.FC<Props> = ({
+  className,
+  storeId,
+}) => {
   return (
     <Card className={`my-2 ${className}`} title="Sales Statistics">
       <Row gutter={[2, 2]}>
@@ -24,6 +28,7 @@ export const SalesChartsStatistics: React.FC<Props> = ({ className }) => {
             chartProps={{
               height: 300,
             }}
+            storeId={storeId}
             title={"Sales of day per hour"}
           />
 
@@ -40,6 +45,7 @@ export const SalesChartsStatistics: React.FC<Props> = ({ className }) => {
             chartProps={{
               height: 300,
             }}
+            storeId={storeId}
             title={"Sales of month per day"}
           />
 
@@ -56,6 +62,7 @@ export const SalesChartsStatistics: React.FC<Props> = ({ className }) => {
             chartProps={{
               height: 300,
             }}
+            storeId={storeId}
             title={"Sales of year per month"}
           />
 
@@ -72,6 +79,7 @@ export const SalesChartsStatistics: React.FC<Props> = ({ className }) => {
             chartProps={{
               height: 300,
             }}
+            storeId={storeId}
             title={"Sales of year per last 6 years"}
           />
 

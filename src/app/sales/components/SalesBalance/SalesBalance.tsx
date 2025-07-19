@@ -9,14 +9,16 @@ import { useGetSalesBalance } from "./useGetSalesBalance";
 
 interface Props {
   className?: string;
+  storeId?: string;
 }
 
-export const SalesBalance: React.FC<Props> = ({ className }) => {
+export const SalesBalance: React.FC<Props> = ({ className, storeId }) => {
   const [salesBalanceParams] = useState<IGetSalesBalanceParams>({
     rangeDate: {
       endDate: moment().endOf("years").toDate(),
       startDate: moment().startOf("years").toDate(),
     },
+    storeId,
   });
 
   const { salesBalance, isLoading } = useGetSalesBalance(salesBalanceParams);
@@ -31,6 +33,7 @@ export const SalesBalance: React.FC<Props> = ({ className }) => {
         <Col xs={24} sm={12} md={6}>
           <SalesBalanceStatistic
             title="Hour Balance"
+            storeId={storeId}
             salesBalanceTotals={salesBalance?.hour}
           />
         </Col>
@@ -38,6 +41,7 @@ export const SalesBalance: React.FC<Props> = ({ className }) => {
         <Col xs={24} sm={12} md={6}>
           <SalesBalanceStatistic
             title="Day Balance"
+            storeId={storeId}
             salesBalanceTotals={salesBalance?.day}
           />
         </Col>
@@ -45,6 +49,7 @@ export const SalesBalance: React.FC<Props> = ({ className }) => {
         <Col xs={24} sm={12} md={6}>
           <SalesBalanceStatistic
             title="Month Balance"
+            storeId={storeId}
             salesBalanceTotals={salesBalance?.month}
           />
         </Col>
@@ -52,6 +57,7 @@ export const SalesBalance: React.FC<Props> = ({ className }) => {
         <Col xs={24} sm={12} md={6}>
           <SalesBalanceStatistic
             title="Annual Balance"
+            storeId={storeId}
             salesBalanceTotals={salesBalance?.annual}
           />
         </Col>

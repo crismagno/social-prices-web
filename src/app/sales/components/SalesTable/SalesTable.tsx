@@ -56,9 +56,11 @@ import { useFindTagsByType } from "../../../tags/useFindTagsByType";
 import { useFindSalesByUserTableState } from "../../useFindSalesByUserTableState";
 import { DownloadSalesDrawer } from "../DownloadSalesDrawer/DownloadSalesDrawer";
 
-interface Props {}
+interface Props {
+  storeId?: string;
+}
 
-const SalesTable: React.FC<Props> = ({}) => {
+const SalesTable: React.FC<Props> = ({ storeId }) => {
   const { user } = useAuthData();
 
   const { socket } = useSocketData();
@@ -67,7 +69,12 @@ const SalesTable: React.FC<Props> = ({}) => {
 
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<ISale> | undefined
-  >(createTableState({ sort: { field: "createdAt", order: "descend" } }));
+  >(
+    createTableState({
+      sort: { field: "createdAt", order: "descend" },
+      filters: { stores: storeId },
+    })
+  );
 
   const [isVisibleDeleteSaleModal, setIsVisibleDeleteSaleModal] =
     useState<boolean>(false);
@@ -186,7 +193,7 @@ const SalesTable: React.FC<Props> = ({}) => {
               Upload
             </Button>
 
-            <ButtonCreateSale />
+            <ButtonCreateSale storeId={storeId} />
           </>
         }
       >
@@ -353,10 +360,12 @@ const SalesTable: React.FC<Props> = ({}) => {
               dataIndex: "stores",
               key: "stores",
               align: "center",
-              filters: map(stores, (store: IStore) => ({
-                value: store._id,
-                text: store.name,
-              })),
+              filters: !storeId
+                ? map(stores, (store: IStore) => ({
+                    value: store._id,
+                    text: store.name,
+                  }))
+                : undefined,
               render: (saleStores: ISaleStore[]) => {
                 return saleStores.map((saleStore: ISaleStore) => {
                   const store: IStore | undefined = find(stores, {
@@ -547,6 +556,7 @@ const SalesTable: React.FC<Props> = ({}) => {
         tags={tagsSort}
         title="Download Sales"
         stores={stores}
+        storeId={storeId}
       />
     </>
   );

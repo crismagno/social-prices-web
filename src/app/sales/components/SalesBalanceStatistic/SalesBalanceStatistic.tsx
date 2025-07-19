@@ -18,6 +18,7 @@ interface Props {
   className?: string;
   title?: string;
   salesBalanceTotals?: IGetSalesBalanceTotalsResponse;
+  storeId?: string;
 }
 
 export const SalesBalanceStatistic: React.FC<Props> = ({
@@ -28,6 +29,7 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
     total: 0,
     productsBalance: [],
   },
+  storeId,
 }) => {
   const router: AppRouterInstance = useRouter();
 
@@ -51,14 +53,23 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
                   src={productBalance?.product?.mainUrl}
                   buttonIcon={<ShoppingCartOutlined />}
                   buttonTooltip="Create Sale By Product"
-                  onClickButton={() =>
-                    router.push(
-                      Urls.SALES_CREATE_BY_PRODUCT.replace(
-                        ":productId",
-                        productId
-                      )
-                    )
-                  }
+                  onClickButton={() => {
+                    if (storeId) {
+                      router.push(
+                        Urls.SALES_CREATE_BY_PRODUCT_AND_STORE.replace(
+                          ":productId",
+                          productId
+                        ).replace(":storeId", storeId)
+                      );
+                    } else {
+                      router.push(
+                        Urls.SALES_CREATE_BY_PRODUCT.replace(
+                          ":productId",
+                          productId
+                        )
+                      );
+                    }
+                  }}
                   onClickTitleButton={() =>
                     router.push(
                       Urls.EDIT_PRODUCT.replace(":productId", productId)

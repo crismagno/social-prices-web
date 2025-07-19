@@ -6,13 +6,23 @@ import { PlusOutlined } from "@ant-design/icons";
 
 import Urls from "../../../shared/common/routes-app/routes-app";
 
-export const ButtonCreateSale: React.FC = () => {
+interface Props {
+  storeId?: string;
+}
+
+export const ButtonCreateSale: React.FC<Props> = ({ storeId }) => {
   const router: AppRouterInstance = useRouter();
 
   return (
     <Button
       type="primary"
-      onClick={() => router.push(Urls.SALES_CREATE)}
+      onClick={() => {
+        if (storeId) {
+          router.push(Urls.SALES_CREATE_BY_STORE.replace(":storeId", storeId));
+        } else {
+          router.push(Urls.SALES_CREATE);
+        }
+      }}
       icon={<PlusOutlined />}
     >
       Create Sale

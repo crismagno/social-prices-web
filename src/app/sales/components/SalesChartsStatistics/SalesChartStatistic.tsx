@@ -34,6 +34,7 @@ interface Props {
     endDate: Date;
   };
   title?: string;
+  storeId?: string;
 }
 
 export const SalesChartStatistic: React.FC<Props> = ({
@@ -41,10 +42,12 @@ export const SalesChartStatistic: React.FC<Props> = ({
   chartProps,
   title,
   rangeDate,
+  storeId,
 }) => {
   const [getSalesAnalyticsParams] = useState<IGetSalesAnalyticsParams>({
     periodType,
     rangeDate,
+    storesIds: storeId ? [storeId] : undefined,
   });
 
   const { isLoading, salesAnalytics } = useGetSalesAnalytics(
