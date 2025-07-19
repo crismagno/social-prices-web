@@ -1,16 +1,45 @@
 "use client";
 
-import { Button, Card } from "antd";
+import { useState } from "react";
+
+import { Button, Card, Col, Image, Modal, Row, Tag, Tooltip } from "antd";
+import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useParams, useRouter } from "next/navigation";
 
-import { EditOutlined } from "@ant-design/icons";
+import { BlockOutlined, EditOutlined, TagOutlined } from "@ant-design/icons";
 
+import Avatar from "../../../components/common/Avatar/Avatar";
+import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
 import Description from "../../../components/common/Description/Description";
+import { DescriptionAddresses } from "../../../components/common/DescriptionAddresses/DescriptionAddresses";
+import {
+  IconAtSymbol,
+  IconCake,
+  IconIdentification,
+  IconPencilSquare,
+  IconPhone,
+  IconQuestion,
+  IconUser,
+} from "../../../components/common/icons/icons";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+import { PhoneNumbersTag } from "../../../components/common/PhoneNumbersTag/PhoneNumbersTag";
+import { TagCategoriesCustomAntd } from "../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
+import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
+import CategoriesEnum from "../../../shared/business/categories/categories.enum";
+import { ICategory } from "../../../shared/business/categories/categories.interface";
+import StoresEnum from "../../../shared/business/stores/stores.enum";
+import TagsEnum from "../../../shared/business/tags/tags.enum";
+import { ITag } from "../../../shared/business/tags/tags.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
+import { sortArray } from "../../../shared/utils/array/functions";
+import DatesEnum from "../../../shared/utils/dates/dates.enum";
+import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
+import { getImageUrl } from "../../../shared/utils/images/url-images";
+import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
+import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindStoreById } from "../detail/useFindStoreById";
 
 export default function StorePage() {
@@ -18,15 +47,28 @@ export default function StorePage() {
 
   const params: Params = useParams();
 
+  const [previewOpen, setPreviewOpen] = useState<boolean>(false);
+
   const { isLoadingStore, store } = useFindStoreById(params?.storeId);
+
+  const { categories, isLoading: isLoadingCategories } =
+    useFindCategoriesByType(CategoriesEnum.Type.STORE);
+
+  const { tags, isLoading: isLoadingTags } = useFindTagsByType(
+    TagsEnum.Type.STORE
+  );
 
   const handleEditStore = () => {
     router.push(Urls.EDIT_STORE.replace(":storeId", params?.storeId));
   };
 
-  if (isLoadingStore || !store) {
+  if (isLoadingStore || !store || isLoadingCategories || isLoadingTags) {
     return <LoadingFull />;
   }
+
+  const categoriesSort: ICategory[] = sortArray(categories, "name");
+
+  const tagsSort: ITag[] = sortArray(tags, "name");
 
   return (
     <Layout
@@ -34,22 +76,182 @@ export default function StorePage() {
       title="Store"
       hasBackButton
     >
-      <Card
-        title="Store"
-        className="h-min-80 mt-5"
-        extra={
-          <>
-            <Button
-              type="success"
-              onClick={handleEditStore}
-              icon={<EditOutlined />}
+      <Card className="h-min-80 mt-10">
+        <Row gutter={[4, 4]}>
+          <Col
+            xs={24}
+            sm={10}
+            md={5}
+            className="flex flex-col justify-center items-center"
+          >
+            <Avatar
+              onClick={() => setPreviewOpen(true)}
+              src={store.logo}
+              width={240}
+              className="shadow-lg border-none cursor-pointer z-10"
+              title="See avatar"
+            />
+
+            <h3 className="md:text-2xl font-semibold text-blueGray-700 mt-1">
+              {store.name}
+            </h3>
+
+            <Tooltip title={"Store Email, click to send a email"}>
+              <a
+                href={`mailto:${store.email}`}
+                className="flex items-center text-sm leading-normal text-gray-400 
+                  font-bold px-2 py-1 shadow-sm rounded-lg border border-gray-300 mt-1
+                  w-min"
+              >
+                {IconAtSymbol("w-3.5 h-3.5")}
+                {store.email}
+              </a>
+            </Tooltip>
+          </Col>
+
+          <Col xs={24} sm={14} md={19}>
+            <ContainerTitle
+              title="Profile"
+              extraHeader={
+                <Tooltip title="Edit store">
+                  <Button
+                    type="success"
+                    icon={<EditOutlined />}
+                    onClick={handleEditStore}
+                  >
+                    Edit
+                  </Button>
+                </Tooltip>
+              }
             >
-              Edit
-            </Button>
-          </>
-        }
-      >
-        <Description label="Name" description={store.name} />
+              <Row>
+                <Col xs={24} md={12}>
+                  <Description
+                    label="My name"
+                    description={`${store.name ?? "-"}`}
+                    leftIcon={IconUser()}
+                  />
+
+                  <Description
+                    label="Email"
+                    description={store.email ?? ""}
+                    leftIcon={IconAtSymbol()}
+                  />
+
+                  <Description
+                    label="Cnpj / Cpf"
+                    description={store.cnpj ?? ""}
+                    leftIcon={IconIdentification()}
+                  />
+
+                  <Description
+                    label="Started At"
+                    leftIcon={IconCake()}
+                    description={
+                      store.startedAt
+                        ? moment(store.startedAt).format(
+                            DatesEnum.Format.DDMMYYY
+                          )
+                        : "-"
+                    }
+                  />
+
+                  <Description
+                    label="Status"
+                    description={
+                      <Tag color={StoresEnum.StatusColor[store.status]}>
+                        {StoresEnum.StatusLabel[store.status]}
+                      </Tag>
+                    }
+                    leftIcon={IconQuestion()}
+                  />
+
+                  <Description
+                    label="Type"
+                    description={
+                      <Tag>
+                        {
+                          StoresEnum.TypeLabels[
+                            store.type ?? StoresEnum.Type.OTHER
+                          ]
+                        }
+                      </Tag>
+                    }
+                    leftIcon={IconQuestion()}
+                  />
+                </Col>
+
+                <Col xs={24} md={12}>
+                  <Description
+                    label="Description"
+                    description={store.description}
+                    leftIcon={IconPencilSquare()}
+                  />
+
+                  <Description
+                    label="About"
+                    description={store.about}
+                    leftIcon={IconPencilSquare()}
+                  />
+
+                  <Description
+                    label="Phone Numbers"
+                    className="overflow-x-auto"
+                    description={
+                      <div className="w-full flex">
+                        <PhoneNumbersTag phoneNumbers={store.phoneNumbers} />
+                      </div>
+                    }
+                    leftIcon={IconPhone()}
+                  />
+
+                  <DescriptionAddresses addresses={store.addresses} />
+
+                  <Description
+                    label="Categories"
+                    description={
+                      <div className="w-full flex">
+                        <TagCategoriesCustomAntd
+                          categories={categoriesSort}
+                          useTag
+                          categoriesIds={store.categoriesIds}
+                        />
+                      </div>
+                    }
+                    leftIcon={<BlockOutlined className="text-lg" />}
+                  />
+
+                  <Description
+                    label="Tags"
+                    description={
+                      <div className="w-full flex">
+                        <TagTagsCustomAntd
+                          tags={tagsSort}
+                          useTag
+                          tagsIds={store.tagsIds}
+                        />
+                      </div>
+                    }
+                    leftIcon={<TagOutlined className="text-lg" />}
+                  />
+                </Col>
+              </Row>
+            </ContainerTitle>
+          </Col>
+        </Row>
+
+        <Modal
+          open={previewOpen}
+          footer={null}
+          onCancel={() => setPreviewOpen(false)}
+        >
+          <Image
+            alt="preview image"
+            style={{ width: "100%" }}
+            preview={false}
+            src={store?.logo ? getImageUrl(store.logo) : defaultAvatarImage}
+          />
+        </Modal>
       </Card>
     </Layout>
   );

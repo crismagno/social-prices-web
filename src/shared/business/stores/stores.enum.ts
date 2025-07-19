@@ -26,11 +26,13 @@ namespace StoresEnum {
   export enum Type {
     ONLINE = "ONLINE",
     PHYSICAL = "PHYSICAL",
+    OTHER = "OTHER",
   }
 
   export const TypeLabels = {
     [Type.ONLINE]: "Online",
     [Type.PHYSICAL]: "Physical",
+    [Type.OTHER]: "Other",
   };
 }
 
