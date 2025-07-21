@@ -19,4 +19,5 @@ export interface ICustomer extends ICreatedAtEntity, IUpdatedAtEntity {
   tagsIds: string[];
   uniqName: string | null;
   uploadFilename: string | null;
+  customerId: string | null;
 }

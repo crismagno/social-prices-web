@@ -8,7 +8,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useParams, useRouter } from "next/navigation";
 
-import { BlockOutlined, EditOutlined, TagOutlined } from "@ant-design/icons";
+import { EditOutlined, FileOutlined, TagOutlined } from "@ant-design/icons";
 
 import Avatar from "../../../components/common/Avatar/Avatar";
 import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
@@ -24,12 +24,9 @@ import {
   IconUser,
 } from "../../../components/common/icons/icons";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
-import { TagCategoriesCustomAntd } from "../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
 import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
-import CategoriesEnum from "../../../shared/business/categories/categories.enum";
-import { ICategory } from "../../../shared/business/categories/categories.interface";
-import StoresEnum from "../../../shared/business/stores/stores.enum";
+import PersonEnum from "../../../shared/business/enums/person.enum";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../shared/business/tags/tags.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
@@ -37,45 +34,40 @@ import { sortArray } from "../../../shared/utils/array/functions";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
-import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
 import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
-import { SalesChartsStatistics } from "../../sales/components/SalesChartsStatistics/SalesChartsStatistics";
 import SalesTable from "../../sales/components/SalesTable/SalesTable";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
-import { useFindStoreById } from "../detail/useFindStoreById";
+import { useFindCustomerById } from "../detail/useFindCustomerById";
 
-export default function StorePage() {
+export default function CustomerPage() {
   const router: AppRouterInstance = useRouter();
 
   const params: Params = useParams();
 
   const [previewOpen, setPreviewOpen] = useState<boolean>(false);
 
-  const { isLoadingStore, store } = useFindStoreById(params?.storeId);
+  const paramsCustomerId: string = params?.customerId;
 
-  const { categories, isLoading: isLoadingCategories } =
-    useFindCategoriesByType(CategoriesEnum.Type.STORE);
+  const { isLoading, customer } = useFindCustomerById(paramsCustomerId);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    TagsEnum.Type.STORE
+    TagsEnum.Type.CUSTOMER
   );
 
-  const handleEditStore = () => {
-    router.push(Urls.EDIT_STORE.replace(":storeId", params?.storeId));
+  const handleEditCustomer = () => {
+    router.push(Urls.EDIT_CUSTOMER.replace(":customerId", paramsCustomerId));
   };
 
-  if (isLoadingStore || !store || isLoadingCategories || isLoadingTags) {
+  if (isLoading || !customer || isLoadingTags) {
     return <LoadingFull />;
   }
-
-  const categoriesSort: ICategory[] = sortArray(categories, "name");
 
   const tagsSort: ITag[] = sortArray(tags, "name");
 
   return (
     <Layout
-      subtitle={`Here we can see about store - ${store.name}`}
-      title="Store"
+      subtitle={`Here we can see about customer - ${customer.name}`}
+      title="Customer"
       hasBackButton
     >
       <Card className="h-min-80 mt-10">
@@ -88,25 +80,25 @@ export default function StorePage() {
           >
             <Avatar
               onClick={() => setPreviewOpen(true)}
-              src={store.logo}
+              src={customer.avatar}
               width={240}
               className="shadow-lg border-none cursor-pointer z-10"
               title="See avatar"
             />
 
             <h3 className="md:text-2xl font-semibold text-blueGray-700 mt-1">
-              {store.name}
+              {customer.name}
             </h3>
 
-            <Tooltip title={"Store Email, click to send a email"}>
+            <Tooltip title={"Customer Email, click to send a email"}>
               <a
-                href={`mailto:${store.email}`}
+                href={`mailto:${customer.email}`}
                 className="flex items-center text-sm leading-normal text-gray-400 
                   font-bold px-2 py-1 shadow-sm rounded-lg border border-gray-300 mt-1
                   w-min"
               >
                 {IconAtSymbol("w-3.5 h-3.5")}
-                {store.email}
+                {customer.email}
               </a>
             </Tooltip>
           </Col>
@@ -115,11 +107,11 @@ export default function StorePage() {
             <ContainerTitle
               title="Profile"
               extraHeader={
-                <Tooltip title="Edit store">
+                <Tooltip title="Edit customer">
                   <Button
                     type="success"
                     icon={<EditOutlined />}
-                    onClick={handleEditStore}
+                    onClick={handleEditCustomer}
                   >
                     Edit
                   </Button>
@@ -130,28 +122,28 @@ export default function StorePage() {
                 <Col xs={24} md={12}>
                   <Description
                     label="My name"
-                    description={`${store.name ?? "-"}`}
+                    description={`${customer.name ?? "-"}`}
                     leftIcon={IconUser()}
                   />
 
                   <Description
-                    label="Email"
-                    description={store.email ?? ""}
-                    leftIcon={IconAtSymbol()}
-                  />
-
-                  <Description
-                    label="Cnpj / Cpf"
-                    description={store.cnpj ?? ""}
+                    label="Uniq Name"
+                    description={`${customer.uniqName ?? "-"}`}
                     leftIcon={IconIdentification()}
                   />
 
                   <Description
-                    label="Started At"
+                    label="Email"
+                    description={customer.email ?? "-"}
+                    leftIcon={IconAtSymbol()}
+                  />
+
+                  <Description
+                    label="Birth Date"
                     leftIcon={IconCake()}
                     description={
-                      store.startedAt
-                        ? moment(store.startedAt).format(
+                      customer.birthDate
+                        ? moment(customer.birthDate).format(
                             DatesEnum.Format.DDMMYYY
                           )
                         : "-"
@@ -159,61 +151,27 @@ export default function StorePage() {
                   />
 
                   <Description
-                    label="Status"
-                    description={
-                      <Tag color={StoresEnum.StatusColor[store.status]}>
-                        {StoresEnum.StatusLabel[store.status]}
-                      </Tag>
-                    }
+                    label="Gender"
                     leftIcon={IconQuestion()}
-                  />
-
-                  <Description
-                    label="Type"
                     description={
-                      <Tag>
+                      <Tag
+                        color={
+                          PersonEnum.GenderColors[
+                            customer.gender ?? PersonEnum.Gender.OTHER
+                          ]
+                        }
+                      >
                         {
-                          StoresEnum.TypeLabels[
-                            store.type ?? StoresEnum.Type.OTHER
+                          PersonEnum.GenderLabels[
+                            customer.gender ?? PersonEnum.Gender.OTHER
                           ]
                         }
                       </Tag>
                     }
-                    leftIcon={IconQuestion()}
                   />
                 </Col>
 
                 <Col xs={24} md={12}>
-                  <Description
-                    label="Description"
-                    description={store.description}
-                    leftIcon={IconPencilSquare()}
-                  />
-
-                  <Description
-                    label="About"
-                    description={store.about}
-                    leftIcon={IconPencilSquare()}
-                  />
-
-                  <DescriptionPhoneNumbers phoneNumbers={store.phoneNumbers} />
-
-                  <DescriptionAddresses addresses={store.addresses} />
-
-                  <Description
-                    label="Categories"
-                    description={
-                      <div className="w-full flex">
-                        <TagCategoriesCustomAntd
-                          categories={categoriesSort}
-                          useTag
-                          categoriesIds={store.categoriesIds}
-                        />
-                      </div>
-                    }
-                    leftIcon={<BlockOutlined className="text-lg" />}
-                  />
-
                   <Description
                     label="Tags"
                     description={
@@ -221,11 +179,29 @@ export default function StorePage() {
                         <TagTagsCustomAntd
                           tags={tagsSort}
                           useTag
-                          tagsIds={store.tagsIds}
+                          tagsIds={customer.tagsIds}
                         />
                       </div>
                     }
                     leftIcon={<TagOutlined className="text-lg" />}
+                  />
+
+                  <DescriptionPhoneNumbers
+                    phoneNumbers={customer.phoneNumbers}
+                  />
+
+                  <DescriptionAddresses addresses={customer.addresses} />
+
+                  <Description
+                    label="About"
+                    description={customer.about}
+                    leftIcon={IconPencilSquare()}
+                  />
+
+                  <Description
+                    label="Upload Filename"
+                    description={customer.uploadFilename}
+                    leftIcon={<FileOutlined className="text-lg" />}
                   />
                 </Col>
               </Row>
@@ -234,13 +210,11 @@ export default function StorePage() {
         </Row>
       </Card>
 
-      <SalesBalance storeId={store._id} />
-
-      <SalesChartsStatistics storeId={store._id} />
+      <SalesBalance customerId={customer._id} />
 
       <Row>
         <Col xs={24}>
-          <SalesTable storeId={store._id} />
+          <SalesTable customerId={customer._id} />{" "}
         </Col>
       </Row>
 
@@ -253,7 +227,9 @@ export default function StorePage() {
           alt="preview image"
           style={{ width: "100%" }}
           preview={false}
-          src={store?.logo ? getImageUrl(store.logo) : defaultAvatarImage}
+          src={
+            customer?.avatar ? getImageUrl(customer.avatar) : defaultAvatarImage
+          }
         />
       </Modal>
     </Layout>

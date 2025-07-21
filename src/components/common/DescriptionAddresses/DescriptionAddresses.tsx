@@ -1,10 +1,11 @@
 import React from "react";
 
+import { IAddress } from "../../../shared/business/interfaces/address.interface";
 import { AddressesTag } from "../AddressesTag/AddressesTag";
 import { IconQuestion } from "../icons/icons";
 
 interface Props {
-  addresses?: any;
+  addresses: IAddress[];
   icon?: any;
 }
 

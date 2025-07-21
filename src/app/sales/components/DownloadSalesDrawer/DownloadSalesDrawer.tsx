@@ -27,6 +27,7 @@ import TableStateEnum from "../../../../shared/utils/table/table-state.enum";
 const formSchema = z.object({
   search: z.string().nullable(),
   tagsIds: z.array(z.string()),
+  customerIds: z.array(z.string()),
   types: z.array(z.string()),
   deliveryTypes: z.array(z.string()),
   status: z.array(z.string()),
@@ -53,6 +54,7 @@ interface Props {
   tags: ITag[];
   stores: IStore[];
   storeId?: string;
+  customerId?: string;
 }
 
 export const DownloadSalesDrawer: React.FC<Props> = ({
@@ -63,6 +65,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
   tags = [],
   stores = [],
   storeId,
+  customerId,
 }) => {
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
 
@@ -83,6 +86,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
       status: [],
       paymentStatus: [],
       storeIds: storeId ? [storeId] : [],
+      customerIds: customerId ? [customerId] : [],
       sortField: SalesEnum.SortField.createdAt,
       sortOrder: TableStateEnum.SortOrder.ascend,
     },

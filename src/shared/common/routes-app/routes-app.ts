@@ -30,6 +30,7 @@ const Urls = {
   CUSTOMERS: "/customers",
   NEW_CUSTOMER: "/customers/detail",
   EDIT_CUSTOMER: "/customers/detail?cid=:customerId",
+  CUSTOMER: "/customers/:customerId",
 
   // sales
   SALES: "/sales",
@@ -40,6 +41,8 @@ const Urls = {
   SALES_CREATE_BY_PRODUCT: "/sales/create?pid=:productId",
   SALES_CREATE_BY_PRODUCT_AND_STORE:
     "/sales/create?pid=:productId&sid=:storeId",
+  SALES_CREATE_BY_PRODUCT_AND_CUSTOMER:
+    "/sales/create?pid=:productId&cid=:customerId",
 
   // categories
   CATEGORIES: "/categories",

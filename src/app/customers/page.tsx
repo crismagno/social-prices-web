@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import {
   DownloadOutlined,
   EditOutlined,
+  EnterOutlined,
   PlusOutlined,
   ShoppingCartOutlined,
   UploadOutlined,
@@ -243,6 +244,18 @@ export default function CustomersPage() {
                           )
                         }
                         icon={<EditOutlined />}
+                      />
+                    </Tooltip>
+
+                    <Tooltip title="Go to customer">
+                      <Button
+                        type="default"
+                        onClick={() =>
+                          router.push(
+                            Urls.CUSTOMER.replace(":customerId", customer._id)
+                          )
+                        }
+                        icon={<EnterOutlined />}
                       />
                     </Tooltip>
 

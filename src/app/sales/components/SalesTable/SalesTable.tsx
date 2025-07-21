@@ -58,9 +58,10 @@ import { DownloadSalesDrawer } from "../DownloadSalesDrawer/DownloadSalesDrawer"
 
 interface Props {
   storeId?: string;
+  customerId?: string;
 }
 
-const SalesTable: React.FC<Props> = ({ storeId }) => {
+const SalesTable: React.FC<Props> = ({ storeId, customerId }) => {
   const { user } = useAuthData();
 
   const { socket } = useSocketData();
@@ -72,7 +73,10 @@ const SalesTable: React.FC<Props> = ({ storeId }) => {
   >(
     createTableState({
       sort: { field: "createdAt", order: "descend" },
-      filters: { stores: storeId },
+      filters: {
+        stores: storeId ? [storeId] : [],
+        customerIds: customerId ? [customerId] : [],
+      },
     })
   );
 
@@ -193,7 +197,7 @@ const SalesTable: React.FC<Props> = ({ storeId }) => {
               Upload
             </Button>
 
-            <ButtonCreateSale storeId={storeId} />
+            <ButtonCreateSale storeId={storeId} customerId={customerId} />
           </>
         }
       >
@@ -557,6 +561,7 @@ const SalesTable: React.FC<Props> = ({ storeId }) => {
         title="Download Sales"
         stores={stores}
         storeId={storeId}
+        customerId={customerId}
       />
     </>
   );

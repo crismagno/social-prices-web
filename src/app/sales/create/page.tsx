@@ -259,6 +259,54 @@ export default function CreateSalePage() {
     resolver: zodResolver(formSchema),
   });
 
+  const handleSelectCustomer = (customer: ICustomer | null) => {
+    let firstAddress: IAddress | undefined = find(
+      customer?.addresses,
+      (customerAddress: IAddress) =>
+        includes(customerAddress.types, AddressEnum.Type.SHIPPING)
+    );
+
+    firstAddress = firstAddress ?? customer?.addresses?.[0];
+
+    const address: TAddressFormSchema = firstAddress
+      ? {
+          address1: firstAddress.address1,
+          address2: firstAddress.address2,
+          city: firstAddress.city,
+          countryCode: firstAddress.country.code,
+          description: firstAddress.description,
+          district: firstAddress.district,
+          isValid: firstAddress.isValid,
+          types: firstAddress.types,
+          uid: firstAddress.uid,
+          zip: firstAddress.zip,
+          isCollapsed: true,
+          stateCode: firstAddress.state?.code!,
+        }
+      : generateNewAddress();
+
+    setValue("customer", {
+      customerId: customer?._id ?? null,
+      about: null,
+      address,
+      birthDate: customer?.birthDate
+        ? moment(customer?.birthDate)
+            .utc()
+            .format(DatesEnum.Format.YYYYMMDD_DASHED)
+        : null,
+      email: customer?.email ?? "",
+      gender: customer?.gender ?? PersonEnum.Gender.MALE,
+      name: customer?.name ?? "",
+      phoneNumber: customer?.phoneNumbers?.[0]?.number ?? null,
+    });
+
+    setValue("customer.address.types", address.types);
+
+    setSelectedCustomer(customer);
+
+    setSelectedAddressUid(firstAddress?.uid ?? null);
+  };
+
   useEffect(() => {
     const showValueNote: TShowValueNoteFormSchema = generateShowAmountNote();
 
@@ -469,54 +517,6 @@ export default function CreateSalePage() {
   let payments: TSalePaymentFormSchema[] = watch("payments");
 
   // Handle Events Part
-
-  const handleSelectCustomer = (customer: ICustomer | null) => {
-    let firstAddress: IAddress | undefined = find(
-      customer?.addresses,
-      (customerAddress: IAddress) =>
-        includes(customerAddress.types, AddressEnum.Type.SHIPPING)
-    );
-
-    firstAddress = firstAddress ?? customer?.addresses?.[0];
-
-    const address: TAddressFormSchema = firstAddress
-      ? {
-          address1: firstAddress.address1,
-          address2: firstAddress.address2,
-          city: firstAddress.city,
-          countryCode: firstAddress.country.code,
-          description: firstAddress.description,
-          district: firstAddress.district,
-          isValid: firstAddress.isValid,
-          types: firstAddress.types,
-          uid: firstAddress.uid,
-          zip: firstAddress.zip,
-          isCollapsed: true,
-          stateCode: firstAddress.state?.code!,
-        }
-      : generateNewAddress();
-
-    setValue("customer", {
-      customerId: customer?._id ?? null,
-      about: null,
-      address,
-      birthDate: customer?.birthDate
-        ? moment(customer?.birthDate)
-            .utc()
-            .format(DatesEnum.Format.YYYYMMDD_DASHED)
-        : null,
-      email: customer?.email ?? "",
-      gender: customer?.gender ?? PersonEnum.Gender.MALE,
-      name: customer?.name ?? "",
-      phoneNumber: customer?.phoneNumbers?.[0]?.number ?? null,
-    });
-
-    setValue("customer.address.types", address.types);
-
-    setSelectedCustomer(customer);
-
-    setSelectedAddressUid(firstAddress?.uid ?? null);
-  };
 
   const handleSelectAddress = (addressUid: string | null) => {
     const findAddress: IAddress | undefined = addressUid
@@ -753,6 +753,8 @@ export default function CreateSalePage() {
 
       const dataTaxAmountByStore: number = dataTaxAmount / dataSaleStoresLength;
 
+      const customerId: string | null = data.customer?.customerId ?? null;
+
       const createSaleDto: CreateSaleDto = {
         buyer: {
           address,
@@ -770,6 +772,7 @@ export default function CreateSalePage() {
           },
           userId: selectedCustomer?.userId ?? null,
         },
+        customerId,
         createdByUserId: user?._id!,
         createdByEmployeeId: employee?._id!,
         header: {
@@ -854,7 +857,7 @@ export default function CreateSalePage() {
             const totalFinalAmountByStore: number = getTotalFinalByStore();
 
             return {
-              customerId: data.customer?.customerId ?? null,
+              customerId,
               products: map(
                 saleStore.products,
                 (saleStoreProduct): SaleStoreProductDto => {

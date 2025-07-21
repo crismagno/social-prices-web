@@ -19,6 +19,7 @@ interface Props {
   title?: string;
   salesBalanceTotals?: IGetSalesBalanceTotalsResponse;
   storeId?: string;
+  customerId?: string;
 }
 
 export const SalesBalanceStatistic: React.FC<Props> = ({
@@ -30,6 +31,7 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
     productsBalance: [],
   },
   storeId,
+  customerId,
 }) => {
   const router: AppRouterInstance = useRouter();
 
@@ -60,6 +62,13 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
                           ":productId",
                           productId
                         ).replace(":storeId", storeId)
+                      );
+                    } else if (customerId) {
+                      router.push(
+                        Urls.SALES_CREATE_BY_PRODUCT_AND_CUSTOMER.replace(
+                          ":productId",
+                          productId
+                        ).replace(":customerId", customerId)
                       );
                     } else {
                       router.push(
