@@ -177,7 +177,21 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
           search={{ placeholder: "Search files uploads..." }}
           loading={isLoading}
           tableStateRequest={tableStateRequest}
-          setTableStateRequest={setTableStateRequest}
+          setTableStateRequest={(tableStateRequestFileUpload: any) => {
+            if (!tableStateRequestFileUpload) {
+              setTableStateRequest(tableStateRequestFileUpload);
+              return;
+            }
+
+            if (type) {
+              tableStateRequestFileUpload!.filters = {
+                ...tableStateRequestFileUpload!.filters,
+                type: [type],
+              };
+            }
+
+            setTableStateRequest(tableStateRequestFileUpload);
+          }}
           total={total}
           className="overflow-auto"
         />

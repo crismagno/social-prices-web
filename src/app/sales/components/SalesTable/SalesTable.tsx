@@ -236,7 +236,28 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId }) => {
         <TableCustomAntd2<ISale>
           rowKey={"_id"}
           tableStateRequest={tableStateRequest}
-          setTableStateRequest={setTableStateRequest}
+          setTableStateRequest={(tableStateRequestSale: any) => {
+            if (!tableStateRequestSale) {
+              setTableStateRequest(tableStateRequestSale);
+              return;
+            }
+
+            if (storeId) {
+              tableStateRequestSale.filters = {
+                ...tableStateRequestSale.filters,
+                stores: [storeId],
+              };
+            }
+
+            if (customerId) {
+              tableStateRequestSale.filters = {
+                ...tableStateRequestSale.filters,
+                customerIds: [customerId],
+              };
+            }
+
+            setTableStateRequest(tableStateRequestSale);
+          }}
           dataSource={sales}
           className="overflow-auto"
           columns={[
