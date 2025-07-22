@@ -2,7 +2,17 @@
 
 import { useState } from "react";
 
-import { Button, Card, Col, Image, Modal, Row, Tag, Tooltip } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Collapse,
+  Image,
+  Modal,
+  Row,
+  Tag,
+  Tooltip,
+} from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
@@ -39,6 +49,7 @@ import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
 import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
+import { SalesChart } from "../../sales/components/SalesChart/SalesChart";
 import { SalesChartsStatistics } from "../../sales/components/SalesChartsStatistics/SalesChartsStatistics";
 import SalesTable from "../../sales/components/SalesTable/SalesTable";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
@@ -60,13 +71,15 @@ export default function StorePage() {
     TagsEnum.Type.STORE
   );
 
-  const handleEditStore = () => {
-    router.push(Urls.EDIT_STORE.replace(":storeId", params?.storeId));
-  };
-
   if (isLoadingStore || !store || isLoadingCategories || isLoadingTags) {
     return <LoadingFull />;
   }
+
+  const storeId: string = store._id;
+
+  const handleEditStore = () => {
+    router.push(Urls.EDIT_STORE.replace(":storeId", storeId));
+  };
 
   const categoriesSort: ICategory[] = sortArray(categories, "name");
 
@@ -234,13 +247,42 @@ export default function StorePage() {
         </Row>
       </Card>
 
-      <SalesBalance storeId={store._id} />
+      <SalesBalance storeId={storeId} />
 
-      <SalesChartsStatistics storeId={store._id} />
+      <Collapse
+        style={{ backgroundColor: "#fff", boxShadow: "none" }}
+        ghost
+        defaultActiveKey={["1"]}
+        items={[
+          {
+            key: "1",
+            forceRender: true,
+            label: (
+              <span className="font-semibold text-base">Sales Statistics</span>
+            ),
+            children: (
+              <SalesChartsStatistics storeId={storeId} isShowHeader={false} />
+            ),
+          },
+        ]}
+      />
+
+      <Collapse
+        style={{ backgroundColor: "#fff", boxShadow: "none" }}
+        ghost
+        className="mt-2"
+        items={[
+          {
+            key: "1",
+            label: <span className="font-semibold text-base">Sales Chart</span>,
+            children: <SalesChart isShowHeader={false} storeId={storeId} />,
+          },
+        ]}
+      />
 
       <Row>
         <Col xs={24}>
-          <SalesTable storeId={store._id} />
+          <SalesTable storeId={storeId} />
         </Col>
       </Row>
 

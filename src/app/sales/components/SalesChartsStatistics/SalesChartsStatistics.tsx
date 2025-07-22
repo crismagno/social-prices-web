@@ -9,14 +9,20 @@ import { SalesChartStatistic } from "./SalesChartStatistic";
 interface Props {
   className?: string;
   storeId?: string;
+  isShowHeader?: boolean;
 }
 
 export const SalesChartsStatistics: React.FC<Props> = ({
   className,
   storeId,
+  isShowHeader = true,
 }) => {
   return (
-    <Card className={`my-2 ${className}`} title="Sales Statistics">
+    <Card
+      className={`my-2 ${className}`}
+      title="Sales Statistics"
+      headStyle={{ display: isShowHeader ? "" : "none" }}
+    >
       <Row gutter={[2, 2]}>
         <Col xs={24} sm={24} md={12}>
           <SalesChartStatistic

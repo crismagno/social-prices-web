@@ -10,6 +10,7 @@ export const createGetSalesAnalyticsParams = (
     storesIds: params?.storesIds,
     tagsIds: params?.tagsIds,
     productIds: params?.productIds,
+    customerIds: params?.customerIds,
     types: params?.types,
   };
 };

@@ -32,6 +32,8 @@ interface Props {
   isShowHeader?: boolean;
   isShowButtonCreateSale?: boolean;
   cardClassName?: string;
+  customerId?: string;
+  storeId?: string;
 }
 
 const defaultGetSalesAnalyticsParams = createGetSalesAnalyticsParams({
@@ -47,9 +49,15 @@ export const SalesChart: React.FC<Props> = ({
   isShowHeader = true,
   isShowButtonCreateSale = false,
   cardClassName,
+  customerId,
+  storeId,
 }) => {
   const [getSalesAnalyticsParams, setGetSalesAnalyticsParams] =
-    useState<IGetSalesAnalyticsParams>(defaultGetSalesAnalyticsParams);
+    useState<IGetSalesAnalyticsParams>({
+      ...defaultGetSalesAnalyticsParams,
+      customerIds: customerId ? [customerId] : undefined,
+      storesIds: storeId ? [storeId] : undefined,
+    });
 
   const { isLoading, salesAnalytics } = useGetSalesAnalytics(
     getSalesAnalyticsParams
@@ -107,6 +115,7 @@ export const SalesChart: React.FC<Props> = ({
                 storesIds: storesIds ?? [],
               });
             }}
+            disabled={!!storeId}
           >
             {map(stores, (store: IStore) => (
               <Select.Option key={store._id} value={store._id}>

@@ -2,7 +2,17 @@
 
 import { useState } from "react";
 
-import { Button, Card, Col, Image, Modal, Row, Tag, Tooltip } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Collapse,
+  Image,
+  Modal,
+  Row,
+  Tag,
+  Tooltip,
+} from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
@@ -35,6 +45,7 @@ import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
 import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
+import { SalesChart } from "../../sales/components/SalesChart/SalesChart";
 import SalesTable from "../../sales/components/SalesTable/SalesTable";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindCustomerById } from "../detail/useFindCustomerById";
@@ -54,13 +65,15 @@ export default function CustomerPage() {
     TagsEnum.Type.CUSTOMER
   );
 
-  const handleEditCustomer = () => {
-    router.push(Urls.EDIT_CUSTOMER.replace(":customerId", paramsCustomerId));
-  };
-
   if (isLoading || !customer || isLoadingTags) {
     return <LoadingFull />;
   }
+
+  const customerId: string = customer._id;
+
+  const handleEditCustomer = () => {
+    router.push(Urls.EDIT_CUSTOMER.replace(":customerId", customerId));
+  };
 
   const tagsSort: ITag[] = sortArray(tags, "name");
 
@@ -210,11 +223,25 @@ export default function CustomerPage() {
         </Row>
       </Card>
 
-      <SalesBalance customerId={customer._id} />
+      <SalesBalance customerId={customerId} />
+
+      <Collapse
+        style={{ backgroundColor: "#fff", boxShadow: "none" }}
+        ghost
+        items={[
+          {
+            key: "1",
+            label: <span className="font-semibold text-base">Sales Chart</span>,
+            children: (
+              <SalesChart isShowHeader={false} customerId={customerId} />
+            ),
+          },
+        ]}
+      />
 
       <Row>
         <Col xs={24}>
-          <SalesTable customerId={customer._id} />{" "}
+          <SalesTable customerId={customerId} />{" "}
         </Col>
       </Row>
 
