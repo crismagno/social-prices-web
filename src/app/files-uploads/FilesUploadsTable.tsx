@@ -184,8 +184,8 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
             }
 
             if (type) {
-              tableStateRequestFileUpload!.filters = {
-                ...tableStateRequestFileUpload!.filters,
+              tableStateRequestFileUpload.filters = {
+                ...tableStateRequestFileUpload.filters,
                 type: [type],
               };
             }
