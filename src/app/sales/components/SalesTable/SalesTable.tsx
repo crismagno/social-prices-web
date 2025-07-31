@@ -2,7 +2,17 @@
 
 import { RefObject, useEffect, useRef, useState } from "react";
 
-import { Badge, Button, Card, Col, Modal, Row, Tag, Tooltip } from "antd";
+import {
+  Badge,
+  Button,
+  Card,
+  Col,
+  Divider,
+  Modal,
+  Row,
+  Tag,
+  Tooltip,
+} from "antd";
 import { find, first, includes, map } from "lodash";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
@@ -45,6 +55,7 @@ import { ITag } from "../../../../shared/business/tags/tags.interface";
 import Urls from "../../../../shared/common/routes-app/routes-app";
 import { sortArray } from "../../../../shared/utils/array/functions";
 import DatesEnum from "../../../../shared/utils/dates/dates.enum";
+import { formatterMoney } from "../../../../shared/utils/strings/string";
 import { createTableState } from "../../../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../../../shared/utils/table/table-state.interface";
 import {
@@ -54,6 +65,7 @@ import {
 import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../../tags/useFindTagsByType";
 import { useFindSalesByUserTableState } from "../../useFindSalesByUserTableState";
+import { useGetSalesSummaryByUserTableState } from "../../useGetSalesSummaryByUserTableState";
 import { DownloadSalesDrawer } from "../DownloadSalesDrawer/DownloadSalesDrawer";
 
 interface Props {
@@ -105,6 +117,12 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId }) => {
   const { isLoading, sales, total, fetchFindSalesByUserTableState } =
     useFindSalesByUserTableState(tableStateRequest);
 
+  const {
+    isLoadingSalesSummary,
+    salesSummary,
+    fetchSalesSummaryByUserTableState,
+  } = useGetSalesSummaryByUserTableState(tableStateRequest);
+
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
@@ -118,6 +136,7 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId }) => {
         async () => {
           await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();
           await fetchFindSalesByUserTableState();
+          await fetchSalesSummaryByUserTableState();
         }
       );
 
@@ -518,6 +537,39 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId }) => {
           search={{ placeholder: "Search sales..." }}
           loading={isLoading}
           total={total}
+          footer={() => {
+            if (isLoadingSalesSummary) {
+              return <LoadingFull />;
+            }
+            return (
+              <div className="flex justify-center">
+                <div>
+                  <b className="mr-2">Discount:</b>
+                  <span>{formatterMoney(salesSummary.discount)}</span>
+                </div>
+                <Divider type="vertical" className="mx-7" />
+                <div>
+                  <b className="mr-2">Tax:</b>
+                  <span>{formatterMoney(salesSummary.tax)}</span>
+                </div>
+                <Divider type="vertical" className="mx-7" />
+                <div>
+                  <b className="mr-2">Shipping:</b>
+                  <span>{formatterMoney(salesSummary.shipping)}</span>
+                </div>
+                <Divider type="vertical" className="mx-7" />
+                <div>
+                  <b className="mr-2">Subtotal:</b>
+                  <span>{formatterMoney(salesSummary.subtotal)}</span>
+                </div>
+                <Divider type="vertical" className="mx-7" />
+                <div>
+                  <b className="mr-2">Total:</b>
+                  <span>{formatterMoney(salesSummary.totalFinal)}</span>
+                </div>
+              </div>
+            );
+          }}
         />
       </Card>
 

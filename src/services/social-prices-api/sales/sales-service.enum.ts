@@ -3,6 +3,7 @@ namespace SalesServiceEnum {
     FIND_BY_ID = "/sales/:saleId",
     COUNT_BY_USER = "/sales/user/count",
     FIND_BY_USER_TABLE_STATE = "/sales/userTableState",
+    GET_SALES_SUMMARY_BY_USER_TABLE_STATE = "/sales/getSalesSummaryByUserTableState",
     CREATE_MANUAL = "/sales/createManual",
     UPDATE_MANUAL = "/sales/updateManual",
     DELETE_MANUAL = "/sales/deleteManual/:saleId",

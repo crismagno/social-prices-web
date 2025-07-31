@@ -7,6 +7,7 @@ import {
   IGetSalesAnalyticsResponse,
   IGetSalesBalanceParams,
   IGetSalesBalanceResponse,
+  IGetSalesSummaryByUserTableStateResponse,
 } from "../../../shared/business/sales/sales.type";
 import {
   ITableStateRequest,
@@ -78,6 +79,24 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
         },
       }
     );
+
+    return response.data;
+  }
+
+  public async getSalesSummaryByUserTableState(
+    tableState?: ITableStateRequest<ISale>
+  ): Promise<IGetSalesSummaryByUserTableStateResponse> {
+    const response =
+      await this._fetchAxios.post<IGetSalesSummaryByUserTableStateResponse>(
+        `${this._socialPricesApiV1}${SalesServiceEnum.Methods.GET_SALES_SUMMARY_BY_USER_TABLE_STATE}`,
+        tableState,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: this.formatAuthorizationWithToken(),
+          },
+        }
+      );
 
     return response.data;
   }

@@ -103,3 +103,11 @@ export interface IFiltersDownloadSales {
 }
 
 // #endregion
+
+export interface IGetSalesSummaryByUserTableStateResponse {
+  totalFinal: number;
+  discount: number;
+  tax: number;
+  shipping: number;
+  subtotal: number;
+}
