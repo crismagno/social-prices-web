@@ -25,6 +25,7 @@ const Urls = {
   PRODUCTS: "/products",
   NEW_PRODUCT: "/products/detail",
   EDIT_PRODUCT: "/products/detail?pid=:productId",
+  PRODUCT: "/products/:productId",
 
   // customers
   CUSTOMERS: "/customers",

@@ -126,7 +126,7 @@ export default function StorePage() {
 
           <Col xs={24} sm={14} md={19}>
             <ContainerTitle
-              title="Profile"
+              title="Information"
               extraHeader={
                 <Tooltip title="Edit store">
                   <Button
@@ -142,7 +142,7 @@ export default function StorePage() {
               <Row>
                 <Col xs={24} md={12}>
                   <Description
-                    label="My name"
+                    label="Name"
                     description={`${store.name ?? "-"}`}
                     leftIcon={IconUser()}
                   />

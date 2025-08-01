@@ -6,6 +6,7 @@ import { IStore } from "../../../shared/business/stores/stores.interface";
 interface Props {
   store: IStore;
 }
+
 export const StoreNameStatus: React.FC<Props> = ({ store }) => {
   return (
     <>

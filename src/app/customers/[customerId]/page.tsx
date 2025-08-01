@@ -118,7 +118,7 @@ export default function CustomerPage() {
 
           <Col xs={24} sm={14} md={19}>
             <ContainerTitle
-              title="Profile"
+              title="Information"
               extraHeader={
                 <Tooltip title="Edit customer">
                   <Button
@@ -134,7 +134,7 @@ export default function CustomerPage() {
               <Row>
                 <Col xs={24} md={12}>
                   <Description
-                    label="My name"
+                    label="Name"
                     description={`${customer.name ?? "-"}`}
                     leftIcon={IconUser()}
                   />

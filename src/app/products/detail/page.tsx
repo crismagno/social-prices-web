@@ -11,12 +11,10 @@ import {
   Input,
   message,
   Modal,
-  Popover,
   QRCode,
   Row,
   Select,
   Space,
-  Tag,
   Upload,
   UploadFile,
   UploadProps,
@@ -33,12 +31,12 @@ import {
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 
-import { QuestionCircleTwoTone } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../../components/common/HrCustom/HrCustom";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+import { ProductPreviousBarcodesPopover } from "../../../components/common/ProductPreviousBarcodesPopover/ProductPreviousBarcodesPopover";
 import { StoreNameStatus } from "../../../components/common/StoreNameStatus/StoreNameStatus";
 import { TagCategoryCustomAntd } from "../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
 import { TagTagCustomAntd } from "../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
@@ -364,26 +362,8 @@ export default function ProductDetailPage() {
                 label={
                   <>
                     <span>Barcode</span>
-                    {product?.previousBarcodes?.length && (
-                      <Popover
-                        content={
-                          <ul>
-                            {product.previousBarcodes.map(
-                              (previousBarcode: string, index: number) => (
-                                <li
-                                  key={`previousBarcode_${index}`}
-                                  className="mt-1"
-                                >
-                                  <Tag>{previousBarcode}</Tag>
-                                </li>
-                              )
-                            )}
-                          </ul>
-                        }
-                        title="Previous Barcodes"
-                      >
-                        <QuestionCircleTwoTone className="ml-1" />
-                      </Popover>
+                    {product && (
+                      <ProductPreviousBarcodesPopover product={product} />
                     )}
                   </>
                 }

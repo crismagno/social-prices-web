@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import {
   DownloadOutlined,
   EditOutlined,
+  EnterOutlined,
   PlusOutlined,
   QuestionCircleOutlined,
   ShoppingCartOutlined,
@@ -341,6 +342,19 @@ export default function ProductsPage() {
                       icon={<EditOutlined />}
                     />
                   </Tooltip>
+
+                  <Tooltip title="Go to product">
+                    <Button
+                      type="default"
+                      onClick={() =>
+                        router.push(
+                          Urls.PRODUCT.replace(":productId", product._id)
+                        )
+                      }
+                      icon={<EnterOutlined />}
+                    />
+                  </Tooltip>
+
                   <Tooltip title="Create Sale">
                     <Button
                       type="primary"
