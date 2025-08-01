@@ -38,6 +38,7 @@ function TableCustomAntd2<T extends object = any>({
       showTotal(totalCount: number, range: [number, number]) {
         return `${range[0]}-${range[1]} of ${totalCount} items`;
       },
+      showSizeChanger: true,
     };
   }
 
