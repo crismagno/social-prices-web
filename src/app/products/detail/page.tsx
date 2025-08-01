@@ -39,6 +39,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../../components/common/HrCustom/HrCustom";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+import { StoreNameStatus } from "../../../components/common/StoreNameStatus/StoreNameStatus";
 import { TagCategoryCustomAntd } from "../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
 import { TagTagCustomAntd } from "../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
 import { CheckboxCustomAntd } from "../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd";
@@ -431,7 +432,7 @@ export default function ProductDetailPage() {
               >
                 {stores.map((store: IStore) => (
                   <Select.Option key={store._id} value={store._id}>
-                    {store.name}
+                    <StoreNameStatus store={store} />
                   </Select.Option>
                 ))}
               </SelectCustomAntd>

@@ -34,6 +34,7 @@ import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageO
 import { LabelBadgeCustomAntd } from "../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
 import Loading from "../../../components/common/Loading/Loading";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+import { StoreNameStatus } from "../../../components/common/StoreNameStatus/StoreNameStatus";
 import { TagTagCustomAntd } from "../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
 import { CheckboxCustomAntd } from "../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd";
 import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
@@ -1256,7 +1257,7 @@ export default function CreateSalePage() {
                   >
                     {stores.map((store: IStore) => (
                       <Select.Option key={store._id} value={store._id}>
-                        {store.name}
+                        <StoreNameStatus store={store} />
                       </Select.Option>
                     ))}
                   </SelectCustomAntd>

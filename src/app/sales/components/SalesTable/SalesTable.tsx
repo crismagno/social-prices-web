@@ -33,6 +33,7 @@ import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/Ima
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
 import { SaleResume } from "../../../../components/common/SaleResume/SaleResume";
 import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
+import { StoreNameStatus } from "../../../../components/common/StoreNameStatus/StoreNameStatus";
 import { TagTagsCustomAntd } from "../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import { UploadFilesDrawer } from "../../../../components/common/UploadFilesDrawer/UploadFilesDrawer";
 import TableCustomAntd2 from "../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
@@ -422,7 +423,7 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId }) => {
 
                   return (
                     <Tag key={saleStore.storeId}>
-                      <span className="mr-1">{store.name}</span>
+                      <StoreNameStatus store={store} />
                     </Tag>
                   );
                 });

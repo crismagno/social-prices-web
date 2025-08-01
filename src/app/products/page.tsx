@@ -2,7 +2,7 @@
 
 import { RefObject, useEffect, useRef, useState } from "react";
 
-import { Avatar, Badge, Button, Card, Image, Tag, Tooltip } from "antd";
+import { Avatar, Button, Card, Image, Tag, Tooltip } from "antd";
 import { find } from "lodash";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
@@ -18,6 +18,7 @@ import {
 } from "@ant-design/icons";
 
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
+import { StoreNameStatus } from "../../components/common/StoreNameStatus/StoreNameStatus";
 import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
 import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import { UploadFilesDrawer } from "../../components/common/UploadFilesDrawer/UploadFilesDrawer";
@@ -32,7 +33,6 @@ import { ICategory } from "../../shared/business/categories/categories.interface
 import FilesUploadsEnum from "../../shared/business/files-uploads/files-uploads.enum";
 import { IProduct } from "../../shared/business/products/products.interface";
 import SocketsEnum from "../../shared/business/sockets/sockets.enum";
-import StoresEnum from "../../shared/business/stores/stores.enum";
 import { IStore } from "../../shared/business/stores/stores.interface";
 import TagsEnum from "../../shared/business/tags/tags.enum";
 import { ITag } from "../../shared/business/tags/tags.interface";
@@ -299,14 +299,7 @@ export default function ProductsPage() {
 
                   return (
                     <Tag key={storeId}>
-                      <span className="mr-1">{store.name ?? "No name"}</span>
-                      <Badge
-                        color={
-                          StoresEnum.StatusBadgeColor[
-                            store.status as StoresEnum.Status
-                          ]
-                        }
-                      />
+                      <StoreNameStatus store={store} />
                     </Tag>
                   );
                 });

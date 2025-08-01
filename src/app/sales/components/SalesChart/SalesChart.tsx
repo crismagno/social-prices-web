@@ -10,6 +10,7 @@ import { ButtonCreateSale } from "../../../../components/common/ButtonCreateSale
 import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
 import Loading from "../../../../components/common/Loading/Loading";
 import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
+import { StoreNameStatus } from "../../../../components/common/StoreNameStatus/StoreNameStatus";
 import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
 import { IProduct } from "../../../../shared/business/products/products.interface";
 import SalesEnum from "../../../../shared/business/sales/sales.enum";
@@ -119,7 +120,7 @@ export const SalesChart: React.FC<Props> = ({
           >
             {map(stores, (store: IStore) => (
               <Select.Option key={store._id} value={store._id}>
-                {store.name}
+                <StoreNameStatus store={store} />
               </Select.Option>
             ))}
           </Select>
