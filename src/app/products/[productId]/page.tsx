@@ -19,6 +19,7 @@ import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useParams, useRouter } from "next/navigation";
 
 import {
+  BlockOutlined,
   EditOutlined,
   FileOutlined,
   QrcodeOutlined,
@@ -236,7 +237,7 @@ export default function ProductPage() {
                         />
                       </div>
                     }
-                    leftIcon={<TagOutlined className="text-lg" />}
+                    leftIcon={<BlockOutlined className="text-lg" />}
                   />
 
                   <Description
