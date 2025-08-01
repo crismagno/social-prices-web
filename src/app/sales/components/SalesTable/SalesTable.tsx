@@ -55,7 +55,7 @@ import { ITag } from "../../../../shared/business/tags/tags.interface";
 import Urls from "../../../../shared/common/routes-app/routes-app";
 import { sortArray } from "../../../../shared/utils/array/functions";
 import DatesEnum from "../../../../shared/utils/dates/dates.enum";
-import { formatterMoney } from "../../../../shared/utils/strings/string";
+import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
 import { createTableState } from "../../../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../../../shared/utils/table/table-state.interface";
 import {
@@ -541,31 +541,32 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId }) => {
             if (isLoadingSalesSummary) {
               return <LoadingFull />;
             }
+
             return (
               <div className="flex justify-center">
                 <div>
                   <b className="mr-2">Discount:</b>
-                  <span>{formatterMoney(salesSummary.discount)}</span>
+                  <span>{formatToMoneyDecimal(salesSummary.discount)}</span>
                 </div>
                 <Divider type="vertical" className="mx-7" />
                 <div>
                   <b className="mr-2">Tax:</b>
-                  <span>{formatterMoney(salesSummary.tax)}</span>
+                  <span>{formatToMoneyDecimal(salesSummary.tax)}</span>
                 </div>
                 <Divider type="vertical" className="mx-7" />
                 <div>
                   <b className="mr-2">Shipping:</b>
-                  <span>{formatterMoney(salesSummary.shipping)}</span>
+                  <span>{formatToMoneyDecimal(salesSummary.shipping)}</span>
                 </div>
                 <Divider type="vertical" className="mx-7" />
                 <div>
                   <b className="mr-2">Subtotal:</b>
-                  <span>{formatterMoney(salesSummary.subtotal)}</span>
+                  <span>{formatToMoneyDecimal(salesSummary.subtotal)}</span>
                 </div>
                 <Divider type="vertical" className="mx-7" />
                 <div>
                   <b className="mr-2">Total:</b>
-                  <span>{formatterMoney(salesSummary.totalFinal)}</span>
+                  <span>{formatToMoneyDecimal(salesSummary.totalFinal)}</span>
                 </div>
               </div>
             );
