@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import {
+  Avatar as AvatarAntd,
   Button,
   Card,
   Col,
@@ -122,7 +123,26 @@ export default function ProductPage() {
               title="See image"
             />
 
-            <h3 className="md:text-2xl font-semibold text-blueGray-700 mt-1">
+            <div className="mt-2">
+              <AvatarAntd.Group
+                maxCount={2}
+                shape="circle"
+                size="large"
+                maxStyle={{ color: "#f56a00", backgroundColor: "#fde3cf" }}
+              >
+                {product.filesUrl.map((fileUrl: string) => (
+                  <Image
+                    key={fileUrl}
+                    width={40}
+                    src={getImageUrl(fileUrl)}
+                    alt="mainUrl"
+                    className="rounded-full"
+                  />
+                ))}
+              </AvatarAntd.Group>
+            </div>
+
+            <h3 className="md:text-2xl font-semibold text-blueGray-700 mt-1 mb-1">
               {product.name}
             </h3>
 
