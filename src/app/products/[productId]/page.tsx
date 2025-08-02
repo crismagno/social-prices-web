@@ -5,7 +5,6 @@ import { useState } from "react";
 import {
   Button,
   Card,
-  Checkbox,
   Col,
   Image,
   Modal,
@@ -14,14 +13,17 @@ import {
   Tag,
   Tooltip,
 } from "antd";
+import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useParams, useRouter } from "next/navigation";
 
 import {
   BlockOutlined,
+  CalendarOutlined,
   EditOutlined,
   FileOutlined,
+  PlusCircleOutlined,
   QrcodeOutlined,
   QuestionCircleOutlined,
   ShopOutlined,
@@ -32,6 +34,7 @@ import Avatar from "../../../components/common/Avatar/Avatar";
 import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
 import Description from "../../../components/common/Description/Description";
 import {
+  IconCake,
   IconIdentification,
   IconMoney,
   IconPencilSquare,
@@ -43,12 +46,14 @@ import { ProductPreviousBarcodesPopover } from "../../../components/common/Produ
 import { TagCategoriesCustomAntd } from "../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
 import { TagStoresCustomAntd } from "../../../components/common/TagStoresCustomAntd/TagStoresCustomAntd";
 import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
+import YesNo from "../../../components/common/YesNo/YesNo";
 import Layout from "../../../components/template/Layout/Layout";
 import CategoriesEnum from "../../../shared/business/categories/categories.enum";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../shared/business/tags/tags.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import { sortArray } from "../../../shared/utils/array/functions";
+import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
 import { formatToMoneyDecimal } from "../../../shared/utils/strings/string";
@@ -101,7 +106,7 @@ export default function ProductPage() {
       title="Product"
       hasBackButton
     >
-      <Card className="h-min-80 mt-10">
+      <Card className="h-min-80 mt-2">
         <Row gutter={[4, 4]}>
           <Col
             xs={24}
@@ -189,13 +194,41 @@ export default function ProductPage() {
                         ) : null}
                       </div>
                     }
-                    leftIcon={IconQuestion()}
+                    leftIcon={<PlusCircleOutlined className="text-lg" />}
                   />
 
                   <Description
                     label="Is Active"
-                    description={<Checkbox checked={product.isActive} />}
+                    description={
+                      <Tag color={product.isActive ? "green" : "red"}>
+                        <YesNo isTrue={product.isActive} />
+                      </Tag>
+                    }
                     leftIcon={IconQuestion()}
+                  />
+
+                  <Description
+                    label="Created At"
+                    description={
+                      product.createdAt
+                        ? moment(product.createdAt).format(
+                            DatesEnum.Format.DDMMYYY
+                          )
+                        : "-"
+                    }
+                    leftIcon={IconCake()}
+                  />
+
+                  <Description
+                    label="Updated At"
+                    description={
+                      product.updatedAt
+                        ? moment(product.updatedAt).format(
+                            DatesEnum.Format.DDMMYYY
+                          )
+                        : "-"
+                    }
+                    leftIcon={<CalendarOutlined className="text-lg" />}
                   />
                 </Col>
 

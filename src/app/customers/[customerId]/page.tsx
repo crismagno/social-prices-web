@@ -83,7 +83,7 @@ export default function CustomerPage() {
       title="Customer"
       hasBackButton
     >
-      <Card className="h-min-80 mt-10">
+      <Card className="h-min-80 mt-2">
         <Row gutter={[4, 4]}>
           <Col
             xs={24}
