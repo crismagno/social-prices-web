@@ -206,6 +206,12 @@ export default function ProductPage() {
                     }
                     leftIcon={IconQuestion()}
                   />
+
+                  <Description
+                    label="Upload Filename"
+                    description={product.uploadFilename}
+                    leftIcon={<FileOutlined className="text-lg" />}
+                  />
                 </Col>
 
                 <Col xs={24} md={10}>
@@ -261,12 +267,6 @@ export default function ProductPage() {
                       </div>
                     }
                     leftIcon={<ShopOutlined className="text-lg" />}
-                  />
-
-                  <Description
-                    label="Upload Filename"
-                    description={product.uploadFilename}
-                    leftIcon={<FileOutlined className="text-lg" />}
                   />
                 </Col>
 
