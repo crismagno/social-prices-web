@@ -276,6 +276,16 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId }) => {
               };
             }
 
+            if (
+              tableStateRequest?.filters?.createdAtRange?.startDate &&
+              tableStateRequest?.filters?.createdAtRange?.endDate
+            ) {
+              tableStateRequestSale.filters = {
+                ...tableStateRequestSale.filters,
+                createdAtRange: tableStateRequest.filters.createdAtRange,
+              };
+            }
+
             setTableStateRequest(tableStateRequestSale);
           }}
           dataSource={sales}
