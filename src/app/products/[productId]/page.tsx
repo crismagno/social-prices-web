@@ -59,6 +59,7 @@ import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
 import { formatToMoneyDecimal } from "../../../shared/utils/strings/string";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
+import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindProductById } from "../detail/useFindProductById";
@@ -327,7 +328,7 @@ export default function ProductPage() {
         </Row>
       </Card>
 
-      {/* <SalesBalance productId={productId} /> */}
+      <SalesBalance productId={productId} />
 
       {/* <Collapse
         style={{ backgroundColor: "#fff", boxShadow: "none" }}
