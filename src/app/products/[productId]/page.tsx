@@ -147,7 +147,7 @@ export default function ProductPage() {
               }
             >
               <Row>
-                <Col xs={24} md={10}>
+                <Col xs={24} md={8}>
                   <Description
                     label="Name"
                     description={product.name}
@@ -205,30 +205,6 @@ export default function ProductPage() {
                       </Tag>
                     }
                     leftIcon={IconQuestion()}
-                  />
-
-                  <Description
-                    label="Created At"
-                    description={
-                      product.createdAt
-                        ? moment(product.createdAt).format(
-                            DatesEnum.Format.DDMMYYY
-                          )
-                        : "-"
-                    }
-                    leftIcon={IconCake()}
-                  />
-
-                  <Description
-                    label="Updated At"
-                    description={
-                      product.updatedAt
-                        ? moment(product.updatedAt).format(
-                            DatesEnum.Format.DDMMYYY
-                          )
-                        : "-"
-                    }
-                    leftIcon={<CalendarOutlined className="text-lg" />}
                   />
                 </Col>
 
@@ -294,11 +270,35 @@ export default function ProductPage() {
                   />
                 </Col>
 
-                <Col xs={24} md={2}>
+                <Col xs={24} md={4}>
                   <Description
                     label="QR Code"
                     description={<QRCode value={product.QRCode ?? ""} />}
                     leftIcon={<QrcodeOutlined className="text-lg" />}
+                  />
+
+                  <Description
+                    label="Created At"
+                    description={
+                      product.createdAt
+                        ? moment(product.createdAt).format(
+                            DatesEnum.Format.DDMMYYYYhhmmss
+                          )
+                        : "-"
+                    }
+                    leftIcon={IconCake()}
+                  />
+
+                  <Description
+                    label="Updated At"
+                    description={
+                      product.updatedAt
+                        ? moment(product.updatedAt).format(
+                            DatesEnum.Format.DDMMYYYYhhmmss
+                          )
+                        : "-"
+                    }
+                    leftIcon={<CalendarOutlined className="text-lg" />}
                   />
                 </Col>
               </Row>
