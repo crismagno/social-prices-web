@@ -119,7 +119,7 @@ export default function ProductPage() {
               onClick={() => setPreviewOpen(true)}
               src={product.mainUrl}
               width={240}
-              className="shadow-lg border-none cursor-pointer z-10"
+              className="shadow-lg border-none cursor-pointer z-10 rounded-lg"
               title="See image"
             />
 
