@@ -35,6 +35,7 @@ interface Props {
   cardClassName?: string;
   customerId?: string;
   storeId?: string;
+  productId?: string;
 }
 
 const defaultGetSalesAnalyticsParams = createGetSalesAnalyticsParams({
@@ -52,12 +53,14 @@ export const SalesChart: React.FC<Props> = ({
   cardClassName,
   customerId,
   storeId,
+  productId,
 }) => {
   const [getSalesAnalyticsParams, setGetSalesAnalyticsParams] =
     useState<IGetSalesAnalyticsParams>({
       ...defaultGetSalesAnalyticsParams,
       customerIds: customerId ? [customerId] : undefined,
       storesIds: storeId ? [storeId] : undefined,
+      productIds: productId ? [productId] : undefined,
     });
 
   const { isLoading, salesAnalytics } = useGetSalesAnalytics(
@@ -129,6 +132,7 @@ export const SalesChart: React.FC<Props> = ({
         <Col md={4}>
           <SelectProducts
             label={"Products"}
+            disabled={!!productId}
             selectedProductIds={getSalesAnalyticsParams.productIds ?? []}
             onSelectProducts={(selectProducts: IProduct[]) => {
               setGetSalesAnalyticsParams({
@@ -212,9 +216,14 @@ export const SalesChart: React.FC<Props> = ({
             <Button
               className="mt-5"
               icon={<ReloadOutlined />}
-              onClick={() =>
-                setGetSalesAnalyticsParams(defaultGetSalesAnalyticsParams)
-              }
+              onClick={() => {
+                setGetSalesAnalyticsParams({
+                  ...defaultGetSalesAnalyticsParams,
+                  customerIds: customerId ? [customerId] : undefined,
+                  storesIds: storeId ? [storeId] : undefined,
+                  productIds: productId ? [productId] : undefined,
+                });
+              }}
             />
           </Tooltip>
         </Col>

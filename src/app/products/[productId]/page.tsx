@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   Col,
+  Collapse,
   Image,
   Modal,
   QRCode,
@@ -60,6 +61,7 @@ import { getImageUrl } from "../../../shared/utils/images/url-images";
 import { formatToMoneyDecimal } from "../../../shared/utils/strings/string";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
 import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
+import { SalesChart } from "../../sales/components/SalesChart/SalesChart";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindProductById } from "../detail/useFindProductById";
@@ -330,19 +332,17 @@ export default function ProductPage() {
 
       <SalesBalance productId={productId} />
 
-      {/* <Collapse
+      <Collapse
         style={{ backgroundColor: "#fff", boxShadow: "none" }}
         ghost
         items={[
           {
             key: "1",
             label: <span className="font-semibold text-base">Sales Chart</span>,
-            children: (
-              <SalesChart isShowHeader={false} productId={productId} />
-            ),
+            children: <SalesChart isShowHeader={false} productId={productId} />,
           },
         ]}
-      /> */}
+      />
 
       {/* <Row>
         <Col xs={24}>
