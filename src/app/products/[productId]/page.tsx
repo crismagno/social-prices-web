@@ -52,9 +52,7 @@ import YesNo from "../../../components/common/YesNo/YesNo";
 import Layout from "../../../components/template/Layout/Layout";
 import CategoriesEnum from "../../../shared/business/categories/categories.enum";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
-import { ITag } from "../../../shared/business/tags/tags.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
-import { sortArray } from "../../../shared/utils/array/functions";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
@@ -102,8 +100,6 @@ export default function ProductPage() {
   const handleEditProduct = () => {
     router.push(Urls.EDIT_PRODUCT.replace(":productId", productId));
   };
-
-  const tagsSort: ITag[] = sortArray(tags, "name");
 
   return (
     <Layout
@@ -256,7 +252,7 @@ export default function ProductPage() {
                     description={
                       <div className="w-full flex">
                         <TagTagsCustomAntd
-                          tags={tagsSort}
+                          tags={tags}
                           useTag
                           tagsIds={product.tagsIds}
                         />

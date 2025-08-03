@@ -38,12 +38,9 @@ import { TagCategoriesCustomAntd } from "../../../components/common/TagCategorie
 import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
 import CategoriesEnum from "../../../shared/business/categories/categories.enum";
-import { ICategory } from "../../../shared/business/categories/categories.interface";
 import StoresEnum from "../../../shared/business/stores/stores.enum";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
-import { ITag } from "../../../shared/business/tags/tags.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
-import { sortArray } from "../../../shared/utils/array/functions";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
@@ -80,10 +77,6 @@ export default function StorePage() {
   const handleEditStore = () => {
     router.push(Urls.EDIT_STORE.replace(":storeId", storeId));
   };
-
-  const categoriesSort: ICategory[] = sortArray(categories, "name");
-
-  const tagsSort: ITag[] = sortArray(tags, "name");
 
   return (
     <Layout
@@ -218,7 +211,7 @@ export default function StorePage() {
                     description={
                       <div className="w-full flex">
                         <TagCategoriesCustomAntd
-                          categories={categoriesSort}
+                          categories={categories}
                           useTag
                           categoriesIds={store.categoriesIds}
                         />
@@ -232,7 +225,7 @@ export default function StorePage() {
                     description={
                       <div className="w-full flex">
                         <TagTagsCustomAntd
-                          tags={tagsSort}
+                          tags={tags}
                           useTag
                           tagsIds={store.tagsIds}
                         />

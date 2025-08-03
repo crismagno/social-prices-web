@@ -38,9 +38,7 @@ import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/
 import Layout from "../../../components/template/Layout/Layout";
 import PersonEnum from "../../../shared/business/enums/person.enum";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
-import { ITag } from "../../../shared/business/tags/tags.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
-import { sortArray } from "../../../shared/utils/array/functions";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
@@ -74,8 +72,6 @@ export default function CustomerPage() {
   const handleEditCustomer = () => {
     router.push(Urls.EDIT_CUSTOMER.replace(":customerId", customerId));
   };
-
-  const tagsSort: ITag[] = sortArray(tags, "name");
 
   return (
     <Layout
@@ -190,7 +186,7 @@ export default function CustomerPage() {
                     description={
                       <div className="w-full flex">
                         <TagTagsCustomAntd
-                          tags={tagsSort}
+                          tags={tags}
                           useTag
                           tagsIds={customer.tagsIds}
                         />
