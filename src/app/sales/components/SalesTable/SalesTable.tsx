@@ -72,9 +72,10 @@ import { DownloadSalesDrawer } from "../DownloadSalesDrawer/DownloadSalesDrawer"
 interface Props {
   storeId?: string;
   customerId?: string;
+  productId?: string;
 }
 
-const SalesTable: React.FC<Props> = ({ storeId, customerId }) => {
+const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
   const { user } = useAuthData();
 
   const { socket } = useSocketData();
@@ -89,6 +90,7 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId }) => {
       filters: {
         stores: storeId ? [storeId] : [],
         customerIds: customerId ? [customerId] : [],
+        productIds: productId ? [productId] : [],
       },
     })
   );
@@ -217,7 +219,11 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId }) => {
               Upload
             </Button>
 
-            <ButtonCreateSale storeId={storeId} customerId={customerId} />
+            <ButtonCreateSale
+              storeId={storeId}
+              customerId={customerId}
+              productId={productId}
+            />
           </>
         }
       >
@@ -233,6 +239,7 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId }) => {
           <Col md={6}>
             <SelectProducts
               label={"Products"}
+              disabled={!!productId}
               selectedProductIds={tableStateRequest?.filters?.productIds ?? []}
               onSelectProducts={(selectProducts: IProduct[]) => {
                 setTableStateRequest({
@@ -273,6 +280,13 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId }) => {
               tableStateRequestSale.filters = {
                 ...tableStateRequestSale.filters,
                 customerIds: [customerId],
+              };
+            }
+
+            if (productId) {
+              tableStateRequestSale.filters = {
+                ...tableStateRequestSale.filters,
+                productIds: [productId],
               };
             }
 
@@ -647,6 +661,7 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId }) => {
         stores={stores}
         storeId={storeId}
         customerId={customerId}
+        productId={productId}
       />
     </>
   );

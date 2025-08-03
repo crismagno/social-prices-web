@@ -62,6 +62,7 @@ import { formatToMoneyDecimal } from "../../../shared/utils/strings/string";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
 import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
 import { SalesChart } from "../../sales/components/SalesChart/SalesChart";
+import SalesTable from "../../sales/components/SalesTable/SalesTable";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindProductById } from "../detail/useFindProductById";
@@ -344,11 +345,11 @@ export default function ProductPage() {
         ]}
       />
 
-      {/* <Row>
+      <Row>
         <Col xs={24}>
           <SalesTable productId={productId} />{" "}
         </Col>
-      </Row> */}
+      </Row>
 
       <Modal
         open={previewOpen}

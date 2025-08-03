@@ -9,9 +9,14 @@ import Urls from "../../../shared/common/routes-app/routes-app";
 interface Props {
   storeId?: string;
   customerId?: string;
+  productId?: string;
 }
 
-export const ButtonCreateSale: React.FC<Props> = ({ storeId, customerId }) => {
+export const ButtonCreateSale: React.FC<Props> = ({
+  storeId,
+  customerId,
+  productId,
+}) => {
   const router: AppRouterInstance = useRouter();
 
   return (
@@ -23,6 +28,10 @@ export const ButtonCreateSale: React.FC<Props> = ({ storeId, customerId }) => {
         } else if (customerId) {
           router.push(
             Urls.SALES_CREATE_BY_CUSTOMER.replace(":customerId", customerId)
+          );
+        } else if (productId) {
+          router.push(
+            Urls.SALES_CREATE_BY_PRODUCT.replace(":productId", productId)
           );
         } else {
           router.push(Urls.SALES_CREATE);
