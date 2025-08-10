@@ -404,8 +404,8 @@ export default function CreateSalePage() {
           saleStores: saleByIdSaleStores,
           discount: saleById?.totals.discount
             ? {
-                amount: saleById.totals.discount.normal.amount,
-                note: saleById.totals.discount.normal.note,
+                amount: saleById.totals.discount.distributed.amount,
+                note: saleById.totals.discount.distributed.note,
                 show: false,
               }
             : showValueNote,
@@ -802,7 +802,10 @@ export default function CreateSalePage() {
         totals: {
           discount: dataDiscountAmount
             ? {
-                normal: { amount: dataDiscountAmount, note: dataDiscountNote },
+                distributed: {
+                  amount: dataDiscountAmount,
+                  note: dataDiscountNote,
+                },
               }
             : null,
           shipping: { amount: dataShippingAmount, note: dataShippingNote },

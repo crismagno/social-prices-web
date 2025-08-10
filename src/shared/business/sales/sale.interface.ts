@@ -64,7 +64,7 @@ export interface ISaleStoreTotalsDiscount {
 }
 
 export interface ISaleTotalsDiscount {
-  normal: ISaleAmountNote;
+  distributed: ISaleAmountNote;
 }
 
 export interface ISalePayment {

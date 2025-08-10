@@ -70,7 +70,8 @@ export const SaleResume: React.FC<Props> = ({ sale, stores, tags }) => {
   };
 
   const getTotalAfterDiscount = (): number => {
-    const discountAmount: number = sale.totals.discount?.normal.amount ?? 0;
+    const discountAmount: number =
+      sale.totals.discount?.distributed.amount ?? 0;
 
     const totalAfterDiscount: number =
       sale.totals.subtotalAmount - discountAmount;
@@ -253,7 +254,7 @@ export const SaleResume: React.FC<Props> = ({ sale, stores, tags }) => {
       <div className="flex justify-between pr-10 mt-2">
         <label className="font-semibold">Discount: </label>
         <label>
-          {formatToMoneyDecimal(sale.totals.discount?.normal.amount ?? 0)}
+          {formatToMoneyDecimal(sale.totals.discount?.distributed.amount ?? 0)}
         </label>
       </div>
 

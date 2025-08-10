@@ -22,7 +22,7 @@ export class SaleStoreProductDto {
 }
 
 export class SaleTotalsDiscountDto {
-  normal: SaleAmountNoteDto = { amount: 0, note: null };
+  distributed: SaleAmountNoteDto = { amount: 0, note: null };
 }
 
 export class SalePaymentDto {
