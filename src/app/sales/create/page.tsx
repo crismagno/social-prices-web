@@ -773,7 +773,6 @@ export default function CreateSalePage() {
           },
           userId: selectedCustomer?.userId ?? null,
         },
-        customerId,
         createdByUserId: user?._id!,
         createdByEmployeeId: employee?._id!,
         header: {

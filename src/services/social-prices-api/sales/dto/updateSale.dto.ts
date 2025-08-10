@@ -25,5 +25,4 @@ export default class UpdateSaleDto {
   deliveryAt: Date | null = null;
   createdDate: Date | null = null;
   numberManual: string | null = null;
-  customerId: string | null = null;
 }
