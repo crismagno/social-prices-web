@@ -55,7 +55,7 @@ export default function NotificationsPage() {
   const handleScrollList = () => {
     setTableStateRequest({
       ...tableStateRequest,
-      filters: {},
+      filters: tableStateRequest?.filters ?? {},
       pagination: {
         total: 0,
         current: undefined,
