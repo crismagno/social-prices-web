@@ -14,6 +14,7 @@ import { INotification } from "../../shared/business/notifications/notification.
 import NotificationsEnum from "../../shared/business/notifications/notifications.enum";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { createTableState } from "../../shared/utils/table/table-state";
+import TableStateEnum from "../../shared/utils/table/table-state.enum";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { useFindNotificationsByUserTableState } from "./useFindNotificationsByUserTableState";
 
@@ -26,7 +27,7 @@ export default function NotificationsPage() {
     ITableStateRequest<INotification> | undefined
   >(
     createTableState({
-      sort: { field: "createdAt", order: "descend" },
+      sort: { field: "createdAt", order: TableStateEnum.SortOrder.descend },
       pagination: { pageSize: 10, skip: 0, current: undefined, total: 0 },
     })
   );
@@ -98,6 +99,24 @@ export default function NotificationsPage() {
     });
   };
 
+  const handleChangeBySort = (sortOrder: TableStateEnum.SortOrder) => {
+    setTableStateRequest({
+      ...tableStateRequest,
+
+      sort: {
+        field: tableStateRequest?.sort?.field,
+        order: sortOrder,
+      },
+      pagination: {
+        total: 0,
+        current: undefined,
+        pageSize: 10,
+        skip: 0,
+      },
+      useConcat: false,
+    });
+  };
+
   const renderDataItem = (notification: INotification): JSX.Element => {
     return (
       <List.Item key={notification._id}>
@@ -136,9 +155,9 @@ export default function NotificationsPage() {
   return (
     <Layout subtitle="My Notifications" title="Notifications" hasBackButton>
       <Card title="Notifications" className="h-min-80 mt-5">
-        <Row>
-          <Col xs={24}>
-            <label className="font-bold">Type: </label>
+        <Row gutter={[8, 8]}>
+          <Col lg={5} md={8} sm={12} xs={24}>
+            <label className="font-bold mr-2">Type:</label>
             <Select
               onChange={handleChangeType}
               className="w-52"
@@ -146,11 +165,33 @@ export default function NotificationsPage() {
             >
               <Select.Option value={null}>Select a Type</Select.Option>
 
-              {Object.keys(NotificationsEnum.Type).map((type) => (
+              {Object.keys(NotificationsEnum.Type).map((type: string) => (
                 <Select.Option key={type} value={type}>
                   {NotificationsEnum.TypeLabels[type as NotificationsEnum.Type]}
                 </Select.Option>
               ))}
+            </Select>
+          </Col>
+
+          <Col lg={5} md={8} sm={12} xs={24}>
+            <label className="font-bold mr-2">Sort :</label>
+            <Select
+              onChange={handleChangeBySort}
+              className="w-52"
+              placeholder="Select a Sort"
+              value={tableStateRequest?.sort?.order}
+            >
+              {Object.keys(TableStateEnum.SortOrder).map(
+                (sortOrder: string) => (
+                  <Select.Option key={sortOrder} value={sortOrder}>
+                    {
+                      TableStateEnum.SortOrderLabels[
+                        sortOrder as TableStateEnum.SortOrder
+                      ]
+                    }
+                  </Select.Option>
+                )
+              )}
             </Select>
           </Col>
         </Row>
