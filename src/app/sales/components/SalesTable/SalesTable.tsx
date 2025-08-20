@@ -3,26 +3,30 @@
 import { RefObject, useEffect, useRef, useState } from "react";
 
 import {
+  Alert,
   Badge,
   Button,
   Card,
   Col,
   Divider,
+  message,
   Modal,
   Row,
   Tag,
   Tooltip,
 } from "antd";
-import { find, first, includes, map } from "lodash";
+import { find, first, includes, map, reduce } from "lodash";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
 import {
+  CheckOutlined,
   DeleteOutlined,
   DownloadOutlined,
   EditOutlined,
   EyeOutlined,
+  QuestionCircleTwoTone,
   UploadOutlined,
 } from "@ant-design/icons";
 
@@ -46,6 +50,7 @@ import { IProduct } from "../../../../shared/business/products/products.interfac
 import {
   ISale,
   ISaleBuyer,
+  ISalePayment,
   ISaleStore,
 } from "../../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../../shared/business/sales/sales.enum";
@@ -99,6 +104,8 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
     useState<boolean>(false);
 
   const [isDeletingSale, setIsDeletingSale] = useState<boolean>(false);
+
+  const [isCompletingSale, setIsCompletingSale] = useState<boolean>(false);
 
   const [saleToDelete, setSaleToDelete] = useState<ISale | null>(null);
 
@@ -177,6 +184,73 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
       setIsDeletingSale(false);
       setSaleToDelete(null);
       setIsVisibleDeleteSaleModal(false);
+    }
+  };
+
+  const validatePayment = (sale: ISale) => {
+    const getTotalPayment = (): number => {
+      const total: number = reduce(
+        sale.payments,
+        (acc: number, payment: ISalePayment) => {
+          acc += payment.amount;
+
+          return acc;
+        },
+        0
+      );
+
+      return total > 0 ? total : 0;
+    };
+
+    const totalAfterPayment: number =
+      sale.totals.totalFinalAmount - getTotalPayment();
+
+    if (totalAfterPayment !== 0) {
+      Modal.confirm({
+        title: `Confirm Payment`,
+        icon: <QuestionCircleTwoTone />,
+        content: (
+          <Alert
+            message={`Please confirm total after payment, and payment status? Sale Number: ${sale.number}`}
+            type="warning"
+            showIcon
+          />
+        ),
+        okText: "Confirm",
+        cancelText: "Cancel",
+        onOk: () => handleCompleteSale(sale, false),
+        onCancel: () => false,
+      });
+
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleCompleteSale = async (
+    sale: ISale,
+    shouldValidatePayment: boolean = true
+  ) => {
+    try {
+      if (shouldValidatePayment && !validatePayment(sale)) {
+        return;
+      }
+
+      setIsCompletingSale(true);
+
+      await serviceMethodsInstance.salesServiceMethods.completeManual(sale._id);
+
+      setTableStateRequest({
+        ...tableStateRequest,
+        pagination: { pageSize: 10, skip: 0, current: undefined, total: 0 },
+      });
+
+      message.success(`Sale ${sale.number} completed successfully!`);
+    } catch (error: any) {
+      handleClientError(error);
+    } finally {
+      setIsCompletingSale(false);
     }
   };
 
@@ -531,9 +605,18 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
               align: "center",
               render: (_, sale: ISale) => (
                 <Button.Group>
+                  {sale.status !== SalesEnum.Status.COMPLETED && (
+                    <Tooltip title="Mark sale as completed">
+                      <Button
+                        type="success"
+                        onClick={() => handleCompleteSale(sale)}
+                        icon={<CheckOutlined />}
+                      />
+                    </Tooltip>
+                  )}
                   <Tooltip title="Edit sale">
                     <Button
-                      type="success"
+                      type="warning"
                       onClick={() => handleEditSale(sale)}
                       icon={<EditOutlined />}
                     />

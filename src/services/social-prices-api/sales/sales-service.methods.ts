@@ -194,4 +194,21 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
 
     return response.data;
   }
+
+  public async completeManual(saleId: string): Promise<ISale> {
+    const response = await this._fetchAxios.put<ISale>(
+      `${
+        this._socialPricesApiV1
+      }${SalesServiceEnum.Methods.COMPLETE_MANUAL.replace(":saleId", saleId)}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
 }
