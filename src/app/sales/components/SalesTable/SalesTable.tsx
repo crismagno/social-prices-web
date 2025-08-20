@@ -346,7 +346,11 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
                       <Button
                         type="link"
                         className="p-0"
-                        onClick={() => router.push(Urls.CUSTOMERS)}
+                        onClick={() =>
+                          router.push(
+                            Urls.CUSTOMER.replace(":customerId", customer?._id!)
+                          )
+                        }
                       >
                         {buyer.name}
                       </Button>

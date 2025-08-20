@@ -709,6 +709,38 @@ export default function CreateSalePage() {
 
   const isEnableCreateSale: boolean = saleStores?.length > 0;
 
+  const validatePayment = () => {
+    if (totalAfterPayment !== 0) {
+      Modal.confirm({
+        title: "Confirm Payment",
+        icon: <QuestionCircleTwoTone />,
+        content: (
+          <Alert
+            message="Please confirm total after payment, and payment status?"
+            type="warning"
+            showIcon
+          />
+        ),
+        okText: "Confirm",
+        cancelText: "Cancel",
+        onOk: () => callOnSubmit(false),
+        onCancel: () => false,
+      });
+
+      return false;
+    }
+
+    return true;
+  };
+
+  const callOnSubmit = (shouldValidatePayment: boolean = true) => {
+    if (shouldValidatePayment && !validatePayment()) {
+      return;
+    }
+
+    handleSubmit(onSubmit)();
+  };
+
   const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
     try {
       setIsSubmitting(true);
@@ -1469,7 +1501,7 @@ export default function CreateSalePage() {
                   type="success"
                   disabled={!isEnableCreateSale}
                   className="w-full text-center mt-5 h-10 font-bold text-lg"
-                  onClick={handleSubmit(onSubmit)}
+                  onClick={() => callOnSubmit(true)}
                   loading={isSubmitting}
                 >
                   {isEditMode ? "SAVE" : "CREATE"} SALE
