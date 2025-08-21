@@ -99,11 +99,11 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
       message.success(`Sale ${sale.number} status updated!`);
 
       onUpdateStatusManual(response);
+      setIsEditing(false);
     } catch (error: any) {
       handleClientError(error);
     } finally {
       setIsSubmitting(false);
-      setIsEditing(false);
     }
   };
 
