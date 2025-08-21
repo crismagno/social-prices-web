@@ -723,7 +723,7 @@ export default function CreateSalePage() {
         ),
         okText: "Confirm",
         cancelText: "Cancel",
-        onOk: () => callOnSubmit(false),
+        onOk: () => callHandleSubmit(false),
         onCancel: () => false,
       });
 
@@ -733,7 +733,7 @@ export default function CreateSalePage() {
     return true;
   };
 
-  const callOnSubmit = (shouldValidatePayment: boolean = true) => {
+  const callHandleSubmit = (shouldValidatePayment: boolean = true) => {
     if (shouldValidatePayment && !validatePayment()) {
       return;
     }
@@ -1501,7 +1501,7 @@ export default function CreateSalePage() {
                   type="success"
                   disabled={!isEnableCreateSale}
                   className="w-full text-center mt-5 h-10 font-bold text-lg"
-                  onClick={() => callOnSubmit(true)}
+                  onClick={() => callHandleSubmit(true)}
                   loading={isSubmitting}
                 >
                   {isEditMode ? "SAVE" : "CREATE"} SALE

@@ -1,6 +1,7 @@
 "use client";
 
 import { ISale } from "../../../shared/business/sales/sale.interface";
+import SalesEnum from "../../../shared/business/sales/sales.enum";
 import {
   IFiltersDownloadSales,
   IGetSalesAnalyticsParams,
@@ -195,12 +196,20 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
-  public async completeManual(saleId: string): Promise<ISale> {
+  public async updateStatusManual(
+    saleId: string,
+    newStatus: SalesEnum.Status
+  ): Promise<ISale> {
     const response = await this._fetchAxios.put<ISale>(
       `${
         this._socialPricesApiV1
-      }${SalesServiceEnum.Methods.COMPLETE_MANUAL.replace(":saleId", saleId)}`,
-      {},
+      }${SalesServiceEnum.Methods.UPDATE_STATUS_MANUAL.replace(
+        ":saleId",
+        saleId
+      )}`,
+      {
+        newStatus,
+      },
       {
         headers: {
           "Content-Type": "application/json",
