@@ -155,7 +155,7 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
 
           <Tooltip title="Confirm update sale status">
             <Button
-              type="success"
+              type="primary"
               size="small"
               onClick={() => handleUpdateStatusSale()}
               icon={<CheckOutlined />}
