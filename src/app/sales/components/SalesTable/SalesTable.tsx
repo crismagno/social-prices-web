@@ -519,6 +519,15 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
               sorter: true,
             },
             {
+              title: "Updated At",
+              dataIndex: "updatedAt",
+              key: "updatedAt",
+              align: "center",
+              render: (updatedAt: Date) =>
+                moment(updatedAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
+              sorter: true,
+            },
+            {
               title: "Delivery At",
               dataIndex: "deliveryAt",
               key: "deliveryAt",
