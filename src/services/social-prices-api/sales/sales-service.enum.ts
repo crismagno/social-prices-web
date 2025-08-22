@@ -11,7 +11,8 @@ namespace SalesServiceEnum {
     GET_SALES_BALANCE = "/sales/getSalesBalance",
     UPLOAD_SALES = "/sales/uploadSales",
     DOWNLOAD_SALES = "/sales/downloadSales",
-    UPDATE_STATUS_MANUAL = "/sales/updateStatusManual/:saleId",
+    UPDATE_STATUS_MANUAL = "/sales/updateStatusManual",
+    UPDATE_PAYMENT_STATUS_MANUAL = "/sales/updatePaymentStatusManual",
   }
 }
 

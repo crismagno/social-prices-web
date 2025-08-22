@@ -17,6 +17,7 @@ import {
 import ServiceMethodsBase from "../service-methods.base";
 import CreateSaleDto from "./dto/createSale.dto";
 import UpdateSaleDto from "./dto/updateSale.dto";
+import UpdateSalePaymentStatusManualDto from "./dto/updateSalePaymentStatusManual.dto";
 import SalesServiceEnum from "./sales-service.enum";
 
 export default class SalesServiceMethods extends ServiceMethodsBase {
@@ -201,15 +202,28 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
     newStatus: SalesEnum.Status
   ): Promise<ISale> {
     const response = await this._fetchAxios.put<ISale>(
-      `${
-        this._socialPricesApiV1
-      }${SalesServiceEnum.Methods.UPDATE_STATUS_MANUAL.replace(
-        ":saleId",
-        saleId
-      )}`,
+      `${this._socialPricesApiV1}${SalesServiceEnum.Methods.UPDATE_STATUS_MANUAL}`,
       {
         newStatus,
+        saleId,
       },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async updatePaymentStatusManual(
+    updateSalePaymentStatusManualDto: UpdateSalePaymentStatusManualDto
+  ): Promise<ISale> {
+    const response = await this._fetchAxios.put<ISale>(
+      `${this._socialPricesApiV1}${SalesServiceEnum.Methods.UPDATE_PAYMENT_STATUS_MANUAL}`,
+      updateSalePaymentStatusManualDto,
       {
         headers: {
           "Content-Type": "application/json",

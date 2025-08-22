@@ -2,7 +2,6 @@
 import { memo, useState } from "react";
 
 import { Alert, Button, message, Modal, Select, Tag, Tooltip } from "antd";
-import { reduce } from "lodash";
 
 import {
   CheckOutlined,
@@ -14,11 +13,9 @@ import {
 import handleClientError from "../../../../components/common/handleClientError/handleClientError";
 import { LabelBadgeCustomAntd } from "../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
-import {
-  ISale,
-  ISalePayment,
-} from "../../../../shared/business/sales/sale.interface";
+import { ISale } from "../../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../../shared/business/sales/sales.enum";
+import { getTotalPayment } from "../../../../shared/business/sales/sales.utils";
 
 export interface Props {
   sale: ISale;
@@ -33,27 +30,12 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  const [newSaleStatus, setNewSaleStatus] = useState<SalesEnum.Status>(
-    sale.status
-  );
+  const [newPaymentStatus, setNewPaymentStatus] =
+    useState<SalesEnum.PaymentStatus>(sale.paymentStatus);
 
   const validatePayment = (handleEvent: Function) => {
-    const getTotalPayment = (): number => {
-      const total: number = reduce(
-        sale.payments,
-        (acc: number, payment: ISalePayment) => {
-          acc += payment.amount;
-
-          return acc;
-        },
-        0
-      );
-
-      return total > 0 ? total : 0;
-    };
-
     const totalAfterPayment: number =
-      sale.totals.totalFinalAmount - getTotalPayment();
+      sale.totals.totalFinalAmount - getTotalPayment(sale);
 
     if (totalAfterPayment !== 0) {
       Modal.confirm({
@@ -78,14 +60,14 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
     return true;
   };
 
-  const handleUpdateStatusSale = async (
+  const handleUpdatePaymentStatusSale = async (
     shouldValidatePayment: boolean = true
   ) => {
     try {
       if (
         shouldValidatePayment &&
-        newSaleStatus === SalesEnum.Status.COMPLETED &&
-        !validatePayment(() => handleUpdateStatusSale(false))
+        newPaymentStatus === SalesEnum.PaymentStatus.COMPLETED &&
+        !validatePayment(() => handleUpdatePaymentStatusSale(false))
       ) {
         return;
       }
@@ -93,12 +75,15 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
       setIsSubmitting(true);
 
       const response: ISale =
-        await serviceMethodsInstance.salesServiceMethods.updateStatusManual(
-          sale._id,
-          newSaleStatus
+        await serviceMethodsInstance.salesServiceMethods.updatePaymentStatusManual(
+          {
+            saleId: sale._id,
+            newPayments: sale.payments,
+            newPaymentStatus: newPaymentStatus,
+          }
         );
 
-      message.success(`Sale ${sale.number} status updated!`);
+      message.success(`Sale ${sale.number} payment status updated!`);
 
       onUpdatePaymentStatusManual(response);
       setIsEditing(false);
@@ -109,11 +94,13 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
     }
   };
 
-  const handleCompleteSale = async (shouldValidatePayment: boolean = true) => {
+  const handleCompleteSalePaymentStatus = async (
+    shouldValidatePayment: boolean = true
+  ) => {
     try {
       if (
         shouldValidatePayment &&
-        !validatePayment(() => handleCompleteSale(false))
+        !validatePayment(() => handleCompleteSalePaymentStatus(false))
       ) {
         return;
       }
@@ -121,12 +108,15 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
       setIsSubmitting(true);
 
       const response: ISale =
-        await serviceMethodsInstance.salesServiceMethods.updateStatusManual(
-          sale._id,
-          SalesEnum.Status.COMPLETED
+        await serviceMethodsInstance.salesServiceMethods.updatePaymentStatusManual(
+          {
+            newPayments: sale.payments,
+            newPaymentStatus: SalesEnum.PaymentStatus.COMPLETED,
+            saleId: sale._id,
+          }
         );
 
-      message.success(`Sale ${sale.number} completed!`);
+      message.success(`Sale ${sale.number} payment completed!`);
 
       onUpdatePaymentStatusManual(response);
     } catch (error: any) {
@@ -141,38 +131,40 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
       {isEditing ? (
         <div className="w-48">
           <Select
-            onChange={setNewSaleStatus}
-            value={newSaleStatus}
+            onChange={setNewPaymentStatus}
+            value={newPaymentStatus}
             size="small"
             className="mr-1 w-32"
           >
-            {Object.values(SalesEnum.Status).map((status: SalesEnum.Status) => (
-              <Select.Option key={status} value={status}>
-                <LabelBadgeCustomAntd
-                  label={SalesEnum.StatusLabels[status as SalesEnum.Status]}
-                  color={SalesEnum.StatusColors[status as SalesEnum.Status]}
-                />
-              </Select.Option>
-            ))}
+            {Object.values(SalesEnum.PaymentStatus).map(
+              (paymentStatus: SalesEnum.PaymentStatus) => (
+                <Select.Option key={paymentStatus} value={paymentStatus}>
+                  <LabelBadgeCustomAntd
+                    label={SalesEnum.PaymentStatusLabels[paymentStatus]}
+                    color={SalesEnum.PaymentStatusColors[paymentStatus]}
+                  />
+                </Select.Option>
+              )
+            )}
           </Select>
 
-          <Tooltip title="Confirm update sale status">
+          <Tooltip title="Confirm update sale payment status">
             <Button
               type="success"
               size="small"
-              onClick={() => handleUpdateStatusSale()}
+              onClick={() => handleUpdatePaymentStatusSale()}
               icon={<CheckOutlined />}
               loading={isSubmitting}
               className="mr-1"
             />
           </Tooltip>
-          <Tooltip title="Cancel update sale status">
+          <Tooltip title="Cancel update sale payment status">
             <Button
               type="default"
               size="small"
               onClick={() => {
                 setIsEditing(false);
-                setNewSaleStatus(sale.status);
+                setNewPaymentStatus(sale.paymentStatus);
               }}
               icon={<CloseOutlined />}
               loading={isSubmitting}
@@ -181,10 +173,13 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
         </div>
       ) : (
         <div className="w-36">
-          <Tag color={SalesEnum.StatusColors[sale.status]} className="mr-1">
-            {SalesEnum.StatusLabels[sale.status]}
+          <Tag
+            color={SalesEnum.PaymentStatusColors[sale.paymentStatus]}
+            className="mr-1"
+          >
+            {SalesEnum.PaymentStatusLabels[sale.paymentStatus]}
           </Tag>
-          <Tooltip title="Edit sale status">
+          <Tooltip title="Edit sale payment status">
             <Button
               type="default"
               size="small"
@@ -198,7 +193,7 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
             <Button
               type="success"
               size="small"
-              onClick={() => setIsEditing(true)}
+              onClick={() => handleCompleteSalePaymentStatus()}
               icon={<CheckOutlined />}
               loading={isSubmitting}
             />

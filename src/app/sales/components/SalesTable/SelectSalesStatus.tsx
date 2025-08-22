@@ -2,7 +2,6 @@
 import { memo, useState } from "react";
 
 import { Alert, Button, message, Modal, Select, Tag, Tooltip } from "antd";
-import { reduce } from "lodash";
 
 import {
   CheckOutlined,
@@ -14,11 +13,9 @@ import {
 import handleClientError from "../../../../components/common/handleClientError/handleClientError";
 import { LabelBadgeCustomAntd } from "../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
-import {
-  ISale,
-  ISalePayment,
-} from "../../../../shared/business/sales/sale.interface";
+import { ISale } from "../../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../../shared/business/sales/sales.enum";
+import { getTotalPayment } from "../../../../shared/business/sales/sales.utils";
 
 export interface Props {
   sale: ISale;
@@ -35,22 +32,8 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
   );
 
   const validatePayment = (handleEvent: Function) => {
-    const getTotalPayment = (): number => {
-      const total: number = reduce(
-        sale.payments,
-        (acc: number, payment: ISalePayment) => {
-          acc += payment.amount;
-
-          return acc;
-        },
-        0
-      );
-
-      return total > 0 ? total : 0;
-    };
-
     const totalAfterPayment: number =
-      sale.totals.totalFinalAmount - getTotalPayment();
+      sale.totals.totalFinalAmount - getTotalPayment(sale);
 
     if (totalAfterPayment !== 0) {
       Modal.confirm({
@@ -146,8 +129,8 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
             {Object.values(SalesEnum.Status).map((status: SalesEnum.Status) => (
               <Select.Option key={status} value={status}>
                 <LabelBadgeCustomAntd
-                  label={SalesEnum.StatusLabels[status as SalesEnum.Status]}
-                  color={SalesEnum.StatusColors[status as SalesEnum.Status]}
+                  label={SalesEnum.StatusLabels[status]}
+                  color={SalesEnum.StatusColors[status]}
                 />
               </Select.Option>
             ))}

@@ -68,6 +68,7 @@ import { useFindTagsByType } from "../../../tags/useFindTagsByType";
 import { useFindSalesByUserTableState } from "../../useFindSalesByUserTableState";
 import { useGetSalesSummaryByUserTableState } from "../../useGetSalesSummaryByUserTableState";
 import { DownloadSalesDrawer } from "../DownloadSalesDrawer/DownloadSalesDrawer";
+import SelectSalesPaymentStatus from "./SelectSalesPaymentStatus";
 import SelectSalesStatus from "./SelectSalesStatus";
 
 interface Props {
@@ -438,11 +439,24 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
                   value: paymentStatus,
                 })
               ),
-              render: (paymentStatus: SalesEnum.PaymentStatus) => (
-                <Tag color={SalesEnum.PaymentStatusColors[paymentStatus]}>
-                  {SalesEnum.PaymentStatusLabels[paymentStatus]}
-                </Tag>
-              ),
+              render: (_, sale: ISale) => {
+                return (
+                  <SelectSalesPaymentStatus
+                    sale={sale}
+                    onUpdatePaymentStatusManual={() => {
+                      setTableStateRequest({
+                        ...tableStateRequest,
+                        pagination: {
+                          pageSize: 10,
+                          skip: 0,
+                          current: undefined,
+                          total: 0,
+                        },
+                      });
+                    }}
+                  />
+                );
+              },
             },
             {
               title: "Stores",
@@ -545,6 +559,7 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
               dataIndex: "action",
               key: "action",
               align: "center",
+              fixed: "right",
               render: (_, sale: ISale) => (
                 <Button.Group>
                   <Tooltip title="Edit sale">
