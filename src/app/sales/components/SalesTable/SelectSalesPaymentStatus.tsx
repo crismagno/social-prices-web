@@ -22,10 +22,13 @@ import SalesEnum from "../../../../shared/business/sales/sales.enum";
 
 export interface Props {
   sale: ISale;
-  onUpdateStatusManual: (sale: ISale) => void;
+  onUpdatePaymentStatusManual: (sale: ISale) => void;
 }
 
-const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
+const SelectSalesPaymentStatus: React.FC<Props> = ({
+  sale,
+  onUpdatePaymentStatusManual,
+}) => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -97,7 +100,7 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
 
       message.success(`Sale ${sale.number} status updated!`);
 
-      onUpdateStatusManual(response);
+      onUpdatePaymentStatusManual(response);
       setIsEditing(false);
     } catch (error: any) {
       handleClientError(error);
@@ -125,7 +128,7 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
 
       message.success(`Sale ${sale.number} completed!`);
 
-      onUpdateStatusManual(response);
+      onUpdatePaymentStatusManual(response);
     } catch (error: any) {
       handleClientError(error);
     } finally {
@@ -177,7 +180,7 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
           </Tooltip>
         </div>
       ) : (
-        <div className="w-40">
+        <div className="w-36">
           <Tag color={SalesEnum.StatusColors[sale.status]} className="mr-1">
             {SalesEnum.StatusLabels[sale.status]}
           </Tag>
@@ -191,22 +194,19 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
               className="mr-1"
             />
           </Tooltip>
-
-          {sale.status !== SalesEnum.Status.COMPLETED && (
-            <Tooltip title="Complete">
-              <Button
-                type="success"
-                size="small"
-                onClick={() => handleCompleteSale()}
-                icon={<CheckOutlined />}
-                loading={isSubmitting}
-              />
-            </Tooltip>
-          )}
+          <Tooltip title="Complete">
+            <Button
+              type="success"
+              size="small"
+              onClick={() => setIsEditing(true)}
+              icon={<CheckOutlined />}
+              loading={isSubmitting}
+            />
+          </Tooltip>
         </div>
       )}
     </>
   );
 };
 
-export default memo(SelectSalesStatus);
+export default memo(SelectSalesPaymentStatus);
