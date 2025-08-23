@@ -33,7 +33,19 @@ export const ButtonEditSelectedProductNote: React.FC<Props> = ({
       </Tooltip>
 
       <Modal
-        title={`Product Note: ${saleStoreProduct.name}(${saleStoreProduct.barcode})`}
+        width={600}
+        title={
+          <div className="flex flex-col">
+            <label>Edit Product Note</label>
+
+            <span className="text-sm italic mt-2">
+              {saleStoreProduct.name}
+              <span className="text-gray-500">
+                ({saleStoreProduct.barcode})
+              </span>
+            </span>
+          </div>
+        }
         open={isVisible}
         onCancel={() => {
           setIsVisible(false);
@@ -51,7 +63,7 @@ export const ButtonEditSelectedProductNote: React.FC<Props> = ({
               setNote(e.target.value)
             }
             value={note ?? ""}
-            rows={3}
+            rows={5}
           />
         </div>
       </Modal>
