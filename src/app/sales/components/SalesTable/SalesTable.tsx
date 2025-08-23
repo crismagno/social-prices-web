@@ -68,6 +68,7 @@ import { useFindTagsByType } from "../../../tags/useFindTagsByType";
 import { useFindSalesByUserTableState } from "../../useFindSalesByUserTableState";
 import { useGetSalesSummaryByUserTableState } from "../../useGetSalesSummaryByUserTableState";
 import { DownloadSalesDrawer } from "../DownloadSalesDrawer/DownloadSalesDrawer";
+import SalesMissingPaymentLabel from "./SalesMissingPaymentLabel";
 import SelectSalesPaymentStatus from "./SelectSalesPaymentStatus";
 import SelectSalesStatus from "./SelectSalesStatus";
 
@@ -441,20 +442,24 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
               ),
               render: (_, sale: ISale) => {
                 return (
-                  <SelectSalesPaymentStatus
-                    sale={sale}
-                    onUpdatePaymentStatusManual={() => {
-                      setTableStateRequest({
-                        ...tableStateRequest,
-                        pagination: {
-                          pageSize: 10,
-                          skip: 0,
-                          current: undefined,
-                          total: 0,
-                        },
-                      });
-                    }}
-                  />
+                  <>
+                    <SelectSalesPaymentStatus
+                      sale={sale}
+                      onUpdatePaymentStatusManual={() => {
+                        setTableStateRequest({
+                          ...tableStateRequest,
+                          pagination: {
+                            pageSize: 10,
+                            skip: 0,
+                            current: undefined,
+                            total: 0,
+                          },
+                        });
+                      }}
+                    />
+
+                    <SalesMissingPaymentLabel sale={sale} />
+                  </>
                 );
               },
             },
