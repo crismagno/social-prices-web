@@ -153,9 +153,9 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
             )}
           </Select>
 
-          <Tooltip title="Confirm update sale payment status">
+          <Tooltip title="Update">
             <Button
-              type="success"
+              type="primary"
               size="small"
               onClick={() => handleUpdatePaymentStatusSale(true, sale.payments)}
               icon={<CheckOutlined />}
@@ -163,7 +163,7 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
               className="mr-1"
             />
           </Tooltip>
-          <Tooltip title="Cancel update sale payment status">
+          <Tooltip title="Cancel update">
             <Button
               type="default"
               size="small"
@@ -184,7 +184,7 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
           >
             {SalesEnum.PaymentStatusLabels[sale.paymentStatus]}
           </Tag>
-          <Tooltip title="Edit sale payment status">
+          <Tooltip title="Edit">
             <Button
               type="default"
               size="small"

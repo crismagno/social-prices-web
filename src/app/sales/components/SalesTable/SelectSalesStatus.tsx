@@ -123,7 +123,7 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
             ))}
           </Select>
 
-          <Tooltip title="Confirm update sale status">
+          <Tooltip title="Update">
             <Button
               type="primary"
               size="small"
@@ -133,7 +133,7 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
               className="mr-1"
             />
           </Tooltip>
-          <Tooltip title="Cancel update sale status">
+          <Tooltip title="Cancel update">
             <Button
               type="default"
               size="small"
@@ -151,7 +151,7 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
           <Tag color={SalesEnum.StatusColors[sale.status]} className="mr-1">
             {SalesEnum.StatusLabels[sale.status]}
           </Tag>
-          <Tooltip title="Edit sale status">
+          <Tooltip title="Edit">
             <Button
               type="default"
               size="small"
