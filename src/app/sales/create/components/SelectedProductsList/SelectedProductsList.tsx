@@ -30,6 +30,7 @@ import {
   TSaleStoreFormSchema,
   TSaleStoreProductFormSchema,
 } from "../../page";
+import { ButtonEditSelectedProductNote } from "./ButtonEditSelectedProductNote";
 
 interface Props {
   stores: IStore[];
@@ -121,7 +122,7 @@ export const SelectedProductsList: React.FC<Props> = ({
               <Col xs={3}>Quantity</Col>
               <Col xs={4}>Price</Col>
               <Col xs={3}>Total</Col>
-              <Col xs={1}></Col>
+              <Col xs={2}></Col>
             </Row>
 
             {saleStore.products?.map(
@@ -231,7 +232,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                       </label>
                     </Col>
 
-                    <Col xs={1} className="flex items-center justify-center">
+                    <Col xs={2} className="flex items-center justify-center">
                       <Tooltip title="Remove product">
                         <ButtonCommon
                           onClick={() =>
@@ -246,6 +247,18 @@ export const SelectedProductsList: React.FC<Props> = ({
                           {IconTrash("w-3 h-3 text-red-500 hover:text-red-600")}
                         </ButtonCommon>
                       </Tooltip>
+
+                      <ButtonEditSelectedProductNote
+                        saleStoreProduct={watch(
+                          `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}`
+                        )}
+                        onConfirmNote={(note: string | null) => {
+                          setValue(
+                            `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}.note`,
+                            note
+                          );
+                        }}
+                      />
                     </Col>
                   </Row>
                 );
