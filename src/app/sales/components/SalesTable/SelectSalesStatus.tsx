@@ -59,13 +59,23 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
   };
 
   const handleUpdateStatusSale = async (
-    shouldValidatePayment: boolean = true
+    shouldValidatePayment: boolean = true,
+    newSaleStatusByParam?: SalesEnum.Status
   ) => {
+    if (newSaleStatusByParam) {
+      setNewSaleStatus(newSaleStatusByParam);
+    }
+
+    const newSaleStatusToUpdate: SalesEnum.Status =
+      newSaleStatusByParam ?? newSaleStatus;
+
     try {
       if (
         shouldValidatePayment &&
-        newSaleStatus === SalesEnum.Status.COMPLETED &&
-        !validatePayment(() => handleUpdateStatusSale(false))
+        newSaleStatusToUpdate === SalesEnum.Status.COMPLETED &&
+        !validatePayment(() =>
+          handleUpdateStatusSale(false, newSaleStatusByParam)
+        )
       ) {
         return;
       }
@@ -75,40 +85,17 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
       const response: ISale =
         await serviceMethodsInstance.salesServiceMethods.updateStatusManual(
           sale._id,
-          newSaleStatus
+          newSaleStatusToUpdate
         );
 
-      message.success(`Sale ${sale.number} status updated!`);
+      message.success(
+        newSaleStatusToUpdate === SalesEnum.Status.COMPLETED
+          ? `Sale ${sale.number} status completed!`
+          : `Sale ${sale.number} status updated!`
+      );
 
       onUpdateStatusManual(response);
       setIsEditing(false);
-    } catch (error: any) {
-      handleClientError(error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleCompleteSale = async (shouldValidatePayment: boolean = true) => {
-    try {
-      if (
-        shouldValidatePayment &&
-        !validatePayment(() => handleCompleteSale(false))
-      ) {
-        return;
-      }
-
-      setIsSubmitting(true);
-
-      const response: ISale =
-        await serviceMethodsInstance.salesServiceMethods.updateStatusManual(
-          sale._id,
-          SalesEnum.Status.COMPLETED
-        );
-
-      message.success(`Sale ${sale.number} completed!`);
-
-      onUpdateStatusManual(response);
     } catch (error: any) {
       handleClientError(error);
     } finally {
@@ -180,7 +167,12 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
               <Button
                 type="success"
                 size="small"
-                onClick={() => handleCompleteSale()}
+                onClick={async () => {
+                  await handleUpdateStatusSale(
+                    true,
+                    SalesEnum.Status.COMPLETED
+                  );
+                }}
                 icon={<CheckOutlined />}
                 loading={isSubmitting}
               />

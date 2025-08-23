@@ -501,33 +501,6 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
               ),
             },
             {
-              title: "Created At",
-              dataIndex: "createdAt",
-              key: "createdAt",
-              align: "center",
-              render: (createdAt: Date) =>
-                moment(createdAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
-              sorter: true,
-            },
-            {
-              title: "Created Date",
-              dataIndex: "createdDate",
-              key: "createdDate",
-              align: "center",
-              render: (createdDate: Date) =>
-                moment(createdDate).format(DatesEnum.Format.DDMMYYYYhhmmss),
-              sorter: true,
-            },
-            {
-              title: "Updated At",
-              dataIndex: "updatedAt",
-              key: "updatedAt",
-              align: "center",
-              render: (updatedAt: Date) =>
-                moment(updatedAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
-              sorter: true,
-            },
-            {
               title: "Delivery At",
               dataIndex: "deliveryAt",
               key: "deliveryAt",
@@ -561,6 +534,33 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
                   </>
                 );
               },
+              sorter: true,
+            },
+            {
+              title: "Created At",
+              dataIndex: "createdAt",
+              key: "createdAt",
+              align: "center",
+              render: (createdAt: Date) =>
+                moment(createdAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
+              sorter: true,
+            },
+            {
+              title: "Created Date",
+              dataIndex: "createdDate",
+              key: "createdDate",
+              align: "center",
+              render: (createdDate: Date) =>
+                moment(createdDate).format(DatesEnum.Format.DDMMYYYYhhmmss),
+              sorter: true,
+            },
+            {
+              title: "Updated At",
+              dataIndex: "updatedAt",
+              key: "updatedAt",
+              align: "center",
+              render: (updatedAt: Date) =>
+                moment(updatedAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
               sorter: true,
             },
             {

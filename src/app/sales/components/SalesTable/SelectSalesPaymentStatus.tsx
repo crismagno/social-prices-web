@@ -1,25 +1,34 @@
 "use client";
 import { memo, useState } from "react";
 
-import { Alert, Button, message, Modal, Select, Tag, Tooltip } from "antd";
+import { Button, message, Modal, Select, Tag, Tooltip } from "antd";
+import { map } from "lodash";
 
-import {
-  CheckOutlined,
-  CloseOutlined,
-  EditOutlined,
-  QuestionCircleTwoTone,
-} from "@ant-design/icons";
+import { CheckOutlined, CloseOutlined, EditOutlined } from "@ant-design/icons";
 
 import handleClientError from "../../../../components/common/handleClientError/handleClientError";
 import { LabelBadgeCustomAntd } from "../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
-import { ISale } from "../../../../shared/business/sales/sale.interface";
+import {
+  ISale,
+  ISalePayment,
+} from "../../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../../shared/business/sales/sales.enum";
 import { getTotalPayment } from "../../../../shared/business/sales/sales.utils";
+import {
+  TFormUpdateSalePaymentsSchema,
+  TSalePaymentFormSchema,
+  UpdateSalePayments,
+} from "../UpdateSalePayments/UpdateSalePayments";
 
 export interface Props {
   sale: ISale;
   onUpdatePaymentStatusManual: (sale: ISale) => void;
+}
+
+enum LastEventEnum {
+  COMPLETED = "COMPLETED",
+  UPDATED = "UPDATED",
 }
 
 const SelectSalesPaymentStatus: React.FC<Props> = ({
@@ -30,30 +39,25 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
+  const [
+    isVisibleUpdateSalePaymentsModal,
+    setIsVisibleUpdateSalePaymentsModal,
+  ] = useState<boolean>(false);
+
+  const [lastEvent, setLastEvent] = useState<LastEventEnum | undefined>(
+    undefined
+  );
+
   const [newPaymentStatus, setNewPaymentStatus] =
     useState<SalesEnum.PaymentStatus>(sale.paymentStatus);
 
-  const validatePayment = (handleEvent: Function) => {
+  const validatePayment = (lastEventParam: LastEventEnum) => {
     const totalAfterPayment: number =
       sale.totals.totalFinalAmount - getTotalPayment(sale);
 
     if (totalAfterPayment !== 0) {
-      Modal.confirm({
-        title: `Confirm Payment`,
-        icon: <QuestionCircleTwoTone />,
-        content: (
-          <Alert
-            message={`Please confirm total after payment, and payment status? Sale Number: ${sale.number}`}
-            type="warning"
-            showIcon
-          />
-        ),
-        okText: "Confirm",
-        cancelText: "Cancel",
-        onOk: () => handleEvent(),
-        onCancel: () => false,
-      });
-
+      setIsVisibleUpdateSalePaymentsModal(true);
+      setLastEvent(lastEventParam);
       return false;
     }
 
@@ -61,13 +65,14 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
   };
 
   const handleUpdatePaymentStatusSale = async (
-    shouldValidatePayment: boolean = true
+    shouldValidatePayment: boolean = true,
+    newPayments: ISalePayment[]
   ) => {
     try {
       if (
         shouldValidatePayment &&
         newPaymentStatus === SalesEnum.PaymentStatus.COMPLETED &&
-        !validatePayment(() => handleUpdatePaymentStatusSale(false))
+        !validatePayment(LastEventEnum.UPDATED)
       ) {
         return;
       }
@@ -78,8 +83,8 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
         await serviceMethodsInstance.salesServiceMethods.updatePaymentStatusManual(
           {
             saleId: sale._id,
-            newPayments: sale.payments,
-            newPaymentStatus: newPaymentStatus,
+            newPayments,
+            newPaymentStatus,
           }
         );
 
@@ -95,13 +100,11 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
   };
 
   const handleCompleteSalePaymentStatus = async (
-    shouldValidatePayment: boolean = true
+    shouldValidatePayment: boolean = true,
+    newPayments: ISalePayment[]
   ) => {
     try {
-      if (
-        shouldValidatePayment &&
-        !validatePayment(() => handleCompleteSalePaymentStatus(false))
-      ) {
+      if (shouldValidatePayment && !validatePayment(LastEventEnum.COMPLETED)) {
         return;
       }
 
@@ -110,7 +113,7 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
       const response: ISale =
         await serviceMethodsInstance.salesServiceMethods.updatePaymentStatusManual(
           {
-            newPayments: sale.payments,
+            newPayments,
             newPaymentStatus: SalesEnum.PaymentStatus.COMPLETED,
             saleId: sale._id,
           }
@@ -119,6 +122,8 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
       message.success(`Sale ${sale.number} payment completed!`);
 
       onUpdatePaymentStatusManual(response);
+
+      setNewPaymentStatus(SalesEnum.PaymentStatus.COMPLETED);
     } catch (error: any) {
       handleClientError(error);
     } finally {
@@ -152,7 +157,7 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
             <Button
               type="success"
               size="small"
-              onClick={() => handleUpdatePaymentStatusSale()}
+              onClick={() => handleUpdatePaymentStatusSale(true, sale.payments)}
               icon={<CheckOutlined />}
               loading={isSubmitting}
               className="mr-1"
@@ -189,17 +194,61 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
               className="mr-1"
             />
           </Tooltip>
-          <Tooltip title="Complete">
-            <Button
-              type="success"
-              size="small"
-              onClick={() => handleCompleteSalePaymentStatus()}
-              icon={<CheckOutlined />}
-              loading={isSubmitting}
-            />
-          </Tooltip>
+          {sale.paymentStatus !== SalesEnum.PaymentStatus.COMPLETED && (
+            <Tooltip title="Complete">
+              <Button
+                type="success"
+                size="small"
+                onClick={() =>
+                  handleCompleteSalePaymentStatus(true, sale.payments)
+                }
+                icon={<CheckOutlined />}
+                loading={isSubmitting}
+              />
+            </Tooltip>
+          )}
         </div>
       )}
+
+      <Modal
+        open={isVisibleUpdateSalePaymentsModal}
+        title={false}
+        onCancel={() => setIsVisibleUpdateSalePaymentsModal(false)}
+        footer={null}
+        width={600}
+        closeIcon={false}
+        closable={false}
+        maskClosable={false}
+      >
+        <UpdateSalePayments
+          sale={sale}
+          onConfirm={async (formPayments: TFormUpdateSalePaymentsSchema) => {
+            setIsVisibleUpdateSalePaymentsModal(false);
+
+            const newPayments: ISalePayment[] = map(
+              formPayments.payments,
+              (payment: TSalePaymentFormSchema) => ({
+                amount: payment.amount,
+                type: payment.type as SalesEnum.PaymentType,
+                status: newPaymentStatus,
+                provider: null,
+              })
+            );
+
+            if (lastEvent === LastEventEnum.COMPLETED) {
+              await handleCompleteSalePaymentStatus(false, newPayments);
+            } else {
+              await handleUpdatePaymentStatusSale(false, newPayments);
+            }
+
+            setLastEvent(undefined);
+          }}
+          onCancel={() => {
+            setIsVisibleUpdateSalePaymentsModal(false);
+            setLastEvent(undefined);
+          }}
+        />
+      </Modal>
     </>
   );
 };
