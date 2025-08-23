@@ -160,6 +160,13 @@ namespace SalesEnum {
     [SortField.createdAt]: "Created At",
     [SortField.createdDate]: "Created Date",
   };
+
+  export const StatusToFilterCharts: Status[] = [
+    Status.STARTED,
+    Status.PROCESSING,
+    Status.COMPLETED,
+    Status.STOPPED,
+  ];
 }
 
 export default SalesEnum;

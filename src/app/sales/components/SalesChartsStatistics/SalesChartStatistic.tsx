@@ -14,6 +14,7 @@ import {
 } from "recharts";
 
 import Loading from "../../../../components/common/Loading/Loading";
+import SalesEnum from "../../../../shared/business/sales/sales.enum";
 import { IGetSalesAnalyticsParams } from "../../../../shared/business/sales/sales.type";
 import { ITotalQuantity } from "../../../../shared/common/interfaces/global.interface";
 import ChartsEnum from "../../../../shared/utils/charts/charts-enum";
@@ -48,6 +49,7 @@ export const SalesChartStatistic: React.FC<Props> = ({
     periodType,
     rangeDate,
     storesIds: storeId ? [storeId] : undefined,
+    status: SalesEnum.StatusToFilterCharts,
   });
 
   const { isLoading, salesAnalytics } = useGetSalesAnalytics(
