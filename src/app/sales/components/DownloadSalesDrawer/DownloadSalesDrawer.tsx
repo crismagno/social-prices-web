@@ -135,7 +135,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
 
           <Col xs={24} sm={12}>
             <CustomRangeDatePicker
-              label="Created At:"
+              label="Created Date:"
               showTime
               labelClassName="font-normal"
               onChange={(startDate: Date | null, endDate: Date | null) => {

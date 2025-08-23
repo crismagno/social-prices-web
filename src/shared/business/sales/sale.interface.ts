@@ -29,7 +29,7 @@ export interface ISale
   paymentStatus: SalesEnum.PaymentStatus;
   tagsIds: string[];
   deliveryAt: Date | null;
-  createdDate: Date | null;
+  createdDate: Date;
   numberManual: string | null;
   uploadFilename: string | null;
 }

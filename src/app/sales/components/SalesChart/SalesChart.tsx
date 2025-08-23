@@ -8,6 +8,7 @@ import { ReloadOutlined } from "@ant-design/icons";
 
 import { ButtonCreateSale } from "../../../../components/common/ButtonCreateSale/ButtonCreateSale";
 import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
+import { LabelBadgeCustomAntd } from "../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
 import Loading from "../../../../components/common/Loading/Loading";
 import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
 import { StoreNameStatus } from "../../../../components/common/StoreNameStatus/StoreNameStatus";
@@ -87,7 +88,7 @@ export const SalesChart: React.FC<Props> = ({
       <Row gutter={[8, 8]}>
         <Col md={6}>
           <CustomRangeDatePicker
-            label="Created At:"
+            label="Created Date:"
             showTime
             defaultValue={[
               moment(getSalesAnalyticsParams?.rangeDate?.startDate),
@@ -208,6 +209,59 @@ export const SalesChart: React.FC<Props> = ({
                 <TagTagCustomAntd tag={tag} useTag={false} />
               </Select.Option>
             ))}
+          </Select>
+        </Col>
+
+        <Col md={3}>
+          <label className="mr-1 font-bold">Payment Status:</label>
+          <Select
+            allowClear
+            mode="multiple"
+            value={getSalesAnalyticsParams.paymentStatus}
+            style={{ width: "100%" }}
+            onChange={(paymentStatus: SalesEnum.PaymentStatus[]) => {
+              setGetSalesAnalyticsParams({
+                ...getSalesAnalyticsParams,
+                paymentStatus: paymentStatus ?? [],
+              });
+            }}
+          >
+            {map(
+              Object.keys(SalesEnum.PaymentStatus),
+              (paymentStatus: SalesEnum.PaymentStatus) => (
+                <Select.Option key={paymentStatus} value={paymentStatus}>
+                  <LabelBadgeCustomAntd
+                    label={SalesEnum.PaymentStatusLabels[paymentStatus]}
+                    color={SalesEnum.PaymentStatusColors[paymentStatus]}
+                  />
+                </Select.Option>
+              )
+            )}
+          </Select>
+        </Col>
+
+        <Col md={3}>
+          <label className="mr-1 font-bold">Delivery Type:</label>
+          <Select
+            allowClear
+            mode="multiple"
+            value={getSalesAnalyticsParams.deliveryTypes}
+            style={{ width: "100%" }}
+            onChange={(deliveryTypes: SalesEnum.DeliveryType[]) => {
+              setGetSalesAnalyticsParams({
+                ...getSalesAnalyticsParams,
+                deliveryTypes: deliveryTypes ?? [],
+              });
+            }}
+          >
+            {map(
+              Object.keys(SalesEnum.DeliveryType),
+              (deliveryType: SalesEnum.DeliveryType) => (
+                <Select.Option key={deliveryType} value={deliveryType}>
+                  {SalesEnum.DeliveryTypeLabels[deliveryType]}
+                </Select.Option>
+              )
+            )}
           </Select>
         </Col>
 

@@ -234,7 +234,7 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
         <Row gutter={[16, 16]}>
           <Col md={6}>
             <CustomRangeDatePicker
-              label="Created At:"
+              label="Created Date:"
               showTime
               onChange={handleFilterSaleByCreatedAt}
             />
