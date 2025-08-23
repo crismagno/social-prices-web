@@ -6,6 +6,7 @@ import {
   Button,
   Card,
   Col,
+  Divider,
   message,
   Row,
   Select,
@@ -24,6 +25,7 @@ import {
 import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 
+import { EnterOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -58,6 +60,7 @@ import { IAddress } from "../../../shared/business/interfaces/address.interface"
 import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number.interface";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../shared/business/tags/tags.interface";
+import Urls from "../../../shared/common/routes-app/routes-app";
 import { sortArray } from "../../../shared/utils/array/functions";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getFileUrl } from "../../../shared/utils/images/helper";
@@ -339,6 +342,26 @@ export default function CustomerDetailPage() {
               </Tooltip>
             </div>
           </div>
+
+          <Row gutter={24} justify={"end"}>
+            <Col>
+              <Tooltip title="Go to customer">
+                <Button
+                  type="primary"
+                  onClick={() =>
+                    router.push(
+                      Urls.CUSTOMER.replace(":customerId", customer!._id)
+                    )
+                  }
+                  icon={<EnterOutlined />}
+                >
+                  Customer
+                </Button>
+              </Tooltip>
+            </Col>
+          </Row>
+
+          <Divider className="mt-2" />
 
           <Row className="mt-10">
             <Col xs={24} md={8}>

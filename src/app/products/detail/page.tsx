@@ -8,6 +8,7 @@ import {
   Button,
   Card,
   Col,
+  Divider,
   Input,
   message,
   Modal,
@@ -15,6 +16,7 @@ import {
   Row,
   Select,
   Space,
+  Tooltip,
   Upload,
   UploadFile,
   UploadProps,
@@ -31,6 +33,7 @@ import {
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 
+import { EnterOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
@@ -55,6 +58,7 @@ import { IProduct } from "../../../shared/business/products/products.interface";
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../shared/business/tags/tags.interface";
+import Urls from "../../../shared/common/routes-app/routes-app";
 import { sortArray } from "../../../shared/utils/array/functions";
 import { getFileUrl } from "../../../shared/utils/images/helper";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
@@ -309,6 +313,26 @@ export default function ProductDetailPage() {
     >
       <Card className="h-min-80 mt-2">
         <form onSubmit={handleSubmit(onSubmit)}>
+          <Row gutter={24} justify={"end"}>
+            <Col>
+              <Tooltip title="Go to product">
+                <Button
+                  type="primary"
+                  onClick={() =>
+                    router.push(
+                      Urls.PRODUCT.replace(":productId", product!._id)
+                    )
+                  }
+                  icon={<EnterOutlined />}
+                >
+                  Product
+                </Button>
+              </Tooltip>
+            </Col>
+          </Row>
+
+          <Divider className="mt-2" />
+
           <div className="content-edit-files flex flex-col justify-start">
             <label className={`text-sm`}>Images</label>
 

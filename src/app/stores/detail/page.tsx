@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   Col,
+  Divider,
   message,
   Row,
   Select,
@@ -25,6 +26,7 @@ import {
 import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 
+import { EnterOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -62,6 +64,7 @@ import StoresEnum from "../../../shared/business/stores/stores.enum";
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../shared/business/tags/tags.interface";
+import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getFileUrl } from "../../../shared/utils/images/helper";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
@@ -356,6 +359,24 @@ export default function StoreDetailPage() {
               </Tooltip>
             </div>
           </div>
+
+          <Row gutter={24} justify={"end"}>
+            <Col>
+              <Tooltip title="Go to store">
+                <Button
+                  type="primary"
+                  onClick={() =>
+                    router.push(Urls.STORE.replace(":storeId", store!._id))
+                  }
+                  icon={<EnterOutlined />}
+                >
+                  Store
+                </Button>
+              </Tooltip>
+            </Col>
+          </Row>
+
+          <Divider className="mt-2" />
 
           <Row gutter={[16, 16]} className="mt-10">
             <Col xs={24} md={8}>
