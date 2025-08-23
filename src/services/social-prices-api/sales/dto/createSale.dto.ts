@@ -19,6 +19,8 @@ export class SaleStoreProductDto {
   barcode: string = "";
   note: string | null = null;
   discount: SaleStoreProductDiscountDto | null = null;
+  isValid: boolean = false;
+  isCompleted: boolean = false;
 }
 
 export class SaleTotalsDiscountDto {

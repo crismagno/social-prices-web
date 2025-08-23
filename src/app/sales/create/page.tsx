@@ -121,6 +121,8 @@ const saleStoreProductFormSchema = z.object({
   quantity: z.number(),
   price: z.number(),
   fileUrl: z.string().nullable(),
+  isValid: z.boolean(),
+  isCompleted: z.boolean(),
 });
 
 export type TSaleStoreProductFormSchema = z.infer<
@@ -358,6 +360,8 @@ export default function CreateSalePage() {
                   price: storeProduct.price,
                   productId: storeProduct.productId,
                   quantity: storeProduct.quantity,
+                  isCompleted: storeProduct.isCompleted,
+                  isValid: storeProduct.isValid,
                 };
               }
             ),
@@ -476,6 +480,8 @@ export default function CreateSalePage() {
                   price: product.price,
                   productId: product._id,
                   quantity: 1,
+                  isCompleted: false,
+                  isValid: true,
                 },
               ],
             },
@@ -565,6 +571,8 @@ export default function CreateSalePage() {
             quantity: productToAddOnSale.product.quantity,
             name: productToAddOnSale.product.name,
             fileUrl: productToAddOnSale.product.fileUrl,
+            isCompleted: false,
+            isValid: true,
           },
         ],
       });
@@ -577,6 +585,8 @@ export default function CreateSalePage() {
         quantity: productToAddOnSale.product.quantity,
         name: productToAddOnSale.product.name,
         fileUrl: productToAddOnSale.product.fileUrl,
+        isCompleted: false,
+        isValid: true,
       });
     }
 

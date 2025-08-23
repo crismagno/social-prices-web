@@ -82,6 +82,8 @@ export interface ISaleStoreProduct {
   barcode: string;
   note: string | null;
   discount: ISaleStoreProductDiscount | null;
+  isValid: boolean;
+  isCompleted: boolean;
 }
 
 export interface ISaleHeader {

@@ -3,7 +3,9 @@ import { find } from "lodash";
 import { Control, UseFormSetValue, UseFormWatch } from "react-hook-form";
 
 import {
+  CheckCircleTwoTone,
   CheckOutlined,
+  CloseCircleTwoTone,
   CloseOutlined,
   EditOutlined,
   QuestionCircleTwoTone,
@@ -11,6 +13,7 @@ import {
 
 import ButtonCommon from "../../../../../components/common/ButtonCommon/ButtonCommon";
 import { IconTrash } from "../../../../../components/common/icons/icons";
+import { CheckboxCustomAntd } from "../../../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd";
 import { InputNumberCustomAntd } from "../../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import { TextareaCustomAntd } from "../../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import SalesEnum from "../../../../../shared/business/sales/sales.enum";
@@ -94,11 +97,30 @@ export const SelectedProductsList: React.FC<Props> = ({
               ) : null}
             </div>
 
-            <Row className="p-1 px-4 bg-zinc-50 text-black font-semibold">
-              <Col xs={8}>Product</Col>
-              <Col xs={5}>Quantity</Col>
-              <Col xs={5}>Price</Col>
-              <Col xs={5}>Total</Col>
+            <Row
+              gutter={[2, 2]}
+              className="p-1 px-2 bg-zinc-50 text-black font-semibold"
+            >
+              <Col xs={1}>
+                <Tooltip title="Mark product as completed">
+                  <CheckCircleTwoTone
+                    twoToneColor={["green", "yellow"]}
+                    style={{ fontSize: 18 }}
+                  />
+                </Tooltip>
+              </Col>
+              <Col xs={1}>
+                <Tooltip title="Mark product as valid">
+                  <CloseCircleTwoTone
+                    twoToneColor={["red", "orange"]}
+                    style={{ fontSize: 18 }}
+                  />
+                </Tooltip>
+              </Col>
+              <Col xs={9}>Product</Col>
+              <Col xs={3}>Quantity</Col>
+              <Col xs={4}>Price</Col>
+              <Col xs={3}>Total</Col>
               <Col xs={1}></Col>
             </Row>
 
@@ -123,10 +145,33 @@ export const SelectedProductsList: React.FC<Props> = ({
 
                 return (
                   <Row
+                    gutter={[2, 2]}
                     key={`${saleStoreProduct.productId}-${indexSaleStoreProduct}`}
                     className="border-b border-slate-100 p-2"
                   >
-                    <Col xs={8}>
+                    <Col xs={1}>
+                      <Tooltip title="Complete?">
+                        <CheckboxCustomAntd
+                          controller={{
+                            control,
+                            name: `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}.isCompleted`,
+                          }}
+                        />
+                      </Tooltip>
+                    </Col>
+
+                    <Col xs={1}>
+                      <Tooltip title="Is Valid?">
+                        <CheckboxCustomAntd
+                          controller={{
+                            control,
+                            name: `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}.isValid`,
+                          }}
+                        />
+                      </Tooltip>
+                    </Col>
+
+                    <Col xs={9}>
                       <div className="flex items-center">
                         <div className="mr-2">
                           <Image
@@ -158,9 +203,8 @@ export const SelectedProductsList: React.FC<Props> = ({
                       </div>
                     </Col>
 
-                    <Col xs={5}>
+                    <Col xs={3} className="flex items-center justify-center">
                       <InputNumberCustomAntd
-                        divClassName="w-32"
                         min={1}
                         controller={{
                           control,
@@ -169,9 +213,8 @@ export const SelectedProductsList: React.FC<Props> = ({
                       />
                     </Col>
 
-                    <Col xs={5}>
+                    <Col xs={4} className="flex items-center justify-center">
                       <InputNumberCustomAntd
-                        divClassName="w-32"
                         formatter={formatterMoney}
                         parser={parserMoney}
                         min={0}
@@ -182,13 +225,13 @@ export const SelectedProductsList: React.FC<Props> = ({
                       />
                     </Col>
 
-                    <Col xs={5}>
-                      <label className="mt-2 font-semibold">
+                    <Col xs={3} className="flex items-center justify-center">
+                      <label className="font-semibold">
                         {formatToMoneyDecimal(total)}
                       </label>
                     </Col>
 
-                    <Col xs={1}>
+                    <Col xs={1} className="flex items-center justify-center">
                       <Tooltip title="Remove product">
                         <ButtonCommon
                           onClick={() =>
