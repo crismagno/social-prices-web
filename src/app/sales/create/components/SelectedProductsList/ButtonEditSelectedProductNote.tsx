@@ -43,6 +43,7 @@ export const ButtonEditSelectedProductNote: React.FC<Props> = ({
           setIsVisible(false);
           onConfirmNote(note);
         }}
+        okText="Confirm"
       >
         <div>
           <TextArea
