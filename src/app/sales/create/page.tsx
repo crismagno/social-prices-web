@@ -1026,7 +1026,6 @@ export default function CreateSalePage() {
                 <Button
                   type="primary"
                   href={Urls.SALES_CREATE}
-                  // onClick={() => router.push(Urls.SALES_CREATE)}
                   target="_blank"
                   icon={<ShoppingCartOutlined />}
                   className="mr-2"
