@@ -1487,7 +1487,7 @@ export default function CreateSalePage() {
                 </SelectCustomAntd>
               </Col>
 
-              {!isEditMode && (
+              {!isEditMode && false && (
                 <Col xs={24} md={8}>
                   <CheckboxCustomAntd
                     controller={{ control, name: "isCreateQuote" }}
