@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { Alert, Button, Card, Col, Modal, Row, Select, Tooltip } from "antd";
-import { filter, find, flatMap, includes, map, reduce } from "lodash";
+import { filter, find, flatMap, includes, map, reduce, some } from "lodash";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import {
@@ -642,6 +642,10 @@ export default function CreateSalePage() {
             accSaleStoreProduct: ISaleStoresProductsTotals,
             saleStoreProduct: TSaleStoreProductFormSchema
           ) => {
+            if (!saleStoreProduct.isValid) {
+              return accSaleStoreProduct;
+            }
+
             accSaleStoreProduct.quantity += saleStoreProduct.quantity;
             accSaleStoreProduct.subtotal +=
               saleStoreProduct.price * saleStoreProduct.quantity;
@@ -777,7 +781,10 @@ export default function CreateSalePage() {
         zip: data.customer.address.zip,
       };
 
-      const dataSaleStoresLength: number = data.saleStores?.length ?? 0;
+      const dataSaleStoresLength: number =
+        filter(data.saleStores, (saleStore) => {
+          return some(saleStore.products, { isValid: true });
+        })?.length ?? 0;
 
       const dataDiscountAmount: number = data.discount.amount ?? 0;
       const dataDiscountNote: string | null = data.discount.note;
@@ -864,6 +871,10 @@ export default function CreateSalePage() {
                 accSaleStoreProduct: ISaleStoresProductsTotals,
                 saleStoreProduct: TSaleStoreProductFormSchema
               ) => {
+                if (!saleStoreProduct.isValid) {
+                  return accSaleStoreProduct;
+                }
+
                 accSaleStoreProduct.quantity += saleStoreProduct.quantity;
                 accSaleStoreProduct.subtotal +=
                   saleStoreProduct.price * saleStoreProduct.quantity;
@@ -919,11 +930,12 @@ export default function CreateSalePage() {
 
                   return {
                     ...saleStoreProduct,
-                    discount: discountByPercentage
-                      ? {
-                          distributedAmount: +discountByPercentage.toFixed(2),
-                        }
-                      : null,
+                    discount:
+                      saleStoreProduct.isValid && discountByPercentage
+                        ? {
+                            distributedAmount: +discountByPercentage.toFixed(2),
+                          }
+                        : null,
                   };
                 }
               ),
