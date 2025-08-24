@@ -141,10 +141,18 @@ export const SaleResume: React.FC<Props> = ({ sale, stores, tags }) => {
 
                 const total: number = quantity * price;
 
+                let rowBackgroundColor: string = "bg-white";
+
+                if (!saleStoreProduct.isValid) {
+                  rowBackgroundColor = "bg-red-100";
+                } else if (saleStoreProduct.isCompleted) {
+                  rowBackgroundColor = "bg-green-100";
+                }
+
                 return (
                   <Row
                     key={saleStoreProduct.productId}
-                    className="border-b border-slate-100 p-2"
+                    className={`border-b border-slate-100 p-2 ${rowBackgroundColor}`}
                   >
                     <Col xs={8}>
                       <div className="flex items-center">
