@@ -19,6 +19,7 @@ import {
   EyeOutlined,
   QuestionCircleTwoTone,
   ShoppingCartOutlined,
+  TableOutlined,
 } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -1019,15 +1020,31 @@ export default function CreateSalePage() {
                 <label className="font-bold text-lg">{saleById?.number}</label>
               ) : null}
             </div>
-            <Tooltip title="Go to sales">
-              <Button
-                type="primary"
-                onClick={() => router.push(Urls.SALES)}
-                icon={<ShoppingCartOutlined />}
-              >
-                Sales
-              </Button>
-            </Tooltip>
+
+            <div>
+              <Tooltip title="Open create sale in a new tab">
+                <Button
+                  type="primary"
+                  href={Urls.SALES_CREATE}
+                  // onClick={() => router.push(Urls.SALES_CREATE)}
+                  target="_blank"
+                  icon={<ShoppingCartOutlined />}
+                  className="mr-2"
+                >
+                  Create Sale
+                </Button>
+              </Tooltip>
+
+              <Tooltip title="Go to sales">
+                <Button
+                  type="primary"
+                  onClick={() => router.push(Urls.SALES)}
+                  icon={<TableOutlined />}
+                >
+                  Sales
+                </Button>
+              </Tooltip>
+            </div>
           </div>
         </Col>
       </Row>
