@@ -18,6 +18,7 @@ import {
   CheckCircleOutlined,
   EyeOutlined,
   QuestionCircleTwoTone,
+  ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -1009,13 +1010,24 @@ export default function CreateSalePage() {
         </div>
       )}
 
-      <Row gutter={[16, 16]} className="mt-5">
+      <Row gutter={[16, 16]} className="mt-5" justify={"end"}>
         <Col xs={24}>
-          <div className="bg-white w-full py-3 px-5 rounded-md">
-            <span className="text-lg mr-2">Sale Number: </span>
-            {saleById?.number ? (
-              <label className="font-bold text-lg">{saleById?.number}</label>
-            ) : null}
+          <div className="flex justify-between bg-white w-full py-3 px-5 rounded-md">
+            <div>
+              <span className="text-lg mr-2">Sale Number: </span>
+              {saleById?.number ? (
+                <label className="font-bold text-lg">{saleById?.number}</label>
+              ) : null}
+            </div>
+            <Tooltip title="Go to sales">
+              <Button
+                type="primary"
+                onClick={() => router.push(Urls.SALES)}
+                icon={<ShoppingCartOutlined />}
+              >
+                Sales
+              </Button>
+            </Tooltip>
           </div>
         </Col>
       </Row>
