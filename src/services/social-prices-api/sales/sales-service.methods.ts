@@ -234,4 +234,19 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
 
     return response.data;
   }
+
+  public async updateSaleFiles(formData: FormData): Promise<ISale> {
+    const response = await this._fetchAxios.post<ISale>(
+      `${this._socialPricesApiV1}${SalesServiceEnum.Methods.UPDATE_SALE_FILES}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
 }

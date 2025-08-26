@@ -2,8 +2,28 @@
 
 import { useEffect, useState } from "react";
 
-import { Alert, Button, Card, Col, Modal, Row, Select, Tooltip } from "antd";
-import { filter, find, flatMap, includes, map, reduce, some } from "lodash";
+import {
+  Alert,
+  Button,
+  Card,
+  Col,
+  Modal,
+  Row,
+  Select,
+  Tooltip,
+  UploadFile,
+} from "antd";
+import { RcFile } from "antd/es/upload";
+import {
+  filter,
+  find,
+  flatMap,
+  includes,
+  isArray,
+  map,
+  reduce,
+  some,
+} from "lodash";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import {
@@ -50,6 +70,7 @@ import CreateSaleDto, {
   SaleStoreProductDto,
 } from "../../../services/social-prices-api/sales/dto/createSale.dto";
 import UpdateSaleDto from "../../../services/social-prices-api/sales/dto/updateSale.dto";
+import UpdateSaleFilesDto from "../../../services/social-prices-api/sales/dto/updateSaleFiles.dto";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import AddressEnum from "../../../shared/business/enums/address.enum";
@@ -87,6 +108,7 @@ import {
   AddProductsTable,
   IStoreProductToAddOnSale,
 } from "./components/AddProductsTable/AddProductsTable";
+import { AddSaleFiles } from "./components/AddSaleFiles/AddSaleFiles";
 import {
   generateNewSalePayment,
   salePaymentFormSchema,
@@ -252,6 +274,8 @@ export default function CreateSalePage() {
     useState<boolean>(false);
 
   const [sale, setSale] = useState<ISale | null>(null);
+
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const {
     handleSubmit,
@@ -757,6 +781,88 @@ export default function CreateSalePage() {
     handleSubmit(onSubmit)();
   };
 
+  const updateSaleFiles = async (
+    fileListToUpload: UploadFile[],
+    updateSaleFilesDto: UpdateSaleFilesDto,
+    defaultSale: ISale
+  ): Promise<ISale> => {
+    try {
+      if (
+        fileListToUpload.length === 0 &&
+        updateSaleFilesDto.deletedFilesUrl.length === 0
+      ) {
+        return defaultSale;
+      }
+
+      const formData = new FormData();
+
+      for (var i = 0; i < fileListToUpload.length; i++) {
+        formData.append("files", fileListToUpload[i].originFileObj as RcFile);
+      }
+
+      for (const property of Object.keys(updateSaleFilesDto)) {
+        let value: any = updateSaleFilesDto[property];
+
+        if (isArray(value)) {
+          value = JSON.stringify(value);
+        }
+
+        formData.append([`${property}`], value);
+      }
+
+      return serviceMethodsInstance.salesServiceMethods.updateSaleFiles(
+        formData
+      );
+    } catch {
+      return defaultSale;
+    }
+  };
+
+  const create = async (createSaleDto: CreateSaleDto): Promise<ISale> => {
+    const createdSale: ISale =
+      await serviceMethodsInstance.salesServiceMethods.createManual(
+        createSaleDto
+      );
+
+    return await updateSaleFiles(
+      fileList,
+      {
+        deletedFilesUrl: [],
+        saleId: createdSale._id,
+      },
+      createdSale
+    );
+  };
+
+  const update = async (updateSaleDto: UpdateSaleDto): Promise<ISale> => {
+    const updatedSale: ISale =
+      await serviceMethodsInstance.salesServiceMethods.updateManual(
+        updateSaleDto
+      );
+
+    const fileListToUpload: UploadFile<any>[] = fileList.filter(
+      (file) => file.originFileObj
+    );
+
+    const deletedFilesUrl: string[] = filter(
+      saleById!.filesUrl,
+      (fileUrl: string) => {
+        return !fileList.find(
+          (file) => file.name === fileUrl && !file.originFileObj
+        );
+      }
+    );
+
+    return await updateSaleFiles(
+      fileListToUpload,
+      {
+        deletedFilesUrl,
+        saleId: updatedSale._id,
+      },
+      updatedSale
+    );
+  };
+
   const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
     try {
       setIsSubmitting(true);
@@ -976,15 +1082,9 @@ export default function CreateSalePage() {
           saleId: saleById!._id,
         };
 
-        response =
-          await serviceMethodsInstance.salesServiceMethods.updateManual(
-            updateSaleDto
-          );
+        response = await update(updateSaleDto);
       } else {
-        response =
-          await serviceMethodsInstance.salesServiceMethods.createManual(
-            createSaleDto
-          );
+        response = await create(createSaleDto);
       }
 
       setSale(response);
@@ -1398,6 +1498,12 @@ export default function CreateSalePage() {
           >
             <Row>
               <Col xs={24}>
+                <AddSaleFiles sale={saleById} onSetFileList={setFileList} />
+              </Col>
+            </Row>
+
+            <Row>
+              <Col xs={24}>
                 <TextareaCustomAntd
                   controller={{ control, name: "note" }}
                   label="Note"
@@ -1567,7 +1673,22 @@ export default function CreateSalePage() {
         closable={false}
         open={isOpenSaleSuccessfullyModal}
         cancelButtonProps={{ hidden: true }}
-        onOk={() => router.push(Urls.SALES)}
+        footer={
+          <div className="flex justify-end">
+            <Button
+              type="primary"
+              disabled
+              onClick={() => router.refresh()}
+              icon={<ShoppingCartOutlined />}
+            >
+              New Sale
+            </Button>
+
+            <Button type="primary" onClick={() => router.push(Urls.SALES)}>
+              Ok
+            </Button>
+          </div>
+        }
       >
         <Alert
           type="success"

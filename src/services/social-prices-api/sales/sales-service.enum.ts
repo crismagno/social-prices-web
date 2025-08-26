@@ -13,6 +13,7 @@ namespace SalesServiceEnum {
     DOWNLOAD_SALES = "/sales/downloadSales",
     UPDATE_STATUS_MANUAL = "/sales/updateStatusManual",
     UPDATE_PAYMENT_STATUS_MANUAL = "/sales/updatePaymentStatusManual",
+    UPDATE_SALE_FILES = "/sales/updateSaleFiles",
   }
 }
 

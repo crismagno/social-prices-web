@@ -32,6 +32,7 @@ export interface ISale
   createdDate: Date;
   numberManual: string | null;
   uploadFilename: string | null;
+  filesUrl: string[];
 }
 
 export interface ISaleTotals {
