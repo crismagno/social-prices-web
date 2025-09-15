@@ -47,7 +47,7 @@ export const AddSaleFiles: React.FC<Props> = ({ sale, onSetFileList }) => {
     let src = file.url as string | null;
 
     if (!src) {
-      src = await getFileUrl(fileList?.[0]);
+      src = await getFileUrl(file);
     }
 
     setPreviewSrc(src);
