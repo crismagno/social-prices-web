@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   Col,
+  Drawer,
   Modal,
   Row,
   Select,
@@ -103,6 +104,7 @@ import {
 import { createAddressName } from "../../../shared/utils/strings/string";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
+import SalesTable from "../components/SalesTable/SalesTable";
 import { useFindSaleById } from "../useFindSaleById";
 import {
   AddProductsTable,
@@ -272,6 +274,8 @@ export default function CreateSalePage() {
 
   const [isOpenSaleResumeModal, setIsOpenSaleResumeModal] =
     useState<boolean>(false);
+
+  const [isOpenSalesTable, setIsOpenSalesTable] = useState<boolean>(false);
 
   const [sale, setSale] = useState<ISale | null>(null);
 
@@ -1134,13 +1138,24 @@ export default function CreateSalePage() {
                 </Button>
               </Tooltip>
 
-              <Tooltip title="Go to sales">
+              <Tooltip title="Open Sales">
+                <Button
+                  type="primary"
+                  onClick={() => setIsOpenSalesTable(true)}
+                  icon={<TableOutlined />}
+                  className="mr-2"
+                >
+                  Open Sales
+                </Button>
+              </Tooltip>
+
+              <Tooltip title="Go to Sales">
                 <Button
                   type="primary"
                   onClick={() => router.push(Urls.SALES)}
                   icon={<TableOutlined />}
                 >
-                  Sales
+                  Go to Sales
                 </Button>
               </Tooltip>
             </div>
@@ -1726,6 +1741,15 @@ export default function CreateSalePage() {
           totalAfterPayment={totalAfterPayment}
         />
       </Modal>
+
+      <Drawer
+        open={isOpenSalesTable}
+        onClose={() => setIsOpenSalesTable(false)}
+        placement="right"
+        width={"90%"}
+      >
+        <SalesTable />
+      </Drawer>
     </Layout>
   );
 }
