@@ -24,7 +24,7 @@ export const getFileUrl = async (file: UploadFile): Promise<string | null> => {
 };
 
 export const isImageFile = (file: UploadFile): boolean => {
-  const fileName = file.name || file.fileName || "";
+  const fileName: string = file?.name || file?.fileName || "";
 
   if (fileName) {
     const extension: string | undefined = fileName
@@ -36,4 +36,14 @@ export const isImageFile = (file: UploadFile): boolean => {
   }
 
   return false;
+};
+
+export const isBase64 = (str: string): boolean => {
+  if (!str || typeof str !== "string") return false;
+
+  const base64: string = str.replace(/^data:.*;base64,/, "");
+
+  const base64Regex: RegExp = /^[A-Za-z0-9+/]+={0,2}$/;
+
+  return base64Regex.test(base64);
 };

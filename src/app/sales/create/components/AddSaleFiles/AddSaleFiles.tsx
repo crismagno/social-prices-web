@@ -1,12 +1,15 @@
+import "./styles.scss";
+
 import React, { useEffect, useState } from "react";
 
-import { Modal, Upload, UploadFile, UploadProps } from "antd";
+import { Upload, UploadFile, UploadProps } from "antd";
 import { map } from "lodash";
 
 import { ISale } from "../../../../../shared/business/sales/sale.interface";
 import FilesEnum from "../../../../../shared/utils/files/files.enum";
 import {
   getFileUrl,
+  isBase64,
   isImageFile,
 } from "../../../../../shared/utils/images/helper";
 import { getImageUrl } from "../../../../../shared/utils/images/url-images";
@@ -18,10 +21,6 @@ interface Props {
 
 export const AddSaleFiles: React.FC<Props> = ({ sale, onSetFileList }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-
-  const [previewOpen, setPreviewOpen] = useState<boolean>(false);
-
-  const [previewFile, setPreviewFile] = useState<any | null>(null);
 
   useEffect(() => {
     if (sale?.filesUrl?.length) {
@@ -54,9 +53,15 @@ export const AddSaleFiles: React.FC<Props> = ({ sale, onSetFileList }) => {
 
     file.src = src;
 
-    if (isImageFile(file)) {
-      setPreviewFile(file);
-      setPreviewOpen(true);
+    if (isBase64(file.src)) {
+      const newWindow = window.open();
+
+      if (newWindow) {
+        newWindow.document.write(
+          `<iframe src="${file.src}" frameborder="0" style="border:0; top:0; left:0; bottom:0; right:0; width:100%; height:100%;" allowfullscreen></iframe>`
+        );
+      }
+
       return;
     }
 
@@ -92,25 +97,6 @@ export const AddSaleFiles: React.FC<Props> = ({ sale, onSetFileList }) => {
         >
           {fileList.length < 10 && "+ Upload"}
         </Upload>
-
-        <Modal
-          open={previewOpen}
-          footer={
-            <div className="mt-2 text-center w-full">
-              {previewFile?.name || previewFile?.fileName || ""}
-            </div>
-          }
-          onCancel={() => {
-            setPreviewOpen(false);
-            setPreviewFile(null);
-          }}
-        >
-          <img
-            alt="preview file"
-            style={{ width: "100%" }}
-            src={previewFile?.src}
-          />
-        </Modal>
       </div>
     </div>
   );

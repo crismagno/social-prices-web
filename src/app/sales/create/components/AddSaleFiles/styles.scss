@@ -1,0 +1,34 @@
+.ant-upload-list-item:hover {
+  .ant-upload-list-item-actions {
+    pointer-events: visible !important;
+
+    a {
+      pointer-events: visible !important;
+      opacity: 1 !important;
+    }
+  }
+}
+
+.ant-upload-list-item-actions {
+  pointer-events: visible !important;
+
+  a {
+    pointer-events: visible !important;
+  }
+
+  a:hover {
+    opacity: 1 !important;
+  }
+}
+
+.ant-upload-list-item-name[title$=".pdf"] + .ant-upload-list-item-actions {
+  pointer-events: visible !important;
+
+  a {
+    pointer-events: visible !important;
+  }
+
+  a:hover {
+    opacity: 1 !important;
+  }
+}
