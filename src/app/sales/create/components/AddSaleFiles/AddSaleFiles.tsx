@@ -76,6 +76,19 @@ export const AddSaleFiles: React.FC<Props> = ({ sale, onSetFileList }) => {
           onChange={onChange}
           onPreview={onPreview}
           multiple={true}
+          iconRender={(file) =>
+            isImageFile(file) ? (
+              <img
+                src={getImageUrl(file.name)}
+                alt={file.name}
+                className="object-cover w-full h-full"
+              />
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full">
+                <span className="text-4xl">📄</span>
+              </div>
+            )
+          }
         >
           {fileList.length < 10 && "+ Upload"}
         </Upload>
