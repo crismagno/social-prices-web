@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 
 import { Modal, Upload, UploadFile, UploadProps } from "antd";
-import ImgCrop from "antd-img-crop";
 import { map } from "lodash";
 
 import { ISale } from "../../../../../shared/business/sales/sale.interface";
 import FilesEnum from "../../../../../shared/utils/files/files.enum";
-import { getFileUrl } from "../../../../../shared/utils/images/helper";
+import {
+  getFileUrl,
+  isImageFile,
+} from "../../../../../shared/utils/images/helper";
 import { getImageUrl } from "../../../../../shared/utils/images/url-images";
 
 interface Props {
@@ -19,7 +21,7 @@ export const AddSaleFiles: React.FC<Props> = ({ sale, onSetFileList }) => {
 
   const [previewOpen, setPreviewOpen] = useState<boolean>(false);
 
-  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
+  const [previewFile, setPreviewFile] = useState<any | null>(null);
 
   useEffect(() => {
     if (sale?.filesUrl?.length) {
@@ -50,8 +52,15 @@ export const AddSaleFiles: React.FC<Props> = ({ sale, onSetFileList }) => {
       src = await getFileUrl(file);
     }
 
-    setPreviewSrc(src);
-    setPreviewOpen(true);
+    file.src = src;
+
+    if (isImageFile(file)) {
+      setPreviewFile(file);
+      setPreviewOpen(true);
+      return;
+    }
+
+    window.open(file.src, "_blank");
   };
 
   return (
@@ -59,29 +68,35 @@ export const AddSaleFiles: React.FC<Props> = ({ sale, onSetFileList }) => {
       <label>Files</label>
 
       <div className="mt-2">
-        <ImgCrop rotationSlider>
-          <Upload
-            action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-            accept={FilesEnum.AcceptFileType}
-            listType="picture-card"
-            fileList={fileList}
-            onChange={onChange}
-            onPreview={onPreview}
-            multiple={true}
-          >
-            {fileList.length < 10 && "+ Upload"}
-          </Upload>
-        </ImgCrop>
+        <Upload
+          action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+          accept={FilesEnum.AcceptFileType}
+          listType="picture-card"
+          fileList={fileList}
+          onChange={onChange}
+          onPreview={onPreview}
+          multiple={true}
+        >
+          {fileList.length < 10 && "+ Upload"}
+        </Upload>
 
         <Modal
           open={previewOpen}
-          footer={null}
+          footer={
+            <div className="mt-2 text-center w-full">
+              {previewFile?.name || previewFile?.fileName || ""}
+            </div>
+          }
           onCancel={() => {
-            setPreviewSrc(null);
             setPreviewOpen(false);
+            setPreviewFile(null);
           }}
         >
-          <img alt="preview file" style={{ width: "100%" }} src={previewSrc} />
+          <img
+            alt="preview file"
+            style={{ width: "100%" }}
+            src={previewFile?.src}
+          />
         </Modal>
       </div>
     </div>
