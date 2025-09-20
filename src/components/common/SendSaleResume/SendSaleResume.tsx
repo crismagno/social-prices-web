@@ -4,6 +4,7 @@ import { Button, Divider, Input, Tooltip } from "antd";
 
 import { DownloadOutlined, SendOutlined } from "@ant-design/icons";
 
+import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import {
   ISale,
@@ -45,6 +46,29 @@ export const SendSaleResume: React.FC<Props> = ({ sale }) => {
     }
   };
 
+  const handleDownloadSalePdf = async () => {
+    try {
+      setIsSubmitting(true);
+
+      const response: Buffer =
+        await serviceMethodsInstance.salesServiceMethods.downloadSalePdf(
+          sale._id
+        );
+
+      const url: string = window.URL.createObjectURL(new Blob([response]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `sale-${sale.number}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      handleClientError(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="w-full">
       <div className="flex">
@@ -68,7 +92,7 @@ export const SendSaleResume: React.FC<Props> = ({ sale }) => {
 
         <Tooltip title="Download sale resume">
           <Button
-            onClick={handleSendEmail}
+            onClick={handleDownloadSalePdf}
             type="primary"
             icon={<DownloadOutlined />}
           />
