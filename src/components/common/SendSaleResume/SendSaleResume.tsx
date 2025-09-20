@@ -53,7 +53,7 @@ export const SendSaleResume: React.FC<Props> = ({ sale }) => {
             className="mr-1"
             onChange={(e) => setEmailToSend(e.target.value)}
             value={emailToSend}
-            width={300}
+            style={{ width: "85%" }}
           />
         </Tooltip>
 
