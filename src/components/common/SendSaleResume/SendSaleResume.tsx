@@ -30,6 +30,8 @@ export const SendSaleResume: React.FC<Props> = ({ sale }) => {
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+  const [isDownloading, setIsDownloading] = useState<boolean>(false);
+
   if (!sale || !customer || !buyer) {
     return null;
   }
@@ -48,7 +50,7 @@ export const SendSaleResume: React.FC<Props> = ({ sale }) => {
 
   const handleDownloadSalePdf = async () => {
     try {
-      setIsSubmitting(true);
+      setIsDownloading(true);
 
       const response: Buffer =
         await serviceMethodsInstance.salesServiceMethods.downloadSalePdf(
@@ -65,7 +67,7 @@ export const SendSaleResume: React.FC<Props> = ({ sale }) => {
     } catch (error) {
       handleClientError(error);
     } finally {
-      setIsSubmitting(false);
+      setIsDownloading(false);
     }
   };
 
@@ -74,6 +76,7 @@ export const SendSaleResume: React.FC<Props> = ({ sale }) => {
       <div className="flex">
         <Tooltip title="Enter the email address where you want to send the sale summary">
           <Input
+            disabled={isSubmitting}
             className="mr-1"
             onChange={(e) => setEmailToSend(e.target.value)}
             value={emailToSend}
@@ -83,6 +86,8 @@ export const SendSaleResume: React.FC<Props> = ({ sale }) => {
 
         <Tooltip title="Send sale resume via email">
           <Button
+            loading={isSubmitting}
+            disabled={isSubmitting}
             onClick={handleSendEmail}
             type="primary"
             className="mr-1"
@@ -95,6 +100,8 @@ export const SendSaleResume: React.FC<Props> = ({ sale }) => {
             onClick={handleDownloadSalePdf}
             type="primary"
             icon={<DownloadOutlined />}
+            loading={isDownloading}
+            disabled={isDownloading}
           />
         </Tooltip>
       </div>
