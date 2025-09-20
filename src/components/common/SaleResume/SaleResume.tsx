@@ -23,6 +23,7 @@ import {
   formatToMoneyDecimal,
 } from "../../../shared/utils/strings/string";
 import { ImageOrDefault } from "../ImageOrDefault/ImageOrDefault";
+import { SendSaleResume } from "../SendSaleResume/SendSaleResume";
 import { TagTagsCustomAntd } from "../TagTagsCustomAntd/TagTagsCustomAntd";
 
 interface Props {
@@ -211,6 +212,8 @@ export const SaleResume: React.FC<Props> = ({ sale, stores, tags }) => {
 
   return (
     <div className="w-full">
+      <SendSaleResume sale={sale} />
+
       <div className="flex flex-col w-full justify-center items-center mt-5">
         <ImageOrDefault width={80} src={customer.avatar} />
 
@@ -293,7 +296,7 @@ export const SaleResume: React.FC<Props> = ({ sale, stores, tags }) => {
 
         {sale.payments.map((payment: ISalePayment) => {
           return (
-            <div>
+            <div key={payment.type}>
               <div className="flex justify-between pr-10 mt-2">
                 <label className="font-semibold">
                   {SalesEnum.PaymentTypeLabels[payment.type]}:{" "}
