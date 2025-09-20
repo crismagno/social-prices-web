@@ -9,7 +9,6 @@ import { ISale } from "../../../../../shared/business/sales/sale.interface";
 import FilesEnum from "../../../../../shared/utils/files/files.enum";
 import {
   getFileUrl,
-  isBase64,
   isImageFile,
 } from "../../../../../shared/utils/images/helper";
 import { getImageUrl } from "../../../../../shared/utils/images/url-images";
@@ -45,27 +44,22 @@ export const AddSaleFiles: React.FC<Props> = ({ sale, onSetFileList }) => {
   };
 
   const onPreview = async (file: UploadFile) => {
-    let src = file.url as string | null;
+    const src: string | null = (file.url || (await getFileUrl(file))) as
+      | string
+      | null;
 
-    if (!src) {
-      src = await getFileUrl(file);
+    const newWindow: Window | null = window.open();
+
+    if (newWindow) {
+      newWindow.document.write(
+        `<iframe 
+            src="${src}" 
+            frameborder="0" 
+            style="border:0; top:0; left:0; bottom:0; right:0; width:100%; height:100%; position:fixed;"
+            allowfullscreen>
+          </iframe>`
+      );
     }
-
-    file.src = src;
-
-    if (isBase64(file.src)) {
-      const newWindow = window.open();
-
-      if (newWindow) {
-        newWindow.document.write(
-          `<iframe src="${file.src}" frameborder="0" style="border:0; top:0; left:0; bottom:0; right:0; width:100%; height:100%;" allowfullscreen></iframe>`
-        );
-      }
-
-      return;
-    }
-
-    window.open(file.src, "_blank");
   };
 
   return (
