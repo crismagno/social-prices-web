@@ -103,8 +103,6 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
 
   const [isDeletingSale, setIsDeletingSale] = useState<boolean>(false);
 
-  const [isCompletingSale, setIsCompletingSale] = useState<boolean>(false);
-
   const [saleToDelete, setSaleToDelete] = useState<ISale | null>(null);
 
   const [isOpenSaleResumeModal, setIsOpenSaleResumeModal] =

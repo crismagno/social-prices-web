@@ -1559,7 +1559,7 @@ export default function CreateSalePage() {
                   label="Sale Status"
                   errorMessage={errors?.status?.message}
                   placeholder={"Select sale status"}
-                  style={{ width: 200 }}
+                  style={{ width: "100%" }}
                 >
                   {Object.keys(SalesEnum.Status).map((status: string) => (
                     <Select.Option key={status} value={status}>
@@ -1585,7 +1585,7 @@ export default function CreateSalePage() {
                   label="Payment Status"
                   errorMessage={errors?.status?.message}
                   placeholder={"Select payment status"}
-                  style={{ width: 200 }}
+                  style={{ width: "100%" }}
                 >
                   {Object.keys(SalesEnum.PaymentStatus).map(
                     (paymentStatus: string) => (

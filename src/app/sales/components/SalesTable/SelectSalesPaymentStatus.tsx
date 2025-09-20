@@ -4,7 +4,12 @@ import { memo, useState } from "react";
 import { Button, message, Modal, Select, Tag, Tooltip } from "antd";
 import { map } from "lodash";
 
-import { CheckOutlined, CloseOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  CheckOutlined,
+  CloseOutlined,
+  EditOutlined,
+  EyeOutlined,
+} from "@ant-design/icons";
 
 import handleClientError from "../../../../components/common/handleClientError/handleClientError";
 import { LabelBadgeCustomAntd } from "../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
@@ -15,6 +20,7 @@ import {
 } from "../../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../../shared/business/sales/sales.enum";
 import { getTotalPayment } from "../../../../shared/business/sales/sales.utils";
+import { SalePaymentsReadOnly } from "../SalePaymentsReadOnly/SalePaymentsReadOnly";
 import {
   TFormUpdateSalePaymentsSchema,
   TSalePaymentFormSchema,
@@ -42,6 +48,11 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
   const [
     isVisibleUpdateSalePaymentsModal,
     setIsVisibleUpdateSalePaymentsModal,
+  ] = useState<boolean>(false);
+
+  const [
+    isVisibleSalePaymentsReadOnlyModal,
+    setIsVisibleSalePaymentsReadOnlyModal,
   ] = useState<boolean>(false);
 
   const [lastEvent, setLastEvent] = useState<LastEventEnum | undefined>(
@@ -194,6 +205,18 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
               className="mr-1"
             />
           </Tooltip>
+
+          <Tooltip title="See payments">
+            <Button
+              type="default"
+              size="small"
+              onClick={() => setIsVisibleSalePaymentsReadOnlyModal(true)}
+              icon={<EyeOutlined />}
+              disabled={isSubmitting}
+              className="mr-1"
+            />
+          </Tooltip>
+
           {sale.paymentStatus !== SalesEnum.PaymentStatus.COMPLETED && (
             <Tooltip title="Complete">
               <Button
@@ -248,6 +271,19 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
             setLastEvent(undefined);
           }}
         />
+      </Modal>
+
+      <Modal
+        open={isVisibleSalePaymentsReadOnlyModal}
+        title={false}
+        onCancel={() => setIsVisibleSalePaymentsReadOnlyModal(false)}
+        okButtonProps={{ hidden: true }}
+        cancelText="Ok"
+        cancelButtonProps={{ type: "primary" }}
+        closeIcon={false}
+        width={600}
+      >
+        <SalePaymentsReadOnly sale={sale} />
       </Modal>
     </>
   );
