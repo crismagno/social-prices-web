@@ -253,7 +253,7 @@ export const SaleResumeByCreate: React.FC<Props> = ({
 
         {formSchema.payments.map((payment: TSalePaymentFormSchema) => {
           return (
-            <div>
+            <div key={payment.type}>
               <div className="flex justify-between pr-10 mt-2">
                 <label className="font-semibold">
                   {
