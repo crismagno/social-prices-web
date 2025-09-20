@@ -38,7 +38,7 @@ export const SendSaleResume: React.FC<Props> = ({ sale }) => {
     try {
       setIsSubmitting(true);
 
-      console.log(`Enviando resumen de la venta al correo: ${emailToSend}`);
+      console.log(`Sending email`);
     } catch (error) {
       handleClientError(error);
     } finally {
