@@ -1,5 +1,5 @@
 import { Col, Divider, Empty, Image, Row } from "antd";
-import { find, reduce } from "lodash";
+import { find } from "lodash";
 import moment from "moment";
 
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
@@ -13,6 +13,12 @@ import {
   ISaleStoreProduct,
 } from "../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../shared/business/sales/sales.enum";
+import {
+  getQuantity,
+  getTotalAfterDiscount,
+  getTotalAfterPayment,
+  getTotalPayment,
+} from "../../../shared/business/sales/sales.utils";
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import { ITag } from "../../../shared/business/tags/tags.interface";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
@@ -43,62 +49,13 @@ export const SaleSummary: React.FC<Props> = ({ sale, stores, tags }) => {
     return <Empty />;
   }
 
-  const getQuantity = (): number => {
-    const quantity: number = reduce(
-      saleStores,
-      (accSaleStore: number, saleStore: ISaleStore) => {
-        const productsQuantityPrice = reduce(
-          saleStore.products,
-          (
-            accSaleStoreProduct: number,
-            saleStoreProduct: ISaleStoreProduct
-          ) => {
-            accSaleStoreProduct += saleStoreProduct.quantity;
+  const quantityTotal = getQuantity(sale);
 
-            return accSaleStoreProduct;
-          },
-          0
-        );
+  const totalAfterDiscount: number = getTotalAfterDiscount(sale);
 
-        accSaleStore += productsQuantityPrice;
+  const totalPayment: number = getTotalPayment(sale);
 
-        return accSaleStore;
-      },
-      0
-    );
-
-    return quantity;
-  };
-
-  const getTotalAfterDiscount = (): number => {
-    const discountAmount: number =
-      sale.totals.discount?.distributed.amount ?? 0;
-
-    const totalAfterDiscount: number =
-      sale.totals.subtotalAmount - discountAmount;
-
-    return totalAfterDiscount > 0 ? totalAfterDiscount : 0;
-  };
-
-  const totalAfterDiscount: number = getTotalAfterDiscount();
-
-  const getTotalPayment = (): number => {
-    const total: number = reduce(
-      sale.payments,
-      (acc: number, payment: ISalePayment) => {
-        acc += payment.amount;
-
-        return acc;
-      },
-      0
-    );
-
-    return total > 0 ? total : 0;
-  };
-
-  const totalPayment: number = getTotalPayment();
-
-  const totalAfterPayment: number = sale.totals.totalFinalAmount - totalPayment;
+  const totalAfterPayment: number = getTotalAfterPayment(sale, totalPayment);
 
   const renderStoresProducts = () => {
     if (!saleStores?.length) {
@@ -254,7 +211,7 @@ export const SaleSummary: React.FC<Props> = ({ sale, stores, tags }) => {
 
       <div className="flex justify-between pr-10 mt-2">
         <label className="font-semibold">Quantity: </label>
-        <label>x {getQuantity()}</label>
+        <label>x {quantityTotal}</label>
       </div>
 
       <div className="flex justify-between pr-10 mt-2">

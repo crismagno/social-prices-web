@@ -19,7 +19,10 @@ import {
   ISalePayment,
 } from "../../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../../shared/business/sales/sales.enum";
-import { getTotalPayment } from "../../../../shared/business/sales/sales.utils";
+import {
+  getTotalAfterPayment,
+  getTotalPayment,
+} from "../../../../shared/business/sales/sales.utils";
 import { SalePaymentsReadOnly } from "../SalePaymentsReadOnly/SalePaymentsReadOnly";
 import {
   TFormUpdateSalePaymentsSchema,
@@ -63,8 +66,10 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
     useState<SalesEnum.PaymentStatus>(sale.paymentStatus);
 
   const validatePayment = (lastEventParam: LastEventEnum) => {
-    const totalAfterPayment: number =
-      sale.totals.totalFinalAmount - getTotalPayment(sale);
+    const totalAfterPayment: number = getTotalAfterPayment(
+      sale,
+      getTotalPayment(sale)
+    );
 
     if (totalAfterPayment !== 0) {
       setIsVisibleUpdateSalePaymentsModal(true);

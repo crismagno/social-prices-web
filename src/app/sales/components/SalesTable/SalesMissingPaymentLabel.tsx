@@ -2,15 +2,20 @@
 import { memo } from "react";
 
 import { ISale } from "../../../../shared/business/sales/sale.interface";
-import { getTotalPayment } from "../../../../shared/business/sales/sales.utils";
+import {
+  getTotalAfterPayment,
+  getTotalPayment,
+} from "../../../../shared/business/sales/sales.utils";
 
 export interface Props {
   sale: ISale;
 }
 
 const SalesMissingPaymentLabel: React.FC<Props> = ({ sale }) => {
-  const totalAfterPayment: number =
-    sale.totals.totalFinalAmount - getTotalPayment(sale);
+  const totalAfterPayment: number = getTotalAfterPayment(
+    sale,
+    getTotalPayment(sale)
+  );
 
   if (totalAfterPayment === 0) {
     return null;

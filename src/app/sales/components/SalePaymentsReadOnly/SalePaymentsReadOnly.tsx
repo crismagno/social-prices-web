@@ -15,7 +15,10 @@ import {
   ISalePayment,
 } from "../../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../../shared/business/sales/sales.enum";
-import { getTotalPayment } from "../../../../shared/business/sales/sales.utils";
+import {
+  getTotalAfterPayment,
+  getTotalPayment,
+} from "../../../../shared/business/sales/sales.utils";
 import {
   formatterMoney,
   formatToMoneyDecimal,
@@ -31,7 +34,7 @@ export const SalePaymentsReadOnly: React.FC<Props> = ({ sale }) => {
 
   const totalPayment: number = getTotalPayment(sale);
 
-  const totalAfterPayment: number = sale.totals.totalFinalAmount - totalPayment;
+  const totalAfterPayment: number = getTotalAfterPayment(sale, totalPayment);
 
   return (
     <Card
