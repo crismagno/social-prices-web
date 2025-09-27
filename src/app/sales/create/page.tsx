@@ -117,7 +117,7 @@ import {
   SalePayments,
   TSalePaymentFormSchema,
 } from "./components/SalePayments/SalePayments";
-import { SaleResumeByCreate } from "./components/SaleResumeByCreate/SaleResumeByCreate";
+import { SaleSummaryByCreate } from "./components/SaleSummaryByCreate/SaleSummaryByCreate";
 import { SelectCustomer } from "./components/SelectCustomer/SelectCustomer";
 import { SelectedProductsList } from "./components/SelectedProductsList/SelectedProductsList";
 
@@ -272,7 +272,7 @@ export default function CreateSalePage() {
   const [isOpenSaleSuccessfullyModal, setIsOpenSaleSuccessfullyModal] =
     useState<boolean>(false);
 
-  const [isOpenSaleResumeModal, setIsOpenSaleResumeModal] =
+  const [isOpenSaleSummaryModal, setIsOpenSaleSummaryModal] =
     useState<boolean>(false);
 
   const [isOpenSalesTable, setIsOpenSalesTable] = useState<boolean>(false);
@@ -1653,14 +1653,14 @@ export default function CreateSalePage() {
 
             <Row>
               <Col xs={24} md={8}>
-                <Tooltip title="See sale resume">
+                <Tooltip title="See sale summary">
                   <Button
                     type="primary"
                     className="mt-4"
-                    onClick={() => setIsOpenSaleResumeModal(true)}
+                    onClick={() => setIsOpenSaleSummaryModal(true)}
                     icon={<EyeOutlined />}
                   >
-                    See Resume
+                    See Summary
                   </Button>
                 </Tooltip>
               </Col>
@@ -1722,13 +1722,13 @@ export default function CreateSalePage() {
       </Modal>
 
       <Modal
-        title="Sale Resume"
-        open={isOpenSaleResumeModal}
+        title="Sale Summary"
+        open={isOpenSaleSummaryModal}
         cancelButtonProps={{ hidden: true }}
-        onOk={() => setIsOpenSaleResumeModal(false)}
-        onCancel={() => setIsOpenSaleResumeModal(false)}
+        onOk={() => setIsOpenSaleSummaryModal(false)}
+        onCancel={() => setIsOpenSaleSummaryModal(false)}
       >
-        <SaleResumeByCreate
+        <SaleSummaryByCreate
           formSchema={watch()}
           selectedCustomer={selectedCustomer}
           stores={stores}

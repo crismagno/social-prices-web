@@ -250,11 +250,11 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
-  public async downloadSalePdf(saleId: string): Promise<Buffer> {
+  public async downloadSaleSummaryPdf(saleId: string): Promise<Buffer> {
     const response = await this._fetchAxios.post<Buffer>(
       `${
         this._socialPricesApiV1
-      }${SalesServiceEnum.Methods.DOWNLOAD_SALE_PDF.replace(
+      }${SalesServiceEnum.Methods.DOWNLOAD_SALE_SUMMARY_PDF.replace(
         ":saleId",
         saleId
       )}`,

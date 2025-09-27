@@ -17,7 +17,7 @@ interface Props {
   sale: ISale | null;
 }
 
-export const SendSaleResume: React.FC<Props> = ({ sale }) => {
+export const SendSaleSummary: React.FC<Props> = ({ sale }) => {
   let saleStores: ISaleStore[] = sale?.stores ?? [];
 
   const customer: ICustomer | undefined = saleStores?.[0].customer;
@@ -48,19 +48,19 @@ export const SendSaleResume: React.FC<Props> = ({ sale }) => {
     }
   };
 
-  const handleDownloadSalePdf = async () => {
+  const handleDownloadSaleSummaryPdf = async () => {
     try {
       setIsDownloading(true);
 
       const response: Buffer =
-        await serviceMethodsInstance.salesServiceMethods.downloadSalePdf(
+        await serviceMethodsInstance.salesServiceMethods.downloadSaleSummaryPdf(
           sale._id
         );
 
       const url: string = window.URL.createObjectURL(new Blob([response]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", `sale-${sale.number}.pdf`);
+      link.setAttribute("download", `sale-summary-${sale.number}.pdf`);
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -84,7 +84,7 @@ export const SendSaleResume: React.FC<Props> = ({ sale }) => {
           />
         </Tooltip>
 
-        <Tooltip title="Send sale resume via email">
+        <Tooltip title="Send sale summary via email">
           <Button
             loading={isSubmitting}
             disabled={isSubmitting}
@@ -95,9 +95,9 @@ export const SendSaleResume: React.FC<Props> = ({ sale }) => {
           />
         </Tooltip>
 
-        <Tooltip title="Download sale resume">
+        <Tooltip title="Download sale summary">
           <Button
-            onClick={handleDownloadSalePdf}
+            onClick={handleDownloadSaleSummaryPdf}
             type="primary"
             icon={<DownloadOutlined />}
             loading={isDownloading}

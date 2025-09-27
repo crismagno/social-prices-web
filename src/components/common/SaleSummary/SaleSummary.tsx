@@ -23,7 +23,7 @@ import {
   formatToMoneyDecimal,
 } from "../../../shared/utils/strings/string";
 import { ImageOrDefault } from "../ImageOrDefault/ImageOrDefault";
-import { SendSaleResume } from "../SendSaleResume/SendSaleResume";
+import { SendSaleSummary } from "../SendSaleSummary/SendSaleSummary";
 import { TagTagsCustomAntd } from "../TagTagsCustomAntd/TagTagsCustomAntd";
 
 interface Props {
@@ -32,7 +32,7 @@ interface Props {
   tags: ITag[];
 }
 
-export const SaleResume: React.FC<Props> = ({ sale, stores, tags }) => {
+export const SaleSummary: React.FC<Props> = ({ sale, stores, tags }) => {
   let saleStores: ISaleStore[] = sale?.stores ?? [];
 
   const customer: ICustomer | undefined = sale?.stores?.[0].customer;
@@ -212,7 +212,7 @@ export const SaleResume: React.FC<Props> = ({ sale, stores, tags }) => {
 
   return (
     <div className="w-full">
-      <SendSaleResume sale={sale} />
+      <SendSaleSummary sale={sale} />
 
       <div className="flex flex-col w-full justify-center items-center mt-5">
         <ImageOrDefault width={80} src={customer.avatar} />

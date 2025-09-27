@@ -36,7 +36,7 @@ interface Props {
   totalAfterPayment: number;
 }
 
-export const SaleResumeByCreate: React.FC<Props> = ({
+export const SaleSummaryByCreate: React.FC<Props> = ({
   formSchema,
   selectedCustomer,
   stores,

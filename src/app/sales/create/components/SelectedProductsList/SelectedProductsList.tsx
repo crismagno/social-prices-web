@@ -302,7 +302,7 @@ export const SelectedProductsList: React.FC<Props> = ({
         {renderStoresProducts()}
       </div>
 
-      {/* Resume totals */}
+      {/* Summary totals */}
       <div className="mt-5">
         <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
           <Col xs={8}>SubTotal:</Col>

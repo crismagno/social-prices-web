@@ -31,7 +31,7 @@ import { CustomRangeDatePicker } from "../../../../components/common/CustomRange
 import handleClientError from "../../../../components/common/handleClientError/handleClientError";
 import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
-import { SaleResume } from "../../../../components/common/SaleResume/SaleResume";
+import { SaleSummary } from "../../../../components/common/SaleSummary/SaleSummary";
 import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
 import { StoreNameStatus } from "../../../../components/common/StoreNameStatus/StoreNameStatus";
 import { TagTagsCustomAntd } from "../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
@@ -105,10 +105,10 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
 
   const [saleToDelete, setSaleToDelete] = useState<ISale | null>(null);
 
-  const [isOpenSaleResumeModal, setIsOpenSaleResumeModal] =
+  const [isOpenSaleSummaryModal, setIsOpenSaleSummaryModal] =
     useState<boolean>(false);
 
-  const [saleSelectedToResume, setSaleSelectedToResume] =
+  const [saleSelectedToSummary, setSaleSelectedToSummary] =
     useState<ISale | null>(null);
 
   const [isUploadFilesDrawerOpen, setIsUploadFilesDrawerOpen] =
@@ -581,12 +581,12 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
                       icon={<EditOutlined />}
                     />
                   </Tooltip>
-                  <Tooltip title="See sale resume">
+                  <Tooltip title="See sale summary">
                     <Button
                       type="primary"
                       onClick={() => {
-                        setSaleSelectedToResume(sale);
-                        setIsOpenSaleResumeModal(true);
+                        setSaleSelectedToSummary(sale);
+                        setIsOpenSaleSummaryModal(true);
                       }}
                       icon={<EyeOutlined />}
                     />
@@ -665,19 +665,19 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
       </Modal>
 
       <Modal
-        title={`Sale Resume: ${saleSelectedToResume?.number}`}
-        open={isOpenSaleResumeModal}
+        title={`Sale Summary: ${saleSelectedToSummary?.number}`}
+        open={isOpenSaleSummaryModal}
         cancelButtonProps={{ hidden: true }}
         onOk={() => {
-          setSaleSelectedToResume(null);
-          setIsOpenSaleResumeModal(false);
+          setSaleSelectedToSummary(null);
+          setIsOpenSaleSummaryModal(false);
         }}
         onCancel={() => {
-          setSaleSelectedToResume(null);
-          setIsOpenSaleResumeModal(false);
+          setSaleSelectedToSummary(null);
+          setIsOpenSaleSummaryModal(false);
         }}
       >
-        <SaleResume sale={saleSelectedToResume} stores={stores} tags={tags} />
+        <SaleSummary sale={saleSelectedToSummary} stores={stores} tags={tags} />
       </Modal>
 
       <UploadFilesDrawer
