@@ -1,12 +1,12 @@
-import { IRangeDate } from "../../common/interfaces/global.interface";
-import ChartsEnum from "../../utils/charts/charts-enum";
+import { IRangeDate } from '../../common/interfaces/global.interface';
+import ChartsEnum from '../../utils/charts/charts-enum';
 import {
   IChartDataPeriodTypeItem,
   IChartDataProductItem,
-} from "../../utils/charts/charts-types";
-import { TTableStateSortOrder } from "../../utils/table/table-state.interface";
-import { IProduct } from "../products/products.interface";
-import SalesEnum from "./sales.enum";
+} from '../../utils/charts/charts-types';
+import { TTableStateSortOrder } from '../../utils/table/table-state.interface';
+import { IProduct } from '../products/products.interface';
+import SalesEnum from './sales.enum';
 
 export interface IGetSalesAnalyticsParams {
   storesIds?: string[];
@@ -113,4 +113,9 @@ export interface IGetSalesSummaryByUserTableStateResponse {
   tax: number;
   shipping: number;
   subtotal: number;
+}
+
+export interface ISendSaleSummaryLinkRequest {
+  saleId: string;
+  toEmail?: string;
 }

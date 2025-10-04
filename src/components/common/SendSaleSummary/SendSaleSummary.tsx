@@ -1,17 +1,30 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Button, Divider, Input, Tooltip } from "antd";
+import {
+  Button,
+  Divider,
+  Input,
+  message,
+  Tooltip,
+} from 'antd';
 
-import { DownloadOutlined, SendOutlined } from "@ant-design/icons";
+import { SendOutlined } from '@ant-design/icons';
 
-import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
-import { ICustomer } from "../../../shared/business/customers/customer.interface";
+import {
+  serviceMethodsInstance,
+} from '../../../services/social-prices-api/service-methods';
+import {
+  ICustomer,
+} from '../../../shared/business/customers/customer.interface';
 import {
   ISale,
   ISaleBuyer,
   ISaleStore,
-} from "../../../shared/business/sales/sale.interface";
-import handleClientError from "../handleClientError/handleClientError";
+} from '../../../shared/business/sales/sale.interface';
+import {
+  DownloadSalesSummaryButton,
+} from '../DownloadSalesSummaryButton/DownloadSalesSummaryButton';
+import handleClientError from '../handleClientError/handleClientError';
 
 interface Props {
   sale: ISale | null;
@@ -30,44 +43,30 @@ export const SendSaleSummary: React.FC<Props> = ({ sale }) => {
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const [isDownloading, setIsDownloading] = useState<boolean>(false);
-
   if (!sale || !customer || !buyer) {
     return null;
   }
 
-  const handleSendEmail = () => {
+  const handleSendEmail = async () => {
+    const messageLoading = message.loading(
+      "Sending sale summary message...",
+      0
+    );
+
     try {
       setIsSubmitting(true);
 
-      console.log(`Sending email`);
+      await serviceMethodsInstance.salesServiceMethods.sendSaleSummaryLink({
+        saleId: sale._id,
+        toEmail: emailToSend,
+      });
+
+      message.success("Sent Message!");
     } catch (error) {
       handleClientError(error);
     } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  const handleDownloadSaleSummaryPdf = async () => {
-    try {
-      setIsDownloading(true);
-
-      const response: Buffer =
-        await serviceMethodsInstance.salesServiceMethods.downloadSaleSummaryPdf(
-          sale._id
-        );
-
-      const url: string = window.URL.createObjectURL(new Blob([response]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `sale-summary-${sale.number}.pdf`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    } catch (error) {
-      handleClientError(error);
-    } finally {
-      setIsDownloading(false);
+      messageLoading?.();
     }
   };
 
@@ -95,15 +94,7 @@ export const SendSaleSummary: React.FC<Props> = ({ sale }) => {
           />
         </Tooltip>
 
-        <Tooltip title="Download sale summary">
-          <Button
-            onClick={handleDownloadSaleSummaryPdf}
-            type="primary"
-            icon={<DownloadOutlined />}
-            loading={isDownloading}
-            disabled={isDownloading}
-          />
-        </Tooltip>
+        <DownloadSalesSummaryButton sale={sale} />
       </div>
 
       <Divider className="my-2" />

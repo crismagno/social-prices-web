@@ -1,7 +1,7 @@
 "use client";
 
-import { ISale } from "../../../shared/business/sales/sale.interface";
-import SalesEnum from "../../../shared/business/sales/sales.enum";
+import { ISale } from '../../../shared/business/sales/sale.interface';
+import SalesEnum from '../../../shared/business/sales/sales.enum';
 import {
   IFiltersDownloadSales,
   IGetSalesAnalyticsParams,
@@ -9,16 +9,18 @@ import {
   IGetSalesBalanceParams,
   IGetSalesBalanceResponse,
   IGetSalesSummaryByUserTableStateResponse,
-} from "../../../shared/business/sales/sales.type";
+  ISendSaleSummaryLinkRequest,
+} from '../../../shared/business/sales/sales.type';
 import {
   ITableStateRequest,
   ITableStateResponse,
-} from "../../../shared/utils/table/table-state.interface";
-import ServiceMethodsBase from "../service-methods.base";
-import CreateSaleDto from "./dto/createSale.dto";
-import UpdateSaleDto from "./dto/updateSale.dto";
-import UpdateSalePaymentStatusManualDto from "./dto/updateSalePaymentStatusManual.dto";
-import SalesServiceEnum from "./sales-service.enum";
+} from '../../../shared/utils/table/table-state.interface';
+import ServiceMethodsBase from '../service-methods.base';
+import CreateSaleDto from './dto/createSale.dto';
+import UpdateSaleDto from './dto/updateSale.dto';
+import UpdateSalePaymentStatusManualDto
+  from './dto/updateSalePaymentStatusManual.dto';
+import SalesServiceEnum from './sales-service.enum';
 
 export default class SalesServiceMethods extends ServiceMethodsBase {
   public async createManual(createSaleDto: CreateSaleDto): Promise<ISale> {
@@ -263,6 +265,41 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
           Authorization: this.formatAuthorizationWithToken(),
         },
         responseType: "blob",
+      }
+    );
+
+    return response.data;
+  }
+
+  public async sendSaleSummaryLink(
+    sendSaleSummaryLinkRequest: ISendSaleSummaryLinkRequest
+  ): Promise<void> {
+    const response = await this._fetchAxios.post<void>(
+      `${this._socialPricesApiV1}${SalesServiceEnum.Methods.SEND_SALE_SUMMARY_LINK}`,
+      sendSaleSummaryLinkRequest,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async getSaleBySaleSummaryLinkToken(token: string): Promise<ISale> {
+    const response = await this._fetchAxios.get<ISale>(
+      `${
+        this._socialPricesApiV1
+      }${SalesServiceEnum.Methods.GET_SALE_BY_SALE_SUMMARY_LINK_TOKEN.replace(
+        ":token",
+        token
+      )}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
     );
 

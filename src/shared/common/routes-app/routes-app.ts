@@ -1,4 +1,5 @@
 const Urls = {
+  ROOT: "/",
   DASHBOARD: "/dashboard",
   LOGIN: "/login",
   LOGIN_EMPLOYEE: "/login-employee",
@@ -55,6 +56,9 @@ const Urls = {
   EMPLOYEES: "/employees",
   NEW_EMPLOYEE: "/employees/detail",
   EDIT_EMPLOYEE: "/employees/detail?empid=:employeeId",
+
+  // download
+  DOWNLOAD_SALE_SUMMARY: "/download/sales/summary?i=:tokenId",
 };
 
 export default Urls;
