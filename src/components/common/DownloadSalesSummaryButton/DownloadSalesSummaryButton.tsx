@@ -1,17 +1,12 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  Button,
-  Tooltip,
-} from 'antd';
+import { Button, Tooltip } from "antd";
 
-import { DownloadOutlined } from '@ant-design/icons';
+import { DownloadOutlined } from "@ant-design/icons";
 
-import {
-  serviceMethodsInstance,
-} from '../../../services/social-prices-api/service-methods';
-import { ISale } from '../../../shared/business/sales/sale.interface';
-import handleClientError from '../handleClientError/handleClientError';
+import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
+import { ISale } from "../../../shared/business/sales/sale.interface";
+import handleClientError from "../handleClientError/handleClientError";
 
 interface Props {
   sale: ISale;
@@ -48,7 +43,7 @@ export const DownloadSalesSummaryButton: React.FC<Props> = ({
   };
 
   return (
-    <Tooltip title="Download Sale Summary">
+    <Tooltip title="Download sale summary">
       <Button
         onClick={handleDownloadSaleSummaryPdf}
         type="primary"
