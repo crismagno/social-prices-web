@@ -187,6 +187,7 @@ const formSchema = z.object({
   deliveryAt: z.string().nullable(),
   createdDate: z.string().nullable(),
   numberManual: z.string().nullable(),
+  noteToCustomer: z.string().nullable(),
 });
 
 export type TFormSchema = z.infer<typeof formSchema>;
@@ -226,6 +227,7 @@ const generateFormSchemaDefault = (): TFormSchema => {
     deliveryAt: null,
     createdDate: null,
     numberManual: null,
+    noteToCustomer: null,
   };
 };
 
@@ -475,6 +477,7 @@ export default function CreateSalePage() {
                 .format(DatesEnum.Format.YYYYMMDD_DASHED)
             : null,
           numberManual: saleById?.numberManual ?? null,
+          noteToCustomer: saleById?.noteToCustomer ?? null,
         });
       };
 
@@ -1074,6 +1077,7 @@ export default function CreateSalePage() {
           ? moment(data.createdDate).toDate()
           : null,
         numberManual: data.numberManual?.trim() ?? null,
+        noteToCustomer: data.noteToCustomer?.trim() ?? null,
       };
 
       let response: ISale | null = null;
@@ -1525,6 +1529,19 @@ export default function CreateSalePage() {
                   divClassName="mt-0"
                   placeholder={"Enter any note if you need"}
                   errorMessage={errors?.note?.message}
+                  maxLength={1000}
+                />
+              </Col>
+            </Row>
+
+            <Row className="mt-2">
+              <Col xs={24}>
+                <TextareaCustomAntd
+                  controller={{ control, name: "noteToCustomer" }}
+                  label="Note to Customer"
+                  divClassName="mt-0"
+                  placeholder={"Enter any note if you need"}
+                  errorMessage={errors?.noteToCustomer?.message}
                   maxLength={1000}
                 />
               </Col>

@@ -33,6 +33,7 @@ export interface ISale
   numberManual: string | null;
   uploadFilename: string | null;
   filesUrl: string[];
+  noteToCustomer: string | null;
 }
 
 export interface ISaleTotals {

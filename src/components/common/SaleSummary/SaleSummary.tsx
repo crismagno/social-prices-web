@@ -320,6 +320,14 @@ export const SaleSummary: React.FC<Props> = ({ sale, stores, tags }) => {
       </div>
 
       <Divider />
+
+      <div className="flex pr-10 mt-2">
+        <label className="font-semibold mr-1">Note to Customer: </label>
+        <label>{sale.noteToCustomer ?? ""}</label>
+      </div>
+
+      <Divider />
+
       <div className="flex pr-10 mt-2">
         <label className="font-semibold mr-1">Tags: </label>
         <TagTagsCustomAntd tags={tags} tagsIds={sale.tagsIds} useTag />

@@ -335,6 +335,14 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
       </div>
 
       <Divider />
+
+      <div className="flex pr-10 mt-2">
+        <label className="font-semibold mr-1">Note to Customer: </label>
+        <label>{formSchema.noteToCustomer}</label>
+      </div>
+
+      <Divider />
+
       <div className="flex pr-10 mt-2">
         <label className="font-semibold mr-1">Tags: </label>
         <TagTagsCustomAntd tags={tags} tagsIds={formSchema.tagsIds} useTag />
