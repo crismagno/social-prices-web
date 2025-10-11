@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import handleClientError from "../../../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../../../components/common/HrCustom/HrCustom";
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
+import { ColorPickerCustomAntd } from "../../../../components/custom/antd/ColorPickerCustomAntd/ColorPickerCustomAntd";
 import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
@@ -18,6 +19,7 @@ import UpdateCategoryDto from "../../../../services/social-prices-api/categories
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import CategoriesEnum from "../../../../shared/business/categories/categories.enum";
 import { ICategory } from "../../../../shared/business/categories/categories.interface";
+import { parseColorPickerToHexString } from "../../../../shared/utils/antd/color-picker/color-picker";
 import { parseToUpperAndUnderline } from "../../../../shared/utils/strings/string";
 import { useFindCategoryById } from "../../useFindCategoryById";
 
@@ -25,6 +27,7 @@ const formSchema = z.object({
   name: z.string().trim().nonempty("Name is required"),
   type: z.string().nonempty("Type is required"),
   description: z.string().trim().nullable(),
+  color: z.any().nullable(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -66,6 +69,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
       name: category?.name ?? "",
       type: category?.type ?? CategoriesEnum.Type.PRODUCT,
       description: category?.description ?? null,
+      color: category?.color ?? null,
     };
 
     setFormValues(values);
@@ -97,6 +101,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
         ownerUserId: user!._id,
         type: data.type as CategoriesEnum.Type,
         description: data.description,
+        color: parseColorPickerToHexString(data.color),
       };
 
       const newCategory: ICategory =
@@ -125,6 +130,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
         type: data.type as CategoriesEnum.Type,
         categoryId: categoryId!,
         description: data.description,
+        color: parseColorPickerToHexString(data.color),
       };
 
       const categoryUpdated: ICategory =
@@ -147,6 +153,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
       name: "",
       type: CategoriesEnum.Type.PRODUCT,
       description: null,
+      color: null,
     });
 
     onClose();
@@ -190,6 +197,18 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
               label="Description"
               placeholder={"Enter description"}
               rows={2}
+            />
+          </Col>
+
+          <Col xs={24}>
+            <ColorPickerCustomAntd
+              controller={{ control, name: "color" }}
+              label="Color"
+              defaultValue="#1677ff"
+              showText
+              allowClear
+              size="large"
+              style={{ width: 120 }}
             />
           </Col>
         </Row>

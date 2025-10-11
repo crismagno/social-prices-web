@@ -9,19 +9,19 @@ interface Props {
   useTag?: boolean;
 }
 export const TagTagCustomAntd: React.FC<Props> = ({ tag, useTag = true }) => {
+  const tagColor: string = tag.color ?? "";
+
   if (useTag) {
     return (
       <Tooltip title={tag.description}>
-        <Tag icon={<TagFilled style={{ color: tag.color ?? "" }} />}>
-          {tag.name}
-        </Tag>
+        <Tag icon={<TagFilled style={{ color: tagColor }} />}>{tag.name}</Tag>
       </Tooltip>
     );
   }
 
   return (
     <Tooltip title={tag.description}>
-      <TagFilled style={{ marginRight: 5, color: tag.color ?? "" }} />
+      <TagFilled style={{ marginRight: 5, color: tagColor }} />
       {tag.name}
     </Tooltip>
   );

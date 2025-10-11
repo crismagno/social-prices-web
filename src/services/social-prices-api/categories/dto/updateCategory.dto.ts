@@ -1,5 +1,4 @@
-import CategoriesEnum
-  from '../../../../shared/business/categories/categories.enum';
+import CategoriesEnum from "../../../../shared/business/categories/categories.enum";
 
 export default class UpdateCategoryDto {
   categoryId: string = "";
@@ -8,4 +7,5 @@ export default class UpdateCategoryDto {
   code: string = "";
   ownerUserId: string | null = null;
   description: string | null = null;
+  color: string | null = null;
 }

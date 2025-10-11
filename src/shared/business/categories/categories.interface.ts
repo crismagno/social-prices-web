@@ -10,4 +10,5 @@ export interface ICategory extends ICreatedAtEntity, IUpdatedAtEntity {
   createdByUserId: string;
   ownerUserId: string | null;
   description: string | null;
+  color: string | null;
 }
