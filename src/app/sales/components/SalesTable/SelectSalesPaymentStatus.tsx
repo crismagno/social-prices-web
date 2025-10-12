@@ -193,7 +193,7 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
           </Tooltip>
         </div>
       ) : (
-        <div className="w-36">
+        <div className="w-40">
           <Tag
             color={SalesEnum.PaymentStatusColors[sale.paymentStatus]}
             className="mr-1"

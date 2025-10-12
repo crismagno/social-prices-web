@@ -28,6 +28,7 @@ import {
 
 import { ButtonCreateSale } from "../../../../components/common/ButtonCreateSale/ButtonCreateSale";
 import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
+import { DeliveryAddressMapButton } from "../../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton";
 import handleClientError from "../../../../components/common/handleClientError/handleClientError";
 import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
@@ -392,9 +393,15 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
                 })
               ),
               render: (_, sale: ISale) => (
-                <Tag>
-                  {SalesEnum.DeliveryTypeLabels[sale.header.deliveryType]}
-                </Tag>
+                <div className="flex">
+                  <Tag className="mr-2">
+                    {SalesEnum.DeliveryTypeLabels[sale.header.deliveryType]}
+                  </Tag>
+
+                  {sale.buyer?.address && (
+                    <DeliveryAddressMapButton address={sale.buyer.address} />
+                  )}
+                </div>
               ),
             },
             {

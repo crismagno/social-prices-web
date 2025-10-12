@@ -52,6 +52,7 @@ import {
   states,
   TAddressFormSchema,
 } from "../../../components/common/Addresses/Addresses";
+import { DeliveryAddressMapButton } from "../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton";
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
 import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
 import { LabelBadgeCustomAntd } from "../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
@@ -555,6 +556,8 @@ export default function CreateSalePage() {
   let deliveryType: string = watch("deliveryType");
 
   let payments: TSalePaymentFormSchema[] = watch("payments");
+
+  let customerAddress: TAddressFormSchema | null = watch("customer.address");
 
   // Handle Events Part
 
@@ -1252,7 +1255,26 @@ export default function CreateSalePage() {
             title={
               <div className="flex justify-between">
                 <div className="flex">
-                  <label className="mr-2">Shipping Address</label>
+                  <label className="mr-2">
+                    <span className="mr-2">Shipping Address</span>
+
+                    {customerAddress && (
+                      <DeliveryAddressMapButton
+                        address={{
+                          ...customerAddress,
+                          country: {
+                            code: customerAddress.countryCode,
+                            name: customerAddress.countryCode,
+                          },
+                          state: {
+                            code: customerAddress.stateCode,
+                            name: customerAddress.stateCode,
+                          },
+                          types: customerAddress.types as AddressEnum.Type[],
+                        }}
+                      />
+                    )}
+                  </label>
 
                   {selectedCustomer && !isEditMode && (
                     <Select
