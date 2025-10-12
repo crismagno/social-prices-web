@@ -19,4 +19,5 @@ export interface IProduct extends ICreatedAtEntity, IUpdatedAtEntity {
   categoriesIds: string[];
   tagsIds: string[];
   uploadFilename: string | null;
+  brand: string | null;
 }

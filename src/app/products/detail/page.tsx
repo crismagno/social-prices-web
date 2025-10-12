@@ -83,6 +83,7 @@ const formSchema = z.object({
   QRCode: z.string().optional(),
   categoriesIds: z.array(z.string()),
   tagsIds: z.array(z.string()),
+  brand: z.string().trim().optional(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -152,6 +153,7 @@ export default function ProductDetailPage() {
       QRCode: product?.QRCode ?? "",
       categoriesIds: product?.categoriesIds ?? [],
       tagsIds: product?.tagsIds ?? [],
+      brand: product?.brand ?? "",
     };
 
     setFormValues(values);
@@ -216,6 +218,7 @@ export default function ProductDetailPage() {
         QRCode: data.QRCode ?? null,
         categoriesIds: data.categoriesIds ?? [],
         tagsIds: data.tagsIds ?? [],
+        brand: data.brand ?? null,
       };
 
       for (const property of Object.keys(createProductDto)) {
@@ -281,6 +284,7 @@ export default function ProductDetailPage() {
         deletedFilesUrl,
         categoriesIds: data.categoriesIds ?? [],
         tagsIds: data.tagsIds ?? [],
+        brand: data.brand ?? null,
       };
 
       for (const property of Object.keys(updateProductDto)) {
@@ -445,6 +449,15 @@ export default function ProductDetailPage() {
 
           <Row>
             <Col xs={24} md={8}>
+              <InputCustomAntd
+                controller={{ control, name: "brand" }}
+                label="Brand"
+                placeholder={"Enter brand"}
+                errorMessage={errors.brand?.message}
+              />
+            </Col>
+
+            <Col xs={24} md={8}>
               <SelectCustomAntd<IProduct>
                 controller={{ control, name: "categoriesIds" }}
                 label="Categories"
@@ -474,6 +487,14 @@ export default function ProductDetailPage() {
                 ))}
               </SelectCustomAntd>
             </Col>
+
+            <Col xs={24} md={8}>
+              <CheckboxCustomAntd<IProduct>
+                controller={{ control, name: "isActive" }}
+                label="Is Active"
+              />
+            </Col>
+
             <Col xs={24} md={8}>
               <div className={`flex flex-col mt-4`}>
                 <label className={`text-sm mr-1`}>QRCode</label>
@@ -495,13 +516,6 @@ export default function ProductDetailPage() {
                   )}
                 ></Controller>
               </div>
-            </Col>
-
-            <Col xs={24} md={8}>
-              <CheckboxCustomAntd<IProduct>
-                controller={{ control, name: "isActive" }}
-                label="Is Active"
-              />
             </Col>
           </Row>
 
