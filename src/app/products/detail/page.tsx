@@ -39,6 +39,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import handleClientError from "../../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../../components/common/HrCustom/HrCustom";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+import { ProductHistoricPricesButton } from "../../../components/common/ProductHistoricPricesButton/ProductHistoricPricesButton";
 import { ProductPreviousBarcodesPopover } from "../../../components/common/ProductPreviousBarcodesPopover/ProductPreviousBarcodesPopover";
 import { StoreNameStatus } from "../../../components/common/StoreNameStatus/StoreNameStatus";
 import { TagCategoryCustomAntd } from "../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
@@ -416,7 +417,14 @@ export default function ProductDetailPage() {
             <Col xs={24} md={8}>
               <InputNumberCustomAntd
                 controller={{ control, name: "price" }}
-                label="Price"
+                label={
+                  <>
+                    <span className="mr-2">Price</span>
+                    {product && (
+                      <ProductHistoricPricesButton product={product} />
+                    )}
+                  </>
+                }
                 formatter={formatterMoney}
                 parser={parserMoney}
               />

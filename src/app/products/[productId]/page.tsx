@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 import {
   Avatar as AvatarAntd,
@@ -14,14 +14,11 @@ import {
   Row,
   Tag,
   Tooltip,
-} from 'antd';
-import moment from 'moment';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import {
-  useParams,
-  useRouter,
-} from 'next/navigation';
+} from "antd";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+import { useParams, useRouter } from "next/navigation";
 
 import {
   BlockOutlined,
@@ -34,12 +31,11 @@ import {
   QuestionCircleOutlined,
   ShopOutlined,
   TagOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import Avatar from '../../../components/common/Avatar/Avatar';
-import ContainerTitle
-  from '../../../components/common/ContainerTitle/ContainerTitle';
-import Description from '../../../components/common/Description/Description';
+import Avatar from "../../../components/common/Avatar/Avatar";
+import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
+import Description from "../../../components/common/Description/Description";
 import {
   IconCake,
   IconIdentification,
@@ -47,39 +43,29 @@ import {
   IconPencilSquare,
   IconQuestion,
   IconUser,
-} from '../../../components/common/icons/icons';
-import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
-import {
-  ProductPreviousBarcodesPopover,
-} from '../../../components/common/ProductPreviousBarcodesPopover/ProductPreviousBarcodesPopover';
-import {
-  TagCategoriesCustomAntd,
-} from '../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd';
-import {
-  TagStoresCustomAntd,
-} from '../../../components/common/TagStoresCustomAntd/TagStoresCustomAntd';
-import {
-  TagTagsCustomAntd,
-} from '../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
-import YesNo from '../../../components/common/YesNo/YesNo';
-import Layout from '../../../components/template/Layout/Layout';
-import CategoriesEnum
-  from '../../../shared/business/categories/categories.enum';
-import TagsEnum from '../../../shared/business/tags/tags.enum';
-import Urls from '../../../shared/common/routes-app/routes-app';
-import DatesEnum from '../../../shared/utils/dates/dates.enum';
-import { defaultAvatarImage } from '../../../shared/utils/images/files-names';
-import { getImageUrl } from '../../../shared/utils/images/url-images';
-import { formatToMoneyDecimal } from '../../../shared/utils/strings/string';
-import {
-  useFindCategoriesByType,
-} from '../../categories/useFindCategoriesByType';
-import { SalesBalance } from '../../sales/components/SalesBalance/SalesBalance';
-import { SalesChart } from '../../sales/components/SalesChart/SalesChart';
-import SalesTable from '../../sales/components/SalesTable/SalesTable';
-import { useFindStoresByUser } from '../../stores/useFindStoresByUser';
-import { useFindTagsByType } from '../../tags/useFindTagsByType';
-import { useFindProductById } from '../detail/useFindProductById';
+} from "../../../components/common/icons/icons";
+import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+import { ProductHistoricPricesButton } from "../../../components/common/ProductHistoricPricesButton/ProductHistoricPricesButton";
+import { ProductPreviousBarcodesPopover } from "../../../components/common/ProductPreviousBarcodesPopover/ProductPreviousBarcodesPopover";
+import { TagCategoriesCustomAntd } from "../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
+import { TagStoresCustomAntd } from "../../../components/common/TagStoresCustomAntd/TagStoresCustomAntd";
+import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
+import YesNo from "../../../components/common/YesNo/YesNo";
+import Layout from "../../../components/template/Layout/Layout";
+import CategoriesEnum from "../../../shared/business/categories/categories.enum";
+import TagsEnum from "../../../shared/business/tags/tags.enum";
+import Urls from "../../../shared/common/routes-app/routes-app";
+import DatesEnum from "../../../shared/utils/dates/dates.enum";
+import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
+import { getImageUrl } from "../../../shared/utils/images/url-images";
+import { formatToMoneyDecimal } from "../../../shared/utils/strings/string";
+import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
+import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
+import { SalesChart } from "../../sales/components/SalesChart/SalesChart";
+import SalesTable from "../../sales/components/SalesTable/SalesTable";
+import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
+import { useFindTagsByType } from "../../tags/useFindTagsByType";
+import { useFindProductById } from "../detail/useFindProductById";
 
 export default function ProductPage() {
   const router: AppRouterInstance = useRouter();
@@ -202,7 +188,12 @@ export default function ProductPage() {
                   />
 
                   <Description
-                    label="Price"
+                    label={
+                      <>
+                        <span className="mr-2">Price</span>
+                        <ProductHistoricPricesButton product={product} />
+                      </>
+                    }
                     description={formatToMoneyDecimal(product.price)}
                     leftIcon={IconMoney()}
                   />

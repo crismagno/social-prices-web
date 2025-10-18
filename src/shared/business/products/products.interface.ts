@@ -20,4 +20,11 @@ export interface IProduct extends ICreatedAtEntity, IUpdatedAtEntity {
   tagsIds: string[];
   uploadFilename: string | null;
   brand: string | null;
+  historicPrices: IProductHistoricPrice[];
+}
+
+export interface IProductHistoricPrice {
+  price: number;
+  barcode: string;
+  updatedAt: Date;
 }

@@ -19,6 +19,7 @@ import {
 } from "@ant-design/icons";
 
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
+import { ProductHistoricPricesButton } from "../../components/common/ProductHistoricPricesButton/ProductHistoricPricesButton";
 import { StoreNameStatus } from "../../components/common/StoreNameStatus/StoreNameStatus";
 import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
 import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
@@ -233,7 +234,15 @@ export default function ProductsPage() {
               dataIndex: "price",
               key: "price",
               align: "center",
-              render: (price: number) => formatterMoney(price),
+              width: 140,
+              render: (price: number, product: IProduct) => {
+                return (
+                  <div className="flex justify-center items-center">
+                    <span className="mr-2">{formatterMoney(price)}</span>
+                    <ProductHistoricPricesButton product={product} />
+                  </div>
+                );
+              },
             },
             {
               title: "Categories",
