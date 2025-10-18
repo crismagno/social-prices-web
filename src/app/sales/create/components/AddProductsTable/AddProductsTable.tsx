@@ -1,7 +1,4 @@
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect, useState } from "react";
 
 import {
   Button,
@@ -13,56 +10,35 @@ import {
   Row,
   Select,
   Tooltip,
-} from 'antd';
-import {
-  find,
-  includes,
-  map,
-} from 'lodash';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+} from "antd";
+import { find, includes, map } from "lodash";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { PlusOutlined } from '@ant-design/icons';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { PlusOutlined } from "@ant-design/icons";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import {
-  InputNumberCustomAntd,
-} from '../../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd';
-import TableCustomAntd2
-  from '../../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
-import CategoriesEnum
-  from '../../../../../shared/business/categories/categories.enum';
-import {
-  ICategory,
-} from '../../../../../shared/business/categories/categories.interface';
-import {
-  IProduct,
-} from '../../../../../shared/business/products/products.interface';
-import { IStore } from '../../../../../shared/business/stores/stores.interface';
-import TagsEnum from '../../../../../shared/business/tags/tags.enum';
-import { ITag } from '../../../../../shared/business/tags/tags.interface';
-import { sortArray } from '../../../../../shared/utils/array/functions';
-import {
-  defaultAvatarImage,
-} from '../../../../../shared/utils/images/files-names';
-import { getImageUrl } from '../../../../../shared/utils/images/url-images';
+import { InputNumberCustomAntd } from "../../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
+import TableCustomAntd2 from "../../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
+import CategoriesEnum from "../../../../../shared/business/categories/categories.enum";
+import { ICategory } from "../../../../../shared/business/categories/categories.interface";
+import { IProduct } from "../../../../../shared/business/products/products.interface";
+import { IStore } from "../../../../../shared/business/stores/stores.interface";
+import TagsEnum from "../../../../../shared/business/tags/tags.enum";
+import { ITag } from "../../../../../shared/business/tags/tags.interface";
+import { sortArray } from "../../../../../shared/utils/array/functions";
+import { defaultAvatarImage } from "../../../../../shared/utils/images/files-names";
+import { getImageUrl } from "../../../../../shared/utils/images/url-images";
 import {
   formatterMoney,
   parserMoney,
-} from '../../../../../shared/utils/strings/string';
-import {
-  createTableState,
-} from '../../../../../shared/utils/table/table-state';
-import {
-  ITableStateRequest,
-} from '../../../../../shared/utils/table/table-state.interface';
-import {
-  useFindCategoriesByType,
-} from '../../../../categories/useFindCategoriesByType';
-import {
-  useFindProductsByUserTableState,
-} from '../../../../products/useFindProductsByUserTableState';
-import { useFindTagsByType } from '../../../../tags/useFindTagsByType';
+} from "../../../../../shared/utils/strings/string";
+import { createTableState } from "../../../../../shared/utils/table/table-state";
+import { ITableStateRequest } from "../../../../../shared/utils/table/table-state.interface";
+import { useFindCategoriesByType } from "../../../../categories/useFindCategoriesByType";
+import { AddProductButton } from "../../../../products/components/AddProductButton/AddProductButton";
+import { useFindProductsByUserTableState } from "../../../../products/useFindProductsByUserTableState";
+import { useFindTagsByType } from "../../../../tags/useFindTagsByType";
 
 const productFormSchema = z.object({
   productId: z.string(),
@@ -120,7 +96,7 @@ export const AddProductsTable: React.FC<Props> = ({
     resolver: zodResolver(formSchema),
   });
 
-  const { isLoading, products, total } =
+  const { isLoading, products, total, fetchFindProductsByUserTableState } =
     useFindProductsByUserTableState(tableStateRequest);
 
   const { categories, isLoading: isLoadingCategories } =
@@ -195,6 +171,35 @@ export const AddProductsTable: React.FC<Props> = ({
     });
   };
 
+  const handleCreate = async (product: IProduct | null) => {
+    if (product == null) {
+      return;
+    }
+
+    await fetchFindProductsByUserTableState();
+
+    let storeId: string = product.storeIds[0];
+
+    if (selectedStoreIds.length) {
+      storeId =
+        find(product.storeIds, (productStoreId: string) =>
+          includes(selectedStoreIds, productStoreId)
+        ) ?? selectedStoreIds[0];
+    }
+
+    onAddProductToSale?.({
+      storeId,
+      product: {
+        price: product.price ?? 0,
+        productId: product._id,
+        quantity: 1,
+        barcode: product.barcode ?? "",
+        fileUrl: product.filesUrl?.[0] ?? null,
+        name: product.name,
+      },
+    });
+  };
+
   return (
     <div style={{ maxHeight: 800 }} className="overflow-auto">
       <Row gutter={[4, 4]}>
@@ -251,6 +256,13 @@ export const AddProductsTable: React.FC<Props> = ({
               Inactive
             </Select.Option>
           </Select>
+        </Col>
+
+        <Col md={5} className="flex justify-end">
+          <AddProductButton
+            buttonProps={{ text: "Add Product" }}
+            onCreate={handleCreate}
+          />
         </Col>
       </Row>
 
