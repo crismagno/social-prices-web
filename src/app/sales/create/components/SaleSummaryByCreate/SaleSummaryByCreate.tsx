@@ -1,27 +1,45 @@
-import { Col, Divider, Empty, Image, Row } from "antd";
-import { find } from "lodash";
-import moment from "moment";
+import {
+  Col,
+  Divider,
+  Empty,
+  Image,
+  Row,
+} from 'antd';
+import { find } from 'lodash';
+import moment from 'moment';
 
-import { ImageOrDefault } from "../../../../../components/common/ImageOrDefault/ImageOrDefault";
-import { TagTagsCustomAntd } from "../../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
-import { ICustomer } from "../../../../../shared/business/customers/customer.interface";
-import PersonEnum from "../../../../../shared/business/enums/person.enum";
-import SalesEnum from "../../../../../shared/business/sales/sales.enum";
-import { IStore } from "../../../../../shared/business/stores/stores.interface";
-import { ITag } from "../../../../../shared/business/tags/tags.interface";
-import DatesEnum from "../../../../../shared/utils/dates/dates.enum";
-import { defaultAvatarImage } from "../../../../../shared/utils/images/files-names";
-import { getImageUrl } from "../../../../../shared/utils/images/url-images";
+import {
+  DeliveryAddressMapButton,
+} from '../../../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton';
+import {
+  ImageOrDefault,
+} from '../../../../../components/common/ImageOrDefault/ImageOrDefault';
+import {
+  TagTagsCustomAntd,
+} from '../../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
+import {
+  ICustomer,
+} from '../../../../../shared/business/customers/customer.interface';
+import AddressEnum from '../../../../../shared/business/enums/address.enum';
+import PersonEnum from '../../../../../shared/business/enums/person.enum';
+import SalesEnum from '../../../../../shared/business/sales/sales.enum';
+import { IStore } from '../../../../../shared/business/stores/stores.interface';
+import { ITag } from '../../../../../shared/business/tags/tags.interface';
+import DatesEnum from '../../../../../shared/utils/dates/dates.enum';
+import {
+  defaultAvatarImage,
+} from '../../../../../shared/utils/images/files-names';
+import { getImageUrl } from '../../../../../shared/utils/images/url-images';
 import {
   createAddressName,
   formatToMoneyDecimal,
-} from "../../../../../shared/utils/strings/string";
+} from '../../../../../shared/utils/strings/string';
 import {
   TFormSchema,
   TSaleStoreFormSchema,
   TSaleStoreProductFormSchema,
-} from "../../page";
-import { TSalePaymentFormSchema } from "../SalePayments/SalePayments";
+} from '../../page';
+import { TSalePaymentFormSchema } from '../SalePayments/SalePayments';
 
 interface Props {
   formSchema: TFormSchema;
@@ -49,6 +67,8 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
   totalAfterPayment,
 }) => {
   let saleStores: TSaleStoreFormSchema[] = formSchema.saleStores;
+
+  const customerAddress = formSchema.customer.address;
 
   const renderStoresProducts = () => {
     if (!saleStores?.length) {
@@ -186,7 +206,22 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
         <div className="text-center">
           <b>Shipping Address: </b>
 
-          <span>{createAddressName(formSchema.customer.address)}</span>
+          <span className="mr-1">{createAddressName(customerAddress)}</span>
+
+          <DeliveryAddressMapButton
+            address={{
+              ...customerAddress,
+              country: {
+                code: customerAddress.countryCode,
+                name: customerAddress.countryCode,
+              },
+              state: {
+                code: customerAddress.stateCode,
+                name: customerAddress.stateCode,
+              },
+              types: customerAddress.types as AddressEnum.Type[],
+            }}
+          />
         </div>
       </div>
 

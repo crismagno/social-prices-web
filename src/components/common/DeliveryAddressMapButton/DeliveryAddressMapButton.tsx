@@ -1,10 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import { Tooltip } from "antd";
+import { Tooltip } from 'antd';
 
-import { EnvironmentOutlined } from "@ant-design/icons";
+import { EnvironmentOutlined } from '@ant-design/icons';
 
-import { IAddress } from "../../../shared/business/interfaces/address.interface";
+import {
+  IAddress,
+} from '../../../shared/business/interfaces/address.interface';
 
 interface Props {
   address: IAddress | null;
@@ -59,7 +61,10 @@ export const DeliveryAddressMapButton: React.FC<Props> = ({ address }) => {
 
   return (
     <Tooltip title="Open Delivery Route">
-      <EnvironmentOutlined onClick={handleOpenRoute} style={{ fontSize: 17 }} />
+      <EnvironmentOutlined
+        onClick={handleOpenRoute}
+        style={{ fontSize: 17, color: "#1677FF" }}
+      />
     </Tooltip>
   );
 };
