@@ -24,6 +24,7 @@ import {
 import ImgCrop from "antd-img-crop";
 import { RcFile } from "antd/es/upload";
 import { isArray } from "class-validator";
+import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import {
   ReadonlyURLSearchParams,
@@ -61,6 +62,7 @@ import TagsEnum from "../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../shared/business/tags/tags.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import { sortArray } from "../../../shared/utils/array/functions";
+import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getFileUrl } from "../../../shared/utils/images/helper";
 import { getImageUrl } from "../../../shared/utils/images/url-images";
 import {
@@ -85,6 +87,7 @@ const formSchema = z.object({
   categoriesIds: z.array(z.string()),
   tagsIds: z.array(z.string()),
   brand: z.string().trim().optional(),
+  releaseDate: z.any().nullable().optional(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -155,6 +158,9 @@ export default function ProductDetailPage() {
       categoriesIds: product?.categoriesIds ?? [],
       tagsIds: product?.tagsIds ?? [],
       brand: product?.brand ?? "",
+      releaseDate: moment(product?.releaseDate)
+        .utc()
+        .format(DatesEnum.Format.YYYYMMDD_DASHED),
     };
 
     setFormValues(values);
@@ -220,6 +226,7 @@ export default function ProductDetailPage() {
         categoriesIds: data.categoriesIds ?? [],
         tagsIds: data.tagsIds ?? [],
         brand: data.brand ?? null,
+        releaseDate: moment(data.releaseDate).toDate(),
       };
 
       for (const property of Object.keys(createProductDto)) {
@@ -286,6 +293,7 @@ export default function ProductDetailPage() {
         categoriesIds: data.categoriesIds ?? [],
         tagsIds: data.tagsIds ?? [],
         brand: data.brand ?? null,
+        releaseDate: moment(data.releaseDate).toDate(),
       };
 
       for (const property of Object.keys(updateProductDto)) {
@@ -480,6 +488,7 @@ export default function ProductDetailPage() {
                 ))}
               </SelectCustomAntd>
             </Col>
+
             <Col xs={24} md={8}>
               <SelectCustomAntd<IProduct>
                 controller={{ control, name: "tagsIds" }}
@@ -524,6 +533,16 @@ export default function ProductDetailPage() {
                   )}
                 ></Controller>
               </div>
+            </Col>
+
+            <Col xs={24} md={8}>
+              <InputCustomAntd
+                controller={{ control, name: "releaseDate" }}
+                label="Release Date"
+                type="date"
+                placeholder={"Enter release date"}
+                errorMessage={errors.releaseDate?.message}
+              />
             </Col>
           </Row>
 

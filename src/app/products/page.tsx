@@ -155,6 +155,7 @@ export default function ProductsPage() {
           tableStateRequest={tableStateRequest}
           setTableStateRequest={setTableStateRequest}
           dataSource={products}
+          className="overflow-auto"
           columns={[
             {
               title: "#",
@@ -199,6 +200,16 @@ export default function ProductsPage() {
               dataIndex: "name",
               key: "name",
               align: "center",
+              render: (_, product: IProduct) => {
+                return (
+                  <div className="flex flex-col justify-center items-center">
+                    <span>{product.name}</span>
+                    <span className="text-sm italic text-slate-500">
+                      {product.brand}
+                    </span>
+                  </div>
+                );
+              },
             },
             {
               title: "Barcode",
@@ -316,6 +327,17 @@ export default function ProductsPage() {
               },
             },
             {
+              title: "Release Date",
+              dataIndex: "releaseDate",
+              key: "releaseDate",
+              align: "center",
+              render: (releaseDate: Date) =>
+                releaseDate
+                  ? moment(releaseDate).format(DatesEnum.Format.DDMMYYYYhhmmss)
+                  : null,
+              sorter: true,
+            },
+            {
               title: "Created At",
               dataIndex: "createdAt",
               key: "createdAt",
@@ -338,6 +360,7 @@ export default function ProductsPage() {
               dataIndex: "action",
               key: "action",
               align: "center",
+              fixed: "right",
               render: (_: any, product: IProduct) => (
                 <Button.Group>
                   <Tooltip title="Edit product">

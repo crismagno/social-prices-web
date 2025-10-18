@@ -11,4 +11,5 @@ export default class CreateProductDto {
   categoriesIds: string[] = [];
   tagsIds: string[] = [];
   brand: string | null = null;
+  releaseDate: Date | null = null;
 }

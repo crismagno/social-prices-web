@@ -29,6 +29,7 @@ import {
   PlusCircleOutlined,
   QrcodeOutlined,
   QuestionCircleOutlined,
+  ScissorOutlined,
   ShopOutlined,
   TagOutlined,
 } from "@ant-design/icons";
@@ -332,6 +333,18 @@ export default function ProductPage() {
                         : "-"
                     }
                     leftIcon={<CalendarOutlined className="text-lg" />}
+                  />
+
+                  <Description
+                    label="Release Date"
+                    leftIcon={<ScissorOutlined className="text-lg" />}
+                    description={
+                      product.releaseDate
+                        ? moment(product.releaseDate).format(
+                            DatesEnum.Format.DDMMYYY
+                          )
+                        : "-"
+                    }
                   />
                 </Col>
               </Row>
