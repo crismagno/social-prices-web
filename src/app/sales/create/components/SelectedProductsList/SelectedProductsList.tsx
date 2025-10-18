@@ -80,7 +80,7 @@ export const SelectedProductsList: React.FC<Props> = ({
               className={`flex items-center border-b-2 border-slate-100 mb-1 w-full`}
             >
               <label className="my-2 text-lg font-semibold mr-2">
-                {store?.name ?? ""}
+                <Tooltip title="Store Name">{store?.name ?? ""}</Tooltip>
               </label>
 
               {saleStore.products.length > 1 ? (
@@ -122,7 +122,7 @@ export const SelectedProductsList: React.FC<Props> = ({
               <Col xs={3}>Quantity</Col>
               <Col xs={4}>Price</Col>
               <Col xs={3}>Total</Col>
-              <Col xs={2}></Col>
+              <Col xs={2}>Action</Col>
             </Row>
 
             {saleStore.products?.map(
@@ -144,14 +144,22 @@ export const SelectedProductsList: React.FC<Props> = ({
 
                 const total: number = quantity * price;
 
+                let rowBackgroundColor: string = "bg-white";
+
+                if (!saleStoreProduct.isValid) {
+                  rowBackgroundColor = "bg-red-100";
+                } else if (saleStoreProduct.isCompleted) {
+                  rowBackgroundColor = "bg-green-100";
+                }
+
                 return (
                   <Row
                     gutter={[2, 2]}
                     key={`${saleStoreProduct.productId}-${indexSaleStoreProduct}`}
-                    className="border-b border-slate-100 p-2"
+                    className={`border-b border-slate-100 p-2 ${rowBackgroundColor}`}
                   >
                     <Col xs={1}>
-                      <Tooltip title="Complete?">
+                      <Tooltip title="Is Completed?">
                         <CheckboxCustomAntd
                           controller={{
                             control,
