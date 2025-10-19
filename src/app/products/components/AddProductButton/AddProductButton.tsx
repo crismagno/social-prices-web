@@ -4,7 +4,7 @@ import "./styles.scss";
 
 import { useState } from "react";
 
-import { Button, Modal, Tooltip } from "antd";
+import { Button, Drawer, Tooltip } from "antd";
 
 import { PlusOutlined } from "@ant-design/icons";
 
@@ -39,16 +39,18 @@ export const AddProductButton: React.FC<Props> = ({
         </Button>
       </Tooltip>
 
-      <Modal
+      <Drawer
         closable={false}
         maskClosable={false}
         open={isOpen}
         title={"Add Product"}
-        onCancel={() => {
+        onClose={() => {
           onCancel?.();
           setOpen(false);
         }}
         footer={null}
+        forceRender
+        size="large"
       >
         <ProductDetail
           productId={null}
@@ -61,7 +63,7 @@ export const AddProductButton: React.FC<Props> = ({
             setOpen(false);
           }}
         />
-      </Modal>
+      </Drawer>
     </>
   );
 };

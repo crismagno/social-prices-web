@@ -306,7 +306,7 @@ export const SelectedProductsList: React.FC<Props> = ({
         </div>
       }
     >
-      <div style={{ maxHeight: 500 }} className="overflow-auto">
+      <div style={{ maxHeight: 700 }} className="overflow-auto">
         {renderStoresProducts()}
       </div>
 

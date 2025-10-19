@@ -171,7 +171,7 @@ export const AddProductsTable: React.FC<Props> = ({
     });
   };
 
-  const handleCreate = async (product: IProduct | null) => {
+  const handleAddProductToSaleByCreate = async (product: IProduct | null) => {
     if (product == null) {
       return;
     }
@@ -201,7 +201,7 @@ export const AddProductsTable: React.FC<Props> = ({
   };
 
   return (
-    <div style={{ maxHeight: 800 }} className="overflow-auto">
+    <div>
       <Row gutter={[4, 4]}>
         <Col md={8}>
           <Select
@@ -261,7 +261,7 @@ export const AddProductsTable: React.FC<Props> = ({
         <Col md={5} className="flex justify-end">
           <AddProductButton
             buttonProps={{ text: "Add Product" }}
-            onCreate={handleCreate}
+            onCreate={handleAddProductToSaleByCreate}
           />
         </Col>
       </Row>
@@ -404,9 +404,8 @@ export const AddProductsTable: React.FC<Props> = ({
         ]}
         search={{ placeholder: "Search products.." }}
         loading={isLoading || isLoadingCategories || isLoadingTags}
-        pagination={{
-          total,
-        }}
+        total={total}
+        className="overflow-auto"
       />
     </div>
   );

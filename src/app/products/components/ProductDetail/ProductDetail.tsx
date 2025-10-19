@@ -371,7 +371,7 @@ export const ProductDetail: React.FC<Props> = ({
         <HrCustom className="my-7" />
 
         <Row gutter={[16, 16]}>
-          <Col xs={24} md={8}>
+          <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
               controller={{ control, name: "name" }}
               label="Name"
@@ -381,7 +381,7 @@ export const ProductDetail: React.FC<Props> = ({
             />
           </Col>
 
-          <Col xs={24} md={8}>
+          <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
               controller={{ control, name: "barcode" }}
               label={
@@ -398,7 +398,7 @@ export const ProductDetail: React.FC<Props> = ({
             />
           </Col>
 
-          <Col xs={24} md={8}>
+          <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
               controller={{ control, name: "description" }}
               label="Description"
@@ -410,7 +410,7 @@ export const ProductDetail: React.FC<Props> = ({
         </Row>
 
         <Row gutter={[16, 16]}>
-          <Col xs={24} md={8}>
+          <Col xs={24} md={8} sm={12} lg={8}>
             <InputNumberCustomAntd
               controller={{ control, name: "price" }}
               label={
@@ -424,7 +424,7 @@ export const ProductDetail: React.FC<Props> = ({
             />
           </Col>
 
-          <Col xs={24} md={8}>
+          <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
               controller={{ control, name: "quantity" }}
               label="Quantity"
@@ -432,7 +432,7 @@ export const ProductDetail: React.FC<Props> = ({
               type="number"
             />
           </Col>
-          <Col xs={24} md={8}>
+          <Col xs={24} md={8} sm={12} lg={8}>
             <SelectCustomAntd<IProduct>
               controller={{ control, name: "storeIds" }}
               label="Stores"
@@ -450,7 +450,7 @@ export const ProductDetail: React.FC<Props> = ({
         </Row>
 
         <Row>
-          <Col xs={24} md={8}>
+          <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
               controller={{ control, name: "brand" }}
               label="Brand"
@@ -459,7 +459,7 @@ export const ProductDetail: React.FC<Props> = ({
             />
           </Col>
 
-          <Col xs={24} md={8}>
+          <Col xs={24} md={8} sm={12} lg={8}>
             <SelectCustomAntd<IProduct>
               controller={{ control, name: "categoriesIds" }}
               label="Categories"
@@ -475,7 +475,7 @@ export const ProductDetail: React.FC<Props> = ({
             </SelectCustomAntd>
           </Col>
 
-          <Col xs={24} md={8}>
+          <Col xs={24} md={8} sm={12} lg={8}>
             <SelectCustomAntd<IProduct>
               controller={{ control, name: "tagsIds" }}
               label="Tags"
@@ -491,14 +491,14 @@ export const ProductDetail: React.FC<Props> = ({
             </SelectCustomAntd>
           </Col>
 
-          <Col xs={24} md={8}>
+          <Col xs={24} md={8} sm={12} lg={8}>
             <CheckboxCustomAntd<IProduct>
               controller={{ control, name: "isActive" }}
               label="Is Active"
             />
           </Col>
 
-          <Col xs={24} md={8}>
+          <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
               controller={{ control, name: "releaseDate" }}
               label="Release Date"
@@ -508,7 +508,7 @@ export const ProductDetail: React.FC<Props> = ({
             />
           </Col>
 
-          <Col xs={24} md={8}>
+          <Col xs={24} md={8} sm={12} lg={8}>
             <div className={`flex flex-col mt-4`}>
               <label className={`text-sm mr-1`}>QRCode</label>
 
