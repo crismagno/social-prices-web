@@ -414,10 +414,10 @@ export const ProductDetail: React.FC<Props> = ({
             <InputNumberCustomAntd
               controller={{ control, name: "price" }}
               label={
-                <>
+                <div>
                   <span className="mr-2">Price</span>
                   {product && <ProductHistoricPricesButton product={product} />}
-                </>
+                </div>
               }
               formatter={formatterMoney}
               parser={parserMoney}
@@ -539,7 +539,7 @@ export const ProductDetail: React.FC<Props> = ({
               label="Details"
               placeholder={"Enter details"}
               errorMessage={errors.details?.message}
-              rows={2}
+              rows={4}
             />
           </Col>
         </Row>

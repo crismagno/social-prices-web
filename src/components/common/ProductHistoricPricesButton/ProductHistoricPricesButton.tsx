@@ -27,8 +27,8 @@ export const ProductHistoricPricesButton: React.FC<Props> = ({ product }) => {
           size="small"
           icon={<UnorderedListOutlined />}
           onClick={() => setOpen(true)}
-          style={{}}
-        ></Button>
+          style={{ maxWidth: 30, width: 30 }}
+        />
       </Tooltip>
 
       <Modal
