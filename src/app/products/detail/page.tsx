@@ -1,6 +1,16 @@
 "use client";
 
-import { Button, Card, Col, Divider, message, Row, Tooltip } from "antd";
+import {
+  Alert,
+  Button,
+  Card,
+  Col,
+  Divider,
+  message,
+  Modal,
+  Row,
+  Tooltip,
+} from "antd";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import {
   ReadonlyURLSearchParams,
@@ -8,7 +18,7 @@ import {
   useSearchParams,
 } from "next/navigation";
 
-import { EnterOutlined } from "@ant-design/icons";
+import { CheckCircleTwoTone, EnterOutlined } from "@ant-design/icons";
 
 import Layout from "../../../components/template/Layout/Layout";
 import Urls from "../../../shared/common/routes-app/routes-app";
@@ -27,8 +37,21 @@ export default function ProductDetailPage() {
   const isEditMode: boolean = !!productId && !!product;
 
   const handleCreate = async () => {
-    message.success("Your product has been created successfully!");
-    router.back();
+    Modal.confirm({
+      title: "Your product has been created successfully!",
+      icon: <CheckCircleTwoTone />,
+      content: (
+        <Alert
+          message="Please confirm if you want to create a new product"
+          type="success"
+          showIcon
+        />
+      ),
+      okText: "Confirm",
+      cancelText: "Cancel",
+      onOk: () => {},
+      onCancel: () => router.back(),
+    });
   };
 
   const handleUpdate = async () => {
