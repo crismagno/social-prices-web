@@ -1,7 +1,7 @@
 "use client";
 
-import { ISale } from '../../../shared/business/sales/sale.interface';
-import SalesEnum from '../../../shared/business/sales/sales.enum';
+import { ISale } from "../../../shared/business/sales/sale.interface";
+import SalesEnum from "../../../shared/business/sales/sales.enum";
 import {
   IFiltersDownloadSales,
   IGetSalesAnalyticsParams,
@@ -10,17 +10,17 @@ import {
   IGetSalesBalanceResponse,
   IGetSalesSummaryByUserTableStateResponse,
   ISendSaleSummaryLinkRequest,
-} from '../../../shared/business/sales/sales.type';
+} from "../../../shared/business/sales/sales.type";
 import {
   ITableStateRequest,
   ITableStateResponse,
-} from '../../../shared/utils/table/table-state.interface';
-import ServiceMethodsBase from '../service-methods.base';
-import CreateSaleDto from './dto/createSale.dto';
-import UpdateSaleDto from './dto/updateSale.dto';
-import UpdateSalePaymentStatusManualDto
-  from './dto/updateSalePaymentStatusManual.dto';
-import SalesServiceEnum from './sales-service.enum';
+} from "../../../shared/utils/table/table-state.interface";
+import ServiceMethodsBase from "../service-methods.base";
+import CreateSaleDto from "./dto/createSale.dto";
+import UpdateSaleDto from "./dto/updateSale.dto";
+import UpdateSaleCustomerManualDto from "./dto/updateSaleCustomerManual.dto";
+import UpdateSalePaymentStatusManualDto from "./dto/updateSalePaymentStatusManual.dto";
+import SalesServiceEnum from "./sales-service.enum";
 
 export default class SalesServiceMethods extends ServiceMethodsBase {
   public async createManual(createSaleDto: CreateSaleDto): Promise<ISale> {
@@ -226,6 +226,23 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
     const response = await this._fetchAxios.put<ISale>(
       `${this._socialPricesApiV1}${SalesServiceEnum.Methods.UPDATE_PAYMENT_STATUS_MANUAL}`,
       updateSalePaymentStatusManualDto,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async updateSaleCustomerManual(
+    updateSaleCustomerManualDto: UpdateSaleCustomerManualDto
+  ): Promise<ISale> {
+    const response = await this._fetchAxios.put<ISale>(
+      `${this._socialPricesApiV1}${SalesServiceEnum.Methods.UPDATE_SALE_CUSTOMER_MANUAL}`,
+      updateSaleCustomerManualDto,
       {
         headers: {
           "Content-Type": "application/json",

@@ -14,6 +14,7 @@ namespace SalesServiceEnum {
     DOWNLOAD_SALE_SUMMARY_PDF = "/sales/downloadSaleSummaryPdf/:saleId",
     UPDATE_STATUS_MANUAL = "/sales/updateStatusManual",
     UPDATE_PAYMENT_STATUS_MANUAL = "/sales/updatePaymentStatusManual",
+    UPDATE_SALE_CUSTOMER_MANUAL = "/sales/updateSaleCustomerManual",
     UPDATE_SALE_FILES = "/sales/updateSaleFiles",
     SEND_SALE_SUMMARY_LINK = "/sales/sendSaleSummaryLink",
     GET_SALE_BY_SALE_SUMMARY_LINK_TOKEN = "/sales/getSaleBySaleSummaryLinkToken/:token",

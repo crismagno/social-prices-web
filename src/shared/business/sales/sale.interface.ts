@@ -34,6 +34,7 @@ export interface ISale
   uploadFilename: string | null;
   filesUrl: string[];
   noteToCustomer: string | null;
+  previousCustomerIds: string[];
 }
 
 export interface ISaleTotals {

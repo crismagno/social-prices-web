@@ -13,9 +13,19 @@ const containerHeight: number = 260;
 
 interface Props {
   onSelectCustomer?: (customer: ICustomer | null) => void;
+  showNewCustomerOption?: boolean;
+  selectProps?: {
+    className?: string;
+  };
+  style?: any;
 }
 
-export const SelectCustomer: React.FC<Props> = ({ onSelectCustomer }) => {
+export const SelectCustomer: React.FC<Props> = ({
+  onSelectCustomer,
+  showNewCustomerOption = true,
+  selectProps,
+  style,
+}) => {
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<ICustomer> | undefined
   >(
@@ -83,14 +93,18 @@ export const SelectCustomer: React.FC<Props> = ({ onSelectCustomer }) => {
       }}
       listHeight={containerHeight}
       filterOption={false}
-      style={{ width: 250 }}
+      placeholder="Select Customer"
+      style={style ?? { width: 250 }}
+      className={selectProps?.className}
     >
-      <Select.Option key={"NEW_CUSTOMER"} value={null}>
-        <div className="flex items-center">
-          <Avatar src={defaultAvatarImage} size={"small"} className="mr-2" />
-          <span>New Customer</span>
-        </div>
-      </Select.Option>
+      {showNewCustomerOption && (
+        <Select.Option key={"NEW_CUSTOMER"} value={null}>
+          <div className="flex items-center">
+            <Avatar src={defaultAvatarImage} size={"small"} className="mr-2" />
+            <span>New Customer</span>
+          </div>
+        </Select.Option>
+      )}
 
       {customers?.map((customer: ICustomer) => (
         <Select.Option key={customer._id} value={customer._id}>
