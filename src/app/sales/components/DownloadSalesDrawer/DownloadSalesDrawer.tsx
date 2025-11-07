@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Button, Card, Col, Drawer, Row, Select } from "antd";
+import { Button, Card, Col, Drawer, Row, Select, Tag } from "antd";
 import { map } from "lodash";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -13,6 +13,7 @@ import handleClientError from "../../../../components/common/handleClientError/h
 import { LabelBadgeCustomAntd } from "../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
 import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
 import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
+import YesNo from "../../../../components/common/YesNo/YesNo";
 import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
@@ -22,6 +23,7 @@ import { IFiltersDownloadSales } from "../../../../shared/business/sales/sales.t
 import StoresEnum from "../../../../shared/business/stores/stores.enum";
 import { IStore } from "../../../../shared/business/stores/stores.interface";
 import { ITag } from "../../../../shared/business/tags/tags.interface";
+import CommonEnum from "../../../../shared/common/enums/common.enum";
 import TableStateEnum from "../../../../shared/utils/table/table-state.enum";
 
 const formSchema = z.object({
@@ -42,6 +44,7 @@ const formSchema = z.object({
       endDate: z.date().nullable(),
     })
     .nullable(),
+  isActive: z.string().nullable(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -91,6 +94,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
       selectedProductIds: productId ? [productId] : [],
       sortField: SalesEnum.SortField.createdAt,
       sortOrder: TableStateEnum.SortOrder.ascend,
+      isActive: null,
     },
     resolver: zodResolver(formSchema),
   });
@@ -335,6 +339,28 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
                   </Select.Option>
                 )
               )}
+            </SelectCustomAntd>
+          </Col>
+
+          <Col xs={24} sm={12}>
+            <SelectCustomAntd
+              controller={{ control, name: "isActive" }}
+              label="Is Active"
+              errorMessage={errors.sortField?.message}
+              placeholder={"Select a status active"}
+            >
+              <Select.Option key={"BOTH"} value={null}>
+                <Tag>Both</Tag>
+              </Select.Option>
+              {Object.keys(CommonEnum.YesNo).map((option: string) => (
+                <Select.Option key={option} value={option}>
+                  <Tag
+                    color={option === CommonEnum.YesNo.YES ? "green" : "red"}
+                  >
+                    <YesNo isTrue={option === CommonEnum.YesNo.YES} />
+                  </Tag>
+                </Select.Option>
+              ))}
             </SelectCustomAntd>
           </Col>
         </Row>

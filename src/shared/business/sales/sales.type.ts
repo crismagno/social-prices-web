@@ -1,12 +1,13 @@
-import { IRangeDate } from '../../common/interfaces/global.interface';
-import ChartsEnum from '../../utils/charts/charts-enum';
+import CommonEnum from "../../common/enums/common.enum";
+import { IRangeDate } from "../../common/interfaces/global.interface";
+import ChartsEnum from "../../utils/charts/charts-enum";
 import {
   IChartDataPeriodTypeItem,
   IChartDataProductItem,
-} from '../../utils/charts/charts-types';
-import { TTableStateSortOrder } from '../../utils/table/table-state.interface';
-import { IProduct } from '../products/products.interface';
-import SalesEnum from './sales.enum';
+} from "../../utils/charts/charts-types";
+import { TTableStateSortOrder } from "../../utils/table/table-state.interface";
+import { IProduct } from "../products/products.interface";
+import SalesEnum from "./sales.enum";
 
 export interface IGetSalesAnalyticsParams {
   storesIds?: string[];
@@ -103,6 +104,7 @@ export interface IFiltersDownloadSales {
   customerIds: string[];
   sortField: SalesEnum.SortField;
   sortOrder: TTableStateSortOrder;
+  isActive: CommonEnum.YesNo | null;
 }
 
 // #endregion

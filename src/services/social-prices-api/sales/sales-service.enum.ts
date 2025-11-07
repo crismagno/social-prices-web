@@ -7,6 +7,7 @@ namespace SalesServiceEnum {
     CREATE_MANUAL = "/sales/createManual",
     UPDATE_MANUAL = "/sales/updateManual",
     DELETE_MANUAL = "/sales/deleteManual/:saleId",
+    ACTIVATE_MANUAL = "/sales/activateManual/:saleId",
     GET_SALES_ANALYTICS = "/sales/getSalesAnalytics",
     GET_SALES_BALANCE = "/sales/getSalesBalance",
     UPLOAD_SALES = "/sales/uploadSales",

@@ -19,6 +19,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
 import {
+  CheckOutlined,
   DeleteOutlined,
   DownloadOutlined,
   EditOutlined,
@@ -37,6 +38,7 @@ import SelectProducts from "../../../../components/common/SelectProducts/SelectP
 import { StoreNameStatus } from "../../../../components/common/StoreNameStatus/StoreNameStatus";
 import { TagTagsCustomAntd } from "../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import { UploadFilesDrawer } from "../../../../components/common/UploadFilesDrawer/UploadFilesDrawer";
+import YesNo from "../../../../components/common/YesNo/YesNo";
 import TableCustomAntd2 from "../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import useAuthData from "../../../../data/context/auth/useAuthData";
 import useSocketData from "../../../../data/context/socket/useSocketData";
@@ -54,6 +56,7 @@ import SocketsEnum from "../../../../shared/business/sockets/sockets.enum";
 import { IStore } from "../../../../shared/business/stores/stores.interface";
 import TagsEnum from "../../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../../shared/business/tags/tags.interface";
+import CommonEnum from "../../../../shared/common/enums/common.enum";
 import Urls from "../../../../shared/common/routes-app/routes-app";
 import { sortArray } from "../../../../shared/utils/array/functions";
 import DatesEnum from "../../../../shared/utils/dates/dates.enum";
@@ -96,6 +99,7 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
         stores: storeId ? [storeId] : [],
         customerIds: customerId ? [customerId] : [],
         productIds: productId ? [productId] : [],
+        isActive: [true],
       },
     })
   );
@@ -106,6 +110,13 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
   const [isDeletingSale, setIsDeletingSale] = useState<boolean>(false);
 
   const [saleToDelete, setSaleToDelete] = useState<ISale | null>(null);
+
+  const [isVisibleActivateSaleModal, setIsVisibleActivateSaleModal] =
+    useState<boolean>(false);
+
+  const [isActivatingSale, setIsIsActivatingSale] = useState<boolean>(false);
+
+  const [saleToActivate, setSaleToActivate] = useState<ISale | null>(null);
 
   const [isOpenSaleSummaryModal, setIsOpenSaleSummaryModal] =
     useState<boolean>(false);
@@ -182,6 +193,25 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
       setIsDeletingSale(false);
       setSaleToDelete(null);
       setIsVisibleDeleteSaleModal(false);
+    }
+  };
+
+  const handleActivateSale = async (sale: ISale) => {
+    try {
+      setIsIsActivatingSale(true);
+
+      await serviceMethodsInstance.salesServiceMethods.activateManual(sale._id);
+
+      setTableStateRequest({
+        ...tableStateRequest,
+        pagination: { pageSize: 10, skip: 0, current: undefined, total: 0 },
+      });
+    } catch (error: any) {
+      handleClientError(error);
+    } finally {
+      setIsIsActivatingSale(false);
+      setSaleToActivate(null);
+      setIsVisibleActivateSaleModal(false);
     }
   };
 
@@ -342,6 +372,8 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
                   sale.stores
                 )?.customer;
 
+                const isSaleDeleted: boolean = !!sale.softDelete;
+
                 return (
                   <div className="flex flex-row">
                     <div className="mr-2">
@@ -361,22 +393,24 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
                       </Button>
                       <div className="text-xs">{buyer.email}</div>
                     </div>
-                    <div className="flex items-end ml-2">
-                      <UpdateSaleCustomerButton
-                        sale={sale}
-                        onUpdatedSaleCustomer={() => {
-                          setTableStateRequest({
-                            ...tableStateRequest,
-                            pagination: {
-                              pageSize: 10,
-                              skip: 0,
-                              current: undefined,
-                              total: 0,
-                            },
-                          });
-                        }}
-                      />
-                    </div>
+                    {!isSaleDeleted && (
+                      <div className="flex items-end ml-2">
+                        <UpdateSaleCustomerButton
+                          sale={sale}
+                          onUpdatedSaleCustomer={() => {
+                            setTableStateRequest({
+                              ...tableStateRequest,
+                              pagination: {
+                                pageSize: 10,
+                                skip: 0,
+                                current: undefined,
+                                total: 0,
+                              },
+                            });
+                          }}
+                        />
+                      </div>
+                    )}
                   </div>
                 );
               },
@@ -431,6 +465,19 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
                 value: status,
               })),
               render: (_, sale: ISale) => {
+                const isSaleDeleted: boolean = !!sale.softDelete;
+
+                if (isSaleDeleted) {
+                  return (
+                    <Tag
+                      color={SalesEnum.StatusColors[sale.status]}
+                      className="mr-1"
+                    >
+                      {SalesEnum.StatusLabels[sale.status]}
+                    </Tag>
+                  );
+                }
+
                 return (
                   <SelectSalesStatus
                     sale={sale}
@@ -463,6 +510,23 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
                 })
               ),
               render: (_, sale: ISale) => {
+                const isSaleDeleted: boolean = !!sale.softDelete;
+
+                if (isSaleDeleted) {
+                  return (
+                    <>
+                      <Tag
+                        color={SalesEnum.StatusColors[sale.status]}
+                        className="mr-1"
+                      >
+                        {SalesEnum.StatusLabels[sale.status]}
+                      </Tag>
+
+                      <SalesMissingPaymentLabel sale={sale} />
+                    </>
+                  );
+                }
+
                 return (
                   <>
                     <SelectSalesPaymentStatus
@@ -591,43 +655,86 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
               sorter: true,
             },
             {
+              title: "Is Active",
+              dataIndex: "isActive",
+              key: "isActive",
+              align: "center",
+              filters: Object.keys(CommonEnum.YesNo).map((value: string) => ({
+                value: value === CommonEnum.YesNo.YES,
+                text: CommonEnum.YesNoLabels[value as CommonEnum.YesNo],
+              })),
+              render: (_, sale: ISale) => (
+                <Tag color={sale.softDelete ? "red" : "green"}>
+                  <YesNo isTrue={!sale.softDelete} />
+                </Tag>
+              ),
+            },
+            {
               title: "Action",
               dataIndex: "action",
               key: "action",
               align: "center",
               fixed: "right",
-              render: (_, sale: ISale) => (
-                <Button.Group>
-                  <Tooltip title="Edit sale">
-                    <Button
-                      type="success"
-                      onClick={() => handleEditSale(sale)}
-                      icon={<EditOutlined />}
-                    />
-                  </Tooltip>
-                  <Tooltip title="See sale summary">
-                    <Button
-                      type="primary"
-                      onClick={() => {
-                        setSaleSelectedToSummary(sale);
-                        setIsOpenSaleSummaryModal(true);
-                      }}
-                      icon={<EyeOutlined />}
-                    />
-                  </Tooltip>
-                  <Tooltip title="Delete sale">
-                    <Button
-                      loading={saleToDelete?._id === sale._id && isDeletingSale}
-                      type="danger"
-                      icon={<DeleteOutlined />}
-                      onClick={() => {
-                        setSaleToDelete(sale);
-                        setIsVisibleDeleteSaleModal(true);
-                      }}
-                    />
-                  </Tooltip>
-                </Button.Group>
-              ),
+              render: (_, sale: ISale) => {
+                const isSaleDeleted: boolean = !!sale.softDelete;
+
+                return (
+                  <Button.Group>
+                    {!isSaleDeleted && (
+                      <Tooltip title="Edit sale">
+                        <Button
+                          type="success"
+                          onClick={() => handleEditSale(sale)}
+                          icon={<EditOutlined />}
+                        />
+                      </Tooltip>
+                    )}
+
+                    <Tooltip title="See sale summary">
+                      <Button
+                        type="primary"
+                        onClick={() => {
+                          setSaleSelectedToSummary(sale);
+                          setIsOpenSaleSummaryModal(true);
+                        }}
+                        icon={<EyeOutlined />}
+                      />
+                    </Tooltip>
+
+                    {!isSaleDeleted && (
+                      <Tooltip title="Delete sale">
+                        <Button
+                          loading={
+                            saleToDelete?._id === sale._id && isDeletingSale
+                          }
+                          type="danger"
+                          icon={<DeleteOutlined />}
+                          onClick={() => {
+                            setSaleToDelete(sale);
+                            setIsVisibleDeleteSaleModal(true);
+                          }}
+                        />
+                      </Tooltip>
+                    )}
+
+                    {isSaleDeleted && (
+                      <Tooltip title="Activate sale">
+                        <Button
+                          loading={
+                            saleToActivate?._id === sale._id && isActivatingSale
+                          }
+                          type="warning"
+                          onClick={() => {
+                            setSaleToActivate(sale);
+                            setIsVisibleActivateSaleModal(true);
+                          }}
+                          icon={<CheckOutlined />}
+                        />
+                      </Tooltip>
+                    )}
+                  </Button.Group>
+                );
+              },
             },
           ]}
           search={{ placeholder: "Search sales..." }}
@@ -734,6 +841,24 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
         customerId={customerId}
         productId={productId}
       />
+
+      <Modal
+        open={isVisibleActivateSaleModal}
+        title={`Activate Manual Sale`}
+        destroyOnClose
+        onCancel={() => {
+          setSaleToActivate(null);
+          setIsVisibleActivateSaleModal(false);
+        }}
+        onOk={async () => {
+          await handleActivateSale(saleToActivate!);
+        }}
+        okText={"Yes"}
+        cancelText={"No"}
+      >
+        Are you sure activate sale? Sale Number:{" "}
+        <strong>{saleToActivate?.number ?? ""}</strong>
+      </Modal>
     </>
   );
 };
