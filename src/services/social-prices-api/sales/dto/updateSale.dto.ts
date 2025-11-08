@@ -9,6 +9,7 @@ import {
 
 export default class UpdateSaleDto {
   saleId: string = "";
+  isSendCustomerNotifications: boolean = false;
   updatedByUserId: string = "";
   updatedByEmployeeId: string = "";
   buyer: SaleBuyerDto | null = null;

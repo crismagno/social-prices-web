@@ -87,6 +87,7 @@ export class SaleStoreDto {
 
 export default class CreateSaleDto {
   createdByUserId: string = "";
+  isSendCustomerNotifications: boolean = false;
   createdByEmployeeId: string = "";
   buyer: SaleBuyerDto | null = null;
   type: SalesEnum.Type = SalesEnum.Type.MANUAL;

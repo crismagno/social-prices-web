@@ -189,6 +189,7 @@ const formSchema = z.object({
   createdDate: z.string().nullable(),
   numberManual: z.string().nullable(),
   noteToCustomer: z.string().nullable(),
+  isSendCustomerNotifications: z.boolean(),
 });
 
 export type TFormSchema = z.infer<typeof formSchema>;
@@ -223,6 +224,7 @@ const generateFormSchemaDefault = (): TFormSchema => {
     note: null,
     status: SalesEnum.Status.STARTED,
     isCreateQuote: false,
+    isSendCustomerNotifications: false,
     paymentStatus: SalesEnum.PaymentStatus.PENDING,
     tagsIds: [],
     deliveryAt: null,
@@ -464,6 +466,7 @@ export default function CreateSalePage() {
           note: saleById?.note ?? null,
           status: saleById?.status ?? SalesEnum.Status.STARTED,
           isCreateQuote: false,
+          isSendCustomerNotifications: !!saleById?.isSendCustomerNotifications,
           paymentStatus:
             saleById?.paymentStatus ?? SalesEnum.PaymentStatus.PENDING,
           tagsIds: saleById?.tagsIds ?? [],
@@ -952,6 +955,7 @@ export default function CreateSalePage() {
           deliveryType: data.deliveryType as SalesEnum.DeliveryType,
         },
         isCreateQuote: data.isCreateQuote,
+        isSendCustomerNotifications: data.isSendCustomerNotifications,
         note: data.note,
         payments: map(
           data.payments,
@@ -1686,6 +1690,16 @@ export default function CreateSalePage() {
                   divClassName="mt-0"
                   placeholder={"Enter sale number manual"}
                   errorMessage={errors?.numberManual?.message}
+                />
+              </Col>
+            </Row>
+
+            <Row>
+              <Col xs={24}>
+                <CheckboxCustomAntd
+                  controller={{ control, name: "isSendCustomerNotifications" }}
+                  label="Send Customer Notifications"
+                  className="ml-1"
                 />
               </Col>
             </Row>

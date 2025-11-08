@@ -35,6 +35,7 @@ export interface ISale
   filesUrl: string[];
   noteToCustomer: string | null;
   previousCustomerIds: string[];
+  isSendCustomerNotifications: boolean;
 }
 
 export interface ISaleTotals {

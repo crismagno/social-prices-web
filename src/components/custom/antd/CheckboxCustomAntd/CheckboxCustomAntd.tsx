@@ -23,26 +23,26 @@ export function CheckboxCustomAntd<T extends object = any>({
 }: Props<T>) {
   return (
     <div className={`flex flex-col mt-4 mr-5 ${divClassName}`}>
-      <label className={`text-sm ${labelClassName}`} for={controller.name}>
-        {label}
-      </label>
-
-      <Controller
-        control={controller.control}
-        name={controller.name}
-        render={({ field: { onChange, value, name, ref } }) => (
-          <Checkbox
-            id={controller.name}
-            onChange={onChange}
-            name={name}
-            value={value}
-            checked={!!value}
-            ref={ref}
-            {...props}
-          ></Checkbox>
-        )}
-      ></Controller>
-
+      <div>
+        <label className={`text-sm ${labelClassName}`} for={controller.name}>
+          {label}
+        </label>
+        <Controller
+          control={controller.control}
+          name={controller.name}
+          render={({ field: { onChange, value, name, ref } }) => (
+            <Checkbox
+              id={controller.name}
+              onChange={onChange}
+              name={name}
+              value={value}
+              checked={!!value}
+              ref={ref}
+              {...props}
+            ></Checkbox>
+          )}
+        ></Controller>
+      </div>
       {errorMessage && (
         <p role="alert" className="text-sm text-red-500 px-1">
           {errorMessage}
