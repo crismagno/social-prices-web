@@ -6,6 +6,7 @@ import { IPhoneNumber } from "../interfaces/phone-number.interface";
 import { ISoftDeleteEntity } from "../interfaces/soft-delete.interface";
 import { IUpdatedAtEntity } from "../interfaces/updated-at.interface";
 import { IProduct } from "../products/products.interface";
+import IUser from "../users/user.interface";
 import SalesEnum from "./sales.enum";
 
 export interface ISale
@@ -36,6 +37,7 @@ export interface ISale
   noteToCustomer: string | null;
   previousCustomerIds: string[];
   isSendCustomerNotifications: boolean;
+  user?: IUser;
 }
 
 export interface ISaleTotals {
