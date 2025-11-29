@@ -1,3 +1,5 @@
+import { IEmployee } from "./employee.interface";
+
 namespace EmployeesEnum {
   export enum Level {
     ADMIN = "ADMIN",
@@ -55,6 +57,29 @@ namespace EmployeesEnum {
     }
 
     return [];
+  };
+
+  export const allowEmployeeActionByLevel = (
+    myEmployee: IEmployee,
+    otherEmployee: IEmployee
+  ): boolean => {
+    if (!myEmployee || !otherEmployee) {
+      return false;
+    }
+
+    if (myEmployee._id === otherEmployee._id) {
+      return false;
+    }
+
+    if (myEmployee.level === Level.ADMIN) {
+      return true;
+    }
+
+    if (myEmployee.level === Level.MASTER) {
+      return otherEmployee.level === Level.EMPLOYEE;
+    }
+
+    return false;
   };
 }
 

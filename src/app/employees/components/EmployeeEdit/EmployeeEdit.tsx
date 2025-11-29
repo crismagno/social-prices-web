@@ -341,6 +341,9 @@ export const EmployeeEdit: React.FC<Props> = ({
     ? Object.keys(EmployeesEnum.Level)
     : EmployeesEnum.getLevelsByEmployeeLevel(employee?.level!);
 
+  const allowActionByMyEmployeeAndOtherEmployee: boolean =
+    EmployeesEnum.allowEmployeeActionByLevel(employee!, employeeToEdit!);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex justify-center w-full">
@@ -475,9 +478,7 @@ export const EmployeeEdit: React.FC<Props> = ({
             controller={{ control, name: "status" }}
             label="Level"
             errorMessage={errors.status?.message}
-            disabled={
-              isFromProfile || employee?.level !== EmployeesEnum.Level.ADMIN
-            }
+            disabled={isFromProfile || !allowActionByMyEmployeeAndOtherEmployee}
           >
             {Object.keys(EmployeesEnum.Status).map((status: string) => (
               <Select.Option key={status} value={status}>
