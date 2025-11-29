@@ -72,6 +72,7 @@ const formSchema = z.object({
   tagsIds: z.array(z.string()),
   about: z.string().trim().nullable(),
   level: z.string().trim().nonempty("Level is required"),
+  status: z.string().trim().nonempty("Status is required"),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -156,6 +157,7 @@ export const EmployeeEdit: React.FC<Props> = ({
       gender: employeeToEdit?.gender ?? PersonEnum.Gender.OTHER,
       tagsIds: employeeToEdit?.tagsIds ?? [],
       level: employeeToEdit?.level ?? EmployeesEnum.Level.EMPLOYEE,
+      status: employeeToEdit?.status ?? EmployeesEnum.Status.PENDING,
     };
 
     setFormValues(values);
@@ -222,6 +224,7 @@ export const EmployeeEdit: React.FC<Props> = ({
         tagsIds: data.tagsIds,
         level: data.level as EmployeesEnum.Level,
         password: data.password,
+        status: data.status as EmployeesEnum.Status,
       };
 
       for (const property of Object.keys(createEmployeeDto)) {
@@ -293,6 +296,7 @@ export const EmployeeEdit: React.FC<Props> = ({
         employeeId: employeeToEdit._id,
         level: data.level as EmployeesEnum.Level,
         password: data.password,
+        status: data.status as EmployeesEnum.Status,
       };
 
       for (const property of Object.keys(updateEmployeeDto)) {
@@ -460,6 +464,29 @@ export const EmployeeEdit: React.FC<Props> = ({
                   }
                 >
                   {EmployeesEnum.LevelLabels[level as EmployeesEnum.Level]}
+                </Tag>
+              </Select.Option>
+            ))}
+          </SelectCustomAntd>
+        </Col>
+
+        <Col xs={24} md={8}>
+          <SelectCustomAntd<IEmployee>
+            controller={{ control, name: "status" }}
+            label="Level"
+            errorMessage={errors.status?.message}
+            disabled={
+              isFromProfile || employee?.level !== EmployeesEnum.Level.ADMIN
+            }
+          >
+            {Object.keys(EmployeesEnum.Status).map((status: string) => (
+              <Select.Option key={status} value={status}>
+                <Tag
+                  color={
+                    EmployeesEnum.StatusColors[status as EmployeesEnum.Status]
+                  }
+                >
+                  {EmployeesEnum.StatusLabels[status as EmployeesEnum.Status]}
                 </Tag>
               </Select.Option>
             ))}
