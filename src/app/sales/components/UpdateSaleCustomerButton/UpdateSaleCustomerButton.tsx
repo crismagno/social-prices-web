@@ -18,7 +18,7 @@ import { createAddressName } from "../../../../shared/utils/strings/string";
 import { SelectCustomer } from "../../create/components/SelectCustomer/SelectCustomer";
 
 const formSchema = z.object({
-  newCustomerId: z.string(),
+  newCustomerId: z.string().nonempty("New Customer is required!"),
   newAddressUid: z.string().optional().nullable(),
 });
 
