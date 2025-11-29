@@ -185,7 +185,8 @@ export default function ProductsPage() {
                     {filesUrl.map((fileUrl: string) => (
                       <Image
                         key={fileUrl}
-                        width={40}
+                        width={50}
+                        height={50}
                         src={getImageUrl(fileUrl)}
                         alt="mainUrl"
                         className="rounded-full"
