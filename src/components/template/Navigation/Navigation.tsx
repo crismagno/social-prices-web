@@ -39,59 +39,61 @@ const Navigation: React.FC<Props> = ({}) => {
   }
 
   return (
-    <div
-      className="max-h-24 flex flex-row
+    <>
+      <div
+        className="max-h-24 flex flex-row
       shadow-lg shadow-slate-600 dark:shadow-white 
      bg-white dark:bg-gray-800 dark:text-white w-screen overflow-x-auto
       fixed bottom-0 left-0 z-50"
-    >
-      <ul className="flex flex-row grow">
-        <NavigationItem
-          text="Profile"
-          url={Urls.PROFILE}
-          title={getUserName(user)}
-        >
-          <Avatar src={user?.avatar} alt="Image logo" />
-        </NavigationItem>
+      >
+        <ul className="flex flex-row grow lg:max-w-2/5">
+          <NavigationItem
+            text="Profile"
+            url={Urls.PROFILE}
+            title={getUserName(user)}
+          >
+            <Avatar src={user?.avatar} alt="Image logo" />
+          </NavigationItem>
 
-        <NavigationItem icon={IconHome()} text="Home" url={Urls.DASHBOARD} />
+          <NavigationItem icon={IconHome()} text="Home" url={Urls.DASHBOARD} />
 
-        <NavigationItem
-          icon={
-            countNotificationNotSeen
-              ? IconBellAlert("animate-pulse text-yellow-500")
-              : IconBell()
-          }
-          text="Notifications"
-          url={Urls.NOTIFICATIONS}
-          isLoading={isLoadingCountNotificationNotSeen}
-        />
+          <NavigationItem
+            icon={
+              countNotificationNotSeen
+                ? IconBellAlert("animate-pulse text-yellow-500")
+                : IconBell()
+            }
+            text="Notifications"
+            url={Urls.NOTIFICATIONS}
+            isLoading={isLoadingCountNotificationNotSeen}
+          />
 
-        <NavigationItem
-          icon={IconAdjustmentsHorizontal}
-          text="Settings"
-          url={Urls.SETTINGS}
-        />
+          <NavigationItem
+            icon={IconAdjustmentsHorizontal}
+            text="Settings"
+            url={Urls.SETTINGS}
+          />
 
-        <StoresMenu />
+          <StoresMenu />
 
-        <SalesMenu />
+          <SalesMenu />
 
-        <GeneralMenu />
-      </ul>
+          <GeneralMenu />
+        </ul>
 
-      <ul className="flex items-center">
-        <EmployeeProfileButton />
+        <ul className="flex justify-end items-center lg:max-w-2/5">
+          <EmployeeProfileButton />
 
-        <NavigationItem
-          icon={IconLogout}
-          text={"Logout"}
-          onClick={() => setShowLogoutModal(true)}
-          className="
+          <NavigationItem
+            icon={IconLogout}
+            text={"Logout"}
+            onClick={() => setShowLogoutModal(true)}
+            className="
             text-red-600 hover:bg-red-400 hover:text-white ml-2
             dark:text-white dark:hover:bg-slate-700"
-        />
-      </ul>
+          />
+        </ul>
+      </div>
 
       <Modal
         open={showLogoutModal}
@@ -114,7 +116,7 @@ const Navigation: React.FC<Props> = ({}) => {
         </div>
         Are you sure logout?
       </Modal>
-    </div>
+    </>
   );
 };
 
