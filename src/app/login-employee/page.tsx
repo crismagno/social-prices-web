@@ -17,6 +17,7 @@ import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import { ISearchEmployee } from "../../shared/business/employees/employees.types";
 import Urls from "../../shared/common/routes-app/routes-app";
+import ImagesEnum from "../../shared/utils/images/images.enum";
 
 export default function LoginPage() {
   useForceRedirect(Urls.LOGIN_EMPLOYEE);
@@ -112,6 +113,16 @@ export default function LoginPage() {
       )}
 
       <form className="relative flex flex-col justify-center m-10 w-full md:w-1/2 lg:w-1/3">
+        <div className="w-full flex justify-center">
+          <Image
+            src={ImagesEnum.FilesNames.DefaultLogo1Image}
+            alt="logo"
+            width={150}
+            height={150}
+            className="my-5"
+          />
+        </div>
+
         <h1 className="text-xl font-bold text-center">Enter as a Employee</h1>
 
         {!selectedSearchEmployee && (

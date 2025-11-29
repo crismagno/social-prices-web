@@ -13,6 +13,7 @@ import useAuthData from "../../data/context/auth/useAuthData";
 import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
 import LoginEnum from "../../shared/common/enums/login.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
+import ImagesEnum from "../../shared/utils/images/images.enum";
 
 export default function LoginPage() {
   useForceRedirect();
@@ -92,7 +93,16 @@ export default function LoginPage() {
         onSubmit={handleLoginOrCreate}
         className="relative flex flex-col justify-center m-10 w-full md:w-1/2 lg:w-1/3"
       >
-        {/* <Image src={"/assets/images/google-logo.png"} /> */}
+        <div className="w-full flex justify-center">
+          <Image
+            src={ImagesEnum.FilesNames.DefaultLogo1Image}
+            alt="logo"
+            width={150}
+            height={150}
+            className="my-5"
+          />
+        </div>
+
         <h1 className="text-xl font-bold text-center">
           {mode === LoginEnum.Mode.LOGIN
             ? "Enter with your account"
