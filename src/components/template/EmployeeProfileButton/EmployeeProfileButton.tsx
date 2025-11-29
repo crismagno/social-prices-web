@@ -2,19 +2,23 @@
 
 import { useState } from "react";
 
-import { Tag, Tooltip } from "antd";
+import { Avatar, Tag, Tooltip } from "antd";
 
 import { EmployeeEditDrawer } from "../../../app/employees/components/EmployeeEditDrawer/DownloadEmployeesDrawer";
 import useAuthData from "../../../data/context/auth/useAuthData";
 import { IEmployee } from "../../../shared/business/employees/employee.interface";
 import EmployeesEnum from "../../../shared/business/employees/employees.enum";
-import { ImageOrDefault } from "../../common/ImageOrDefault/ImageOrDefault";
+import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
 
 export const EmployeeProfileButton: React.FC = () => {
   const { employee, updateEmployeeSession } = useAuthData();
 
   const [isEmployeeEditDrawerOpen, setIsEmployeeEditDrawerOpen] =
     useState<boolean>(false);
+
+  const [avatar, setAvatar] = useState<string>(
+    employee?.avatar ?? defaultAvatarImage
+  );
 
   if (!employee) {
     return null;
@@ -29,7 +33,11 @@ export const EmployeeProfileButton: React.FC = () => {
     "
         onClick={() => setIsEmployeeEditDrawerOpen(true)}
       >
-        <ImageOrDefault src={employee.avatar} />
+        <Avatar
+          src={avatar}
+          onError={() => setAvatar(defaultAvatarImage) as any}
+          size="large"
+        />
 
         <div className="flex flex-col items-start justify-start ml-3 text-sm">
           <Tooltip title={employee.name} className="cursor-pointer">
