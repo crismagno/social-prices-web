@@ -125,17 +125,18 @@ export const UpdateSaleCustomerButton: React.FC<Props> = ({
               <ImageOrDefault width={100} src={newCustomer?.avatar} />
             </Tooltip>
 
-            <SelectCustomer
-              onSelectCustomer={handleSelectCustomer}
-              showNewCustomerOption={false}
-              style={{ width: 400 }}
-              selectProps={{ className: "mt-5 mb-5" }}
-            />
-            {errors.newCustomerId?.message && (
-              <label className="text-sm text-red-500">
-                {errors.newCustomerId?.message}
-              </label>
-            )}
+            <div className="flex flex-col mt-5 mb-5">
+              <SelectCustomer
+                onSelectCustomer={handleSelectCustomer}
+                showNewCustomerOption={false}
+                style={{ width: 400 }}
+              />
+              {errors.newCustomerId?.message && (
+                <label className="text-sm text-red-500">
+                  {errors.newCustomerId?.message}
+                </label>
+              )}
+            </div>
 
             {newCustomer && (
               <SelectCustomAntd
