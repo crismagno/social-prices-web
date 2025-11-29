@@ -495,6 +495,7 @@ export const ProductDetail: React.FC<Props> = ({
             <CheckboxCustomAntd<IProduct>
               controller={{ control, name: "isActive" }}
               label="Is Active"
+              labelClassName="mr-1"
             />
           </Col>
 
