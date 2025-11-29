@@ -14,6 +14,7 @@ import {
   IconHome,
   IconLogout,
 } from "../../common/icons/icons";
+import { Logo1 } from "../../common/Logo/Logo1";
 import { EmployeeProfileButton } from "../EmployeeProfileButton/EmployeeProfileButton";
 import { GeneralMenu } from "./GeneralMenu/GeneralMenu";
 import NavigationItem from "./NavigationItem";
@@ -46,7 +47,7 @@ const Navigation: React.FC<Props> = ({}) => {
      bg-white dark:bg-gray-800 dark:text-white w-screen overflow-x-auto
       fixed bottom-0 left-0 z-50"
       >
-        <ul className="flex flex-row grow lg:max-w-2/5">
+        <ul className="flex lg:w-5/12">
           <NavigationItem
             text="Profile"
             url={Urls.PROFILE}
@@ -81,7 +82,11 @@ const Navigation: React.FC<Props> = ({}) => {
           <GeneralMenu />
         </ul>
 
-        <ul className="flex justify-end items-center lg:max-w-2/5">
+        <div className="flex flex-grow justify-center items-center">
+          <Logo1 size={50} className="m-0" />
+        </div>
+
+        <ul className="flex justify-end items-center lg:w-5/12">
           <EmployeeProfileButton />
 
           <NavigationItem
