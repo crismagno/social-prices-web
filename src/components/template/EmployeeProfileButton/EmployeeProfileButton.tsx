@@ -9,6 +9,7 @@ import useAuthData from "../../../data/context/auth/useAuthData";
 import { IEmployee } from "../../../shared/business/employees/employee.interface";
 import EmployeesEnum from "../../../shared/business/employees/employees.enum";
 import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
+import { getImageUrl } from "../../../shared/utils/images/url-images";
 
 export const EmployeeProfileButton: React.FC = () => {
   const { employee, updateEmployeeSession } = useAuthData();
@@ -17,7 +18,7 @@ export const EmployeeProfileButton: React.FC = () => {
     useState<boolean>(false);
 
   const [avatar, setAvatar] = useState<string>(
-    employee?.avatar ?? defaultAvatarImage
+    employee?.avatar ? getImageUrl(employee.avatar) : defaultAvatarImage
   );
 
   if (!employee) {
