@@ -11,7 +11,7 @@ import useAuthData from "../../../../data/context/auth/useAuthData";
 import EmployeesEnum from "../../../../shared/business/employees/employees.enum";
 import Urls from "../../../../shared/common/routes-app/routes-app";
 import { IconQuestion } from "../../../common/icons/icons";
-import { getItem, MenuItem } from "../../../utils/navigation/navigation";
+import { getItem, MenuItem } from "../../../utils/navigation/navigation.util";
 import NavigationItem from "../NavigationItem";
 
 interface Props {}

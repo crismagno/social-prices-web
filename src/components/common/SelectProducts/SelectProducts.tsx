@@ -5,8 +5,8 @@ import { filter, includes } from "lodash";
 
 import { useFindProductsByUserTableState } from "../../../app/products/useFindProductsByUserTableState";
 import { IProduct } from "../../../shared/business/products/products.interface";
-import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
-import { getImageUrl } from "../../../shared/utils/images/url-images";
+import { getImageUrl } from "../../../shared/utils/images/images-url";
+import ImagesEnum from "../../../shared/utils/images/images.enum";
 import { createTableState } from "../../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../../shared/utils/table/table-state.interface";
 
@@ -110,7 +110,7 @@ const SelectProducts: React.FC<Props> = ({
                 src={
                   product.mainUrl
                     ? getImageUrl(product.mainUrl)
-                    : defaultAvatarImage
+                    : ImagesEnum.FilesNames.DefaultAvatarImage
                 }
                 size={"small"}
                 className="mr-2"

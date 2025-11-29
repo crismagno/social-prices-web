@@ -18,8 +18,8 @@ import { InputNumberCustomAntd } from "../../../../../components/custom/antd/Inp
 import { TextareaCustomAntd } from "../../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import SalesEnum from "../../../../../shared/business/sales/sales.enum";
 import { IStore } from "../../../../../shared/business/stores/stores.interface";
-import { defaultAvatarImage } from "../../../../../shared/utils/images/files-names";
-import { getImageUrl } from "../../../../../shared/utils/images/url-images";
+import { getImageUrl } from "../../../../../shared/utils/images/images-url";
+import ImagesEnum from "../../../../../shared/utils/images/images.enum";
 import {
   formatterMoney,
   formatToMoneyDecimal,
@@ -132,7 +132,7 @@ export const SelectedProductsList: React.FC<Props> = ({
               ) => {
                 const fileUrl: string = saleStoreProduct.fileUrl
                   ? getImageUrl(saleStoreProduct.fileUrl)
-                  : defaultAvatarImage;
+                  : ImagesEnum.FilesNames.DefaultAvatarImage;
 
                 const quantity: number =
                   saleStores[indexSaleStore].products[indexSaleStoreProduct]
@@ -190,7 +190,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                             onError={() => (
                               <Image
                                 width={30}
-                                src={defaultAvatarImage}
+                                src={ImagesEnum.FilesNames.DefaultAvatarImage}
                                 alt="mainUrl"
                                 className="rounded-full"
                               />

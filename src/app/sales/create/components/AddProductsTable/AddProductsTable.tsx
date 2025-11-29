@@ -27,8 +27,8 @@ import { IStore } from "../../../../../shared/business/stores/stores.interface";
 import TagsEnum from "../../../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../../../shared/business/tags/tags.interface";
 import { sortArray } from "../../../../../shared/utils/array/functions";
-import { defaultAvatarImage } from "../../../../../shared/utils/images/files-names";
-import { getImageUrl } from "../../../../../shared/utils/images/url-images";
+import { getImageUrl } from "../../../../../shared/utils/images/images-url";
+import ImagesEnum from "../../../../../shared/utils/images/images.enum";
 import {
   formatterMoney,
   parserMoney,
@@ -280,7 +280,7 @@ export const AddProductsTable: React.FC<Props> = ({
             render: (filesUrl: string[], product: IProduct) => {
               const fileUrl: string = filesUrl?.length
                 ? getImageUrl(filesUrl[0])
-                : defaultAvatarImage;
+                : ImagesEnum.FilesNames.DefaultAvatarImage;
 
               return (
                 <div className="flex items-center">
@@ -294,7 +294,7 @@ export const AddProductsTable: React.FC<Props> = ({
                         <Image
                           width={50}
                           height={50}
-                          src={defaultAvatarImage}
+                          src={ImagesEnum.FilesNames.DefaultAvatarImage}
                           alt="mainUrl"
                           className="rounded-full"
                         />

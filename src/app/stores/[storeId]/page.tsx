@@ -42,8 +42,8 @@ import StoresEnum from "../../../shared/business/stores/stores.enum";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
-import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
-import { getImageUrl } from "../../../shared/utils/images/url-images";
+import { getImageUrl } from "../../../shared/utils/images/images-url";
+import ImagesEnum from "../../../shared/utils/images/images.enum";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
 import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
 import { SalesChart } from "../../sales/components/SalesChart/SalesChart";
@@ -288,7 +288,11 @@ export default function StorePage() {
           alt="preview image"
           style={{ width: "100%" }}
           preview={false}
-          src={store?.logo ? getImageUrl(store.logo) : defaultAvatarImage}
+          src={
+            store?.logo
+              ? getImageUrl(store.logo)
+              : ImagesEnum.FilesNames.DefaultAvatarImage
+          }
         />
       </Modal>
     </Layout>

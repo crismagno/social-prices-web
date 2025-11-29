@@ -32,8 +32,8 @@ import PersonEnum from "../../shared/business/enums/person.enum";
 import UsersEnum from "../../shared/business/users/users.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
-import { defaultAvatarImage } from "../../shared/utils/images/files-names";
-import { getImageUrl } from "../../shared/utils/images/url-images";
+import { getImageUrl } from "../../shared/utils/images/images-url";
+import ImagesEnum from "../../shared/utils/images/images.enum";
 import { getUserName } from "../../shared/utils/strings/string";
 
 export default function ProfilePage() {
@@ -69,7 +69,11 @@ export default function ProfilePage() {
             alt="preview image"
             style={{ width: "100%" }}
             preview={false}
-            src={user.avatar ? getImageUrl(user.avatar) : defaultAvatarImage}
+            src={
+              user.avatar
+                ? getImageUrl(user.avatar)
+                : ImagesEnum.FilesNames.DefaultAvatarImage
+            }
           />
         </Modal>
 

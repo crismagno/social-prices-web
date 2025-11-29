@@ -1,45 +1,29 @@
-import {
-  Col,
-  Divider,
-  Empty,
-  Image,
-  Row,
-} from 'antd';
-import { find } from 'lodash';
-import moment from 'moment';
+import { Col, Divider, Empty, Image, Row } from "antd";
+import { find } from "lodash";
+import moment from "moment";
 
-import {
-  DeliveryAddressMapButton,
-} from '../../../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton';
-import {
-  ImageOrDefault,
-} from '../../../../../components/common/ImageOrDefault/ImageOrDefault';
-import {
-  TagTagsCustomAntd,
-} from '../../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
-import {
-  ICustomer,
-} from '../../../../../shared/business/customers/customer.interface';
-import AddressEnum from '../../../../../shared/business/enums/address.enum';
-import PersonEnum from '../../../../../shared/business/enums/person.enum';
-import SalesEnum from '../../../../../shared/business/sales/sales.enum';
-import { IStore } from '../../../../../shared/business/stores/stores.interface';
-import { ITag } from '../../../../../shared/business/tags/tags.interface';
-import DatesEnum from '../../../../../shared/utils/dates/dates.enum';
-import {
-  defaultAvatarImage,
-} from '../../../../../shared/utils/images/files-names';
-import { getImageUrl } from '../../../../../shared/utils/images/url-images';
+import { DeliveryAddressMapButton } from "../../../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton";
+import { ImageOrDefault } from "../../../../../components/common/ImageOrDefault/ImageOrDefault";
+import { TagTagsCustomAntd } from "../../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
+import { ICustomer } from "../../../../../shared/business/customers/customer.interface";
+import AddressEnum from "../../../../../shared/business/enums/address.enum";
+import PersonEnum from "../../../../../shared/business/enums/person.enum";
+import SalesEnum from "../../../../../shared/business/sales/sales.enum";
+import { IStore } from "../../../../../shared/business/stores/stores.interface";
+import { ITag } from "../../../../../shared/business/tags/tags.interface";
+import DatesEnum from "../../../../../shared/utils/dates/dates.enum";
+import { getImageUrl } from "../../../../../shared/utils/images/images-url";
+import ImagesEnum from "../../../../../shared/utils/images/images.enum";
 import {
   createAddressName,
   formatToMoneyDecimal,
-} from '../../../../../shared/utils/strings/string';
+} from "../../../../../shared/utils/strings/string";
 import {
   TFormSchema,
   TSaleStoreFormSchema,
   TSaleStoreProductFormSchema,
-} from '../../page';
-import { TSalePaymentFormSchema } from '../SalePayments/SalePayments';
+} from "../../page";
+import { TSalePaymentFormSchema } from "../SalePayments/SalePayments";
 
 interface Props {
   formSchema: TFormSchema;
@@ -98,7 +82,7 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
               ) => {
                 const fileUrl: string = saleStoreProduct.fileUrl
                   ? getImageUrl(saleStoreProduct.fileUrl)
-                  : defaultAvatarImage;
+                  : ImagesEnum.FilesNames.DefaultAvatarImage;
 
                 const quantity: number =
                   saleStores[indexSaleStore].products[indexSaleStoreProduct]
@@ -133,7 +117,7 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
                             onError={() => (
                               <Image
                                 width={30}
-                                src={defaultAvatarImage}
+                                src={ImagesEnum.FilesNames.DefaultAvatarImage}
                                 alt="mainUrl"
                                 className="rounded-full"
                               />

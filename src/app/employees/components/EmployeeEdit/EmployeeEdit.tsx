@@ -56,8 +56,8 @@ import TagsEnum from "../../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../../shared/business/tags/tags.interface";
 import { sortArray } from "../../../../shared/utils/array/functions";
 import DatesEnum from "../../../../shared/utils/dates/dates.enum";
-import { getFileUrl } from "../../../../shared/utils/images/helper";
-import { getImageUrl } from "../../../../shared/utils/images/url-images";
+import { getFileUrl } from "../../../../shared/utils/images/images-helper";
+import { getImageUrl } from "../../../../shared/utils/images/images-url";
 import { useFindTagsByType } from "../../../tags/useFindTagsByType";
 import { useFindEmployeeById } from "../../detail/useFindEmployeeById";
 

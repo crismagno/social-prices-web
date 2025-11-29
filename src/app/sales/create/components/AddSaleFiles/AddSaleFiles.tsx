@@ -10,8 +10,8 @@ import FilesEnum from "../../../../../shared/utils/files/files.enum";
 import {
   getFileUrl,
   isImageFile,
-} from "../../../../../shared/utils/images/helper";
-import { getImageUrl } from "../../../../../shared/utils/images/url-images";
+} from "../../../../../shared/utils/images/images-helper";
+import { getImageUrl } from "../../../../../shared/utils/images/images-url";
 
 interface Props {
   sale: ISale | null;

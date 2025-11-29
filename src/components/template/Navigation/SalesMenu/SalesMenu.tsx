@@ -8,7 +8,7 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 
 import Urls from "../../../../shared/common/routes-app/routes-app";
 import { IconCart } from "../../../common/icons/icons";
-import { getItem, MenuItem } from "../../../utils/navigation/navigation";
+import { getItem, MenuItem } from "../../../utils/navigation/navigation.util";
 import NavigationItem from "../NavigationItem";
 
 interface Props {}

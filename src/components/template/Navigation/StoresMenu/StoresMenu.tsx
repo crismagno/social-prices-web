@@ -13,7 +13,7 @@ import {
 
 import Urls from "../../../../shared/common/routes-app/routes-app";
 import { IconBuildingStoreFront } from "../../../common/icons/icons";
-import { getItem, MenuItem } from "../../../utils/navigation/navigation";
+import { getItem, MenuItem } from "../../../utils/navigation/navigation.util";
 import NavigationItem from "../NavigationItem";
 
 interface Props {}

@@ -15,8 +15,8 @@ import {
 import useAuthData from "../../../data/context/auth/useAuthData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import IUser from "../../../shared/business/users/user.interface";
-import { getBase64 } from "../../../shared/utils/images/helper";
-import { getImageUrl } from "../../../shared/utils/images/url-images";
+import { getBase64 } from "../../../shared/utils/images/images-helper";
+import { getImageUrl } from "../../../shared/utils/images/images-url";
 import handleClientError from "../handleClientError/handleClientError";
 
 interface Props {

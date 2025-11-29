@@ -57,8 +57,8 @@ import CategoriesEnum from "../../../shared/business/categories/categories.enum"
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
-import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
-import { getImageUrl } from "../../../shared/utils/images/url-images";
+import { getImageUrl } from "../../../shared/utils/images/images-url";
+import ImagesEnum from "../../../shared/utils/images/images.enum";
 import { formatToMoneyDecimal } from "../../../shared/utils/strings/string";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
 import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
@@ -383,7 +383,9 @@ export default function ProductPage() {
           style={{ width: "100%" }}
           preview={false}
           src={
-            product?.mainUrl ? getImageUrl(product.mainUrl) : defaultAvatarImage
+            product?.mainUrl
+              ? getImageUrl(product.mainUrl)
+              : ImagesEnum.FilesNames.DefaultAvatarImage
           }
         />
       </Modal>

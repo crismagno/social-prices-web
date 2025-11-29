@@ -8,8 +8,8 @@ import { EmployeeEditDrawer } from "../../../app/employees/components/EmployeeEd
 import useAuthData from "../../../data/context/auth/useAuthData";
 import { IEmployee } from "../../../shared/business/employees/employee.interface";
 import EmployeesEnum from "../../../shared/business/employees/employees.enum";
-import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
-import { getImageUrl } from "../../../shared/utils/images/url-images";
+import { getImageUrl } from "../../../shared/utils/images/images-url";
+import ImagesEnum from "../../../shared/utils/images/images.enum";
 
 export const EmployeeProfileButton: React.FC = () => {
   const { employee, updateEmployeeSession } = useAuthData();
@@ -18,7 +18,9 @@ export const EmployeeProfileButton: React.FC = () => {
     useState<boolean>(false);
 
   const [avatar, setAvatar] = useState<string>(
-    employee?.avatar ? getImageUrl(employee.avatar) : defaultAvatarImage
+    employee?.avatar
+      ? getImageUrl(employee.avatar)
+      : ImagesEnum.FilesNames.DefaultAvatarImage
   );
 
   if (!employee) {
@@ -36,7 +38,9 @@ export const EmployeeProfileButton: React.FC = () => {
       >
         <Avatar
           src={avatar}
-          onError={() => setAvatar(defaultAvatarImage) as any}
+          onError={() =>
+            setAvatar(ImagesEnum.FilesNames.DefaultAvatarImage) as any
+          }
           size="large"
         />
 

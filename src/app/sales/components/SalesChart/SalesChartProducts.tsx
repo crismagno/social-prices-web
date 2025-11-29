@@ -6,7 +6,7 @@ import SelectByQuantityOrTotal from "../../../../components/common/SelectByQuant
 import { IGetSalesAnalyticsResponse } from "../../../../shared/business/sales/sales.type";
 import CommonEnum from "../../../../shared/common/enums/common.enum";
 import { IChartDataProductItem } from "../../../../shared/utils/charts/charts-types";
-import { getImageUrl } from "../../../../shared/utils/images/url-images";
+import { getImageUrl } from "../../../../shared/utils/images/images-url";
 import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
 
 interface Props {

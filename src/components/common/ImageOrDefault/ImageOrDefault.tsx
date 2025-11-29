@@ -1,7 +1,7 @@
 import { Image } from "antd";
 
-import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
-import { getImageUrl } from "../../../shared/utils/images/url-images";
+import { getImageUrl } from "../../../shared/utils/images/images-url";
+import ImagesEnum from "../../../shared/utils/images/images.enum";
 
 interface Props {
   defaultImage?: string;
@@ -13,7 +13,7 @@ interface Props {
 export const ImageOrDefault: React.FC<Props> = ({
   src,
   className = "rounded-full shadow-md",
-  defaultImage = defaultAvatarImage,
+  defaultImage = ImagesEnum.FilesNames.DefaultAvatarImage,
   width = 40,
 }) => {
   return (

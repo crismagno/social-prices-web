@@ -8,7 +8,7 @@ import type { UploadFile } from "antd/es/upload/interface";
 
 import { PlusOutlined } from "@ant-design/icons";
 
-import { getBase64 } from "../../../shared/utils/images/helper";
+import { getBase64 } from "../../../shared/utils/images/images-helper";
 
 interface Props {
   isVisible: boolean;

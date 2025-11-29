@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 
 import { Tooltip } from "antd";
 
-import { defaultAvatarImage } from "../../../shared/utils/images/files-names";
-import { getImageUrl } from "../../../shared/utils/images/url-images";
+import { getImageUrl } from "../../../shared/utils/images/images-url";
+import ImagesEnum from "../../../shared/utils/images/images.enum";
 
 interface Props {
   src?: string | null;
@@ -30,7 +30,8 @@ const Avatar: React.FC<Props> = ({
 
   const [image, setImage] = useState<string>();
 
-  const defaultImageByParam: string = defaultImage ?? defaultAvatarImage;
+  const defaultImageByParam: string =
+    defaultImage ?? ImagesEnum.FilesNames.DefaultAvatarImage;
 
   useEffect(() => {
     let url: string = src ? getImageUrl(src) : defaultImageByParam;

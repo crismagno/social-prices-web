@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { Avatar, Select } from "antd";
 
 import { ICustomer } from "../../../../../shared/business/customers/customer.interface";
-import { defaultAvatarImage } from "../../../../../shared/utils/images/files-names";
-import { getImageUrl } from "../../../../../shared/utils/images/url-images";
+import { getImageUrl } from "../../../../../shared/utils/images/images-url";
+import ImagesEnum from "../../../../../shared/utils/images/images.enum";
 import { createTableState } from "../../../../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../../../../shared/utils/table/table-state.interface";
 import { useFindCustomersByOwnerOfUserTableState } from "../../../../customers/useFindCustomersByOwnerOfUserTableState";
@@ -100,7 +100,11 @@ export const SelectCustomer: React.FC<Props> = ({
       {showNewCustomerOption && (
         <Select.Option key={"NEW_CUSTOMER"} value={null}>
           <div className="flex items-center">
-            <Avatar src={defaultAvatarImage} size={"small"} className="mr-2" />
+            <Avatar
+              src={ImagesEnum.FilesNames.DefaultAvatarImage}
+              size={"small"}
+              className="mr-2"
+            />
             <span>New Customer</span>
           </div>
         </Select.Option>
@@ -113,7 +117,7 @@ export const SelectCustomer: React.FC<Props> = ({
               src={
                 customer.avatar
                   ? getImageUrl(customer.avatar)
-                  : defaultAvatarImage
+                  : ImagesEnum.FilesNames.DefaultAvatarImage
               }
               size={"small"}
               className="mr-2"
