@@ -68,9 +68,7 @@ export const SalesChartListProducts: React.FC<Props> = ({ salesAnalytics }) => {
             <List.Item.Meta
               avatar={<ImageOrDefault src={item.mainUrl} />}
               title={
-                <a
-                  href={Urls.EDIT_PRODUCT.replace(":productId", item.productId)}
-                >
+                <a href={Urls.PRODUCT.replace(":productId", item.productId)}>
                   {item.name}
                 </a>
               }

@@ -80,9 +80,7 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
                     }
                   }}
                   onClickTitleButton={() =>
-                    router.push(
-                      Urls.EDIT_PRODUCT.replace(":productId", productId)
-                    )
+                    router.push(Urls.PRODUCT.replace(":productId", productId))
                   }
                   title={productBalance?.product?.name}
                   subtitle={`Total: ${formatToMoneyDecimal(
