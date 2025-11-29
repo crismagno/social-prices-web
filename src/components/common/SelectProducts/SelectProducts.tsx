@@ -33,6 +33,9 @@ const SelectProducts: React.FC<Props> = ({
     createTableState({
       sort: { field: "createdAt", order: "descend" },
       pagination: { pageSize: 10, skip: 0, current: undefined, total: 0 },
+      filters: selectedProductIds
+        ? { productIds: selectedProductIds }
+        : undefined,
     })
   );
 
