@@ -79,15 +79,17 @@ export default function StoresPage() {
         title="Stores"
         className="h-min-80 mt-5"
         extra={
-          <>
-            <Button
-              type="primary"
-              onClick={handleNewStore}
-              icon={<PlusOutlined />}
-            >
-              New Store
-            </Button>
-          </>
+          !stores.length && (
+            <>
+              <Button
+                type="primary"
+                onClick={handleNewStore}
+                icon={<PlusOutlined />}
+              >
+                New Store
+              </Button>
+            </>
+          )
         }
       >
         <TableCustomAntd2<IStore>
