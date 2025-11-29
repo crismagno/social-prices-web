@@ -9,11 +9,11 @@ import AuthInput from "../../components/common/AuthInput/AuthInput";
 import handleClientError from "../../components/common/handleClientError/handleClientError";
 import { IconUsers } from "../../components/common/icons/icons";
 import Loading from "../../components/common/Loading/Loading";
+import { Logo1 } from "../../components/common/Logo/Logo1";
 import useAuthData from "../../data/context/auth/useAuthData";
 import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
 import LoginEnum from "../../shared/common/enums/login.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
-import ImagesEnum from "../../shared/utils/images/images.enum";
 
 export default function LoginPage() {
   useForceRedirect();
@@ -94,13 +94,7 @@ export default function LoginPage() {
         className="relative flex flex-col justify-center m-10 w-full md:w-1/2 lg:w-1/3"
       >
         <div className="w-full flex justify-center">
-          <Image
-            src={ImagesEnum.FilesNames.DefaultLogo1Image}
-            alt="logo"
-            width={150}
-            height={150}
-            className="my-5"
-          />
+          <Logo1 />
         </div>
 
         <h1 className="text-xl font-bold text-center">
