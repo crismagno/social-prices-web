@@ -288,10 +288,12 @@ export const AddProductsTable: React.FC<Props> = ({
                     <Image
                       key={`${fileUrl}-${Date.now()}`}
                       width={50}
+                      height={50}
                       src={fileUrl}
                       onError={() => (
                         <Image
                           width={50}
+                          height={50}
                           src={defaultAvatarImage}
                           alt="mainUrl"
                           className="rounded-full"
