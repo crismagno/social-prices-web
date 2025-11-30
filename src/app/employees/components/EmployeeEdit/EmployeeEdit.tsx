@@ -476,7 +476,7 @@ export const EmployeeEdit: React.FC<Props> = ({
         <Col xs={24} md={8}>
           <SelectCustomAntd<IEmployee>
             controller={{ control, name: "status" }}
-            label="Level"
+            label="Status"
             errorMessage={errors.status?.message}
             disabled={isFromProfile || !allowActionByMyEmployeeAndOtherEmployee}
           >
