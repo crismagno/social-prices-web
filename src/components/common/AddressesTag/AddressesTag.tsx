@@ -1,6 +1,6 @@
 import { Tag } from "antd";
 
-import { IAddress } from "../../../shared/business/interfaces/address.interface";
+import { IAddress } from "../../../shared/business/shared/address/address.interface";
 import { createAddressName } from "../../../shared/utils/strings/string";
 
 interface Props {

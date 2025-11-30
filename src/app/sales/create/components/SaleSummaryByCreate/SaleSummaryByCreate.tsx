@@ -6,9 +6,9 @@ import { DeliveryAddressMapButton } from "../../../../../components/common/Deliv
 import { ImageOrDefault } from "../../../../../components/common/ImageOrDefault/ImageOrDefault";
 import { TagTagsCustomAntd } from "../../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import { ICustomer } from "../../../../../shared/business/customers/customer.interface";
-import AddressEnum from "../../../../../shared/business/enums/address.enum";
-import PersonEnum from "../../../../../shared/business/enums/person.enum";
 import SalesEnum from "../../../../../shared/business/sales/sales.enum";
+import AddressEnum from "../../../../../shared/business/shared/address/address.enum";
+import PersonEnum from "../../../../../shared/business/shared/person/person.enum";
 import { IStore } from "../../../../../shared/business/stores/stores.interface";
 import { ITag } from "../../../../../shared/business/tags/tags.interface";
 import DatesEnum from "../../../../../shared/utils/dates/dates.enum";

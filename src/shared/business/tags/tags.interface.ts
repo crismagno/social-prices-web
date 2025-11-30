@@ -1,5 +1,5 @@
-import { ICreatedAtEntity } from "../interfaces/created-at.interface";
-import { IUpdatedAtEntity } from "../interfaces/updated-at.interface";
+import { ICreatedAtEntity } from "../shared/global/created-at.interface";
+import { IUpdatedAtEntity } from "../shared/global/updated-at.interface";
 import TagsEnum from "./tags.enum";
 
 export interface ITag extends ICreatedAtEntity, IUpdatedAtEntity {

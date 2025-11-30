@@ -1,12 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import { Tooltip } from 'antd';
+import { Tooltip } from "antd";
 
-import { EnvironmentOutlined } from '@ant-design/icons';
+import { EnvironmentOutlined } from "@ant-design/icons";
 
-import {
-  IAddress,
-} from '../../../shared/business/interfaces/address.interface';
+import { IAddress } from "../../../shared/business/shared/address/address.interface";
 
 interface Props {
   address: IAddress | null;

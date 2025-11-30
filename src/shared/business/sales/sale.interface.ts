@@ -1,11 +1,11 @@
 import { ICustomer } from "../customers/customer.interface";
-import PersonEnum from "../enums/person.enum";
-import { IAddress } from "../interfaces/address.interface";
-import { ICreatedAtEntity } from "../interfaces/created-at.interface";
-import { IPhoneNumber } from "../interfaces/phone-number.interface";
-import { ISoftDeleteEntity } from "../interfaces/soft-delete.interface";
-import { IUpdatedAtEntity } from "../interfaces/updated-at.interface";
 import { IProduct } from "../products/products.interface";
+import { IAddress } from "../shared/address/address.interface";
+import { ICreatedAtEntity } from "../shared/global/created-at.interface";
+import { ISoftDeleteEntity } from "../shared/global/soft-delete.interface";
+import { IUpdatedAtEntity } from "../shared/global/updated-at.interface";
+import PersonEnum from "../shared/person/person.enum";
+import { IPhoneNumber } from "../shared/phone/phone-number.interface";
 import IUser from "../users/user.interface";
 import SalesEnum from "./sales.enum";
 

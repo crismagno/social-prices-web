@@ -58,7 +58,7 @@ import TagsEnum from "../../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../../shared/business/tags/tags.interface";
 import CommonEnum from "../../../../shared/common/enums/common.enum";
 import Urls from "../../../../shared/common/routes-app/routes-app";
-import { sortArray } from "../../../../shared/utils/array/functions";
+import { sortArray } from "../../../../shared/utils/array/array-functions";
 import DatesEnum from "../../../../shared/utils/dates/dates.enum";
 import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
 import { createTableState } from "../../../../shared/utils/table/table-state";

@@ -1,5 +1,5 @@
 import EmployeesEnum from "../../../../shared/business/employees/employees.enum";
-import PersonEnum from "../../../../shared/business/enums/person.enum";
+import PersonEnum from "../../../../shared/business/shared/person/person.enum";
 
 export default class UpdateEmployeeDto {
   employeeId: string = "";

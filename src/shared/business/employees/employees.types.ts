@@ -1,5 +1,5 @@
 import { TTableStateSortOrder } from "../../utils/table/table-state.interface";
-import PersonEnum from "../enums/person.enum";
+import PersonEnum from "../shared/person/person.enum";
 import EmployeesEnum from "./employees.enum";
 
 export interface ISearchEmployee {

@@ -14,7 +14,7 @@ import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCusto
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import CustomersEnum from "../../../../shared/business/customers/customers.enum";
 import { IFiltersDownloadCustomers } from "../../../../shared/business/customers/customers.type";
-import PersonEnum from "../../../../shared/business/enums/person.enum";
+import PersonEnum from "../../../../shared/business/shared/person/person.enum";
 import { ITag } from "../../../../shared/business/tags/tags.interface";
 import TableStateEnum from "../../../../shared/utils/table/table-state.enum";
 

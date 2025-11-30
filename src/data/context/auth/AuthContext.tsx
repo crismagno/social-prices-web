@@ -21,7 +21,7 @@ import {
   IAuthUserEmployee,
 } from "../../../shared/business/auth/auth.types";
 import { IEmployee } from "../../../shared/business/employees/employee.interface";
-import PhoneNumberEnum from "../../../shared/business/enums/phone-number.enum";
+import PhoneNumberEnum from "../../../shared/business/shared/phone/phone-number.enum";
 import IUser from "../../../shared/business/users/user.interface";
 import UsersEnum from "../../../shared/business/users/users.enum";
 import CookiesEnum from "../../../shared/common/cookies/cookies.enum";

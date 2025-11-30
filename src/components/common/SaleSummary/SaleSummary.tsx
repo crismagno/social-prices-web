@@ -3,7 +3,6 @@ import { find } from "lodash";
 import moment from "moment";
 
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
-import PersonEnum from "../../../shared/business/enums/person.enum";
 import { IProduct } from "../../../shared/business/products/products.interface";
 import {
   ISale,
@@ -19,6 +18,7 @@ import {
   getTotalAfterPayment,
   getTotalPayment,
 } from "../../../shared/business/sales/sales.utils";
+import PersonEnum from "../../../shared/business/shared/person/person.enum";
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import { ITag } from "../../../shared/business/tags/tags.interface";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";

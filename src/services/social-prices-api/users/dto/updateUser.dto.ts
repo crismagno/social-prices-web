@@ -1,4 +1,4 @@
-import PersonEnum from "../../../../shared/business/enums/person.enum";
+import PersonEnum from "../../../../shared/business/shared/person/person.enum";
 
 export default class UpdateUserDto {
   name: string = "";

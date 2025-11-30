@@ -18,7 +18,7 @@ import { SelectCustomAntd } from "../../../../../components/custom/antd/SelectCu
 import { TextareaCustomAntd } from "../../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import useAuthData from "../../../../../data/context/auth/useAuthData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/service-methods";
-import PersonEnum from "../../../../../shared/business/enums/person.enum";
+import PersonEnum from "../../../../../shared/business/shared/person/person.enum";
 import IUser from "../../../../../shared/business/users/user.interface";
 import DatesEnum from "../../../../../shared/utils/dates/dates.enum";
 

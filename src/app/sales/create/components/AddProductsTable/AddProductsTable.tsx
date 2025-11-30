@@ -26,7 +26,7 @@ import { IProduct } from "../../../../../shared/business/products/products.inter
 import { IStore } from "../../../../../shared/business/stores/stores.interface";
 import TagsEnum from "../../../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../../../shared/business/tags/tags.interface";
-import { sortArray } from "../../../../../shared/utils/array/functions";
+import { sortArray } from "../../../../../shared/utils/array/array-functions";
 import { getImageUrl } from "../../../../../shared/utils/images/images-url";
 import ImagesEnum from "../../../../../shared/utils/images/images.enum";
 import {

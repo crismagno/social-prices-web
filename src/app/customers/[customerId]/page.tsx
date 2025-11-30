@@ -36,7 +36,7 @@ import {
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
-import PersonEnum from "../../../shared/business/enums/person.enum";
+import PersonEnum from "../../../shared/business/shared/person/person.enum";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";

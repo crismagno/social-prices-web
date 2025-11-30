@@ -28,7 +28,7 @@ import { PhoneNumbersTag } from "../../components/common/PhoneNumbersTag/PhoneNu
 import Layout from "../../components/template/Layout/Layout";
 import useAuthData from "../../data/context/auth/useAuthData";
 import EmployeesEnum from "../../shared/business/employees/employees.enum";
-import PersonEnum from "../../shared/business/enums/person.enum";
+import PersonEnum from "../../shared/business/shared/person/person.enum";
 import UsersEnum from "../../shared/business/users/users.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";

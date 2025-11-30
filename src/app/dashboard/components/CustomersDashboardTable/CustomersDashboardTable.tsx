@@ -8,8 +8,8 @@ import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/Ima
 import { PhoneNumbersTag } from "../../../../components/common/PhoneNumbersTag/PhoneNumbersTag";
 import TableCustomAntd2 from "../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import { ICustomer } from "../../../../shared/business/customers/customer.interface";
-import PersonEnum from "../../../../shared/business/enums/person.enum";
-import { IPhoneNumber } from "../../../../shared/business/interfaces/phone-number.interface";
+import PersonEnum from "../../../../shared/business/shared/person/person.enum";
+import { IPhoneNumber } from "../../../../shared/business/shared/phone/phone-number.interface";
 import DatesEnum from "../../../../shared/utils/dates/dates.enum";
 import { createTableState } from "../../../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../../../shared/utils/table/table-state.interface";

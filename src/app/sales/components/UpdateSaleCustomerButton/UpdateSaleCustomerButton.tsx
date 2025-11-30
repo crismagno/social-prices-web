@@ -12,8 +12,8 @@ import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/Ima
 import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import { ICustomer } from "../../../../shared/business/customers/customer.interface";
-import { IAddress } from "../../../../shared/business/interfaces/address.interface";
 import { ISale } from "../../../../shared/business/sales/sale.interface";
+import { IAddress } from "../../../../shared/business/shared/address/address.interface";
 import { createAddressName } from "../../../../shared/utils/strings/string";
 import { SelectCustomer } from "../../create/components/SelectCustomer/SelectCustomer";
 

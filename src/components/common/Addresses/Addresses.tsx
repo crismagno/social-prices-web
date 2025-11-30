@@ -2,8 +2,8 @@ import { Select, Tooltip } from "antd";
 import { Control, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 
-import AddressEnum from "../../../shared/business/enums/address.enum";
-import { IAddress } from "../../../shared/business/interfaces/address.interface";
+import AddressEnum from "../../../shared/business/shared/address/address.enum";
+import { IAddress } from "../../../shared/business/shared/address/address.interface";
 import citiesMockData from "../../../shared/utils/mock-data/brazil-cities.json";
 import statesMockData from "../../../shared/utils/mock-data/brazil-states.json";
 import countriesMockData from "../../../shared/utils/mock-data/countries.json";

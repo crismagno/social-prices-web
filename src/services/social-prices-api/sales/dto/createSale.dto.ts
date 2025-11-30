@@ -1,7 +1,7 @@
-import PersonEnum from "../../../../shared/business/enums/person.enum";
 import SalesEnum from "../../../../shared/business/sales/sales.enum";
-import { CreateAddressDto } from "../../../../shared/business/shared/dtos/CreateAddress.dto";
+import { CreateAddressDto } from "../../../../shared/business/shared/address/CreateAddress.dto";
 import { CreatePhoneNumberDto } from "../../../../shared/business/shared/dtos/CreatePhoneNumber.dto";
+import PersonEnum from "../../../../shared/business/shared/person/person.enum";
 
 export class SaleStoreProductDiscountDto {
   distributedAmount: number | null = null;

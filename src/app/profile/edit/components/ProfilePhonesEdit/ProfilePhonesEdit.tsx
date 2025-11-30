@@ -17,7 +17,7 @@ import {
 } from "../../../../../components/common/PhoneNumbers/PhoneNumbers";
 import useAuthData from "../../../../../data/context/auth/useAuthData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/service-methods";
-import { IPhoneNumber } from "../../../../../shared/business/interfaces/phone-number.interface";
+import { IPhoneNumber } from "../../../../../shared/business/shared/phone/phone-number.interface";
 import IUser from "../../../../../shared/business/users/user.interface";
 
 const formSchema = z.object({

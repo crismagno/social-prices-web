@@ -2,8 +2,8 @@ import { Select, Tooltip } from "antd";
 import { useFieldArray } from "react-hook-form";
 import { z } from "zod";
 
-import PhoneNumberEnum from "../../../shared/business/enums/phone-number.enum";
-import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number.interface";
+import PhoneNumberEnum from "../../../shared/business/shared/phone/phone-number.enum";
+import { IPhoneNumber } from "../../../shared/business/shared/phone/phone-number.interface";
 import { createPhoneNumberName } from "../../../shared/utils/strings/string";
 import { InputCustomAntd } from "../../custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../custom/antd/SelectCustomAntd/SelectCustomAntd";

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number.interface";
+import { IPhoneNumber } from "../../../shared/business/shared/phone/phone-number.interface";
 import Description from "../Description/Description";
 import { IconPhone } from "../icons/icons";
 import { PhoneNumbersTag } from "../PhoneNumbersTag/PhoneNumbersTag";

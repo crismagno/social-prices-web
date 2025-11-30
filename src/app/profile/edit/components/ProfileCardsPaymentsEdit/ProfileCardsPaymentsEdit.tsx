@@ -22,8 +22,8 @@ import {
 } from "../../../../../components/common/icons/icons";
 import useAuthData from "../../../../../data/context/auth/useAuthData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/service-methods";
-import PhoneNumberEnum from "../../../../../shared/business/enums/phone-number.enum";
-import { IPhoneNumber } from "../../../../../shared/business/interfaces/phone-number.interface";
+import PhoneNumberEnum from "../../../../../shared/business/shared/phone/phone-number.enum";
+import { IPhoneNumber } from "../../../../../shared/business/shared/phone/phone-number.interface";
 import IUser from "../../../../../shared/business/users/user.interface";
 import { createPhoneNumberName } from "../../../../../shared/utils/strings/string";
 

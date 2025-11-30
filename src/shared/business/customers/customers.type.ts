@@ -1,4 +1,4 @@
-import PersonEnum from "../enums/person.enum";
+import PersonEnum from "../shared/person/person.enum";
 
 export interface ICustomerFileUploadTemplateRow {
   rowNumber: number;

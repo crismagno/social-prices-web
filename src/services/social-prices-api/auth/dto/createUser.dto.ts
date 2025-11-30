@@ -1,4 +1,4 @@
-import { IPhoneNumber } from "../../../../shared/business/interfaces/phone-number.interface";
+import { IPhoneNumber } from "../../../../shared/business/shared/phone/phone-number.interface";
 import UsersEnum from "../../../../shared/business/users/users.enum";
 
 export default class CreateUserDto {

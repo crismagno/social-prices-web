@@ -48,13 +48,13 @@ import UpdateEmployeeDto from "../../../../services/social-prices-api/employees/
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import { IEmployee } from "../../../../shared/business/employees/employee.interface";
 import EmployeesEnum from "../../../../shared/business/employees/employees.enum";
-import AddressEnum from "../../../../shared/business/enums/address.enum";
-import PersonEnum from "../../../../shared/business/enums/person.enum";
-import { IAddress } from "../../../../shared/business/interfaces/address.interface";
-import { IPhoneNumber } from "../../../../shared/business/interfaces/phone-number.interface";
+import AddressEnum from "../../../../shared/business/shared/address/address.enum";
+import { IAddress } from "../../../../shared/business/shared/address/address.interface";
+import PersonEnum from "../../../../shared/business/shared/person/person.enum";
+import { IPhoneNumber } from "../../../../shared/business/shared/phone/phone-number.interface";
 import TagsEnum from "../../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../../shared/business/tags/tags.interface";
-import { sortArray } from "../../../../shared/utils/array/functions";
+import { sortArray } from "../../../../shared/utils/array/array-functions";
 import DatesEnum from "../../../../shared/utils/dates/dates.enum";
 import { getFileUrl } from "../../../../shared/utils/images/images-helper";
 import { getImageUrl } from "../../../../shared/utils/images/images-url";

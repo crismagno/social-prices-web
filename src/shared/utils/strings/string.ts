@@ -1,7 +1,7 @@
-import AddressEnum from "../../business/enums/address.enum";
-import PhoneNumberEnum from "../../business/enums/phone-number.enum";
-import { IAddress } from "../../business/interfaces/address.interface";
-import { IPhoneNumber } from "../../business/interfaces/phone-number.interface";
+import AddressEnum from "../../business/shared/address/address.enum";
+import { IAddress } from "../../business/shared/address/address.interface";
+import PhoneNumberEnum from "../../business/shared/phone/phone-number.enum";
+import { IPhoneNumber } from "../../business/shared/phone/phone-number.interface";
 import IUser from "../../business/users/user.interface";
 
 export const createComma = (str: string): string =>

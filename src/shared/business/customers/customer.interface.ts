@@ -1,8 +1,8 @@
-import PersonEnum from "../enums/person.enum";
-import { IAddress } from "../interfaces/address.interface";
-import { ICreatedAtEntity } from "../interfaces/created-at.interface";
-import { IPhoneNumber } from "../interfaces/phone-number.interface";
-import { IUpdatedAtEntity } from "../interfaces/updated-at.interface";
+import { IAddress } from "../shared/address/address.interface";
+import { ICreatedAtEntity } from "../shared/global/created-at.interface";
+import { IUpdatedAtEntity } from "../shared/global/updated-at.interface";
+import PersonEnum from "../shared/person/person.enum";
+import { IPhoneNumber } from "../shared/phone/phone-number.interface";
 
 export interface ICustomer extends ICreatedAtEntity, IUpdatedAtEntity {
   readonly _id: string;

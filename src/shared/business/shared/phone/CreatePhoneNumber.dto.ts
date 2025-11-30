@@ -1,4 +1,4 @@
-import PhoneNumberEnum from "../../enums/phone-number.enum";
+import PhoneNumberEnum from "../phone/phone-number.enum";
 
 export class CreatePhoneNumberDto {
   uid: string = "";

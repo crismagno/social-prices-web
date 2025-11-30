@@ -48,7 +48,7 @@ import { IProduct } from "../../../../shared/business/products/products.interfac
 import { IStore } from "../../../../shared/business/stores/stores.interface";
 import TagsEnum from "../../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../../shared/business/tags/tags.interface";
-import { sortArray } from "../../../../shared/utils/array/functions";
+import { sortArray } from "../../../../shared/utils/array/array-functions";
 import DatesEnum from "../../../../shared/utils/dates/dates.enum";
 import { getFileUrl } from "../../../../shared/utils/images/images-helper";
 import { getImageUrl } from "../../../../shared/utils/images/images-url";

@@ -57,9 +57,9 @@ import CreateStoreDto from "../../../services/social-prices-api/stores/dto/creat
 import UpdateStoreDto from "../../../services/social-prices-api/stores/dto/updateStore.dto";
 import CategoriesEnum from "../../../shared/business/categories/categories.enum";
 import { ICategory } from "../../../shared/business/categories/categories.interface";
-import AddressEnum from "../../../shared/business/enums/address.enum";
-import { IAddress } from "../../../shared/business/interfaces/address.interface";
-import { IPhoneNumber } from "../../../shared/business/interfaces/phone-number.interface";
+import AddressEnum from "../../../shared/business/shared/address/address.enum";
+import { IAddress } from "../../../shared/business/shared/address/address.interface";
+import { IPhoneNumber } from "../../../shared/business/shared/phone/phone-number.interface";
 import StoresEnum from "../../../shared/business/stores/stores.enum";
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import TagsEnum from "../../../shared/business/tags/tags.enum";

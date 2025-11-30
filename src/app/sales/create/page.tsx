@@ -75,10 +75,6 @@ import UpdateSaleDto from "../../../services/social-prices-api/sales/dto/updateS
 import UpdateSaleFilesDto from "../../../services/social-prices-api/sales/dto/updateSaleFiles.dto";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
-import AddressEnum from "../../../shared/business/enums/address.enum";
-import PersonEnum from "../../../shared/business/enums/person.enum";
-import PhoneNumberEnum from "../../../shared/business/enums/phone-number.enum";
-import { IAddress } from "../../../shared/business/interfaces/address.interface";
 import { IProduct } from "../../../shared/business/products/products.interface";
 import {
   ISale,
@@ -86,12 +82,16 @@ import {
   ISaleStoreProduct,
 } from "../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../shared/business/sales/sales.enum";
-import { CreateAddressDto } from "../../../shared/business/shared/dtos/CreateAddress.dto";
+import AddressEnum from "../../../shared/business/shared/address/address.enum";
+import { IAddress } from "../../../shared/business/shared/address/address.interface";
+import { CreateAddressDto } from "../../../shared/business/shared/address/CreateAddress.dto";
+import PersonEnum from "../../../shared/business/shared/person/person.enum";
+import PhoneNumberEnum from "../../../shared/business/shared/phone/phone-number.enum";
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../shared/business/tags/tags.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
-import { sortArray } from "../../../shared/utils/array/functions";
+import { sortArray } from "../../../shared/utils/array/array-functions";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import {
   ICityMockData,

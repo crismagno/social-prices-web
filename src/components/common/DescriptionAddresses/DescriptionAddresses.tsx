@@ -1,6 +1,6 @@
 import React from "react";
 
-import { IAddress } from "../../../shared/business/interfaces/address.interface";
+import { IAddress } from "../../../shared/business/shared/address/address.interface";
 import { AddressesTag } from "../AddressesTag/AddressesTag";
 import { IconQuestion } from "../icons/icons";
 
