@@ -45,6 +45,7 @@ const Urls = {
     "/sales/create?pid=:productId&sid=:storeId",
   SALES_CREATE_BY_PRODUCT_AND_CUSTOMER:
     "/sales/create?pid=:productId&cid=:customerId",
+  SALE: "/sales/:saleId",
 
   // categories
   CATEGORIES: "/categories",

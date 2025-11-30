@@ -40,7 +40,7 @@ interface Props {
 }
 
 export const SaleSummary: React.FC<Props> = ({ sale, stores, tags }) => {
-  let saleStores: ISaleStore[] = sale?.stores ?? [];
+  const saleStores: ISaleStore[] = sale?.stores ?? [];
 
   const customer: ICustomer | undefined = sale?.stores?.[0].customer;
 

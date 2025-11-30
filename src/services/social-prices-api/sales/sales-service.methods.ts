@@ -70,6 +70,25 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
+  public async findFilledByIdOrFail(saleId: string): Promise<ISale | null> {
+    const response = await this._fetchAxios.get<ISale | null>(
+      `${
+        this._socialPricesApiV1
+      }${SalesServiceEnum.Methods.FIND_FILLED_BY_ID_OR_FAIL.replace(
+        ":saleId",
+        saleId
+      )}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
   public async findByUserTableState(
     tableState?: ITableStateRequest<ISale>
   ): Promise<ITableStateResponse<ISale[]>> {

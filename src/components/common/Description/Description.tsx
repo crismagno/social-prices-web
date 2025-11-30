@@ -5,6 +5,7 @@ interface Props {
   description?: any;
   className?: string;
   leftIcon?: any;
+  containerClassName?: string;
 }
 
 const Description: React.FC<Props> = ({
@@ -12,9 +13,10 @@ const Description: React.FC<Props> = ({
   description,
   className,
   leftIcon,
+  containerClassName = "mt-4",
 }) => {
   return (
-    <div className="flex items-start mt-4 ">
+    <div className={`flex items-start ${containerClassName}`}>
       {leftIcon && <span className="mr-3">{leftIcon}</span>}
       <div className={`flex flex-col ${className}`}>
         <label className="">{label}</label>

@@ -50,7 +50,7 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
   totalPayment,
   totalAfterPayment,
 }) => {
-  let saleStores: TSaleStoreFormSchema[] = formSchema.saleStores;
+  const saleStores: TSaleStoreFormSchema[] = formSchema.saleStores;
 
   const customerAddress = formSchema.customer.address;
 

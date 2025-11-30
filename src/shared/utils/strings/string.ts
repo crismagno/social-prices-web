@@ -53,22 +53,7 @@ export const createAddressName = (address: IAddress | any): string => {
   }
 
   if (address.types?.length) {
-    const typesToString = address.types.reduce(
-      (acc: string, curr: AddressEnum.Type, index: number) => {
-        const lastIndexElement: number = address.types.length - 1;
-
-        if (index !== lastIndexElement) {
-          acc += `${AddressEnum.TypesLabels[curr]}, `;
-        } else if (index === lastIndexElement) {
-          acc += `${AddressEnum.TypesLabels[curr]}`;
-        }
-
-        return acc;
-      },
-      ""
-    );
-
-    addressName += ` (${typesToString})`;
+    addressName += ` (${addressTypesToString(address)})`;
   }
 
   return addressName;
@@ -112,3 +97,21 @@ export const formatToMoneyDecimal = (
   value: number,
   decimal: number = 2
 ): string => `R$ ${value?.toFixed(decimal) ?? 0}`;
+
+export const addressTypesToString = (address: IAddress): string =>
+  address?.types?.length
+    ? address.types.reduce(
+        (acc: string, curr: AddressEnum.Type, index: number) => {
+          const lastIndexElement: number = address.types.length - 1;
+
+          if (index !== lastIndexElement) {
+            acc += `${AddressEnum.TypesLabels[curr]}, `;
+          } else if (index === lastIndexElement) {
+            acc += `${AddressEnum.TypesLabels[curr]}`;
+          }
+
+          return acc;
+        },
+        ""
+      )
+    : "";

@@ -23,6 +23,7 @@ import {
   DeleteOutlined,
   DownloadOutlined,
   EditOutlined,
+  EnterOutlined,
   EyeOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
@@ -689,6 +690,16 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
                         />
                       </Tooltip>
                     )}
+
+                    <Tooltip title="Go to sale">
+                      <Button
+                        type="default"
+                        onClick={() =>
+                          router.push(Urls.SALE.replace(":saleId", sale._id))
+                        }
+                        icon={<EnterOutlined />}
+                      />
+                    </Tooltip>
 
                     <Tooltip title="See sale summary">
                       <Button
