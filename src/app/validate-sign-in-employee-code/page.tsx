@@ -9,6 +9,7 @@ import Avatar from "../../components/common/Avatar/Avatar";
 import ButtonCommon from "../../components/common/ButtonCommon/ButtonCommon";
 import handleClientError from "../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../components/common/HrCustom/HrCustom";
+import { Logo1 } from "../../components/common/Logo/Logo1";
 import useAuthData from "../../data/context/auth/useAuthData";
 import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
 import Urls from "../../shared/common/routes-app/routes-app";
@@ -55,9 +56,11 @@ export default function ValidateSignInEmployeeCodePage() {
   return (
     <form
       onSubmit={handleValidateSignInCode}
-      className="h-screen w-screen flex flex-col justify-center items-center 
+      className="h-screen w-screen flex flex-col justify-between items-center 
         bg-gradient-to-r from-green-100 to-slate-200"
     >
+      <div />
+
       <div className="flex flex-col justify-center items-center lg:w-1/4 md:w-1/2">
         <div
           className="flex flex-col justify-center items-center w-full h-full
@@ -111,6 +114,10 @@ export default function ValidateSignInEmployeeCodePage() {
           Go to login
         </ButtonCommon>
       </div>
+
+      <footer>
+        <Logo1 size={50} />
+      </footer>
     </form>
   );
 }

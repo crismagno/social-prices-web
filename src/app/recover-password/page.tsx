@@ -10,6 +10,7 @@ import Avatar from "../../components/common/Avatar/Avatar";
 import ButtonCommon from "../../components/common/ButtonCommon/ButtonCommon";
 import HrCustom from "../../components/common/HrCustom/HrCustom";
 import Loading from "../../components/common/Loading/Loading";
+import { Logo1 } from "../../components/common/Logo/Logo1";
 import useAuthData from "../../data/context/auth/useAuthData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 
@@ -84,9 +85,11 @@ export default function RecoverPasswordPage() {
 
   return (
     <div
-      className="h-screen w-screen flex flex-col justify-center items-center 
+      className="h-screen w-screen flex flex-col justify-between items-center 
         bg-gradient-to-r from-blue-100 to-slate-200"
     >
+      <div />
+
       <div className="flex flex-col justify-center items-center lg:w-1/4 md:w-1/2">
         <div
           className="flex flex-col justify-center items-center 
@@ -173,6 +176,10 @@ export default function RecoverPasswordPage() {
           Go Back
         </ButtonCommon>
       </div>
+
+      <footer>
+        <Logo1 size={50} />
+      </footer>
     </div>
   );
 }
