@@ -56,6 +56,7 @@ const Urls = {
   EMPLOYEES: "/employees",
   NEW_EMPLOYEE: "/employees/detail",
   EDIT_EMPLOYEE: "/employees/detail?empid=:employeeId",
+  EMPLOYEE: "/employees/:employeeId",
 
   // download
   DOWNLOAD_SALE_SUMMARY: "/download/sales/summary?i=:tokenId",

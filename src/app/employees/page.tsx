@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import {
   DownloadOutlined,
   EditOutlined,
+  EnterOutlined,
   PlusOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
@@ -277,6 +278,18 @@ export default function EmployeesPage() {
                           )
                         }
                         icon={<EditOutlined />}
+                      />
+                    </Tooltip>
+
+                    <Tooltip title="Go to employee">
+                      <Button
+                        type="default"
+                        onClick={() =>
+                          router.push(
+                            Urls.EMPLOYEE.replace(":employeeId", employee._id)
+                          )
+                        }
+                        icon={<EnterOutlined />}
                       />
                     </Tooltip>
                   </Button.Group>
