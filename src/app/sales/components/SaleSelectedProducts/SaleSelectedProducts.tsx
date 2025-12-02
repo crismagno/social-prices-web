@@ -1,0 +1,184 @@
+import { Card, Col, Empty, Row, Tooltip } from "antd";
+
+import { QuestionCircleTwoTone } from "@ant-design/icons";
+
+import { ICustomer } from "../../../../shared/business/customers/customer.interface";
+import {
+  ISale,
+  ISaleBuyer,
+} from "../../../../shared/business/sales/sale.interface";
+import SalesEnum from "../../../../shared/business/sales/sales.enum";
+import {
+  getQuantity,
+  getTotalAfterDiscount,
+} from "../../../../shared/business/sales/sales.utils";
+import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
+import { SaleStoresProducts } from "./SaleStoresProducts";
+
+interface Props {
+  sale: ISale;
+}
+
+export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
+  const customer: ICustomer | undefined = sale?.stores?.[0].customer;
+
+  const buyer: ISaleBuyer | null = sale?.buyer ?? null;
+
+  if (!sale || !customer || !buyer) {
+    return <Empty />;
+  }
+
+  const quantityTotal = getQuantity(sale);
+
+  const totalAfterDiscount: number = getTotalAfterDiscount(sale);
+
+  return (
+    <Card
+      title={
+        <div className="flex justify-between">
+          <div className="flex items-center">
+            <label className="mr-2">Selected Products</label>
+
+            <Tooltip title="Here you can see what products has been selected for the sale.">
+              <QuestionCircleTwoTone />
+            </Tooltip>
+          </div>
+        </div>
+      }
+    >
+      <div style={{ maxHeight: 700 }} className="overflow-auto">
+        <SaleStoresProducts sale={sale} />
+      </div>
+
+      {/* Summary totals */}
+      <div className="mt-5">
+        <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
+          <Col xs={8}>SubTotal:</Col>
+
+          <Col xs={10}></Col>
+
+          <Col xs={6}>
+            <Tooltip title="Sum all prices products">
+              {formatToMoneyDecimal(sale.totals.subtotalAmount)}
+            </Tooltip>
+          </Col>
+        </Row>
+
+        {/* Discount */}
+        <Row className="border-b px-4 border-slate-100 p-2">
+          <Col xs={8}>
+            <label className="font-semibold mr-2">Discount:</label>
+          </Col>
+
+          <Col xs={10}></Col>
+
+          <Col xs={6}>
+            <Tooltip title="Discount amount">
+              -{" "}
+              {formatToMoneyDecimal(
+                sale.totals.discount
+                  ? sale.totals.discount.distributed.amount
+                  : 0
+              )}
+            </Tooltip>
+          </Col>
+
+          <Col xs={24} className="py-2">
+            <label className="font-semibold">Note: </label>
+
+            {sale.totals.discount && (
+              <Tooltip title={sale.totals.discount.distributed.note}>
+                {sale.totals.discount.distributed.note}
+              </Tooltip>
+            )}
+          </Col>
+        </Row>
+
+        {/* Total Discount */}
+        <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
+          <Col xs={8}>Total After Discount:</Col>
+
+          <Col xs={10}></Col>
+
+          <Col xs={6}>
+            <Tooltip title="Sum total after all discounts">
+              - {formatToMoneyDecimal(totalAfterDiscount)}
+            </Tooltip>
+          </Col>
+        </Row>
+
+        {/* Shipping */}
+        {sale.header.deliveryType === SalesEnum.DeliveryType.DELIVERY && (
+          <Row className="border-b px-4 border-slate-100 p-2">
+            <Col xs={8}>
+              <label className="font-semibold mr-2">Shipping:</label>
+            </Col>
+
+            <Col xs={10}></Col>
+
+            <Col xs={6}>
+              <Tooltip title="Shipping amount">
+                {formatToMoneyDecimal(
+                  sale.totals.shipping ? sale.totals.shipping.amount : 0
+                )}
+              </Tooltip>
+            </Col>
+
+            <Col xs={24}>
+              <label className="font-semibold">Note: </label>
+
+              {sale.totals.shipping && (
+                <Tooltip title={sale.totals.shipping.note}>
+                  {sale.totals.shipping.note}
+                </Tooltip>
+              )}
+            </Col>
+          </Row>
+        )}
+
+        {/* Tax */}
+        <Row className="border-b px-4 border-slate-100 p-2">
+          <Col xs={8}>
+            <label className="font-semibold mr-2">Tax:</label>
+          </Col>
+
+          <Col xs={10}></Col>
+
+          <Col xs={6}>
+            <Tooltip title="Tax amount">
+              {formatToMoneyDecimal(
+                sale.totals.tax ? sale.totals.tax.amount : 0
+              )}
+            </Tooltip>
+          </Col>
+
+          <Col xs={24}>
+            <label className="font-semibold">Note: </label>
+
+            {sale.totals.tax && (
+              <Tooltip title={sale.totals.tax.note}>
+                {sale.totals.tax.note}
+              </Tooltip>
+            )}
+          </Col>
+        </Row>
+
+        {/* Total */}
+        <Row className="p-2 px-4 bg-emerald-50 text-black font-bold">
+          <Col xs={8}></Col>
+
+          <Col xs={10}>
+            <Tooltip title="Quantity products selected">
+              Qty: {quantityTotal}
+            </Tooltip>
+          </Col>
+          <Col xs={6}>
+            <Tooltip title="Sum all prices products">
+              Total: {formatToMoneyDecimal(sale.totals.totalFinalAmount)}
+            </Tooltip>
+          </Col>
+        </Row>
+      </div>
+    </Card>
+  );
+};

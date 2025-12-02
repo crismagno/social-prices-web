@@ -27,9 +27,10 @@ import {
 
 interface Props {
   sale: ISale;
+  title?: any;
 }
 
-export const SalePaymentsReadOnly: React.FC<Props> = ({ sale }) => {
+export const SalePaymentsReadOnly: React.FC<Props> = ({ sale, title }) => {
   const totalFinal: number = sale.totals.totalFinalAmount;
 
   const totalPayment: number = getTotalPayment(sale);
@@ -39,11 +40,15 @@ export const SalePaymentsReadOnly: React.FC<Props> = ({ sale }) => {
   return (
     <Card
       title={
-        <div className="flex justify-between">
-          <div>
-            <label className="mr-2">Sale Payments: {sale.number}</label>
+        title ? (
+          title
+        ) : (
+          <div className="flex justify-between">
+            <div>
+              <label className="mr-2">Sale Payments: {sale.number}</label>
+            </div>
           </div>
-        </div>
+        )
       }
     >
       <ContainerTitle

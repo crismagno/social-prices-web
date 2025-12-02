@@ -8,7 +8,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useParams, useRouter } from "next/navigation";
 
-import { TableOutlined } from "@ant-design/icons";
+import { QuestionCircleTwoTone, TableOutlined } from "@ant-design/icons";
 
 import { DeliveryAddressMapButton } from "../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton";
 import Description from "../../../components/common/Description/Description";
@@ -29,6 +29,8 @@ import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { addressTypesToString } from "../../../shared/utils/strings/string";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
+import { SalePaymentsReadOnly } from "../components/SalePaymentsReadOnly/SalePaymentsReadOnly";
+import { SaleSelectedProducts } from "../components/SaleSelectedProducts/SaleSelectedProducts";
 import { useFindSaleFilledByIdOrFail } from "../useFindSaleFilledByIdOrFail";
 
 export default function SalePage() {
@@ -213,7 +215,7 @@ export default function SalePage() {
             }
             className="h-min-80"
           >
-            <Row gutter={[8, 8]}>
+            <Row gutter={[8, 8]} className="pb-2">
               <Col xs={24} md={8}>
                 <Description
                   containerClassName="mt-0"
@@ -272,83 +274,28 @@ export default function SalePage() {
       </Row>
 
       <Row gutter={[8, 8]} className="mt-2">
-        {/* Select Products */}
-        {/* <Col xs={24} md={12}>
-          <Card
+        {/* Selected Products */}
+        <Col xs={24} md={12}>
+          <SaleSelectedProducts sale={sale} />
+        </Col>
+
+        {/* Payment */}
+        <Col xs={24} md={12}>
+          <SalePaymentsReadOnly
+            sale={sale}
             title={
-              <div className="flex justify-between">
-                <div className="flex items-center">
-                  <label className="mr-2">Select Products</label>
-
-                  <Tooltip
-                    title="Here you can select what stores and products will be on sale, note: only will 
-                  show products available in stores selected"
-                  >
-                    <QuestionCircleTwoTone />
-                  </Tooltip>
-                </div>
-
-                <span className="flex">
-                  <label className="mr-2">Select Stores</label>
-                  <SelectCustomAntd
-                    allowClear
-                    controller={{ control, name: "selectedStoreIds" }}
-                    errorMessage={errors.selectedStoreIds?.message}
-                    placeholder={"Select stores"}
-                    onClear={handleRemoveAllProduct}
-                    onDeselect={handleRemoveAllProductByStore}
-                    mode="multiple"
-                    divClassName="mt-0"
-                    style={{ width: 300 }}
-                  >
-                    {stores.map((store: IStore) => (
-                      <Select.Option key={store._id} value={store._id}>
-                        <StoreNameStatus store={store} />
-                      </Select.Option>
-                    ))}
-                  </SelectCustomAntd>
-                </span>
+              <div className="flex">
+                <label className="mr-2">Payment</label>
+                <Tooltip title="Here you can see sale payments information">
+                  <QuestionCircleTwoTone />
+                </Tooltip>
               </div>
             }
-          >
-            <AddProductsTable
-              selectedStoreIds={watch("selectedStoreIds")}
-              stores={stores}
-              onAddProductToSale={handleAddProductToSale}
-            />
-          </Card>
-        </Col> */}
-
-        {/* Selected Products */}
-        {/* <Col xs={24} md={12}>
-          <SelectedProductsList
-            stores={stores}
-            control={control}
-            watch={watch}
-            setValue={setValue}
-            handleRemoveAllProduct={handleRemoveAllProduct}
-            handleRemoveAllProductByStore={handleRemoveAllProductByStore}
-            handleRemoveProduct={handleRemoveProduct}
-            subtotal={saleStoresProductsTotals.subtotal}
-            quantity={saleStoresProductsTotals.quantity}
-            totalFinal={totalFinal}
-            totalAfterDiscount={totalAfterDiscount}
           />
-        </Col> */}
+        </Col>
       </Row>
 
       <Row gutter={[8, 8]} className="mt-2">
-        {/* Payment */}
-        {/* <Col xs={24} md={12}>
-          <SalePayments
-            control={control}
-            errors={errors}
-            totalFinal={totalFinal}
-            totalPayment={totalPayment}
-            totalAfterPayment={totalAfterPayment}
-          />
-        </Col> */}
-
         {/* Confirmation */}
         {/* <Col xs={24} md={12}>
           <Card

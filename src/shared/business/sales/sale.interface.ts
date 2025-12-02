@@ -6,6 +6,7 @@ import { ISoftDeleteEntity } from "../shared/global/soft-delete.interface";
 import { IUpdatedAtEntity } from "../shared/global/updated-at.interface";
 import PersonEnum from "../shared/person/person.enum";
 import { IPhoneNumber } from "../shared/phone/phone-number.interface";
+import { IStore } from "../stores/stores.interface";
 import IUser from "../users/user.interface";
 import SalesEnum from "./sales.enum";
 
@@ -50,6 +51,7 @@ export interface ISaleTotals {
 
 export interface ISaleStore {
   storeId: string;
+  store?: IStore;
   number: number;
   products: ISaleStoreProduct[];
   totals: ISaleStoreTotals;
