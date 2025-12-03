@@ -2,18 +2,24 @@
 
 import { useState } from "react";
 
-import { Button, Card, Col, Row, Tag, Tooltip } from "antd";
+import { Button, Card, Col, Drawer, Modal, Row, Tag, Tooltip } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useParams, useRouter } from "next/navigation";
 
-import { QuestionCircleTwoTone, TableOutlined } from "@ant-design/icons";
+import {
+  EyeOutlined,
+  QuestionCircleTwoTone,
+  TableOutlined,
+} from "@ant-design/icons";
 
 import { DeliveryAddressMapButton } from "../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton";
 import Description from "../../../components/common/Description/Description";
 import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+import { SaleSummary } from "../../../components/common/SaleSummary/SaleSummary";
 import Layout from "../../../components/template/Layout/Layout";
 import useAuthData from "../../../data/context/auth/useAuthData";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
@@ -28,9 +34,13 @@ import TagsEnum from "../../../shared/business/tags/tags.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { addressTypesToString } from "../../../shared/utils/strings/string";
+import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
+import { SaleFilesList } from "../components/SaleFilesList/SaleFilesList";
 import { SalePaymentsReadOnly } from "../components/SalePaymentsReadOnly/SalePaymentsReadOnly";
 import { SaleSelectedProducts } from "../components/SaleSelectedProducts/SaleSelectedProducts";
+import SalesTable from "../components/SalesTable/SalesTable";
+import { SaleTagsList } from "../components/SaleTagsList/SaleTagsList";
 import { useFindSaleFilledByIdOrFail } from "../useFindSaleFilledByIdOrFail";
 
 export default function SalePage() {
@@ -44,12 +54,17 @@ export default function SalePage() {
 
   const { sale, isLoading } = useFindSaleFilledByIdOrFail(paramsSaleId);
 
+  const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
+
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
     TagsEnum.Type.SALE
   );
   const [isOpenSalesTable, setIsOpenSalesTable] = useState<boolean>(false);
 
-  if (isLoading || !sale || isLoadingTags) {
+  const [isOpenSaleSummaryModal, setIsOpenSaleSummaryModal] =
+    useState<boolean>(false);
+
+  if (isLoading || !sale || isLoadingTags || isLoadingStores) {
     return <LoadingFull />;
   }
 
@@ -74,6 +89,17 @@ export default function SalePage() {
             </div>
 
             <div>
+              <Tooltip title="See sale summary">
+                <Button
+                  type="primary"
+                  className="mr-2"
+                  onClick={() => setIsOpenSaleSummaryModal(true)}
+                  icon={<EyeOutlined />}
+                >
+                  See Summary
+                </Button>
+              </Tooltip>
+
               <Tooltip title="Open Sales">
                 <Button
                   type="primary"
@@ -297,7 +323,7 @@ export default function SalePage() {
         </Col>
 
         {/* Confirmation */}
-        {/* <Col xs={24} md={12}>
+        <Col xs={24} md={12}>
           <Card
             title={
               <div className="flex justify-between">
@@ -307,236 +333,120 @@ export default function SalePage() {
           >
             <Row>
               <Col xs={24}>
-                <AddSaleFiles sale={saleById} onSetFileList={setFileList} />
+                <SaleFilesList sale={sale} />
               </Col>
             </Row>
 
             <Row>
               <Col xs={24}>
-                <TextareaCustomAntd
-                  controller={{ control, name: "note" }}
+                <Description
                   label="Note"
-                  divClassName="mt-0"
-                  placeholder={"Enter any note if you need"}
-                  errorMessage={errors?.note?.message}
-                  maxLength={1000}
+                  className="w-full"
+                  description={<TextArea readOnly value={sale?.note!} />}
                 />
               </Col>
             </Row>
 
             <Row className="mt-2">
               <Col xs={24}>
-                <TextareaCustomAntd
-                  controller={{ control, name: "noteToCustomer" }}
+                <Description
                   label="Note to Customer"
-                  divClassName="mt-0"
-                  placeholder={"Enter any note if you need"}
-                  errorMessage={errors?.noteToCustomer?.message}
-                  maxLength={1000}
+                  className="w-full"
+                  description={
+                    <TextArea readOnly value={sale?.noteToCustomer!} />
+                  }
                 />
               </Col>
             </Row>
 
             <Row>
               <Col xs={24}>
-                <SelectCustomAntd<ICustomer>
-                  controller={{ control, name: "tagsIds" }}
+                <Description
                   label="Tags"
-                  divClassName="mt-3"
-                  errorMessage={errors.tagsIds?.message}
-                  placeholder={"Select tags"}
-                  mode="multiple"
-                >
-                  {sortArray(tags, "name").map((tag: ITag) => (
-                    <Select.Option key={tag._id} value={tag._id}>
-                      <TagTagCustomAntd tag={tag} useTag={false} />
-                    </Select.Option>
-                  ))}
-                </SelectCustomAntd>
+                  className="w-full"
+                  description={<SaleTagsList sale={sale} tags={tags} />}
+                />
               </Col>
             </Row>
 
             <Row>
               <Col xs={24} md={8}>
-                <SelectCustomAntd
-                  controller={{
-                    control,
-                    name: `status`,
-                  }}
-                  label="Sale Status"
-                  errorMessage={errors?.status?.message}
-                  placeholder={"Select sale status"}
-                  style={{ width: "100%" }}
-                >
-                  {Object.keys(SalesEnum.Status).map((status: string) => (
-                    <Select.Option key={status} value={status}>
-                      <LabelBadgeCustomAntd
-                        label={
-                          SalesEnum.StatusLabels[status as SalesEnum.Status]
-                        }
-                        color={
-                          SalesEnum.StatusColors[status as SalesEnum.Status]
-                        }
-                      />
-                    </Select.Option>
-                  ))}
-                </SelectCustomAntd>
+                <Description
+                  label="Status"
+                  description={
+                    <Tag color={SalesEnum.StatusColors[sale.status]}>
+                      {SalesEnum.StatusLabels[sale.status]}
+                    </Tag>
+                  }
+                />
               </Col>
 
               <Col xs={24} md={8}>
-                <SelectCustomAntd
-                  controller={{
-                    control,
-                    name: `paymentStatus`,
-                  }}
+                <Description
                   label="Payment Status"
-                  errorMessage={errors?.status?.message}
-                  placeholder={"Select payment status"}
-                  style={{ width: "100%" }}
-                >
-                  {Object.keys(SalesEnum.PaymentStatus).map(
-                    (paymentStatus: string) => (
-                      <Select.Option key={paymentStatus} value={paymentStatus}>
-                        <LabelBadgeCustomAntd
-                          label={
-                            SalesEnum.PaymentStatusLabels[
-                              paymentStatus as SalesEnum.PaymentStatus
-                            ]
-                          }
-                          color={
-                            SalesEnum.PaymentStatusColors[
-                              paymentStatus as SalesEnum.PaymentStatus
-                            ]
-                          }
-                        />
-                      </Select.Option>
-                    )
-                  )}
-                </SelectCustomAntd>
+                  description={
+                    <Tag
+                      color={SalesEnum.PaymentStatusColors[sale.paymentStatus]}
+                    >
+                      {SalesEnum.PaymentStatusLabels[sale.paymentStatus]}
+                    </Tag>
+                  }
+                />
               </Col>
-
-              {!isEditMode && false && (
-                <Col xs={24} md={8}>
-                  <CheckboxCustomAntd
-                    controller={{ control, name: "isCreateQuote" }}
-                    label="Create Quote"
-                  />
-                </Col>
-              )}
             </Row>
 
             <Row className="mt-3">
               <Col xs={24} md={8} className="pr-5">
-                <InputCustomAntd
-                  controller={{ control, name: "deliveryAt" }}
+                <Description
                   label="Delivery Date"
-                  divClassName="mt-0"
-                  type="date"
-                  placeholder={"Enter deliveryAt"}
-                  errorMessage={errors?.deliveryAt?.message}
+                  containerClassName="mt-0"
+                  description={
+                    sale?.deliveryAt
+                      ? moment(sale.deliveryAt).format(
+                          DatesEnum.Format.MMDDYYYY
+                        )
+                      : "-"
+                  }
                 />
               </Col>
 
               <Col xs={24} md={8} className="pr-5">
-                <InputCustomAntd
-                  controller={{ control, name: "createdDate" }}
+                <Description
                   label="Created Date"
-                  divClassName="mt-0"
-                  type="date"
-                  placeholder={"Enter created date"}
-                  errorMessage={errors?.createdDate?.message}
+                  containerClassName="mt-0"
+                  description={
+                    sale?.createdAt
+                      ? moment(sale.createdAt).format(DatesEnum.Format.MMDDYYYY)
+                      : "-"
+                  }
                 />
               </Col>
               <Col xs={24} md={8} className="pr-5">
-                <InputCustomAntd
-                  controller={{ control, name: "numberManual" }}
+                <Description
                   label="Sale Number Manual"
-                  divClassName="mt-0"
-                  placeholder={"Enter sale number manual"}
-                  errorMessage={errors?.numberManual?.message}
+                  containerClassName="mt-0"
+                  description={sale.numberManual ?? "-"}
                 />
               </Col>
             </Row>
 
             <Row>
               <Col xs={24}>
-                <CheckboxCustomAntd
-                  controller={{ control, name: "isSendCustomerNotifications" }}
+                <Description
                   label="Send Customer Notifications"
-                  className="ml-1"
+                  description={
+                    <div>
+                      <Tag>
+                        {sale.isSendCustomerNotifications ? "Yes" : "No"}
+                      </Tag>
+                    </div>
+                  }
                 />
-              </Col>
-            </Row>
-
-            <Row>
-              <Col xs={24} md={8}>
-                <Tooltip title="See sale summary">
-                  <Button
-                    type="primary"
-                    className="mt-4"
-                    onClick={() => setIsOpenSaleSummaryModal(true)}
-                    icon={<EyeOutlined />}
-                  >
-                    See Summary
-                  </Button>
-                </Tooltip>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col xs={24}>
-                <Button
-                  type="success"
-                  disabled={!isEnableCreateSale}
-                  className="w-full text-center mt-5 h-10 font-bold text-lg"
-                  onClick={() => callHandleSubmit(true)}
-                  loading={isSubmitting}
-                >
-                  {isEditMode ? "SAVE" : "CREATE"} SALE
-                </Button>
               </Col>
             </Row>
           </Card>
-        </Col> */}
+        </Col>
       </Row>
-
-      {/* <Modal
-        title="Sale"
-        closable={false}
-        open={isOpenSaleSuccessfullyModal}
-        cancelButtonProps={{ hidden: true }}
-        footer={
-          <div className="flex justify-end">
-            <Button
-              type="primary"
-              disabled
-              onClick={() => router.refresh()}
-              icon={<ShoppingCartOutlined />}
-            >
-              New Sale
-            </Button>
-
-            <Button type="primary" onClick={() => router.push(Urls.SALES)}>
-              Ok
-            </Button>
-          </div>
-        }
-      >
-        <Alert
-          type="success"
-          icon={<CheckCircleOutlined />}
-          message={
-            <div>
-              <div>
-                Sale has been {isEditMode ? "updated" : "created"} successfully!
-              </div>
-              <div>
-                Sale Number: <b>{sale?.number}</b>
-              </div>
-            </div>
-          }
-        />
-      </Modal>
 
       <Modal
         title="Sale Summary"
@@ -545,18 +455,7 @@ export default function SalePage() {
         onOk={() => setIsOpenSaleSummaryModal(false)}
         onCancel={() => setIsOpenSaleSummaryModal(false)}
       >
-        <SaleSummaryByCreate
-          formSchema={watch()}
-          selectedCustomer={selectedCustomer}
-          stores={stores}
-          tags={tags}
-          subtotal={saleStoresProductsTotals.subtotal}
-          quantity={saleStoresProductsTotals.quantity}
-          totalFinal={totalFinal}
-          totalAfterDiscount={totalAfterDiscount}
-          totalPayment={totalPayment}
-          totalAfterPayment={totalAfterPayment}
-        />
+        <SaleSummary sale={sale} stores={stores} tags={tags} />
       </Modal>
 
       <Drawer
@@ -566,7 +465,7 @@ export default function SalePage() {
         width={"90%"}
       >
         <SalesTable />
-      </Drawer> */}
+      </Drawer>
     </Layout>
   );
 }

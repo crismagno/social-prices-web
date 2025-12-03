@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 
 interface Props {
@@ -20,7 +22,7 @@ const Description: React.FC<Props> = ({
       {leftIcon && <span className="mr-3">{leftIcon}</span>}
       <div className={`flex flex-col ${className}`}>
         <label className="">{label}</label>
-        {typeof description == "string" ? (
+        {typeof description === "string" ? (
           <span className="text-sm text-gray-500">{description}</span>
         ) : (
           description
