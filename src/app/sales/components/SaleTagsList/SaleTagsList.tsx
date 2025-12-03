@@ -16,7 +16,7 @@ interface Props {
 export const SaleTagsList: React.FC<Props> = ({ sale, tags }) => {
   return (
     <div className="flex border rounded-md gap-2 flex-wrap p-3">
-      {sale?.tagsIds?.map((tagId) => {
+      {sale?.tagsIds?.map((tagId: string) => {
         const tag: ITag | undefined = find(tags, { _id: tagId });
 
         return tag ? <TagTagCustomAntd key={tagId} tag={tag} /> : null;
