@@ -62,10 +62,18 @@ export const SaleStoresProducts: React.FC<Props> = ({ sale }) => {
             </Tooltip>
           </Col>
           <Col xs={9}>Product</Col>
-          <Col xs={3}>Quantity</Col>
-          <Col xs={4}>Price</Col>
-          <Col xs={3}>Total</Col>
-          <Col xs={2}>Action</Col>
+          <Col xs={3} className="text-center">
+            Quantity
+          </Col>
+          <Col xs={4} className="text-center">
+            Price
+          </Col>
+          <Col xs={3} className="text-center">
+            Total
+          </Col>
+          <Col xs={2} className="text-center">
+            Action
+          </Col>
         </Row>
 
         {saleStore.products?.map(
@@ -144,21 +152,21 @@ export const SaleStoresProducts: React.FC<Props> = ({ sale }) => {
                   </div>
                 </Col>
 
-                <Col xs={3} className="flex items-center justify-center">
+                <Col xs={3} className="text-center">
                   <label>{quantity}</label>
                 </Col>
 
-                <Col xs={4} className="flex items-center justify-center">
+                <Col xs={4} className="text-center">
                   <label className="ml-2">{formatToMoneyDecimal(price)}</label>
                 </Col>
 
-                <Col xs={3} className="flex items-center justify-center">
+                <Col xs={3} className="text-center">
                   <label className="font-semibold">
                     {formatToMoneyDecimal(total)}
                   </label>
                 </Col>
 
-                <Col xs={2} className="flex items-center justify-center">
+                <Col xs={2} className="text-center">
                   <SelectedProductNoteButton
                     saleStoreProduct={saleStoreProduct}
                   />

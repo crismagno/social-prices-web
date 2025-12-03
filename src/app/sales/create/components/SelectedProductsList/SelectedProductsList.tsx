@@ -121,7 +121,9 @@ export const SelectedProductsList: React.FC<Props> = ({
               <Col xs={9}>Product</Col>
               <Col xs={3}>Quantity</Col>
               <Col xs={4}>Price</Col>
-              <Col xs={3}>Total</Col>
+              <Col xs={3} className="text-center">
+                Total
+              </Col>
               <Col xs={2}>Action</Col>
             </Row>
 
@@ -306,19 +308,16 @@ export const SelectedProductsList: React.FC<Props> = ({
         </div>
       }
     >
-      <div style={{ maxHeight: 700 }} className="overflow-auto">
-        {renderStoresProducts()}
-      </div>
+      <div style={{ maxHeight: 878 }}>{renderStoresProducts()}</div>
 
       {/* Summary totals */}
       <div className="mt-5">
+        {/* Subtotal */}
         <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
-          <Col xs={8}>SubTotal:</Col>
+          <Col xs={4}>SubTotal:</Col>
 
-          <Col xs={10}></Col>
-
-          <Col xs={6}>
-            <Tooltip title="Sum all prices products">
+          <Col xs={17} className="text-end">
+            <Tooltip title="Sum all prices products" className="mr-4">
               {formatToMoneyDecimal(subtotal)}
             </Tooltip>
           </Col>
@@ -326,7 +325,7 @@ export const SelectedProductsList: React.FC<Props> = ({
 
         {/* Discount */}
         <Row className="border-b px-4 border-slate-100 p-2">
-          <Col xs={8}>
+          <Col xs={4}>
             <label className="font-semibold mr-2">Discount:</label>
             {!watch("discount.show") ? (
               <Tooltip title="Edit Discount">
@@ -366,9 +365,7 @@ export const SelectedProductsList: React.FC<Props> = ({
             )}
           </Col>
 
-          <Col xs={10}></Col>
-
-          <Col xs={6}>
+          <Col xs={17} className="flex justify-end">
             {watch("discount.show") ? (
               <InputNumberCustomAntd
                 divClassName="w-28"
@@ -382,7 +379,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                 }}
               />
             ) : (
-              <Tooltip title="Discount amount">
+              <Tooltip title="Discount amount" className="mr-4">
                 - {formatToMoneyDecimal(watch("discount.amount") ?? 0)}
               </Tooltip>
             )}
@@ -408,12 +405,10 @@ export const SelectedProductsList: React.FC<Props> = ({
 
         {/* Total Discount */}
         <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
-          <Col xs={8}>Total After Discount:</Col>
+          <Col xs={4}>Total After Discount:</Col>
 
-          <Col xs={10}></Col>
-
-          <Col xs={6}>
-            <Tooltip title="Sum total after all discounts">
+          <Col xs={17} className="text-end">
+            <Tooltip title="Sum total after all discounts" className="mr-4">
               - {formatToMoneyDecimal(totalAfterDiscount)}
             </Tooltip>
           </Col>
@@ -422,7 +417,7 @@ export const SelectedProductsList: React.FC<Props> = ({
         {/* Shipping */}
         {deliveryType === SalesEnum.DeliveryType.DELIVERY && (
           <Row className="border-b px-4 border-slate-100 p-2">
-            <Col xs={8}>
+            <Col xs={4}>
               <label className="font-semibold mr-2">Shipping:</label>
 
               {!watch("shipping.show") ? (
@@ -463,9 +458,7 @@ export const SelectedProductsList: React.FC<Props> = ({
               )}
             </Col>
 
-            <Col xs={10}></Col>
-
-            <Col xs={6}>
+            <Col xs={17} className="flex justify-end">
               {watch("shipping.show") ? (
                 <InputNumberCustomAntd
                   divClassName="w-28"
@@ -478,7 +471,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                   }}
                 />
               ) : (
-                <Tooltip title="Shipping amount">
+                <Tooltip title="Shipping amount" className="mr-4">
                   {formatToMoneyDecimal(watch("shipping.amount") ?? 0)}
                 </Tooltip>
               )}
@@ -505,7 +498,7 @@ export const SelectedProductsList: React.FC<Props> = ({
 
         {/* Tax */}
         <Row className="border-b px-4 border-slate-100 p-2">
-          <Col xs={8}>
+          <Col xs={4}>
             <label className="font-semibold mr-2">Tax:</label>
 
             {!watch("tax.show") ? (
@@ -546,9 +539,7 @@ export const SelectedProductsList: React.FC<Props> = ({
             )}
           </Col>
 
-          <Col xs={10}></Col>
-
-          <Col xs={6}>
+          <Col xs={17} className="flex justify-end">
             {watch("tax.show") ? (
               <InputNumberCustomAntd
                 divClassName="w-28"
@@ -561,7 +552,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                 }}
               />
             ) : (
-              <Tooltip title="Tax amount">
+              <Tooltip title="Tax amount" className="mr-4">
                 {formatToMoneyDecimal(watch("tax.amount") ?? 0)}
               </Tooltip>
             )}
@@ -585,17 +576,17 @@ export const SelectedProductsList: React.FC<Props> = ({
 
         {/* Total */}
         <Row className="p-2 px-4 bg-emerald-50 text-black font-bold">
-          <Col xs={8}></Col>
+          <Col xs={5}>Total:</Col>
 
-          <Col xs={10}>
+          <Col xs={8} className="text-end">
             <Tooltip title="Quantity products selected">
               Qty: {quantity}
             </Tooltip>
           </Col>
 
-          <Col xs={6}>
-            <Tooltip title="Sum all prices products">
-              Total: {formatToMoneyDecimal(totalFinal)}
+          <Col xs={8} className="text-end">
+            <Tooltip title="Sum all prices products" className="mr-4">
+              {formatToMoneyDecimal(totalFinal)}
             </Tooltip>
           </Col>
         </Row>

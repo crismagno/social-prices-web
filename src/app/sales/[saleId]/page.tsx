@@ -274,6 +274,13 @@ export default function SalePage() {
       </Row>
 
       <Row gutter={[8, 8]} className="mt-2">
+        {/* Selected Products */}
+        <Col xs={24} md={24}>
+          <SaleSelectedProducts sale={sale} />
+        </Col>
+      </Row>
+
+      <Row gutter={[8, 8]} className="mt-2">
         {/* Payment */}
         <Col xs={24} md={12}>
           <SalePaymentsReadOnly
@@ -289,13 +296,6 @@ export default function SalePage() {
           />
         </Col>
 
-        {/* Selected Products */}
-        <Col xs={24} md={12}>
-          <SaleSelectedProducts sale={sale} />
-        </Col>
-      </Row>
-
-      <Row gutter={[8, 8]} className="mt-2">
         {/* Confirmation */}
         {/* <Col xs={24} md={12}>
           <Card

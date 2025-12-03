@@ -46,18 +46,17 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
         </div>
       }
     >
-      <div style={{ maxHeight: 700 }} className="overflow-auto">
+      <div style={{ maxHeight: 878 }}>
         <SaleStoresProducts sale={sale} />
       </div>
 
       {/* Summary totals */}
       <div className="mt-5">
+        {/* Subtotal */}
         <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
-          <Col xs={8}>SubTotal:</Col>
+          <Col xs={4}>SubTotal:</Col>
 
-          <Col xs={10}></Col>
-
-          <Col xs={6}>
+          <Col xs={16} className="text-end">
             <Tooltip title="Sum all prices products">
               {formatToMoneyDecimal(sale.totals.subtotalAmount)}
             </Tooltip>
@@ -66,13 +65,11 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
 
         {/* Discount */}
         <Row className="border-b px-4 border-slate-100 p-2">
-          <Col xs={8}>
+          <Col xs={4}>
             <label className="font-semibold mr-2">Discount:</label>
           </Col>
 
-          <Col xs={10}></Col>
-
-          <Col xs={6}>
+          <Col xs={16} className="text-end">
             <Tooltip title="Discount amount">
               -{" "}
               {formatToMoneyDecimal(
@@ -96,11 +93,9 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
 
         {/* Total Discount */}
         <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
-          <Col xs={8}>Total After Discount:</Col>
+          <Col xs={4}>Total After Discount:</Col>
 
-          <Col xs={10}></Col>
-
-          <Col xs={6}>
+          <Col xs={16} className="text-end">
             <Tooltip title="Sum total after all discounts">
               - {formatToMoneyDecimal(totalAfterDiscount)}
             </Tooltip>
@@ -110,13 +105,11 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
         {/* Shipping */}
         {sale.header.deliveryType === SalesEnum.DeliveryType.DELIVERY && (
           <Row className="border-b px-4 border-slate-100 p-2">
-            <Col xs={8}>
+            <Col xs={4}>
               <label className="font-semibold mr-2">Shipping:</label>
             </Col>
 
-            <Col xs={10}></Col>
-
-            <Col xs={6}>
+            <Col xs={16} className="text-end">
               <Tooltip title="Shipping amount">
                 {formatToMoneyDecimal(
                   sale.totals.shipping ? sale.totals.shipping.amount : 0
@@ -138,13 +131,11 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
 
         {/* Tax */}
         <Row className="border-b px-4 border-slate-100 p-2">
-          <Col xs={8}>
+          <Col xs={4}>
             <label className="font-semibold mr-2">Tax:</label>
           </Col>
 
-          <Col xs={10}></Col>
-
-          <Col xs={6}>
+          <Col xs={16} className="text-end">
             <Tooltip title="Tax amount">
               {formatToMoneyDecimal(
                 sale.totals.tax ? sale.totals.tax.amount : 0
@@ -165,14 +156,14 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
 
         {/* Total */}
         <Row className="p-2 px-4 bg-emerald-50 text-black font-bold">
-          <Col xs={8}></Col>
+          <Col xs={4}>Total:</Col>
 
-          <Col xs={10}>
+          <Col xs={9} className="text-end">
             <Tooltip title="Quantity products selected">
               Qty: {quantityTotal}
             </Tooltip>
           </Col>
-          <Col xs={6}>
+          <Col xs={7} className="text-end">
             <Tooltip title="Sum all prices products">
               Total: {formatToMoneyDecimal(sale.totals.totalFinalAmount)}
             </Tooltip>
