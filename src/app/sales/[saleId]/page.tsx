@@ -21,12 +21,8 @@ import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageO
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { SaleSummary } from "../../../components/common/SaleSummary/SaleSummary";
 import Layout from "../../../components/template/Layout/Layout";
-import useAuthData from "../../../data/context/auth/useAuthData";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
-import {
-  ISaleBuyer,
-  ISaleStore,
-} from "../../../shared/business/sales/sale.interface";
+import { ISaleBuyer } from "../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../shared/business/sales/sales.enum";
 import { IAddress } from "../../../shared/business/shared/address/address.interface";
 import PersonEnum from "../../../shared/business/shared/person/person.enum";
@@ -44,8 +40,6 @@ import { SaleTagsList } from "../components/SaleTagsList/SaleTagsList";
 import { useFindSaleFilledByIdOrFail } from "../useFindSaleFilledByIdOrFail";
 
 export default function SalePage() {
-  const { user, employee } = useAuthData();
-
   const router: AppRouterInstance = useRouter();
 
   const params: Params = useParams();
@@ -67,8 +61,6 @@ export default function SalePage() {
   if (isLoading || !sale || isLoadingTags || isLoadingStores) {
     return <LoadingFull />;
   }
-
-  const saleStores: ISaleStore[] = sale?.stores ?? [];
 
   const customer: ICustomer | undefined = sale?.stores?.[0].customer;
 
