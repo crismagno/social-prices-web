@@ -126,10 +126,12 @@ export const SaleStoresProducts: React.FC<Props> = ({ sale }) => {
                       <Image
                         key={`${fileUrl}-${Date.now()}`}
                         width={30}
+                        height={30}
                         src={fileUrl}
                         onError={() => (
                           <Image
                             width={30}
+                            height={30}
                             src={ImagesEnum.FilesNames.DefaultAvatarImage}
                             alt="mainUrl"
                             className="rounded-full"
