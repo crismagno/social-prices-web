@@ -166,7 +166,7 @@ export const SaleStoresProducts: React.FC<Props> = ({ sale }) => {
                   </label>
                 </Col>
 
-                <Col xs={2} className="text-center">
+                <Col xs={2} className="flex justify-center">
                   <SelectedProductNoteButton
                     saleStoreProduct={saleStoreProduct}
                   />

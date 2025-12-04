@@ -12,7 +12,7 @@ interface Props {
   onConfirmNote: (note: string | null) => void;
 }
 
-export const ButtonEditSelectedProductNote: React.FC<Props> = ({
+export const EditSelectedProductNoteButton: React.FC<Props> = ({
   saleStoreProduct,
   onConfirmNote,
 }) => {

@@ -378,6 +378,7 @@ export default function SalePage() {
                   label="Payment Status"
                   description={
                     <Tag
+                      className="w-fit"
                       color={SalesEnum.PaymentStatusColors[sale.paymentStatus]}
                     >
                       {SalesEnum.PaymentStatusLabels[sale.paymentStatus]}
@@ -417,7 +418,7 @@ export default function SalePage() {
                 <Description
                   label="Sale Number Manual"
                   containerClassName="mt-0"
-                  description={sale.numberManual ?? "-"}
+                  description={<b>{sale?.numberManual || "-"}</b>}
                 />
               </Col>
             </Row>

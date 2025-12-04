@@ -18,7 +18,7 @@ export const SelectedProductNoteButton: React.FC<Props> = ({
 
   return (
     <>
-      <Tooltip title="Note product">
+      <Tooltip title="See note product">
         <ButtonCommon
           onClick={() => setIsVisible(true)}
           color="transparent"

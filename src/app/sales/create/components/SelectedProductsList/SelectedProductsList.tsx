@@ -1,4 +1,5 @@
 import { Button, Card, Col, Empty, Image, Row, Tooltip } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import { find } from "lodash";
 import { Control, UseFormSetValue, UseFormWatch } from "react-hook-form";
 
@@ -30,7 +31,7 @@ import {
   TSaleStoreFormSchema,
   TSaleStoreProductFormSchema,
 } from "../../page";
-import { ButtonEditSelectedProductNote } from "./ButtonEditSelectedProductNote";
+import { EditSelectedProductNoteButton } from "./EditSelectedProductNoteButton";
 
 interface Props {
   stores: IStore[];
@@ -258,7 +259,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                         </ButtonCommon>
                       </Tooltip>
 
-                      <ButtonEditSelectedProductNote
+                      <EditSelectedProductNoteButton
                         saleStoreProduct={watch(
                           `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}`
                         )}
@@ -397,7 +398,7 @@ export const SelectedProductsList: React.FC<Props> = ({
               />
             ) : (
               <Tooltip title={watch("discount.note")}>
-                {watch("discount.note")}
+                <TextArea readOnly value={watch("discount.note") || ""} />
               </Tooltip>
             )}
           </Col>
@@ -489,7 +490,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                 />
               ) : (
                 <Tooltip title={watch("shipping.note")}>
-                  {watch("shipping.note")}
+                  <TextArea readOnly value={watch("shipping.note") || ""} />
                 </Tooltip>
               )}
             </Col>
@@ -569,7 +570,9 @@ export const SelectedProductsList: React.FC<Props> = ({
                 }}
               />
             ) : (
-              <Tooltip title={watch("tax.note")}>{watch("tax.note")}</Tooltip>
+              <Tooltip title={watch("tax.note")}>
+                <TextArea readOnly value={watch("tax.note") || ""} />
+              </Tooltip>
             )}
           </Col>
         </Row>

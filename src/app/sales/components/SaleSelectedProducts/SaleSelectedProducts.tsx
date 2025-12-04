@@ -1,4 +1,5 @@
 import { Card, Col, Empty, Row, Tooltip } from "antd";
+import TextArea from "antd/es/input/TextArea";
 
 import { QuestionCircleTwoTone } from "@ant-design/icons";
 
@@ -83,11 +84,12 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
           <Col xs={24} className="py-2">
             <label className="font-semibold">Note: </label>
 
-            {sale.totals.discount && (
-              <Tooltip title={sale.totals.discount.distributed.note}>
-                {sale.totals.discount.distributed.note}
-              </Tooltip>
-            )}
+            <Tooltip title={sale.totals?.discount?.distributed?.note || ""}>
+              <TextArea
+                readOnly
+                value={sale.totals?.discount?.distributed?.note || ""}
+              />
+            </Tooltip>
           </Col>
         </Row>
 
@@ -120,11 +122,9 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
             <Col xs={24}>
               <label className="font-semibold">Note: </label>
 
-              {sale.totals.shipping && (
-                <Tooltip title={sale.totals.shipping.note}>
-                  {sale.totals.shipping.note}
-                </Tooltip>
-              )}
+              <Tooltip title={sale.totals?.shipping?.note || ""}>
+                <TextArea readOnly value={sale.totals?.shipping?.note || ""} />
+              </Tooltip>
             </Col>
           </Row>
         )}
@@ -146,11 +146,9 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
           <Col xs={24}>
             <label className="font-semibold">Note: </label>
 
-            {sale.totals.tax && (
-              <Tooltip title={sale.totals.tax.note}>
-                {sale.totals.tax.note}
-              </Tooltip>
-            )}
+            <Tooltip title={sale.totals?.tax?.note || ""}>
+              <TextArea readOnly value={sale.totals?.tax?.note || ""} />
+            </Tooltip>
           </Col>
         </Row>
 
@@ -165,7 +163,7 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
           </Col>
           <Col xs={7} className="text-end">
             <Tooltip title="Sum all prices products">
-              Total: {formatToMoneyDecimal(sale.totals.totalFinalAmount)}
+              {formatToMoneyDecimal(sale.totals.totalFinalAmount)}
             </Tooltip>
           </Col>
         </Row>
