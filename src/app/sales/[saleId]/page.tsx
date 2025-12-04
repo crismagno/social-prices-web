@@ -2,7 +2,17 @@
 
 import { useState } from "react";
 
-import { Button, Card, Col, Drawer, Modal, Row, Tag, Tooltip } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Divider,
+  Drawer,
+  Modal,
+  Row,
+  Tag,
+  Tooltip,
+} from "antd";
 import TextArea from "antd/es/input/TextArea";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
@@ -69,64 +79,88 @@ export default function SalePage() {
 
   const buyerAddress: IAddress | null = buyer?.address ?? null;
 
+  const isSaleDeleted: boolean = !!sale.softDelete;
+
+  const renderSaleActiveOrDeletedTag = () => {
+    if (isSaleDeleted) {
+      return (
+        <Tag color="red" className="mb-2">
+          This sale is deleted
+        </Tag>
+      );
+    }
+
+    return (
+      <Tag color="green" className="mb-2">
+        This sale is active
+      </Tag>
+    );
+  };
+
   return (
     <Layout subtitle={"Information about sale"} title={"Sale"} hasBackButton>
       <Row gutter={[16, 16]} className="mt-5" justify={"end"}>
         <Col xs={24}>
-          <div className="flex justify-between bg-white w-full py-3 px-5 rounded-md">
-            <div>
-              <span className="text-lg mr-2">Sale Number: </span>
-              {sale?.number ? (
-                <label className="font-bold text-lg">{sale?.number}</label>
-              ) : null}
+          <div className="bg-white w-full py-3 px-5 rounded-md">
+            <div className="flex justify-between w-full">
+              <div>
+                <span className="text-lg mr-2">Sale Number: </span>
+                {sale?.number ? (
+                  <label className="font-bold text-lg">{sale?.number}</label>
+                ) : null}
+              </div>
+
+              <div>
+                <Tooltip title="Edit sale">
+                  <Button
+                    type="success"
+                    onClick={() =>
+                      router.push(Urls.SALES_EDIT.replace(":saleId", sale._id!))
+                    }
+                    className="px-3 shadow-lg mr-2"
+                    icon={<EditOutlined />}
+                  >
+                    Edit
+                  </Button>
+                </Tooltip>
+
+                <Tooltip title="See sale summary">
+                  <Button
+                    type="primary"
+                    className="mr-2"
+                    onClick={() => setIsOpenSaleSummaryModal(true)}
+                    icon={<EyeOutlined />}
+                  >
+                    See Summary
+                  </Button>
+                </Tooltip>
+
+                <Tooltip title="Open Sales">
+                  <Button
+                    type="primary"
+                    onClick={() => setIsOpenSalesTable(true)}
+                    icon={<TableOutlined />}
+                    className="mr-2"
+                  >
+                    Open Sales
+                  </Button>
+                </Tooltip>
+
+                <Tooltip title="Go to Sales">
+                  <Button
+                    type="primary"
+                    onClick={() => router.push(Urls.SALES)}
+                    icon={<TableOutlined />}
+                  >
+                    Go to Sales
+                  </Button>
+                </Tooltip>
+              </div>
             </div>
 
-            <div>
-              <Tooltip title="Edit sale">
-                <Button
-                  type="success"
-                  onClick={() =>
-                    router.push(Urls.SALES_EDIT.replace(":saleId", sale._id!))
-                  }
-                  className="px-3 shadow-lg mr-2"
-                  icon={<EditOutlined />}
-                >
-                  Edit
-                </Button>
-              </Tooltip>
+            <Divider className="my-2" />
 
-              <Tooltip title="See sale summary">
-                <Button
-                  type="primary"
-                  className="mr-2"
-                  onClick={() => setIsOpenSaleSummaryModal(true)}
-                  icon={<EyeOutlined />}
-                >
-                  See Summary
-                </Button>
-              </Tooltip>
-
-              <Tooltip title="Open Sales">
-                <Button
-                  type="primary"
-                  onClick={() => setIsOpenSalesTable(true)}
-                  icon={<TableOutlined />}
-                  className="mr-2"
-                >
-                  Open Sales
-                </Button>
-              </Tooltip>
-
-              <Tooltip title="Go to Sales">
-                <Button
-                  type="primary"
-                  onClick={() => router.push(Urls.SALES)}
-                  icon={<TableOutlined />}
-                >
-                  Go to Sales
-                </Button>
-              </Tooltip>
-            </div>
+            <div className="flex">{renderSaleActiveOrDeletedTag()}</div>
           </div>
         </Col>
       </Row>
