@@ -19,12 +19,15 @@ export const useFindSaleById = (
     try {
       setIsLoading(true);
 
-      if (saleId) {
-        const response: ISale | null =
-          await serviceMethodsInstance.salesServiceMethods.findById(saleId);
-
-        setSale(response);
+      if (!saleId) {
+        setSale(null);
+        return;
       }
+
+      const response: ISale | null =
+        await serviceMethodsInstance.salesServiceMethods.findById(saleId);
+
+      setSale(response);
     } catch (error: any) {
       handleClientError(error);
     } finally {

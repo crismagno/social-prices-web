@@ -242,7 +242,9 @@ export default function CreateSalePage() {
 
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
 
-  const saleIdByParam: string | null = searchParams.get("said");
+  const [saleIdByParam, setSaleIdByParam] = useState<string | null>(
+    searchParams.get("said")
+  );
 
   const customerIdByParam: string | null = searchParams.get("cid");
 
@@ -1113,6 +1115,38 @@ export default function CreateSalePage() {
     }
   };
 
+  const renderGoToSaleButton = (): JSX.Element | null => {
+    const saleId: string | undefined = sale?._id ?? saleById?._id;
+
+    if (saleId) {
+      return (
+        <Tooltip title="Go to Sale">
+          <Button
+            type="primary"
+            onClick={() => router.push(Urls.SALE.replace(":saleId", saleId))}
+            className="px-3 shadow-lg"
+            icon={<EnterOutlined />}
+          >
+            Sale
+          </Button>
+        </Tooltip>
+      );
+    }
+
+    return null;
+  };
+
+  const handleNewSaleAfterSubmit = () => {
+    setIsOpenSaleSuccessfullyModal(false);
+    router.push(Urls.SALES_CREATE);
+    setFormValues(generateFormSchemaDefault());
+    setSelectedCustomer(null);
+    setSelectedAddressUid(null);
+    setFileList([]);
+    setSale(null);
+    setSaleIdByParam(null);
+  };
+
   return (
     <Layout
       subtitle={
@@ -1138,20 +1172,7 @@ export default function CreateSalePage() {
             </div>
 
             <div>
-              {saleById && (
-                <Tooltip title="Go to Sale">
-                  <Button
-                    type="primary"
-                    onClick={() =>
-                      router.push(Urls.SALE.replace(":saleId", saleById._id))
-                    }
-                    className="px-3 shadow-lg mr-2"
-                    icon={<EnterOutlined />}
-                  >
-                    Sale
-                  </Button>
-                </Tooltip>
-              )}
+              {renderGoToSaleButton()}
 
               <Tooltip title="Open create sale in a new tab">
                 <Button
@@ -1159,7 +1180,7 @@ export default function CreateSalePage() {
                   href={Urls.SALES_CREATE}
                   target="_blank"
                   icon={<ShoppingCartOutlined />}
-                  className="mr-2"
+                  className="mx-2"
                 >
                   Create Sale
                 </Button>
@@ -1761,15 +1782,16 @@ export default function CreateSalePage() {
           <div className="flex justify-end">
             <Button
               type="primary"
-              disabled
-              onClick={() => router.refresh()}
+              onClick={handleNewSaleAfterSubmit}
               icon={<ShoppingCartOutlined />}
             >
               New Sale
             </Button>
 
+            {renderGoToSaleButton()}
+
             <Button type="primary" onClick={() => router.push(Urls.SALES)}>
-              Ok
+              Go to Sales
             </Button>
           </div>
         }

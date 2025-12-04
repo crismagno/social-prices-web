@@ -35,8 +35,11 @@ export const AddSaleFiles: React.FC<Props> = ({ sale, onSetFileList }) => {
 
       setFileList(saleFilesUrlToFileList);
       onSetFileList(saleFilesUrlToFileList);
+    } else {
+      setFileList([]);
+      onSetFileList([]);
     }
-  }, [sale]);
+  }, [sale?.filesUrl]);
 
   const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
