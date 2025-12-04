@@ -37,6 +37,7 @@ import { z } from "zod";
 
 import {
   CheckCircleOutlined,
+  EnterOutlined,
   EyeOutlined,
   QuestionCircleTwoTone,
   ShoppingCartOutlined,
@@ -1137,6 +1138,21 @@ export default function CreateSalePage() {
             </div>
 
             <div>
+              {saleById && (
+                <Tooltip title="Go to Sale">
+                  <Button
+                    type="primary"
+                    onClick={() =>
+                      router.push(Urls.SALE.replace(":saleId", saleById._id))
+                    }
+                    className="px-3 shadow-lg mr-2"
+                    icon={<EnterOutlined />}
+                  >
+                    Sale
+                  </Button>
+                </Tooltip>
+              )}
+
               <Tooltip title="Open create sale in a new tab">
                 <Button
                   type="primary"

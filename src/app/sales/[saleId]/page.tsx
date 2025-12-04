@@ -10,6 +10,7 @@ import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useParams, useRouter } from "next/navigation";
 
 import {
+  EditOutlined,
   EyeOutlined,
   QuestionCircleTwoTone,
   TableOutlined,
@@ -81,6 +82,19 @@ export default function SalePage() {
             </div>
 
             <div>
+              <Tooltip title="Edit sale">
+                <Button
+                  type="success"
+                  onClick={() =>
+                    router.push(Urls.SALES_EDIT.replace(":saleId", sale._id!))
+                  }
+                  className="px-3 shadow-lg mr-2"
+                  icon={<EditOutlined />}
+                >
+                  Edit
+                </Button>
+              </Tooltip>
+
               <Tooltip title="See sale summary">
                 <Button
                   type="primary"
