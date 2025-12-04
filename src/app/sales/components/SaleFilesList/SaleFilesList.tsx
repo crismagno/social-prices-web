@@ -66,6 +66,7 @@ export const SaleFilesList: React.FC<Props> = ({ sale }) => {
           listType="picture-card"
           fileList={fileList}
           onPreview={onPreview}
+          showUploadList={{ showRemoveIcon: false }}
           iconRender={(file) =>
             isImageFile(file) ? (
               <img
@@ -79,9 +80,7 @@ export const SaleFilesList: React.FC<Props> = ({ sale }) => {
               </div>
             )
           }
-        >
-          {fileList.length < 100}
-        </Upload>
+        ></Upload>
       </div>
     </div>
   );
