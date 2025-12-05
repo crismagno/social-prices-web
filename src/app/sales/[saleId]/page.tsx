@@ -43,6 +43,7 @@ import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { addressTypesToString } from "../../../shared/utils/strings/string";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
+import { SaleActiveOrDeletedTag } from "../components/SaleActiveOrDeletedTag/SaleActiveOrDeletedTag";
 import { SaleFilesList } from "../components/SaleFilesList/SaleFilesList";
 import { SalePaymentsReadOnly } from "../components/SalePaymentsReadOnly/SalePaymentsReadOnly";
 import { SaleSelectedProducts } from "../components/SaleSelectedProducts/SaleSelectedProducts";
@@ -58,7 +59,8 @@ export default function SalePage() {
 
   const paramsSaleId: string = params?.saleId;
 
-  const { sale, isLoading } = useFindSaleFilledByIdOrFail(paramsSaleId);
+  const { sale, isLoading, fetchFindSaleById } =
+    useFindSaleFilledByIdOrFail(paramsSaleId);
 
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
@@ -161,7 +163,13 @@ export default function SalePage() {
 
             <Divider className="my-2" />
 
-            <div className="flex">{renderSaleActiveOrDeletedTag()}</div>
+            <div className="flex">
+              <SaleActiveOrDeletedTag
+                sale={sale}
+                onActivateSale={() => fetchFindSaleById()}
+                onRemoveSale={() => fetchFindSaleById()}
+              />
+            </div>
           </div>
         </Col>
       </Row>
