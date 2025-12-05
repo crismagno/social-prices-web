@@ -3,8 +3,9 @@ import { useState } from "react";
 import { Modal, Tooltip } from "antd";
 import TextArea from "antd/es/input/TextArea";
 
+import { CommentOutlined } from "@ant-design/icons";
+
 import ButtonCommon from "../../../../components/common/ButtonCommon/ButtonCommon";
-import { IconEye } from "../../../../components/common/icons/icons";
 import { ISaleStoreProduct } from "../../../../shared/business/sales/sale.interface";
 
 interface Props {
@@ -24,7 +25,7 @@ export const SelectedProductNoteButton: React.FC<Props> = ({
           color="transparent"
           className="rounded-r-full rounded-l-full shadow-none"
         >
-          {IconEye("w-3 h-3")}
+          <CommentOutlined style={{ fontSize: 20 }} />
         </ButtonCommon>
       </Tooltip>
 

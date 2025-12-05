@@ -65,12 +65,14 @@ export const SaleSummary: React.FC<Props> = ({ sale, stores, tags }) => {
 
     const storesProductsElements: JSX.Element[] = saleStores.map(
       (saleStore: ISaleStore, indexSaleStore: number) => {
-        const store: IStore | undefined = find(stores, {
-          _id: saleStore.storeId,
-        });
+        const store: IStore | undefined = saleStore?.store?._id
+          ? saleStore?.store
+          : find(stores, {
+              _id: saleStore.storeId,
+            });
 
         return (
-          <div key={store?._id} className="my-1">
+          <div key={`store-${store?._id}`} className="my-1">
             <div
               className={`flex items-center border-b-2 border-slate-100 mb-1 w-full`}
             >

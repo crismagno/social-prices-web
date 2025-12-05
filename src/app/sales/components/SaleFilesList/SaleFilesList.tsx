@@ -4,7 +4,7 @@ import "./styles.scss";
 
 import React, { useEffect, useState } from "react";
 
-import { Upload, UploadFile } from "antd";
+import { Empty, Upload, UploadFile } from "antd";
 import { map } from "lodash";
 
 import { ISale } from "../../../../shared/business/sales/sale.interface";
@@ -55,6 +55,16 @@ export const SaleFilesList: React.FC<Props> = ({ sale }) => {
       );
     }
   };
+
+  if (fileList.length === 0) {
+    return (
+      <div className="flex flex-col">
+        <label>Files</label>
+
+        <Empty className="mt-2" description="No files uploaded yet" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col">
