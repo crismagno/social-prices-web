@@ -47,6 +47,7 @@ import { SaleFilesList } from "../components/SaleFilesList/SaleFilesList";
 import { SalePaymentsReadOnly } from "../components/SalePaymentsReadOnly/SalePaymentsReadOnly";
 import { SaleSelectedProducts } from "../components/SaleSelectedProducts/SaleSelectedProducts";
 import SalesTable from "../components/SalesTable/SalesTable";
+import { SaleStoresListCard } from "../components/SaleStoresListCard/SaleStoresListCard";
 import { SaleTagsList } from "../components/SaleTagsList/SaleTagsList";
 import { useFindSaleFilledByIdOrFail } from "../useFindSaleFilledByIdOrFail";
 
@@ -336,6 +337,13 @@ export default function SalePage() {
               </Col>
             </Row>
           </Card>
+        </Col>
+      </Row>
+
+      <Row gutter={[8, 8]} className="mt-2">
+        {/* Stores */}
+        <Col xs={24} md={24}>
+          <SaleStoresListCard sale={sale} stores={stores} />
         </Col>
       </Row>
 
