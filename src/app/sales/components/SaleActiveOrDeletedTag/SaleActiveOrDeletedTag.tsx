@@ -10,12 +10,14 @@ import { ISale } from "../../../../shared/business/sales/sale.interface";
 
 interface Props {
   sale: ISale;
+  allowEvents?: boolean;
   onRemoveSale?: (sale: ISale) => void;
   onActivateSale?: (sale: ISale) => void;
 }
 
 export const SaleActiveOrDeletedTag: React.FC<Props> = ({
   sale,
+  allowEvents,
   onActivateSale,
   onRemoveSale,
 }) => {
@@ -67,6 +69,7 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
     return (
       <>
         <Popover
+          visible={allowEvents ? undefined : false}
           title="Activate Sale?"
           content={
             <div className="flex flex-col gap-4">
@@ -84,7 +87,11 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
             </div>
           }
         >
-          <Tag color="red" className="mb-2" icon={<QuestionCircleTwoTone />}>
+          <Tag
+            color="red"
+            className="mb-2"
+            icon={allowEvents && <QuestionCircleTwoTone />}
+          >
             <label>This sale is deleted</label>
           </Tag>
         </Popover>
@@ -113,6 +120,7 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
   return (
     <>
       <Popover
+        visible={allowEvents ? undefined : false}
         title="Remove Sale?"
         content={
           <div className="flex flex-col gap-4">
@@ -127,7 +135,11 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
           </div>
         }
       >
-        <Tag color="green" className="mb-2" icon={<QuestionCircleTwoTone />}>
+        <Tag
+          color="green"
+          className="mb-2"
+          icon={allowEvents && <QuestionCircleTwoTone />}
+        >
           <label>This sale is active</label>
         </Tag>
 

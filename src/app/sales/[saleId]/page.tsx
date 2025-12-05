@@ -165,6 +165,7 @@ export default function SalePage() {
 
             <div className="flex">
               <SaleActiveOrDeletedTag
+                allowEvents
                 sale={sale}
                 onActivateSale={() => fetchFindSaleById()}
                 onRemoveSale={() => fetchFindSaleById()}
