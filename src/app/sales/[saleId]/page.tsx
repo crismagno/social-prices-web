@@ -44,6 +44,7 @@ import { addressTypesToString } from "../../../shared/utils/strings/string";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { SaleActiveOrDeletedTag } from "../components/SaleActiveOrDeletedTag/SaleActiveOrDeletedTag";
+import { SaleCreatedByEmployeeCard } from "../components/SaleCreatedByEmployeeCard/SaleCreatedByEmployeeCard";
 import { SaleFilesList } from "../components/SaleFilesList/SaleFilesList";
 import { SalePaymentsReadOnly } from "../components/SalePaymentsReadOnly/SalePaymentsReadOnly";
 import { SaleSelectedProducts } from "../components/SaleSelectedProducts/SaleSelectedProducts";
@@ -81,24 +82,6 @@ export default function SalePage() {
   const buyer: ISaleBuyer | null = sale?.buyer ?? null;
 
   const buyerAddress: IAddress | null = buyer?.address ?? null;
-
-  const isSaleDeleted: boolean = !!sale.softDelete;
-
-  const renderSaleActiveOrDeletedTag = () => {
-    if (isSaleDeleted) {
-      return (
-        <Tag color="red" className="mb-2">
-          This sale is deleted
-        </Tag>
-      );
-    }
-
-    return (
-      <Tag color="green" className="mb-2">
-        This sale is active
-      </Tag>
-    );
-  };
 
   return (
     <Layout subtitle={"Information about sale"} title={"Sale"} hasBackButton>
@@ -163,13 +146,15 @@ export default function SalePage() {
 
             <Divider className="my-2" />
 
-            <div className="flex">
+            <div className="flex justify-between">
               <SaleActiveOrDeletedTag
                 allowEvents
                 sale={sale}
                 onActivateSale={() => fetchFindSaleById()}
                 onRemoveSale={() => fetchFindSaleById()}
               />
+
+              <SaleCreatedByEmployeeCard sale={sale} />
             </div>
           </div>
         </Col>

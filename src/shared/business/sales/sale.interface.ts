@@ -1,4 +1,5 @@
 import { ICustomer } from "../customers/customer.interface";
+import { IEmployee } from "../employees/employee.interface";
 import { IProduct } from "../products/products.interface";
 import { IAddress } from "../shared/address/address.interface";
 import { ICreatedAtEntity } from "../shared/global/created-at.interface";
@@ -19,6 +20,8 @@ export interface ISale
   updatedByUserId: string | null;
   createdByEmployeeId: string | null;
   updatedByEmployeeId: string | null;
+  createdByEmployee?: IEmployee;
+  updatedByEmployee?: IEmployee;
   buyer: ISaleBuyer | null;
   number: number;
   type: SalesEnum.Type;
