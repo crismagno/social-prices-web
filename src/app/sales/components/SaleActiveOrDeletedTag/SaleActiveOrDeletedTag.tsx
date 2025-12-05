@@ -79,7 +79,7 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
               </p>
 
               <Button
-                type="primary"
+                type="success"
                 onClick={() => setIsVisibleActivateSaleModal(true)}
               >
                 Activate Sale
@@ -89,7 +89,7 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
         >
           <Tag
             color="red"
-            className="mb-2"
+            className="mb-2 h-fit w-fit"
             icon={allowEvents && <QuestionCircleTwoTone />}
           >
             <label>This sale is deleted</label>
@@ -107,7 +107,7 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
           okText={"Yes"}
           cancelText={"No"}
           closable={!isActivatingSale}
-          okButtonProps={{ loading: isActivatingSale }}
+          okButtonProps={{ loading: isActivatingSale, type: "success" }}
           cancelButtonProps={{ disabled: isActivatingSale }}
         >
           Are you sure activate sale? Sale Number:{" "}
@@ -137,7 +137,7 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
       >
         <Tag
           color="green"
-          className="mb-2"
+          className="mb-2 h-fit w-fit"
           icon={allowEvents && <QuestionCircleTwoTone />}
         >
           <label>This sale is active</label>
@@ -154,7 +154,7 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
           closable={!isDeletingSale}
           okText={"Yes"}
           cancelText={"No"}
-          okButtonProps={{ loading: isDeletingSale }}
+          okButtonProps={{ loading: isDeletingSale, type: "danger" }}
           cancelButtonProps={{ disabled: isDeletingSale }}
         >
           Are you sure delete sale? Sale Number: <strong>{sale.number}</strong>
