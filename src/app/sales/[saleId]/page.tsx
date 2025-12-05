@@ -43,8 +43,7 @@ import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { addressTypesToString } from "../../../shared/utils/strings/string";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
-import { SaleActiveOrDeletedTag } from "../components/SaleActiveOrDeletedTag/SaleActiveOrDeletedTag";
-import { SaleCreatedByEmployeeCard } from "../components/SaleCreatedByEmployeeCard/SaleCreatedByEmployeeCard";
+import { SaleExtraInfo } from "../components/SaleExtraInfo/SaleExtraInfo";
 import { SaleFilesList } from "../components/SaleFilesList/SaleFilesList";
 import { SalePaymentsReadOnly } from "../components/SalePaymentsReadOnly/SalePaymentsReadOnly";
 import { SaleSelectedProducts } from "../components/SaleSelectedProducts/SaleSelectedProducts";
@@ -146,16 +145,12 @@ export default function SalePage() {
 
             <Divider className="my-2" />
 
-            <div className="flex justify-between">
-              <SaleActiveOrDeletedTag
-                allowEvents
-                sale={sale}
-                onActivateSale={() => fetchFindSaleById()}
-                onRemoveSale={() => fetchFindSaleById()}
-              />
-
-              <SaleCreatedByEmployeeCard sale={sale} />
-            </div>
+            <SaleExtraInfo
+              allowEvents
+              sale={sale}
+              onActivateSale={() => fetchFindSaleById()}
+              onRemoveSale={() => fetchFindSaleById()}
+            />
           </div>
         </Col>
       </Row>

@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   Col,
+  Divider,
   Drawer,
   Modal,
   Row,
@@ -106,6 +107,7 @@ import {
 import { createAddressName } from "../../../shared/utils/strings/string";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
+import { SaleExtraInfo } from "../components/SaleExtraInfo/SaleExtraInfo";
 import SalesTable from "../components/SalesTable/SalesTable";
 import { useFindSaleById } from "../useFindSaleById";
 import {
@@ -1163,50 +1165,62 @@ export default function CreateSalePage() {
 
       <Row gutter={[16, 16]} className="mt-5" justify={"end"}>
         <Col xs={24}>
-          <div className="flex justify-between bg-white w-full py-3 px-5 rounded-md">
-            <div>
-              <span className="text-lg mr-2">Sale Number: </span>
-              {saleById?.number ? (
-                <label className="font-bold text-lg">{saleById?.number}</label>
-              ) : null}
+          <div className="bg-white w-full py-3 px-5 rounded-md">
+            <div className="flex justify-between w-full">
+              <div>
+                <span className="text-lg mr-2">Sale Number: </span>
+                {saleById?.number ? (
+                  <label className="font-bold text-lg">
+                    {saleById?.number}
+                  </label>
+                ) : null}
+              </div>
+
+              <div>
+                {renderGoToSaleButton()}
+
+                <Tooltip title="Open create sale in a new tab">
+                  <Button
+                    type="primary"
+                    href={Urls.SALES_CREATE}
+                    target="_blank"
+                    icon={<ShoppingCartOutlined />}
+                    className="mx-2"
+                  >
+                    Create Sale
+                  </Button>
+                </Tooltip>
+
+                <Tooltip title="Open Sales">
+                  <Button
+                    type="primary"
+                    onClick={() => setIsOpenSalesTable(true)}
+                    icon={<TableOutlined />}
+                    className="mr-2"
+                  >
+                    Open Sales
+                  </Button>
+                </Tooltip>
+
+                <Tooltip title="Go to Sales">
+                  <Button
+                    type="primary"
+                    onClick={() => router.push(Urls.SALES)}
+                    icon={<TableOutlined />}
+                  >
+                    Go to Sales
+                  </Button>
+                </Tooltip>
+              </div>
             </div>
 
-            <div>
-              {renderGoToSaleButton()}
+            {saleById && (
+              <>
+                <Divider className="my-2" />
 
-              <Tooltip title="Open create sale in a new tab">
-                <Button
-                  type="primary"
-                  href={Urls.SALES_CREATE}
-                  target="_blank"
-                  icon={<ShoppingCartOutlined />}
-                  className="mx-2"
-                >
-                  Create Sale
-                </Button>
-              </Tooltip>
-
-              <Tooltip title="Open Sales">
-                <Button
-                  type="primary"
-                  onClick={() => setIsOpenSalesTable(true)}
-                  icon={<TableOutlined />}
-                  className="mr-2"
-                >
-                  Open Sales
-                </Button>
-              </Tooltip>
-
-              <Tooltip title="Go to Sales">
-                <Button
-                  type="primary"
-                  onClick={() => router.push(Urls.SALES)}
-                  icon={<TableOutlined />}
-                >
-                  Go to Sales
-                </Button>
-              </Tooltip>
-            </div>
+                <SaleExtraInfo sale={saleById} />
+              </>
+            )}
           </div>
         </Col>
       </Row>

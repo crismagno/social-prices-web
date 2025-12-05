@@ -1,10 +1,13 @@
-import { Tooltip } from "antd";
+import { Button, Tooltip } from "antd";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import { useRouter } from "next/navigation";
 
 import { QuestionCircleTwoTone } from "@ant-design/icons";
 
 import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
 import { IEmployee } from "../../../../shared/business/employees/employee.interface";
 import { ISale } from "../../../../shared/business/sales/sale.interface";
+import Urls from "../../../../shared/common/routes-app/routes-app";
 import ImagesEnum from "../../../../shared/utils/images/images.enum";
 
 interface Props {
@@ -12,6 +15,8 @@ interface Props {
 }
 
 export const SaleCreatedByEmployeeCard: React.FC<Props> = ({ sale }) => {
+  const router: AppRouterInstance = useRouter();
+
   const employee: IEmployee | undefined = sale.createdByEmployee;
 
   if (!employee) {
@@ -27,9 +32,15 @@ export const SaleCreatedByEmployeeCard: React.FC<Props> = ({ sale }) => {
           src={employee.avatar}
         />
         <div className=" flex flex-col ml-2">
-          <label className="font-bold mb-0">
+          <Button
+            type="link"
+            className="pl-0 mb-0"
+            onClick={() =>
+              router.push(Urls.EMPLOYEE.replace(":employeeId", employee._id))
+            }
+          >
             {employee.name} <QuestionCircleTwoTone />
-          </label>
+          </Button>
           <small className="italic mt-0">{employee.email}</small>
         </div>
       </div>
