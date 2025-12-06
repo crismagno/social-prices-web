@@ -27,6 +27,7 @@ import {
   formatToMoneyDecimal,
   parserMoney,
 } from "../../../../../shared/utils/strings/string";
+import SalesMissingPaymentLabel from "../../../components/SalesTable/SalesMissingPaymentLabel";
 import { TFormSchema } from "../../page";
 
 export const salePaymentFormSchema = z.object({
@@ -196,6 +197,8 @@ export const SalePayments: React.FC<Props> = ({
 
         <Descriptions.Item label="Total After Payment" span={3}>
           {formatToMoneyDecimal(totalAfterPayment)}
+
+          <SalesMissingPaymentLabel totalAfterPayment={totalAfterPayment} />
         </Descriptions.Item>
       </Descriptions>
     </Card>

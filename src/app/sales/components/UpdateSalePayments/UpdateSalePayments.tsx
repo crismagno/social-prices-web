@@ -29,6 +29,7 @@ import {
   formatToMoneyDecimal,
   parserMoney,
 } from "../../../../shared/utils/strings/string";
+import SalesMissingPaymentLabel from "../SalesTable/SalesMissingPaymentLabel";
 
 export const salePaymentFormSchema = z.object({
   amount: z.number(),
@@ -247,6 +248,8 @@ export const UpdateSalePayments: React.FC<Props> = ({
 
         <Descriptions.Item label="Total After Payment" span={3}>
           {formatToMoneyDecimal(totalAfterPayment)}
+
+          <SalesMissingPaymentLabel totalAfterPayment={totalAfterPayment} />
         </Descriptions.Item>
       </Descriptions>
 

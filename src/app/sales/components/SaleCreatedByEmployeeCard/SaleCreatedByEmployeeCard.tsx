@@ -31,17 +31,18 @@ export const SaleCreatedByEmployeeCard: React.FC<Props> = ({ sale }) => {
           defaultImage={ImagesEnum.FilesNames.DefaultAvatarImage}
           src={employee.avatar}
         />
+
         <div className=" flex flex-col ml-2">
           <Button
             type="link"
-            className="pl-0 mb-0"
+            className="pl-0"
             onClick={() =>
               router.push(Urls.EMPLOYEE.replace(":employeeId", employee._id))
             }
           >
             {employee.name} <QuestionCircleTwoTone />
           </Button>
-          <small className="italic mt-0">{employee.email}</small>
+          <small className="italic">{employee.email}</small>
         </div>
       </div>
     </Tooltip>

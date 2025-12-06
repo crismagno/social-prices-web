@@ -24,6 +24,7 @@ import {
   formatToMoneyDecimal,
   parserMoney,
 } from "../../../../shared/utils/strings/string";
+import SalesMissingPaymentLabel from "../SalesTable/SalesMissingPaymentLabel";
 
 interface Props {
   sale: ISale;
@@ -105,6 +106,8 @@ export const SalePaymentsReadOnly: React.FC<Props> = ({ sale, title }) => {
 
         <Descriptions.Item label="Total After Payment" span={3}>
           {formatToMoneyDecimal(totalAfterPayment)}
+
+          <SalesMissingPaymentLabel totalAfterPayment={totalAfterPayment} />
         </Descriptions.Item>
       </Descriptions>
     </Card>

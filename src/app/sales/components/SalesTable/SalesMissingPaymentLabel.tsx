@@ -8,20 +8,30 @@ import {
 } from "../../../../shared/business/sales/sales.utils";
 
 export interface Props {
-  sale: ISale;
+  sale?: ISale;
+  totalAfterPayment?: number;
 }
 
-const SalesMissingPaymentLabel: React.FC<Props> = ({ sale }) => {
-  const totalAfterPayment: number = getTotalAfterPayment(
-    sale,
-    getTotalPayment(sale)
-  );
-
-  if (totalAfterPayment === 0) {
+const SalesMissingPaymentLabel: React.FC<Props> = ({
+  sale,
+  totalAfterPayment,
+}) => {
+  if (totalAfterPayment === undefined && !sale) {
     return null;
   }
 
-  return <small className="text-red-500 italic">Incorrect Payment</small>;
+  const calculatedTotalAfterPayment: number =
+    totalAfterPayment !== undefined
+      ? totalAfterPayment
+      : sale
+      ? getTotalAfterPayment(sale, getTotalPayment(sale))
+      : 0;
+
+  if (calculatedTotalAfterPayment === 0) {
+    return null;
+  }
+
+  return <small className="text-red-500 italic ml-2">Incorrect Payment</small>;
 };
 
 export default memo(SalesMissingPaymentLabel);

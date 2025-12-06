@@ -1179,6 +1179,17 @@ export default function CreateSalePage() {
               <div>
                 {renderGoToSaleButton()}
 
+                <Tooltip title="See sale summary">
+                  <Button
+                    type="primary"
+                    className="ml-2"
+                    onClick={() => setIsOpenSaleSummaryModal(true)}
+                    icon={<EyeOutlined />}
+                  >
+                    See Summary
+                  </Button>
+                </Tooltip>
+
                 <Tooltip title="Open create sale in a new tab">
                   <Button
                     type="primary"
@@ -1752,21 +1763,6 @@ export default function CreateSalePage() {
                   label="Send Customer Notifications"
                   className="ml-1"
                 />
-              </Col>
-            </Row>
-
-            <Row>
-              <Col xs={24} md={8}>
-                <Tooltip title="See sale summary">
-                  <Button
-                    type="primary"
-                    className="mt-4"
-                    onClick={() => setIsOpenSaleSummaryModal(true)}
-                    icon={<EyeOutlined />}
-                  >
-                    See Summary
-                  </Button>
-                </Tooltip>
               </Col>
             </Row>
 

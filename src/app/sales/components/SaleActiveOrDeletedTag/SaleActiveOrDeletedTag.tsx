@@ -121,7 +121,7 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
     <>
       <Popover
         visible={allowEvents ? undefined : false}
-        title="Remove Sale?"
+        title="Delete Sale?"
         content={
           <div className="flex flex-col gap-4">
             <p>This sale is currently active. Do you want to delete it?</p>
