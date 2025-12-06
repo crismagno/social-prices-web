@@ -411,9 +411,24 @@ export default function SalePage() {
                 <Description
                   label="Status"
                   description={
-                    <Tag color={SalesEnum.StatusColors[sale.status]}>
-                      {SalesEnum.StatusLabels[sale.status]}
-                    </Tag>
+                    <>
+                      <Tag
+                        color={SalesEnum.StatusColors[sale.status]}
+                        className="w-fit h-fit"
+                      >
+                        {SalesEnum.StatusLabels[sale.status]}
+                      </Tag>
+
+                      {sale.completedAt && (
+                        <Tooltip title="Completed At">
+                          <small className="ml-1 italic">
+                            {moment(sale.completedAt).format(
+                              DatesEnum.Format.DDMMYYYYhhmmss
+                            )}
+                          </small>
+                        </Tooltip>
+                      )}
+                    </>
                   }
                 />
               </Col>

@@ -1679,6 +1679,16 @@ export default function CreateSalePage() {
                     </Select.Option>
                   ))}
                 </SelectCustomAntd>
+
+                {saleById?.completedAt && (
+                  <Tooltip title="Completed At">
+                    <small className="ml-1 italic">
+                      {moment(saleById.completedAt).format(
+                        DatesEnum.Format.DDMMYYYYhhmmss
+                      )}
+                    </small>
+                  </Tooltip>
+                )}
               </Col>
 
               <Col xs={24} md={8}>
