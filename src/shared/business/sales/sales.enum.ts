@@ -80,6 +80,7 @@ namespace SalesEnum {
     PROCESSING = "PROCESSING",
     PENDING = "PENDING",
     REFUNDED = "REFUNDED",
+    DELIVERY = "DELIVERY",
   }
 
   export const StatusLabels = {
@@ -91,6 +92,7 @@ namespace SalesEnum {
     [Status.PROCESSING]: "Processing",
     [Status.PENDING]: "Pending",
     [Status.REFUNDED]: "Refunded",
+    [Status.DELIVERY]: "Delivery",
   };
 
   export const StatusColors = {
@@ -102,6 +104,7 @@ namespace SalesEnum {
     [Status.PROCESSING]: "blue",
     [Status.PENDING]: "blue",
     [Status.REFUNDED]: "orange",
+    [Status.DELIVERY]: "purple",
   };
 
   export const getDeliveryAtColor = (deliveryAt: Date | null): string => {
@@ -166,6 +169,7 @@ namespace SalesEnum {
     Status.PROCESSING,
     Status.COMPLETED,
     Status.STOPPED,
+    Status.DELIVERY,
   ];
 }
 
