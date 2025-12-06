@@ -42,6 +42,7 @@ export interface ISale
   previousCustomerIds: string[];
   isSendCustomerNotifications: boolean;
   user?: IUser;
+  completedAt: Date | null;
 }
 
 export interface ISaleTotals {

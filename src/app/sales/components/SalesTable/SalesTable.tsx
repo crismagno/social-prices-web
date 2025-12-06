@@ -359,7 +359,7 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
               align: "center",
               render: (numberManual: string) => (
                 <>
-                  <strong className="mr-2">{numberManual}</strong>
+                  <strong className="mr-2">{numberManual ?? "-"}</strong>
                 </>
               ),
             },
@@ -593,13 +593,24 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
               ),
             },
             {
+              title: "Completed At",
+              dataIndex: "completedAt",
+              key: "completedAt",
+              align: "center",
+              render: (completedAt: Date | null) =>
+                completedAt
+                  ? moment(completedAt).format(DatesEnum.Format.DDMMYYYYhhmmss)
+                  : "-",
+              sorter: true,
+            },
+            {
               title: "Delivery At",
               dataIndex: "deliveryAt",
               key: "deliveryAt",
               align: "center",
               render: (deliveryAt: Date | null, sale: ISale) => {
                 if (!deliveryAt) {
-                  return null;
+                  return "-";
                 }
 
                 return (
