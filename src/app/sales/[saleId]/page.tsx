@@ -260,7 +260,7 @@ export default function SalePage() {
                   </label>
                 </div>
 
-                <div className="flex">
+                <div className="flex items-baseline">
                   <label className="mr-2">Delivery Type</label>
 
                   <Tag>
@@ -276,32 +276,35 @@ export default function SalePage() {
                 <Description
                   containerClassName="mt-0"
                   label="Country"
-                  description={buyerAddress?.country.name}
+                  description={buyerAddress?.country.name || "-"}
                 />
 
                 <Description
                   label="State"
-                  description={buyerAddress?.state?.name}
+                  description={buyerAddress?.state?.name || "-"}
                 />
 
-                <Description label="City" description={buyerAddress?.city} />
+                <Description
+                  label="City"
+                  description={buyerAddress?.city || "-"}
+                />
               </Col>
 
               <Col xs={24} md={8}>
                 <Description
                   containerClassName="mt-0"
                   label="Address1"
-                  description={buyerAddress?.address1}
+                  description={buyerAddress?.address1 || "-"}
                 />
 
                 <Description
                   label="Address2"
-                  description={buyerAddress?.address2}
+                  description={buyerAddress?.address2 || "-"}
                 />
 
                 <Description
                   label="District"
-                  description={buyerAddress?.district}
+                  description={buyerAddress?.district || "-"}
                 />
               </Col>
 
@@ -309,18 +312,18 @@ export default function SalePage() {
                 <Description
                   containerClassName="mt-0"
                   label="Zipcode"
-                  description={buyerAddress?.zip}
+                  description={buyerAddress?.zip || "-"}
                 />
 
                 <Description
                   label="Description"
-                  description={buyerAddress?.zip}
+                  description={buyerAddress?.description || "-"}
                 />
 
                 <Description
                   label="Types"
                   description={
-                    buyerAddress ? addressTypesToString(buyerAddress) : ""
+                    buyerAddress ? addressTypesToString(buyerAddress) : "-"
                   }
                 />
               </Col>
