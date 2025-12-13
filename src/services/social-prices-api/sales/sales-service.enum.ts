@@ -20,6 +20,7 @@ namespace SalesServiceEnum {
     UPDATE_SALE_FILES = "/sales/updateSaleFiles",
     SEND_SALE_SUMMARY_LINK = "/sales/sendSaleSummaryLink",
     GET_SALE_BY_SALE_SUMMARY_LINK_TOKEN = "/sales/getSaleBySaleSummaryLinkToken/:token",
+    COMPLETE_MULTIPLE_SALES_MANUAL = "/sales/completeMultipleSalesManual",
   }
 }
 

@@ -16,6 +16,7 @@ import {
   ITableStateResponse,
 } from "../../../shared/utils/table/table-state.interface";
 import ServiceMethodsBase from "../service-methods.base";
+import CompleteMultipleSalesManualDto from "./dto/completeMultipleSalesManual.dto";
 import CreateSaleDto from "./dto/createSale.dto";
 import UpdateSaleDto from "./dto/updateSale.dto";
 import UpdateSaleCustomerManualDto from "./dto/updateSaleCustomerManual.dto";
@@ -245,6 +246,23 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
         newStatus,
         saleId,
       },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async completeMultipleSalesManual(
+    completeMultipleSalesManualDto: CompleteMultipleSalesManualDto
+  ): Promise<void> {
+    const response = await this._fetchAxios.post<void>(
+      `${this._socialPricesApiV1}${SalesServiceEnum.Methods.COMPLETE_MULTIPLE_SALES_MANUAL}`,
+      completeMultipleSalesManualDto,
       {
         headers: {
           "Content-Type": "application/json",

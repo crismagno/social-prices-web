@@ -8,6 +8,7 @@ import {
   Card,
   Col,
   Divider,
+  message,
   Modal,
   Row,
   Tag,
@@ -131,6 +132,10 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
   const [isDownloadSalesDrawerOpen, setIsDownloadSalesDrawerOpen] =
     useState<boolean>(false);
 
+  const [selectedSaleIds, setSelectedSaleIds] = useState<string[]>([]);
+
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const filesUploadsTableRef: RefObject<IFilesUploadsTableRefProps> =
     useRef<IFilesUploadsTableRefProps>(null);
 
@@ -230,6 +235,32 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
     });
   };
 
+  const handleCompleteMultipleSales = async () => {
+    try {
+      setIsSubmitting(true);
+
+      await serviceMethodsInstance.salesServiceMethods.completeMultipleSalesManual(
+        {
+          saleIds: selectedSaleIds,
+        }
+      );
+
+      setSelectedSaleIds([]);
+
+      setTableStateRequest({
+        ...tableStateRequest,
+        filters: { ...tableStateRequest?.filters },
+        pagination: { pageSize: 10, skip: 0, current: undefined, total: 0 },
+      });
+
+      message.success("Selected sales completed successfully.");
+    } catch (error: any) {
+      handleClientError(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
       <Card
@@ -263,6 +294,21 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
           </>
         }
       >
+        <Row className="mb-4" gutter={[16, 16]}>
+          <Col xs={24} className="flex justify-end items-center">
+            <Tooltip title="Complete Multiple Sales">
+              <Button
+                icon={<CheckOutlined />}
+                type="success"
+                disabled={selectedSaleIds.length === 0}
+                onClick={handleCompleteMultipleSales}
+              >
+                Complete
+              </Button>
+            </Tooltip>
+          </Col>
+        </Row>
+
         <Row gutter={[16, 16]}>
           <Col md={6}>
             <CustomRangeDatePicker
@@ -760,8 +806,14 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
             },
           ]}
           search={{ placeholder: "Search sales..." }}
-          loading={isLoading}
+          loading={isLoading || isSubmitting}
           total={total}
+          rowSelection={{
+            selectedRowKeys: selectedSaleIds,
+            onChange: (selectedRowKeys: React.Key[]) => {
+              setSelectedSaleIds(selectedRowKeys as string[]);
+            },
+          }}
           footer={() => {
             if (isLoadingSalesSummary) {
               return <LoadingFull />;
