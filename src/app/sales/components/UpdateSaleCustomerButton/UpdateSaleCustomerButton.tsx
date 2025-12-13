@@ -44,6 +44,8 @@ export const UpdateSaleCustomerButton: React.FC<Props> = ({
     formState: { errors },
     control,
     setValue,
+    setError,
+    reset,
   } = useForm<TFormSchema>({
     values: {
       newCustomerId: "",
@@ -55,6 +57,11 @@ export const UpdateSaleCustomerButton: React.FC<Props> = ({
   if (!sale) {
     return null;
   }
+
+  const resetForm = () => {
+    reset();
+    setNewCustomer(null);
+  };
 
   const onSubmit: SubmitHandler<TFormSchema> = async (data: TFormSchema) => {
     try {
@@ -70,6 +77,7 @@ export const UpdateSaleCustomerButton: React.FC<Props> = ({
         );
 
       onUpdatedSaleCustomer?.(response);
+      resetForm();
       setIsOpen(false);
     } catch (error: any) {
       handleClientError(error);
@@ -81,6 +89,7 @@ export const UpdateSaleCustomerButton: React.FC<Props> = ({
   const handleSelectCustomer = (customer: ICustomer | null) => {
     setValue("newCustomerId", customer?._id ?? "");
     setValue("newAddressUid", null);
+    setError("newCustomerId", { message: undefined });
 
     setNewCustomer(customer);
   };
@@ -91,11 +100,15 @@ export const UpdateSaleCustomerButton: React.FC<Props> = ({
     <>
       <Modal
         title={`Update Customer For Sale: ${sale.number}`}
-        onCancel={() => setIsOpen(false)}
+        onCancel={() => {
+          resetForm();
+          setIsOpen(false);
+        }}
         onOk={handleSubmit(onSubmit)}
         open={isOpen}
         closable={false}
         maskClosable={false}
+        destroyOnClose
       >
         <Divider />
 
