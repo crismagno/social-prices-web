@@ -1,6 +1,6 @@
 import { Tag, Tooltip } from "antd";
 
-import { TagFilled } from "@ant-design/icons";
+import { QuestionCircleOutlined, TagFilled } from "@ant-design/icons";
 
 import { ITag } from "../../../shared/business/tags/tags.interface";
 
@@ -14,7 +14,10 @@ export const TagTagCustomAntd: React.FC<Props> = ({ tag, useTag = true }) => {
   if (useTag) {
     return (
       <Tooltip title={tag.description}>
-        <Tag icon={<TagFilled style={{ color: tagColor }} />}>{tag.name}</Tag>
+        <Tag icon={<TagFilled style={{ color: tagColor }} />}>
+          {tag.name}
+          {tag.description && <QuestionCircleOutlined className="ml-1" />}
+        </Tag>
       </Tooltip>
     );
   }

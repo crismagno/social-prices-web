@@ -1,6 +1,6 @@
 import { Tag, Tooltip } from "antd";
 
-import { BlockOutlined } from "@ant-design/icons";
+import { BlockOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 
 import { ICategory } from "../../../shared/business/categories/categories.interface";
 
@@ -19,7 +19,11 @@ export const TagCategoryCustomAntd: React.FC<Props> = ({
   if (useTag) {
     return (
       <Tooltip title={category.description}>
-        <Tag icon={icon}>{category.name}</Tag>
+        <Tag icon={icon}>
+          {category.name}
+
+          {category.description && <QuestionCircleOutlined className="ml-1" />}
+        </Tag>
       </Tooltip>
     );
   }
