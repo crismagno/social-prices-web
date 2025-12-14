@@ -156,12 +156,16 @@ namespace SalesEnum {
     deliveryAt = "deliveryAt",
     createdAt = "createdAt",
     createdDate = "createdDate",
+    completedAt = "completedAt",
+    updatedAt = "updatedAt",
   }
 
   export const SortFieldLabels = {
     [SortField.deliveryAt]: "Delivery At",
     [SortField.createdAt]: "Created At",
     [SortField.createdDate]: "Created Date",
+    [SortField.completedAt]: "Completed At",
+    [SortField.updatedAt]: "Updated At",
   };
 
   export const StatusToFilterCharts: Status[] = [
