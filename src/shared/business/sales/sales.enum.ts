@@ -175,6 +175,13 @@ namespace SalesEnum {
     Status.STOPPED,
     Status.DELIVERY,
   ];
+
+  export const SelectOptionsRangeDatePicker = Object.values(SortField).map(
+    (value) => ({
+      label: SalesEnum.SortFieldLabels[value],
+      value,
+    })
+  );
 }
 
 export default SalesEnum;

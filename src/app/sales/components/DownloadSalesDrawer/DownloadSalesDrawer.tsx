@@ -38,7 +38,8 @@ const formSchema = z.object({
   selectedProductIds: z.array(z.string()),
   sortField: z.string().nullable(),
   sortOrder: z.string().nullable(),
-  rangeCreatedDate: z
+  rangeField: z.string().nullable(),
+  rangeDate: z
     .object({
       startDate: z.date().nullable(),
       endDate: z.date().nullable(),
@@ -85,7 +86,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
       search: null,
       tagsIds: [],
       types: [],
-      rangeCreatedDate: null,
+      rangeDate: null,
       deliveryTypes: [],
       status: [],
       paymentStatus: [],
@@ -95,6 +96,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
       sortField: SalesEnum.SortField.createdAt,
       sortOrder: TableStateEnum.SortOrder.ascend,
       isActive: null,
+      rangeField: SalesEnum.SortField.createdAt,
     },
     resolver: zodResolver(formSchema),
   });
@@ -137,14 +139,18 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
             />
           </Col>
 
-          <Col xs={24} sm={12}>
+          <Col xs={24} sm={14} className="flex items-end">
             <CustomRangeDatePicker
-              label="Created Date:"
               showTime
               labelClassName="font-normal"
+              select={{
+                options: SalesEnum.SelectOptionsRangeDatePicker,
+                onChange: (value: string) => setValue("rangeField", value),
+                value: watch("rangeField")!,
+              }}
               onChange={(startDate: Date | null, endDate: Date | null) => {
                 setValue(
-                  "rangeCreatedDate",
+                  "rangeDate",
                   startDate === null || endDate === null
                     ? null
                     : { startDate, endDate }
@@ -153,7 +159,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
             />
           </Col>
 
-          <Col xs={24} sm={12}>
+          <Col xs={24} sm={10}>
             <SelectProducts
               label="Products"
               labelClassName="font-normal"

@@ -102,6 +102,7 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
         customerIds: customerId ? [customerId] : [],
         productIds: productId ? [productId] : [],
         isActive: [true],
+        rangeField: SalesEnum.SortField.createdAt,
       },
     })
   );
@@ -221,7 +222,7 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
     }
   };
 
-  const handleFilterSaleByCreatedAt = (
+  const handleFilterSaleByRangeDates = (
     startDate: Date | null,
     endDate: Date | null
   ) => {
@@ -229,7 +230,18 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
       ...tableStateRequest,
       filters: {
         ...tableStateRequest?.filters,
-        createdAtRange: startDate && endDate ? { startDate, endDate } : null,
+        rangeDate: startDate && endDate ? { startDate, endDate } : null,
+      },
+      pagination: { pageSize: 10, skip: 0, current: undefined, total: 0 },
+    });
+  };
+
+  const handleFilterSaleByRangeField = (value: string) => {
+    setTableStateRequest({
+      ...tableStateRequest,
+      filters: {
+        ...tableStateRequest?.filters,
+        rangeField: value,
       },
       pagination: { pageSize: 10, skip: 0, current: undefined, total: 0 },
     });
@@ -310,11 +322,15 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
         </Row>
 
         <Row gutter={[16, 16]}>
-          <Col md={6}>
+          <Col md={8} className="flex items-end">
             <CustomRangeDatePicker
-              label="Created Date:"
               showTime
-              onChange={handleFilterSaleByCreatedAt}
+              onChange={handleFilterSaleByRangeDates}
+              select={{
+                options: SalesEnum.SelectOptionsRangeDatePicker,
+                onChange: handleFilterSaleByRangeField,
+                value: tableStateRequest?.filters?.rangeField,
+              }}
             />
           </Col>
 
@@ -373,12 +389,12 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
             }
 
             if (
-              tableStateRequest?.filters?.createdAtRange?.startDate &&
-              tableStateRequest?.filters?.createdAtRange?.endDate
+              tableStateRequest?.filters?.rangeDate?.startDate &&
+              tableStateRequest?.filters?.rangeDate?.endDate
             ) {
               tableStateRequestSale.filters = {
                 ...tableStateRequestSale.filters,
-                createdAtRange: tableStateRequest.filters.createdAtRange,
+                rangeDate: tableStateRequest.filters.rangeDate,
               };
             }
 
