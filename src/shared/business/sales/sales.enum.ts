@@ -176,6 +176,8 @@ namespace SalesEnum {
     Status.DELIVERY,
   ];
 
+  export const StatusRed: Status[] = [Status.ERROR, Status.STOPPED];
+
   export const SelectOptionsRangeDatePicker = Object.values(SortField).map(
     (value) => ({
       label: SalesEnum.SortFieldLabels[value],

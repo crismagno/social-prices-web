@@ -831,12 +831,16 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
             },
           }}
           rowClassName={(sale: ISale) => {
-            if (sale.softDelete) {
+            if (sale.softDelete || includes(SalesEnum.StatusRed, sale.status)) {
               return "bg-red-50";
             }
 
             if (sale.status === SalesEnum.Status.COMPLETED) {
               return "bg-green-50";
+            }
+
+            if (sale.status === SalesEnum.Status.DELIVERY) {
+              return "bg-purple-50";
             }
 
             return "";
