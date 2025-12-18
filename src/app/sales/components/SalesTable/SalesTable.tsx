@@ -830,6 +830,17 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
               setSelectedSaleIds(selectedRowKeys as string[]);
             },
           }}
+          rowClassName={(sale: ISale) => {
+            if (sale.softDelete) {
+              return "bg-red-50";
+            }
+
+            if (sale.status === SalesEnum.Status.COMPLETED) {
+              return "bg-green-50";
+            }
+
+            return "";
+          }}
           footer={() => {
             if (isLoadingSalesSummary) {
               return <LoadingFull />;
