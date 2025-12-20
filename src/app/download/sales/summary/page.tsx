@@ -1,36 +1,22 @@
 "use client";
 
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect, useState } from "react";
 
-import {
-  Divider,
-  Empty,
-  Tooltip,
-} from 'antd';
+import { Divider, Empty, Tooltip } from "antd";
 import {
   ReadonlyURLSearchParams,
   useRouter,
   useSearchParams,
-} from 'next/dist/client/components/navigation';
+} from "next/dist/client/components/navigation";
 
-import Avatar from '../../../../components/common/Avatar/Avatar';
-import {
-  DownloadSalesSummaryButton,
-} from '../../../../components/common/DownloadSalesSummaryButton/DownloadSalesSummaryButton';
-import handleClientError
-  from '../../../../components/common/handleClientError/handleClientError';
-import LoadingFull from '../../../../components/common/LoadingFull/LoadingFull';
-import {
-  serviceMethodsInstance,
-} from '../../../../services/social-prices-api/service-methods';
-import {
-  ICustomer,
-} from '../../../../shared/business/customers/customer.interface';
-import { ISale } from '../../../../shared/business/sales/sale.interface';
-import Urls from '../../../../shared/common/routes-app/routes-app';
+import Avatar from "../../../../components/common/Avatar/Avatar";
+import handleClientError from "../../../../components/common/handleClientError/handleClientError";
+import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
+import { Logo1 } from "../../../../components/common/Logo/Logo1";
+import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
+import { ICustomer } from "../../../../shared/business/customers/customer.interface";
+import { ISale } from "../../../../shared/business/sales/sale.interface";
+import Urls from "../../../../shared/common/routes-app/routes-app";
 
 export default function DownloadSalesSummaryPage() {
   const router = useRouter();
@@ -73,7 +59,7 @@ export default function DownloadSalesSummaryPage() {
   if (!sale) {
     return (
       <div
-        className="w-screen h-screen flex justify-center items-center 
+        className="w-screen h-screen flex flex-col justify-center items-center 
           bg-gradient-to-r from-gray-200 to-sky-100"
       >
         <div
@@ -82,6 +68,10 @@ export default function DownloadSalesSummaryPage() {
         >
           <Empty />
         </div>
+
+        <footer>
+          <Logo1 size={50} />
+        </footer>
       </div>
     );
   }
@@ -122,10 +112,10 @@ export default function DownloadSalesSummaryPage() {
 
           <Divider type="horizontal" dashed />
 
-          <DownloadSalesSummaryButton
+          {/* <DownloadSalesSummaryButton
             sale={sale}
             buttonText="Download Sale Summary"
-          />
+          /> */}
         </div>
       </div>
 
@@ -141,6 +131,10 @@ export default function DownloadSalesSummaryPage() {
           </a>
         </Tooltip>
       </div>
+
+      <footer>
+        <Logo1 size={50} />
+      </footer>
     </div>
   );
 }
