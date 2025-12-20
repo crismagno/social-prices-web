@@ -18,6 +18,8 @@ import { z } from "zod";
 import { PlusOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { TagCategoryCustomAntd } from "../../../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
+import { TagTagCustomAntd } from "../../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
 import { InputNumberCustomAntd } from "../../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import TableCustomAntd2 from "../../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import CategoriesEnum from "../../../../../shared/business/categories/categories.enum";
@@ -213,7 +215,7 @@ export const AddProductsTable: React.FC<Props> = ({
           >
             {map(categories, (category: ICategory) => (
               <Select.Option key={category._id} value={category._id}>
-                {category.name}
+                <TagCategoryCustomAntd category={category} useTag={false} />
               </Select.Option>
             ))}
           </Select>
@@ -229,7 +231,7 @@ export const AddProductsTable: React.FC<Props> = ({
           >
             {map(sortArray(tags, "name"), (tag: ITag) => (
               <Select.Option key={tag._id} value={tag._id}>
-                {tag.name}
+                <TagTagCustomAntd tag={tag} useTag={false} />
               </Select.Option>
             ))}
           </Select>
