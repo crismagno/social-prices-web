@@ -408,9 +408,9 @@ export const SelectedProductsList: React.FC<Props> = ({
 
         {/* Total Discount */}
         <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
-          <Col xs={4}>Total After Discount:</Col>
+          <Col xs={5}>Total After Discount:</Col>
 
-          <Col xs={17} className="text-end">
+          <Col xs={16} className="text-end">
             <Tooltip title="Sum total after all discounts" className="mr-4">
               - {formatToMoneyDecimal(totalAfterDiscount)}
             </Tooltip>
