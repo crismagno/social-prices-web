@@ -62,7 +62,11 @@ export const SalesChartsStatistics: React.FC<Props> = ({
               height: 300,
             }}
             storeId={storeId}
-            title={"Sales amount of day per hour"}
+            title={
+              isSalesQuantityMode
+                ? "Sales quantity of day per hour"
+                : "Sales amount of day per hour"
+            }
             isSalesQuantityMode={isSalesQuantityMode}
           />
 
@@ -80,7 +84,11 @@ export const SalesChartsStatistics: React.FC<Props> = ({
               height: 300,
             }}
             storeId={storeId}
-            title={"Sales amount of month per day"}
+            title={
+              isSalesQuantityMode
+                ? "Sales quantity of month per day"
+                : "Sales amount of month per day"
+            }
             isSalesQuantityMode={isSalesQuantityMode}
           />
 
@@ -98,7 +106,11 @@ export const SalesChartsStatistics: React.FC<Props> = ({
               height: 300,
             }}
             storeId={storeId}
-            title={"Sales amount of year per month"}
+            title={
+              isSalesQuantityMode
+                ? "Sales quantity of year per month"
+                : "Sales amount of year per month"
+            }
             isSalesQuantityMode={isSalesQuantityMode}
           />
 
@@ -116,7 +128,11 @@ export const SalesChartsStatistics: React.FC<Props> = ({
               height: 300,
             }}
             storeId={storeId}
-            title={"Sales amount of year per last 6 years"}
+            title={
+              isSalesQuantityMode
+                ? "Sales quantity of year per last 6 years"
+                : "Sales amount of year per last 6 years"
+            }
             isSalesQuantityMode={isSalesQuantityMode}
           />
 
