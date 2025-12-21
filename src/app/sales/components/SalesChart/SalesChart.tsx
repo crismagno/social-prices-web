@@ -28,6 +28,7 @@ import { useGetSalesAnalytics } from "../../useGetSalesAnalytics";
 import { SalesChartListProducts } from "./SalesChartListProducts";
 import { SalesChartPeriodType } from "./SalesChartPeriodType";
 import { SalesChartProducts } from "./SalesChartProducts";
+import { SalesQuantityChartPeriodType } from "./SalesQuantityChartPeriodType";
 
 interface Props {
   title?: string;
@@ -284,7 +285,7 @@ export const SalesChart: React.FC<Props> = ({
       </Row>
 
       <Row gutter={[16, 16]} className="mt-3">
-        <Col md={16}>
+        <Col md={12}>
           <SalesChartPeriodType
             periodType={getSalesAnalyticsParams.periodType!}
             onChange={(periodType: ChartsEnum.PeriodType) => {
@@ -296,9 +297,11 @@ export const SalesChart: React.FC<Props> = ({
             salesAnalytics={salesAnalytics}
           />
         </Col>
-
-        <Col md={8}>
-          <SalesChartListProducts salesAnalytics={salesAnalytics} />
+        <Col md={12}>
+          <SalesQuantityChartPeriodType
+            periodType={getSalesAnalyticsParams.periodType!}
+            salesAnalytics={salesAnalytics}
+          />
         </Col>
       </Row>
 
@@ -307,6 +310,10 @@ export const SalesChart: React.FC<Props> = ({
       <Row gutter={[16, 16]} className="mt-2">
         <Col md={12}>
           <SalesChartProducts salesAnalytics={salesAnalytics} />
+        </Col>
+
+        <Col md={12}>
+          <SalesChartListProducts salesAnalytics={salesAnalytics} />
         </Col>
       </Row>
     </Card>

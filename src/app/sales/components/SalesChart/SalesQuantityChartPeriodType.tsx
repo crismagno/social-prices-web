@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Divider, Select, Tag } from "antd";
+import { Select, Tag } from "antd";
 import { find, map, reduce } from "lodash";
 import {
   Area,
@@ -14,18 +14,17 @@ import {
 } from "recharts";
 
 import { IGetSalesAnalyticsResponse } from "../../../../shared/business/sales/sales.type";
-import { ITotalQuantity } from "../../../../shared/common/interfaces/global.interface";
+import { ITotalQuantitySalesQuantity } from "../../../../shared/common/interfaces/global.interface";
 import ChartsEnum from "../../../../shared/utils/charts/charts-enum";
 import { IChartDataPeriodTypeItem } from "../../../../shared/utils/charts/charts-types";
-import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
 
 interface Props {
   salesAnalytics: IGetSalesAnalyticsResponse | null;
-  onChange: (periodType: ChartsEnum.PeriodType) => void;
+  onChange?: (periodType: ChartsEnum.PeriodType) => void;
   periodType: ChartsEnum.PeriodType;
 }
 
-export const SalesChartPeriodType: React.FC<Props> = ({
+export const SalesQuantityChartPeriodType: React.FC<Props> = ({
   salesAnalytics,
   onChange,
   periodType,
@@ -33,19 +32,21 @@ export const SalesChartPeriodType: React.FC<Props> = ({
   const chartDataPeriodType: IChartDataPeriodTypeItem[] =
     salesAnalytics?.chartDataPeriodType ?? [];
 
-  const totalQuantityByData: ITotalQuantity = reduce(
+  const totalByData: ITotalQuantitySalesQuantity = reduce(
     chartDataPeriodType,
-    (acc: ITotalQuantity, curr: IChartDataPeriodTypeItem) => {
+    (acc: ITotalQuantitySalesQuantity, curr: IChartDataPeriodTypeItem) => {
       acc.total += curr.total;
       acc.quantity += curr.quantity;
+      acc.salesQuantity = (acc.salesQuantity || 0) + (curr.salesQuantity || 0);
 
       return acc;
     },
     {
       total: 0,
       quantity: 0,
+      salesQuantity: 0,
     }
-  ) || { total: 0, quantity: 0 };
+  ) || { total: 0, quantity: 0, salesQuantity: 0 };
 
   const renderTooltip = (props: any) => {
     const { active, payload } = props;
@@ -56,15 +57,10 @@ export const SalesChartPeriodType: React.FC<Props> = ({
 
     const item: IChartDataPeriodTypeItem = payload[0].payload;
 
-    const itemTotal: number = item?.total ?? 0;
+    const itemSalesQuantity: number = item?.salesQuantity ?? 0;
 
-    const itemQuantity: number = item?.quantity ?? 0;
-
-    const percentageByTotal: number =
-      (itemTotal * 100) / totalQuantityByData.total;
-
-    const percentageByQuantity: number =
-      (itemQuantity * 100) / totalQuantityByData.quantity;
+    const percentageBySalesQuantity: number =
+      (itemSalesQuantity * 100) / (totalByData.salesQuantity || 1);
 
     return (
       <div
@@ -75,10 +71,8 @@ export const SalesChartPeriodType: React.FC<Props> = ({
         }}
       >
         <p>{`${ChartsEnum.PeriodTypeLabel[periodType]}: ${item.name} `}</p>
-        <p>{`Total Amount: ${formatToMoneyDecimal(item.total)}`}</p>
-        <p>{`Percentage by Total Amount: ${percentageByTotal.toFixed(2)}%`}</p>
-        <p>{`Product Quantity: ${item.quantity}`}</p>
-        <p>{`Percentage by Product Quantity: ${percentageByQuantity.toFixed(
+        <p>{`Sales Quantity Total: ${item.salesQuantity}`}</p>
+        <p>{`Percentage by Sales Quantity Total: ${percentageBySalesQuantity.toFixed(
           2
         )}%`}</p>
       </div>
@@ -96,10 +90,10 @@ export const SalesChartPeriodType: React.FC<Props> = ({
       { name: value }
     );
 
-    const itemTotal: number = item?.total || 0;
+    const itemSalesQuantity: number = item?.salesQuantity || 0;
 
-    const percentageByTotal: number =
-      (itemTotal * 100) / totalQuantityByData.total || 0;
+    const percentageBySalesQuantity: number =
+      (itemSalesQuantity * 100) / (totalByData.salesQuantity || 1) || 0;
 
     return (
       <>
@@ -120,13 +114,13 @@ export const SalesChartPeriodType: React.FC<Props> = ({
           y={y + 20}
           rotate={10}
         >
-          {percentageByTotal.toFixed(1)}%
+          {percentageBySalesQuantity.toFixed(1)}%
         </text>
       </>
     );
   };
 
-  const renderYAxisTotal = (tickProps: any) => {
+  const renderYAxisSalesQuantity = (tickProps: any) => {
     const { x, y, payload } = tickProps;
     const { value } = payload;
 
@@ -135,28 +129,10 @@ export const SalesChartPeriodType: React.FC<Props> = ({
         <text
           style={{ fontSize: "0.6rem" }}
           textAnchor="middle"
-          x={x - 24}
+          x={x - 4}
           y={y + 4}
         >
-          {formatToMoneyDecimal(value)}
-        </text>
-      </>
-    );
-  };
-
-  const renderYAxisQuantity = (tickProps: any) => {
-    const { x, y, payload } = tickProps;
-    const { value } = payload;
-
-    return (
-      <>
-        <text
-          style={{ fontSize: "0.6rem" }}
-          textAnchor="middle"
-          x={x + 20}
-          y={y + 4}
-        >
-          P. Qty: {value}
+          {value}
         </text>
       </>
     );
@@ -167,7 +143,7 @@ export const SalesChartPeriodType: React.FC<Props> = ({
   return (
     <>
       <div className="flex items-center justify-center">
-        <label className="font-semibold mr-2">Sales Revenue by Period: </label>
+        <label className="font-semibold mr-2">Sales Quantity by Period: </label>
 
         {onChange ? (
           <Select style={{ width: 120 }} value={periodType} onChange={onChange}>
@@ -185,7 +161,7 @@ export const SalesChartPeriodType: React.FC<Props> = ({
         )}
       </div>
 
-      <div className="ml-5">
+      <div className="mt-2">
         <ResponsiveContainer width={"100%"} height={390}>
           <AreaChart
             data={chartDataPeriodType}
@@ -198,50 +174,27 @@ export const SalesChartPeriodType: React.FC<Props> = ({
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" tick={renderXAxis} />
-            <YAxis tick={renderYAxisTotal} yAxisId="total" />
-            <YAxis
-              tick={renderYAxisQuantity}
-              yAxisId="quantity"
-              orientation="right"
-            />
+            <YAxis tick={renderYAxisSalesQuantity} yAxisId="salesQuantity" />
 
             <Tooltip content={renderTooltip} />
             <Legend />
 
             <Area
               type="monotone"
-              dataKey="total"
-              name="Total Amount"
-              stroke="#8dc5f8"
+              dataKey="salesQuantity"
+              name="Sales Quantity"
+              stroke="#73d13d"
               fillOpacity={0.5}
-              fill="#8dc5f8"
-              yAxisId="total"
-            />
-            <Area
-              type="monotone"
-              dataKey="quantity"
-              name="Product Quantity"
-              stroke="#1f1f1f"
-              fillOpacity={1}
-              fill="url(#colorPv)"
-              yAxisId="quantity"
+              fill="#73d13d"
+              yAxisId="salesQuantity"
             />
           </AreaChart>
         </ResponsiveContainer>
 
         <div className="text-center mt-1">
           <span className="font-semibold">
-            Total Amount:
-            <span className="ml-1">
-              {formatToMoneyDecimal(totalQuantityByData.total)}
-            </span>
-          </span>
-
-          <Divider type="vertical" />
-
-          <span className="font-semibold">
-            Product Quantity:
-            <span className="ml-1">{totalQuantityByData.quantity}</span>
+            Sales Quantity Total:
+            <span className="ml-1">{totalByData.salesQuantity || 0}</span>
           </span>
         </div>
       </div>
