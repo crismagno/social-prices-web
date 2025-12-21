@@ -75,10 +75,12 @@ export const SalesChartPeriodType: React.FC<Props> = ({
         }}
       >
         <p>{`${ChartsEnum.PeriodTypeLabel[periodType]}: ${item.name} `}</p>
-        <p>{`Total: ${formatToMoneyDecimal(item.total)}`}</p>
-        <p>{`Percentage by Total: ${percentageByTotal.toFixed(2)}%`}</p>
-        <p>{`Quantity: ${item.quantity}`}</p>
-        <p>{`Percentage by Quantity: ${percentageByQuantity.toFixed(2)}%`}</p>
+        <p>{`Total Amount: ${formatToMoneyDecimal(item.total)}`}</p>
+        <p>{`Percentage by Total Amount: ${percentageByTotal.toFixed(2)}%`}</p>
+        <p>{`Product Quantity: ${item.quantity}`}</p>
+        <p>{`Percentage by Product Quantity: ${percentageByQuantity.toFixed(
+          2
+        )}%`}</p>
       </div>
     );
   };
@@ -151,10 +153,10 @@ export const SalesChartPeriodType: React.FC<Props> = ({
         <text
           style={{ fontSize: "0.6rem" }}
           textAnchor="middle"
-          x={x + 15}
+          x={x + 20}
           y={y + 4}
         >
-          Qty: {value}
+          P. Qty: {value}
         </text>
       </>
     );
@@ -221,7 +223,7 @@ export const SalesChartPeriodType: React.FC<Props> = ({
 
         <div className="text-center mt-1">
           <span className="font-semibold">
-            Total:
+            Total Amount:
             <span className="ml-1">
               {formatToMoneyDecimal(totalQuantityByData.total)}
             </span>
@@ -230,7 +232,7 @@ export const SalesChartPeriodType: React.FC<Props> = ({
           <Divider type="vertical" />
 
           <span className="font-semibold">
-            Quantity:
+            Product Quantity:
             <span className="ml-1">{totalQuantityByData.quantity}</span>
           </span>
         </div>
