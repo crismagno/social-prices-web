@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Card, Col, Divider, Row } from "antd";
+import { Card, Col, Divider, Radio, Row } from "antd";
 import moment from "moment";
+
+import { DotChartOutlined, LineChartOutlined } from "@ant-design/icons";
 
 import ChartsEnum from "../../../../shared/utils/charts/charts-enum";
 import { SalesChartStatistic } from "./SalesChartStatistic";
@@ -17,10 +19,35 @@ export const SalesChartsStatistics: React.FC<Props> = ({
   storeId,
   isShowHeader = true,
 }) => {
+  const [isSalesQuantityMode, setIsSalesQuantityMode] =
+    useState<boolean>(false);
+
   return (
     <Card
       className={`my-2 ${className}`}
-      title="Sales Statistics"
+      title={
+        <div className="flex items-center">
+          <h2>Sales Statistics:</h2>
+
+          <Radio.Group
+            className="ml-3"
+            onChange={(e) => {
+              setIsSalesQuantityMode(e.target.value);
+            }}
+            value={isSalesQuantityMode}
+          >
+            <Radio.Button value={false}>
+              <LineChartOutlined />
+              <span className="ml-1">Amount</span>
+            </Radio.Button>
+
+            <Radio.Button value={true}>
+              <DotChartOutlined />
+              <span className="ml-1">Quantity</span>
+            </Radio.Button>
+          </Radio.Group>
+        </div>
+      }
       headStyle={{ display: isShowHeader ? "" : "none" }}
     >
       <Row gutter={[2, 2]}>
@@ -35,7 +62,8 @@ export const SalesChartsStatistics: React.FC<Props> = ({
               height: 300,
             }}
             storeId={storeId}
-            title={"Sales of day per hour"}
+            title={"Sales amount of day per hour"}
+            isSalesQuantityMode={isSalesQuantityMode}
           />
 
           <Divider type="horizontal" />
@@ -52,7 +80,8 @@ export const SalesChartsStatistics: React.FC<Props> = ({
               height: 300,
             }}
             storeId={storeId}
-            title={"Sales of month per day"}
+            title={"Sales amount of month per day"}
+            isSalesQuantityMode={isSalesQuantityMode}
           />
 
           <Divider type="horizontal" />
@@ -69,7 +98,8 @@ export const SalesChartsStatistics: React.FC<Props> = ({
               height: 300,
             }}
             storeId={storeId}
-            title={"Sales of year per month"}
+            title={"Sales amount of year per month"}
+            isSalesQuantityMode={isSalesQuantityMode}
           />
 
           <Divider type="horizontal" />
@@ -86,7 +116,8 @@ export const SalesChartsStatistics: React.FC<Props> = ({
               height: 300,
             }}
             storeId={storeId}
-            title={"Sales of year per last 6 years"}
+            title={"Sales amount of year per last 6 years"}
+            isSalesQuantityMode={isSalesQuantityMode}
           />
 
           <Divider type="horizontal" />

@@ -1,7 +1,6 @@
 import React from "react";
 
-import { Select, Tag } from "antd";
-import { find, map, reduce } from "lodash";
+import { find, reduce } from "lodash";
 import {
   Area,
   AreaChart,
@@ -19,20 +18,27 @@ import ChartsEnum from "../../../../shared/utils/charts/charts-enum";
 import { IChartDataPeriodTypeItem } from "../../../../shared/utils/charts/charts-types";
 
 interface Props {
-  salesAnalytics: IGetSalesAnalyticsResponse | null;
-  onChange?: (periodType: ChartsEnum.PeriodType) => void;
   periodType: ChartsEnum.PeriodType;
+  chartProps?: {
+    width?: number | string;
+    height?: number | string;
+    totalColor?: string;
+    quantityColor?: string;
+  };
+  title?: string;
+  salesAnalytics?: IGetSalesAnalyticsResponse | null;
 }
 
-export const SalesQuantityChartPeriodType: React.FC<Props> = ({
-  salesAnalytics,
-  onChange,
+export const SalesQuantityChartStatistic: React.FC<Props> = ({
   periodType,
+  chartProps,
+  title,
+  salesAnalytics,
 }) => {
   const chartDataPeriodType: IChartDataPeriodTypeItem[] =
     salesAnalytics?.chartDataPeriodType ?? [];
 
-  const totalByData: ITotalQuantitySalesQuantity = reduce(
+  const totalQuantityByData: ITotalQuantitySalesQuantity = reduce(
     chartDataPeriodType,
     (acc: ITotalQuantitySalesQuantity, curr: IChartDataPeriodTypeItem) => {
       acc.total += curr.total;
@@ -60,7 +66,7 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
     const itemSalesQuantity: number = item?.salesQuantity ?? 0;
 
     const percentageBySalesQuantity: number =
-      (itemSalesQuantity * 100) / (totalByData.salesQuantity || 1);
+      (itemSalesQuantity * 100) / (totalQuantityByData.salesQuantity || 1);
 
     return (
       <div
@@ -71,7 +77,7 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
         }}
       >
         <p>{`${ChartsEnum.PeriodTypeLabel[periodType]}: ${item.name} `}</p>
-        <p>{`Sales Quantity: ${item.salesQuantity}`}</p>
+        <p>{`Sales Quantity: ${itemSalesQuantity}`}</p>
         <p>{`Percentage by Sales Quantity: ${percentageBySalesQuantity.toFixed(
           2
         )}%`}</p>
@@ -92,8 +98,8 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
 
     const itemSalesQuantity: number = item?.salesQuantity || 0;
 
-    const percentageBySalesQuantity: number =
-      (itemSalesQuantity * 100) / (totalByData.salesQuantity || 1) || 0;
+    const percentageByQuantity: number =
+      (itemSalesQuantity * 100) / (totalQuantityByData.salesQuantity || 1);
 
     return (
       <>
@@ -114,13 +120,13 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
           y={y + 20}
           rotate={10}
         >
-          {percentageBySalesQuantity.toFixed(1)}%
+          {percentageByQuantity.toFixed(1)}%
         </text>
       </>
     );
   };
 
-  const renderYAxisSalesQuantity = (tickProps: any) => {
+  const renderYAxisTotal = (tickProps: any) => {
     const { x, y, payload } = tickProps;
     const { value } = payload;
 
@@ -129,7 +135,7 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
         <text
           style={{ fontSize: "0.6rem" }}
           textAnchor="middle"
-          x={x - 4}
+          x={x - 24}
           y={y + 4}
         >
           {value}
@@ -138,31 +144,27 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
     );
   };
 
-  const periodTypeLabel: string = ChartsEnum.PeriodTypeLabel[periodType];
-
   return (
     <>
-      <div className="flex items-center justify-center">
-        <label className="font-semibold mr-2">Sales Quantity by Period: </label>
-
-        {onChange ? (
-          <Select style={{ width: 120 }} value={periodType} onChange={onChange}>
-            {map(
-              Object.keys(ChartsEnum.PeriodType),
-              (periodTypeParam: ChartsEnum.PeriodType) => (
-                <Select.Option key={periodTypeParam} value={periodTypeParam}>
-                  {ChartsEnum.PeriodTypeLabel[periodTypeParam]}
-                </Select.Option>
-              )
-            )}
-          </Select>
+      <div className="w-full text-center">
+        {title ? (
+          <label className="font-semibold">{title}</label>
         ) : (
-          <Tag>{periodTypeLabel}</Tag>
+          <>
+            <span className="mr-2">Sales Amount by Period:</span>
+
+            <label className="font-semibold">
+              {ChartsEnum.PeriodTypeLabel[periodType]}
+            </label>
+          </>
         )}
       </div>
 
-      <div className="mt-2">
-        <ResponsiveContainer width={"100%"} height={390}>
+      <div className="ml-5">
+        <ResponsiveContainer
+          width={chartProps?.width ?? "100%"}
+          height={chartProps?.height ?? 390}
+        >
           <AreaChart
             data={chartDataPeriodType}
             margin={{
@@ -174,7 +176,7 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" tick={renderXAxis} />
-            <YAxis tick={renderYAxisSalesQuantity} yAxisId="salesQuantity" />
+            <YAxis tick={renderYAxisTotal} yAxisId="salesQuantity" />
 
             <Tooltip content={renderTooltip} />
             <Legend />
@@ -183,9 +185,9 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
               type="monotone"
               dataKey="salesQuantity"
               name="Sales Quantity"
-              stroke="#73d13d"
+              stroke={chartProps?.totalColor ?? "#73d13d"}
               fillOpacity={0.5}
-              fill="#73d13d"
+              fill={chartProps?.totalColor ?? "#73d13d"}
               yAxisId="salesQuantity"
             />
           </AreaChart>
@@ -194,7 +196,9 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
         <div className="text-center mt-1">
           <span className="font-semibold">
             Sales Quantity:
-            <span className="ml-1">{totalByData.salesQuantity || 0}</span>
+            <span className="ml-1">
+              {totalQuantityByData.salesQuantity || 0}
+            </span>
           </span>
         </div>
       </div>
