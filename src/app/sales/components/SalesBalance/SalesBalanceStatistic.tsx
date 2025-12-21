@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Card, Divider } from "antd";
+import { Card, Divider, Tooltip } from "antd";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
@@ -29,6 +29,7 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
     quantity: 0,
     total: 0,
     productsBalance: [],
+    salesQuantity: 0,
   },
   storeId,
   customerId,
@@ -122,7 +123,17 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
 
   return (
     <Card className={`p-1 text-family-1 ${className}`}>
-      {title && <label className="text-lg color-gray-1">{title}</label>}
+      <div className="flex justify-between items-center">
+        {title && <label className="text-lg color-gray-1">{title}</label>}
+
+        <Divider type="vertical" dashed />
+
+        <Tooltip title="Sales Quantity">
+          <label className="color-black-1 text-lg">
+            {salesBalanceTotals.salesQuantity || 0}
+          </label>
+        </Tooltip>
+      </div>
 
       <div className="my-2 flex items-center text-family-1">
         <div>
@@ -134,7 +145,7 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
         <Divider type="vertical" dashed />
 
         <div>
-          <label className="color-black-1">Qty: </label>
+          <label className="color-black-1">Product Qty: </label>
           <label className="color-black-1 text-lg">
             {salesBalanceTotals.quantity}
           </label>

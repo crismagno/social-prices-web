@@ -135,7 +135,7 @@ export const SalesQuantityChartStatistic: React.FC<Props> = ({
         <text
           style={{ fontSize: "0.6rem" }}
           textAnchor="middle"
-          x={x - 24}
+          x={x - 4}
           y={y + 4}
         >
           {value}

@@ -46,6 +46,7 @@ export interface IGetSalesBalanceTotalsResponse {
   total: number;
   quantity: number;
   productsBalance: IGetSalesProductBalanceResponse[];
+  salesQuantity: number;
 }
 
 export interface IGetSalesProductBalanceResponse {
