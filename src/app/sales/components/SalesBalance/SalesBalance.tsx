@@ -4,7 +4,7 @@ import { Card, Col, Row } from "antd";
 import moment from "moment";
 
 import { IGetSalesBalanceParams } from "../../../../shared/business/sales/sales.type";
-import { SalesBalanceStatistic } from "../SalesBalanceStatistic/SalesBalanceStatistic";
+import { SalesBalanceStatistic } from "./SalesBalanceStatistic";
 import { useGetSalesBalance } from "./useGetSalesBalance";
 
 interface Props {

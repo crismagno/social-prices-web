@@ -71,8 +71,8 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
         }}
       >
         <p>{`${ChartsEnum.PeriodTypeLabel[periodType]}: ${item.name} `}</p>
-        <p>{`Sales Quantity Total: ${item.salesQuantity}`}</p>
-        <p>{`Percentage by Sales Quantity Total: ${percentageBySalesQuantity.toFixed(
+        <p>{`Sales Quantity: ${item.salesQuantity}`}</p>
+        <p>{`Percentage by Sales Quantity: ${percentageBySalesQuantity.toFixed(
           2
         )}%`}</p>
       </div>
@@ -193,7 +193,7 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
 
         <div className="text-center mt-1">
           <span className="font-semibold">
-            Sales Quantity Total:
+            Sales Quantity:
             <span className="ml-1">{totalByData.salesQuantity || 0}</span>
           </span>
         </div>
