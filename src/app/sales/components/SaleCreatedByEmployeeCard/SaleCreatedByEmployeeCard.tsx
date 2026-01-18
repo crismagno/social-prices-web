@@ -19,8 +19,6 @@ export const SaleCreatedByEmployeeCard: React.FC<Props> = ({ sale }) => {
 
   const employee: IEmployee | undefined = sale.createdByEmployee;
 
-  console.log(sale);
-
   if (!employee) {
     return null;
   }
