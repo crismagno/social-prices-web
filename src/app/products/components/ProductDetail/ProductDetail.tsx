@@ -89,6 +89,7 @@ const formSchema = z.object({
   isActive: z.boolean(),
   storeIds: z.array(z.string()).min(1, "Should select at least one store"),
   barcode: z.string().trim().optional(),
+  sku: z.string().trim().optional(),
   QRCode: z.string().optional(),
   categoriesIds: z.array(z.string()),
   tagsIds: z.array(z.string()),
@@ -164,6 +165,7 @@ export const ProductDetail: React.FC<Props> = ({
       name: product?.name ?? "",
       description: product?.description ?? "",
       barcode: product?.barcode ?? "",
+      sku: product?.sku ?? "",
       details: product?.details ?? "",
       isActive: product ? product.isActive : true,
       price: product?.price ?? 0,
@@ -209,6 +211,7 @@ export const ProductDetail: React.FC<Props> = ({
       name: "",
       description: "",
       barcode: "",
+      sku: "",
       details: "",
       isActive: true,
       price: 0,
@@ -281,6 +284,7 @@ export const ProductDetail: React.FC<Props> = ({
         quantity: data.quantity ?? 0,
         storeIds: data.storeIds,
         barcode: data.barcode ?? null,
+        sku: data.sku ?? null,
         QRCode: data.QRCode ?? null,
         categoriesIds: data.categoriesIds ?? [],
         tagsIds: data.tagsIds ?? [],
@@ -355,6 +359,7 @@ export const ProductDetail: React.FC<Props> = ({
         price: data.price ?? 0,
         quantity: data.quantity ?? 0,
         barcode: data.barcode ?? null,
+        sku: data.sku ?? null,
         storeIds: data.storeIds,
         productId: product!._id,
         QRCode: data.QRCode ?? null,
@@ -465,11 +470,15 @@ export const ProductDetail: React.FC<Props> = ({
 
           <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
-              controller={{ control, name: "description" }}
-              label="Description"
-              placeholder={"Enter description"}
-              errorMessage={errors.description?.message}
-              maxLength={200}
+              controller={{ control, name: "sku" }}
+              label={
+                <>
+                  <span>SKU</span>
+                </>
+              }
+              placeholder={"Enter sku"}
+              errorMessage={errors.sku?.message}
+              maxLength={400}
             />
           </Col>
         </Row>
@@ -601,6 +610,18 @@ export const ProductDetail: React.FC<Props> = ({
         <Row>
           <Col xs={24}>
             <TextareaCustomAntd
+              controller={{ control, name: "description" }}
+              label="Description"
+              placeholder={"Enter description"}
+              errorMessage={errors.description?.message}
+              rows={4}
+            />
+          </Col>
+        </Row>
+
+        <Row className="mt-3">
+          <Col xs={24}>
+            <TextareaCustomAntd
               controller={{ control, name: "details" }}
               label="Details"
               placeholder={"Enter details"}
@@ -610,7 +631,7 @@ export const ProductDetail: React.FC<Props> = ({
           </Col>
         </Row>
 
-        <ContainerTitle title="Dimensions" className="mt-5">
+        <ContainerTitle title="Dimensions" className="mt-7">
           <Row>
             <Col xs={24} md={4} sm={6} lg={2}>
               <InputCustomAntd
