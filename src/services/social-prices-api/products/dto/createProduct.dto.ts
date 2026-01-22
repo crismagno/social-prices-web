@@ -1,3 +1,14 @@
+export class ProductDimensionsDto {
+  size: string | null = null;
+  height: number | null = null;
+  width: number | null = null;
+  length: number | null = null;
+  depth: number | null = null;
+  diameter: number | null = null;
+  thickness: number | null = null;
+  volume: number | null = null;
+  weight: number | null = null;
+}
 export default class CreateProductDto {
   name: string = "";
   barcode: string | null = null;
@@ -12,4 +23,6 @@ export default class CreateProductDto {
   tagsIds: string[] = [];
   brand: string | null = null;
   releaseDate: Date | null = null;
+  dimensions: ProductDimensionsDto | null = null;
+  colors: string[] = [];
 }

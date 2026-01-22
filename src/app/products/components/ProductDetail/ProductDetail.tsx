@@ -20,15 +20,21 @@ import {
 import ImgCrop from "antd-img-crop";
 import { RcFile } from "antd/es/upload";
 import { isArray } from "class-validator";
+import { filter, isObject, map } from "lodash";
 import moment from "moment";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import ContainerTitle from "../../../../components/common/ContainerTitle/ContainerTitle";
 import handleClientError from "../../../../components/common/handleClientError/handleClientError";
 import HrCustom from "../../../../components/common/HrCustom/HrCustom";
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
+import {
+  colorSchema,
+  MultiColors,
+} from "../../../../components/common/MultiColors/MultiColors";
 import { ProductHistoricPricesButton } from "../../../../components/common/ProductHistoricPricesButton/ProductHistoricPricesButton";
 import { ProductPreviousBarcodesPopover } from "../../../../components/common/ProductPreviousBarcodesPopover/ProductPreviousBarcodesPopover";
 import { StoreNameStatus } from "../../../../components/common/StoreNameStatus/StoreNameStatus";
@@ -48,6 +54,7 @@ import { IProduct } from "../../../../shared/business/products/products.interfac
 import { IStore } from "../../../../shared/business/stores/stores.interface";
 import TagsEnum from "../../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../../shared/business/tags/tags.interface";
+import { parseColorPickerToHexString } from "../../../../shared/utils/antd/color-picker/color-picker";
 import { sortArray } from "../../../../shared/utils/array/array-functions";
 import DatesEnum from "../../../../shared/utils/dates/dates.enum";
 import { getFileUrl } from "../../../../shared/utils/images/images-helper";
@@ -60,6 +67,18 @@ import { useFindCategoriesByType } from "../../../categories/useFindCategoriesBy
 import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../../tags/useFindTagsByType";
 import { useFindProductById } from "../../detail/useFindProductById";
+
+const dimensionsFormSchema = z.object({
+  size: z.string().optional(),
+  height: z.any().optional(),
+  width: z.any().optional(),
+  length: z.any().optional(),
+  depth: z.any().optional(),
+  diameter: z.any().optional(),
+  thickness: z.any().optional(),
+  volume: z.any().optional(),
+  weight: z.any().optional(),
+});
 
 const formSchema = z.object({
   name: z.string().trim().nonempty("Name is required"),
@@ -75,6 +94,8 @@ const formSchema = z.object({
   tagsIds: z.array(z.string()),
   brand: z.string().trim().optional(),
   releaseDate: z.any().nullable().optional(),
+  dimensions: dimensionsFormSchema.optional(),
+  colors: z.array(colorSchema).optional(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -155,6 +176,18 @@ export const ProductDetail: React.FC<Props> = ({
       releaseDate: moment(product?.releaseDate)
         .utc()
         .format(DatesEnum.Format.YYYYMMDD_DASHED),
+      colors: map(product?.colors ?? [], (color: string) => ({ value: color })),
+      dimensions: {
+        size: product?.dimensions?.size ?? "",
+        height: product?.dimensions?.height ?? 0,
+        width: product?.dimensions?.width ?? 0,
+        length: product?.dimensions?.length ?? 0,
+        depth: product?.dimensions?.depth ?? 0,
+        diameter: product?.dimensions?.diameter ?? 0,
+        thickness: product?.dimensions?.thickness ?? 0,
+        volume: product?.dimensions?.volume ?? 0,
+        weight: product?.dimensions?.weight ?? 0,
+      },
     };
 
     setFormValues(values);
@@ -186,6 +219,18 @@ export const ProductDetail: React.FC<Props> = ({
       tagsIds: [],
       brand: "",
       releaseDate: moment().utc().format(DatesEnum.Format.YYYYMMDD_DASHED),
+      colors: [],
+      dimensions: {
+        size: "",
+        height: 0,
+        width: 0,
+        length: 0,
+        depth: 0,
+        diameter: 0,
+        thickness: 0,
+        volume: 0,
+        weight: 0,
+      },
     });
   };
 
@@ -241,12 +286,22 @@ export const ProductDetail: React.FC<Props> = ({
         tagsIds: data.tagsIds ?? [],
         brand: data.brand ?? null,
         releaseDate: moment(data.releaseDate).toDate(),
+        colors: data.colors?.length
+          ? map(
+              filter(
+                data.colors ?? [],
+                (c): c is { value: string } => !!c?.value
+              ),
+              (c) => parseColorPickerToHexString(c.value)
+            )
+          : [],
+        dimensions: data?.dimensions as any,
       };
 
       for (const property of Object.keys(createProductDto)) {
         let value: any = createProductDto[property];
 
-        if (isArray(value)) {
+        if (isArray(value) || isObject(value)) {
           value = JSON.stringify(value);
         }
 
@@ -308,12 +363,22 @@ export const ProductDetail: React.FC<Props> = ({
         tagsIds: data.tagsIds ?? [],
         brand: data.brand ?? null,
         releaseDate: moment(data.releaseDate).toDate(),
+        colors: data.colors?.length
+          ? map(
+              filter(
+                data.colors ?? [],
+                (c): c is { value: string } => !!c?.value
+              ),
+              (c) => parseColorPickerToHexString(c.value)
+            )
+          : [],
+        dimensions: data?.dimensions as any,
       };
 
       for (const property of Object.keys(updateProductDto)) {
         let value: any = updateProductDto[property];
 
-        if (isArray(value)) {
+        if (isArray(value) || isObject(value)) {
           value = JSON.stringify(value);
         }
 
@@ -544,6 +609,113 @@ export const ProductDetail: React.FC<Props> = ({
             />
           </Col>
         </Row>
+
+        <ContainerTitle title="Dimensions" className="mt-5">
+          <Row>
+            <Col xs={24} md={4} sm={6} lg={2}>
+              <InputCustomAntd
+                controller={{ control, name: "dimensions.size" }}
+                label="Size"
+                placeholder={"Enter size"}
+              />
+            </Col>
+
+            <Col xs={24} md={4} sm={6} lg={2}>
+              <InputCustomAntd
+                controller={{ control, name: "dimensions.height" }}
+                label="Height"
+                placeholder={"Enter height"}
+                type="number"
+                min={0}
+              />
+            </Col>
+
+            <Col xs={24} md={4} sm={6} lg={2}>
+              <InputCustomAntd
+                controller={{ control, name: "dimensions.width" }}
+                label="Width"
+                placeholder={"Enter width"}
+                type="number"
+                min={0}
+              />
+            </Col>
+
+            <Col xs={24} md={4} sm={6} lg={2}>
+              <InputCustomAntd
+                controller={{ control, name: "dimensions.length" }}
+                label="Length"
+                placeholder={"Enter length"}
+                type="number"
+                min={0}
+              />
+            </Col>
+
+            <Col xs={24} md={4} sm={6} lg={2}>
+              <InputCustomAntd
+                controller={{ control, name: "dimensions.depth" }}
+                label="Depth"
+                placeholder={"Enter depth"}
+                type="number"
+                min={0}
+              />
+            </Col>
+
+            <Col xs={24} md={4} sm={6} lg={2}>
+              <InputCustomAntd
+                controller={{ control, name: "dimensions.diameter" }}
+                label="Diameter"
+                placeholder={"Enter diameter"}
+                type="number"
+                min={0}
+              />
+            </Col>
+
+            <Col xs={24} md={4} sm={6} lg={2}>
+              <InputCustomAntd
+                controller={{ control, name: "dimensions.thickness" }}
+                label="Thickness"
+                placeholder={"Enter thickness"}
+                type="number"
+                min={0}
+              />
+            </Col>
+
+            <Col xs={24} md={4} sm={6} lg={2}>
+              <InputCustomAntd
+                controller={{ control, name: "dimensions.volume" }}
+                label="Volume"
+                placeholder={"Enter volume"}
+                type="number"
+                min={0}
+              />
+            </Col>
+
+            <Col xs={24} md={4} sm={6} lg={2}>
+              <InputCustomAntd
+                controller={{ control, name: "dimensions.weight" }}
+                label="Weight"
+                placeholder={"Enter weight"}
+                type="number"
+                min={0}
+              />
+            </Col>
+          </Row>
+        </ContainerTitle>
+
+        <MultiColors control={control} errors={errors} />
+
+        {/* Criar um componente dinamico com form e usar nessa parte igual o address */}
+        {/* <ContainerTitle title="Additions" className="mt-5">
+          <Row>
+            <Col xs={24} md={4} sm={6} lg={2}>
+              <ColorPickerCustomAntd
+                controller={{ control, name: "color" }}
+                label="Color"
+                errorMessage={errors.color?.message}
+              />
+            </Col>
+          </Row>
+        </ContainerTitle> */}
 
         <HrCustom className="my-7" />
 
