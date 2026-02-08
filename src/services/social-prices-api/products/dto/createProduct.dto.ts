@@ -24,6 +24,7 @@ export default class CreateProductDto {
   tagsIds: string[] = [];
   brand: string | null = null;
   releaseDate: Date | null = null;
+  expirationDate: Date | null = null;
   dimensions: ProductDimensionsDto | null = null;
   colors: string[] = [];
 }

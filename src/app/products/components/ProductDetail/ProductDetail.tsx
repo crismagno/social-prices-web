@@ -95,6 +95,7 @@ const formSchema = z.object({
   tagsIds: z.array(z.string()),
   brand: z.string().trim().optional(),
   releaseDate: z.any().nullable().optional(),
+  expirationDate: z.any().nullable().optional(),
   dimensions: dimensionsFormSchema.optional(),
   colors: z.array(colorSchema).optional(),
 });
@@ -175,9 +176,16 @@ export const ProductDetail: React.FC<Props> = ({
       categoriesIds: product?.categoriesIds ?? [],
       tagsIds: product?.tagsIds ?? [],
       brand: product?.brand ?? "",
-      releaseDate: moment(product?.releaseDate)
-        .utc()
-        .format(DatesEnum.Format.YYYYMMDD_DASHED),
+      releaseDate: product?.releaseDate
+        ? moment(product?.releaseDate)
+            .utc()
+            .format(DatesEnum.Format.YYYYMMDD_DASHED)
+        : null,
+      expirationDate: product?.expirationDate
+        ? moment(product?.expirationDate)
+            .utc()
+            .format(DatesEnum.Format.YYYYMMDD_DASHED)
+        : null,
       colors: map(product?.colors ?? [], (color: string) => ({ value: color })),
       dimensions: {
         size: product?.dimensions?.size ?? "",
@@ -221,7 +229,8 @@ export const ProductDetail: React.FC<Props> = ({
       categoriesIds: [],
       tagsIds: [],
       brand: "",
-      releaseDate: moment().utc().format(DatesEnum.Format.YYYYMMDD_DASHED),
+      releaseDate: null,
+      expirationDate: null,
       colors: [],
       dimensions: {
         size: "",
@@ -290,6 +299,7 @@ export const ProductDetail: React.FC<Props> = ({
         tagsIds: data.tagsIds ?? [],
         brand: data.brand ?? null,
         releaseDate: moment(data.releaseDate).toDate(),
+        expirationDate: moment(data.expirationDate).toDate(),
         colors: data.colors?.length
           ? map(
               filter(
@@ -368,6 +378,7 @@ export const ProductDetail: React.FC<Props> = ({
         tagsIds: data.tagsIds ?? [],
         brand: data.brand ?? null,
         releaseDate: moment(data.releaseDate).toDate(),
+        expirationDate: moment(data.expirationDate).toDate(),
         colors: data.colors?.length
           ? map(
               filter(
@@ -580,6 +591,16 @@ export const ProductDetail: React.FC<Props> = ({
               type="date"
               placeholder={"Enter release date"}
               errorMessage={errors.releaseDate?.message}
+            />
+          </Col>
+
+          <Col xs={24} md={8} sm={12} lg={8}>
+            <InputCustomAntd
+              controller={{ control, name: "expirationDate" }}
+              label="Expiration Date"
+              type="date"
+              placeholder={"Enter expiration date"}
+              errorMessage={errors.expirationDate?.message}
             />
           </Col>
 

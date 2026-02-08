@@ -346,6 +346,18 @@ export default function ProductPage() {
                         : "-"
                     }
                   />
+
+                  <Description
+                    label="Release Date"
+                    leftIcon={<ScissorOutlined className="text-lg" />}
+                    description={
+                      product.expirationDate
+                        ? moment(product.expirationDate).format(
+                            DatesEnum.Format.DDMMYYY
+                          )
+                        : "-"
+                    }
+                  />
                 </Col>
               </Row>
             </ContainerTitle>
