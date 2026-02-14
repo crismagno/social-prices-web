@@ -1,8 +1,11 @@
 "use client";
 
-import "./styles.scss";
+import './styles.scss';
 
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from 'react';
 
 import {
   Button,
@@ -13,54 +16,94 @@ import {
   Upload,
   UploadFile,
   UploadProps,
-} from "antd";
-import ImgCrop from "antd-img-crop";
-import { RcFile } from "antd/es/upload";
-import { isArray, isObject } from "class-validator";
-import { filter, map } from "lodash";
-import moment from "moment";
-import { SubmitHandler, useForm } from "react-hook-form";
-import z from "zod";
+} from 'antd';
+import ImgCrop from 'antd-img-crop';
+import { RcFile } from 'antd/es/upload';
+import {
+  isArray,
+  isObject,
+} from 'class-validator';
+import {
+  filter,
+  map,
+} from 'lodash';
+import moment from 'moment';
+import {
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
+import z from 'zod';
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import ContainerTitle from "../../../../components/common/ContainerTitle/ContainerTitle";
-import handleClientError from "../../../../components/common/handleClientError/handleClientError";
-import HrCustom from "../../../../components/common/HrCustom/HrCustom";
-import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
+import ContainerTitle
+  from '../../../../components/common/ContainerTitle/ContainerTitle';
+import handleClientError
+  from '../../../../components/common/handleClientError/handleClientError';
+import HrCustom from '../../../../components/common/HrCustom/HrCustom';
+import LoadingFull from '../../../../components/common/LoadingFull/LoadingFull';
 import {
   colorSchema,
   MultiColors,
-} from "../../../../components/common/MultiColors/MultiColors";
-import { TagCategoryCustomAntd } from "../../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
-import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
-import { CheckboxCustomAntd } from "../../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd";
-import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
-import { InputNumberCustomAntd } from "../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
-import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
-import { TextareaCustomAntd } from "../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
-import CreateProductItemDto from "../../../../services/social-prices-api/product-items/dto/createProductItem.dto";
-import UpdateProductItemDto from "../../../../services/social-prices-api/product-items/dto/updateProductItem.dto";
-import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
-import CategoriesEnum from "../../../../shared/business/categories/categories.enum";
-import { ICategory } from "../../../../shared/business/categories/categories.interface";
-import { IProductItem } from "../../../../shared/business/product-items/product-items.interface";
-import { IProduct } from "../../../../shared/business/products/products.interface";
-import TagsEnum from "../../../../shared/business/tags/tags.enum";
-import { ITag } from "../../../../shared/business/tags/tags.interface";
-import { parseColorPickerToHexString } from "../../../../shared/utils/antd/color-picker/color-picker";
-import { sortArray } from "../../../../shared/utils/array/array-functions";
-import DatesEnum from "../../../../shared/utils/dates/dates.enum";
-import { getFileUrl } from "../../../../shared/utils/images/images-helper";
-import { getImageUrl } from "../../../../shared/utils/images/images-url";
+} from '../../../../components/common/MultiColors/MultiColors';
+import {
+  TagCategoryCustomAntd,
+} from '../../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd';
+import {
+  TagTagCustomAntd,
+} from '../../../../components/common/TagTagCustomAntd/TagTagCustomAntd';
+import {
+  CheckboxCustomAntd,
+} from '../../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd';
+import {
+  InputCustomAntd,
+} from '../../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
+import {
+  InputNumberCustomAntd,
+} from '../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd';
+import {
+  SelectCustomAntd,
+} from '../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
+import {
+  TextareaCustomAntd,
+} from '../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd';
+import CreateProductItemDto
+  from '../../../../services/social-prices-api/product-items/dto/createProductItem.dto';
+import UpdateProductItemDto
+  from '../../../../services/social-prices-api/product-items/dto/updateProductItem.dto';
+import {
+  serviceMethodsInstance,
+} from '../../../../services/social-prices-api/service-methods';
+import CategoriesEnum
+  from '../../../../shared/business/categories/categories.enum';
+import {
+  ICategory,
+} from '../../../../shared/business/categories/categories.interface';
+import {
+  IProductItem,
+} from '../../../../shared/business/product-items/product-items.interface';
+import {
+  IProduct,
+} from '../../../../shared/business/products/products.interface';
+import TagsEnum from '../../../../shared/business/tags/tags.enum';
+import { ITag } from '../../../../shared/business/tags/tags.interface';
+import {
+  parseColorPickerToHexString,
+} from '../../../../shared/utils/antd/color-picker/color-picker';
+import { sortArray } from '../../../../shared/utils/array/array-functions';
+import DatesEnum from '../../../../shared/utils/dates/dates.enum';
+import { getFileUrl } from '../../../../shared/utils/images/images-helper';
+import { getImageUrl } from '../../../../shared/utils/images/images-url';
 import {
   formatterMoney,
   parserMoney,
-} from "../../../../shared/utils/strings/string";
-import { useFindCategoriesByType } from "../../../categories/useFindCategoriesByType";
-import { useFindProductsByUser } from "../../../products/useFindProductsByUser";
-import { useFindTagsByType } from "../../../tags/useFindTagsByType";
-import { useFindProductItemById } from "../../useFindProductItemById";
+} from '../../../../shared/utils/strings/string';
+import {
+  useFindCategoriesByType,
+} from '../../../categories/useFindCategoriesByType';
+import { useFindProductsByUser } from '../../../products/useFindProductsByUser';
+import { useFindTagsByType } from '../../../tags/useFindTagsByType';
+import { useFindProductItemById } from '../../useFindProductItemById';
 
 const dimensionsFormSchema = z.object({
   size: z.string().optional(),
@@ -552,22 +595,6 @@ export const ProductItemDetail: React.FC<Props> = ({
           </Col>
 
           <Col xs={24} md={8} sm={12} lg={8}>
-            <CheckboxCustomAntd<IProductItem>
-              controller={{ control, name: "isActive" }}
-              label="Is Active"
-              labelClassName="mr-1"
-            />
-          </Col>
-
-          <Col xs={24} md={8} sm={12} lg={8}>
-            <CheckboxCustomAntd<IProductItem>
-              controller={{ control, name: "isDefault" }}
-              label="Is Default"
-              labelClassName="mr-1"
-            />
-          </Col>
-
-          <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
               controller={{ control, name: "releaseDate" }}
               label="Release Date"
@@ -584,6 +611,24 @@ export const ProductItemDetail: React.FC<Props> = ({
               type="date"
               placeholder={"Enter expiration date"}
               errorMessage={errors.expirationDate?.message as string}
+            />
+          </Col>
+        </Row>
+
+        <Row>
+          <Col xs={24} md={8} sm={12} lg={8}>
+            <CheckboxCustomAntd<IProductItem>
+              controller={{ control, name: "isActive" }}
+              label="Is Active"
+              labelClassName="mr-1"
+            />
+          </Col>
+
+          <Col xs={24} md={8} sm={12} lg={8}>
+            <CheckboxCustomAntd<IProductItem>
+              controller={{ control, name: "isDefault" }}
+              label="Is Default"
+              labelClassName="mr-1"
             />
           </Col>
         </Row>

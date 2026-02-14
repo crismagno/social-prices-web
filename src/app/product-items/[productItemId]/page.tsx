@@ -1,30 +1,50 @@
 "use client";
 
-import { Button, Card, Col, Descriptions, Image, Row, Tag } from "antd";
-import { find } from "lodash";
-import moment from "moment";
-import { useParams, useRouter } from "next/navigation";
+import {
+  Button,
+  Card,
+  Col,
+  Descriptions,
+  Image,
+  Row,
+  Tag,
+} from 'antd';
+import { find } from 'lodash';
+import moment from 'moment';
+import {
+  useParams,
+  useRouter,
+} from 'next/navigation';
 
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined } from '@ant-design/icons';
 
-import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
-import { TagCategoriesCustomAntd } from "../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
-import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
-import Layout from "../../../components/template/Layout/Layout";
-import CategoriesEnum from "../../../shared/business/categories/categories.enum";
-import { ICategory } from "../../../shared/business/categories/categories.interface";
-import TagsEnum from "../../../shared/business/tags/tags.enum";
-import { ITag } from "../../../shared/business/tags/tags.interface";
-import Urls from "../../../shared/common/routes-app/routes-app";
-import { sortArray } from "../../../shared/utils/array/array-functions";
-import DatesEnum from "../../../shared/utils/dates/dates.enum";
-import { getImageUrl } from "../../../shared/utils/images/images-url";
-import ImagesEnum from "../../../shared/utils/images/images.enum";
-import { formatterMoney } from "../../../shared/utils/strings/string";
-import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
-import { useFindProductsByUser } from "../../products/useFindProductsByUser";
-import { useFindTagsByType } from "../../tags/useFindTagsByType";
-import { useFindProductItemById } from "../useFindProductItemById";
+import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
+import {
+  TagCategoriesCustomAntd,
+} from '../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd';
+import {
+  TagTagsCustomAntd,
+} from '../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
+import Layout from '../../../components/template/Layout/Layout';
+import CategoriesEnum
+  from '../../../shared/business/categories/categories.enum';
+import {
+  ICategory,
+} from '../../../shared/business/categories/categories.interface';
+import TagsEnum from '../../../shared/business/tags/tags.enum';
+import { ITag } from '../../../shared/business/tags/tags.interface';
+import Urls from '../../../shared/common/routes-app/routes-app';
+import { sortArray } from '../../../shared/utils/array/array-functions';
+import DatesEnum from '../../../shared/utils/dates/dates.enum';
+import { getImageUrl } from '../../../shared/utils/images/images-url';
+import ImagesEnum from '../../../shared/utils/images/images.enum';
+import { formatterMoney } from '../../../shared/utils/strings/string';
+import {
+  useFindCategoriesByType,
+} from '../../categories/useFindCategoriesByType';
+import { useFindProductsByUser } from '../../products/useFindProductsByUser';
+import { useFindTagsByType } from '../../tags/useFindTagsByType';
+import { useFindProductItemById } from '../useFindProductItemById';
 
 export default function ProductItemPage() {
   const router = useRouter();
