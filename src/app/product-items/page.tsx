@@ -1,43 +1,72 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Avatar, Button, Card, Image, Tooltip } from "antd";
-import moment from "moment";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter } from "next/navigation";
+import {
+  Avatar,
+  Button,
+  Card,
+  Col,
+  Image,
+  Row,
+  Tooltip,
+} from 'antd';
+import moment from 'moment';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+import { useRouter } from 'next/navigation';
 
 import {
   EditOutlined,
   EnterOutlined,
   PlusOutlined,
   QuestionCircleOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 
-import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
-import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
-import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
-import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
-import Layout from "../../components/template/Layout/Layout";
-import useAuthData from "../../data/context/auth/useAuthData";
-import useSocketData from "../../data/context/socket/useSocketData";
-import CategoriesEnum from "../../shared/business/categories/categories.enum";
-import { ICategory } from "../../shared/business/categories/categories.interface";
-import { IProductItem } from "../../shared/business/product-items/product-items.interface";
-import TagsEnum from "../../shared/business/tags/tags.enum";
-import { ITag } from "../../shared/business/tags/tags.interface";
-import Urls from "../../shared/common/routes-app/routes-app";
-import { sortArray } from "../../shared/utils/array/array-functions";
-import DatesEnum from "../../shared/utils/dates/dates.enum";
-import { getImageUrl } from "../../shared/utils/images/images-url";
-import ImagesEnum from "../../shared/utils/images/images.enum";
-import { formatterMoney } from "../../shared/utils/strings/string";
-import { createTableState } from "../../shared/utils/table/table-state";
-import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
-import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";
-import { useFindStoresByUser } from "../stores/useFindStoresByUser";
-import { useFindTagsByType } from "../tags/useFindTagsByType";
-import { useFindProductItemsByUserTableState } from "./useFindProductItemsByUserTableState";
+import {
+  CustomRangeDatePicker,
+} from '../../components/common/CustomRangeDatePicker/CustomRangeDatePicker';
+import LoadingFull from '../../components/common/LoadingFull/LoadingFull';
+import SelectProducts
+  from '../../components/common/SelectProducts/SelectProducts';
+import {
+  TagCategoriesCustomAntd,
+} from '../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd';
+import {
+  TagTagsCustomAntd,
+} from '../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
+import TableCustomAntd2
+  from '../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
+import Layout from '../../components/template/Layout/Layout';
+import useAuthData from '../../data/context/auth/useAuthData';
+import useSocketData from '../../data/context/socket/useSocketData';
+import CategoriesEnum from '../../shared/business/categories/categories.enum';
+import {
+  ICategory,
+} from '../../shared/business/categories/categories.interface';
+import ProductItemsEnum
+  from '../../shared/business/product-items/product-items.enum';
+import {
+  IProductItem,
+} from '../../shared/business/product-items/product-items.interface';
+import { IProduct } from '../../shared/business/products/products.interface';
+import TagsEnum from '../../shared/business/tags/tags.enum';
+import { ITag } from '../../shared/business/tags/tags.interface';
+import Urls from '../../shared/common/routes-app/routes-app';
+import { sortArray } from '../../shared/utils/array/array-functions';
+import DatesEnum from '../../shared/utils/dates/dates.enum';
+import { getImageUrl } from '../../shared/utils/images/images-url';
+import ImagesEnum from '../../shared/utils/images/images.enum';
+import { formatterMoney } from '../../shared/utils/strings/string';
+import { createTableState } from '../../shared/utils/table/table-state';
+import {
+  ITableStateRequest,
+} from '../../shared/utils/table/table-state.interface';
+import { useFindCategoriesByType } from '../categories/useFindCategoriesByType';
+import { useFindStoresByUser } from '../stores/useFindStoresByUser';
+import { useFindTagsByType } from '../tags/useFindTagsByType';
+import {
+  useFindProductItemsByUserTableState,
+} from './useFindProductItemsByUserTableState';
 
 export default function ProductItemsPage() {
   const { user } = useAuthData();
@@ -84,6 +113,60 @@ export default function ProductItemsPage() {
           </>
         }
       >
+        <Row gutter={[16, 16]}>
+          <Col md={8} className="flex items-end">
+            <CustomRangeDatePicker
+              format={DatesEnum.Format.DDMMYYYYhhmmss}
+              showTime
+              onChange={(startDate: Date | null, endDate: Date | null) => {
+                setTableStateRequest({
+                  ...tableStateRequest,
+                  filters: {
+                    ...tableStateRequest?.filters,
+                    rangeDate:
+                      startDate && endDate ? [startDate, endDate] : undefined,
+                  },
+                });
+              }}
+              select={{
+                options: ProductItemsEnum.SelectOptionsRangeDatePicker,
+                value:
+                  (tableStateRequest?.filters?.fieldDate as string) ||
+                  ProductItemsEnum.SortField.createdAt,
+                onChange: (value: string) => {
+                  setTableStateRequest({
+                    ...tableStateRequest,
+                    filters: {
+                      ...tableStateRequest?.filters,
+                      fieldDate: value,
+                    },
+                  });
+                },
+              }}
+            />
+          </Col>
+
+          <Col md={6}>
+            <SelectProducts
+              label={"Products"}
+              selectedProductIds={
+                (tableStateRequest?.filters?.productIds as string[]) || []
+              }
+              onSelectProducts={(selectedProducts: IProduct[]) => {
+                setTableStateRequest({
+                  ...tableStateRequest,
+                  filters: {
+                    ...tableStateRequest?.filters,
+                    productIds: selectedProducts.map(
+                      (product: IProduct) => product._id
+                    ),
+                  },
+                });
+              }}
+            />
+          </Col>
+        </Row>
+
         <TableCustomAntd2<IProductItem>
           rowKey={"_id"}
           tableStateRequest={tableStateRequest}
