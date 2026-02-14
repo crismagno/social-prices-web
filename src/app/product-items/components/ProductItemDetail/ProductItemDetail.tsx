@@ -80,6 +80,7 @@ const formSchema = z.object({
   description: z.string().trim().optional(),
   price: z.any().optional(),
   isActive: z.boolean(),
+  isDefault: z.boolean(),
   productId: z.string().nonempty("Product is required"),
   barcode: z.string().trim().optional(),
   sku: z.string().trim().optional(),
@@ -159,6 +160,7 @@ export const ProductItemDetail: React.FC<Props> = ({
       barcode: productItem?.barcode ?? "",
       sku: productItem?.sku ?? "",
       isActive: productItem ? productItem.isActive : true,
+      isDefault: productItem ? productItem.isDefault : false,
       price: productItem?.price ?? 0,
       quantity: productItem?.quantity ?? 0,
       productId: productItem?.productId ?? "",
@@ -274,6 +276,7 @@ export const ProductItemDetail: React.FC<Props> = ({
         price: data.price ?? 0,
         quantity: data.quantity ?? 0,
         isActive: data.isActive,
+        isDefault: data.isDefault ?? false,
         barcode: data.barcode ?? null,
         sku: data.sku ?? null,
         productId: data.productId,
@@ -351,6 +354,7 @@ export const ProductItemDetail: React.FC<Props> = ({
         price: data.price ?? 0,
         quantity: data.quantity ?? 0,
         isActive: data.isActive,
+        isDefault: data.isDefault ?? false,
         barcode: data.barcode ?? null,
         sku: data.sku ?? null,
         productId: productItem!.productId,
@@ -551,6 +555,14 @@ export const ProductItemDetail: React.FC<Props> = ({
             <CheckboxCustomAntd<IProductItem>
               controller={{ control, name: "isActive" }}
               label="Is Active"
+              labelClassName="mr-1"
+            />
+          </Col>
+
+          <Col xs={24} md={8} sm={12} lg={8}>
+            <CheckboxCustomAntd<IProductItem>
+              controller={{ control, name: "isDefault" }}
+              label="Is Default"
               labelClassName="mr-1"
             />
           </Col>

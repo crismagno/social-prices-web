@@ -136,6 +136,18 @@ export default function ProductItemPage() {
                 </Tag>
               </Descriptions.Item>
 
+              <Descriptions.Item label="Active">
+                <Tag color={productItem.isActive ? "green" : "red"}>
+                  {productItem.isActive ? "Yes" : "No"}
+                </Tag>
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Default">
+                <Tag color={productItem.isDefault ? "blue" : "gray"}>
+                  {productItem.isDefault ? "Yes" : "No"}
+                </Tag>
+              </Descriptions.Item>
+
               <Descriptions.Item label="Categories">
                 <TagCategoriesCustomAntd
                   categories={categoriesSort}

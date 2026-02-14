@@ -18,6 +18,7 @@ export default class CreateProductItemDto {
   description: string | null = null;
   price: number = 0;
   isActive: boolean = true;
+  isDefault: boolean = false;
   productId: string = "";
   categoriesIds: string[] = [];
   tagsIds: string[] = [];

@@ -339,6 +339,21 @@ export default function ProductItemsPage() {
               ),
             },
             {
+              title: "Default",
+              dataIndex: "isDefault",
+              key: "isDefault",
+              align: "center",
+              filters: Object.keys(CommonEnum.YesNo).map((value: string) => ({
+                value: value === CommonEnum.YesNo.YES,
+                text: CommonEnum.YesNoLabels[value as CommonEnum.YesNo],
+              })),
+              render: (isDefault: boolean) => (
+                <Tag color={isDefault ? "blue" : "gray"}>
+                  <YesNo isTrue={isDefault} />
+                </Tag>
+              ),
+            },
+            {
               title: "Release Date",
               dataIndex: "releaseDate",
               key: "releaseDate",
