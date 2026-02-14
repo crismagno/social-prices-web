@@ -264,6 +264,7 @@ export default function ProductsPage() {
               dataIndex: "quantity",
               key: "quantity",
               align: "center",
+              sorter: true,
               render: (quantity: number) => {
                 return (
                   <div className="flex">
@@ -288,6 +289,7 @@ export default function ProductsPage() {
               key: "price",
               align: "center",
               width: 140,
+              sorter: true,
               render: (price: number, product: IProduct) => {
                 return (
                   <div className="flex justify-center items-center">

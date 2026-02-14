@@ -1,5 +1,6 @@
-import { ICreatedAtEntity } from "../shared/global/created-at.interface";
-import { IUpdatedAtEntity } from "../shared/global/updated-at.interface";
+import { IProduct } from '../products/products.interface';
+import { ICreatedAtEntity } from '../shared/global/created-at.interface';
+import { IUpdatedAtEntity } from '../shared/global/updated-at.interface';
 
 export interface IProductItem extends ICreatedAtEntity, IUpdatedAtEntity {
   readonly _id: string;
@@ -12,6 +13,7 @@ export interface IProductItem extends ICreatedAtEntity, IUpdatedAtEntity {
   sku: string | null;
   userId: string;
   productId: string;
+  product?: IProduct;
   filesUrl: string[];
   mainUrl: string | null;
   categoriesIds: string[];

@@ -233,6 +233,16 @@ export default function ProductItemsPage() {
               },
             },
             {
+              title: "Product",
+              dataIndex: "product",
+              key: "product",
+              align: "center",
+              render: (product?: IProduct) => {
+                if (!product) return "-";
+                return <span>{product.name}</span>;
+              },
+            },
+            {
               title: "Barcode",
               dataIndex: "barcode",
               key: "barcode",
