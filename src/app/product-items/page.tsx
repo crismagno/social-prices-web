@@ -9,6 +9,7 @@ import {
   Col,
   Image,
   Row,
+  Tag,
   Tooltip,
 } from 'antd';
 import moment from 'moment';
@@ -34,6 +35,7 @@ import {
 import {
   TagTagsCustomAntd,
 } from '../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
+import YesNo from '../../components/common/YesNo/YesNo';
 import TableCustomAntd2
   from '../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
 import Layout from '../../components/template/Layout/Layout';
@@ -51,6 +53,7 @@ import {
 import { IProduct } from '../../shared/business/products/products.interface';
 import TagsEnum from '../../shared/business/tags/tags.enum';
 import { ITag } from '../../shared/business/tags/tags.interface';
+import CommonEnum from '../../shared/common/enums/common.enum';
 import Urls from '../../shared/common/routes-app/routes-app';
 import { sortArray } from '../../shared/utils/array/array-functions';
 import DatesEnum from '../../shared/utils/dates/dates.enum';
@@ -236,10 +239,18 @@ export default function ProductItemsPage() {
               align: "center",
             },
             {
+              title: "SKU",
+              dataIndex: "sku",
+              key: "sku",
+              align: "center",
+              render: (sku: string) => sku || "-",
+            },
+            {
               title: "Quantity",
               dataIndex: "quantity",
               key: "quantity",
               align: "center",
+              sorter: true,
               render: (quantity: number) => {
                 return (
                   <div className="flex">
@@ -264,6 +275,7 @@ export default function ProductItemsPage() {
               key: "price",
               align: "center",
               width: 140,
+              sorter: true,
               render: (price: number) => {
                 return (
                   <div className="flex justify-center items-center">
@@ -302,6 +314,21 @@ export default function ProductItemsPage() {
               ),
             },
             {
+              title: "Active",
+              dataIndex: "isActive",
+              key: "isActive",
+              align: "center",
+              filters: Object.keys(CommonEnum.YesNo).map((value: string) => ({
+                value: value === CommonEnum.YesNo.YES,
+                text: CommonEnum.YesNoLabels[value as CommonEnum.YesNo],
+              })),
+              render: (isActive: boolean) => (
+                <Tag color={isActive ? "green" : "red"}>
+                  <YesNo isTrue={isActive} />
+                </Tag>
+              ),
+            },
+            {
               title: "Release Date",
               dataIndex: "releaseDate",
               key: "releaseDate",
@@ -309,7 +336,20 @@ export default function ProductItemsPage() {
               render: (releaseDate: Date) =>
                 releaseDate
                   ? moment(releaseDate).format(DatesEnum.Format.DDMMYYYYhhmmss)
-                  : null,
+                  : "-",
+              sorter: true,
+            },
+            {
+              title: "Expiration Date",
+              dataIndex: "expirationDate",
+              key: "expirationDate",
+              align: "center",
+              render: (expirationDate: Date) =>
+                expirationDate
+                  ? moment(expirationDate).format(
+                      DatesEnum.Format.DDMMYYYYhhmmss
+                    )
+                  : "-",
               sorter: true,
             },
             {
@@ -340,7 +380,7 @@ export default function ProductItemsPage() {
                 <Button.Group>
                   <Tooltip title="Edit product item">
                     <Button
-                      type="default"
+                      type="success"
                       onClick={() =>
                         router.push(
                           Urls.EDIT_PRODUCT_ITEM.replace(

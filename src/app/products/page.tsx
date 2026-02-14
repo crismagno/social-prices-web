@@ -1,12 +1,24 @@
 "use client";
 
-import { RefObject, useEffect, useRef, useState } from "react";
+import {
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
-import { Avatar, Button, Card, Image, Tag, Tooltip } from "antd";
-import { find } from "lodash";
-import moment from "moment";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter } from "next/navigation";
+import {
+  Avatar,
+  Button,
+  Card,
+  Image,
+  Tag,
+  Tooltip,
+} from 'antd';
+import { find } from 'lodash';
+import moment from 'moment';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+import { useRouter } from 'next/navigation';
 
 import {
   DownloadOutlined,
@@ -16,46 +28,68 @@ import {
   QuestionCircleOutlined,
   ShoppingCartOutlined,
   UploadOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 
-import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
-import { ProductHistoricPricesButton } from "../../components/common/ProductHistoricPricesButton/ProductHistoricPricesButton";
-import { StoreNameStatus } from "../../components/common/StoreNameStatus/StoreNameStatus";
-import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
-import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
-import { UploadFilesDrawer } from "../../components/common/UploadFilesDrawer/UploadFilesDrawer";
-import YesNo from "../../components/common/YesNo/YesNo";
-import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
-import Layout from "../../components/template/Layout/Layout";
-import useAuthData from "../../data/context/auth/useAuthData";
-import useSocketData from "../../data/context/socket/useSocketData";
-import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
-import CategoriesEnum from "../../shared/business/categories/categories.enum";
-import { ICategory } from "../../shared/business/categories/categories.interface";
-import FilesUploadsEnum from "../../shared/business/files-uploads/files-uploads.enum";
-import { IProduct } from "../../shared/business/products/products.interface";
-import SocketsEnum from "../../shared/business/sockets/sockets.enum";
-import { IStore } from "../../shared/business/stores/stores.interface";
-import TagsEnum from "../../shared/business/tags/tags.enum";
-import { ITag } from "../../shared/business/tags/tags.interface";
-import CommonEnum from "../../shared/common/enums/common.enum";
-import Urls from "../../shared/common/routes-app/routes-app";
-import { sortArray } from "../../shared/utils/array/array-functions";
-import DatesEnum from "../../shared/utils/dates/dates.enum";
-import { getImageUrl } from "../../shared/utils/images/images-url";
-import ImagesEnum from "../../shared/utils/images/images.enum";
-import { formatterMoney } from "../../shared/utils/strings/string";
-import { createTableState } from "../../shared/utils/table/table-state";
-import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
-import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";
+import LoadingFull from '../../components/common/LoadingFull/LoadingFull';
+import {
+  ProductHistoricPricesButton,
+} from '../../components/common/ProductHistoricPricesButton/ProductHistoricPricesButton';
+import {
+  StoreNameStatus,
+} from '../../components/common/StoreNameStatus/StoreNameStatus';
+import {
+  TagCategoriesCustomAntd,
+} from '../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd';
+import {
+  TagTagsCustomAntd,
+} from '../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
+import {
+  UploadFilesDrawer,
+} from '../../components/common/UploadFilesDrawer/UploadFilesDrawer';
+import YesNo from '../../components/common/YesNo/YesNo';
+import TableCustomAntd2
+  from '../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
+import Layout from '../../components/template/Layout/Layout';
+import useAuthData from '../../data/context/auth/useAuthData';
+import useSocketData from '../../data/context/socket/useSocketData';
+import {
+  serviceMethodsInstance,
+} from '../../services/social-prices-api/service-methods';
+import CategoriesEnum from '../../shared/business/categories/categories.enum';
+import {
+  ICategory,
+} from '../../shared/business/categories/categories.interface';
+import FilesUploadsEnum
+  from '../../shared/business/files-uploads/files-uploads.enum';
+import { IProduct } from '../../shared/business/products/products.interface';
+import SocketsEnum from '../../shared/business/sockets/sockets.enum';
+import { IStore } from '../../shared/business/stores/stores.interface';
+import TagsEnum from '../../shared/business/tags/tags.enum';
+import { ITag } from '../../shared/business/tags/tags.interface';
+import CommonEnum from '../../shared/common/enums/common.enum';
+import Urls from '../../shared/common/routes-app/routes-app';
+import { sortArray } from '../../shared/utils/array/array-functions';
+import DatesEnum from '../../shared/utils/dates/dates.enum';
+import { getImageUrl } from '../../shared/utils/images/images-url';
+import ImagesEnum from '../../shared/utils/images/images.enum';
+import { formatterMoney } from '../../shared/utils/strings/string';
+import { createTableState } from '../../shared/utils/table/table-state';
+import {
+  ITableStateRequest,
+} from '../../shared/utils/table/table-state.interface';
+import { useFindCategoriesByType } from '../categories/useFindCategoriesByType';
 import {
   FilesUploadsTable,
   IFilesUploadsTableRefProps,
-} from "../files-uploads/FilesUploadsTable";
-import { useFindStoresByUser } from "../stores/useFindStoresByUser";
-import { useFindTagsByType } from "../tags/useFindTagsByType";
-import { DownloadProductsDrawer } from "./components/DownloadProductsDrawer/DownloadProductsDrawer";
-import { useFindProductsByUserTableState } from "./useFindProductsByUserTableState";
+} from '../files-uploads/FilesUploadsTable';
+import { useFindStoresByUser } from '../stores/useFindStoresByUser';
+import { useFindTagsByType } from '../tags/useFindTagsByType';
+import {
+  DownloadProductsDrawer,
+} from './components/DownloadProductsDrawer/DownloadProductsDrawer';
+import {
+  useFindProductsByUserTableState,
+} from './useFindProductsByUserTableState';
 
 export default function ProductsPage() {
   const { user } = useAuthData();
@@ -219,6 +253,13 @@ export default function ProductsPage() {
               align: "center",
             },
             {
+              title: "SKU",
+              dataIndex: "sku",
+              key: "sku",
+              align: "center",
+              render: (sku: string) => sku || "-",
+            },
+            {
               title: "Quantity",
               dataIndex: "quantity",
               key: "quantity",
@@ -335,7 +376,20 @@ export default function ProductsPage() {
               render: (releaseDate: Date) =>
                 releaseDate
                   ? moment(releaseDate).format(DatesEnum.Format.DDMMYYYYhhmmss)
-                  : null,
+                  : "-",
+              sorter: true,
+            },
+            {
+              title: "Expiration Date",
+              dataIndex: "expirationDate",
+              key: "expirationDate",
+              align: "center",
+              render: (expirationDate: Date) =>
+                expirationDate
+                  ? moment(expirationDate).format(
+                      DatesEnum.Format.DDMMYYYYhhmmss
+                    )
+                  : "-",
               sorter: true,
             },
             {
