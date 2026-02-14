@@ -676,7 +676,7 @@ export const ProductDetail: React.FC<Props> = ({
           </Col>
         </Row>
 
-        <Row>
+        <Row className="mt-4">
           <Col xs={24}>
             <TextareaCustomAntd
               controller={{ control, name: "description" }}
