@@ -23,6 +23,7 @@ export interface IProductItem extends ICreatedAtEntity, IUpdatedAtEntity {
   expirationDate: Date | null;
   dimensions: IProductItemDimensions | null;
   colors: string[] | null;
+  isDefault: boolean;
 }
 
 export interface IProductItemDimensions {
