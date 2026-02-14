@@ -8,6 +8,7 @@ import {
   AppstoreOutlined,
   BlockOutlined,
   HomeOutlined,
+  ShoppingOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
 
@@ -46,7 +47,10 @@ export const StoresMenu: React.FC<Props> = ({}) => {
           "Products",
           null,
           null,
-          [getItem("Products", Urls.PRODUCTS, <AppstoreOutlined />)],
+          [
+            getItem("Products", Urls.PRODUCTS, <AppstoreOutlined />),
+            getItem("Product Items", Urls.PRODUCT_ITEMS, <ShoppingOutlined />),
+          ],
           "group"
         ),
       ]

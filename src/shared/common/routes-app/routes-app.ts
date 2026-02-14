@@ -28,6 +28,12 @@ const Urls = {
   EDIT_PRODUCT: "/products/detail?pid=:productId",
   PRODUCT: "/products/:productId",
 
+  // product-items
+  PRODUCT_ITEMS: "/product-items",
+  NEW_PRODUCT_ITEM: "/product-items/detail",
+  EDIT_PRODUCT_ITEM: "/product-items/detail?piid=:productItemId",
+  PRODUCT_ITEM: "/product-items/:productItemId",
+
   // customers
   CUSTOMERS: "/customers",
   NEW_CUSTOMER: "/customers/detail",

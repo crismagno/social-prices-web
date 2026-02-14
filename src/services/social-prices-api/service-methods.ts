@@ -5,6 +5,7 @@ import EmployeesServiceMethods from "./employees/employees-service.methods";
 import FilesUploadsServiceMethods from "./files-uploads/files-uploads-service.methods";
 import FilesServiceMethods from "./files/files-service.methods";
 import NotificationsServiceMethods from "./notifications/notifications-service.methods";
+import ProductItemsServiceMethods from "./product-items/product-items-service.methods";
 import ProductsServiceMethods from "./products/products-service.methods";
 import SalesServiceMethods from "./sales/sales-service.methods";
 import StoresServiceMethods from "./stores/stores-service.methods";
@@ -16,6 +17,7 @@ export default class ServiceMethods {
   public usersServiceMethods: UsersServiceMethods;
   public storesServiceMethods: StoresServiceMethods;
   public productsServiceMethods: ProductsServiceMethods;
+  public productItemsServiceMethods: ProductItemsServiceMethods;
   public categoriesServiceMethods: CategoriesServiceMethods;
   public customersServiceMethods: CustomersServiceMethods;
   public notificationsServiceMethods: NotificationsServiceMethods;
@@ -30,6 +32,7 @@ export default class ServiceMethods {
     this.usersServiceMethods = new UsersServiceMethods();
     this.storesServiceMethods = new StoresServiceMethods();
     this.productsServiceMethods = new ProductsServiceMethods();
+    this.productItemsServiceMethods = new ProductItemsServiceMethods();
     this.categoriesServiceMethods = new CategoriesServiceMethods();
     this.customersServiceMethods = new CustomersServiceMethods();
     this.notificationsServiceMethods = new NotificationsServiceMethods();
