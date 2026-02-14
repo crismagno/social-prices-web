@@ -24,6 +24,7 @@ import {
   BlockOutlined,
   CalendarOutlined,
   CheckCircleOutlined,
+  ClockCircleOutlined,
   EditOutlined,
   FileOutlined,
   PlusCircleOutlined,
@@ -348,8 +349,8 @@ export default function ProductPage() {
                   />
 
                   <Description
-                    label="Release Date"
-                    leftIcon={<ScissorOutlined className="text-lg" />}
+                    label="Expiration Date"
+                    leftIcon={<ClockCircleOutlined className="text-lg" />}
                     description={
                       product.expirationDate
                         ? moment(product.expirationDate).format(
