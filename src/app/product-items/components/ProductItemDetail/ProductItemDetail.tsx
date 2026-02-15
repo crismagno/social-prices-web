@@ -463,6 +463,16 @@ export const ProductItemDetail: React.FC<Props> = ({
 
   return (
     <div className="h-min-80 mt-2">
+      {isReadonly && (
+        <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded">
+          <p className="text-blue-800">
+            ℹ️ This is a default product item. It is automatically synchronized
+            with the product and cannot be edited directly. Please edit the
+            product to update this item.
+          </p>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="content-edit-files flex flex-col justify-start">
           <label className={`text-sm`}>Images</label>
@@ -476,8 +486,9 @@ export const ProductItemDetail: React.FC<Props> = ({
                 onChange={onChange}
                 onPreview={onPreview}
                 multiple
+                disabled={isReadonly}
               >
-                {fileList.length < 10 && "+ Upload"}
+                {fileList.length < 10 && !isReadonly && "+ Upload"}
               </Upload>
             </ImgCrop>
 
@@ -525,6 +536,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               placeholder={"Enter name"}
               errorMessage={errors.name?.message}
               maxLength={200}
+              disabled={isReadonly}
             />
           </Col>
 
@@ -542,6 +554,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               placeholder={"Enter barcode"}
               errorMessage={errors.barcode?.message}
               maxLength={100}
+              disabled={isReadonly}
             />
           </Col>
         </Row>
@@ -554,6 +567,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               placeholder={"Enter sku"}
               errorMessage={errors.sku?.message}
               maxLength={400}
+              disabled={isReadonly}
             />
           </Col>
 
@@ -563,6 +577,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               label="Price"
               formatter={formatterMoney}
               parser={parserMoney}
+              disabled={isReadonly}
             />
           </Col>
 
@@ -572,6 +587,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               label="Quantity"
               placeholder={"Enter quantity"}
               type="number"
+              disabled={isReadonly}
             />
           </Col>
         </Row>
@@ -583,6 +599,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               label="Brand"
               placeholder={"Enter brand"}
               errorMessage={errors.brand?.message}
+              disabled={isReadonly}
             />
           </Col>
 
@@ -593,6 +610,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               errorMessage={errors.categoriesIds?.message}
               placeholder={"Select categories"}
               mode="multiple"
+              disabled={isReadonly}
             >
               {sortArray(categories, "name").map((category: ICategory) => (
                 <Select.Option key={category._id} value={category._id}>
@@ -609,6 +627,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               errorMessage={errors.tagsIds?.message}
               placeholder={"Select tags"}
               mode="multiple"
+              disabled={isReadonly}
             >
               {sortArray(tags, "name").map((tag: ITag) => (
                 <Select.Option key={tag._id} value={tag._id}>
@@ -625,6 +644,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               type="date"
               placeholder={"Enter release date"}
               errorMessage={errors.releaseDate?.message as string}
+              disabled={isReadonly}
             />
           </Col>
 
@@ -635,6 +655,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               type="date"
               placeholder={"Enter expiration date"}
               errorMessage={errors.expirationDate?.message as string}
+              disabled={isReadonly}
             />
           </Col>
         </Row>
@@ -645,6 +666,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               controller={{ control, name: "isActive" }}
               label="Is Active"
               labelClassName="mr-1"
+              disabled={isReadonly}
             />
           </Col>
 
@@ -653,35 +675,11 @@ export const ProductItemDetail: React.FC<Props> = ({
               controller={{ control, name: "isDefault" }}
               label="Is Default"
               labelClassName="mr-1"
-              disabled
-            />
-          </Col>
-        </Row>
-
-        <Row className="mt-4">
-          <Col xs={24}>
-            <TextareaCustomAntd
-              controller={{ control, name: "description" }}
-              label="Description"
-              placeholder={"Enter description"}
-              errorMessage={errors.description?.message}
-              rows={4}
-            />
-          </Col>
-        </Row>
-
-        <Row gutter={[16, 16]} className="mt-4">
-          <Col xs={24} md={12}>
-            <TextareaCustomAntd
-              controller={{ control, name: "details" }}
-              label="Details"
-              placeholder={"Enter details"}
-              errorMessage={errors.details?.message}
-              rows={4}
+              disabled={true}
             />
           </Col>
 
-          <Col xs={24} md={12}>
+          <Col xs={24} md={8} sm={12} lg={8}>
             <div className={`flex flex-col mt-4`}>
               <label className={`text-sm mr-1`}>QRCode</label>
 
@@ -697,11 +695,38 @@ export const ProductItemDetail: React.FC<Props> = ({
                       maxLength={60}
                       value={value}
                       onChange={onChange}
+                      disabled={isReadonly}
                     />
                   </Space>
                 )}
               />
             </div>
+          </Col>
+        </Row>
+
+        <Row className="mt-4">
+          <Col xs={24}>
+            <TextareaCustomAntd
+              controller={{ control, name: "description" }}
+              label="Description"
+              placeholder={"Enter description"}
+              errorMessage={errors.description?.message}
+              rows={4}
+              disabled={isReadonly}
+            />
+          </Col>
+        </Row>
+
+        <Row gutter={[16, 16]} className="mt-4">
+          <Col xs={24}>
+            <TextareaCustomAntd
+              controller={{ control, name: "details" }}
+              label="Details"
+              placeholder={"Enter details"}
+              errorMessage={errors.details?.message}
+              rows={4}
+              disabled={isReadonly}
+            />
           </Col>
         </Row>
 
@@ -712,6 +737,7 @@ export const ProductItemDetail: React.FC<Props> = ({
                 controller={{ control, name: "dimensions.size" }}
                 label="Size"
                 placeholder={"Enter size"}
+                disabled={isReadonly}
               />
             </Col>
 
@@ -722,6 +748,7 @@ export const ProductItemDetail: React.FC<Props> = ({
                 placeholder={"Enter height"}
                 type="number"
                 min={0}
+                disabled={isReadonly}
               />
             </Col>
 
@@ -732,6 +759,7 @@ export const ProductItemDetail: React.FC<Props> = ({
                 placeholder={"Enter width"}
                 type="number"
                 min={0}
+                disabled={isReadonly}
               />
             </Col>
 
@@ -742,6 +770,7 @@ export const ProductItemDetail: React.FC<Props> = ({
                 placeholder={"Enter length"}
                 type="number"
                 min={0}
+                disabled={isReadonly}
               />
             </Col>
 
@@ -752,6 +781,7 @@ export const ProductItemDetail: React.FC<Props> = ({
                 placeholder={"Enter depth"}
                 type="number"
                 min={0}
+                disabled={isReadonly}
               />
             </Col>
 
@@ -762,6 +792,7 @@ export const ProductItemDetail: React.FC<Props> = ({
                 placeholder={"Enter diameter"}
                 type="number"
                 min={0}
+                disabled={isReadonly}
               />
             </Col>
 
@@ -772,6 +803,7 @@ export const ProductItemDetail: React.FC<Props> = ({
                 placeholder={"Enter thickness"}
                 type="number"
                 min={0}
+                disabled={isReadonly}
               />
             </Col>
 
@@ -782,6 +814,7 @@ export const ProductItemDetail: React.FC<Props> = ({
                 placeholder={"Enter volume"}
                 type="number"
                 min={0}
+                disabled={isReadonly}
               />
             </Col>
 
@@ -792,12 +825,13 @@ export const ProductItemDetail: React.FC<Props> = ({
                 placeholder={"Enter weight"}
                 type="number"
                 min={0}
+                disabled={isReadonly}
               />
             </Col>
           </Row>
         </ContainerTitle>
 
-        <MultiColors control={control} errors={errors} />
+        <MultiColors control={control} errors={errors} disabled={isReadonly} />
 
         <HrCustom className="my-7" />
 
@@ -814,14 +848,16 @@ export const ProductItemDetail: React.FC<Props> = ({
             Cancel
           </Button>
 
-          <Button
-            type="primary"
-            onClick={handleSubmit(onSubmit)}
-            loading={isSubmitting}
-            disabled={isSubmitting}
-          >
-            {isEditMode ? "Save" : "Create"}
-          </Button>
+          {!isReadonly && (
+            <Button
+              type="primary"
+              onClick={handleSubmit(onSubmit)}
+              loading={isSubmitting}
+              disabled={isSubmitting}
+            >
+              {isEditMode ? "Save" : "Create"}
+            </Button>
+          )}
         </div>
       </form>
     </div>
