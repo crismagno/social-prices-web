@@ -344,8 +344,16 @@ export const ProductDetail: React.FC<Props> = ({
         categoriesIds: data.categoriesIds ?? [],
         tagsIds: data.tagsIds ?? [],
         brand: data.brand ?? null,
-        releaseDate: moment(data.releaseDate).toDate(),
-        expirationDate: moment(data.expirationDate).toDate(),
+        releaseDate: data.releaseDate
+          ? moment
+              .utc(data.releaseDate)
+              .format(DatesEnum.Format.YYYYMMDD_DASHED)
+          : null,
+        expirationDate: data.expirationDate
+          ? moment
+              .utc(data.expirationDate)
+              .format(DatesEnum.Format.YYYYMMDD_DASHED)
+          : null,
         colors: data.colors?.length
           ? map(
               filter(
@@ -423,8 +431,16 @@ export const ProductDetail: React.FC<Props> = ({
         categoriesIds: data.categoriesIds ?? [],
         tagsIds: data.tagsIds ?? [],
         brand: data.brand ?? null,
-        releaseDate: moment(data.releaseDate).toDate(),
-        expirationDate: moment(data.expirationDate).toDate(),
+        releaseDate: data.releaseDate
+          ? moment
+              .utc(data.releaseDate)
+              .format(DatesEnum.Format.YYYYMMDD_DASHED)
+          : null,
+        expirationDate: data.expirationDate
+          ? moment
+              .utc(data.expirationDate)
+              .format(DatesEnum.Format.YYYYMMDD_DASHED)
+          : null,
         colors: data.colors?.length
           ? map(
               filter(

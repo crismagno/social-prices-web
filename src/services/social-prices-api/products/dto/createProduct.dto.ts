@@ -23,8 +23,8 @@ export default class CreateProductDto {
   categoriesIds: string[] = [];
   tagsIds: string[] = [];
   brand: string | null = null;
-  releaseDate: Date | null = null;
-  expirationDate: Date | null = null;
+  releaseDate: string | null = null;
+  expirationDate: string | null = null;
   dimensions: ProductDimensionsDto | null = null;
   colors: string[] = [];
 }
