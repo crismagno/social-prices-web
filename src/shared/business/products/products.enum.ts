@@ -1,12 +1,16 @@
 namespace ProductsEnum {
   export enum SortField {
-    birthDate = "birthDate",
+    releaseDate = "releaseDate",
     createdAt = "createdAt",
+    expirationDate = "expirationDate",
+    updatedAt = "updatedAt",
   }
 
   export const SortFieldLabels = {
-    [SortField.birthDate]: "Birth Date",
+    [SortField.releaseDate]: "Release Date",
     [SortField.createdAt]: "Created At",
+    [SortField.expirationDate]: "Expiration Date",
+    [SortField.updatedAt]: "Updated At",
   };
 }
 

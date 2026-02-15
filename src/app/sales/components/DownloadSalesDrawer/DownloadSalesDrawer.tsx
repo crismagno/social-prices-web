@@ -1,30 +1,59 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Button, Card, Col, Drawer, Row, Select, Tag } from "antd";
-import { map } from "lodash";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
+import {
+  Button,
+  Card,
+  Col,
+  Drawer,
+  Row,
+  Select,
+  Tag,
+} from 'antd';
+import { map } from 'lodash';
+import {
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
+import { z } from 'zod';
 
-import { DownloadOutlined } from "@ant-design/icons";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { DownloadOutlined } from '@ant-design/icons';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
-import handleClientError from "../../../../components/common/handleClientError/handleClientError";
-import { LabelBadgeCustomAntd } from "../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
-import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
-import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
-import YesNo from "../../../../components/common/YesNo/YesNo";
-import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
-import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
-import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
-import { IProduct } from "../../../../shared/business/products/products.interface";
-import SalesEnum from "../../../../shared/business/sales/sales.enum";
-import { IFiltersDownloadSales } from "../../../../shared/business/sales/sales.type";
-import StoresEnum from "../../../../shared/business/stores/stores.enum";
-import { IStore } from "../../../../shared/business/stores/stores.interface";
-import { ITag } from "../../../../shared/business/tags/tags.interface";
-import CommonEnum from "../../../../shared/common/enums/common.enum";
-import TableStateEnum from "../../../../shared/utils/table/table-state.enum";
+import {
+  CustomRangeDatePicker,
+} from '../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker';
+import handleClientError
+  from '../../../../components/common/handleClientError/handleClientError';
+import {
+  LabelBadgeCustomAntd,
+} from '../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd';
+import SelectProducts
+  from '../../../../components/common/SelectProducts/SelectProducts';
+import {
+  TagTagCustomAntd,
+} from '../../../../components/common/TagTagCustomAntd/TagTagCustomAntd';
+import YesNo from '../../../../components/common/YesNo/YesNo';
+import {
+  InputCustomAntd,
+} from '../../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
+import {
+  SelectCustomAntd,
+} from '../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
+import {
+  serviceMethodsInstance,
+} from '../../../../services/social-prices-api/service-methods';
+import {
+  IProduct,
+} from '../../../../shared/business/products/products.interface';
+import SalesEnum from '../../../../shared/business/sales/sales.enum';
+import {
+  IFiltersDownloadSales,
+} from '../../../../shared/business/sales/sales.type';
+import StoresEnum from '../../../../shared/business/stores/stores.enum';
+import { IStore } from '../../../../shared/business/stores/stores.interface';
+import { ITag } from '../../../../shared/business/tags/tags.interface';
+import CommonEnum from '../../../../shared/common/enums/common.enum';
+import TableStateEnum from '../../../../shared/utils/table/table-state.enum';
 
 const formSchema = z.object({
   search: z.string().nullable(),
@@ -331,7 +360,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
             <SelectCustomAntd
               controller={{ control, name: "sortOrder" }}
               label="Sort Order"
-              errorMessage={errors.sortField?.message}
+              errorMessage={errors.sortOrder?.message}
               placeholder={"Select sort order"}
             >
               {Object.keys(TableStateEnum.SortOrder).map(

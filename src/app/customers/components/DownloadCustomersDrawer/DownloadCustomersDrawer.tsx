@@ -1,22 +1,44 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Button, Card, Col, Drawer, Row, Select } from "antd";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
+import {
+  Button,
+  Card,
+  Col,
+  Drawer,
+  Row,
+  Select,
+} from 'antd';
+import {
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
+import { z } from 'zod';
 
-import { DownloadOutlined } from "@ant-design/icons";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { DownloadOutlined } from '@ant-design/icons';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import handleClientError from "../../../../components/common/handleClientError/handleClientError";
-import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
-import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
-import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
-import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
-import CustomersEnum from "../../../../shared/business/customers/customers.enum";
-import { IFiltersDownloadCustomers } from "../../../../shared/business/customers/customers.type";
-import PersonEnum from "../../../../shared/business/shared/person/person.enum";
-import { ITag } from "../../../../shared/business/tags/tags.interface";
-import TableStateEnum from "../../../../shared/utils/table/table-state.enum";
+import handleClientError
+  from '../../../../components/common/handleClientError/handleClientError';
+import {
+  TagTagCustomAntd,
+} from '../../../../components/common/TagTagCustomAntd/TagTagCustomAntd';
+import {
+  InputCustomAntd,
+} from '../../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
+import {
+  SelectCustomAntd,
+} from '../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
+import {
+  serviceMethodsInstance,
+} from '../../../../services/social-prices-api/service-methods';
+import CustomersEnum
+  from '../../../../shared/business/customers/customers.enum';
+import {
+  IFiltersDownloadCustomers,
+} from '../../../../shared/business/customers/customers.type';
+import PersonEnum from '../../../../shared/business/shared/person/person.enum';
+import { ITag } from '../../../../shared/business/tags/tags.interface';
+import TableStateEnum from '../../../../shared/utils/table/table-state.enum';
 
 const formSchema = z.object({
   search: z.string().nullable(),
@@ -155,7 +177,7 @@ export const DownloadCustomersDrawer: React.FC<Props> = ({
             <SelectCustomAntd
               controller={{ control, name: "sortOrder" }}
               label="Sort Order"
-              errorMessage={errors.sortField?.message}
+              errorMessage={errors.sortOrder?.message}
               placeholder={"Select sort order"}
             >
               {Object.keys(TableStateEnum.SortOrder).map(
