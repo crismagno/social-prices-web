@@ -11,6 +11,7 @@ import {
   Descriptions,
   Image,
   Modal,
+  QRCode,
   Row,
   Tag,
   Tooltip,
@@ -150,7 +151,7 @@ export default function ProductPage() {
               extraHeader={
                 <Tooltip title="Edit product">
                   <Button
-                    type="success"
+                    type="primary"
                     icon={<EditOutlined />}
                     onClick={handleEditProduct}
                   >
@@ -305,6 +306,118 @@ export default function ProductPage() {
                     </Descriptions.Item>
                   </Descriptions>
                 </Col>
+
+                {/* QR Code */}
+                {product.QRCode && (
+                  <Col xs={24}>
+                    <Descriptions bordered column={1} size="small">
+                      <Descriptions.Item label="QR Code">
+                        <div className="flex items-center gap-4">
+                          <QRCode value={product.QRCode} size={100} />
+                          <span className="text-gray-600">
+                            {product.QRCode}
+                          </span>
+                        </div>
+                      </Descriptions.Item>
+                    </Descriptions>
+                  </Col>
+                )}
+
+                {/* Colors */}
+                {product.colors && product.colors.length > 0 && (
+                  <Col xs={24}>
+                    <Descriptions bordered column={1} size="small">
+                      <Descriptions.Item label="Colors">
+                        <div className="flex flex-wrap gap-2">
+                          {product.colors.map(
+                            (color: string, index: number) => (
+                              <Tooltip key={index} title={color}>
+                                <div className="flex items-center gap-2 border rounded px-3 py-1">
+                                  <div
+                                    style={{
+                                      backgroundColor: color,
+                                      width: 24,
+                                      height: 24,
+                                      borderRadius: 4,
+                                      border: "1px solid #d9d9d9",
+                                    }}
+                                  />
+                                  <span className="text-xs">{color}</span>
+                                </div>
+                              </Tooltip>
+                            )
+                          )}
+                        </div>
+                      </Descriptions.Item>
+                    </Descriptions>
+                  </Col>
+                )}
+
+                {/* Dimensions */}
+                {product.dimensions && (
+                  <Col xs={24}>
+                    <Descriptions
+                      bordered
+                      column={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
+                      size="small"
+                      title="Dimensions"
+                    >
+                      {product.dimensions.size && (
+                        <Descriptions.Item label="Size">
+                          <Tag color="cyan">{product.dimensions.size}</Tag>
+                        </Descriptions.Item>
+                      )}
+
+                      {(product.dimensions.height ?? 0) > 0 && (
+                        <Descriptions.Item label="Height">
+                          {product.dimensions.height} m
+                        </Descriptions.Item>
+                      )}
+
+                      {(product.dimensions.width ?? 0) > 0 && (
+                        <Descriptions.Item label="Width">
+                          {product.dimensions.width} m
+                        </Descriptions.Item>
+                      )}
+
+                      {(product.dimensions.length ?? 0) > 0 && (
+                        <Descriptions.Item label="Length">
+                          {product.dimensions.length} m
+                        </Descriptions.Item>
+                      )}
+
+                      {(product.dimensions.depth ?? 0) > 0 && (
+                        <Descriptions.Item label="Depth">
+                          {product.dimensions.depth} m
+                        </Descriptions.Item>
+                      )}
+
+                      {(product.dimensions.diameter ?? 0) > 0 && (
+                        <Descriptions.Item label="Diameter">
+                          {product.dimensions.diameter} m
+                        </Descriptions.Item>
+                      )}
+
+                      {(product.dimensions.thickness ?? 0) > 0 && (
+                        <Descriptions.Item label="Thickness">
+                          {product.dimensions.thickness} m
+                        </Descriptions.Item>
+                      )}
+
+                      {(product.dimensions.volume ?? 0) > 0 && (
+                        <Descriptions.Item label="Volume">
+                          {product.dimensions.volume} l
+                        </Descriptions.Item>
+                      )}
+
+                      {(product.dimensions.weight ?? 0) > 0 && (
+                        <Descriptions.Item label="Weight">
+                          {product.dimensions.weight} kg
+                        </Descriptions.Item>
+                      )}
+                    </Descriptions>
+                  </Col>
+                )}
               </Row>
             </ContainerTitle>
           </Col>
