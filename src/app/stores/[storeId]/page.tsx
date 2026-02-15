@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
 
 import {
   Button,
@@ -12,19 +12,31 @@ import {
   Row,
   Tag,
   Tooltip,
-} from "antd";
-import moment from "moment";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
-import { useParams, useRouter } from "next/navigation";
+} from 'antd';
+import moment from 'moment';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
+import {
+  useParams,
+  useRouter,
+} from 'next/navigation';
 
-import { BlockOutlined, EditOutlined, TagOutlined } from "@ant-design/icons";
+import {
+  BlockOutlined,
+  EditOutlined,
+  TagOutlined,
+} from '@ant-design/icons';
 
-import Avatar from "../../../components/common/Avatar/Avatar";
-import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
-import Description from "../../../components/common/Description/Description";
-import { DescriptionAddresses } from "../../../components/common/DescriptionAddresses/DescriptionAddresses";
-import { DescriptionPhoneNumbers } from "../../../components/common/DescriptionPhoneNumbers/DescriptionPhoneNumbers";
+import Avatar from '../../../components/common/Avatar/Avatar';
+import ContainerTitle
+  from '../../../components/common/ContainerTitle/ContainerTitle';
+import Description from '../../../components/common/Description/Description';
+import {
+  DescriptionAddresses,
+} from '../../../components/common/DescriptionAddresses/DescriptionAddresses';
+import {
+  DescriptionPhoneNumbers,
+} from '../../../components/common/DescriptionPhoneNumbers/DescriptionPhoneNumbers';
 import {
   IconAtSymbol,
   IconCake,
@@ -32,25 +44,34 @@ import {
   IconPencilSquare,
   IconQuestion,
   IconUser,
-} from "../../../components/common/icons/icons";
-import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
-import { TagCategoriesCustomAntd } from "../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
-import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
-import Layout from "../../../components/template/Layout/Layout";
-import CategoriesEnum from "../../../shared/business/categories/categories.enum";
-import StoresEnum from "../../../shared/business/stores/stores.enum";
-import TagsEnum from "../../../shared/business/tags/tags.enum";
-import Urls from "../../../shared/common/routes-app/routes-app";
-import DatesEnum from "../../../shared/utils/dates/dates.enum";
-import { getImageUrl } from "../../../shared/utils/images/images-url";
-import ImagesEnum from "../../../shared/utils/images/images.enum";
-import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
-import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
-import { SalesChart } from "../../sales/components/SalesChart/SalesChart";
-import { SalesChartsStatistics } from "../../sales/components/SalesChartsStatistics/SalesChartsStatistics";
-import SalesTable from "../../sales/components/SalesTable/SalesTable";
-import { useFindTagsByType } from "../../tags/useFindTagsByType";
-import { useFindStoreById } from "../detail/useFindStoreById";
+} from '../../../components/common/icons/icons';
+import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
+import {
+  TagCategoriesCustomAntd,
+} from '../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd';
+import {
+  TagTagsCustomAntd,
+} from '../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
+import Layout from '../../../components/template/Layout/Layout';
+import CategoriesEnum
+  from '../../../shared/business/categories/categories.enum';
+import StoresEnum from '../../../shared/business/stores/stores.enum';
+import TagsEnum from '../../../shared/business/tags/tags.enum';
+import Urls from '../../../shared/common/routes-app/routes-app';
+import DatesEnum from '../../../shared/utils/dates/dates.enum';
+import { getImageUrl } from '../../../shared/utils/images/images-url';
+import ImagesEnum from '../../../shared/utils/images/images.enum';
+import {
+  useFindCategoriesByType,
+} from '../../categories/useFindCategoriesByType';
+import { SalesBalance } from '../../sales/components/SalesBalance/SalesBalance';
+import { SalesChart } from '../../sales/components/SalesChart/SalesChart';
+import {
+  SalesChartsStatistics,
+} from '../../sales/components/SalesChartsStatistics/SalesChartsStatistics';
+import SalesTable from '../../sales/components/SalesTable/SalesTable';
+import { useFindTagsByType } from '../../tags/useFindTagsByType';
+import { useFindStoreById } from '../detail/useFindStoreById';
 
 export default function StorePage() {
   const router: AppRouterInstance = useRouter();
@@ -254,7 +275,10 @@ export default function StorePage() {
               <span className="font-semibold text-base">Sales Statistics</span>
             ),
             children: (
-              <SalesChartsStatistics storeId={storeId} isShowHeader={false} />
+              <SalesChartsStatistics
+                storeId={storeId}
+                isShowHeaderLabel={false}
+              />
             ),
           },
         ]}

@@ -1,23 +1,34 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Card, Col, Divider, Radio, Row } from "antd";
-import moment from "moment";
+import {
+  Card,
+  Col,
+  Divider,
+  Radio,
+  Row,
+} from 'antd';
+import moment from 'moment';
 
-import { DotChartOutlined, LineChartOutlined } from "@ant-design/icons";
+import {
+  DotChartOutlined,
+  LineChartOutlined,
+} from '@ant-design/icons';
 
-import ChartsEnum from "../../../../shared/utils/charts/charts-enum";
-import { SalesChartStatistic } from "./SalesChartStatistic";
+import ChartsEnum from '../../../../shared/utils/charts/charts-enum';
+import { SalesChartStatistic } from './SalesChartStatistic';
 
 interface Props {
   className?: string;
   storeId?: string;
   isShowHeader?: boolean;
+  isShowHeaderLabel?: boolean;
 }
 
 export const SalesChartsStatistics: React.FC<Props> = ({
   className,
   storeId,
   isShowHeader = true,
+  isShowHeaderLabel = true,
 }) => {
   const [isSalesQuantityMode, setIsSalesQuantityMode] =
     useState<boolean>(false);
@@ -27,10 +38,9 @@ export const SalesChartsStatistics: React.FC<Props> = ({
       className={`my-2 ${className}`}
       title={
         <div className="flex items-center">
-          <h2>Sales Statistics:</h2>
+          {isShowHeaderLabel && <h2 className="mr-3">Sales Statistics:</h2>}
 
           <Radio.Group
-            className="ml-3"
             onChange={(e) => {
               setIsSalesQuantityMode(e.target.value);
             }}
