@@ -166,7 +166,7 @@ export default function ProductItemPage() {
               extraHeader={
                 <Tooltip title="Edit product item">
                   <Button
-                    type="primary"
+                    type="success"
                     icon={<EditOutlined />}
                     onClick={handleEditProductItem}
                   >
