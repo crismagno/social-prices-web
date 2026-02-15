@@ -1,11 +1,17 @@
-import { Popover, Tag } from "antd";
+import {
+  Popover,
+  Tag,
+} from 'antd';
 
-import { QuestionCircleTwoTone } from "@ant-design/icons";
+import { QuestionCircleTwoTone } from '@ant-design/icons';
 
-import { IProduct } from "../../../shared/business/products/products.interface";
+import {
+  IProductItem,
+} from '../../../shared/business/product-items/product-items.interface';
+import { IProduct } from '../../../shared/business/products/products.interface';
 
 interface Props {
-  product: IProduct;
+  product: IProduct | IProductItem;
 }
 
 export const ProductPreviousBarcodesPopover: React.FC<Props> = ({

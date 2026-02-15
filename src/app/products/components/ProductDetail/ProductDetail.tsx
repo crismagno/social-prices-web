@@ -713,7 +713,7 @@ export const ProductDetail: React.FC<Props> = ({
             <Col xs={24} md={4} sm={6} lg={2}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.height" }}
-                label="Height"
+                label="Height(m)"
                 placeholder={"Enter height"}
                 type="number"
                 min={0}
@@ -723,7 +723,7 @@ export const ProductDetail: React.FC<Props> = ({
             <Col xs={24} md={4} sm={6} lg={2}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.width" }}
-                label="Width"
+                label="Width(m)"
                 placeholder={"Enter width"}
                 type="number"
                 min={0}
@@ -733,7 +733,7 @@ export const ProductDetail: React.FC<Props> = ({
             <Col xs={24} md={4} sm={6} lg={2}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.length" }}
-                label="Length"
+                label="Length(m)"
                 placeholder={"Enter length"}
                 type="number"
                 min={0}
@@ -743,7 +743,7 @@ export const ProductDetail: React.FC<Props> = ({
             <Col xs={24} md={4} sm={6} lg={2}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.depth" }}
-                label="Depth"
+                label="Depth(m)"
                 placeholder={"Enter depth"}
                 type="number"
                 min={0}
@@ -753,7 +753,7 @@ export const ProductDetail: React.FC<Props> = ({
             <Col xs={24} md={4} sm={6} lg={2}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.diameter" }}
-                label="Diameter"
+                label="Diameter(m)"
                 placeholder={"Enter diameter"}
                 type="number"
                 min={0}
@@ -763,7 +763,7 @@ export const ProductDetail: React.FC<Props> = ({
             <Col xs={24} md={4} sm={6} lg={2}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.thickness" }}
-                label="Thickness"
+                label="Thickness(m) "
                 placeholder={"Enter thickness"}
                 type="number"
                 min={0}
@@ -773,7 +773,7 @@ export const ProductDetail: React.FC<Props> = ({
             <Col xs={24} md={4} sm={6} lg={2}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.volume" }}
-                label="Volume"
+                label="Volume(l)"
                 placeholder={"Enter volume"}
                 type="number"
                 min={0}
@@ -783,7 +783,7 @@ export const ProductDetail: React.FC<Props> = ({
             <Col xs={24} md={4} sm={6} lg={2}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.weight" }}
-                label="Weight"
+                label="Weight(kg)"
                 placeholder={"Enter weight"}
                 type="number"
                 min={0}

@@ -17,6 +17,7 @@ export interface IProductItem extends ICreatedAtEntity, IUpdatedAtEntity {
   filesUrl: string[];
   mainUrl: string | null;
   categoriesIds: string[];
+  previousBarcodes: string[];
   tagsIds: string[];
   brand: string | null;
   releaseDate: Date | null;
