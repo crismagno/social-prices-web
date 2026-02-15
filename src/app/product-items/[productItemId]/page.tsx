@@ -25,7 +25,10 @@ import {
   useRouter,
 } from 'next/navigation';
 
-import { EditOutlined } from '@ant-design/icons';
+import {
+  EditOutlined,
+  EyeOutlined,
+} from '@ant-design/icons';
 
 import Avatar from '../../../components/common/Avatar/Avatar';
 import ContainerTitle
@@ -191,7 +194,28 @@ export default function ProductItemPage() {
                     </Descriptions.Item>
 
                     <Descriptions.Item label="Product">
-                      <Tag color="geekblue">{product?.name || "-"}</Tag>
+                      <div className="flex items-center gap-2">
+                        <Tag color="geekblue">{product?.name || "-"}</Tag>
+                        {product?._id && (
+                          <Tooltip title="View Product Profile">
+                            <Button
+                              type="link"
+                              size="small"
+                              icon={<EyeOutlined />}
+                              onClick={() =>
+                                router.push(
+                                  Urls.PRODUCT.replace(
+                                    ":productId",
+                                    product._id
+                                  )
+                                )
+                              }
+                            >
+                              View
+                            </Button>
+                          </Tooltip>
+                        )}
+                      </div>
                     </Descriptions.Item>
 
                     <Descriptions.Item label="Barcode">
