@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
 
 import {
   Avatar as AvatarAntd,
@@ -8,66 +8,55 @@ import {
   Card,
   Col,
   Collapse,
+  Descriptions,
   Image,
   Modal,
-  QRCode,
   Row,
   Tag,
   Tooltip,
-} from "antd";
-import moment from "moment";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
-import { useParams, useRouter } from "next/navigation";
-
+} from 'antd';
+import moment from 'moment';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import {
-  BlockOutlined,
-  CalendarOutlined,
-  CheckCircleOutlined,
-  ClockCircleOutlined,
-  EditOutlined,
-  FileOutlined,
-  PlusCircleOutlined,
-  QrcodeOutlined,
-  QuestionCircleOutlined,
-  ScissorOutlined,
-  ShopOutlined,
-  TagOutlined,
-} from "@ant-design/icons";
+  useParams,
+  useRouter,
+} from 'next/navigation';
 
-import Avatar from "../../../components/common/Avatar/Avatar";
-import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
-import Description from "../../../components/common/Description/Description";
+import { EditOutlined } from '@ant-design/icons';
+
+import Avatar from '../../../components/common/Avatar/Avatar';
+import ContainerTitle
+  from '../../../components/common/ContainerTitle/ContainerTitle';
+import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
 import {
-  IconCake,
-  IconIdentification,
-  IconMoney,
-  IconPencilSquare,
-  IconQuestion,
-  IconUser,
-} from "../../../components/common/icons/icons";
-import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
-import { ProductHistoricPricesButton } from "../../../components/common/ProductHistoricPricesButton/ProductHistoricPricesButton";
-import { ProductPreviousBarcodesPopover } from "../../../components/common/ProductPreviousBarcodesPopover/ProductPreviousBarcodesPopover";
-import { TagCategoriesCustomAntd } from "../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
-import { TagStoresCustomAntd } from "../../../components/common/TagStoresCustomAntd/TagStoresCustomAntd";
-import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
-import YesNo from "../../../components/common/YesNo/YesNo";
-import Layout from "../../../components/template/Layout/Layout";
-import CategoriesEnum from "../../../shared/business/categories/categories.enum";
-import TagsEnum from "../../../shared/business/tags/tags.enum";
-import Urls from "../../../shared/common/routes-app/routes-app";
-import DatesEnum from "../../../shared/utils/dates/dates.enum";
-import { getImageUrl } from "../../../shared/utils/images/images-url";
-import ImagesEnum from "../../../shared/utils/images/images.enum";
-import { formatToMoneyDecimal } from "../../../shared/utils/strings/string";
-import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
-import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
-import { SalesChart } from "../../sales/components/SalesChart/SalesChart";
-import SalesTable from "../../sales/components/SalesTable/SalesTable";
-import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
-import { useFindTagsByType } from "../../tags/useFindTagsByType";
-import { useFindProductById } from "../detail/useFindProductById";
+  TagCategoriesCustomAntd,
+} from '../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd';
+import {
+  TagStoresCustomAntd,
+} from '../../../components/common/TagStoresCustomAntd/TagStoresCustomAntd';
+import {
+  TagTagsCustomAntd,
+} from '../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
+import YesNo from '../../../components/common/YesNo/YesNo';
+import Layout from '../../../components/template/Layout/Layout';
+import CategoriesEnum
+  from '../../../shared/business/categories/categories.enum';
+import TagsEnum from '../../../shared/business/tags/tags.enum';
+import Urls from '../../../shared/common/routes-app/routes-app';
+import DatesEnum from '../../../shared/utils/dates/dates.enum';
+import { getImageUrl } from '../../../shared/utils/images/images-url';
+import ImagesEnum from '../../../shared/utils/images/images.enum';
+import { formatToMoneyDecimal } from '../../../shared/utils/strings/string';
+import {
+  useFindCategoriesByType,
+} from '../../categories/useFindCategoriesByType';
+import { SalesBalance } from '../../sales/components/SalesBalance/SalesBalance';
+import { SalesChart } from '../../sales/components/SalesChart/SalesChart';
+import SalesTable from '../../sales/components/SalesTable/SalesTable';
+import { useFindStoresByUser } from '../../stores/useFindStoresByUser';
+import { useFindTagsByType } from '../../tags/useFindTagsByType';
+import { useFindProductById } from '../detail/useFindProductById';
 
 export default function ProductPage() {
   const router: AppRouterInstance = useRouter();
@@ -170,195 +159,151 @@ export default function ProductPage() {
                 </Tooltip>
               }
             >
-              <Row>
-                <Col xs={24} md={8}>
-                  <Description
-                    label="Name"
-                    description={product.name}
-                    leftIcon={IconUser()}
-                  />
+              <Row gutter={[16, 16]}>
+                {/* Basic Information */}
+                <Col xs={24}>
+                  <Descriptions
+                    bordered
+                    column={{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3 }}
+                    size="small"
+                  >
+                    <Descriptions.Item label="Name" span={3}>
+                      <span className="font-medium">{product.name}</span>
+                    </Descriptions.Item>
 
-                  <Description
-                    label={
-                      <>
-                        <span>Barcode</span>
-                        <ProductPreviousBarcodesPopover product={product} />
-                      </>
-                    }
-                    description={<Tag>{product.barcode}</Tag>}
-                    leftIcon={IconIdentification()}
-                  />
+                    <Descriptions.Item label="Barcode">
+                      <Tag color="blue">{product.barcode}</Tag>
+                    </Descriptions.Item>
 
-                  <Description
-                    label={
-                      <>
-                        <span className="mr-2">Price</span>
-                        <ProductHistoricPricesButton product={product} />
-                      </>
-                    }
-                    description={formatToMoneyDecimal(product.price)}
-                    leftIcon={IconMoney()}
-                  />
+                    <Descriptions.Item label="SKU">
+                      <Tag color="purple">{product.sku || "-"}</Tag>
+                    </Descriptions.Item>
 
-                  <Description
-                    label="Quantity"
-                    description={
-                      <div className="flex">
-                        <div
-                          className={
-                            product.quantity <= 0
-                              ? "text-red-600 mr-1"
-                              : " text-green-600 mr-1"
-                          }
-                        >
-                          {product.quantity}
-                        </div>
+                    <Descriptions.Item label="Brand">
+                      {product.brand || "-"}
+                    </Descriptions.Item>
 
-                        {product.quantity <= 0 ? (
-                          <Tooltip title="Needs to be filled stock">
-                            <QuestionCircleOutlined
-                              style={{ color: "orange" }}
-                            />
-                          </Tooltip>
-                        ) : null}
-                      </div>
-                    }
-                    leftIcon={<PlusCircleOutlined className="text-lg" />}
-                  />
+                    <Descriptions.Item label="Price">
+                      <span className="font-semibold text-green-600">
+                        {formatToMoneyDecimal(product.price)}
+                      </span>
+                    </Descriptions.Item>
 
-                  <Description
-                    label="Is Active"
-                    description={
+                    <Descriptions.Item label="Quantity">
+                      <Tag color={product.quantity > 0 ? "success" : "error"}>
+                        {product.quantity}
+                      </Tag>
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Is Active">
                       <Tag color={product.isActive ? "green" : "red"}>
                         <YesNo isTrue={product.isActive} />
                       </Tag>
-                    }
-                    leftIcon={IconQuestion()}
-                  />
-
-                  <Description
-                    label="Upload Filename"
-                    description={product.uploadFilename}
-                    leftIcon={<FileOutlined className="text-lg" />}
-                  />
+                    </Descriptions.Item>
+                  </Descriptions>
                 </Col>
 
-                <Col xs={24} md={10}>
-                  <Description
-                    label="Description"
-                    description={product.description}
-                    leftIcon={IconPencilSquare()}
-                  />
-
-                  <Description
-                    label="Details"
-                    description={product.details}
-                    leftIcon={IconPencilSquare()}
-                  />
-
-                  <Description
-                    label="Tags"
-                    description={
-                      <div className="w-full flex">
-                        <TagTagsCustomAntd
-                          tags={tags}
-                          useTag
-                          tagsIds={product.tagsIds}
-                        />
+                {/* Description & Details */}
+                <Col xs={24}>
+                  <Descriptions bordered column={1} size="small">
+                    <Descriptions.Item label="Description">
+                      <div className="max-h-20 overflow-y-auto">
+                        {product.description || "-"}
                       </div>
-                    }
-                    leftIcon={<TagOutlined className="text-lg" />}
-                  />
+                    </Descriptions.Item>
 
-                  <Description
-                    label="Categories"
-                    description={
-                      <div className="w-full flex">
-                        <TagCategoriesCustomAntd
-                          categories={categories}
-                          useTag
-                          categoriesIds={product.categoriesIds}
-                        />
+                    <Descriptions.Item label="Details">
+                      <div className="max-h-20 overflow-y-auto">
+                        {product.details || "-"}
                       </div>
-                    }
-                    leftIcon={<BlockOutlined className="text-lg" />}
-                  />
-
-                  <Description
-                    label="Stores"
-                    description={
-                      <div className="w-full flex">
-                        <TagStoresCustomAntd
-                          stores={stores}
-                          useTag
-                          storeIds={product.storeIds}
-                        />
-                      </div>
-                    }
-                    leftIcon={<ShopOutlined className="text-lg" />}
-                  />
-
-                  <Description
-                    label="Brand"
-                    description={product.brand}
-                    leftIcon={<CheckCircleOutlined className="text-lg" />}
-                  />
+                    </Descriptions.Item>
+                  </Descriptions>
                 </Col>
 
-                <Col xs={24} md={4}>
-                  <Description
-                    label="QR Code"
-                    description={<QRCode value={product.QRCode ?? ""} />}
-                    leftIcon={<QrcodeOutlined className="text-lg" />}
-                  />
+                {/* Categories, Tags & Stores */}
+                <Col xs={24}>
+                  <Descriptions bordered column={1} size="small">
+                    <Descriptions.Item label="Categories">
+                      <div className="max-w-full overflow-x-auto py-1">
+                        <div className="flex flex-wrap gap-1">
+                          <TagCategoriesCustomAntd
+                            categories={categories}
+                            useTag
+                            categoriesIds={product.categoriesIds}
+                          />
+                        </div>
+                      </div>
+                    </Descriptions.Item>
 
-                  <Description
-                    label="Created At"
-                    description={
-                      product.createdAt
-                        ? moment(product.createdAt).format(
-                            DatesEnum.Format.DDMMYYYYhhmmss
-                          )
-                        : "-"
-                    }
-                    leftIcon={IconCake()}
-                  />
+                    <Descriptions.Item label="Tags">
+                      <div className="max-w-full overflow-x-auto py-1">
+                        <div className="flex flex-wrap gap-1">
+                          <TagTagsCustomAntd
+                            tags={tags}
+                            useTag
+                            tagsIds={product.tagsIds}
+                          />
+                        </div>
+                      </div>
+                    </Descriptions.Item>
 
-                  <Description
-                    label="Updated At"
-                    description={
-                      product.updatedAt
-                        ? moment(product.updatedAt).format(
-                            DatesEnum.Format.DDMMYYYYhhmmss
-                          )
-                        : "-"
-                    }
-                    leftIcon={<CalendarOutlined className="text-lg" />}
-                  />
+                    <Descriptions.Item label="Stores">
+                      <div className="max-w-full overflow-x-auto py-1">
+                        <div className="flex flex-wrap gap-1">
+                          <TagStoresCustomAntd
+                            stores={stores}
+                            useTag
+                            storeIds={product.storeIds}
+                          />
+                        </div>
+                      </div>
+                    </Descriptions.Item>
+                  </Descriptions>
+                </Col>
 
-                  <Description
-                    label="Release Date"
-                    leftIcon={<ScissorOutlined className="text-lg" />}
-                    description={
-                      product.releaseDate
+                {/* Dates & Additional Info */}
+                <Col xs={24}>
+                  <Descriptions
+                    bordered
+                    column={{ xs: 1, sm: 2, md: 2, lg: 3, xl: 3 }}
+                    size="small"
+                  >
+                    <Descriptions.Item label="Release Date">
+                      {product.releaseDate
                         ? moment(product.releaseDate).format(
                             DatesEnum.Format.DDMMYYY
                           )
-                        : "-"
-                    }
-                  />
+                        : "-"}
+                    </Descriptions.Item>
 
-                  <Description
-                    label="Expiration Date"
-                    leftIcon={<ClockCircleOutlined className="text-lg" />}
-                    description={
-                      product.expirationDate
+                    <Descriptions.Item label="Expiration Date">
+                      {product.expirationDate
                         ? moment(product.expirationDate).format(
                             DatesEnum.Format.DDMMYYY
                           )
-                        : "-"
-                    }
-                  />
+                        : "-"}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Upload Filename">
+                      {product.uploadFilename || "-"}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Created At">
+                      {product.createdAt
+                        ? moment(product.createdAt).format(
+                            DatesEnum.Format.DDMMYYYYhhmmss
+                          )
+                        : "-"}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Updated At">
+                      {product.updatedAt
+                        ? moment(product.updatedAt).format(
+                            DatesEnum.Format.DDMMYYYYhhmmss
+                          )
+                        : "-"}
+                    </Descriptions.Item>
+                  </Descriptions>
                 </Col>
               </Row>
             </ContainerTitle>
