@@ -18,6 +18,7 @@ export interface IProductItem extends ICreatedAtEntity, IUpdatedAtEntity {
   mainUrl: string | null;
   categoriesIds: string[];
   previousBarcodes: string[];
+  storeIds: string[];
   tagsIds: string[];
   brand: string | null;
   releaseDate: Date | null;
@@ -27,6 +28,7 @@ export interface IProductItem extends ICreatedAtEntity, IUpdatedAtEntity {
   isDefault: boolean;
   details: string | null;
   QRCode: string | null;
+  uploadFilename: string | null;
 }
 
 export interface IProductItemDimensions {

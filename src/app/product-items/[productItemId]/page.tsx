@@ -1,16 +1,25 @@
 "use client";
 
+import { useState } from 'react';
+
 import {
+  Avatar as AvatarAntd,
   Button,
   Card,
   Col,
   Descriptions,
   Image,
+  Modal,
+  QRCode,
   Row,
+  Tabs,
   Tag,
+  Tooltip,
 } from 'antd';
 import { find } from 'lodash';
 import moment from 'moment';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import {
   useParams,
   useRouter,
@@ -18,269 +27,474 @@ import {
 
 import { EditOutlined } from '@ant-design/icons';
 
+import Avatar from '../../../components/common/Avatar/Avatar';
+import ContainerTitle
+  from '../../../components/common/ContainerTitle/ContainerTitle';
 import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
 import {
   TagCategoriesCustomAntd,
 } from '../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd';
 import {
+  TagStoresCustomAntd,
+} from '../../../components/common/TagStoresCustomAntd/TagStoresCustomAntd';
+import {
   TagTagsCustomAntd,
 } from '../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
+import YesNo from '../../../components/common/YesNo/YesNo';
 import Layout from '../../../components/template/Layout/Layout';
 import CategoriesEnum
   from '../../../shared/business/categories/categories.enum';
-import {
-  ICategory,
-} from '../../../shared/business/categories/categories.interface';
 import TagsEnum from '../../../shared/business/tags/tags.enum';
-import { ITag } from '../../../shared/business/tags/tags.interface';
 import Urls from '../../../shared/common/routes-app/routes-app';
-import { sortArray } from '../../../shared/utils/array/array-functions';
 import DatesEnum from '../../../shared/utils/dates/dates.enum';
 import { getImageUrl } from '../../../shared/utils/images/images-url';
 import ImagesEnum from '../../../shared/utils/images/images.enum';
-import { formatterMoney } from '../../../shared/utils/strings/string';
+import { formatToMoneyDecimal } from '../../../shared/utils/strings/string';
 import {
   useFindCategoriesByType,
 } from '../../categories/useFindCategoriesByType';
 import { useFindProductsByUser } from '../../products/useFindProductsByUser';
+import { SalesBalance } from '../../sales/components/SalesBalance/SalesBalance';
+import { SalesChart } from '../../sales/components/SalesChart/SalesChart';
+import SalesTable from '../../sales/components/SalesTable/SalesTable';
+import { useFindStoresByUser } from '../../stores/useFindStoresByUser';
 import { useFindTagsByType } from '../../tags/useFindTagsByType';
 import { useFindProductItemById } from '../useFindProductItemById';
 
 export default function ProductItemPage() {
-  const router = useRouter();
-  const params = useParams();
-  const productItemId = params.productItemId as string;
+  const router: AppRouterInstance = useRouter();
 
-  const { productItem, isLoading } = useFindProductItemById(productItemId);
+  const params: Params = useParams();
 
-  const { categories, isLoading: isLoadingCategories } =
-    useFindCategoriesByType(CategoriesEnum.Type.PRODUCT);
+  const [previewOpen, setPreviewOpen] = useState<boolean>(false);
+
+  const paramsProductItemId: string = params?.productItemId;
+
+  const { isLoading, productItem } =
+    useFindProductItemById(paramsProductItemId);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
     TagsEnum.Type.PRODUCT
   );
 
+  const { categories, isLoading: isLoadingCategories } =
+    useFindCategoriesByType(CategoriesEnum.Type.PRODUCT);
+
+  const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
+
   const { products, isLoading: isLoadingProducts } = useFindProductsByUser();
 
-  if (isLoading || isLoadingCategories || isLoadingTags || isLoadingProducts) {
+  if (
+    isLoading ||
+    !productItem ||
+    isLoadingTags ||
+    isLoadingStores ||
+    isLoadingCategories ||
+    isLoadingProducts
+  ) {
     return <LoadingFull />;
   }
 
-  if (!productItem) {
-    return (
-      <Layout subtitle="Not Found" title="Product Item" hasBackButton>
-        <Card>
-          <p>Product item not found</p>
-        </Card>
-      </Layout>
-    );
-  }
-
-  const categoriesSort: ICategory[] = sortArray(categories, "name");
-  const tagsSort: ITag[] = sortArray(tags, "name");
+  const productItemId: string = productItem._id;
   const product = find(products, { _id: productItem.productId });
 
+  const handleEditProductItem = () => {
+    router.push(
+      Urls.EDIT_PRODUCT_ITEM.replace(":productItemId", productItemId)
+    );
+  };
+
   return (
-    <Layout subtitle={productItem.name} title="Product Item" hasBackButton>
-      <Card
-        title="Product Item Information"
-        className="mt-5"
-        extra={
-          <Button
-            type="primary"
-            icon={<EditOutlined />}
-            onClick={() =>
-              router.push(
-                Urls.EDIT_PRODUCT_ITEM.replace(
-                  ":productItemId",
-                  productItem._id
-                )
-              )
-            }
+    <Layout
+      subtitle={`Here we can see about product item - ${productItem.name}`}
+      title="Product Item"
+      hasBackButton
+    >
+      <Card className="h-min-80 mt-2">
+        <Row gutter={[4, 4]}>
+          <Col
+            xs={24}
+            sm={10}
+            md={5}
+            className="flex flex-col justify-start items-center"
           >
-            Edit
-          </Button>
-        }
-      >
-        <Row gutter={[16, 16]}>
-          <Col xs={24} md={8}>
-            {productItem.filesUrl?.length > 0 ? (
-              <Image.PreviewGroup>
+            <Avatar
+              onClick={() => setPreviewOpen(true)}
+              src={productItem.mainUrl}
+              width={240}
+              className="shadow-lg border-none cursor-pointer z-10 rounded-lg mt-10"
+              title="See image"
+            />
+
+            <div className="mt-2">
+              <AvatarAntd.Group
+                maxCount={2}
+                shape="circle"
+                size="large"
+                maxStyle={{ color: "#f56a00", backgroundColor: "#fde3cf" }}
+              >
                 {productItem.filesUrl.map((fileUrl: string) => (
                   <Image
                     key={fileUrl}
-                    width={200}
+                    width={40}
                     src={getImageUrl(fileUrl)}
-                    alt={productItem.name}
+                    alt="mainUrl"
+                    className="rounded-full"
                   />
                 ))}
-              </Image.PreviewGroup>
-            ) : (
-              <Image
-                width={200}
-                src={ImagesEnum.FilesNames.DefaultAvatarImage}
-                alt={productItem.name}
-              />
+              </AvatarAntd.Group>
+            </div>
+
+            <h3 className="md:text-2xl font-semibold text-blueGray-700 mt-1 mb-1">
+              {productItem.name}
+            </h3>
+
+            <Tooltip title={"Product Item Barcode"}>
+              <Tag>{productItem.barcode}</Tag>
+            </Tooltip>
+
+            {productItem.isDefault && (
+              <Tag color="blue" className="mt-2">
+                Default Item
+              </Tag>
             )}
           </Col>
 
-          <Col xs={24} md={16}>
-            <Descriptions bordered column={1}>
-              <Descriptions.Item label="Name">
-                {productItem.name}
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Product">
-                {product?.name ?? "N/A"}
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Brand">
-                {productItem.brand ?? "N/A"}
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Barcode">
-                {productItem.barcode ?? "N/A"}
-              </Descriptions.Item>
-
-              <Descriptions.Item label="SKU">
-                {productItem.sku ?? "N/A"}
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Price">
-                {formatterMoney(productItem.price)}
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Quantity">
-                <Tag color={productItem.quantity <= 0 ? "red" : "green"}>
-                  {productItem.quantity}
-                </Tag>
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Active">
-                <Tag color={productItem.isActive ? "green" : "red"}>
-                  {productItem.isActive ? "Yes" : "No"}
-                </Tag>
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Default">
-                <Tag color={productItem.isDefault ? "blue" : "gray"}>
-                  {productItem.isDefault ? "Yes" : "No"}
-                </Tag>
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Categories">
-                <TagCategoriesCustomAntd
-                  categories={categoriesSort}
-                  categoriesIds={productItem.categoriesIds}
-                />
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Tags">
-                <TagTagsCustomAntd
-                  tags={tagsSort}
-                  tagsIds={productItem.tagsIds}
-                />
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Colors">
-                {productItem.colors?.map((color: string) => (
-                  <Tag
-                    key={color}
-                    color={color}
-                    style={{ marginRight: 4, marginBottom: 4 }}
+          <Col xs={24} sm={14} md={19}>
+            <ContainerTitle
+              title="Information"
+              extraHeader={
+                <Tooltip title="Edit product item">
+                  <Button
+                    type="primary"
+                    icon={<EditOutlined />}
+                    onClick={handleEditProductItem}
                   >
-                    {color}
-                  </Tag>
-                ))}
-              </Descriptions.Item>
+                    Edit
+                  </Button>
+                </Tooltip>
+              }
+            >
+              <Row gutter={[16, 16]}>
+                {/* Basic Information */}
+                <Col xs={24}>
+                  <Descriptions
+                    bordered
+                    column={{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3 }}
+                    size="small"
+                  >
+                    <Descriptions.Item label="Name" span={3}>
+                      <span className="font-medium">{productItem.name}</span>
+                    </Descriptions.Item>
 
-              <Descriptions.Item label="Release Date">
-                {productItem.releaseDate
-                  ? moment(productItem.releaseDate).format(
-                      DatesEnum.Format.DDMMYYYYhhmmss
-                    )
-                  : "N/A"}
-              </Descriptions.Item>
+                    <Descriptions.Item label="Product">
+                      <Tag color="geekblue">{product?.name || "-"}</Tag>
+                    </Descriptions.Item>
 
-              <Descriptions.Item label="Expiration Date">
-                {productItem.expirationDate
-                  ? moment(productItem.expirationDate).format(
-                      DatesEnum.Format.DDMMYYYYhhmmss
-                    )
-                  : "N/A"}
-              </Descriptions.Item>
+                    <Descriptions.Item label="Barcode">
+                      <Tag color="blue">{productItem.barcode}</Tag>
+                    </Descriptions.Item>
 
-              <Descriptions.Item label="Description">
-                {productItem.description ?? "N/A"}
-              </Descriptions.Item>
+                    <Descriptions.Item label="SKU">
+                      <Tag color="purple">{productItem.sku || "-"}</Tag>
+                    </Descriptions.Item>
 
-              <Descriptions.Item label="Created At">
-                {moment(productItem.createdAt).format(
-                  DatesEnum.Format.DDMMYYYYhhmmss
+                    <Descriptions.Item label="Brand">
+                      {productItem.brand || "-"}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Price">
+                      <span className="font-semibold text-green-600">
+                        {formatToMoneyDecimal(productItem.price)}
+                      </span>
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Quantity">
+                      <Tag
+                        color={productItem.quantity > 0 ? "success" : "error"}
+                      >
+                        {productItem.quantity}
+                      </Tag>
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Is Active">
+                      <Tag color={productItem.isActive ? "green" : "red"}>
+                        <YesNo isTrue={productItem.isActive} />
+                      </Tag>
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Is Default">
+                      <Tag color={productItem.isDefault ? "blue" : "gray"}>
+                        <YesNo isTrue={productItem.isDefault} />
+                      </Tag>
+                    </Descriptions.Item>
+                  </Descriptions>
+                </Col>
+
+                {/* Description & Details */}
+                <Col xs={24}>
+                  <Descriptions bordered column={1} size="small">
+                    <Descriptions.Item label="Description">
+                      <div className="max-h-20 overflow-y-auto">
+                        {productItem.description || "-"}
+                      </div>
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Details">
+                      <div className="max-h-20 overflow-y-auto">
+                        {productItem.details || "-"}
+                      </div>
+                    </Descriptions.Item>
+                  </Descriptions>
+                </Col>
+
+                {/* Categories, Tags & Stores */}
+                <Col xs={24}>
+                  <Descriptions bordered column={1} size="small">
+                    <Descriptions.Item label="Categories">
+                      <div className="max-w-full overflow-x-auto py-1">
+                        <div className="flex flex-wrap gap-1">
+                          <TagCategoriesCustomAntd
+                            categories={categories}
+                            useTag
+                            categoriesIds={productItem.categoriesIds}
+                          />
+                        </div>
+                      </div>
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Tags">
+                      <div className="max-w-full overflow-x-auto py-1">
+                        <div className="flex flex-wrap gap-1">
+                          <TagTagsCustomAntd
+                            tags={tags}
+                            useTag
+                            tagsIds={productItem.tagsIds}
+                          />
+                        </div>
+                      </div>
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Stores">
+                      <div className="max-w-full overflow-x-auto py-1">
+                        <div className="flex flex-wrap gap-1">
+                          <TagStoresCustomAntd
+                            stores={stores}
+                            useTag
+                            storeIds={productItem.storeIds}
+                          />
+                        </div>
+                      </div>
+                    </Descriptions.Item>
+                  </Descriptions>
+                </Col>
+
+                {/* Dates & Additional Info */}
+                <Col xs={24}>
+                  <Descriptions
+                    bordered
+                    column={{ xs: 1, sm: 2, md: 2, lg: 3, xl: 3 }}
+                    size="small"
+                  >
+                    <Descriptions.Item label="Release Date">
+                      {productItem.releaseDate
+                        ? moment(productItem.releaseDate).format(
+                            DatesEnum.Format.DDMMYYY
+                          )
+                        : "-"}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Expiration Date">
+                      {productItem.expirationDate
+                        ? moment(productItem.expirationDate).format(
+                            DatesEnum.Format.DDMMYYY
+                          )
+                        : "-"}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Upload Filename">
+                      {productItem.uploadFilename || "-"}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Created At">
+                      {productItem.createdAt
+                        ? moment(productItem.createdAt).format(
+                            DatesEnum.Format.DDMMYYYYhhmmss
+                          )
+                        : "-"}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Updated At">
+                      {productItem.updatedAt
+                        ? moment(productItem.updatedAt).format(
+                            DatesEnum.Format.DDMMYYYYhhmmss
+                          )
+                        : "-"}
+                    </Descriptions.Item>
+                  </Descriptions>
+                </Col>
+
+                {/* QR Code */}
+                {productItem.QRCode && (
+                  <Col xs={24}>
+                    <Descriptions bordered column={1} size="small">
+                      <Descriptions.Item label="QR Code">
+                        <div className="flex items-center gap-4">
+                          <QRCode value={productItem.QRCode} size={100} />
+                          <span className="text-gray-600">
+                            {productItem.QRCode}
+                          </span>
+                        </div>
+                      </Descriptions.Item>
+                    </Descriptions>
+                  </Col>
                 )}
-              </Descriptions.Item>
 
-              <Descriptions.Item label="Updated At">
-                {moment(productItem.updatedAt).format(
-                  DatesEnum.Format.DDMMYYYYhhmmss
+                {/* Colors */}
+                {productItem.colors && productItem.colors.length > 0 && (
+                  <Col xs={24}>
+                    <Descriptions bordered column={1} size="small">
+                      <Descriptions.Item label="Colors">
+                        <div className="flex flex-wrap gap-2">
+                          {productItem.colors.map(
+                            (color: string, index: number) => (
+                              <Tooltip key={index} title={color}>
+                                <div className="flex items-center gap-2 border rounded px-3 py-1">
+                                  <div
+                                    style={{
+                                      backgroundColor: color,
+                                      width: 24,
+                                      height: 24,
+                                      borderRadius: 4,
+                                      border: "1px solid #d9d9d9",
+                                    }}
+                                  />
+                                  <span className="text-xs">{color}</span>
+                                </div>
+                              </Tooltip>
+                            )
+                          )}
+                        </div>
+                      </Descriptions.Item>
+                    </Descriptions>
+                  </Col>
                 )}
-              </Descriptions.Item>
-            </Descriptions>
+
+                {/* Dimensions */}
+                {productItem.dimensions && (
+                  <Col xs={24}>
+                    <Descriptions
+                      bordered
+                      column={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
+                      size="small"
+                      title="Dimensions"
+                    >
+                      {productItem.dimensions.size && (
+                        <Descriptions.Item label="Size">
+                          <Tag color="cyan">{productItem.dimensions.size}</Tag>
+                        </Descriptions.Item>
+                      )}
+
+                      {(productItem.dimensions.height ?? 0) > 0 && (
+                        <Descriptions.Item label="Height">
+                          {productItem.dimensions.height} m
+                        </Descriptions.Item>
+                      )}
+
+                      {(productItem.dimensions.width ?? 0) > 0 && (
+                        <Descriptions.Item label="Width">
+                          {productItem.dimensions.width} m
+                        </Descriptions.Item>
+                      )}
+
+                      {(productItem.dimensions.length ?? 0) > 0 && (
+                        <Descriptions.Item label="Length">
+                          {productItem.dimensions.length} m
+                        </Descriptions.Item>
+                      )}
+
+                      {(productItem.dimensions.depth ?? 0) > 0 && (
+                        <Descriptions.Item label="Depth">
+                          {productItem.dimensions.depth} m
+                        </Descriptions.Item>
+                      )}
+
+                      {(productItem.dimensions.diameter ?? 0) > 0 && (
+                        <Descriptions.Item label="Diameter">
+                          {productItem.dimensions.diameter} m
+                        </Descriptions.Item>
+                      )}
+
+                      {(productItem.dimensions.thickness ?? 0) > 0 && (
+                        <Descriptions.Item label="Thickness">
+                          {productItem.dimensions.thickness} m
+                        </Descriptions.Item>
+                      )}
+
+                      {(productItem.dimensions.volume ?? 0) > 0 && (
+                        <Descriptions.Item label="Volume">
+                          {productItem.dimensions.volume} l
+                        </Descriptions.Item>
+                      )}
+
+                      {(productItem.dimensions.weight ?? 0) > 0 && (
+                        <Descriptions.Item label="Weight">
+                          {productItem.dimensions.weight} kg
+                        </Descriptions.Item>
+                      )}
+                    </Descriptions>
+                  </Col>
+                )}
+              </Row>
+            </ContainerTitle>
           </Col>
         </Row>
-
-        {productItem.dimensions && (
-          <Card title="Dimensions" className="mt-5">
-            <Descriptions bordered column={3}>
-              {productItem.dimensions.size && (
-                <Descriptions.Item label="Size">
-                  {productItem.dimensions.size}
-                </Descriptions.Item>
-              )}
-              {productItem.dimensions.height && (
-                <Descriptions.Item label="Height">
-                  {productItem.dimensions.height}
-                </Descriptions.Item>
-              )}
-              {productItem.dimensions.width && (
-                <Descriptions.Item label="Width">
-                  {productItem.dimensions.width}
-                </Descriptions.Item>
-              )}
-              {productItem.dimensions.length && (
-                <Descriptions.Item label="Length">
-                  {productItem.dimensions.length}
-                </Descriptions.Item>
-              )}
-              {productItem.dimensions.depth && (
-                <Descriptions.Item label="Depth">
-                  {productItem.dimensions.depth}
-                </Descriptions.Item>
-              )}
-              {productItem.dimensions.diameter && (
-                <Descriptions.Item label="Diameter">
-                  {productItem.dimensions.diameter}
-                </Descriptions.Item>
-              )}
-              {productItem.dimensions.thickness && (
-                <Descriptions.Item label="Thickness">
-                  {productItem.dimensions.thickness}
-                </Descriptions.Item>
-              )}
-              {productItem.dimensions.volume && (
-                <Descriptions.Item label="Volume">
-                  {productItem.dimensions.volume}
-                </Descriptions.Item>
-              )}
-              {productItem.dimensions.weight && (
-                <Descriptions.Item label="Weight">
-                  {productItem.dimensions.weight}
-                </Descriptions.Item>
-              )}
-            </Descriptions>
-          </Card>
-        )}
       </Card>
+
+      <Card className="mt-4">
+        <Tabs
+          defaultActiveKey="1"
+          items={[
+            {
+              key: "1",
+              label: "Sales Balance",
+              children: <SalesBalance productItemId={productItemId} />,
+            },
+            {
+              key: "2",
+              label: "Sales Chart",
+              children: (
+                <SalesChart
+                  isShowHeader={false}
+                  productItemId={productItemId}
+                />
+              ),
+            },
+            {
+              key: "3",
+              label: "Sales Table",
+              children: <SalesTable productItemId={productItemId} />,
+            },
+          ]}
+        />
+      </Card>
+
+      <Modal
+        open={previewOpen}
+        footer={null}
+        onCancel={() => setPreviewOpen(false)}
+      >
+        <Image
+          alt="preview image"
+          style={{ width: "100%" }}
+          preview={false}
+          src={
+            productItem?.mainUrl
+              ? getImageUrl(productItem.mainUrl)
+              : ImagesEnum.FilesNames.DefaultAvatarImage
+          }
+        />
+      </Modal>
     </Layout>
   );
 }
