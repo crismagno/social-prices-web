@@ -33,6 +33,9 @@ import {
   TagCategoriesCustomAntd,
 } from '../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd';
 import {
+  TagStoresCustomAntd,
+} from '../../components/common/TagStoresCustomAntd/TagStoresCustomAntd';
+import {
   TagTagsCustomAntd,
 } from '../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
 import YesNo from '../../components/common/YesNo/YesNo';
@@ -321,6 +324,19 @@ export default function ProductItemsPage() {
               align: "center",
               render: (tagsIds: string[]) => (
                 <TagTagsCustomAntd tags={tagsSort} tagsIds={tagsIds} />
+              ),
+            },
+            {
+              title: "Stores",
+              dataIndex: "storeIds",
+              key: "storeIds",
+              align: "center",
+              filters: stores.map((store) => ({
+                text: store.name,
+                value: store._id,
+              })),
+              render: (storeIds: string[]) => (
+                <TagStoresCustomAntd stores={stores} storeIds={storeIds} />
               ),
             },
             {
