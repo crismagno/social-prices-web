@@ -31,6 +31,9 @@ import ContainerTitle
   from '../../../components/common/ContainerTitle/ContainerTitle';
 import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
 import {
+  ProductHistoricPricesButton,
+} from '../../../components/common/ProductHistoricPricesButton/ProductHistoricPricesButton';
+import {
   TagCategoriesCustomAntd,
 } from '../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd';
 import {
@@ -185,9 +188,12 @@ export default function ProductPage() {
                     </Descriptions.Item>
 
                     <Descriptions.Item label="Price">
-                      <span className="font-semibold text-green-600">
-                        {formatToMoneyDecimal(product.price)}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-green-600">
+                          {formatToMoneyDecimal(product.price)}
+                        </span>
+                        <ProductHistoricPricesButton product={product} />
+                      </div>
                     </Descriptions.Item>
 
                     <Descriptions.Item label="Quantity">
