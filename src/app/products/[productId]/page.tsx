@@ -7,12 +7,12 @@ import {
   Button,
   Card,
   Col,
-  Collapse,
   Descriptions,
   Image,
   Modal,
   QRCode,
   Row,
+  Tabs,
   Tag,
   Tooltip,
 } from 'antd';
@@ -424,25 +424,30 @@ export default function ProductPage() {
         </Row>
       </Card>
 
-      <SalesBalance productId={productId} />
-
-      <Collapse
-        style={{ backgroundColor: "#fff", boxShadow: "none" }}
-        ghost
-        items={[
-          {
-            key: "1",
-            label: <span className="font-semibold text-base">Sales Chart</span>,
-            children: <SalesChart isShowHeader={false} productId={productId} />,
-          },
-        ]}
-      />
-
-      <Row>
-        <Col xs={24}>
-          <SalesTable productId={productId} />{" "}
-        </Col>
-      </Row>
+      <Card className="mt-4">
+        <Tabs
+          defaultActiveKey="1"
+          items={[
+            {
+              key: "1",
+              label: "Sales Balance",
+              children: <SalesBalance productId={productId} />,
+            },
+            {
+              key: "2",
+              label: "Sales Chart",
+              children: (
+                <SalesChart isShowHeader={false} productId={productId} />
+              ),
+            },
+            {
+              key: "3",
+              label: "Sales Table",
+              children: <SalesTable productId={productId} />,
+            },
+          ]}
+        />
+      </Card>
 
       <Modal
         open={previewOpen}
