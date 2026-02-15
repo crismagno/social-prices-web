@@ -24,6 +24,8 @@ export interface IProductItem extends ICreatedAtEntity, IUpdatedAtEntity {
   dimensions: IProductItemDimensions | null;
   colors: string[] | null;
   isDefault: boolean;
+  details: string | null;
+  QRCode: string | null;
 }
 
 export interface IProductItemDimensions {

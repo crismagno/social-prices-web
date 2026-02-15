@@ -1,16 +1,33 @@
 "use client";
 
-import { Button, Card, Col, Divider, Modal, Row, Tooltip } from "antd";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter, useSearchParams } from "next/navigation";
+import {
+  Alert,
+  Button,
+  Card,
+  Col,
+  Divider,
+  message,
+  Modal,
+  Row,
+  Tooltip,
+} from 'antd';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+import {
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 
-import { CheckCircleTwoTone, EnterOutlined } from "@ant-design/icons";
+import {
+  CheckCircleTwoTone,
+  EnterOutlined,
+} from '@ant-design/icons';
 
-import Layout from "../../../components/template/Layout/Layout";
-import { IProductItem } from "../../../shared/business/product-items/product-items.interface";
-import Urls from "../../../shared/common/routes-app/routes-app";
-import { ProductItemDetail } from "../components/ProductItemDetail/ProductItemDetail";
-import { useFindProductItemById } from "../useFindProductItemById";
+import Layout from '../../../components/template/Layout/Layout';
+import Urls from '../../../shared/common/routes-app/routes-app';
+import {
+  ProductItemDetail,
+} from '../components/ProductItemDetail/ProductItemDetail';
+import { useFindProductItemById } from '../useFindProductItemById';
 
 export default function ProductItemDetailPage() {
   const router: AppRouterInstance = useRouter();
@@ -21,32 +38,27 @@ export default function ProductItemDetailPage() {
 
   const isEditMode: boolean = !!productItemId && !!productItem;
 
-  const handleCreate = async () => {
+  const handleCreate = () => {
     Modal.confirm({
       title: "Your product item has been created successfully!",
-      icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
-      okText: "See all product items",
-      cancelText: "Create another",
-      onOk: async () => {
-        router.push(Urls.PRODUCT_ITEMS);
-      },
+      icon: <CheckCircleTwoTone />,
+      content: (
+        <Alert
+          message="Please confirm if you want to create a new product item"
+          type="success"
+          showIcon
+        />
+      ),
+      okText: "Confirm",
+      cancelText: "Cancel",
+      onOk: () => {},
+      onCancel: () => router.back(),
     });
   };
 
-  const handleUpdate = async (productItem: IProductItem | null) => {
-    Modal.confirm({
-      title: "Your product item has been updated successfully!",
-      icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
-      okText: "See all product items",
-      cancelText: "Continue editing",
-      onOk: async () => {
-        router.push(Urls.PRODUCT_ITEMS);
-      },
-    });
-  };
-
-  const handleCancel = () => {
-    router.push(Urls.PRODUCT_ITEMS);
+  const handleUpdate = () => {
+    message.success("Your product item has been update successfully!");
+    router.back();
   };
 
   return (
@@ -93,7 +105,7 @@ export default function ProductItemDetailPage() {
           productItemId={productItemId}
           onCreate={handleCreate}
           onUpdate={handleUpdate}
-          onCancel={handleCancel}
+          onCancel={() => router.back()}
         />
       </Card>
     </Layout>

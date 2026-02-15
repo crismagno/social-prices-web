@@ -10,9 +10,12 @@ import {
 import {
   Button,
   Col,
+  Input,
   Modal,
+  QRCode,
   Row,
   Select,
+  Space,
   Upload,
   UploadFile,
   UploadProps,
@@ -29,6 +32,7 @@ import {
 } from 'lodash';
 import moment from 'moment';
 import {
+  Controller,
   SubmitHandler,
   useForm,
 } from 'react-hook-form';
@@ -121,12 +125,14 @@ const formSchema = z.object({
   name: z.string().trim().nonempty("Name is required"),
   quantity: z.any().optional(),
   description: z.string().trim().optional(),
+  details: z.string().trim().optional(),
   price: z.any().optional(),
   isActive: z.boolean(),
   isDefault: z.boolean(),
   productId: z.string().nonempty("Product is required"),
   barcode: z.string().trim().optional(),
   sku: z.string().trim().optional(),
+  QRCode: z.string().trim().optional(),
   categoriesIds: z.array(z.string()),
   tagsIds: z.array(z.string()),
   brand: z.string().trim().optional(),
@@ -200,8 +206,10 @@ export const ProductItemDetail: React.FC<Props> = ({
     const values: TFormSchema = {
       name: productItem?.name ?? "",
       description: productItem?.description ?? "",
+      details: productItem?.details ?? "",
       barcode: productItem?.barcode ?? "",
       sku: productItem?.sku ?? "",
+      QRCode: productItem?.QRCode ?? "",
       isActive: productItem ? productItem.isActive : true,
       isDefault: productItem ? productItem.isDefault : false,
       price: productItem?.price ?? 0,
@@ -316,12 +324,14 @@ export const ProductItemDetail: React.FC<Props> = ({
       const createProductItemDto: CreateProductItemDto = {
         name: data.name,
         description: data.description ?? "",
+        details: data.details ?? null,
         price: data.price ?? 0,
         quantity: data.quantity ?? 0,
         isActive: data.isActive,
         isDefault: data.isDefault ?? false,
         barcode: data.barcode ?? null,
         sku: data.sku ?? null,
+        QRCode: data.QRCode ?? null,
         productId: data.productId,
         brand: data.brand ?? null,
         categoriesIds: data.categoriesIds ?? [],
@@ -394,12 +404,14 @@ export const ProductItemDetail: React.FC<Props> = ({
         productItemId: productItem!._id,
         name: data.name,
         description: data.description ?? "",
+        details: data.details ?? null,
         price: data.price ?? 0,
         quantity: data.quantity ?? 0,
         isActive: data.isActive,
         isDefault: data.isDefault ?? false,
         barcode: data.barcode ?? null,
         sku: data.sku ?? null,
+        QRCode: data.QRCode ?? null,
         productId: productItem!.productId,
         brand: data.brand ?? null,
         categoriesIds: data.categoriesIds ?? [],
@@ -642,6 +654,41 @@ export const ProductItemDetail: React.FC<Props> = ({
               errorMessage={errors.description?.message}
               rows={4}
             />
+          </Col>
+        </Row>
+
+        <Row gutter={[16, 16]} className="mt-4">
+          <Col xs={24} md={12}>
+            <TextareaCustomAntd
+              controller={{ control, name: "details" }}
+              label="Details"
+              placeholder={"Enter details"}
+              errorMessage={errors.details?.message}
+              rows={4}
+            />
+          </Col>
+
+          <Col xs={24} md={12}>
+            <div className={`flex flex-col mt-4`}>
+              <label className={`text-sm mr-1`}>QRCode</label>
+
+              <Controller
+                control={control}
+                name={`QRCode`}
+                render={({ field: { onChange, value, name, ref } }) => (
+                  <Space direction="vertical" align="start">
+                    <QRCode value={value ?? ""} />
+                    <Input
+                      name={name}
+                      placeholder="-"
+                      maxLength={60}
+                      value={value}
+                      onChange={onChange}
+                    />
+                  </Space>
+                )}
+              />
+            </div>
           </Col>
         </Row>
 
