@@ -107,13 +107,13 @@ export default function ProductPage() {
             xs={24}
             sm={10}
             md={5}
-            className="flex flex-col justify-center items-center"
+            className="flex flex-col justify-start items-center"
           >
             <Avatar
               onClick={() => setPreviewOpen(true)}
               src={product.mainUrl}
               width={240}
-              className="shadow-lg border-none cursor-pointer z-10 rounded-lg"
+              className="shadow-lg border-none cursor-pointer z-10 rounded-lg mt-10"
               title="See image"
             />
 
