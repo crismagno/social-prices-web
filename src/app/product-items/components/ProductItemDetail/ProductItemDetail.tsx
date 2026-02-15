@@ -174,6 +174,8 @@ export const ProductItemDetail: React.FC<Props> = ({
   const [formValues, setFormValues] = useState<TFormSchema>();
 
   const isEditMode: boolean = !!productItemId && !!productItem;
+  const isDefaultItem: boolean = productItem?.isDefault ?? false;
+  const isReadonly: boolean = isEditMode && isDefaultItem;
 
   const {
     handleSubmit,
@@ -651,6 +653,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               controller={{ control, name: "isDefault" }}
               label="Is Default"
               labelClassName="mr-1"
+              disabled
             />
           </Col>
         </Row>
