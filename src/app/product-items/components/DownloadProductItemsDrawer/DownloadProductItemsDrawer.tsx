@@ -144,17 +144,20 @@ export const DownloadProductItemsDrawer: React.FC<Props> = ({
           </Col>
 
           <Col xs={24} sm={12}>
-            <SelectProducts
-              label={"Products"}
-              selectedProductIds={selectedProductsState.map((p) => p._id)}
-              onSelectProducts={(products: IProduct[]) => {
-                setSelectedProductsState(products);
-                setValue(
-                  "productIds",
-                  products.map((p) => p._id)
-                );
-              }}
-            />
+            <div className="mt-10 mr-5">
+              <SelectProducts
+                label={"Products"}
+                labelClassName="font-normal"
+                selectedProductIds={selectedProductsState.map((p) => p._id)}
+                onSelectProducts={(products: IProduct[]) => {
+                  setSelectedProductsState(products);
+                  setValue(
+                    "productIds",
+                    products.map((p) => p._id)
+                  );
+                }}
+              />
+            </div>
           </Col>
 
           <Col xs={24} sm={12}>
