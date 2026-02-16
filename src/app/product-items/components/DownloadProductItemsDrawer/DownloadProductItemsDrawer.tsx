@@ -144,7 +144,7 @@ export const DownloadProductItemsDrawer: React.FC<Props> = ({
           </Col>
 
           <Col xs={24} sm={12}>
-            <div className="mt-10 mr-5">
+            <div className="mt-4 mr-5">
               <SelectProducts
                 label={"Products"}
                 labelClassName="font-normal"

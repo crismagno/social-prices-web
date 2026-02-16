@@ -502,7 +502,7 @@ export default function ProductItemsPage() {
                 <Button.Group>
                   <Tooltip title="Edit product item">
                     <Button
-                      type="primary"
+                      type="success"
                       onClick={() =>
                         router.push(
                           Urls.EDIT_PRODUCT_ITEM.replace(
