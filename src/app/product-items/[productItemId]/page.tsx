@@ -197,7 +197,7 @@ export default function ProductItemPage() {
                       <div className="flex items-center gap-2">
                         <Tag color="geekblue">{product?.name || "-"}</Tag>
                         {product?._id && (
-                          <Tooltip title="View Product Profile">
+                          <Tooltip title="View Product">
                             <Button
                               type="link"
                               size="small"
