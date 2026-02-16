@@ -1,14 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Button, Divider, message, Upload, UploadFile } from "antd";
-import { RcFile } from "antd/es/upload";
+import {
+  Button,
+  Divider,
+  message,
+  Upload,
+  UploadFile,
+} from 'antd';
+import { RcFile } from 'antd/es/upload';
 
-import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  InboxOutlined,
+  UploadOutlined,
+} from '@ant-design/icons';
 
-import { DownloadFile } from "../DownloadFile/DownloadFile";
-import handleClientError from "../handleClientError/handleClientError";
+import { IProduct } from '../../../shared/business/products/products.interface';
+import { DownloadFile } from '../DownloadFile/DownloadFile';
+import handleClientError from '../handleClientError/handleClientError';
+import SelectProduct from '../SelectProduct/SelectProduct';
 
 const { Dragger } = Upload;
 
@@ -17,6 +28,7 @@ export interface UploadFilesProps {
   downloadFileName?: string;
   accept?: string;
   onUploadFiles: (formData: FormData) => Promise<any> | any | void;
+  useProduct?: boolean;
 }
 
 export const UploadFiles: React.FC<UploadFilesProps> = ({
@@ -24,16 +36,28 @@ export const UploadFiles: React.FC<UploadFilesProps> = ({
   downloadFileName,
   accept,
   onUploadFiles,
+  useProduct = false,
 }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
+  const [selectedProductId, setSelectedProductId] = useState<string | string>();
+
   const handleUpload = async () => {
     try {
+      if (useProduct && !selectedProductId) {
+        message.error("Please select a product before upload files!");
+        return;
+      }
+
       setIsUploading(true);
 
       const formData = new FormData();
+
+      if (useProduct && selectedProductId) {
+        formData.append("productId", selectedProductId);
+      }
 
       for (var i = 0; i < fileList.length; i++) {
         formData.append("files", fileList[i] as RcFile);
@@ -75,16 +99,30 @@ export const UploadFiles: React.FC<UploadFilesProps> = ({
 
   return (
     <div>
-      {downloadFileName && (
-        <DownloadFile
-          filename={downloadFileName}
-          btnProps={{
-            className: "my-1",
-            type: "success",
-          }}
-          btnLabel="Download Template File"
-        />
-      )}
+      <div className="flex justify-between">
+        {downloadFileName && (
+          <DownloadFile
+            filename={downloadFileName}
+            btnProps={{
+              className: "my-1",
+              type: "success",
+            }}
+            btnLabel="Download Template File"
+          />
+        )}
+
+        {useProduct && (
+          <div className="w-96 my-1">
+            <SelectProduct
+              disabled={isUploading}
+              selectedProductId={selectedProductId}
+              onSelectProduct={(selectProduct: IProduct | null) =>
+                setSelectedProductId(selectProduct?._id)
+              }
+            />
+          </div>
+        )}
+      </div>
 
       <Divider className="my-2" />
 

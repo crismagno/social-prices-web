@@ -537,6 +537,7 @@ export default function ProductItemsPage() {
         downloadFileName="social-prices-product-items-template.xlsx"
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         title="Upload Product Items"
+        useProduct={true}
       >
         <FilesUploadsTable
           type={FilesUploadsEnum.Type.UPLOAD_PRODUCT_ITEMS}

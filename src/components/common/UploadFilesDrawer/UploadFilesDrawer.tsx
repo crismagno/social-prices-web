@@ -1,6 +1,9 @@
-import { Drawer } from "antd";
+import { Drawer } from 'antd';
 
-import { UploadFiles, UploadFilesProps } from "../UploadFiles/UploadFiles";
+import {
+  UploadFiles,
+  UploadFilesProps,
+} from '../UploadFiles/UploadFiles';
 
 interface Props extends UploadFilesProps {
   isOpen: boolean;
@@ -20,6 +23,7 @@ export const UploadFilesDrawer: React.FC<Props> = ({
   downloadFileName,
   maxFilesToUpload,
   children,
+  useProduct = false,
 }) => {
   return (
     <Drawer title={title} onClose={onClose} open={isOpen} width={width}>
@@ -28,6 +32,7 @@ export const UploadFilesDrawer: React.FC<Props> = ({
         downloadFileName={downloadFileName}
         accept={accept}
         maxFilesToUpload={maxFilesToUpload}
+        useProduct={useProduct}
       />
       {children}
     </Drawer>

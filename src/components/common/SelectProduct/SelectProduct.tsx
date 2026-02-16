@@ -24,6 +24,7 @@ interface Props {
   selectedProductId?: string;
   label?: any;
   labelClassName?: string;
+  className?: string;
   disabled?: boolean;
 }
 
@@ -33,6 +34,7 @@ const SelectProduct: React.FC<Props> = ({
   label,
   labelClassName = "",
   disabled,
+  className,
 }) => {
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<IProduct> | undefined
@@ -108,6 +110,8 @@ const SelectProduct: React.FC<Props> = ({
         filterOption={false}
         style={{ width: "100%" }}
         disabled={disabled}
+        placeholder="Select a product"
+        className={className}
       >
         {products?.map((product: IProduct) => (
           <Select.Option key={product._id} value={product._id}>
