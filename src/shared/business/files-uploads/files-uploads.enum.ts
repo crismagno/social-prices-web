@@ -2,6 +2,7 @@ namespace FilesUploadsEnum {
   export enum Type {
     UPLOAD_CUSTOMERS = "UPLOAD_CUSTOMERS",
     UPLOAD_PRODUCTS = "UPLOAD_PRODUCTS",
+    UPLOAD_PRODUCT_ITEMS = "UPLOAD_PRODUCT_ITEMS",
     UPLOAD_EMPLOYEES = "UPLOAD_EMPLOYEES",
     UPLOAD_SALES = "UPLOAD_SALES",
   }
@@ -29,6 +30,10 @@ namespace FilesUploadsEnum {
 
   export const TypeLabels = {
     [Type.UPLOAD_CUSTOMERS]: "Upload Customers",
+    [Type.UPLOAD_PRODUCTS]: "Upload Products",
+    [Type.UPLOAD_PRODUCT_ITEMS]: "Upload Product Items",
+    [Type.UPLOAD_EMPLOYEES]: "Upload Employees",
+    [Type.UPLOAD_SALES]: "Upload Sales",
   };
 }
 

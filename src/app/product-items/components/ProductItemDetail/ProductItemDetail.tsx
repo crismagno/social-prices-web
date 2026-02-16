@@ -53,6 +53,8 @@ import {
 import {
   ProductPreviousBarcodesPopover,
 } from '../../../../components/common/ProductPreviousBarcodesPopover/ProductPreviousBarcodesPopover';
+import SelectProduct
+  from '../../../../components/common/SelectProduct/SelectProduct';
 import {
   TagCategoryCustomAntd,
 } from '../../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd';
@@ -182,6 +184,8 @@ export const ProductItemDetail: React.FC<Props> = ({
     formState: { errors },
     control,
     reset,
+    watch,
+    setValue,
   } = useForm<TFormSchema>({
     values: formValues,
     resolver: zodResolver(formSchema),
@@ -522,19 +526,19 @@ export const ProductItemDetail: React.FC<Props> = ({
 
         <Row gutter={[16, 16]}>
           <Col xs={24} md={8} sm={12} lg={8}>
-            <SelectCustomAntd<IProductItem>
-              controller={{ control, name: "productId" }}
-              label="Product"
-              errorMessage={errors.productId?.message}
-              placeholder={"Select product"}
-              disabled={isEditMode}
-            >
-              {products.map((product: IProduct) => (
-                <Select.Option key={product._id} value={product._id}>
-                  {product.name}
-                </Select.Option>
-              ))}
-            </SelectCustomAntd>
+            <SelectProduct
+              label={"Product"}
+              disabled={!!isEditMode}
+              selectedProductId={watch("productId")}
+              onSelectProduct={(selectProduct: IProduct | null) => {
+                setValue("productId", selectProduct?._id ?? "");
+              }}
+            />
+            {errors.productId?.message && (
+              <label className="text-sm text-red-500">
+                {errors.productId?.message}
+              </label>
+            )}
           </Col>
 
           <Col xs={24} md={8} sm={12} lg={8}>

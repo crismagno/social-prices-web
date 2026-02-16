@@ -1,6 +1,11 @@
 "use client";
 
-import { useState } from 'react';
+import {
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import {
   Avatar,
@@ -21,6 +26,7 @@ import {
   EnterOutlined,
   PlusOutlined,
   QuestionCircleOutlined,
+  UploadOutlined,
 } from '@ant-design/icons';
 
 import {
@@ -38,22 +44,31 @@ import {
 import {
   TagTagsCustomAntd,
 } from '../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
+import {
+  UploadFilesDrawer,
+} from '../../components/common/UploadFilesDrawer/UploadFilesDrawer';
 import YesNo from '../../components/common/YesNo/YesNo';
 import TableCustomAntd2
   from '../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
 import Layout from '../../components/template/Layout/Layout';
 import useAuthData from '../../data/context/auth/useAuthData';
 import useSocketData from '../../data/context/socket/useSocketData';
+import {
+  serviceMethodsInstance,
+} from '../../services/social-prices-api/service-methods';
 import CategoriesEnum from '../../shared/business/categories/categories.enum';
 import {
   ICategory,
 } from '../../shared/business/categories/categories.interface';
+import FilesUploadsEnum
+  from '../../shared/business/files-uploads/files-uploads.enum';
 import ProductItemsEnum
   from '../../shared/business/product-items/product-items.enum';
 import {
   IProductItem,
 } from '../../shared/business/product-items/product-items.interface';
 import { IProduct } from '../../shared/business/products/products.interface';
+import SocketsEnum from '../../shared/business/sockets/sockets.enum';
 import TagsEnum from '../../shared/business/tags/tags.enum';
 import { ITag } from '../../shared/business/tags/tags.interface';
 import CommonEnum from '../../shared/common/enums/common.enum';
@@ -68,6 +83,10 @@ import {
   ITableStateRequest,
 } from '../../shared/utils/table/table-state.interface';
 import { useFindCategoriesByType } from '../categories/useFindCategoriesByType';
+import {
+  FilesUploadsTable,
+  IFilesUploadsTableRefProps,
+} from '../files-uploads/FilesUploadsTable';
 import { useFindStoresByUser } from '../stores/useFindStoresByUser';
 import { useFindTagsByType } from '../tags/useFindTagsByType';
 import {
@@ -83,8 +102,12 @@ export default function ProductItemsPage() {
     ITableStateRequest<IProductItem> | undefined
   >(createTableState({ sort: { field: "createdAt", order: "ascend" } }));
 
-  const { isLoading, productItems, total } =
-    useFindProductItemsByUserTableState(tableStateRequest);
+  const {
+    isLoading,
+    productItems,
+    total,
+    fetchFindProductItemsByUserTableState,
+  } = useFindProductItemsByUserTableState(tableStateRequest);
 
   const { categories, isLoading: isLoadingCategories } =
     useFindCategoriesByType(CategoriesEnum.Type.PRODUCT);
@@ -94,6 +117,39 @@ export default function ProductItemsPage() {
   );
 
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
+
+  const [isUploadFilesDrawerOpen, setIsUploadFilesDrawerOpen] =
+    useState<boolean>(false);
+
+  const filesUploadsTableRef: RefObject<IFilesUploadsTableRefProps> =
+    useRef<IFilesUploadsTableRefProps>(null);
+
+  useEffect(() => {
+    if (socket && filesUploadsTableRef && user) {
+      socket.on(
+        SocketsEnum.EventNames.RESPONSE_UPLOAD_PRODUCT_ITEMS_FILE_TO_USER(
+          user._id
+        ),
+        async () => {
+          await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();
+          await fetchFindProductItemsByUserTableState();
+        }
+      );
+
+      return () => {
+        socket.off(
+          SocketsEnum.EventNames.RESPONSE_UPLOAD_PRODUCT_ITEMS_FILE_TO_USER(
+            user._id
+          )
+        );
+      };
+    }
+  }, [
+    socket,
+    filesUploadsTableRef,
+    user,
+    fetchFindProductItemsByUserTableState,
+  ]);
 
   if (isLoadingStores || isLoadingCategories || isLoadingTags) {
     return <LoadingFull />;
@@ -109,6 +165,15 @@ export default function ProductItemsPage() {
         className="h-min-80 mt-5"
         extra={
           <>
+            <Button
+              type="primary"
+              onClick={() => setIsUploadFilesDrawerOpen(true)}
+              className="mr-2"
+              icon={<UploadOutlined />}
+            >
+              Upload
+            </Button>
+
             <Button
               type="primary"
               onClick={() => router.push(Urls.NEW_PRODUCT_ITEM)}
@@ -457,6 +522,27 @@ export default function ProductItemsPage() {
           total={total}
         />
       </Card>
+
+      <UploadFilesDrawer
+        width={"70%"}
+        isOpen={isUploadFilesDrawerOpen}
+        onClose={() => setIsUploadFilesDrawerOpen(false)}
+        onUploadFiles={async (formData: FormData) => {
+          await serviceMethodsInstance.productItemsServiceMethods.uploadProductItems(
+            formData
+          );
+
+          await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();
+        }}
+        downloadFileName="social-prices-product-items-template.xlsx"
+        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        title="Upload Product Items"
+      >
+        <FilesUploadsTable
+          type={FilesUploadsEnum.Type.UPLOAD_PRODUCT_ITEMS}
+          ref={filesUploadsTableRef}
+        />
+      </UploadFilesDrawer>
     </Layout>
   );
 }

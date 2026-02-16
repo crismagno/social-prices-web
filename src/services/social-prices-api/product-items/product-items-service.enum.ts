@@ -6,6 +6,7 @@ namespace ProductItemsServiceEnum {
     FIND_BY_PRODUCT = "/product-items/product/:productId",
     FIND_BY_USER = "/product-items/user",
     FIND_BY_USER_TABLE_STATE = "/product-items/userTableState",
+    UPLOAD_PRODUCT_ITEMS = "/product-items/uploadProductItems",
   }
 }
 
