@@ -124,4 +124,20 @@ export default class ProductItemsServiceMethods extends ServiceMethodsBase {
       }
     );
   }
+
+  public async downloadProductItems(filters: any): Promise<Buffer> {
+    const response = await this._fetchAxios.post<Buffer>(
+      `${this._socialPricesApiV1}${ProductItemsServiceEnum.Methods.DOWNLOAD_PRODUCT_ITEMS}`,
+      filters,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+        responseType: "arraybuffer",
+      }
+    );
+
+    return response.data;
+  }
 }

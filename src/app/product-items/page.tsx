@@ -22,6 +22,7 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
 import { useRouter } from 'next/navigation';
 
 import {
+  DownloadOutlined,
   EditOutlined,
   EnterOutlined,
   PlusOutlined,
@@ -90,6 +91,9 @@ import {
 import { useFindStoresByUser } from '../stores/useFindStoresByUser';
 import { useFindTagsByType } from '../tags/useFindTagsByType';
 import {
+  DownloadProductItemsDrawer,
+} from './components/DownloadProductItemsDrawer/DownloadProductItemsDrawer';
+import {
   useFindProductItemsByUserTableState,
 } from './useFindProductItemsByUserTableState';
 
@@ -119,6 +123,9 @@ export default function ProductItemsPage() {
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
   const [isUploadFilesDrawerOpen, setIsUploadFilesDrawerOpen] =
+    useState<boolean>(false);
+
+  const [isDownloadDrawerOpen, setIsDownloadDrawerOpen] =
     useState<boolean>(false);
 
   const filesUploadsTableRef: RefObject<IFilesUploadsTableRefProps> =
@@ -165,6 +172,15 @@ export default function ProductItemsPage() {
         className="h-min-80 mt-5"
         extra={
           <>
+            <Button
+              type="primary"
+              onClick={() => setIsDownloadDrawerOpen(true)}
+              className="mr-2"
+              icon={<DownloadOutlined />}
+            >
+              Download
+            </Button>
+
             <Button
               type="primary"
               onClick={() => setIsUploadFilesDrawerOpen(true)}
@@ -486,7 +502,7 @@ export default function ProductItemsPage() {
                 <Button.Group>
                   <Tooltip title="Edit product item">
                     <Button
-                      type="success"
+                      type="primary"
                       onClick={() =>
                         router.push(
                           Urls.EDIT_PRODUCT_ITEM.replace(
@@ -544,6 +560,16 @@ export default function ProductItemsPage() {
           ref={filesUploadsTableRef}
         />
       </UploadFilesDrawer>
+
+      <DownloadProductItemsDrawer
+        isOpen={isDownloadDrawerOpen}
+        onClose={() => setIsDownloadDrawerOpen(false)}
+        title="Download Product Items"
+        width="50%"
+        tags={tagsSort}
+        categories={categoriesSort}
+        stores={stores}
+      />
     </Layout>
   );
 }
