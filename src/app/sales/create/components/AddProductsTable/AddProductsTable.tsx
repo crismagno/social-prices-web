@@ -147,9 +147,21 @@ export const AddProductsTable: React.FC<Props> = ({
   }
 
   const handleAddProductToSale = async (productId: string, storeId: string) => {
-    const product: IProduct | undefined = find(products, {
+    let product: IProduct | null = find(products, {
       _id: productId,
-    });
+    }) as IProduct | null;
+
+    // If product is not found in the current list, fetch it from the API
+    if (!product) {
+      try {
+        product = await serviceMethodsInstance.productsServiceMethods.findById(
+          productId
+        );
+      } catch (error) {
+        message.error("Product not found");
+        return;
+      }
+    }
 
     if (!product) {
       message.error("Product not found");
@@ -161,24 +173,21 @@ export const AddProductsTable: React.FC<Props> = ({
       { productId }
     );
 
-    if (!productForm) {
-      message.error("Product not found");
-      return;
-    }
+    // If product form is not found, use default values
+    const quantity = productForm?.quantity ?? 1;
+    const price = productForm?.price ?? product.price;
 
-    if (productForm.quantity <= 0) {
+    if (quantity <= 0) {
       message.warning("Product quantity invalid");
       return;
     }
 
     try {
-      // Buscar product items do produto
       const productItemsResponse: IProductItem[] =
         await serviceMethodsInstance.productItemsServiceMethods.findByProduct(
           productId
         );
 
-      // Filtrar apenas product items ativos
       const activeProductItems = productItemsResponse.filter(
         (item) => item.isActive
       );
@@ -189,14 +198,13 @@ export const AddProductsTable: React.FC<Props> = ({
       }
 
       if (activeProductItems.length === 1) {
-        // Se tiver apenas 1 product item, adicionar direto
         const productItem = activeProductItems[0];
         onAddProductToSale?.({
           storeId,
           product: {
-            price: productForm.price ?? productItem.price,
+            price: price ?? productItem.price,
             productId,
-            quantity: productForm.quantity,
+            quantity: quantity,
             barcode: productItem.barcode ?? "",
             fileUrl: productItem.filesUrl?.[0] ?? product.filesUrl?.[0] ?? null,
             name: productItem.name,
@@ -204,8 +212,8 @@ export const AddProductsTable: React.FC<Props> = ({
             productItemId: productItem._id,
           },
         });
+        message.success("Product added to sale successfully!");
       } else {
-        // Se tiver mais de 1 product item, abrir modal para seleção
         setSelectedProduct(product);
         setProductItems(activeProductItems);
         setPendingStoreId(storeId);
@@ -266,7 +274,6 @@ export const AddProductsTable: React.FC<Props> = ({
         ) ?? selectedStoreIds[0];
     }
 
-    // Chamar a mesma lógica de adicionar produto
     await handleAddProductToSale(product._id, storeId);
   };
 
