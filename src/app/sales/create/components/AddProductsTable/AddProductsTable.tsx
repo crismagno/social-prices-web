@@ -22,8 +22,10 @@ import { TagCategoryCustomAntd } from "../../../../../components/common/TagCateg
 import { TagTagCustomAntd } from "../../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
 import { InputNumberCustomAntd } from "../../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import TableCustomAntd2 from "../../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
+import { serviceMethodsInstance } from "../../../../../services/social-prices-api/service-methods";
 import CategoriesEnum from "../../../../../shared/business/categories/categories.enum";
 import { ICategory } from "../../../../../shared/business/categories/categories.interface";
+import { IProductItem } from "../../../../../shared/business/product-items/product-items.interface";
 import { IProduct } from "../../../../../shared/business/products/products.interface";
 import { IStore } from "../../../../../shared/business/stores/stores.interface";
 import TagsEnum from "../../../../../shared/business/tags/tags.enum";
@@ -41,6 +43,7 @@ import { useFindCategoriesByType } from "../../../../categories/useFindCategorie
 import { AddProductButton } from "../../../../products/components/AddProductButton/AddProductButton";
 import { useFindProductsByUserTableState } from "../../../../products/useFindProductsByUserTableState";
 import { useFindTagsByType } from "../../../../tags/useFindTagsByType";
+import { SelectProductItemModal } from "../SelectProductItemModal/SelectProductItemModal";
 
 const productFormSchema = z.object({
   productId: z.string(),
@@ -63,6 +66,8 @@ export interface IProductToAddOnSale {
   price: number;
   name: string;
   fileUrl: string | null;
+  sku: string | null;
+  productItemId: string;
 }
 
 export interface IStoreProductToAddOnSale {
@@ -108,6 +113,12 @@ export const AddProductsTable: React.FC<Props> = ({
     TagsEnum.Type.SALE
   );
 
+  const [isSelectProductItemModalOpen, setIsSelectProductItemModalOpen] =
+    useState<boolean>(false);
+  const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
+  const [productItems, setProductItems] = useState<IProductItem[]>([]);
+  const [pendingStoreId, setPendingStoreId] = useState<string | null>(null);
+
   useEffect(() => {
     setFormValues({
       products: map(
@@ -122,10 +133,10 @@ export const AddProductsTable: React.FC<Props> = ({
   }, [products]);
 
   useEffect(() => {
-    setTableStateRequest({
-      ...tableStateRequest,
+    setTableStateRequest((prevState) => ({
+      ...prevState,
       filters: { storeIds: selectedStoreIds, categoriesIds, tagsIds, isActive },
-    });
+    }));
   }, [selectedStoreIds, categoriesIds, tagsIds, isActive]);
 
   const getStore = (storeId: string): IStore | undefined =>
@@ -135,7 +146,7 @@ export const AddProductsTable: React.FC<Props> = ({
     return <Empty />;
   }
 
-  const handleAddProductToSale = (productId: string, storeId: string) => {
+  const handleAddProductToSale = async (productId: string, storeId: string) => {
     const product: IProduct | undefined = find(products, {
       _id: productId,
     });
@@ -160,17 +171,83 @@ export const AddProductsTable: React.FC<Props> = ({
       return;
     }
 
+    try {
+      // Buscar product items do produto
+      const productItemsResponse: IProductItem[] =
+        await serviceMethodsInstance.productItemsServiceMethods.findByProduct(
+          productId
+        );
+
+      // Filtrar apenas product items ativos
+      const activeProductItems = productItemsResponse.filter(
+        (item) => item.isActive
+      );
+
+      if (activeProductItems.length === 0) {
+        message.warning("This product has no active product items");
+        return;
+      }
+
+      if (activeProductItems.length === 1) {
+        // Se tiver apenas 1 product item, adicionar direto
+        const productItem = activeProductItems[0];
+        onAddProductToSale?.({
+          storeId,
+          product: {
+            price: productForm.price ?? productItem.price,
+            productId,
+            quantity: productForm.quantity,
+            barcode: productItem.barcode ?? "",
+            fileUrl: productItem.filesUrl?.[0] ?? product.filesUrl?.[0] ?? null,
+            name: productItem.name,
+            sku: productItem.sku ?? null,
+            productItemId: productItem._id,
+          },
+        });
+      } else {
+        // Se tiver mais de 1 product item, abrir modal para seleção
+        setSelectedProduct(product);
+        setProductItems(activeProductItems);
+        setPendingStoreId(storeId);
+        setIsSelectProductItemModalOpen(true);
+      }
+    } catch (error) {
+      message.error("Error loading product items");
+      console.error(error);
+    }
+  };
+
+  const handleSelectProductItem = (productItem: IProductItem) => {
+    if (!selectedProduct || !pendingStoreId) return;
+
+    const productForm: TProductFormSchema | undefined = find(
+      getValues("products"),
+      { productId: selectedProduct._id }
+    );
+
+    if (!productForm) {
+      message.error("Product not found");
+      return;
+    }
+
     onAddProductToSale?.({
-      storeId,
+      storeId: pendingStoreId,
       product: {
-        price: productForm.price ?? 0,
-        productId,
+        price: productForm.price ?? productItem.price,
+        productId: selectedProduct._id,
         quantity: productForm.quantity,
-        barcode: product.barcode ?? "",
-        fileUrl: product.filesUrl?.[0] ?? null,
-        name: product.name,
+        barcode: productItem.barcode ?? "",
+        fileUrl:
+          productItem.filesUrl?.[0] ?? selectedProduct.filesUrl?.[0] ?? null,
+        name: productItem.name,
+        sku: productItem.sku ?? null,
+        productItemId: productItem._id,
       },
     });
+
+    setSelectedProduct(null);
+    setProductItems([]);
+    setPendingStoreId(null);
   };
 
   const handleAddProductToSaleByCreate = async (product: IProduct | null) => {
@@ -189,17 +266,8 @@ export const AddProductsTable: React.FC<Props> = ({
         ) ?? selectedStoreIds[0];
     }
 
-    onAddProductToSale?.({
-      storeId,
-      product: {
-        price: product.price ?? 0,
-        productId: product._id,
-        quantity: 1,
-        barcode: product.barcode ?? "",
-        fileUrl: product.filesUrl?.[0] ?? null,
-        name: product.name,
-      },
-    });
+    // Chamar a mesma lógica de adicionar produto
+    await handleAddProductToSale(product._id, storeId);
   };
 
   return (
@@ -410,6 +478,19 @@ export const AddProductsTable: React.FC<Props> = ({
         loading={isLoading || isLoadingCategories || isLoadingTags}
         total={total}
         className="overflow-auto"
+      />
+
+      <SelectProductItemModal
+        product={selectedProduct}
+        productItems={productItems}
+        isOpen={isSelectProductItemModalOpen}
+        onClose={() => {
+          setIsSelectProductItemModalOpen(false);
+          setSelectedProduct(null);
+          setProductItems([]);
+          setPendingStoreId(null);
+        }}
+        onSelectProductItem={handleSelectProductItem}
       />
     </div>
   );

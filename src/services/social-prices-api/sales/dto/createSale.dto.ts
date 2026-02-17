@@ -21,7 +21,7 @@ export class SaleStoreProductDto {
   discount: SaleStoreProductDiscountDto | null = null;
   isValid: boolean = false;
   isCompleted: boolean = false;
-  sku: string = "";
+  sku: string | null = null;
   productItemId: string = "";
 }
 

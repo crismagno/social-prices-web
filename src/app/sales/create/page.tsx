@@ -153,6 +153,8 @@ const saleStoreProductFormSchema = z.object({
   fileUrl: z.string().nullable(),
   isValid: z.boolean(),
   isCompleted: z.boolean(),
+  sku: z.string().nullable(),
+  productItemId: z.string(),
 });
 
 export type TSaleStoreProductFormSchema = z.infer<
@@ -402,6 +404,8 @@ export default function CreateSalePage() {
                   quantity: storeProduct.quantity,
                   isCompleted: storeProduct.isCompleted,
                   isValid: storeProduct.isValid,
+                  sku: product?.sku ?? null,
+                  productItemId: storeProduct.productItemId,
                 };
               }
             ),
@@ -510,6 +514,7 @@ export default function CreateSalePage() {
           const selectedStoreIdFromParam: string =
             initialSelectedStoreIdFromParam ?? firstStoreIdByProduct;
 
+          // Note: productItemId will be set when user selects the product item
           setValue("saleStores", [
             {
               storeId: selectedStoreIdFromParam,
@@ -524,6 +529,8 @@ export default function CreateSalePage() {
                   quantity: 1,
                   isCompleted: false,
                   isValid: true,
+                  sku: null,
+                  productItemId: "", // Will be set when adding product
                 },
               ],
             },
@@ -617,6 +624,8 @@ export default function CreateSalePage() {
             fileUrl: productToAddOnSale.product.fileUrl,
             isCompleted: false,
             isValid: true,
+            sku: productToAddOnSale.product.sku,
+            productItemId: productToAddOnSale.product.productItemId,
           },
         ],
       });
@@ -631,6 +640,8 @@ export default function CreateSalePage() {
         fileUrl: productToAddOnSale.product.fileUrl,
         isCompleted: false,
         isValid: true,
+        sku: productToAddOnSale.product.sku,
+        productItemId: productToAddOnSale.product.productItemId,
       });
     }
 
@@ -819,13 +830,13 @@ export default function CreateSalePage() {
       }
 
       for (const property of Object.keys(updateSaleFilesDto)) {
-        let value: any = updateSaleFilesDto[property];
+        let value: any = (updateSaleFilesDto as any)[property];
 
         if (isArray(value)) {
           value = JSON.stringify(value);
         }
 
-        formData.append([`${property}`], value);
+        formData.append(property, value);
       }
 
       return serviceMethodsInstance.salesServiceMethods.updateSaleFiles(
@@ -1541,7 +1552,9 @@ export default function CreateSalePage() {
                     errorMessage={errors.selectedStoreIds?.message}
                     placeholder={"Select stores"}
                     onClear={handleRemoveAllProduct}
-                    onDeselect={handleRemoveAllProductByStore}
+                    onDeselect={(value: any) =>
+                      handleRemoveAllProductByStore(value as string)
+                    }
                     mode="multiple"
                     divClassName="mt-0"
                     style={{ width: 300 }}
@@ -1779,9 +1792,9 @@ export default function CreateSalePage() {
             <Row>
               <Col xs={24}>
                 <Button
-                  type="success"
+                  type="primary"
                   disabled={!isEnableCreateSale}
-                  className="w-full text-center mt-5 h-10 font-bold text-lg"
+                  className="w-full text-center mt-5 h-10 font-bold text-lg bg-green-600 hover:bg-green-700"
                   onClick={() => callHandleSubmit(true)}
                   loading={isSubmitting}
                 >
