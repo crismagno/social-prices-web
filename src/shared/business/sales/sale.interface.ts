@@ -1,5 +1,6 @@
 import { ICustomer } from "../customers/customer.interface";
 import { IEmployee } from "../employees/employee.interface";
+import { IProductItem } from "../product-items/product-items.interface";
 import { IProduct } from "../products/products.interface";
 import { IAddress } from "../shared/address/address.interface";
 import { ICreatedAtEntity } from "../shared/global/created-at.interface";
@@ -96,6 +97,9 @@ export interface ISaleStoreProduct {
   discount: ISaleStoreProductDiscount | null;
   isValid: boolean;
   isCompleted: boolean;
+  sku: string;
+  productItemId: string;
+  productItem?: IProductItem;
 }
 
 export interface ISaleHeader {

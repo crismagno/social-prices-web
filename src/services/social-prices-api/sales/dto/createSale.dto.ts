@@ -1,7 +1,7 @@
 import SalesEnum from "../../../../shared/business/sales/sales.enum";
 import { CreateAddressDto } from "../../../../shared/business/shared/address/CreateAddress.dto";
-import { CreatePhoneNumberDto } from "../../../../shared/business/shared/dtos/CreatePhoneNumber.dto";
 import PersonEnum from "../../../../shared/business/shared/person/person.enum";
+import { CreatePhoneNumberDto } from "../../../../shared/business/shared/phone/CreatePhoneNumber.dto";
 
 export class SaleStoreProductDiscountDto {
   distributedAmount: number | null = null;
@@ -21,6 +21,8 @@ export class SaleStoreProductDto {
   discount: SaleStoreProductDiscountDto | null = null;
   isValid: boolean = false;
   isCompleted: boolean = false;
+  sku: string = "";
+  productItemId: string = "";
 }
 
 export class SaleTotalsDiscountDto {
