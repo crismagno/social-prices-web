@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 
-import { Button, Image, Modal, Radio, Space, Tag } from "antd";
-import { find } from "lodash";
+import { Button, Image, Input, Tag, Tooltip } from "antd";
 
-import { CheckCircleOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, SearchOutlined } from "@ant-design/icons";
 
 import { IProductItem } from "../../../../../shared/business/product-items/product-items.interface";
 import { IProduct } from "../../../../../shared/business/products/products.interface";
@@ -26,167 +25,193 @@ export const SelectProductItemModal: React.FC<Props> = ({
   onClose,
   onSelectProductItem,
 }) => {
-  const [selectedProductItemId, setSelectedProductItemId] = useState<
-    string | null
-  >(null);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filteredProductItems, setFilteredProductItems] = useState<
+    IProductItem[]
+  >([]);
 
   useEffect(() => {
-    // Auto-select default product item if available
-    const defaultProductItem = find(productItems, { isDefault: true });
-    if (defaultProductItem) {
-      setSelectedProductItemId(defaultProductItem._id);
-    } else if (productItems.length > 0) {
-      setSelectedProductItemId(productItems[0]._id);
+    let items = [...productItems];
+
+    // Sort to always show default product item first
+    items.sort((a, b) => {
+      if (a.isDefault && !b.isDefault) return -1;
+      if (!a.isDefault && b.isDefault) return 1;
+      return 0;
+    });
+
+    if (!searchTerm.trim()) {
+      setFilteredProductItems(items);
+      return;
     }
-  }, [productItems]);
 
-  const handleConfirm = () => {
-    const selectedProductItem = productItems.find(
-      (item) => item._id === selectedProductItemId
-    );
+    const searchLower = searchTerm.toLowerCase();
+    const filtered = items.filter((item) => {
+      return (
+        item.name.toLowerCase().includes(searchLower) ||
+        item.barcode?.toLowerCase().includes(searchLower) ||
+        item.sku?.toLowerCase().includes(searchLower)
+      );
+    });
 
-    if (selectedProductItem) {
-      onSelectProductItem(selectedProductItem);
-      handleClose();
-    }
-  };
+    setFilteredProductItems(filtered);
+  }, [searchTerm, productItems]);
 
-  const handleClose = () => {
-    setSelectedProductItemId(null);
+  const handleSelectProductItem = (productItem: IProductItem) => {
+    onSelectProductItem(productItem);
+    setSearchTerm("");
     onClose();
   };
 
+  if (!isOpen) return null;
+
   return (
-    <Modal
-      title={
-        <div>
-          <span className="mr-2">Select Product Item</span>
-          {product && (
-            <span className="text-sm text-gray-500">({product.name})</span>
-          )}
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+        {/* Header */}
+        <div className="p-6 border-b">
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <h2 className="text-2xl font-bold">Select Product Item</h2>
+              {product && (
+                <span className="text-sm text-gray-500">({product.name})</span>
+              )}
+            </div>
+            <Button onClick={onClose}>Close</Button>
+          </div>
+
+          {/* Search */}
+          <Input
+            placeholder="Search by name, barcode, or SKU..."
+            prefix={<SearchOutlined />}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            allowClear
+            size="large"
+          />
         </div>
-      }
-      open={isOpen}
-      onCancel={handleClose}
-      footer={[
-        <Button key="cancel" onClick={handleClose}>
-          Cancel
-        </Button>,
-        <Button
-          key="confirm"
-          type="primary"
-          onClick={handleConfirm}
-          disabled={!selectedProductItemId}
-          icon={<CheckCircleOutlined />}
-        >
-          Confirm
-        </Button>,
-      ]}
-      width={700}
-    >
-      <div className="mb-4">
-        <p className="text-gray-600">
-          This product has multiple items. Please select one to add to the sale:
-        </p>
-      </div>
 
-      <Radio.Group
-        value={selectedProductItemId}
-        onChange={(e) => setSelectedProductItemId(e.target.value)}
-        className="w-full"
-      >
-        <Space direction="vertical" className="w-full">
-          {productItems.map((productItem) => (
-            <Radio
-              key={productItem._id}
-              value={productItem._id}
-              className="w-full"
-            >
-              <div className="flex items-center justify-between p-3 border rounded hover:bg-gray-50 w-full">
-                <div className="flex items-center flex-1">
-                  <Image
-                    width={60}
-                    height={60}
-                    src={
-                      productItem.mainUrl
-                        ? getImageUrl(productItem.mainUrl)
-                        : ImagesEnum.FilesNames.DefaultAvatarImage
-                    }
-                    alt={productItem.name}
-                    className="rounded"
-                  />
+        {/* Body */}
+        <div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)]">
+          {filteredProductItems.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">
+              No product items found
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {filteredProductItems.map((productItem) => (
+                <div
+                  key={productItem._id}
+                  className="border rounded-lg p-4 hover:shadow-lg transition-shadow"
+                >
+                  <div className="flex gap-4">
+                    {/* Image */}
+                    <Image
+                      width={80}
+                      height={80}
+                      src={
+                        productItem.mainUrl
+                          ? getImageUrl(productItem.mainUrl)
+                          : ImagesEnum.FilesNames.DefaultAvatarImage
+                      }
+                      alt={productItem.name}
+                      className="rounded object-cover"
+                    />
 
-                  <div className="ml-3 flex-1">
-                    <div className="flex items-center">
-                      <span className="font-semibold text-base">
-                        {productItem.name}
-                      </span>
-                      {productItem.isDefault && (
-                        <Tag color="blue" className="ml-2">
-                          Default
-                        </Tag>
-                      )}
-                      {!productItem.isActive && (
-                        <Tag color="red" className="ml-2">
-                          Inactive
-                        </Tag>
-                      )}
-                    </div>
-
-                    <div className="flex items-center text-sm text-gray-600 mt-1">
-                      {productItem.barcode && (
-                        <span className="mr-3">
-                          <strong>Barcode:</strong> {productItem.barcode}
-                        </span>
-                      )}
-                      {productItem.sku && (
-                        <span className="mr-3">
-                          <strong>SKU:</strong> {productItem.sku}
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="flex items-center text-sm text-gray-600 mt-1">
-                      <span className="mr-3">
-                        <strong>Quantity:</strong>{" "}
-                        <span
-                          className={
-                            productItem.quantity <= 0 ? "text-red-600" : ""
-                          }
-                        >
-                          {productItem.quantity}
-                        </span>
-                      </span>
-                      <span className="mr-3">
-                        <strong>Price:</strong>{" "}
-                        {formatterMoney(productItem.price)}
-                      </span>
-                    </div>
-
-                    {productItem.brand && (
-                      <div className="text-sm text-gray-500 mt-1">
-                        <strong>Brand:</strong> {productItem.brand}
+                    {/* Content */}
+                    <div className="flex-1">
+                      {/* Name and Tags */}
+                      <div className="flex items-start justify-between mb-2">
+                        <h3 className="font-semibold text-base">
+                          {productItem.name}
+                        </h3>
+                        <div className="flex gap-1">
+                          {productItem.isDefault && (
+                            <Tag color="blue" className="text-xs">
+                              Default
+                            </Tag>
+                          )}
+                          {!productItem.isActive && (
+                            <Tag color="red" className="text-xs">
+                              Inactive
+                            </Tag>
+                          )}
+                        </div>
                       </div>
-                    )}
 
-                    {productItem.colors && productItem.colors.length > 0 && (
-                      <div className="text-sm text-gray-500 mt-1">
-                        <strong>Colors:</strong> {productItem.colors.join(", ")}
+                      {/* Details */}
+                      <div className="space-y-1 text-sm text-gray-600">
+                        {productItem.barcode && (
+                          <div>
+                            <strong>Barcode:</strong> {productItem.barcode}
+                          </div>
+                        )}
+                        {productItem.sku && (
+                          <div>
+                            <strong>SKU:</strong> {productItem.sku}
+                          </div>
+                        )}
+                        <div className="flex gap-4">
+                          <div>
+                            <strong>Quantity:</strong>{" "}
+                            <span
+                              className={
+                                productItem.quantity <= 0 ? "text-red-600" : ""
+                              }
+                            >
+                              {productItem.quantity}
+                            </span>
+                          </div>
+                          <div>
+                            <strong>Price:</strong>{" "}
+                            {formatterMoney(productItem.price)}
+                          </div>
+                        </div>
+                        {productItem.brand && (
+                          <div>
+                            <strong>Brand:</strong> {productItem.brand}
+                          </div>
+                        )}
+                        {productItem.dimensions?.size && (
+                          <div>
+                            <strong>Size:</strong> {productItem.dimensions.size}
+                          </div>
+                        )}
+                        {productItem.colors &&
+                          productItem.colors.length > 0 && (
+                            <div className="flex items-center gap-2">
+                              <strong>Colors:</strong>
+                              <div className="flex gap-1 flex-wrap">
+                                {productItem.colors.map((color, index) => (
+                                  <Tooltip key={index} title={color}>
+                                    <div
+                                      className="w-6 h-6 rounded border border-gray-300"
+                                      style={{ backgroundColor: color }}
+                                    />
+                                  </Tooltip>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                       </div>
-                    )}
 
-                    {productItem.dimensions?.size && (
-                      <div className="text-sm text-gray-500 mt-1">
-                        <strong>Size:</strong> {productItem.dimensions.size}
-                      </div>
-                    )}
+                      {/* Select Button */}
+                      <Button
+                        type="primary"
+                        icon={<CheckCircleOutlined />}
+                        className="w-full mt-3"
+                        onClick={() => handleSelectProductItem(productItem)}
+                      >
+                        Select
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Radio>
-          ))}
-        </Space>
-      </Radio.Group>
-    </Modal>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
