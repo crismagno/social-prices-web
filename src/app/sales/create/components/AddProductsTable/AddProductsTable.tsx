@@ -188,7 +188,7 @@ export const AddProductsTable: React.FC<Props> = ({
           productId
         );
 
-      const activeProductItems = productItemsResponse.filter(
+      const activeProductItems: IProductItem[] = productItemsResponse.filter(
         (item) => item.isActive
       );
 
