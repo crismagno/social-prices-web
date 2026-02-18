@@ -143,7 +143,11 @@ export const SaleSummary: React.FC<Props> = ({ sale, stores, tags }) => {
                           </span>
 
                           <span className="text-xs">
-                            {saleStoreProduct.barcode}
+                            Barcode: {saleStoreProduct.barcode}
+                          </span>
+
+                          <span className="text-xs">
+                            SKU: {saleStoreProduct.sku}
                           </span>
                         </div>
                       </div>
