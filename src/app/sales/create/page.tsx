@@ -77,6 +77,7 @@ import UpdateSaleDto from "../../../services/social-prices-api/sales/dto/updateS
 import UpdateSaleFilesDto from "../../../services/social-prices-api/sales/dto/updateSaleFiles.dto";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
+import { IProductItem } from "../../../shared/business/product-items/product-items.interface";
 import { IProduct } from "../../../shared/business/products/products.interface";
 import {
   ISale,
@@ -357,16 +358,8 @@ export default function CreateSalePage() {
 
     if (saleById) {
       const componentWillMountBySaleId = async () => {
-        const saleByIdStoreIds: string[] = map(saleById?.stores, "storeId");
-
-        const saleByIdProductIds: string[] = flatMap(
-          saleById?.stores,
-          (saleByIdStore: ISaleStore) =>
-            map(saleByIdStore.products, "productId")
-        );
-
         const customerId: string | null =
-          saleById?.stores?.[0].customerId ?? null;
+          saleById.stores?.[0].customerId ?? null;
 
         const customerBySale: ICustomer | null = customerId
           ? await serviceMethodsInstance.customersServiceMethods.findById(
@@ -376,9 +369,28 @@ export default function CreateSalePage() {
 
         setSelectedCustomer(customerBySale);
 
+        const saleByIdStoreIds: string[] = map(saleById?.stores, "storeId");
+
+        const saleByIdProductIds: string[] = flatMap(
+          saleById.stores,
+          (saleByIdStore: ISaleStore) =>
+            map(saleByIdStore.products, "productId")
+        );
+
+        const saleByIdProductItemIds: string[] = flatMap(
+          saleById.stores,
+          (saleByIdStore: ISaleStore) =>
+            map(saleByIdStore.products, "productItemId")
+        );
+
         const products: IProduct[] =
           await serviceMethodsInstance.productsServiceMethods.findByIds(
             saleByIdProductIds
+          );
+
+        const productItems: IProductItem[] =
+          await serviceMethodsInstance.productItemsServiceMethods.findByIds(
+            saleByIdProductItemIds
           );
 
         const saleByIdSaleStores = map(
@@ -390,22 +402,42 @@ export default function CreateSalePage() {
               (
                 storeProduct: ISaleStoreProduct
               ): TSaleStoreProductFormSchema => {
+                const productItemId =
+                  storeProduct.productItem?._id ?? storeProduct.productItemId;
+
+                const productItem: IProductItem | undefined = find(
+                  productItems,
+                  {
+                    _id: productItemId,
+                  }
+                );
+
                 const product: IProduct | undefined = find(products, {
                   _id: storeProduct.productId,
                 });
 
+                const name = productItem?.name ?? product?.name ?? "";
+                const fileUrl =
+                  productItem?.mainUrl ?? product?.mainUrl ?? null;
+
+                console.log(
+                  "storeProduct.productItemId",
+                  storeProduct.productItemId
+                );
+                console.log("productItem", productItem);
+
                 return {
                   barcode: storeProduct.barcode,
-                  fileUrl: product?.mainUrl ?? null,
-                  name: product?.name ?? "",
+                  fileUrl,
+                  name,
                   note: storeProduct.note,
                   price: storeProduct.price,
                   productId: storeProduct.productId,
                   quantity: storeProduct.quantity,
                   isCompleted: storeProduct.isCompleted,
                   isValid: storeProduct.isValid,
-                  sku: product?.sku ?? null,
-                  productItemId: storeProduct.productItemId,
+                  sku: storeProduct.sku,
+                  productItemId,
                 };
               }
             ),
@@ -508,29 +540,33 @@ export default function CreateSalePage() {
             productIdByParam
           );
 
-        if (product) {
+        const productItemDefault: IProductItem | undefined =
+          product?.productItemDefault;
+
+        console.log("product", product);
+
+        if (product && productItemDefault) {
           const firstStoreIdByProduct: string = product.storeIds[0];
 
           const selectedStoreIdFromParam: string =
             initialSelectedStoreIdFromParam ?? firstStoreIdByProduct;
 
-          // Note: productItemId will be set when user selects the product item
           setValue("saleStores", [
             {
               storeId: selectedStoreIdFromParam,
               products: [
                 {
-                  barcode: product.barcode!,
-                  fileUrl: product.mainUrl!,
-                  name: product.name,
+                  barcode: productItemDefault.barcode!,
+                  fileUrl: productItemDefault.mainUrl!,
+                  name: productItemDefault.name,
                   note: null,
-                  price: product.price,
+                  price: productItemDefault.price,
                   productId: product._id,
                   quantity: 1,
                   isCompleted: false,
                   isValid: true,
-                  sku: null,
-                  productItemId: "", // Will be set when adding product
+                  sku: productItemDefault.sku,
+                  productItemId: productItemDefault._id,
                 },
               ],
             },

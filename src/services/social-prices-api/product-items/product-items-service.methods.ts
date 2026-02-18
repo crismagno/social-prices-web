@@ -1,14 +1,12 @@
 "use client";
 
-import {
-  IProductItem,
-} from '../../../shared/business/product-items/product-items.interface';
+import { IProductItem } from "../../../shared/business/product-items/product-items.interface";
 import {
   ITableStateRequest,
   ITableStateResponse,
-} from '../../../shared/utils/table/table-state.interface';
-import ServiceMethodsBase from '../service-methods.base';
-import ProductItemsServiceEnum from './product-items-service.enum';
+} from "../../../shared/utils/table/table-state.interface";
+import ServiceMethodsBase from "../service-methods.base";
+import ProductItemsServiceEnum from "./product-items-service.enum";
 
 export default class ProductItemsServiceMethods extends ServiceMethodsBase {
   public async create(createDto: any): Promise<IProductItem> {
@@ -135,6 +133,21 @@ export default class ProductItemsServiceMethods extends ServiceMethodsBase {
           Authorization: this.formatAuthorizationWithToken(),
         },
         responseType: "arraybuffer",
+      }
+    );
+
+    return response.data;
+  }
+
+  public async findByIds(productItemIds: string[]): Promise<IProductItem[]> {
+    const response = await this._fetchAxios.post<IProductItem[]>(
+      `${this._socialPricesApiV1}${ProductItemsServiceEnum.Methods.FIND_BY_IDS}`,
+      productItemIds,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
       }
     );
 
