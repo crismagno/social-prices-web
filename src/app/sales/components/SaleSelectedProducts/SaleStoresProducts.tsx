@@ -81,8 +81,14 @@ export const SaleStoresProducts: React.FC<Props> = ({ sale }) => {
             saleStoreProduct: ISaleStoreProduct,
             indexSaleStoreProduct: number
           ) => {
-            const fileUrl: string = saleStoreProduct.product?.mainUrl
-              ? getImageUrl(saleStoreProduct.product.mainUrl)
+            const productItem = saleStoreProduct.productItem;
+            const product = saleStoreProduct.product;
+
+            const name = productItem?.name || product?.name || "";
+            const mainUrl = productItem?.mainUrl || product?.mainUrl;
+
+            const fileUrl: string = mainUrl
+              ? getImageUrl(mainUrl)
               : ImagesEnum.FilesNames.DefaultAvatarImage;
 
             const quantity: number =
@@ -143,9 +149,7 @@ export const SaleStoresProducts: React.FC<Props> = ({ sale }) => {
                     </div>
 
                     <div className="flex flex-col">
-                      <span className="text-base">
-                        {saleStoreProduct.product?.name}
-                      </span>
+                      <span className="text-base">{name}</span>
 
                       <span className="text-xs">
                         Barcode: {saleStoreProduct.barcode}

@@ -3,7 +3,6 @@ import { find } from "lodash";
 import moment from "moment";
 
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
-import { IProduct } from "../../../shared/business/products/products.interface";
 import {
   ISale,
   ISaleBuyer,
@@ -86,10 +85,14 @@ export const SaleSummary: React.FC<Props> = ({ sale, stores, tags }) => {
                 saleStoreProduct: ISaleStoreProduct,
                 indexSaleStoreProduct: number
               ) => {
-                const product: IProduct | undefined = saleStoreProduct.product;
+                const productItem = saleStoreProduct.productItem;
+                const product = saleStoreProduct.product;
 
-                const fileUrl: string = product?.mainUrl
-                  ? getImageUrl(product.mainUrl)
+                const name = productItem?.name || product?.name || "";
+                const mainUrl = productItem?.mainUrl || product?.mainUrl;
+
+                const fileUrl: string = mainUrl
+                  ? getImageUrl(mainUrl)
                   : ImagesEnum.FilesNames.DefaultAvatarImage;
 
                 const quantity: number =
@@ -138,9 +141,7 @@ export const SaleSummary: React.FC<Props> = ({ sale, stores, tags }) => {
                         </div>
 
                         <div className="flex flex-col text-start">
-                          <span className="text-base">
-                            {saleStoreProduct.product?.name}
-                          </span>
+                          <span className="text-base">{name}</span>
 
                           <span className="text-xs">
                             Barcode: {saleStoreProduct.barcode}
