@@ -383,7 +383,8 @@ export const AddProductsTable: React.FC<Props> = ({
 
                   <div className="flex flex-col text-start">
                     <span className="text-lg">{product.name}</span>
-                    <span className="text-xs">{product.barcode}</span>
+                    <span className="text-xs">Barcode: {product.barcode}</span>
+                    <span className="text-xs">SKU: {product.sku}</span>
                   </div>
                 </div>
               );
