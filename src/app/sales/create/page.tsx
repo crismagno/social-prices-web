@@ -420,12 +420,6 @@ export default function CreateSalePage() {
                 const fileUrl =
                   productItem?.mainUrl ?? product?.mainUrl ?? null;
 
-                console.log(
-                  "storeProduct.productItemId",
-                  storeProduct.productItemId
-                );
-                console.log("productItem", productItem);
-
                 return {
                   barcode: storeProduct.barcode,
                   fileUrl,
@@ -542,8 +536,6 @@ export default function CreateSalePage() {
 
         const productItemDefault: IProductItem | undefined =
           product?.productItemDefault;
-
-        console.log("product", product);
 
         if (product && productItemDefault) {
           const firstStoreIdByProduct: string = product.storeIds[0];
