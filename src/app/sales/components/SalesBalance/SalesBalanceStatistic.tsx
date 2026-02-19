@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 
 import { AvatarDescription } from "../../../../components/common/AvatarDescription/AvatarDescription";
+import { IProductItem } from "../../../../shared/business/product-items/product-items.interface";
+import { IProduct } from "../../../../shared/business/products/products.interface";
 import {
   IGetSalesBalanceTotalsResponse,
   IGetSalesProductBalanceResponse,
@@ -49,11 +51,19 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
               index: number
             ) => {
               const productId: string = productBalance.product?._id!;
+              const productItemId: string = productBalance.productItem?._id!;
+
+              const mainUrl: string | undefined | null =
+                productBalance.productItem?.mainUrl ??
+                productBalance.product?.mainUrl;
+              const name: string | undefined =
+                productBalance.productItem?.name ??
+                productBalance.product?.name;
 
               return (
                 <AvatarDescription
                   key={index}
-                  src={productBalance?.product?.mainUrl}
+                  src={mainUrl}
                   buttonIcon={<ShoppingCartOutlined />}
                   buttonTooltip="Create Sale By Product"
                   onClickButton={() => {
@@ -71,6 +81,13 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
                           productId
                         ).replace(":customerId", customerId)
                       );
+                    } else if (productItemId) {
+                      router.push(
+                        Urls.SALES_CREATE_BY_PRODUCT_ITEM.replace(
+                          ":productItemId",
+                          productItemId
+                        )
+                      );
                     } else {
                       router.push(
                         Urls.SALES_CREATE_BY_PRODUCT.replace(
@@ -80,10 +97,21 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
                       );
                     }
                   }}
-                  onClickTitleButton={() =>
-                    router.push(Urls.PRODUCT.replace(":productId", productId))
-                  }
-                  title={productBalance?.product?.name}
+                  onClickTitleButton={() => {
+                    if (productItemId) {
+                      router.push(
+                        Urls.PRODUCT_ITEM.replace(
+                          ":productItemId",
+                          productItemId
+                        )
+                      );
+                    } else {
+                      router.push(
+                        Urls.PRODUCT.replace(":productId", productId)
+                      );
+                    }
+                  }}
+                  title={name}
                   subtitle={`Total: ${formatToMoneyDecimal(
                     productBalance?.total
                   )} | Qty: ${productBalance?.quantity}`}
@@ -96,24 +124,36 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
       );
     }
 
+    const product: IProduct | undefined = productBalance?.product;
+    const productItem: IProductItem | undefined = productBalance?.productItem;
+
+    const mainUrl: string | undefined | null =
+      productItem?.mainUrl ?? product?.mainUrl;
+    const name: string | undefined = productItem?.name ?? product?.name;
+
     return (
       <AvatarDescription
-        src={productBalance?.product?.mainUrl}
+        src={mainUrl}
         buttonIcon={<ShoppingCartOutlined />}
         buttonTooltip="Create Sale By Product"
         onClickButton={
-          productBalance?.product
+          productItem || product
             ? () =>
                 router.push(
-                  Urls.SALES_CREATE_BY_PRODUCT.replace(
-                    ":productId",
-                    productBalance.product?._id!
-                  )
+                  productItem
+                    ? Urls.SALES_CREATE_BY_PRODUCT_ITEM.replace(
+                        ":productItemId",
+                        productItem._id!
+                      )
+                    : Urls.SALES_CREATE_BY_PRODUCT.replace(
+                        ":productId",
+                        product?._id!
+                      )
                 )
             : undefined
         }
-        styleLeft={{ width: productBalance?.product ? 282 : 318 }}
-        title={productBalance?.product?.name}
+        styleLeft={{ width: product || productItem ? 282 : 318 }}
+        title={name}
         subtitle={`Total: ${formatToMoneyDecimal(
           productBalance?.total
         )} | Qty: ${productBalance?.quantity ?? 0}`}

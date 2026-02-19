@@ -6,6 +6,7 @@ import {
   IChartDataProductItem,
 } from "../../utils/charts/charts-types";
 import { TTableStateSortOrder } from "../../utils/table/table-state.interface";
+import { IProductItem } from "../product-items/product-items.interface";
 import { IProduct } from "../products/products.interface";
 import SalesEnum from "./sales.enum";
 
@@ -34,6 +35,7 @@ export interface IGetSalesBalanceParams {
   storeId?: string;
   customerId?: string;
   productIds?: string[];
+  productItemIds?: string[];
 }
 
 export interface IGetSalesBalanceResponse {
@@ -52,6 +54,9 @@ export interface IGetSalesBalanceTotalsResponse {
 
 export interface IGetSalesProductBalanceResponse {
   product?: IProduct;
+  productItem?: IProductItem;
+  productId: string;
+  productItemId: string;
   total: number;
   quantity: number;
 }
