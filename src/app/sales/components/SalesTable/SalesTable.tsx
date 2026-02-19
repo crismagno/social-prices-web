@@ -36,6 +36,7 @@ import handleClientError from "../../../../components/common/handleClientError/h
 import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
 import { SaleSummary } from "../../../../components/common/SaleSummary/SaleSummary";
+import SelectProductItems from "../../../../components/common/SelectProductItems/SelectProductItems";
 import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
 import { StoreNameStatus } from "../../../../components/common/StoreNameStatus/StoreNameStatus";
 import { TagTagsCustomAntd } from "../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
@@ -47,6 +48,7 @@ import useSocketData from "../../../../data/context/socket/useSocketData";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import { ICustomer } from "../../../../shared/business/customers/customer.interface";
 import FilesUploadsEnum from "../../../../shared/business/files-uploads/files-uploads.enum";
+import { IProductItem } from "../../../../shared/business/product-items/product-items.interface";
 import { IProduct } from "../../../../shared/business/products/products.interface";
 import {
   ISale,
@@ -83,9 +85,15 @@ interface Props {
   storeId?: string;
   customerId?: string;
   productId?: string;
+  productItemId?: string;
 }
 
-const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
+const SalesTable: React.FC<Props> = ({
+  storeId,
+  customerId,
+  productId,
+  productItemId,
+}) => {
   const { user } = useAuthData();
 
   const { socket } = useSocketData();
@@ -101,6 +109,7 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
         stores: storeId ? [storeId] : [],
         customerIds: customerId ? [customerId] : [],
         productIds: productId ? [productId] : [],
+        productItemIds: productItemId ? [productItemId] : [],
         isActive: [true],
         rangeField: SalesEnum.SortField.createdAt,
       },
@@ -302,6 +311,7 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
               storeId={storeId}
               customerId={customerId}
               productId={productId}
+              productItemId={productItemId}
             />
           </>
         }
@@ -356,6 +366,31 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
               }}
             />
           </Col>
+
+          <Col md={6}>
+            <SelectProductItems
+              label={"Product Items"}
+              disabled={!!productItemId}
+              selectedProductItemIds={
+                tableStateRequest?.filters?.productItemIds ?? []
+              }
+              onSelectProductItems={(selectProductItems: IProductItem[]) => {
+                setTableStateRequest({
+                  ...tableStateRequest,
+                  filters: {
+                    ...tableStateRequest?.filters,
+                    productItemIds: map(selectProductItems, "_id"),
+                  },
+                  pagination: {
+                    pageSize: 10,
+                    skip: 0,
+                    current: undefined,
+                    total: 0,
+                  },
+                });
+              }}
+            />
+          </Col>
         </Row>
 
         <TableCustomAntd2<ISale>
@@ -385,6 +420,13 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
               tableStateRequestSale.filters = {
                 ...tableStateRequestSale.filters,
                 productIds: [productId],
+              };
+            }
+
+            if (productItemId) {
+              tableStateRequestSale.filters = {
+                ...tableStateRequestSale.filters,
+                productItemIds: [productItemId],
               };
             }
 
@@ -945,6 +987,7 @@ const SalesTable: React.FC<Props> = ({ storeId, customerId, productId }) => {
         storeId={storeId}
         customerId={customerId}
         productId={productId}
+        productItemId={productItemId}
       />
 
       <Modal

@@ -10,12 +10,14 @@ interface Props {
   storeId?: string;
   customerId?: string;
   productId?: string;
+  productItemId?: string;
 }
 
 export const ButtonCreateSale: React.FC<Props> = ({
   storeId,
   customerId,
   productId,
+  productItemId,
 }) => {
   const router: AppRouterInstance = useRouter();
 
@@ -28,6 +30,13 @@ export const ButtonCreateSale: React.FC<Props> = ({
         } else if (customerId) {
           router.push(
             Urls.SALES_CREATE_BY_CUSTOMER.replace(":customerId", customerId)
+          );
+        } else if (productItemId) {
+          router.push(
+            Urls.SALES_CREATE_BY_PRODUCT_ITEM.replace(
+              ":productItemId",
+              productItemId
+            )
           );
         } else if (productId) {
           router.push(

@@ -1,59 +1,32 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  Button,
-  Card,
-  Col,
-  Drawer,
-  Row,
-  Select,
-  Tag,
-} from 'antd';
-import { map } from 'lodash';
-import {
-  SubmitHandler,
-  useForm,
-} from 'react-hook-form';
-import { z } from 'zod';
+import { Button, Card, Col, Drawer, Row, Select, Tag } from "antd";
+import { map } from "lodash";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { DownloadOutlined } from '@ant-design/icons';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { DownloadOutlined } from "@ant-design/icons";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import {
-  CustomRangeDatePicker,
-} from '../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker';
-import handleClientError
-  from '../../../../components/common/handleClientError/handleClientError';
-import {
-  LabelBadgeCustomAntd,
-} from '../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd';
-import SelectProducts
-  from '../../../../components/common/SelectProducts/SelectProducts';
-import {
-  TagTagCustomAntd,
-} from '../../../../components/common/TagTagCustomAntd/TagTagCustomAntd';
-import YesNo from '../../../../components/common/YesNo/YesNo';
-import {
-  InputCustomAntd,
-} from '../../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
-import {
-  SelectCustomAntd,
-} from '../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
-import {
-  serviceMethodsInstance,
-} from '../../../../services/social-prices-api/service-methods';
-import {
-  IProduct,
-} from '../../../../shared/business/products/products.interface';
-import SalesEnum from '../../../../shared/business/sales/sales.enum';
-import {
-  IFiltersDownloadSales,
-} from '../../../../shared/business/sales/sales.type';
-import StoresEnum from '../../../../shared/business/stores/stores.enum';
-import { IStore } from '../../../../shared/business/stores/stores.interface';
-import { ITag } from '../../../../shared/business/tags/tags.interface';
-import CommonEnum from '../../../../shared/common/enums/common.enum';
-import TableStateEnum from '../../../../shared/utils/table/table-state.enum';
+import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
+import handleClientError from "../../../../components/common/handleClientError/handleClientError";
+import { LabelBadgeCustomAntd } from "../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
+import SelectProductItems from "../../../../components/common/SelectProductItems/SelectProductItems";
+import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
+import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
+import YesNo from "../../../../components/common/YesNo/YesNo";
+import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
+import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
+import { IProductItem } from "../../../../shared/business/product-items/product-items.interface";
+import { IProduct } from "../../../../shared/business/products/products.interface";
+import SalesEnum from "../../../../shared/business/sales/sales.enum";
+import { IFiltersDownloadSales } from "../../../../shared/business/sales/sales.type";
+import StoresEnum from "../../../../shared/business/stores/stores.enum";
+import { IStore } from "../../../../shared/business/stores/stores.interface";
+import { ITag } from "../../../../shared/business/tags/tags.interface";
+import CommonEnum from "../../../../shared/common/enums/common.enum";
+import TableStateEnum from "../../../../shared/utils/table/table-state.enum";
 
 const formSchema = z.object({
   search: z.string().nullable(),
@@ -65,6 +38,7 @@ const formSchema = z.object({
   paymentStatus: z.array(z.string()),
   storeIds: z.array(z.string()),
   selectedProductIds: z.array(z.string()),
+  selectedProductItemIds: z.array(z.string()),
   sortField: z.string().nullable(),
   sortOrder: z.string().nullable(),
   rangeField: z.string().nullable(),
@@ -89,6 +63,7 @@ interface Props {
   storeId?: string;
   customerId?: string;
   productId?: string;
+  productItemId?: string;
 }
 
 export const DownloadSalesDrawer: React.FC<Props> = ({
@@ -101,6 +76,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
   storeId,
   customerId,
   productId,
+  productItemId,
 }) => {
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
 
@@ -122,6 +98,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
       storeIds: storeId ? [storeId] : [],
       customerIds: customerId ? [customerId] : [],
       selectedProductIds: productId ? [productId] : [],
+      selectedProductItemIds: productItemId ? [productItemId] : [],
       sortField: SalesEnum.SortField.createdAt,
       sortOrder: TableStateEnum.SortOrder.ascend,
       isActive: null,
@@ -157,18 +134,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
     <Drawer title={title} onClose={onClose} open={isOpen} width={width}>
       <Card title="Filters">
         <Row gutter={[8, 8]}>
-          <Col xs={24} sm={24}>
-            <InputCustomAntd
-              controller={{ control, name: "search" }}
-              label="Search"
-              placeholder={"Search sales..."}
-              errorMessage={errors.search?.message}
-              maxLength={200}
-              allowClear
-            />
-          </Col>
-
-          <Col xs={24} sm={14} className="flex items-end">
+          <Col xs={24} sm={24} className="flex items-end">
             <CustomRangeDatePicker
               showTime
               labelClassName="font-normal"
@@ -188,13 +154,38 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
             />
           </Col>
 
-          <Col xs={24} sm={10}>
+          <Col xs={24} sm={24}>
+            <InputCustomAntd
+              controller={{ control, name: "search" }}
+              label="Search"
+              placeholder={"Search sales..."}
+              errorMessage={errors.search?.message}
+              maxLength={200}
+              allowClear
+            />
+          </Col>
+
+          <Col xs={24} sm={12}>
             <SelectProducts
               label="Products"
               labelClassName="font-normal"
               selectedProductIds={watch("selectedProductIds")}
               onSelectProducts={(selectProducts: IProduct[]) =>
                 setValue("selectedProductIds", map(selectProducts, "_id"))
+              }
+            />
+          </Col>
+
+          <Col xs={24} sm={12}>
+            <SelectProductItems
+              label="Products Items"
+              labelClassName="font-normal"
+              selectedProductItemIds={watch("selectedProductItemIds")}
+              onSelectProductItems={(selectProductItems: IProductItem[]) =>
+                setValue(
+                  "selectedProductItemIds",
+                  map(selectProductItems, "_id")
+                )
               }
             />
           </Col>
