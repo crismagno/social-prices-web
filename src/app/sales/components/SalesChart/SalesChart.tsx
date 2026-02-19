@@ -10,9 +10,11 @@ import { ButtonCreateSale } from "../../../../components/common/ButtonCreateSale
 import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
 import { LabelBadgeCustomAntd } from "../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
 import Loading from "../../../../components/common/Loading/Loading";
+import SelectProductItems from "../../../../components/common/SelectProductItems/SelectProductItems";
 import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
 import { StoreNameStatus } from "../../../../components/common/StoreNameStatus/StoreNameStatus";
 import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
+import { IProductItem } from "../../../../shared/business/product-items/product-items.interface";
 import { IProduct } from "../../../../shared/business/products/products.interface";
 import SalesEnum from "../../../../shared/business/sales/sales.enum";
 import { IGetSalesAnalyticsParams } from "../../../../shared/business/sales/sales.type";
@@ -38,6 +40,7 @@ interface Props {
   customerId?: string;
   storeId?: string;
   productId?: string;
+  productItemId?: string;
 }
 
 const defaultGetSalesAnalyticsParams = createGetSalesAnalyticsParams({
@@ -56,6 +59,7 @@ export const SalesChart: React.FC<Props> = ({
   customerId,
   storeId,
   productId,
+  productItemId,
 }) => {
   const [getSalesAnalyticsParams, setGetSalesAnalyticsParams] =
     useState<IGetSalesAnalyticsParams>({
@@ -63,6 +67,7 @@ export const SalesChart: React.FC<Props> = ({
       customerIds: customerId ? [customerId] : undefined,
       storesIds: storeId ? [storeId] : undefined,
       productIds: productId ? [productId] : undefined,
+      productItemIds: productItemId ? [productItemId] : undefined,
     });
 
   const { isLoading, salesAnalytics } = useGetSalesAnalytics(
@@ -140,6 +145,22 @@ export const SalesChart: React.FC<Props> = ({
               setGetSalesAnalyticsParams({
                 ...getSalesAnalyticsParams,
                 productIds: map(selectProducts, "_id"),
+              });
+            }}
+          />
+        </Col>
+
+        <Col md={4}>
+          <SelectProductItems
+            label={"Product Items"}
+            disabled={!!productItemId}
+            selectedProductItemIds={
+              getSalesAnalyticsParams.productItemIds ?? []
+            }
+            onSelectProductItems={(selectProductItems: IProductItem[]) => {
+              setGetSalesAnalyticsParams({
+                ...getSalesAnalyticsParams,
+                productItemIds: map(selectProductItems, "_id"),
               });
             }}
           />
@@ -277,6 +298,7 @@ export const SalesChart: React.FC<Props> = ({
                   customerIds: customerId ? [customerId] : undefined,
                   storesIds: storeId ? [storeId] : undefined,
                   productIds: productId ? [productId] : undefined,
+                  productItemIds: productItemId ? [productItemId] : undefined,
                 });
               }}
             />

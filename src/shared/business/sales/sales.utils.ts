@@ -20,6 +20,9 @@ export const createGetSalesAnalyticsParams = (
     productIds: params?.productIds,
     customerIds: params?.customerIds,
     types: params?.types,
+    paymentStatus: params?.paymentStatus,
+    deliveryTypes: params?.deliveryTypes,
+    productItemIds: params?.productItemIds,
   };
 };
 

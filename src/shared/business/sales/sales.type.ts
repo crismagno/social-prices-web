@@ -20,6 +20,7 @@ export interface IGetSalesAnalyticsParams {
   customerIds?: string[];
   paymentStatus?: SalesEnum.PaymentStatus[];
   deliveryTypes?: SalesEnum.DeliveryType[];
+  productItemIds?: string[];
 }
 
 export interface IGetSalesAnalyticsResponse {
