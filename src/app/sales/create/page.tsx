@@ -257,6 +257,8 @@ export default function CreateSalePage() {
 
   const productIdByParam: string | null = searchParams.get("pid");
 
+  const productItemIdByParam: string | null = searchParams.get("piid");
+
   const { sale: saleById, isLoading: isLoadingSaleById } =
     useFindSaleById(saleIdByParam);
 
@@ -527,7 +529,47 @@ export default function CreateSalePage() {
     const initialSelectedStoreIdFromParam: string =
       storeIdByParam ?? stores?.[0]?._id;
 
-    if (productIdByParam) {
+    if (productItemIdByParam) {
+      const componentWillMountByProductItemIdParam = async () => {
+        const productItem: IProductItem | null =
+          await serviceMethodsInstance.productItemsServiceMethods.findById(
+            productItemIdByParam
+          );
+
+        if (productItem) {
+          const firstStoreIdByProduct: string = productItem.storeIds[0];
+
+          const selectedStoreIdFromParam: string =
+            initialSelectedStoreIdFromParam ?? firstStoreIdByProduct;
+
+          setValue("saleStores", [
+            {
+              storeId: selectedStoreIdFromParam,
+              products: [
+                {
+                  barcode: productItem.barcode!,
+                  fileUrl: productItem.mainUrl!,
+                  name: productItem.name,
+                  note: null,
+                  price: productItem.price,
+                  productId: productItem.productId,
+                  quantity: 1,
+                  isCompleted: false,
+                  isValid: true,
+                  sku: productItem.sku,
+                  productItemId: productItem._id,
+                },
+              ],
+            },
+          ]);
+          setValue("selectedStoreIds", [selectedStoreIdFromParam]);
+        } else {
+          setValue("selectedStoreIds", [initialSelectedStoreIdFromParam]);
+        }
+      };
+
+      componentWillMountByProductItemIdParam();
+    } else if (productIdByParam) {
       const componentWillMountByProductIdParam = async () => {
         const product: IProduct | null =
           await serviceMethodsInstance.productsServiceMethods.findById(
