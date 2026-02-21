@@ -1,52 +1,26 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  Button,
-  Card,
-  Col,
-  Drawer,
-  Row,
-  Select,
-} from 'antd';
-import {
-  SubmitHandler,
-  useForm,
-} from 'react-hook-form';
-import { z } from 'zod';
+import { Button, Card, Col, Drawer, Row, Select } from "antd";
+import { map } from "lodash";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { DownloadOutlined } from '@ant-design/icons';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { DownloadOutlined } from "@ant-design/icons";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import handleClientError
-  from '../../../../components/common/handleClientError/handleClientError';
-import SelectProducts
-  from '../../../../components/common/SelectProducts/SelectProducts';
-import {
-  TagCategoryCustomAntd,
-} from '../../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd';
-import {
-  TagTagCustomAntd,
-} from '../../../../components/common/TagTagCustomAntd/TagTagCustomAntd';
-import {
-  InputCustomAntd,
-} from '../../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
-import {
-  SelectCustomAntd,
-} from '../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
-import {
-  serviceMethodsInstance,
-} from '../../../../services/social-prices-api/service-methods';
-import {
-  ICategory,
-} from '../../../../shared/business/categories/categories.interface';
-import ProductItemsEnum
-  from '../../../../shared/business/product-items/product-items.enum';
-import {
-  IProduct,
-} from '../../../../shared/business/products/products.interface';
-import { IStore } from '../../../../shared/business/stores/stores.interface';
-import { ITag } from '../../../../shared/business/tags/tags.interface';
-import TableStateEnum from '../../../../shared/utils/table/table-state.enum';
+import handleClientError from "../../../../components/common/handleClientError/handleClientError";
+import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
+import { TagCategoryCustomAntd } from "../../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
+import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
+import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
+import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
+import { ICategory } from "../../../../shared/business/categories/categories.interface";
+import ProductItemsEnum from "../../../../shared/business/product-items/product-items.enum";
+import { IProduct } from "../../../../shared/business/products/products.interface";
+import { IStore } from "../../../../shared/business/stores/stores.interface";
+import { ITag } from "../../../../shared/business/tags/tags.interface";
+import TableStateEnum from "../../../../shared/utils/table/table-state.enum";
 
 const formSchema = z.object({
   search: z.string().nullable(),
@@ -69,7 +43,7 @@ interface Props {
   tags: ITag[];
   categories: ICategory[];
   stores: IStore[];
-  selectedProducts?: IProduct[];
+  productId?: string;
 }
 
 export const DownloadProductItemsDrawer: React.FC<Props> = ({
@@ -80,24 +54,23 @@ export const DownloadProductItemsDrawer: React.FC<Props> = ({
   tags = [],
   categories = [],
   stores = [],
-  selectedProducts = [],
+  productId,
 }) => {
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
-  const [selectedProductsState, setSelectedProductsState] =
-    useState<IProduct[]>(selectedProducts);
 
   const {
     handleSubmit,
     formState: { errors },
     control,
     setValue,
+    watch,
   } = useForm<TFormSchema>({
     values: {
       search: null,
       tagsIds: [],
       categoriesIds: [],
       storeIds: [],
-      productIds: selectedProducts.map((p) => p._id),
+      productIds: productId ? [productId] : [],
       isActive: null,
       sortField: ProductItemsEnum.SortField.createdAt,
       sortOrder: TableStateEnum.SortOrder.ascend,
@@ -148,13 +121,9 @@ export const DownloadProductItemsDrawer: React.FC<Props> = ({
               <SelectProducts
                 label={"Products"}
                 labelClassName="font-normal"
-                selectedProductIds={selectedProductsState.map((p) => p._id)}
+                selectedProductIds={watch("productIds")}
                 onSelectProducts={(products: IProduct[]) => {
-                  setSelectedProductsState(products);
-                  setValue(
-                    "productIds",
-                    products.map((p) => p._id)
-                  );
+                  setValue("productIds", map(products, "_id"));
                 }}
               />
             </div>

@@ -40,6 +40,7 @@ import { getImageUrl } from "../../../shared/utils/images/images-url";
 import ImagesEnum from "../../../shared/utils/images/images.enum";
 import { formatToMoneyDecimal } from "../../../shared/utils/strings/string";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
+import { ProductItemsTable } from "../../product-items/components/ProductItemsTable/ProductItemsTable";
 import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
 import { SalesChart } from "../../sales/components/SalesChart/SalesChart";
 import SalesTable from "../../sales/components/SalesTable/SalesTable";
@@ -433,6 +434,11 @@ export default function ProductPage() {
               key: "2",
               label: "Sales Table",
               children: <SalesTable productId={productId} />,
+            },
+            {
+              key: "3",
+              label: "Product Items",
+              children: <ProductItemsTable productId={productId} />,
             },
           ]}
         />
