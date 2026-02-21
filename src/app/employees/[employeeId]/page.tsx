@@ -2,32 +2,35 @@
 
 import { useState } from "react";
 
-import { Button, Card, Col, Image, Modal, Row, Tag, Tooltip } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Descriptions,
+  Image,
+  Modal,
+  Row,
+  Tag,
+  Tooltip,
+} from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useParams, useRouter } from "next/navigation";
 
-import { EditOutlined, FileOutlined, TagOutlined } from "@ant-design/icons";
+import { EditOutlined } from "@ant-design/icons";
 
 import Avatar from "../../../components/common/Avatar/Avatar";
 import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
-import Description from "../../../components/common/Description/Description";
-import { DescriptionAddresses } from "../../../components/common/DescriptionAddresses/DescriptionAddresses";
-import { DescriptionPhoneNumbers } from "../../../components/common/DescriptionPhoneNumbers/DescriptionPhoneNumbers";
-import {
-  IconAtSymbol,
-  IconCake,
-  IconIdentification,
-  IconPencilSquare,
-  IconQuestion,
-  IconUser,
-} from "../../../components/common/icons/icons";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
 import EmployeesEnum from "../../../shared/business/employees/employees.enum";
+import AddressEnum from "../../../shared/business/shared/address/address.enum";
+import { IAddress } from "../../../shared/business/shared/address/address.interface";
 import PersonEnum from "../../../shared/business/shared/person/person.enum";
+import PhoneNumberEnum from "../../../shared/business/shared/phone/phone-number.enum";
+import { IPhoneNumber } from "../../../shared/business/shared/phone/phone-number.interface";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
@@ -73,17 +76,17 @@ export default function EmployeePage() {
             xs={24}
             sm={10}
             md={5}
-            className="flex flex-col justify-center items-center"
+            className="flex flex-col justify-start items-center"
           >
             <Avatar
               onClick={() => setPreviewOpen(true)}
               src={employee.avatar}
               width={240}
-              className="shadow-lg border-none cursor-pointer z-10"
+              className="shadow-lg border-none cursor-pointer z-10 rounded-lg mt-10"
               title="See avatar"
             />
 
-            <h3 className="md:text-2xl font-semibold text-blueGray-700 mt-1">
+            <h3 className="md:text-2xl font-semibold text-blueGray-700 mt-1 mb-1">
               {employee.name}
             </h3>
 
@@ -91,13 +94,33 @@ export default function EmployeePage() {
               <a
                 href={`mailto:${employee.email}`}
                 className="flex items-center text-sm leading-normal text-gray-400 
-                  font-bold px-2 py-1 shadow-sm rounded-lg border border-gray-300 mt-1
-                  w-min"
+                  font-bold px-2 py-1 shadow-sm rounded-lg border border-gray-300 mt-1"
               >
-                {IconAtSymbol("w-3.5 h-3.5")}
                 {employee.email}
               </a>
             </Tooltip>
+
+            {employee.username && (
+              <Tooltip title="Username">
+                <Tag color="blue" className="mt-2">
+                  {employee.username}
+                </Tag>
+              </Tooltip>
+            )}
+
+            <Tag
+              color={EmployeesEnum.LevelColors[employee.level]}
+              className="mt-2"
+            >
+              {EmployeesEnum.LevelLabels[employee.level]}
+            </Tag>
+
+            <Tag
+              color={EmployeesEnum.StatusColors[employee.status]}
+              className="mt-2"
+            >
+              {EmployeesEnum.StatusLabels[employee.status]}
+            </Tag>
           </Col>
 
           <Col xs={24} sm={14} md={19}>
@@ -115,42 +138,40 @@ export default function EmployeePage() {
                 </Tooltip>
               }
             >
-              <Row>
-                <Col xs={24} md={12}>
-                  <Description
-                    label="Name"
-                    description={`${employee.name ?? "-"}`}
-                    leftIcon={IconUser()}
-                  />
+              <Row gutter={[16, 16]}>
+                {/* Basic Information */}
+                <Col xs={24}>
+                  <Descriptions
+                    bordered
+                    column={{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3 }}
+                    size="small"
+                  >
+                    <Descriptions.Item label="Name" span={2}>
+                      <span className="font-medium">{employee.name}</span>
+                    </Descriptions.Item>
 
-                  <Description
-                    label="Username"
-                    description={`${employee.username ?? "-"}`}
-                    leftIcon={IconIdentification()}
-                  />
+                    <Descriptions.Item label="Username">
+                      <Tag color="blue">{employee.username || "-"}</Tag>
+                    </Descriptions.Item>
 
-                  <Description
-                    label="Email"
-                    description={employee.email ?? "-"}
-                    leftIcon={IconAtSymbol()}
-                  />
+                    <Descriptions.Item label="Email">
+                      <a
+                        href={`mailto:${employee.email}`}
+                        className="text-blue-600"
+                      >
+                        {employee.email}
+                      </a>
+                    </Descriptions.Item>
 
-                  <Description
-                    label="Birth Date"
-                    leftIcon={IconCake()}
-                    description={
-                      employee.birthDate
+                    <Descriptions.Item label="Birth Date">
+                      {employee.birthDate
                         ? moment(employee.birthDate).format(
                             DatesEnum.Format.DDMMYYY
                           )
-                        : "-"
-                    }
-                  />
+                        : "-"}
+                    </Descriptions.Item>
 
-                  <Description
-                    label="Gender"
-                    leftIcon={IconQuestion()}
-                    description={
+                    <Descriptions.Item label="Gender">
                       <Tag
                         color={
                           PersonEnum.GenderColors[
@@ -164,61 +185,190 @@ export default function EmployeePage() {
                           ]
                         }
                       </Tag>
-                    }
-                  />
+                    </Descriptions.Item>
 
-                  <Description
-                    label="Level"
-                    leftIcon={IconQuestion()}
-                    description={
+                    <Descriptions.Item label="Level">
                       <Tag color={EmployeesEnum.LevelColors[employee.level]}>
                         {EmployeesEnum.LevelLabels[employee.level]}
                       </Tag>
-                    }
-                  />
-                </Col>
+                    </Descriptions.Item>
 
-                <Col xs={24} md={12}>
-                  <Description
-                    label="Tags"
-                    description={
-                      <div className="w-full flex">
-                        <TagTagsCustomAntd
-                          tags={tags}
-                          useTag
-                          tagsIds={employee.tagsIds}
-                        />
-                      </div>
-                    }
-                    leftIcon={<TagOutlined className="text-lg" />}
-                  />
-
-                  <DescriptionPhoneNumbers
-                    phoneNumbers={employee.phoneNumbers}
-                  />
-
-                  <DescriptionAddresses addresses={employee.addresses} />
-
-                  <Description
-                    label="About"
-                    description={employee.about}
-                    leftIcon={IconPencilSquare()}
-                  />
-
-                  <Description
-                    label="Status"
-                    leftIcon={IconQuestion()}
-                    description={
+                    <Descriptions.Item label="Status">
                       <Tag color={EmployeesEnum.StatusColors[employee.status]}>
                         {EmployeesEnum.StatusLabels[employee.status]}
                       </Tag>
-                    }
-                  />
-                  <Description
-                    label="Upload Filename"
-                    description={employee.uploadFilename}
-                    leftIcon={<FileOutlined className="text-lg" />}
-                  />
+                    </Descriptions.Item>
+                  </Descriptions>
+                </Col>
+
+                {/* About */}
+                {employee.about && (
+                  <Col xs={24}>
+                    <Descriptions bordered column={1} size="small">
+                      <Descriptions.Item label="About">
+                        <div className="max-h-20 overflow-y-auto">
+                          {employee.about}
+                        </div>
+                      </Descriptions.Item>
+                    </Descriptions>
+                  </Col>
+                )}
+
+                {/* Phone Numbers */}
+                {employee.phoneNumbers && employee.phoneNumbers.length > 0 && (
+                  <Col xs={24}>
+                    <Descriptions bordered column={1} size="small">
+                      <Descriptions.Item label="Phone Numbers">
+                        <div className="flex flex-col gap-2">
+                          {employee.phoneNumbers.map(
+                            (phone: IPhoneNumber, index: number) => (
+                              <div
+                                key={index}
+                                className="flex items-center gap-2 flex-wrap"
+                              >
+                                <Tag color="blue">
+                                  {PhoneNumberEnum.TypeLabels[phone.type]}
+                                </Tag>
+                                <a
+                                  href={`tel:${phone.number}`}
+                                  className="text-blue-600 font-medium"
+                                >
+                                  {phone.number}
+                                </a>
+                                {phone.messengers &&
+                                  phone.messengers.length > 0 && (
+                                    <div className="flex gap-1">
+                                      {phone.messengers.map(
+                                        (
+                                          messenger: PhoneNumberEnum.PhoneNumberMessenger,
+                                          messengerIndex: number
+                                        ) => (
+                                          <Tag
+                                            key={messengerIndex}
+                                            color="green"
+                                          >
+                                            {
+                                              PhoneNumberEnum
+                                                .PhoneNumberMessengerLabels[
+                                                messenger
+                                              ]
+                                            }
+                                          </Tag>
+                                        )
+                                      )}
+                                    </div>
+                                  )}
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </Descriptions.Item>
+                    </Descriptions>
+                  </Col>
+                )}
+
+                {/* Addresses */}
+                {employee.addresses && employee.addresses.length > 0 && (
+                  <Col xs={24}>
+                    <Descriptions bordered column={1} size="small">
+                      <Descriptions.Item label="Addresses">
+                        <div className="flex flex-col gap-3">
+                          {employee.addresses.map(
+                            (address: IAddress, index: number) => (
+                              <div
+                                key={index}
+                                className="border-l-4 border-orange-500 pl-3 py-2 bg-gray-50 rounded"
+                              >
+                                <div className="flex flex-wrap gap-1 mb-2">
+                                  {address.types &&
+                                    address.types.map(
+                                      (
+                                        type: AddressEnum.Type,
+                                        typeIndex: number
+                                      ) => (
+                                        <Tag key={typeIndex} color="purple">
+                                          {AddressEnum.TypesLabels[type]}
+                                        </Tag>
+                                      )
+                                    )}
+                                </div>
+                                <div className="text-sm space-y-1">
+                                  <div>
+                                    <span className="font-medium">
+                                      {address.address1}
+                                    </span>
+                                    {address.address2 && (
+                                      <span>, {address.address2}</span>
+                                    )}
+                                  </div>
+                                  <div className="text-gray-600">
+                                    {address.district}, {address.city} -{" "}
+                                    {address.state?.name}
+                                  </div>
+                                  <div className="text-gray-600">
+                                    {address.zip} - {address.country?.name}
+                                  </div>
+                                  {address.description && (
+                                    <div className="text-gray-500 italic">
+                                      {address.description}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </Descriptions.Item>
+                    </Descriptions>
+                  </Col>
+                )}
+
+                {/* Tags */}
+                <Col xs={24}>
+                  <Descriptions bordered column={1} size="small">
+                    <Descriptions.Item label="Tags">
+                      <div className="max-w-full overflow-x-auto py-1">
+                        <div className="flex flex-wrap gap-1">
+                          <TagTagsCustomAntd
+                            tags={tags}
+                            useTag
+                            tagsIds={employee.tagsIds}
+                          />
+                        </div>
+                      </div>
+                    </Descriptions.Item>
+                  </Descriptions>
+                </Col>
+
+                {/* Dates & Upload Info */}
+                <Col xs={24}>
+                  <Descriptions
+                    bordered
+                    column={{ xs: 1, sm: 2, md: 2, lg: 3, xl: 3 }}
+                    size="small"
+                  >
+                    {employee.uploadFilename && (
+                      <Descriptions.Item label="Upload Filename">
+                        <Tag color="orange">{employee.uploadFilename}</Tag>
+                      </Descriptions.Item>
+                    )}
+
+                    <Descriptions.Item label="Created At">
+                      {employee.createdAt
+                        ? moment(employee.createdAt).format(
+                            DatesEnum.Format.DDMMYYYYhhmmss
+                          )
+                        : "-"}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Updated At">
+                      {employee.updatedAt
+                        ? moment(employee.updatedAt).format(
+                            DatesEnum.Format.DDMMYYYYhhmmss
+                          )
+                        : "-"}
+                    </Descriptions.Item>
+                  </Descriptions>
                 </Col>
               </Row>
             </ContainerTitle>
