@@ -2,33 +2,34 @@
 
 import { useState } from "react";
 
-import { Button, Card, Col, Image, Modal, Row, Tag, Tooltip } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Descriptions,
+  Image,
+  Modal,
+  Row,
+  Tag,
+  Tooltip,
+} from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 
 import { EditOutlined, GoogleOutlined } from "@ant-design/icons";
 
-import { AddressesTag } from "../../components/common/AddressesTag/AddressesTag";
 import Avatar from "../../components/common/Avatar/Avatar";
 import ContainerTitle from "../../components/common/ContainerTitle/ContainerTitle";
-import Description from "../../components/common/Description/Description";
-import {
-  IconAtSymbol,
-  IconCake,
-  IconFinger,
-  IconIdentification,
-  IconPencilSquare,
-  IconPhone,
-  IconQuestion,
-  IconUser,
-} from "../../components/common/icons/icons";
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
-import { PhoneNumbersTag } from "../../components/common/PhoneNumbersTag/PhoneNumbersTag";
 import Layout from "../../components/template/Layout/Layout";
 import useAuthData from "../../data/context/auth/useAuthData";
 import EmployeesEnum from "../../shared/business/employees/employees.enum";
+import AddressEnum from "../../shared/business/shared/address/address.enum";
+import { IAddress } from "../../shared/business/shared/address/address.interface";
 import PersonEnum from "../../shared/business/shared/person/person.enum";
+import PhoneNumberEnum from "../../shared/business/shared/phone/phone-number.enum";
+import { IPhoneNumber } from "../../shared/business/shared/phone/phone-number.interface";
 import UsersEnum from "../../shared/business/users/users.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
@@ -49,226 +50,362 @@ export default function ProfilePage() {
 
   return (
     <Layout title="Profile" subtitle="See my information">
-      <Card className=" h-min-80 mt-10">
-        <div className="flex justify-center absolute right-0 w-full -top-16">
-          <Avatar
-            onClick={() => setPreviewOpen(true)}
-            src={user.avatar}
-            width={180}
-            className="shadow-lg border-none cursor-pointer z-10"
-            title="See avatar"
-          />
-        </div>
+      <Card className="h-min-80 mt-2">
+        <Row gutter={[4, 4]}>
+          <Col
+            xs={24}
+            sm={10}
+            md={5}
+            className="flex flex-col justify-start items-center"
+          >
+            <Avatar
+              onClick={() => setPreviewOpen(true)}
+              src={user.avatar}
+              width={240}
+              className="shadow-lg border-none cursor-pointer z-10 rounded-lg mt-10"
+              title="See avatar"
+            />
 
-        <Modal
-          open={previewOpen}
-          footer={null}
-          onCancel={() => setPreviewOpen(false)}
-        >
-          <Image
-            alt="preview image"
-            style={{ width: "100%" }}
-            preview={false}
-            src={
-              user.avatar
-                ? getImageUrl(user.avatar)
-                : ImagesEnum.FilesNames.DefaultAvatarImage
-            }
-          />
-        </Modal>
+            <h3 className="md:text-2xl font-semibold text-blueGray-700 mt-1 mb-1">
+              {getUserName(user)}
+            </h3>
 
-        <div className="flex justify-end relative h-8">
-          {employee?.level !== EmployeesEnum.Level.EMPLOYEE && (
-            <Button
-              type="success"
-              onClick={() => router.push(Urls.PROFILE_EDIT)}
-              className="px-3 shadow-lg"
-              icon={<EditOutlined />}
+            <Tooltip title={"My Email, click to send a email"}>
+              <a
+                href={`mailto:${user.email}`}
+                className="flex items-center text-sm leading-normal text-gray-400 
+                  font-bold px-2 py-1 shadow-sm rounded-lg border border-gray-300 mt-1"
+              >
+                {user.email}
+              </a>
+            </Tooltip>
+
+            {user.username && (
+              <Tooltip title="Username">
+                <Tag color="blue" className="mt-2">
+                  {user.username}
+                </Tag>
+              </Tooltip>
+            )}
+
+            <Tag
+              color={
+                UsersEnum.StatusColors[user.status ?? UsersEnum.Status.PENDING]
+              }
+              className="mt-2"
             >
-              Edit
-            </Button>
-          )}
-        </div>
+              {UsersEnum.StatusLabels[user.status ?? UsersEnum.Status.PENDING]}
+            </Tag>
+          </Col>
 
-        <div className="flex flex-col justify-center items-center text-center mt-20 mb-5">
-          <h3 className="sm:text-sm md:text-4xl font-semibold text-blueGray-700 mb-2">
-            {getUserName(user)}
-          </h3>
-
-          <Tooltip title={"My Email, click to send a email"}>
-            <a
-              href={`mailto:${user.email}`}
-              className="flex items-center text-sm leading-normal mt-0 mb-2 text-gray-400 
-            font-bold px-2 py-1 shadow-sm rounded-lg border border-gray-300
-            w-min"
+          <Col xs={24} sm={14} md={19}>
+            <ContainerTitle
+              title="Information"
+              extraHeader={
+                employee?.level !== EmployeesEnum.Level.EMPLOYEE && (
+                  <Tooltip title="Edit profile">
+                    <Button
+                      type="success"
+                      icon={<EditOutlined />}
+                      onClick={() => router.push(Urls.PROFILE_EDIT)}
+                    >
+                      Edit
+                    </Button>
+                  </Tooltip>
+                )
+              }
             >
-              {IconAtSymbol("w-3.5 h-3.5")}
-              {user.email}
-            </a>
-          </Tooltip>
-        </div>
-
-        <ContainerTitle title="Information" className="mt-6">
-          <div className="flex">
-            <Description
-              label="Logged By"
-              className="mr-5"
-              description={
-                <Tag
-                  color={
-                    UsersEnum.ProviderColors[
-                      user.loggedByAuthProvider ?? UsersEnum.Provider.OTHER
-                    ]
-                  }
-                  icon={
-                    user.loggedByAuthProvider === UsersEnum.Provider.GOOGLE ? (
-                      <GoogleOutlined />
-                    ) : null
-                  }
-                >
-                  {
-                    UsersEnum.ProviderLabels[
-                      user.loggedByAuthProvider ?? UsersEnum.Provider.OTHER
-                    ]
-                  }
-                </Tag>
-              }
-              leftIcon={IconFinger()}
-            />
-
-            <Description
-              label="Auth Provider"
-              className="mr-5"
-              description={
-                <Tag
-                  color={
-                    UsersEnum.ProviderColors[
-                      user.authProvider ?? UsersEnum.Provider.OTHER
-                    ]
-                  }
-                  icon={
-                    user.authProvider === UsersEnum.Provider.GOOGLE ? (
-                      <GoogleOutlined />
-                    ) : null
-                  }
-                >
-                  {
-                    UsersEnum.ProviderLabels[
-                      user.authProvider ?? UsersEnum.Provider.OTHER
-                    ]
-                  }
-                </Tag>
-              }
-              leftIcon={IconFinger()}
-            />
-
-            <Description
-              label="Status"
-              description={
-                <Tag
-                  color={
-                    UsersEnum.StatusColors[
-                      user.status ?? UsersEnum.Status.PENDING
-                    ]
-                  }
-                >
-                  {
-                    UsersEnum.StatusLabels[
-                      user.status ?? UsersEnum.Status.PENDING
-                    ]
-                  }
-                </Tag>
-              }
-              leftIcon={IconQuestion()}
-            />
-          </div>
-        </ContainerTitle>
-
-        <ContainerTitle title="Profile" className="mt-6">
-          <Row>
-            <Col xs={24} md={12}>
-              <Description
-                label="My name"
-                description={`${user.name ?? "-"}`}
-                leftIcon={IconUser()}
-              />
-
-              <Description
-                label="Username"
-                description={user.username ?? ""}
-                leftIcon={IconIdentification()}
-              />
-
-              <Description
-                label="Email"
-                description={user.email ?? ""}
-                leftIcon={IconAtSymbol()}
-              />
-
-              <Description
-                label="Phone Numbers"
-                className="overflow-x-auto"
-                description={
-                  <div className="w-full flex">
-                    <PhoneNumbersTag phoneNumbers={user.phoneNumbers} />
-                  </div>
-                }
-                leftIcon={IconPhone()}
-              />
-            </Col>
-
-            <Col xs={24} md={12}>
-              <div className="flex items-start mt-4 ">
-                <span className="mr-3">{IconQuestion()}</span>
-                <div className={`flex flex-col overflow-x-auto`}>
-                  <label className="">Addresses</label>
-                  <div className="w-full overflow-x-auto flex">
-                    <AddressesTag addresses={user.addresses} />
-                  </div>
-                </div>
-              </div>
-
-              <Description
-                label="Birth date"
-                leftIcon={IconCake()}
-                description={
-                  user.birthDate
-                    ? moment(user.birthDate).format(DatesEnum.Format.DDMMYYY)
-                    : "-"
-                }
-              />
-
-              <Description
-                label="Gender"
-                leftIcon={IconQuestion()}
-                description={
-                  <Tag
-                    color={
-                      PersonEnum.GenderColors[
-                        user.gender ?? PersonEnum.Gender.OTHER
-                      ]
-                    }
+              <Row gutter={[16, 16]}>
+                {/* Authentication Information */}
+                <Col xs={24}>
+                  <Descriptions
+                    bordered
+                    column={{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3 }}
+                    size="small"
+                    title="Authentication"
                   >
-                    {
-                      PersonEnum.GenderLabels[
-                        user.gender ?? PersonEnum.Gender.OTHER
-                      ]
-                    }
-                  </Tag>
-                }
-              />
+                    <Descriptions.Item label="Logged By">
+                      <Tag
+                        color={
+                          UsersEnum.ProviderColors[
+                            user.loggedByAuthProvider ??
+                              UsersEnum.Provider.OTHER
+                          ]
+                        }
+                        icon={
+                          user.loggedByAuthProvider ===
+                          UsersEnum.Provider.GOOGLE ? (
+                            <GoogleOutlined />
+                          ) : null
+                        }
+                      >
+                        {
+                          UsersEnum.ProviderLabels[
+                            user.loggedByAuthProvider ??
+                              UsersEnum.Provider.OTHER
+                          ]
+                        }
+                      </Tag>
+                    </Descriptions.Item>
 
-              {user.about && (
-                <Description
-                  label="About"
-                  description={user.about}
-                  leftIcon={IconPencilSquare()}
-                />
-              )}
-            </Col>
-          </Row>
-        </ContainerTitle>
+                    <Descriptions.Item label="Auth Provider">
+                      <Tag
+                        color={
+                          UsersEnum.ProviderColors[
+                            user.authProvider ?? UsersEnum.Provider.OTHER
+                          ]
+                        }
+                        icon={
+                          user.authProvider === UsersEnum.Provider.GOOGLE ? (
+                            <GoogleOutlined />
+                          ) : null
+                        }
+                      >
+                        {
+                          UsersEnum.ProviderLabels[
+                            user.authProvider ?? UsersEnum.Provider.OTHER
+                          ]
+                        }
+                      </Tag>
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Status">
+                      <Tag
+                        color={
+                          UsersEnum.StatusColors[
+                            user.status ?? UsersEnum.Status.PENDING
+                          ]
+                        }
+                      >
+                        {
+                          UsersEnum.StatusLabels[
+                            user.status ?? UsersEnum.Status.PENDING
+                          ]
+                        }
+                      </Tag>
+                    </Descriptions.Item>
+                  </Descriptions>
+                </Col>
+
+                {/* Basic Information */}
+                <Col xs={24}>
+                  <Descriptions
+                    bordered
+                    column={{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3 }}
+                    size="small"
+                    title="Personal Information"
+                  >
+                    <Descriptions.Item label="Name" span={2}>
+                      <span className="font-medium">{user.name || "-"}</span>
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Username">
+                      <Tag color="blue">{user.username || "-"}</Tag>
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Email">
+                      <a
+                        href={`mailto:${user.email}`}
+                        className="text-blue-600"
+                      >
+                        {user.email}
+                      </a>
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Birth Date">
+                      {user.birthDate
+                        ? moment(user.birthDate).format(
+                            DatesEnum.Format.DDMMYYY
+                          )
+                        : "-"}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Gender">
+                      <Tag
+                        color={
+                          PersonEnum.GenderColors[
+                            user.gender ?? PersonEnum.Gender.OTHER
+                          ]
+                        }
+                      >
+                        {
+                          PersonEnum.GenderLabels[
+                            user.gender ?? PersonEnum.Gender.OTHER
+                          ]
+                        }
+                      </Tag>
+                    </Descriptions.Item>
+                  </Descriptions>
+                </Col>
+
+                {/* About */}
+                {user.about && (
+                  <Col xs={24}>
+                    <Descriptions bordered column={1} size="small">
+                      <Descriptions.Item label="About">
+                        <div className="max-h-20 overflow-y-auto">
+                          {user.about}
+                        </div>
+                      </Descriptions.Item>
+                    </Descriptions>
+                  </Col>
+                )}
+
+                {/* Phone Numbers */}
+                {user.phoneNumbers && user.phoneNumbers.length > 0 && (
+                  <Col xs={24}>
+                    <Descriptions bordered column={1} size="small">
+                      <Descriptions.Item label="Phone Numbers">
+                        <div className="flex flex-col gap-2">
+                          {user.phoneNumbers.map(
+                            (phone: IPhoneNumber, index: number) => (
+                              <div
+                                key={index}
+                                className="flex items-center gap-2 flex-wrap"
+                              >
+                                <Tag color="blue">
+                                  {PhoneNumberEnum.TypeLabels[phone.type]}
+                                </Tag>
+                                <a
+                                  href={`tel:${phone.number}`}
+                                  className="text-blue-600 font-medium"
+                                >
+                                  {phone.number}
+                                </a>
+                                {phone.messengers &&
+                                  phone.messengers.length > 0 && (
+                                    <div className="flex gap-1">
+                                      {phone.messengers.map(
+                                        (
+                                          messenger: PhoneNumberEnum.PhoneNumberMessenger,
+                                          messengerIndex: number
+                                        ) => (
+                                          <Tag
+                                            key={messengerIndex}
+                                            color="green"
+                                          >
+                                            {
+                                              PhoneNumberEnum
+                                                .PhoneNumberMessengerLabels[
+                                                messenger
+                                              ]
+                                            }
+                                          </Tag>
+                                        )
+                                      )}
+                                    </div>
+                                  )}
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </Descriptions.Item>
+                    </Descriptions>
+                  </Col>
+                )}
+
+                {/* Addresses */}
+                {user.addresses && user.addresses.length > 0 && (
+                  <Col xs={24}>
+                    <Descriptions bordered column={1} size="small">
+                      <Descriptions.Item label="Addresses">
+                        <div className="flex flex-col gap-3">
+                          {user.addresses.map(
+                            (address: IAddress, index: number) => (
+                              <div
+                                key={index}
+                                className="border-l-4 border-indigo-500 pl-3 py-2 bg-gray-50 rounded"
+                              >
+                                <div className="flex flex-wrap gap-1 mb-2">
+                                  {address.types &&
+                                    address.types.map(
+                                      (
+                                        type: AddressEnum.Type,
+                                        typeIndex: number
+                                      ) => (
+                                        <Tag key={typeIndex} color="purple">
+                                          {AddressEnum.TypesLabels[type]}
+                                        </Tag>
+                                      )
+                                    )}
+                                </div>
+                                <div className="text-sm space-y-1">
+                                  <div>
+                                    <span className="font-medium">
+                                      {address.address1}
+                                    </span>
+                                    {address.address2 && (
+                                      <span>, {address.address2}</span>
+                                    )}
+                                  </div>
+                                  <div className="text-gray-600">
+                                    {address.district}, {address.city} -{" "}
+                                    {address.state?.name}
+                                  </div>
+                                  <div className="text-gray-600">
+                                    {address.zip} - {address.country?.name}
+                                  </div>
+                                  {address.description && (
+                                    <div className="text-gray-500 italic">
+                                      {address.description}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </Descriptions.Item>
+                    </Descriptions>
+                  </Col>
+                )}
+
+                {/* Dates */}
+                <Col xs={24}>
+                  <Descriptions
+                    bordered
+                    column={{ xs: 1, sm: 2, md: 2, lg: 2, xl: 2 }}
+                    size="small"
+                  >
+                    <Descriptions.Item label="Created At">
+                      {user.createdAt
+                        ? moment(user.createdAt).format(
+                            DatesEnum.Format.DDMMYYYYhhmmss
+                          )
+                        : "-"}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="Updated At">
+                      {user.updatedAt
+                        ? moment(user.updatedAt).format(
+                            DatesEnum.Format.DDMMYYYYhhmmss
+                          )
+                        : "-"}
+                    </Descriptions.Item>
+                  </Descriptions>
+                </Col>
+              </Row>
+            </ContainerTitle>
+          </Col>
+        </Row>
       </Card>
+
+      <Modal
+        open={previewOpen}
+        footer={null}
+        onCancel={() => setPreviewOpen(false)}
+      >
+        <Image
+          alt="preview image"
+          style={{ width: "100%" }}
+          preview={false}
+          src={
+            user.avatar
+              ? getImageUrl(user.avatar)
+              : ImagesEnum.FilesNames.DefaultAvatarImage
+          }
+        />
+      </Modal>
     </Layout>
   );
 }

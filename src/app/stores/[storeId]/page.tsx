@@ -108,10 +108,7 @@ export default function StorePage() {
               </a>
             </Tooltip>
 
-            <Tag
-              color={StoresEnum.StatusColor[store.status]}
-              className="mt-2"
-            >
+            <Tag color={StoresEnum.StatusColor[store.status]} className="mt-2">
               {StoresEnum.StatusLabel[store.status]}
             </Tag>
           </Col>
@@ -154,7 +151,10 @@ export default function StorePage() {
                     </Descriptions.Item>
 
                     <Descriptions.Item label="Email">
-                      <a href={`mailto:${store.email}`} className="text-blue-600">
+                      <a
+                        href={`mailto:${store.email}`}
+                        className="text-blue-600"
+                      >
                         {store.email}
                       </a>
                     </Descriptions.Item>
