@@ -1,11 +1,8 @@
 "use client";
 
-import './styles.scss';
+import "./styles.scss";
 
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect, useState } from "react";
 
 import {
   Button,
@@ -19,100 +16,56 @@ import {
   Upload,
   UploadFile,
   UploadProps,
-} from 'antd';
-import ImgCrop from 'antd-img-crop';
-import { RcFile } from 'antd/es/upload';
-import {
-  isArray,
-  isObject,
-} from 'class-validator';
-import {
-  filter,
-  map,
-} from 'lodash';
-import moment from 'moment';
-import {
-  Controller,
-  SubmitHandler,
-  useForm,
-} from 'react-hook-form';
-import z from 'zod';
+} from "antd";
+import ImgCrop from "antd-img-crop";
+import { RcFile } from "antd/es/upload";
+import { isArray, isObject } from "class-validator";
+import { filter, map } from "lodash";
+import moment from "moment";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import z from "zod";
 
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import ContainerTitle
-  from '../../../../components/common/ContainerTitle/ContainerTitle';
-import handleClientError
-  from '../../../../components/common/handleClientError/handleClientError';
-import HrCustom from '../../../../components/common/HrCustom/HrCustom';
-import LoadingFull from '../../../../components/common/LoadingFull/LoadingFull';
+import ContainerTitle from "../../../../components/common/ContainerTitle/ContainerTitle";
+import handleClientError from "../../../../components/common/handleClientError/handleClientError";
+import HrCustom from "../../../../components/common/HrCustom/HrCustom";
+import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
 import {
   colorSchema,
   MultiColors,
-} from '../../../../components/common/MultiColors/MultiColors';
-import {
-  ProductPreviousBarcodesPopover,
-} from '../../../../components/common/ProductPreviousBarcodesPopover/ProductPreviousBarcodesPopover';
-import SelectProduct
-  from '../../../../components/common/SelectProduct/SelectProduct';
-import {
-  TagCategoryCustomAntd,
-} from '../../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd';
-import {
-  TagTagCustomAntd,
-} from '../../../../components/common/TagTagCustomAntd/TagTagCustomAntd';
-import {
-  CheckboxCustomAntd,
-} from '../../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd';
-import {
-  InputCustomAntd,
-} from '../../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
-import {
-  InputNumberCustomAntd,
-} from '../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd';
-import {
-  SelectCustomAntd,
-} from '../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
-import {
-  TextareaCustomAntd,
-} from '../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd';
-import CreateProductItemDto
-  from '../../../../services/social-prices-api/product-items/dto/createProductItem.dto';
-import UpdateProductItemDto
-  from '../../../../services/social-prices-api/product-items/dto/updateProductItem.dto';
-import {
-  serviceMethodsInstance,
-} from '../../../../services/social-prices-api/service-methods';
-import CategoriesEnum
-  from '../../../../shared/business/categories/categories.enum';
-import {
-  ICategory,
-} from '../../../../shared/business/categories/categories.interface';
-import {
-  IProductItem,
-} from '../../../../shared/business/product-items/product-items.interface';
-import {
-  IProduct,
-} from '../../../../shared/business/products/products.interface';
-import TagsEnum from '../../../../shared/business/tags/tags.enum';
-import { ITag } from '../../../../shared/business/tags/tags.interface';
-import {
-  parseColorPickerToHexString,
-} from '../../../../shared/utils/antd/color-picker/color-picker';
-import { sortArray } from '../../../../shared/utils/array/array-functions';
-import DatesEnum from '../../../../shared/utils/dates/dates.enum';
-import { getFileUrl } from '../../../../shared/utils/images/images-helper';
-import { getImageUrl } from '../../../../shared/utils/images/images-url';
+} from "../../../../components/common/MultiColors/MultiColors";
+import { ProductPreviousBarcodesPopover } from "../../../../components/common/ProductPreviousBarcodesPopover/ProductPreviousBarcodesPopover";
+import SelectProduct from "../../../../components/common/SelectProduct/SelectProduct";
+import { TagCategoryCustomAntd } from "../../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
+import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
+import { CheckboxCustomAntd } from "../../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd";
+import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
+import { InputNumberCustomAntd } from "../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
+import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { TextareaCustomAntd } from "../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
+import CreateProductItemDto from "../../../../services/social-prices-api/product-items/dto/createProductItem.dto";
+import UpdateProductItemDto from "../../../../services/social-prices-api/product-items/dto/updateProductItem.dto";
+import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
+import CategoriesEnum from "../../../../shared/business/categories/categories.enum";
+import { ICategory } from "../../../../shared/business/categories/categories.interface";
+import { IProductItem } from "../../../../shared/business/product-items/product-items.interface";
+import { IProduct } from "../../../../shared/business/products/products.interface";
+import TagsEnum from "../../../../shared/business/tags/tags.enum";
+import { ITag } from "../../../../shared/business/tags/tags.interface";
+import { parseColorPickerToHexString } from "../../../../shared/utils/antd/color-picker/color-picker";
+import { sortArray } from "../../../../shared/utils/array/array-functions";
+import DatesEnum from "../../../../shared/utils/dates/dates.enum";
+import { getFileUrl } from "../../../../shared/utils/images/images-helper";
+import { getImageUrl } from "../../../../shared/utils/images/images-url";
 import {
   formatterMoney,
   parserMoney,
-} from '../../../../shared/utils/strings/string';
-import {
-  useFindCategoriesByType,
-} from '../../../categories/useFindCategoriesByType';
-import { useFindProductsByUser } from '../../../products/useFindProductsByUser';
-import { useFindTagsByType } from '../../../tags/useFindTagsByType';
-import { useFindProductItemById } from '../../useFindProductItemById';
+} from "../../../../shared/utils/strings/string";
+import { useFindCategoriesByType } from "../../../categories/useFindCategoriesByType";
+import { useFindProductsByUser } from "../../../products/useFindProductsByUser";
+import { useFindTagsByType } from "../../../tags/useFindTagsByType";
+import { useFindProductItemById } from "../../useFindProductItemById";
 
 const dimensionsFormSchema = z.object({
   size: z.string().optional(),
@@ -525,11 +478,18 @@ export const ProductItemDetail: React.FC<Props> = ({
         <HrCustom className="my-7" />
 
         <Row gutter={[16, 16]}>
-          <Col xs={24} md={8} sm={12} lg={8}>
+          <Col
+            xs={24}
+            md={8}
+            sm={12}
+            lg={8}
+            className="flex flex-col justify-end"
+          >
             <SelectProduct
               label={"Product"}
+              labelClassName="font-normal"
               disabled={!!isEditMode}
-              selectedProductId={watch("productId")}
+              selectedProductId={productItem?.productId ?? watch("productId")}
               onSelectProduct={(selectProduct: IProduct | null) => {
                 setValue("productId", selectProduct?._id ?? "");
               }}
@@ -744,7 +704,7 @@ export const ProductItemDetail: React.FC<Props> = ({
 
         <ContainerTitle title="Dimensions" className="mt-7">
           <Row>
-            <Col xs={24} md={4} sm={6} lg={2}>
+            <Col xs={24} md={4} sm={6} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.size" }}
                 label="Size"
@@ -753,7 +713,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               />
             </Col>
 
-            <Col xs={24} md={4} sm={6} lg={2}>
+            <Col xs={24} md={4} sm={6} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.height" }}
                 label="Height(m)"
@@ -764,7 +724,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               />
             </Col>
 
-            <Col xs={24} md={4} sm={6} lg={2}>
+            <Col xs={24} md={4} sm={6} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.width" }}
                 label="Width(m)"
@@ -775,7 +735,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               />
             </Col>
 
-            <Col xs={24} md={4} sm={6} lg={2}>
+            <Col xs={24} md={4} sm={6} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.length" }}
                 label="Length(m)"
@@ -786,7 +746,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               />
             </Col>
 
-            <Col xs={24} md={4} sm={6} lg={2}>
+            <Col xs={24} md={4} sm={6} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.depth" }}
                 label="Depth(m)"
@@ -797,7 +757,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               />
             </Col>
 
-            <Col xs={24} md={4} sm={6} lg={2}>
+            <Col xs={24} md={4} sm={6} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.diameter" }}
                 label="Diameter(m)"
@@ -808,7 +768,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               />
             </Col>
 
-            <Col xs={24} md={4} sm={6} lg={2}>
+            <Col xs={24} md={4} sm={6} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.thickness" }}
                 label="Thickness(m)"
@@ -819,7 +779,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               />
             </Col>
 
-            <Col xs={24} md={4} sm={6} lg={2}>
+            <Col xs={24} md={4} sm={6} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.volume" }}
                 label="Volume(l)"
@@ -830,7 +790,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               />
             </Col>
 
-            <Col xs={24} md={4} sm={6} lg={2}>
+            <Col xs={24} md={4} sm={6} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.weight" }}
                 label="Weight(kg)"

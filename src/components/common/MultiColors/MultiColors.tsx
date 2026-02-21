@@ -17,12 +17,14 @@ interface Props {
     colors: { value: string }[];
   }>;
   containerExtraHeader?: React.ReactNode;
+  disabled?: boolean;
 }
 
 export const MultiColors: React.FC<Props> = ({
   control,
   errors,
   containerExtraHeader,
+  disabled,
 }) => {
   const { fields, append, remove } = useFieldArray({
     control,
@@ -52,6 +54,7 @@ export const MultiColors: React.FC<Props> = ({
             onClick={addNewColor}
             icon={<PlusOutlined />}
             className="rounded-full"
+            disabled={disabled}
           />
         </div>
       }
@@ -70,6 +73,7 @@ export const MultiColors: React.FC<Props> = ({
               allowClear
               errorMessage={errors.colors?.[index]?.value?.message}
               divClassName="mr-2"
+              disabled={disabled}
             />
 
             <Button
@@ -80,6 +84,7 @@ export const MultiColors: React.FC<Props> = ({
                 removeColor(index);
               }}
               icon={<DeleteOutlined />}
+              disabled={disabled}
             />
 
             <Divider type="vertical" />

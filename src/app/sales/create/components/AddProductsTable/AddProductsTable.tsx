@@ -253,6 +253,8 @@ export const AddProductsTable: React.FC<Props> = ({
       },
     });
 
+    message.success("Product added to sale successfully!");
+
     setSelectedProduct(null);
     setProductItems([]);
     setPendingStoreId(null);

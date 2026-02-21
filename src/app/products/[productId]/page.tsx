@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 import {
   Avatar as AvatarAntd,
@@ -15,52 +15,37 @@ import {
   Tabs,
   Tag,
   Tooltip,
-} from 'antd';
-import moment from 'moment';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import {
-  useParams,
-  useRouter,
-} from 'next/navigation';
+} from "antd";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+import { useParams, useRouter } from "next/navigation";
 
-import { EditOutlined } from '@ant-design/icons';
+import { EditOutlined } from "@ant-design/icons";
 
-import Avatar from '../../../components/common/Avatar/Avatar';
-import ContainerTitle
-  from '../../../components/common/ContainerTitle/ContainerTitle';
-import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
-import {
-  ProductHistoricPricesButton,
-} from '../../../components/common/ProductHistoricPricesButton/ProductHistoricPricesButton';
-import {
-  TagCategoriesCustomAntd,
-} from '../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd';
-import {
-  TagStoresCustomAntd,
-} from '../../../components/common/TagStoresCustomAntd/TagStoresCustomAntd';
-import {
-  TagTagsCustomAntd,
-} from '../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
-import YesNo from '../../../components/common/YesNo/YesNo';
-import Layout from '../../../components/template/Layout/Layout';
-import CategoriesEnum
-  from '../../../shared/business/categories/categories.enum';
-import TagsEnum from '../../../shared/business/tags/tags.enum';
-import Urls from '../../../shared/common/routes-app/routes-app';
-import DatesEnum from '../../../shared/utils/dates/dates.enum';
-import { getImageUrl } from '../../../shared/utils/images/images-url';
-import ImagesEnum from '../../../shared/utils/images/images.enum';
-import { formatToMoneyDecimal } from '../../../shared/utils/strings/string';
-import {
-  useFindCategoriesByType,
-} from '../../categories/useFindCategoriesByType';
-import { SalesBalance } from '../../sales/components/SalesBalance/SalesBalance';
-import { SalesChart } from '../../sales/components/SalesChart/SalesChart';
-import SalesTable from '../../sales/components/SalesTable/SalesTable';
-import { useFindStoresByUser } from '../../stores/useFindStoresByUser';
-import { useFindTagsByType } from '../../tags/useFindTagsByType';
-import { useFindProductById } from '../detail/useFindProductById';
+import Avatar from "../../../components/common/Avatar/Avatar";
+import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
+import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+import { ProductHistoricPricesButton } from "../../../components/common/ProductHistoricPricesButton/ProductHistoricPricesButton";
+import { TagCategoriesCustomAntd } from "../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
+import { TagStoresCustomAntd } from "../../../components/common/TagStoresCustomAntd/TagStoresCustomAntd";
+import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
+import YesNo from "../../../components/common/YesNo/YesNo";
+import Layout from "../../../components/template/Layout/Layout";
+import CategoriesEnum from "../../../shared/business/categories/categories.enum";
+import TagsEnum from "../../../shared/business/tags/tags.enum";
+import Urls from "../../../shared/common/routes-app/routes-app";
+import DatesEnum from "../../../shared/utils/dates/dates.enum";
+import { getImageUrl } from "../../../shared/utils/images/images-url";
+import ImagesEnum from "../../../shared/utils/images/images.enum";
+import { formatToMoneyDecimal } from "../../../shared/utils/strings/string";
+import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
+import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
+import { SalesChart } from "../../sales/components/SalesChart/SalesChart";
+import SalesTable from "../../sales/components/SalesTable/SalesTable";
+import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
+import { useFindTagsByType } from "../../tags/useFindTagsByType";
+import { useFindProductById } from "../detail/useFindProductById";
 
 export default function ProductPage() {
   const router: AppRouterInstance = useRouter();
@@ -436,18 +421,16 @@ export default function ProductPage() {
           items={[
             {
               key: "1",
-              label: "Sales Balance",
-              children: <SalesBalance productId={productId} />,
-            },
-            {
-              key: "2",
               label: "Sales Chart",
               children: (
-                <SalesChart isShowHeader={false} productId={productId} />
+                <>
+                  <SalesBalance productId={productId} />
+                  <SalesChart productId={productId} />
+                </>
               ),
             },
             {
-              key: "3",
+              key: "2",
               label: "Sales Table",
               children: <SalesTable productId={productId} />,
             },

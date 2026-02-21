@@ -1,30 +1,18 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  Button,
-  Divider,
-  Input,
-  message,
-  Tooltip,
-} from 'antd';
+import { Button, Divider, Input, message, Tooltip } from "antd";
 
-import { SendOutlined } from '@ant-design/icons';
+import { SendOutlined } from "@ant-design/icons";
 
-import {
-  serviceMethodsInstance,
-} from '../../../services/social-prices-api/service-methods';
-import {
-  ICustomer,
-} from '../../../shared/business/customers/customer.interface';
+import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
+import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import {
   ISale,
   ISaleBuyer,
   ISaleStore,
-} from '../../../shared/business/sales/sale.interface';
-import {
-  DownloadSalesSummaryButton,
-} from '../DownloadSalesSummaryButton/DownloadSalesSummaryButton';
-import handleClientError from '../handleClientError/handleClientError';
+} from "../../../shared/business/sales/sale.interface";
+import { DownloadSalesSummaryButton } from "../DownloadSalesSummaryButton/DownloadSalesSummaryButton";
+import handleClientError from "../handleClientError/handleClientError";
 
 interface Props {
   sale: ISale | null;
@@ -76,10 +64,9 @@ export const SendSaleSummary: React.FC<Props> = ({ sale }) => {
         <Tooltip title="Enter the email address where you want to send the sale summary">
           <Input
             disabled={isSubmitting}
-            className="mr-1"
+            className="mr-1 flex-1"
             onChange={(e) => setEmailToSend(e.target.value)}
             value={emailToSend}
-            style={{ width: "85%" }}
           />
         </Tooltip>
 

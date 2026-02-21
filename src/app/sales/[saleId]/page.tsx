@@ -510,6 +510,7 @@ export default function SalePage() {
         cancelButtonProps={{ hidden: true }}
         onOk={() => setIsOpenSaleSummaryModal(false)}
         onCancel={() => setIsOpenSaleSummaryModal(false)}
+        width={700}
       >
         <SaleSummary sale={sale} stores={stores} tags={tags} />
       </Modal>

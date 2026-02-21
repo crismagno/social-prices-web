@@ -1921,6 +1921,7 @@ export default function CreateSalePage() {
         cancelButtonProps={{ hidden: true }}
         onOk={() => setIsOpenSaleSummaryModal(false)}
         onCancel={() => setIsOpenSaleSummaryModal(false)}
+        width={700}
       >
         <SaleSummaryByCreate
           formSchema={watch()}

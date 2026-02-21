@@ -954,6 +954,7 @@ const SalesTable: React.FC<Props> = ({
           setSaleSelectedToSummary(null);
           setIsOpenSaleSummaryModal(false);
         }}
+        width={700}
       >
         <SaleSummary sale={saleSelectedToSummary} stores={stores} tags={tags} />
       </Modal>
