@@ -2,17 +2,7 @@
 
 import { useState } from "react";
 
-import {
-  Button,
-  Card,
-  Col,
-  Collapse,
-  Image,
-  Modal,
-  Row,
-  Tag,
-  Tooltip,
-} from "antd";
+import { Button, Card, Col, Image, Modal, Row, Tabs, Tag, Tooltip } from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
@@ -219,27 +209,28 @@ export default function CustomerPage() {
         </Row>
       </Card>
 
-      <SalesBalance customerId={customerId} />
-
-      <Collapse
-        style={{ backgroundColor: "#fff", boxShadow: "none" }}
-        ghost
-        items={[
-          {
-            key: "1",
-            label: <span className="font-semibold text-base">Sales Chart</span>,
-            children: (
-              <SalesChart isShowHeader={false} customerId={customerId} />
-            ),
-          },
-        ]}
-      />
-
-      <Row>
-        <Col xs={24}>
-          <SalesTable customerId={customerId} />{" "}
-        </Col>
-      </Row>
+      <Card className="mt-4">
+        <Tabs
+          defaultActiveKey="1"
+          items={[
+            {
+              key: "1",
+              label: "Sales Chart",
+              children: (
+                <>
+                  <SalesBalance customerId={customerId} />
+                  <SalesChart customerId={customerId} />
+                </>
+              ),
+            },
+            {
+              key: "2",
+              label: "Sales Table",
+              children: <SalesTable customerId={customerId} />,
+            },
+          ]}
+        />
+      </Card>
 
       <Modal
         open={previewOpen}

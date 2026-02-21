@@ -27,12 +27,14 @@ namespace StoresEnum {
     ONLINE = "ONLINE",
     PHYSICAL = "PHYSICAL",
     HYBRID = "HYBRID",
+    OTHER = "OTHER",
   }
 
   export const TypeLabels = {
     [Type.ONLINE]: "Online",
     [Type.PHYSICAL]: "Physical",
     [Type.HYBRID]: "Hybrid",
+    [Type.OTHER]: "Other",
   };
 }
 
