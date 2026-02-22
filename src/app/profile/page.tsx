@@ -24,6 +24,7 @@ import ContainerTitle from "../../components/common/ContainerTitle/ContainerTitl
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import Layout from "../../components/template/Layout/Layout";
 import useAuthData from "../../data/context/auth/useAuthData";
+import useLanguageData from "../../data/context/language/useLanguageData";
 import EmployeesEnum from "../../shared/business/employees/employees.enum";
 import AddressEnum from "../../shared/business/shared/address/address.enum";
 import { IAddress } from "../../shared/business/shared/address/address.interface";
@@ -39,9 +40,8 @@ import { getUserName } from "../../shared/utils/strings/string";
 
 export default function ProfilePage() {
   const { user, employee } = useAuthData();
-
+  const { t } = useLanguageData()!;
   const router: AppRouterInstance = useRouter();
-
   const [previewOpen, setPreviewOpen] = useState<boolean>(false);
 
   if (!user) {
@@ -49,7 +49,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <Layout title="Profile" subtitle="See my information">
+    <Layout title={t("profile.title")} subtitle={t("profile.subtitle")}>
       <Card className="h-min-80 mt-2">
         <Row gutter={[4, 4]}>
           <Col
@@ -63,14 +63,14 @@ export default function ProfilePage() {
               src={user.avatar}
               width={240}
               className="shadow-lg border-none cursor-pointer z-10 rounded-lg mt-10"
-              title="See avatar"
+              title={t("profile.seeAvatar")}
             />
 
             <h3 className="md:text-2xl font-semibold text-blueGray-700 mt-1 mb-1">
               {getUserName(user)}
             </h3>
 
-            <Tooltip title={"My Email, click to send a email"}>
+            <Tooltip title={t("profile.myEmail")}>
               <a
                 href={`mailto:${user.email}`}
                 className="flex items-center text-sm leading-normal text-gray-400 
@@ -81,7 +81,7 @@ export default function ProfilePage() {
             </Tooltip>
 
             {user.username && (
-              <Tooltip title="Username">
+              <Tooltip title={t("auth.username")}>
                 <Tag color="blue" className="mt-2">
                   {user.username}
                 </Tag>
@@ -100,16 +100,16 @@ export default function ProfilePage() {
 
           <Col xs={24} sm={14} md={19}>
             <ContainerTitle
-              title="Information"
+              title={t("profile.information")}
               extraHeader={
                 employee?.level !== EmployeesEnum.Level.EMPLOYEE && (
-                  <Tooltip title="Edit profile">
+                  <Tooltip title={t("profile.editProfile")}>
                     <Button
                       type="success"
                       icon={<EditOutlined />}
                       onClick={() => router.push(Urls.PROFILE_EDIT)}
                     >
-                      Edit
+                      {t("common.edit")}
                     </Button>
                   </Tooltip>
                 )
@@ -122,9 +122,9 @@ export default function ProfilePage() {
                     bordered
                     column={{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3 }}
                     size="small"
-                    title="Authentication"
+                    title={t("profile.authentication")}
                   >
-                    <Descriptions.Item label="Logged By">
+                    <Descriptions.Item label={t("profile.loggedBy")}>
                       <Tag
                         color={
                           UsersEnum.ProviderColors[
@@ -148,7 +148,7 @@ export default function ProfilePage() {
                       </Tag>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Auth Provider">
+                    <Descriptions.Item label={t("profile.authProvider")}>
                       <Tag
                         color={
                           UsersEnum.ProviderColors[
@@ -169,7 +169,7 @@ export default function ProfilePage() {
                       </Tag>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Status">
+                    <Descriptions.Item label={t("common.status")}>
                       <Tag
                         color={
                           UsersEnum.StatusColors[
@@ -193,17 +193,17 @@ export default function ProfilePage() {
                     bordered
                     column={{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3 }}
                     size="small"
-                    title="Personal Information"
+                    title={t("profile.personalInformation")}
                   >
-                    <Descriptions.Item label="Name" span={2}>
+                    <Descriptions.Item label={t("common.name")} span={2}>
                       <span className="font-medium">{user.name || "-"}</span>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Username">
+                    <Descriptions.Item label={t("auth.username")}>
                       <Tag color="blue">{user.username || "-"}</Tag>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Email">
+                    <Descriptions.Item label={t("common.email")}>
                       <a
                         href={`mailto:${user.email}`}
                         className="text-blue-600"
@@ -212,7 +212,7 @@ export default function ProfilePage() {
                       </a>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Birth Date">
+                    <Descriptions.Item label={t("customers.birthDate")}>
                       {user.birthDate
                         ? moment(user.birthDate).format(
                             DatesEnum.Format.DDMMYYY
@@ -220,7 +220,7 @@ export default function ProfilePage() {
                         : "-"}
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Gender">
+                    <Descriptions.Item label={t("customers.gender")}>
                       <Tag
                         color={
                           PersonEnum.GenderColors[
@@ -242,7 +242,7 @@ export default function ProfilePage() {
                 {user.about && (
                   <Col xs={24}>
                     <Descriptions bordered column={1} size="small">
-                      <Descriptions.Item label="About">
+                      <Descriptions.Item label={t("customers.about")}>
                         <div className="max-h-20 overflow-y-auto">
                           {user.about}
                         </div>
@@ -255,7 +255,7 @@ export default function ProfilePage() {
                 {user.phoneNumbers && user.phoneNumbers.length > 0 && (
                   <Col xs={24}>
                     <Descriptions bordered column={1} size="small">
-                      <Descriptions.Item label="Phone Numbers">
+                      <Descriptions.Item label={t("profile.phoneNumbers")}>
                         <div className="flex flex-col gap-2">
                           {user.phoneNumbers.map(
                             (phone: IPhoneNumber, index: number) => (
@@ -308,7 +308,7 @@ export default function ProfilePage() {
                 {user.addresses && user.addresses.length > 0 && (
                   <Col xs={24}>
                     <Descriptions bordered column={1} size="small">
-                      <Descriptions.Item label="Addresses">
+                      <Descriptions.Item label={t("profile.addresses")}>
                         <div className="flex flex-col gap-3">
                           {user.addresses.map(
                             (address: IAddress, index: number) => (
@@ -367,7 +367,7 @@ export default function ProfilePage() {
                     column={{ xs: 1, sm: 2, md: 2, lg: 2, xl: 2 }}
                     size="small"
                   >
-                    <Descriptions.Item label="Created At">
+                    <Descriptions.Item label={t("profile.createdAt")}>
                       {user.createdAt
                         ? moment(user.createdAt).format(
                             DatesEnum.Format.DDMMYYYYhhmmss
@@ -375,7 +375,7 @@ export default function ProfilePage() {
                         : "-"}
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Updated At">
+                    <Descriptions.Item label={t("profile.updatedAt")}>
                       {user.updatedAt
                         ? moment(user.updatedAt).format(
                             DatesEnum.Format.DDMMYYYYhhmmss
