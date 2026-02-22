@@ -128,21 +128,6 @@
     "signUp": "Cadastrar",
     "emailOrUsername": "E-mail ou Usuário"
   },
-  "dashboard": {
-    "title": "Painel",
-    "subtitle": "Informações do painel",
-    "seeStores": "Ver Lojas",
-    "createNewStore": "Criar uma nova Loja",
-    "totalStores": "Total de Lojas: {{count}}",
-    "seeCustomers": "Ver Clientes",
-    "createNewCustomer": "Criar um novo Cliente",
-    "totalCustomers": "Total de Clientes: {{count}}",
-    "seeProducts": "Ver Produtos",
-    "createNewProduct": "Criar um novo Produto",
-    "totalProducts": "Total de Produtos: {{count}}",
-    "seeCategories": "Ver Categorias",
-    "totalCategories": "Total de Categorias: {{count}}"
-  },
   "sales": {
     "salesTable": "Tabela de Vendas",
     "salesChart": "Gráfico de Vendas",

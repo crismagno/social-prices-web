@@ -128,21 +128,6 @@
     "signUp": "Sign Up",
     "emailOrUsername": "Email or Username"
   },
-  "dashboard": {
-    "title": "Dashboard",
-    "subtitle": "Dashboard information",
-    "seeStores": "See Stores",
-    "createNewStore": "Create a new Store",
-    "totalStores": "Total Stores: {{count}}",
-    "seeCustomers": "See Customers",
-    "createNewCustomer": "Create a new Customer",
-    "totalCustomers": "Total Customers: {{count}}",
-    "seeProducts": "See Products",
-    "createNewProduct": "Create a new Product",
-    "totalProducts": "Total Products: {{count}}",
-    "seeCategories": "See Categories",
-    "totalCategories": "Total Categories: {{count}}"
-  },
   "sales": {
     "salesTable": "Sales Table",
     "salesChart": "Sales Chart",
