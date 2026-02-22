@@ -61,7 +61,7 @@ const NavigationItem: React.FC<Props> = ({
       onClick={onClick}
       className={`
       flex items-center justify-center
-       text-slate-800 hover:bg-gray-100 w-28 h-20 
+       text-slate-800 hover:bg-gray-100 w-28 h-20
        dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700
        hover:border-b-2 hover:border-blue-500 transition-all
        ${className} 

@@ -42,12 +42,12 @@ const Navigation: React.FC<Props> = ({}) => {
   return (
     <>
       <div
-        className="max-h-24 flex flex-row
+        className="social-navigation max-h-20 flex flex-row
       shadow-lg shadow-slate-600 dark:shadow-white 
      bg-white dark:bg-gray-800 dark:text-white w-screen overflow-x-auto
       fixed bottom-0 left-0 z-50"
       >
-        <ul className="flex lg:w-5/12">
+        <ul className="flex lg:w-5/12 mb-0">
           <NavigationItem
             text="Profile"
             url={Urls.PROFILE}
@@ -82,11 +82,11 @@ const Navigation: React.FC<Props> = ({}) => {
           <GeneralMenu />
         </ul>
 
-        <div className="flex flex-grow justify-center items-center">
+        <div className="flex flex-grow justify-center items-center mb-0">
           <Logo1 size={50} className="m-0" />
         </div>
 
-        <ul className="flex justify-end items-center lg:w-5/12">
+        <ul className="flex justify-end items-center lg:w-5/12 mb-0">
           <EmployeeProfileButton />
 
           <NavigationItem

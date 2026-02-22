@@ -45,7 +45,7 @@ export const SalesMenu: React.FC<Props> = ({}) => {
       onClick={onClick}
       mode="horizontal"
       items={items}
-      style={{ paddingLeft: 0 }}
+      className="px-0 border-b-0"
     />
   );
 };
