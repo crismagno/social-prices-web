@@ -88,9 +88,7 @@ export const SelectCustomer: React.FC<Props> = ({
         onSelectCustomer?.(selectedCustomer ?? null);
       }}
       defaultValue={null}
-      dropdownStyle={{
-        maxHeight: containerHeight,
-      }}
+      styles={{ popup: { root: { maxHeight: containerHeight } } }}
       listHeight={containerHeight}
       filterOption={false}
       placeholder="Select Customer"

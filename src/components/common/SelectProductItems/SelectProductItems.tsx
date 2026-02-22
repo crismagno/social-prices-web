@@ -96,9 +96,7 @@ const SelectProductItems: React.FC<Props> = ({
           );
           onSelectProductItems?.(selectedProductItems);
         }}
-        dropdownStyle={{
-          maxHeight: containerHeight,
-        }}
+        styles={{ popup: { root: { maxHeight: containerHeight } } }}
         allowClear
         listHeight={containerHeight}
         filterOption={false}

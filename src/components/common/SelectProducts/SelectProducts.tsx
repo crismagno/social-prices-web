@@ -1,24 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import {
-  Avatar,
-  Select,
-} from 'antd';
-import {
-  filter,
-  includes,
-} from 'lodash';
+import { Avatar, Select } from "antd";
+import { filter, includes } from "lodash";
 
-import {
-  useFindProductsByUserTableState,
-} from '../../../app/products/useFindProductsByUserTableState';
-import { IProduct } from '../../../shared/business/products/products.interface';
-import { getImageUrl } from '../../../shared/utils/images/images-url';
-import ImagesEnum from '../../../shared/utils/images/images.enum';
-import { createTableState } from '../../../shared/utils/table/table-state';
-import {
-  ITableStateRequest,
-} from '../../../shared/utils/table/table-state.interface';
+import { useFindProductsByUserTableState } from "../../../app/products/useFindProductsByUserTableState";
+import { IProduct } from "../../../shared/business/products/products.interface";
+import { getImageUrl } from "../../../shared/utils/images/images-url";
+import ImagesEnum from "../../../shared/utils/images/images.enum";
+import { createTableState } from "../../../shared/utils/table/table-state";
+import { ITableStateRequest } from "../../../shared/utils/table/table-state.interface";
 
 const containerHeight: number = 260;
 
@@ -104,9 +94,7 @@ const SelectProducts: React.FC<Props> = ({
           );
           onSelectProducts?.(selectedProducts);
         }}
-        dropdownStyle={{
-          maxHeight: containerHeight,
-        }}
+        styles={{ popup: { root: { maxHeight: containerHeight } } }}
         allowClear
         listHeight={containerHeight}
         filterOption={false}

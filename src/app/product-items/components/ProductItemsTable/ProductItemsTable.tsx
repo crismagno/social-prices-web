@@ -2,7 +2,17 @@
 
 import { RefObject, useEffect, useRef, useState } from "react";
 
-import { Avatar, Button, Card, Col, Image, Row, Tag, Tooltip } from "antd";
+import {
+  Avatar,
+  Button,
+  Card,
+  Col,
+  Image,
+  Row,
+  Space,
+  Tag,
+  Tooltip,
+} from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
@@ -495,7 +505,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               align: "center",
               fixed: "right",
               render: (_: any, productItem: IProductItem) => (
-                <Button.Group>
+                <Space.Compact>
                   <Tooltip title="Edit product item">
                     <Button
                       type="success"
@@ -540,7 +550,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
                       icon={<ShoppingCartOutlined />}
                     />
                   </Tooltip>
-                </Button.Group>
+                </Space.Compact>
               ),
             },
           ]}

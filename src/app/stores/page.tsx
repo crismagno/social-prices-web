@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Button, Card, Tag, Tooltip } from "antd";
+import { Button, Card, Space, Tag, Tooltip } from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
@@ -187,7 +187,7 @@ export default function StoresPage() {
               align: "center",
               render: (_: any, store: IStore) => {
                 return (
-                  <Button.Group>
+                  <Space.Compact>
                     <Tooltip title="Edit store">
                       <Button
                         type="success"
@@ -216,7 +216,7 @@ export default function StoresPage() {
                         icon={<ShoppingCartOutlined />}
                       />
                     </Tooltip>
-                  </Button.Group>
+                  </Space.Compact>
                 );
               },
             },

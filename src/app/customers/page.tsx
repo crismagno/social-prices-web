@@ -2,7 +2,7 @@
 
 import { RefObject, useEffect, useRef, useState } from "react";
 
-import { Button, Card, Tag, Tooltip } from "antd";
+import { Button, Card, Space, Tag, Tooltip } from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
@@ -231,7 +231,7 @@ export default function CustomersPage() {
               align: "center",
               render: (_: any, customer: ICustomer) => {
                 return (
-                  <Button.Group>
+                  <Space.Compact>
                     <Tooltip title="Edit Customer">
                       <Button
                         type="success"
@@ -273,7 +273,7 @@ export default function CustomersPage() {
                         icon={<ShoppingCartOutlined />}
                       />
                     </Tooltip>
-                  </Button.Group>
+                  </Space.Compact>
                 );
               },
             },

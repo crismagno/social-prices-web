@@ -92,7 +92,7 @@ export const SalesChart: React.FC<Props> = ({
       title={title ?? "Sales Chart"}
       extra={isShowButtonCreateSale && <ButtonCreateSale />}
       className={cardClassName}
-      headStyle={{ display: isShowHeader ? "" : "none" }}
+      styles={{ header: { display: isShowHeader ? "" : "none" } }}
     >
       <Row gutter={[8, 8]}>
         <Col md={6}>

@@ -1,6 +1,6 @@
 import { forwardRef, useImperativeHandle, useState } from "react";
 
-import { Button, Card, Tag, Tooltip } from "antd";
+import { Button, Card, Space, Tag, Tooltip } from "antd";
 import moment from "moment";
 
 import { DownloadOutlined } from "@ant-design/icons";
@@ -150,7 +150,7 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
                   const fileUploadId: string = fileUpload._id;
 
                   return (
-                    <Button.Group>
+                    <Space.Compact>
                       <Tooltip title="Download Errors">
                         <Button
                           type="danger"
@@ -166,7 +166,7 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
                           icon={<DownloadOutlined />}
                         />
                       </Tooltip>
-                    </Button.Group>
+                    </Space.Compact>
                   );
                 }
 

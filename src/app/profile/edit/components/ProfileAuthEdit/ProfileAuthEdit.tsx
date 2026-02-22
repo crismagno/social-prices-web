@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "antd";
+import { Button, Space } from "antd";
 
 import ContainerTitle from "../../../../../components/common/ContainerTitle/ContainerTitle";
 import DescriptionInput from "../../../../../components/common/DescriptionInput/DescriptionInput";
@@ -15,10 +15,10 @@ const ProfileAuthEdit: React.FC = () => {
       title="Auth"
       className="mt-20"
       extraHeader={
-        <Button.Group>
+        <Space.Compact>
           <Button href={Urls.UPDATE_EMAIL}>Email</Button>
           <Button href={Urls.RECOVER_PASSWORD}>Password</Button>
-        </Button.Group>
+        </Space.Compact>
       }
     >
       <div className="flex">

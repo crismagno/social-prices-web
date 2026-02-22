@@ -11,6 +11,7 @@ import {
   message,
   Modal,
   Row,
+  Space,
   Tag,
   Tooltip,
 } from "antd";
@@ -806,7 +807,7 @@ const SalesTable: React.FC<Props> = ({
                 const isSaleDeleted: boolean = !!sale.softDelete;
 
                 return (
-                  <Button.Group>
+                  <Space.Compact>
                     {!isSaleDeleted && (
                       <Tooltip title="Edit sale">
                         <Button
@@ -869,7 +870,7 @@ const SalesTable: React.FC<Props> = ({
                         />
                       </Tooltip>
                     )}
-                  </Button.Group>
+                  </Space.Compact>
                 );
               },
             },

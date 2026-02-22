@@ -1,4 +1,4 @@
-import { Button, Card, Col, Empty, Image, Row, Tooltip } from "antd";
+import { Button, Card, Col, Empty, Image, Row, Space, Tooltip } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { find } from "lodash";
 import { Control, UseFormSetValue, UseFormWatch } from "react-hook-form";
@@ -345,7 +345,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                 />
               </Tooltip>
             ) : (
-              <Button.Group>
+              <Space.Compact>
                 <Tooltip title="Use Discount">
                   <Button
                     icon={<CheckOutlined />}
@@ -368,7 +368,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                     }}
                   />
                 </Tooltip>
-              </Button.Group>
+              </Space.Compact>
             )}
           </Col>
 
@@ -438,7 +438,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                   />
                 </Tooltip>
               ) : (
-                <Button.Group>
+                <Space.Compact>
                   <Tooltip title="Use Shipping">
                     <Button
                       icon={<CheckOutlined />}
@@ -461,7 +461,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                       }}
                     />
                   </Tooltip>
-                </Button.Group>
+                </Space.Compact>
               )}
             </Col>
 
@@ -519,7 +519,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                 />
               </Tooltip>
             ) : (
-              <Button.Group>
+              <Space.Compact>
                 <Tooltip title="Use Tax">
                   <Button
                     icon={<CheckOutlined />}
@@ -542,7 +542,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                     }}
                   />
                 </Tooltip>
-              </Button.Group>
+              </Space.Compact>
             )}
           </Col>
 
