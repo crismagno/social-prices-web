@@ -57,7 +57,7 @@ const NavigationItem: React.FC<Props> = ({
   );
 
   return (
-    <li
+    <div
       onClick={onClick}
       className={`
       flex items-center justify-center
@@ -76,7 +76,7 @@ const NavigationItem: React.FC<Props> = ({
           <div className={classNameDefault}>{loadingOrRenderLink}</div>
         )}
       </Tooltip>
-    </li>
+    </div>
   );
 };
 

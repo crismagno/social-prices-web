@@ -162,8 +162,9 @@ export default function NotificationsPage() {
               onChange={handleChangeType}
               className="w-52"
               placeholder="Select a Type"
+              value={tableStateRequest?.filters?.type?.[0]! as any}
             >
-              <Select.Option value={null}>Select a Type</Select.Option>
+              <Select.Option value={""}>Select a Type</Select.Option>
 
               {Object.keys(NotificationsEnum.Type).map((type: string) => (
                 <Select.Option key={type} value={type}>
