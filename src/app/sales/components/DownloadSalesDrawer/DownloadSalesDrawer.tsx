@@ -37,6 +37,7 @@ const formSchema = z.object({
   status: z.array(z.string()),
   paymentStatus: z.array(z.string()),
   storeIds: z.array(z.string()),
+  employeeIds: z.array(z.string()),
   selectedProductIds: z.array(z.string()),
   selectedProductItemIds: z.array(z.string()),
   sortField: z.string().nullable(),
@@ -64,6 +65,7 @@ interface Props {
   customerId?: string;
   productId?: string;
   productItemId?: string;
+  employeeId?: string;
 }
 
 export const DownloadSalesDrawer: React.FC<Props> = ({
@@ -77,6 +79,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
   customerId,
   productId,
   productItemId,
+  employeeId,
 }) => {
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
 
@@ -97,6 +100,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
       paymentStatus: [],
       storeIds: storeId ? [storeId] : [],
       customerIds: customerId ? [customerId] : [],
+      employeeIds: employeeId ? [employeeId] : [],
       selectedProductIds: productId ? [productId] : [],
       selectedProductItemIds: productItemId ? [productItemId] : [],
       sortField: SalesEnum.SortField.createdAt,

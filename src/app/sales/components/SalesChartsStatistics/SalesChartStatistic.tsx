@@ -22,6 +22,8 @@ interface Props {
   };
   title?: string;
   storeId?: string;
+  customerId?: string;
+  employeeId?: string;
   isSalesQuantityMode?: boolean;
 }
 
@@ -31,12 +33,16 @@ export const SalesChartStatistic: React.FC<Props> = ({
   title,
   rangeDate,
   storeId,
+  customerId,
+  employeeId,
   isSalesQuantityMode,
 }) => {
   const [getSalesAnalyticsParams] = useState<IGetSalesAnalyticsParams>({
     periodType,
     rangeDate,
     storesIds: storeId ? [storeId] : undefined,
+    customerIds: customerId ? [customerId] : undefined,
+    employeeIds: employeeId ? [employeeId] : undefined,
     status: SalesEnum.StatusToFilterCharts,
   });
 

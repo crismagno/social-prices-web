@@ -22,6 +22,7 @@ export interface IGetSalesAnalyticsParams {
   paymentStatus?: SalesEnum.PaymentStatus[];
   deliveryTypes?: SalesEnum.DeliveryType[];
   productItemIds?: string[];
+  employeeIds?: string[];
 }
 
 export interface IGetSalesAnalyticsResponse {
@@ -36,6 +37,7 @@ export interface IGetSalesBalanceParams {
   customerId?: string;
   productIds?: string[];
   productItemIds?: string[];
+  employeeIds?: string[];
 }
 
 export interface IGetSalesBalanceResponse {

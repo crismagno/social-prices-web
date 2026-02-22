@@ -86,6 +86,7 @@ interface Props {
   customerId?: string;
   productId?: string;
   productItemId?: string;
+  employeeId?: string;
 }
 
 const SalesTable: React.FC<Props> = ({
@@ -93,6 +94,7 @@ const SalesTable: React.FC<Props> = ({
   customerId,
   productId,
   productItemId,
+  employeeId,
 }) => {
   const { user } = useAuthData();
 
@@ -110,8 +112,10 @@ const SalesTable: React.FC<Props> = ({
         customerIds: customerId ? [customerId] : [],
         productIds: productId ? [productId] : [],
         productItemIds: productItemId ? [productItemId] : [],
+        employeeId: employeeId,
         isActive: [true],
         rangeField: SalesEnum.SortField.createdAt,
+        employeeIds: employeeId ? [employeeId] : [],
       },
     })
   );
@@ -427,6 +431,13 @@ const SalesTable: React.FC<Props> = ({
               tableStateRequestSale.filters = {
                 ...tableStateRequestSale.filters,
                 productItemIds: [productItemId],
+              };
+            }
+
+            if (employeeId) {
+              tableStateRequestSale.filters = {
+                ...tableStateRequestSale.filters,
+                employeeIds: employeeId ? [employeeId] : [],
               };
             }
 
@@ -989,6 +1000,7 @@ const SalesTable: React.FC<Props> = ({
         customerId={customerId}
         productId={productId}
         productItemId={productItemId}
+        employeeId={employeeId}
       />
 
       <Modal

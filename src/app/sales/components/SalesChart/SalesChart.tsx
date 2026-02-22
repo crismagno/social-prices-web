@@ -41,6 +41,7 @@ interface Props {
   storeId?: string;
   productId?: string;
   productItemId?: string;
+  employeeId?: string;
 }
 
 const defaultGetSalesAnalyticsParams = createGetSalesAnalyticsParams({
@@ -60,6 +61,7 @@ export const SalesChart: React.FC<Props> = ({
   storeId,
   productId,
   productItemId,
+  employeeId,
 }) => {
   const [getSalesAnalyticsParams, setGetSalesAnalyticsParams] =
     useState<IGetSalesAnalyticsParams>({
@@ -68,6 +70,7 @@ export const SalesChart: React.FC<Props> = ({
       storesIds: storeId ? [storeId] : undefined,
       productIds: productId ? [productId] : undefined,
       productItemIds: productItemId ? [productItemId] : undefined,
+      employeeIds: employeeId ? [employeeId] : undefined,
     });
 
   const { isLoading, salesAnalytics } = useGetSalesAnalytics(
@@ -299,6 +302,7 @@ export const SalesChart: React.FC<Props> = ({
                   storesIds: storeId ? [storeId] : undefined,
                   productIds: productId ? [productId] : undefined,
                   productItemIds: productItemId ? [productItemId] : undefined,
+                  employeeIds: employeeId ? [employeeId] : undefined,
                 });
               }}
             />

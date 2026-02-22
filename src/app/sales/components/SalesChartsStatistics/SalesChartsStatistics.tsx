@@ -1,25 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import {
-  Card,
-  Col,
-  Divider,
-  Radio,
-  Row,
-} from 'antd';
-import moment from 'moment';
+import { Card, Col, Divider, Radio, Row } from "antd";
+import moment from "moment";
 
-import {
-  DotChartOutlined,
-  LineChartOutlined,
-} from '@ant-design/icons';
+import { DotChartOutlined, LineChartOutlined } from "@ant-design/icons";
 
-import ChartsEnum from '../../../../shared/utils/charts/charts-enum';
-import { SalesChartStatistic } from './SalesChartStatistic';
+import ChartsEnum from "../../../../shared/utils/charts/charts-enum";
+import { SalesChartStatistic } from "./SalesChartStatistic";
 
 interface Props {
   className?: string;
   storeId?: string;
+  customerId?: string;
+  employeeId?: string;
   isShowHeader?: boolean;
   isShowHeaderLabel?: boolean;
 }
@@ -27,6 +20,8 @@ interface Props {
 export const SalesChartsStatistics: React.FC<Props> = ({
   className,
   storeId,
+  customerId,
+  employeeId,
   isShowHeader = true,
   isShowHeaderLabel = true,
 }) => {
@@ -72,6 +67,8 @@ export const SalesChartsStatistics: React.FC<Props> = ({
               height: 300,
             }}
             storeId={storeId}
+            customerId={customerId}
+            employeeId={employeeId}
             title={
               isSalesQuantityMode
                 ? "Sales quantity of day per hour"
@@ -94,6 +91,8 @@ export const SalesChartsStatistics: React.FC<Props> = ({
               height: 300,
             }}
             storeId={storeId}
+            customerId={customerId}
+            employeeId={employeeId}
             title={
               isSalesQuantityMode
                 ? "Sales quantity of month per day"
@@ -116,6 +115,8 @@ export const SalesChartsStatistics: React.FC<Props> = ({
               height: 300,
             }}
             storeId={storeId}
+            customerId={customerId}
+            employeeId={employeeId}
             title={
               isSalesQuantityMode
                 ? "Sales quantity of year per month"
@@ -138,6 +139,8 @@ export const SalesChartsStatistics: React.FC<Props> = ({
               height: 300,
             }}
             storeId={storeId}
+            customerId={customerId}
+            employeeId={employeeId}
             title={
               isSalesQuantityMode
                 ? "Sales quantity of year per last 6 years"

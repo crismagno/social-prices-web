@@ -13,6 +13,7 @@ interface Props {
   customerId?: string;
   productId?: string;
   productItemId?: string;
+  employeeId?: string;
 }
 
 export const SalesBalance: React.FC<Props> = ({
@@ -21,6 +22,7 @@ export const SalesBalance: React.FC<Props> = ({
   customerId,
   productId,
   productItemId,
+  employeeId,
 }) => {
   const [salesBalanceParams] = useState<IGetSalesBalanceParams>({
     rangeDate: {
@@ -31,6 +33,7 @@ export const SalesBalance: React.FC<Props> = ({
     customerId,
     productIds: productId ? [productId] : [],
     productItemIds: productItemId ? [productItemId] : [],
+    employeeIds: employeeId ? [employeeId] : [],
   });
 
   const { salesBalance, isLoading } = useGetSalesBalance(salesBalanceParams);
