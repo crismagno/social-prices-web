@@ -5,7 +5,7 @@ import { Button, ButtonProps } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
-import handleClientError from "../handleClientError/handleClientError";
+import handleClientError from "../HandleClientError/HandleClientError";
 
 interface Props {
   btnProps?: ButtonProps;

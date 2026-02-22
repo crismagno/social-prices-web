@@ -17,7 +17,7 @@ import { serviceMethodsInstance } from "../../../services/social-prices-api/serv
 import IUser from "../../../shared/business/users/user.interface";
 import { getBase64 } from "../../../shared/utils/images/images-helper";
 import { getImageUrl } from "../../../shared/utils/images/images-url";
-import handleClientError from "../handleClientError/handleClientError";
+import handleClientError from "../HandleClientError/HandleClientError";
 
 interface Props {
   isVisible: boolean;

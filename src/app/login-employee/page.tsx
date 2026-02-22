@@ -10,7 +10,7 @@ import { RightOutlined, ShopOutlined } from "@ant-design/icons";
 
 import AuthInput from "../../components/common/AuthInput/AuthInput";
 import Avatar from "../../components/common/Avatar/Avatar";
-import handleClientError from "../../components/common/handleClientError/handleClientError";
+import handleClientError from "../../components/common/HandleClientError/HandleClientError";
 import Loading from "../../components/common/Loading/Loading";
 import { Logo1 } from "../../components/common/Logo/Logo1";
 import useAuthData from "../../data/context/auth/useAuthData";

@@ -16,7 +16,7 @@ import {
   generateNewAddress,
   states,
 } from "../../../../../components/common/Addresses/Addresses";
-import handleClientError from "../../../../../components/common/handleClientError/handleClientError";
+import handleClientError from "../../../../../components/common/HandleClientError/HandleClientError";
 import useAuthData from "../../../../../data/context/auth/useAuthData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/service-methods";
 import AddressEnum from "../../../../../shared/business/shared/address/address.enum";

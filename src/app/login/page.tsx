@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import AuthInput from "../../components/common/AuthInput/AuthInput";
-import handleClientError from "../../components/common/handleClientError/handleClientError";
+import handleClientError from "../../components/common/HandleClientError/HandleClientError";
 import { IconUsers } from "../../components/common/icons/icons";
 import Loading from "../../components/common/Loading/Loading";
 import { Logo1 } from "../../components/common/Logo/Logo1";

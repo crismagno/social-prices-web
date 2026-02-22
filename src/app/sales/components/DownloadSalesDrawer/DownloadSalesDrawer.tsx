@@ -9,7 +9,7 @@ import { DownloadOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
-import handleClientError from "../../../../components/common/handleClientError/handleClientError";
+import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
 import { LabelBadgeCustomAntd } from "../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
 import SelectProductItems from "../../../../components/common/SelectProductItems/SelectProductItems";
 import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";

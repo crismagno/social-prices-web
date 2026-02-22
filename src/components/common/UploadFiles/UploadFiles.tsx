@@ -1,25 +1,16 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  Button,
-  Divider,
-  message,
-  Upload,
-  UploadFile,
-} from 'antd';
-import { RcFile } from 'antd/es/upload';
+import { Button, Divider, message, Upload, UploadFile } from "antd";
+import { RcFile } from "antd/es/upload";
 
-import {
-  InboxOutlined,
-  UploadOutlined,
-} from '@ant-design/icons';
+import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
 
-import { IProduct } from '../../../shared/business/products/products.interface';
-import { DownloadFile } from '../DownloadFile/DownloadFile';
-import handleClientError from '../handleClientError/handleClientError';
-import SelectProduct from '../SelectProduct/SelectProduct';
+import { IProduct } from "../../../shared/business/products/products.interface";
+import { DownloadFile } from "../DownloadFile/DownloadFile";
+import handleClientError from "../HandleClientError/HandleClientError";
+import SelectProduct from "../SelectProduct/SelectProduct";
 
 const { Dragger } = Upload;
 

@@ -13,7 +13,7 @@ import {
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
-import handleClientError from "../../../components/common/handleClientError/handleClientError";
+import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
 import firebaseApp from "../../../services/firebase/config";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import {

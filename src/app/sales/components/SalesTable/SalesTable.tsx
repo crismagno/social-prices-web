@@ -32,7 +32,7 @@ import {
 import { ButtonCreateSale } from "../../../../components/common/ButtonCreateSale/ButtonCreateSale";
 import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
 import { DeliveryAddressMapButton } from "../../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton";
-import handleClientError from "../../../../components/common/handleClientError/handleClientError";
+import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
 import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
 import { SaleSummary } from "../../../../components/common/SaleSummary/SaleSummary";

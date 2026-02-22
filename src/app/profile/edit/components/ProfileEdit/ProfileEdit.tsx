@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import ContainerTitle from "../../../../../components/common/ContainerTitle/ContainerTitle";
 import { FormSelectOption } from "../../../../../components/common/FormSelect/FormSelect";
-import handleClientError from "../../../../../components/common/handleClientError/handleClientError";
+import handleClientError from "../../../../../components/common/HandleClientError/HandleClientError";
 import { InputCustomAntd } from "../../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";

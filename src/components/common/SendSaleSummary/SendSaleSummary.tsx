@@ -12,7 +12,7 @@ import {
   ISaleStore,
 } from "../../../shared/business/sales/sale.interface";
 import { DownloadSalesSummaryButton } from "../DownloadSalesSummaryButton/DownloadSalesSummaryButton";
-import handleClientError from "../handleClientError/handleClientError";
+import handleClientError from "../HandleClientError/HandleClientError";
 
 interface Props {
   sale: ISale | null;

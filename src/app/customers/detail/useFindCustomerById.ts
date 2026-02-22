@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import handleClientError from "../../../components/common/handleClientError/handleClientError";
+import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 

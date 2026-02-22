@@ -1,3 +1,5 @@
+"use client";
+
 import { message } from "antd";
 
 const handleClientError = (

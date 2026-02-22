@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, InputHTMLAttributes, useState } from "react";
+import { useState } from "react";
 
 import { IconEye, IconEyeSlash } from "../icons/icons";
 
@@ -13,10 +13,7 @@ interface Props {
   useShowPassword?: boolean;
 }
 
-const AuthInput: React.FC<
-  | Props
-  | DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
-> = ({
+const AuthInput: React.FC<Props> = ({
   label,
   type,
   value,

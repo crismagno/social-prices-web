@@ -55,7 +55,7 @@ import {
   TAddressFormSchema,
 } from "../../../components/common/Addresses/Addresses";
 import { DeliveryAddressMapButton } from "../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton";
-import handleClientError from "../../../components/common/handleClientError/handleClientError";
+import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
 import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
 import { LabelBadgeCustomAntd } from "../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
 import Loading from "../../../components/common/Loading/Loading";

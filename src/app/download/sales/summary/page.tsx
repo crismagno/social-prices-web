@@ -10,7 +10,7 @@ import {
 } from "next/dist/client/components/navigation";
 
 import Avatar from "../../../../components/common/Avatar/Avatar";
-import handleClientError from "../../../../components/common/handleClientError/handleClientError";
+import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
 import { Logo1 } from "../../../../components/common/Logo/Logo1";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";

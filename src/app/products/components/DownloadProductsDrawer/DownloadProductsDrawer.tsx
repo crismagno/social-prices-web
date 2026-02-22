@@ -1,49 +1,24 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  Button,
-  Card,
-  Col,
-  Drawer,
-  Row,
-  Select,
-} from 'antd';
-import {
-  SubmitHandler,
-  useForm,
-} from 'react-hook-form';
-import { z } from 'zod';
+import { Button, Card, Col, Drawer, Row, Select } from "antd";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { DownloadOutlined } from '@ant-design/icons';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { DownloadOutlined } from "@ant-design/icons";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import handleClientError
-  from '../../../../components/common/handleClientError/handleClientError';
-import {
-  TagCategoryCustomAntd,
-} from '../../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd';
-import {
-  TagTagCustomAntd,
-} from '../../../../components/common/TagTagCustomAntd/TagTagCustomAntd';
-import {
-  InputCustomAntd,
-} from '../../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
-import {
-  SelectCustomAntd,
-} from '../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
-import {
-  serviceMethodsInstance,
-} from '../../../../services/social-prices-api/service-methods';
-import {
-  ICategory,
-} from '../../../../shared/business/categories/categories.interface';
-import ProductsEnum from '../../../../shared/business/products/products.enum';
-import {
-  IFiltersDownloadProducts,
-} from '../../../../shared/business/products/products.type';
-import { IStore } from '../../../../shared/business/stores/stores.interface';
-import { ITag } from '../../../../shared/business/tags/tags.interface';
-import TableStateEnum from '../../../../shared/utils/table/table-state.enum';
+import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
+import { TagCategoryCustomAntd } from "../../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
+import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
+import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
+import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
+import { ICategory } from "../../../../shared/business/categories/categories.interface";
+import ProductsEnum from "../../../../shared/business/products/products.enum";
+import { IFiltersDownloadProducts } from "../../../../shared/business/products/products.type";
+import { IStore } from "../../../../shared/business/stores/stores.interface";
+import { ITag } from "../../../../shared/business/tags/tags.interface";
+import TableStateEnum from "../../../../shared/utils/table/table-state.enum";
 
 const formSchema = z.object({
   search: z.string().nullable(),

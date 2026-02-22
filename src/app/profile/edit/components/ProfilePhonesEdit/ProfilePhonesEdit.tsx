@@ -9,7 +9,7 @@ import { z } from "zod";
 import { SaveOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import handleClientError from "../../../../../components/common/handleClientError/handleClientError";
+import handleClientError from "../../../../../components/common/HandleClientError/HandleClientError";
 import {
   generateNewPhoneNumber,
   phoneNumberFormSchema,

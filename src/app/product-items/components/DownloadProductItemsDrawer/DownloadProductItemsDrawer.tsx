@@ -8,7 +8,7 @@ import { z } from "zod";
 import { DownloadOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import handleClientError from "../../../../components/common/handleClientError/handleClientError";
+import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
 import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
 import { TagCategoryCustomAntd } from "../../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
 import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";

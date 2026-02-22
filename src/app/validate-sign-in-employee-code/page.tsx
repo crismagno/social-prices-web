@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 import Avatar from "../../components/common/Avatar/Avatar";
 import ButtonCommon from "../../components/common/ButtonCommon/ButtonCommon";
-import handleClientError from "../../components/common/handleClientError/handleClientError";
+import handleClientError from "../../components/common/HandleClientError/HandleClientError";
 import HrCustom from "../../components/common/HrCustom/HrCustom";
 import { Logo1 } from "../../components/common/Logo/Logo1";
 import useAuthData from "../../data/context/auth/useAuthData";

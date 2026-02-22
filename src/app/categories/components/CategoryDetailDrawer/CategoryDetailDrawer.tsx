@@ -6,7 +6,7 @@ import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import handleClientError from "../../../../components/common/handleClientError/handleClientError";
+import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
 import HrCustom from "../../../../components/common/HrCustom/HrCustom";
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
 import { ColorPickerCustomAntd } from "../../../../components/custom/antd/ColorPickerCustomAntd/ColorPickerCustomAntd";

@@ -1,45 +1,22 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  Button,
-  Card,
-  Col,
-  Drawer,
-  Row,
-  Select,
-  Tag,
-} from 'antd';
-import {
-  SubmitHandler,
-  useForm,
-} from 'react-hook-form';
-import { z } from 'zod';
+import { Button, Card, Col, Drawer, Row, Select, Tag } from "antd";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { DownloadOutlined } from '@ant-design/icons';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { DownloadOutlined } from "@ant-design/icons";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import handleClientError
-  from '../../../../components/common/handleClientError/handleClientError';
-import {
-  TagTagCustomAntd,
-} from '../../../../components/common/TagTagCustomAntd/TagTagCustomAntd';
-import {
-  InputCustomAntd,
-} from '../../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
-import {
-  SelectCustomAntd,
-} from '../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
-import {
-  serviceMethodsInstance,
-} from '../../../../services/social-prices-api/service-methods';
-import EmployeesEnum
-  from '../../../../shared/business/employees/employees.enum';
-import {
-  IFiltersDownloadEmployees,
-} from '../../../../shared/business/employees/employees.types';
-import PersonEnum from '../../../../shared/business/shared/person/person.enum';
-import { ITag } from '../../../../shared/business/tags/tags.interface';
-import TableStateEnum from '../../../../shared/utils/table/table-state.enum';
+import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
+import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
+import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
+import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
+import EmployeesEnum from "../../../../shared/business/employees/employees.enum";
+import { IFiltersDownloadEmployees } from "../../../../shared/business/employees/employees.types";
+import PersonEnum from "../../../../shared/business/shared/person/person.enum";
+import { ITag } from "../../../../shared/business/tags/tags.interface";
+import TableStateEnum from "../../../../shared/utils/table/table-state.enum";
 
 const formSchema = z.object({
   search: z.string().nullable(),

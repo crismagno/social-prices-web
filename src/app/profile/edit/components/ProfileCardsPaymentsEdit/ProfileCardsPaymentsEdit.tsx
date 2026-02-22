@@ -15,7 +15,7 @@ import FormInput from "../../../../../components/common/FormInput/FormInput";
 import FormSelect, {
   FormSelectOption,
 } from "../../../../../components/common/FormSelect/FormSelect";
-import handleClientError from "../../../../../components/common/handleClientError/handleClientError";
+import handleClientError from "../../../../../components/common/HandleClientError/HandleClientError";
 import {
   IconPlus,
   IconTrash,

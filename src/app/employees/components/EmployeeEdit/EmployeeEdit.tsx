@@ -32,7 +32,7 @@ import {
   states,
 } from "../../../../components/common/Addresses/Addresses";
 import Avatar from "../../../../components/common/Avatar/Avatar";
-import handleClientError from "../../../../components/common/handleClientError/handleClientError";
+import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
 import HrCustom from "../../../../components/common/HrCustom/HrCustom";
 import ImageModal from "../../../../components/common/ImageModal/ImageModal";
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";

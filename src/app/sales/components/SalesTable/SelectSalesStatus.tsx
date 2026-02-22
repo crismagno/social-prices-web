@@ -10,7 +10,7 @@ import {
   QuestionCircleTwoTone,
 } from "@ant-design/icons";
 
-import handleClientError from "../../../../components/common/handleClientError/handleClientError";
+import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
 import { LabelBadgeCustomAntd } from "../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import { ISale } from "../../../../shared/business/sales/sale.interface";
