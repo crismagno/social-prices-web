@@ -84,7 +84,7 @@ export default function CustomerPage() {
 
   return (
     <Layout
-      subtitle={t("customers.customerProfileSubtitle", { name: customer.name })}
+      subtitle={`${t("customers.customerProfileSubtitle")} - ${customer.name}`}
       title={t("customers.customerProfile")}
       hasBackButton
     >

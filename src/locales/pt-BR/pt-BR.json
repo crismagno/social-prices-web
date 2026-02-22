@@ -205,7 +205,7 @@
     "customerUpdatedSuccessfully": "Seu cliente foi atualizado com sucesso!",
     "customerNotFoundToUpdate": "Cliente não encontrado para atualizar!",
     "customerProfile": "Perfil do Cliente",
-    "customerProfileSubtitle": "Perfil do cliente {{name}}",
+    "customerProfileSubtitle": "Perfil do cliente",
     "customerEmailTooltip": "E-mail do cliente, clique para enviar um e-mail",
     "uniqueUsername": "Nome de usuário único",
     "uploadFilename": "Nome do Arquivo de Upload"
