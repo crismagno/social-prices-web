@@ -1,20 +1,35 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Button, List, Tooltip } from "antd";
-import { reduce } from "lodash";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter } from "next/navigation";
+import {
+  Button,
+  List,
+  Tooltip,
+} from 'antd';
+import { reduce } from 'lodash';
+import {
+  AppRouterInstance,
+} from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useRouter } from 'next/navigation';
 
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import { ShoppingCartOutlined } from '@ant-design/icons';
 
-import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
-import SelectByQuantityOrTotal from "../../../../components/common/SelectByQuantityOrTotal/SelectByQuantityOrTotal";
-import { IGetSalesAnalyticsResponse } from "../../../../shared/business/sales/sales.type";
-import CommonEnum from "../../../../shared/common/enums/common.enum";
-import { ITotalQuantity } from "../../../../shared/common/interfaces/global.interface";
-import Urls from "../../../../shared/common/routes-app/routes-app";
-import { IChartDataProductItem } from "../../../../shared/utils/charts/charts-types";
-import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
+import {
+  ImageOrDefault,
+} from '../../../../components/common/ImageOrDefault/ImageOrDefault';
+import SelectByQuantityOrTotal
+  from '../../../../components/common/SelectByQuantityOrTotal/SelectByQuantityOrTotal';
+import {
+  IGetSalesAnalyticsResponse,
+} from '../../../../shared/business/sales/sales.type';
+import CommonEnum from '../../../../shared/common/enums/common.enum';
+import {
+  ITotalQuantity,
+} from '../../../../shared/common/interfaces/global.interface';
+import Urls from '../../../../shared/common/routes-app/routes-app';
+import {
+  IChartDataProductItem,
+} from '../../../../shared/utils/charts/charts-types';
+import { formatToMoneyDecimal } from '../../../../shared/utils/strings/string';
 
 interface Props {
   salesAnalytics: IGetSalesAnalyticsResponse | null;

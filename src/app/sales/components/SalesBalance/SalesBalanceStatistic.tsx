@@ -1,20 +1,32 @@
-import React from "react";
+import React from 'react';
 
-import { Card, Divider, Tooltip } from "antd";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter } from "next/navigation";
+import {
+  Card,
+  Divider,
+  Tooltip,
+} from 'antd';
+import {
+  AppRouterInstance,
+} from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useRouter } from 'next/navigation';
 
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import { ShoppingCartOutlined } from '@ant-design/icons';
 
-import { AvatarDescription } from "../../../../components/common/AvatarDescription/AvatarDescription";
-import { IProductItem } from "../../../../shared/business/product-items/product-items.interface";
-import { IProduct } from "../../../../shared/business/products/products.interface";
+import {
+  AvatarDescription,
+} from '../../../../components/common/AvatarDescription/AvatarDescription';
+import {
+  IProductItem,
+} from '../../../../shared/business/product-items/product-items.interface';
+import {
+  IProduct,
+} from '../../../../shared/business/products/products.interface';
 import {
   IGetSalesBalanceTotalsResponse,
   IGetSalesProductBalanceResponse,
-} from "../../../../shared/business/sales/sales.type";
-import Urls from "../../../../shared/common/routes-app/routes-app";
-import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
+} from '../../../../shared/business/sales/sales.type';
+import Urls from '../../../../shared/common/routes-app/routes-app';
+import { formatToMoneyDecimal } from '../../../../shared/utils/strings/string';
 
 interface Props {
   className?: string;

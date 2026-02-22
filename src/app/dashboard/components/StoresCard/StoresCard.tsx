@@ -1,14 +1,23 @@
 "use client";
 
-import { Card, Tooltip } from "antd";
-import Meta from "antd/es/card/Meta";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter } from "next/navigation";
+import {
+  Card,
+  Tooltip,
+} from 'antd';
+import Meta from 'antd/es/card/Meta';
+import {
+  AppRouterInstance,
+} from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useRouter } from 'next/navigation';
 
-import { HomeOutlined, PlusOutlined, TabletOutlined } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  PlusOutlined,
+  TabletOutlined,
+} from '@ant-design/icons';
 
-import Urls from "../../../../shared/common/routes-app/routes-app";
-import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
+import Urls from '../../../../shared/common/routes-app/routes-app';
+import { useFindStoresByUser } from '../../../stores/useFindStoresByUser';
 
 export const StoresCard: React.FC = () => {
   const router: AppRouterInstance = useRouter();

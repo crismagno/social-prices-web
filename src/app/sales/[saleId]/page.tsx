@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
 
 import {
   Button,
@@ -12,45 +12,66 @@ import {
   Row,
   Tag,
   Tooltip,
-} from "antd";
-import TextArea from "antd/es/input/TextArea";
-import moment from "moment";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
-import { useParams, useRouter } from "next/navigation";
+} from 'antd';
+import TextArea from 'antd/es/input/TextArea';
+import moment from 'moment';
+import {
+  AppRouterInstance,
+} from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
+import {
+  useParams,
+  useRouter,
+} from 'next/navigation';
 
 import {
   EditOutlined,
   EyeOutlined,
   QuestionCircleTwoTone,
   TableOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 
-import { DeliveryAddressMapButton } from "../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton";
-import Description from "../../../components/common/Description/Description";
-import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
-import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
-import { SaleSummary } from "../../../components/common/SaleSummary/SaleSummary";
-import Layout from "../../../components/template/Layout/Layout";
-import { ICustomer } from "../../../shared/business/customers/customer.interface";
-import { ISaleBuyer } from "../../../shared/business/sales/sale.interface";
-import SalesEnum from "../../../shared/business/sales/sales.enum";
-import { IAddress } from "../../../shared/business/shared/address/address.interface";
-import PersonEnum from "../../../shared/business/shared/person/person.enum";
-import TagsEnum from "../../../shared/business/tags/tags.enum";
-import Urls from "../../../shared/common/routes-app/routes-app";
-import DatesEnum from "../../../shared/utils/dates/dates.enum";
-import { addressTypesToString } from "../../../shared/utils/strings/string";
-import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
-import { useFindTagsByType } from "../../tags/useFindTagsByType";
-import { SaleExtraInfo } from "../components/SaleExtraInfo/SaleExtraInfo";
-import { SaleFilesList } from "../components/SaleFilesList/SaleFilesList";
-import { SalePaymentsReadOnly } from "../components/SalePaymentsReadOnly/SalePaymentsReadOnly";
-import { SaleSelectedProducts } from "../components/SaleSelectedProducts/SaleSelectedProducts";
-import SalesTable from "../components/SalesTable/SalesTable";
-import { SaleStoresListCard } from "../components/SaleStoresListCard/SaleStoresListCard";
-import { SaleTagsList } from "../components/SaleTagsList/SaleTagsList";
-import { useFindSaleFilledByIdOrFail } from "../useFindSaleFilledByIdOrFail";
+import {
+  DeliveryAddressMapButton,
+} from '../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton';
+import Description from '../../../components/common/Description/Description';
+import {
+  ImageOrDefault,
+} from '../../../components/common/ImageOrDefault/ImageOrDefault';
+import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
+import {
+  SaleSummary,
+} from '../../../components/common/SaleSummary/SaleSummary';
+import Layout from '../../../components/template/Layout/Layout';
+import {
+  ICustomer,
+} from '../../../shared/business/customers/customer.interface';
+import { ISaleBuyer } from '../../../shared/business/sales/sale.interface';
+import SalesEnum from '../../../shared/business/sales/sales.enum';
+import {
+  IAddress,
+} from '../../../shared/business/shared/address/address.interface';
+import PersonEnum from '../../../shared/business/shared/person/person.enum';
+import TagsEnum from '../../../shared/business/tags/tags.enum';
+import Urls from '../../../shared/common/routes-app/routes-app';
+import DatesEnum from '../../../shared/utils/dates/dates.enum';
+import { addressTypesToString } from '../../../shared/utils/strings/string';
+import { useFindStoresByUser } from '../../stores/useFindStoresByUser';
+import { useFindTagsByType } from '../../tags/useFindTagsByType';
+import { SaleExtraInfo } from '../components/SaleExtraInfo/SaleExtraInfo';
+import { SaleFilesList } from '../components/SaleFilesList/SaleFilesList';
+import {
+  SalePaymentsReadOnly,
+} from '../components/SalePaymentsReadOnly/SalePaymentsReadOnly';
+import {
+  SaleSelectedProducts,
+} from '../components/SaleSelectedProducts/SaleSelectedProducts';
+import SalesTable from '../components/SalesTable/SalesTable';
+import {
+  SaleStoresListCard,
+} from '../components/SaleStoresListCard/SaleStoresListCard';
+import { SaleTagsList } from '../components/SaleTagsList/SaleTagsList';
+import { useFindSaleFilledByIdOrFail } from '../useFindSaleFilledByIdOrFail';
 
 export default function SalePage() {
   const router: AppRouterInstance = useRouter();

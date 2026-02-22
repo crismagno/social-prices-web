@@ -1,39 +1,58 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Button, Card, Space, Tag, Tooltip } from "antd";
-import moment from "moment";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter } from "next/navigation";
+import {
+  Button,
+  Card,
+  Space,
+  Tag,
+  Tooltip,
+} from 'antd';
+import moment from 'moment';
+import {
+  AppRouterInstance,
+} from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useRouter } from 'next/navigation';
 
 import {
   EditOutlined,
   EnterOutlined,
   PlusOutlined,
   ShoppingCartOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 
-import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
-import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
-import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
-import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
-import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
-import Layout from "../../components/template/Layout/Layout";
-import CategoriesEnum from "../../shared/business/categories/categories.enum";
-import { ICategory } from "../../shared/business/categories/categories.interface";
-import StoresEnum from "../../shared/business/stores/stores.enum";
-import { IStore } from "../../shared/business/stores/stores.interface";
-import TagsEnum from "../../shared/business/tags/tags.enum";
-import { ITag } from "../../shared/business/tags/tags.interface";
-import Urls from "../../shared/common/routes-app/routes-app";
-import { sortArray } from "../../shared/utils/array/array-functions";
-import DatesEnum from "../../shared/utils/dates/dates.enum";
-import { createTableState } from "../../shared/utils/table/table-state";
-import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
-import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";
-import { useFindTagsByType } from "../tags/useFindTagsByType";
-import { useFindStoresByUserTableState } from "./useFindStoresByUserTableState";
+import {
+  ImageOrDefault,
+} from '../../components/common/ImageOrDefault/ImageOrDefault';
+import LoadingFull from '../../components/common/LoadingFull/LoadingFull';
+import {
+  TagCategoriesCustomAntd,
+} from '../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd';
+import {
+  TagTagsCustomAntd,
+} from '../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
+import TableCustomAntd2
+  from '../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
+import Layout from '../../components/template/Layout/Layout';
+import CategoriesEnum from '../../shared/business/categories/categories.enum';
+import {
+  ICategory,
+} from '../../shared/business/categories/categories.interface';
+import StoresEnum from '../../shared/business/stores/stores.enum';
+import { IStore } from '../../shared/business/stores/stores.interface';
+import TagsEnum from '../../shared/business/tags/tags.enum';
+import { ITag } from '../../shared/business/tags/tags.interface';
+import Urls from '../../shared/common/routes-app/routes-app';
+import { sortArray } from '../../shared/utils/array/array-functions';
+import DatesEnum from '../../shared/utils/dates/dates.enum';
+import { createTableState } from '../../shared/utils/table/table-state';
+import {
+  ITableStateRequest,
+} from '../../shared/utils/table/table-state.interface';
+import { useFindCategoriesByType } from '../categories/useFindCategoriesByType';
+import { useFindTagsByType } from '../tags/useFindTagsByType';
+import { useFindStoresByUserTableState } from './useFindStoresByUserTableState';
 
 export default function StoresPage() {
   const router: AppRouterInstance = useRouter();

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
 
 import {
   Button,
@@ -13,34 +13,47 @@ import {
   Tabs,
   Tag,
   Tooltip,
-} from "antd";
-import moment from "moment";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
-import { useParams, useRouter } from "next/navigation";
+} from 'antd';
+import moment from 'moment';
+import {
+  AppRouterInstance,
+} from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
+import {
+  useParams,
+  useRouter,
+} from 'next/navigation';
 
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined } from '@ant-design/icons';
 
-import Avatar from "../../../components/common/Avatar/Avatar";
-import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
-import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
-import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
-import Layout from "../../../components/template/Layout/Layout";
-import AddressEnum from "../../../shared/business/shared/address/address.enum";
-import { IAddress } from "../../../shared/business/shared/address/address.interface";
-import PersonEnum from "../../../shared/business/shared/person/person.enum";
-import PhoneNumberEnum from "../../../shared/business/shared/phone/phone-number.enum";
-import { IPhoneNumber } from "../../../shared/business/shared/phone/phone-number.interface";
-import TagsEnum from "../../../shared/business/tags/tags.enum";
-import Urls from "../../../shared/common/routes-app/routes-app";
-import DatesEnum from "../../../shared/utils/dates/dates.enum";
-import { getImageUrl } from "../../../shared/utils/images/images-url";
-import ImagesEnum from "../../../shared/utils/images/images.enum";
-import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
-import { SalesChart } from "../../sales/components/SalesChart/SalesChart";
-import SalesTable from "../../sales/components/SalesTable/SalesTable";
-import { useFindTagsByType } from "../../tags/useFindTagsByType";
-import { useFindCustomerById } from "../detail/useFindCustomerById";
+import Avatar from '../../../components/common/Avatar/Avatar';
+import ContainerTitle
+  from '../../../components/common/ContainerTitle/ContainerTitle';
+import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
+import {
+  TagTagsCustomAntd,
+} from '../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
+import Layout from '../../../components/template/Layout/Layout';
+import AddressEnum from '../../../shared/business/shared/address/address.enum';
+import {
+  IAddress,
+} from '../../../shared/business/shared/address/address.interface';
+import PersonEnum from '../../../shared/business/shared/person/person.enum';
+import PhoneNumberEnum
+  from '../../../shared/business/shared/phone/phone-number.enum';
+import {
+  IPhoneNumber,
+} from '../../../shared/business/shared/phone/phone-number.interface';
+import TagsEnum from '../../../shared/business/tags/tags.enum';
+import Urls from '../../../shared/common/routes-app/routes-app';
+import DatesEnum from '../../../shared/utils/dates/dates.enum';
+import { getImageUrl } from '../../../shared/utils/images/images-url';
+import ImagesEnum from '../../../shared/utils/images/images.enum';
+import { SalesBalance } from '../../sales/components/SalesBalance/SalesBalance';
+import { SalesChart } from '../../sales/components/SalesChart/SalesChart';
+import SalesTable from '../../sales/components/SalesTable/SalesTable';
+import { useFindTagsByType } from '../../tags/useFindTagsByType';
+import { useFindCustomerById } from '../detail/useFindCustomerById';
 
 export default function CustomerPage() {
   const router: AppRouterInstance = useRouter();

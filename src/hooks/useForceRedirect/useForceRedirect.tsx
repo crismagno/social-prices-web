@@ -1,14 +1,16 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-import Cookies from "js-cookie";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter } from "next/navigation";
+import Cookies from 'js-cookie';
+import {
+  AppRouterInstance,
+} from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useRouter } from 'next/navigation';
 
-import useAuthData from "../../data/context/auth/useAuthData";
-import CookiesEnum from "../../shared/common/cookies/cookies.enum";
-import Urls from "../../shared/common/routes-app/routes-app";
+import useAuthData from '../../data/context/auth/useAuthData';
+import CookiesEnum from '../../shared/common/cookies/cookies.enum';
+import Urls from '../../shared/common/routes-app/routes-app';
 
 const useForceRedirect = (routeToRedirect: string = Urls.LOGIN): boolean => {
   const { user } = useAuthData();

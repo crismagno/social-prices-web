@@ -10,16 +10,26 @@ import {
   message,
   Row,
   Tooltip,
-} from "antd";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter, useSearchParams } from "next/navigation";
+} from 'antd';
+import {
+  AppRouterInstance,
+} from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import {
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 
-import { CheckCircleTwoTone, EnterOutlined } from "@ant-design/icons";
+import {
+  CheckCircleTwoTone,
+  EnterOutlined,
+} from '@ant-design/icons';
 
-import Layout from "../../../components/template/Layout/Layout";
-import Urls from "../../../shared/common/routes-app/routes-app";
-import { ProductItemDetail } from "../components/ProductItemDetail/ProductItemDetail";
-import { useFindProductItemById } from "../useFindProductItemById";
+import Layout from '../../../components/template/Layout/Layout';
+import Urls from '../../../shared/common/routes-app/routes-app';
+import {
+  ProductItemDetail,
+} from '../components/ProductItemDetail/ProductItemDetail';
+import { useFindProductItemById } from '../useFindProductItemById';
 
 export default function ProductItemDetailPage() {
   const { modal } = App.useApp();

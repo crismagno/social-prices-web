@@ -1,6 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from 'react';
 
 import {
   Button,
@@ -12,21 +15,26 @@ import {
   Select,
   Tooltip,
   UploadFile,
-} from "antd";
-import { RcFile } from "antd/es/upload";
-import { isArray } from "class-validator";
-import moment from "moment";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+} from 'antd';
+import { RcFile } from 'antd/es/upload';
+import { isArray } from 'class-validator';
+import moment from 'moment';
+import {
+  AppRouterInstance,
+} from 'next/dist/shared/lib/app-router-context.shared-runtime.shared-runtime';
 import {
   ReadonlyURLSearchParams,
   useRouter,
   useSearchParams,
-} from "next/navigation";
-import { SubmitHandler, useForm } from "react-hook-form";
-import z from "zod";
+} from 'next/navigation';
+import {
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
+import z from 'zod';
 
-import { EnterOutlined } from "@ant-design/icons";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { EnterOutlined } from '@ant-design/icons';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
   Addresses,
@@ -34,40 +42,59 @@ import {
   countries,
   generateNewAddress,
   states,
-} from "../../../components/common/Addresses/Addresses";
-import Avatar from "../../../components/common/Avatar/Avatar";
-import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
-import HrCustom from "../../../components/common/HrCustom/HrCustom";
-import ImageModal from "../../../components/common/ImageModal/ImageModal";
-import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+} from '../../../components/common/Addresses/Addresses';
+import Avatar from '../../../components/common/Avatar/Avatar';
+import handleClientError
+  from '../../../components/common/HandleClientError/HandleClientError';
+import HrCustom from '../../../components/common/HrCustom/HrCustom';
+import ImageModal from '../../../components/common/ImageModal/ImageModal';
+import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
 import {
   generateNewPhoneNumber,
   phoneNumberFormSchema,
   PhoneNumbers,
-} from "../../../components/common/PhoneNumbers/PhoneNumbers";
-import { TagTagCustomAntd } from "../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
-import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
-import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
-import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
-import Layout from "../../../components/template/Layout/Layout";
-import useLanguageData from "../../../data/context/language/useLanguageData";
-import CreateCustomerDto from "../../../services/social-prices-api/customers/dto/createCustomer.dto";
-import UpdateCustomerDto from "../../../services/social-prices-api/customers/dto/updateCustomer.dto";
-import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
-import { ICustomer } from "../../../shared/business/customers/customer.interface";
-import AddressEnum from "../../../shared/business/shared/address/address.enum";
-import { IAddress } from "../../../shared/business/shared/address/address.interface";
-import PersonEnum from "../../../shared/business/shared/person/person.enum";
-import { IPhoneNumber } from "../../../shared/business/shared/phone/phone-number.interface";
-import TagsEnum from "../../../shared/business/tags/tags.enum";
-import { ITag } from "../../../shared/business/tags/tags.interface";
-import Urls from "../../../shared/common/routes-app/routes-app";
-import { sortArray } from "../../../shared/utils/array/array-functions";
-import DatesEnum from "../../../shared/utils/dates/dates.enum";
-import { getFileUrl } from "../../../shared/utils/images/images-helper";
-import { getImageUrl } from "../../../shared/utils/images/images-url";
-import { useFindTagsByType } from "../../tags/useFindTagsByType";
-import { useFindCustomerById } from "./useFindCustomerById";
+} from '../../../components/common/PhoneNumbers/PhoneNumbers';
+import {
+  TagTagCustomAntd,
+} from '../../../components/common/TagTagCustomAntd/TagTagCustomAntd';
+import {
+  InputCustomAntd,
+} from '../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
+import {
+  SelectCustomAntd,
+} from '../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
+import {
+  TextareaCustomAntd,
+} from '../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd';
+import Layout from '../../../components/template/Layout/Layout';
+import useLanguageData from '../../../data/context/language/useLanguageData';
+import CreateCustomerDto
+  from '../../../services/social-prices-api/customers/dto/createCustomer.dto';
+import UpdateCustomerDto
+  from '../../../services/social-prices-api/customers/dto/updateCustomer.dto';
+import {
+  serviceMethodsInstance,
+} from '../../../services/social-prices-api/service-methods';
+import {
+  ICustomer,
+} from '../../../shared/business/customers/customer.interface';
+import AddressEnum from '../../../shared/business/shared/address/address.enum';
+import {
+  IAddress,
+} from '../../../shared/business/shared/address/address.interface';
+import PersonEnum from '../../../shared/business/shared/person/person.enum';
+import {
+  IPhoneNumber,
+} from '../../../shared/business/shared/phone/phone-number.interface';
+import TagsEnum from '../../../shared/business/tags/tags.enum';
+import { ITag } from '../../../shared/business/tags/tags.interface';
+import Urls from '../../../shared/common/routes-app/routes-app';
+import { sortArray } from '../../../shared/utils/array/array-functions';
+import DatesEnum from '../../../shared/utils/dates/dates.enum';
+import { getFileUrl } from '../../../shared/utils/images/images-helper';
+import { getImageUrl } from '../../../shared/utils/images/images-url';
+import { useFindTagsByType } from '../../tags/useFindTagsByType';
+import { useFindCustomerById } from './useFindCustomerById';
 
 const formSchema = z.object({
   name: z.string().trim().nonempty("Name is required"),

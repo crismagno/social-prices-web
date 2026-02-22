@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
 
 import {
   Button,
@@ -12,31 +12,42 @@ import {
   Row,
   Tag,
   Tooltip,
-} from "antd";
-import moment from "moment";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter } from "next/navigation";
+} from 'antd';
+import moment from 'moment';
+import {
+  AppRouterInstance,
+} from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useRouter } from 'next/navigation';
 
-import { EditOutlined, GoogleOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  GoogleOutlined,
+} from '@ant-design/icons';
 
-import Avatar from "../../components/common/Avatar/Avatar";
-import ContainerTitle from "../../components/common/ContainerTitle/ContainerTitle";
-import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
-import Layout from "../../components/template/Layout/Layout";
-import useAuthData from "../../data/context/auth/useAuthData";
-import useLanguageData from "../../data/context/language/useLanguageData";
-import EmployeesEnum from "../../shared/business/employees/employees.enum";
-import AddressEnum from "../../shared/business/shared/address/address.enum";
-import { IAddress } from "../../shared/business/shared/address/address.interface";
-import PersonEnum from "../../shared/business/shared/person/person.enum";
-import PhoneNumberEnum from "../../shared/business/shared/phone/phone-number.enum";
-import { IPhoneNumber } from "../../shared/business/shared/phone/phone-number.interface";
-import UsersEnum from "../../shared/business/users/users.enum";
-import Urls from "../../shared/common/routes-app/routes-app";
-import DatesEnum from "../../shared/utils/dates/dates.enum";
-import { getImageUrl } from "../../shared/utils/images/images-url";
-import ImagesEnum from "../../shared/utils/images/images.enum";
-import { getUserName } from "../../shared/utils/strings/string";
+import Avatar from '../../components/common/Avatar/Avatar';
+import ContainerTitle
+  from '../../components/common/ContainerTitle/ContainerTitle';
+import LoadingFull from '../../components/common/LoadingFull/LoadingFull';
+import Layout from '../../components/template/Layout/Layout';
+import useAuthData from '../../data/context/auth/useAuthData';
+import useLanguageData from '../../data/context/language/useLanguageData';
+import EmployeesEnum from '../../shared/business/employees/employees.enum';
+import AddressEnum from '../../shared/business/shared/address/address.enum';
+import {
+  IAddress,
+} from '../../shared/business/shared/address/address.interface';
+import PersonEnum from '../../shared/business/shared/person/person.enum';
+import PhoneNumberEnum
+  from '../../shared/business/shared/phone/phone-number.enum';
+import {
+  IPhoneNumber,
+} from '../../shared/business/shared/phone/phone-number.interface';
+import UsersEnum from '../../shared/business/users/users.enum';
+import Urls from '../../shared/common/routes-app/routes-app';
+import DatesEnum from '../../shared/utils/dates/dates.enum';
+import { getImageUrl } from '../../shared/utils/images/images-url';
+import ImagesEnum from '../../shared/utils/images/images.enum';
+import { getUserName } from '../../shared/utils/strings/string';
 
 export default function ProfilePage() {
   const { user, employee } = useAuthData();

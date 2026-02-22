@@ -1,18 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Card } from "antd";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import { Card } from 'antd';
+import {
+  AppRouterInstance,
+} from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import {
   ReadonlyURLSearchParams,
   useRouter,
   useSearchParams,
-} from "next/navigation";
+} from 'next/navigation';
 
-import Layout from "../../../components/template/Layout/Layout";
-import { IEmployee } from "../../../shared/business/employees/employee.interface";
-import { EmployeeEdit } from "../components/EmployeeEdit/EmployeeEdit";
+import Layout from '../../../components/template/Layout/Layout';
+import {
+  IEmployee,
+} from '../../../shared/business/employees/employee.interface';
+import { EmployeeEdit } from '../components/EmployeeEdit/EmployeeEdit';
 
 export default function EmployeeDetailPage() {
   const router: AppRouterInstance = useRouter();

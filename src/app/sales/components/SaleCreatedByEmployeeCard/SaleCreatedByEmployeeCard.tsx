@@ -1,14 +1,23 @@
-import { Button, Tooltip } from "antd";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter } from "next/navigation";
+import {
+  Button,
+  Tooltip,
+} from 'antd';
+import {
+  AppRouterInstance,
+} from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useRouter } from 'next/navigation';
 
-import { QuestionCircleTwoTone } from "@ant-design/icons";
+import { QuestionCircleTwoTone } from '@ant-design/icons';
 
-import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
-import { IEmployee } from "../../../../shared/business/employees/employee.interface";
-import { ISale } from "../../../../shared/business/sales/sale.interface";
-import Urls from "../../../../shared/common/routes-app/routes-app";
-import ImagesEnum from "../../../../shared/utils/images/images.enum";
+import {
+  ImageOrDefault,
+} from '../../../../components/common/ImageOrDefault/ImageOrDefault';
+import {
+  IEmployee,
+} from '../../../../shared/business/employees/employee.interface';
+import { ISale } from '../../../../shared/business/sales/sale.interface';
+import Urls from '../../../../shared/common/routes-app/routes-app';
+import ImagesEnum from '../../../../shared/utils/images/images.enum';
 
 interface Props {
   sale: ISale;
