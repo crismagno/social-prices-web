@@ -12,7 +12,7 @@ const Title: React.FC<Props> = ({ subtitle, title, hasBackButton }) => {
   return (
     <div className="flex justify-between items-end">
       <div>
-        <h1 className="font-black text-3xl text-gray-800 dark:text-gray-100">
+        <h1 className="font-black text-3xl text-gray-800 dark:text-gray-100 mb-1">
           {title}
         </h1>
 
