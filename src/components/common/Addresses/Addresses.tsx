@@ -129,7 +129,9 @@ export const Addresses: React.FC<Props> = ({
           <Collapse
             key={index}
             collapsed={formAddress.isCollapsed}
-            title={addressName.trim() || `${t("common.address")} (${index + 1})`}
+            title={
+              addressName.trim() || `${t("common.address")} (${index + 1})`
+            }
             className="relative mt-5"
             extraHeader={
               <Tooltip title={t("address.removeAddress")}>

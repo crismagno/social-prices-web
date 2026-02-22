@@ -104,7 +104,10 @@ export const PhoneNumbers: React.FC<Props> = ({
             <Collapse
               key={index}
               collapsed={formPhoneNumber.isCollapsed}
-              title={phoneNumberName.trim() || `${t("phoneNumber.phoneNumber")} (${index + 1})`}
+              title={
+                phoneNumberName.trim() ||
+                `${t("phoneNumber.phoneNumber")} (${index + 1})`
+              }
               className="relative mt-5"
               extraHeader={
                 <Tooltip title={t("phoneNumber.removePhoneNumber")}>
