@@ -24,6 +24,7 @@ import { UploadFilesDrawer } from "../../components/common/UploadFilesDrawer/Upl
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
 import useAuthData from "../../data/context/auth/useAuthData";
+import useLanguageData from "../../data/context/language/useLanguageData";
 import useSocketData from "../../data/context/socket/useSocketData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import { ICustomer } from "../../shared/business/customers/customer.interface";
@@ -48,6 +49,7 @@ import { useFindCustomersByOwnerOfUserTableState } from "./useFindCustomersByOwn
 
 export default function CustomersPage() {
   const { user } = useAuthData();
+  const { t } = useLanguageData()!;
 
   const { socket } = useSocketData();
 
@@ -104,9 +106,13 @@ export default function CustomersPage() {
   const tagsSort: ITag[] = sortArray(tags, "name");
 
   return (
-    <Layout subtitle="Manager my Customers" title="Customers" hasBackButton>
+    <Layout
+      subtitle={t("customers.manageMyCustomers")}
+      title={t("customers.title")}
+      hasBackButton
+    >
       <Card
-        title="Customers"
+        title={t("customers.title")}
         className="h-min-80 mt-5"
         extra={
           <>
@@ -116,7 +122,7 @@ export default function CustomersPage() {
               className="mr-2"
               icon={<DownloadOutlined />}
             >
-              Download
+              {t("common.download")}
             </Button>
 
             <Button
@@ -125,7 +131,7 @@ export default function CustomersPage() {
               className="mr-2"
               icon={<UploadOutlined />}
             >
-              Upload
+              {t("common.upload")}
             </Button>
 
             <Button
@@ -133,7 +139,7 @@ export default function CustomersPage() {
               onClick={() => router.push(Urls.NEW_CUSTOMER)}
               icon={<PlusOutlined />}
             >
-              New Customer
+              {t("customers.newCustomer")}
             </Button>
           </>
         }
@@ -152,19 +158,19 @@ export default function CustomersPage() {
               ),
             },
             {
-              title: "Name",
+              title: t("common.name"),
               dataIndex: "name",
               key: "name",
               align: "center",
             },
             {
-              title: "Uniq Name",
+              title: t("customers.uniqName"),
               dataIndex: "uniqName",
               key: "uniqName",
               align: "center",
             },
             {
-              title: "Email",
+              title: t("common.email"),
               dataIndex: "email",
               key: "email",
               align: "center",
@@ -175,7 +181,7 @@ export default function CustomersPage() {
               ),
             },
             {
-              title: "Phone Numbers",
+              title: t("profile.phoneNumbers"),
               dataIndex: "phoneNumbers",
               key: "phoneNumbers",
               align: "center",
@@ -184,7 +190,7 @@ export default function CustomersPage() {
               ),
             },
             {
-              title: "Gender",
+              title: t("customers.gender"),
               dataIndex: "gender",
               key: "gender",
               align: "center",
@@ -203,7 +209,7 @@ export default function CustomersPage() {
               ),
             },
             {
-              title: "Birth Date",
+              title: t("customers.birthDate"),
               dataIndex: "birthDate",
               key: "birthDate",
               align: "center",
@@ -212,7 +218,7 @@ export default function CustomersPage() {
                 moment(birthDate).format(DatesEnum.Format.DDMMYYY),
             },
             {
-              title: "Tags",
+              title: t("tags.title"),
               dataIndex: "tagsIds",
               key: "tagsIds",
               filters: tagsSort.map((tag: ITag) => ({
@@ -225,14 +231,14 @@ export default function CustomersPage() {
               ),
             },
             {
-              title: "Action",
+              title: t("common.actions"),
               dataIndex: "action",
               key: "action",
               align: "center",
               render: (_: any, customer: ICustomer) => {
                 return (
                   <Space.Compact>
-                    <Tooltip title="Edit Customer">
+                    <Tooltip title={t("customers.editCustomer")}>
                       <Button
                         type="success"
                         onClick={() =>
@@ -247,7 +253,7 @@ export default function CustomersPage() {
                       />
                     </Tooltip>
 
-                    <Tooltip title="Go to customer">
+                    <Tooltip title={t("customers.goToCustomer")}>
                       <Button
                         type="default"
                         onClick={() =>
@@ -259,7 +265,7 @@ export default function CustomersPage() {
                       />
                     </Tooltip>
 
-                    <Tooltip title="Create Sale">
+                    <Tooltip title={t("sales.createSale")}>
                       <Button
                         type="primary"
                         onClick={() =>
@@ -278,7 +284,7 @@ export default function CustomersPage() {
               },
             },
           ]}
-          search={{ placeholder: "Search customers..." }}
+          search={{ placeholder: t("customers.searchCustomers") }}
           loading={isLoading}
           tableStateRequest={tableStateRequest}
           setTableStateRequest={setTableStateRequest}
@@ -299,7 +305,7 @@ export default function CustomersPage() {
         }}
         downloadFileName="social-prices-customers-template.xlsx"
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        title="Upload Customers"
+        title={t("customers.uploadCustomers")}
       >
         <FilesUploadsTable
           type={FilesUploadsEnum.Type.UPLOAD_CUSTOMERS}
@@ -310,7 +316,7 @@ export default function CustomersPage() {
       <DownloadCustomersDrawer
         isOpen={isDownloadCustomersDrawerOpen}
         onClose={() => setIsDownloadCustomersDrawerOpen(false)}
-        title="Download Customers"
+        title={t("customers.downloadCustomers")}
         tags={tagsSort}
       />
     </Layout>

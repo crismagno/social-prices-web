@@ -50,6 +50,7 @@ import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd
 import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
+import useLanguageData from "../../../data/context/language/useLanguageData";
 import CreateCustomerDto from "../../../services/social-prices-api/customers/dto/createCustomer.dto";
 import UpdateCustomerDto from "../../../services/social-prices-api/customers/dto/updateCustomer.dto";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
@@ -83,6 +84,7 @@ const formSchema = z.object({
 type TFormSchema = z.infer<typeof formSchema>;
 
 export default function CustomerDetailPage() {
+  const { t } = useLanguageData()!;
   const router: AppRouterInstance = useRouter();
 
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
@@ -220,7 +222,7 @@ export default function CustomerDetailPage() {
 
       await serviceMethodsInstance.customersServiceMethods.create(formData);
 
-      message.success("Your customer has been created successfully!");
+      message.success(t("customers.customerCreatedSuccessfully"));
 
       router.back();
     } catch (error) {
@@ -233,7 +235,7 @@ export default function CustomerDetailPage() {
   const handleUpdate = async (data: TFormSchema) => {
     try {
       if (!customer) {
-        message.warning("Customer not found to update!");
+        message.warning(t("customers.customerNotFoundToUpdate"));
         return;
       }
 
@@ -289,7 +291,7 @@ export default function CustomerDetailPage() {
 
       await serviceMethodsInstance.customersServiceMethods.update(formData);
 
-      message.success("Your customer has been updated successfully!");
+      message.success(t("customers.customerUpdatedSuccessfully"));
 
       router.back();
     } catch (error) {
@@ -316,15 +318,23 @@ export default function CustomerDetailPage() {
 
   return (
     <Layout
-      subtitle={isEditMode ? "Edit customer details" : "New customer details"}
-      title={isEditMode ? `Edit customer: ${customer?.name}` : "New customer"}
+      subtitle={
+        isEditMode
+          ? t("customers.editCustomerDetails")
+          : t("customers.newCustomerDetails")
+      }
+      title={
+        isEditMode
+          ? `${t("customers.editCustomer")}: ${customer?.name}`
+          : t("customers.newCustomer")
+      }
       hasBackButton
     >
       <Card className="h-min-80 mt-2">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex justify-center w-full">
             <div className="cursor-pointer z-10">
-              <Tooltip title="Edit avatar" placement="bottom">
+              <Tooltip title={t("profile.editAvatar")} placement="bottom">
                 <Avatar
                   src={avatarUrl}
                   width={180}
@@ -345,7 +355,7 @@ export default function CustomerDetailPage() {
 
           <Row gutter={24} justify={"end"}>
             <Col>
-              <Tooltip title="Go to customer">
+              <Tooltip title={t("customers.goToCustomer")}>
                 <Button
                   type="primary"
                   onClick={() =>
@@ -355,7 +365,7 @@ export default function CustomerDetailPage() {
                   }
                   icon={<EnterOutlined />}
                 >
-                  Customer
+                  {t("customers.customer")}
                 </Button>
               </Tooltip>
             </Col>
@@ -367,8 +377,8 @@ export default function CustomerDetailPage() {
             <Col xs={24} md={8}>
               <InputCustomAntd
                 controller={{ control, name: "name" }}
-                label="Name"
-                placeholder={"Enter name"}
+                label={t("common.name")}
+                placeholder={t("placeholders.enterName")}
                 errorMessage={errors.name?.message}
                 maxLength={200}
               />
@@ -377,8 +387,8 @@ export default function CustomerDetailPage() {
             <Col xs={24} md={8}>
               <InputCustomAntd
                 controller={{ control, name: "uniqName" }}
-                label="Uniq Name"
-                placeholder={"Enter uniq name"}
+                label={t("customers.uniqName")}
+                placeholder={t("customers.enterUniqName")}
                 errorMessage={errors.uniqName?.message}
                 maxLength={200}
               />
@@ -387,8 +397,8 @@ export default function CustomerDetailPage() {
             <Col xs={24} md={8}>
               <InputCustomAntd
                 controller={{ control, name: "email" }}
-                label="Email"
-                placeholder={"Enter email"}
+                label={t("common.email")}
+                placeholder={t("placeholders.enterEmail")}
                 errorMessage={errors.email?.message}
                 maxLength={200}
                 type="email"
@@ -398,9 +408,9 @@ export default function CustomerDetailPage() {
             <Col xs={24} md={8}>
               <InputCustomAntd
                 controller={{ control, name: "birthDate" }}
-                label="Birth Date"
+                label={t("customers.birthDate")}
                 type="date"
-                placeholder={"Enter birth date"}
+                placeholder={t("placeholders.enterBirthDate")}
                 errorMessage={errors.birthDate?.message}
               />
             </Col>
@@ -408,7 +418,7 @@ export default function CustomerDetailPage() {
             <Col xs={24} md={8}>
               <SelectCustomAntd<ICustomer>
                 controller={{ control, name: "gender" }}
-                label="Gender"
+                label={t("customers.gender")}
                 errorMessage={errors.gender?.message}
               >
                 {Object.keys(PersonEnum.Gender).map((gender: string) => (
@@ -422,9 +432,9 @@ export default function CustomerDetailPage() {
             <Col xs={24} md={8}>
               <SelectCustomAntd<ICustomer>
                 controller={{ control, name: "tagsIds" }}
-                label="Tags"
+                label={t("tags.title")}
                 errorMessage={errors.tagsIds?.message}
-                placeholder={"Select tags"}
+                placeholder={t("tags.selectTags")}
                 mode="multiple"
               >
                 {sortArray(tags, "name").map((tag: ITag) => (
@@ -439,9 +449,9 @@ export default function CustomerDetailPage() {
           <Row>
             <Col xs={24}>
               <TextareaCustomAntd
-                label="About"
+                label={t("customers.about")}
                 controller={{ control, name: "about" }}
-                placeholder={"Enter about"}
+                placeholder={t("placeholders.enterAbout")}
                 rows={2}
               />
             </Col>
@@ -460,7 +470,7 @@ export default function CustomerDetailPage() {
               onClick={() => router.back()}
               disabled={isSubmitting}
             >
-              Cancel
+              {t("common.cancel")}
             </Button>
 
             <Button
@@ -469,7 +479,7 @@ export default function CustomerDetailPage() {
               loading={isSubmitting}
               disabled={isSubmitting}
             >
-              {isEditMode ? "Save" : "Create"}
+              {isEditMode ? t("common.save") : t("common.create")}
             </Button>
           </div>
         </form>

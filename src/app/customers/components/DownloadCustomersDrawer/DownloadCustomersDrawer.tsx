@@ -11,6 +11,7 @@ import handleClientError from "../../../../components/common/HandleClientError/H
 import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
 import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import CustomersEnum from "../../../../shared/business/customers/customers.enum";
 import { IFiltersDownloadCustomers } from "../../../../shared/business/customers/customers.type";
@@ -43,6 +44,7 @@ export const DownloadCustomersDrawer: React.FC<Props> = ({
   width = "50%",
   tags = [],
 }) => {
+  const { t } = useLanguageData()!;
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
 
   const {
@@ -85,13 +87,13 @@ export const DownloadCustomersDrawer: React.FC<Props> = ({
 
   return (
     <Drawer title={title} onClose={onClose} open={isOpen} width={width}>
-      <Card title="Filters">
+      <Card title={t("common.filter")}>
         <Row>
           <Col xs={24} sm={12}>
             <InputCustomAntd
               controller={{ control, name: "search" }}
-              label="Search"
-              placeholder={"Search customers..."}
+              label={t("common.search")}
+              placeholder={t("customers.searchCustomers")}
               errorMessage={errors.search?.message}
               maxLength={200}
               allowClear
@@ -101,9 +103,9 @@ export const DownloadCustomersDrawer: React.FC<Props> = ({
           <Col xs={24} sm={12}>
             <SelectCustomAntd
               controller={{ control, name: "tagsIds" }}
-              label="Tags"
+              label={t("tags.title")}
               errorMessage={errors.tagsIds?.message}
-              placeholder={"Select tags"}
+              placeholder={t("tags.selectTags")}
               mode="multiple"
               allowClear
             >
@@ -118,11 +120,11 @@ export const DownloadCustomersDrawer: React.FC<Props> = ({
           <Col xs={24} sm={8}>
             <SelectCustomAntd
               controller={{ control, name: "gender" }}
-              label="Gender"
+              label={t("customers.gender")}
               errorMessage={errors.gender?.message}
             >
               <Select.Option key={"SELECT_ALL"} value={null}>
-                - Select -
+                {t("common.select")}
               </Select.Option>
               {Object.keys(PersonEnum.Gender).map((gender: string) => (
                 <Select.Option key={gender} value={gender}>
@@ -135,9 +137,9 @@ export const DownloadCustomersDrawer: React.FC<Props> = ({
           <Col xs={24} sm={8}>
             <SelectCustomAntd
               controller={{ control, name: "sortField" }}
-              label="Sort Field"
+              label={t("customers.sortField")}
               errorMessage={errors.sortField?.message}
-              placeholder={"Select sort field"}
+              placeholder={t("customers.selectSortField")}
             >
               {Object.keys(CustomersEnum.SortField).map((sortField: string) => (
                 <Select.Option key={sortField} value={sortField}>
@@ -154,9 +156,9 @@ export const DownloadCustomersDrawer: React.FC<Props> = ({
           <Col xs={24} sm={8}>
             <SelectCustomAntd
               controller={{ control, name: "sortOrder" }}
-              label="Sort Order"
+              label={t("customers.sortOrder")}
               errorMessage={errors.sortOrder?.message}
-              placeholder={"Select sort order"}
+              placeholder={t("customers.selectSortOrder")}
             >
               {Object.keys(TableStateEnum.SortOrder).map(
                 (sortOrder: string) => (
@@ -182,7 +184,7 @@ export const DownloadCustomersDrawer: React.FC<Props> = ({
         loading={isDownloading}
         disabled={isDownloading}
       >
-        Download
+        {t("common.download")}
       </Button>
     </Drawer>
   );
