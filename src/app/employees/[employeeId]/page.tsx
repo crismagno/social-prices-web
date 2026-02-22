@@ -156,7 +156,7 @@ export default function EmployeePage() {
               extraHeader={
                 <Tooltip title="Edit employee">
                   <Button
-                    type="primary"
+                    type="success"
                     icon={<EditOutlined />}
                     onClick={handleEditEmployee}
                   >
