@@ -1,25 +1,40 @@
-import { Select, Tooltip } from "antd";
-import { Control, useFieldArray } from "react-hook-form";
-import { z } from "zod";
+import {
+  Select,
+  Tooltip,
+} from 'antd';
+import {
+  Control,
+  useFieldArray,
+} from 'react-hook-form';
+import { z } from 'zod';
 
-import useLanguageData from "../../../data/context/language/useLanguageData";
-import AddressEnum from "../../../shared/business/shared/address/address.enum";
-import { IAddress } from "../../../shared/business/shared/address/address.interface";
-import citiesMockData from "../../../shared/utils/mock-data/brazil-cities.json";
-import statesMockData from "../../../shared/utils/mock-data/brazil-states.json";
-import countriesMockData from "../../../shared/utils/mock-data/countries.json";
+import useLanguageData from '../../../data/context/language/useLanguageData';
+import AddressEnum from '../../../shared/business/shared/address/address.enum';
+import {
+  IAddress,
+} from '../../../shared/business/shared/address/address.interface';
+import citiesMockData from '../../../shared/utils/mock-data/brazil-cities.json';
+import statesMockData from '../../../shared/utils/mock-data/brazil-states.json';
+import countriesMockData from '../../../shared/utils/mock-data/countries.json';
 import {
   ICityMockData,
   ICountryMockData,
   IStateMockData,
-} from "../../../shared/utils/mock-data/interfaces";
-import { createAddressName } from "../../../shared/utils/strings/string";
-import { InputCustomAntd } from "../../custom/antd/InputCustomAntd/InputCustomAntd";
-import { SelectCustomAntd } from "../../custom/antd/SelectCustomAntd/SelectCustomAntd";
-import ButtonCommon from "../ButtonCommon/ButtonCommon";
-import Collapse from "../Collapse/Collapse";
-import ContainerTitle from "../ContainerTitle/ContainerTitle";
-import { IconPlus, IconTrash } from "../icons/icons";
+} from '../../../shared/utils/mock-data/interfaces';
+import { createAddressName } from '../../../shared/utils/strings/string';
+import {
+  InputCustomAntd,
+} from '../../custom/antd/InputCustomAntd/InputCustomAntd';
+import {
+  SelectCustomAntd,
+} from '../../custom/antd/SelectCustomAntd/SelectCustomAntd';
+import ButtonCommon from '../ButtonCommon/ButtonCommon';
+import Collapse from '../Collapse/Collapse';
+import ContainerTitle from '../ContainerTitle/ContainerTitle';
+import {
+  IconPlus,
+  IconTrash,
+} from '../icons/icons';
 
 export const countries: ICountryMockData[] = countriesMockData.filter(
   (country) => country.code === "BR"

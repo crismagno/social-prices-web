@@ -1,6 +1,11 @@
 "use client";
 
-import { createContext, useCallback, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
 import {
   Auth,
@@ -9,28 +14,36 @@ import {
   signInWithPopup,
   signOut,
   User,
-} from "firebase/auth";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+} from 'firebase/auth';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
-import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
-import firebaseApp from "../../../services/firebase/config";
-import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
+import handleClientError
+  from '../../../components/common/HandleClientError/HandleClientError';
+import firebaseApp from '../../../services/firebase/config';
+import {
+  serviceMethodsInstance,
+} from '../../../services/social-prices-api/service-methods';
 import {
   IAuthLogin,
   IAuthUserEmployee,
-} from "../../../shared/business/auth/auth.types";
-import { IEmployee } from "../../../shared/business/employees/employee.interface";
-import PhoneNumberEnum from "../../../shared/business/shared/phone/phone-number.enum";
-import IUser from "../../../shared/business/users/user.interface";
-import UsersEnum from "../../../shared/business/users/users.enum";
-import CookiesEnum from "../../../shared/common/cookies/cookies.enum";
-import { localStorageMethodsInstance } from "../../../shared/common/local-storage/local-storage-methods";
-import Urls from "../../../shared/common/routes-app/routes-app";
+} from '../../../shared/business/auth/auth.types';
+import {
+  IEmployee,
+} from '../../../shared/business/employees/employee.interface';
+import PhoneNumberEnum
+  from '../../../shared/business/shared/phone/phone-number.enum';
+import IUser from '../../../shared/business/users/user.interface';
+import UsersEnum from '../../../shared/business/users/users.enum';
+import CookiesEnum from '../../../shared/common/cookies/cookies.enum';
+import {
+  localStorageMethodsInstance,
+} from '../../../shared/common/local-storage/local-storage-methods';
+import Urls from '../../../shared/common/routes-app/routes-app';
 import {
   makeRandomCode,
   sleep,
-} from "../../../shared/utils/functions/functions";
+} from '../../../shared/utils/functions/functions';
 
 const googleProvider: GoogleAuthProvider = new GoogleAuthProvider();
 googleProvider.addScope("https://www.googleapis.com/auth/contacts.readonly");

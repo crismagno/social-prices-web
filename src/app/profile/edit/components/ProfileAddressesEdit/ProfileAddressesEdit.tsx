@@ -1,13 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Button, message } from "antd";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
+import {
+  Button,
+  message,
+} from 'antd';
+import {
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
+import { z } from 'zod';
 
-import { SaveOutlined } from "@ant-design/icons";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { SaveOutlined } from '@ant-design/icons';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
   Addresses,
@@ -15,14 +21,21 @@ import {
   countries,
   generateNewAddress,
   states,
-} from "../../../../../components/common/Addresses/Addresses";
-import handleClientError from "../../../../../components/common/HandleClientError/HandleClientError";
-import useAuthData from "../../../../../data/context/auth/useAuthData";
-import useLanguageData from "../../../../../data/context/language/useLanguageData";
-import { serviceMethodsInstance } from "../../../../../services/social-prices-api/service-methods";
-import AddressEnum from "../../../../../shared/business/shared/address/address.enum";
-import { IAddress } from "../../../../../shared/business/shared/address/address.interface";
-import IUser from "../../../../../shared/business/users/user.interface";
+} from '../../../../../components/common/Addresses/Addresses';
+import handleClientError
+  from '../../../../../components/common/HandleClientError/HandleClientError';
+import useAuthData from '../../../../../data/context/auth/useAuthData';
+import useLanguageData
+  from '../../../../../data/context/language/useLanguageData';
+import {
+  serviceMethodsInstance,
+} from '../../../../../services/social-prices-api/service-methods';
+import AddressEnum
+  from '../../../../../shared/business/shared/address/address.enum';
+import {
+  IAddress,
+} from '../../../../../shared/business/shared/address/address.interface';
+import IUser from '../../../../../shared/business/users/user.interface';
 
 const formSchema = z.object({
   addresses: z.array(addressFormSchema),

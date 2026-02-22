@@ -1,26 +1,28 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Modal } from "antd";
+import { Modal } from 'antd';
 
-import useAppData from "../../../data/context/app/useAppData";
-import useAuthData from "../../../data/context/auth/useAuthData";
-import useLanguageData from "../../../data/context/language/useLanguageData";
-import Urls from "../../../shared/common/routes-app/routes-app";
-import { getUserName } from "../../../shared/utils/strings/string";
-import Avatar from "../../common/Avatar/Avatar";
+import useAppData from '../../../data/context/app/useAppData';
+import useAuthData from '../../../data/context/auth/useAuthData';
+import useLanguageData from '../../../data/context/language/useLanguageData';
+import Urls from '../../../shared/common/routes-app/routes-app';
+import { getUserName } from '../../../shared/utils/strings/string';
+import Avatar from '../../common/Avatar/Avatar';
 import {
   IconAdjustmentsHorizontal,
   IconBell,
   IconBellAlert,
   IconHome,
   IconLogout,
-} from "../../common/icons/icons";
-import { Logo1 } from "../../common/Logo/Logo1";
-import { EmployeeProfileButton } from "../EmployeeProfileButton/EmployeeProfileButton";
-import { GeneralMenu } from "./GeneralMenu/GeneralMenu";
-import NavigationItem from "./NavigationItem";
-import { SalesMenu } from "./SalesMenu/SalesMenu";
-import { StoresMenu } from "./StoresMenu/StoresMenu";
+} from '../../common/icons/icons';
+import { Logo1 } from '../../common/Logo/Logo1';
+import {
+  EmployeeProfileButton,
+} from '../EmployeeProfileButton/EmployeeProfileButton';
+import { GeneralMenu } from './GeneralMenu/GeneralMenu';
+import NavigationItem from './NavigationItem';
+import { SalesMenu } from './SalesMenu/SalesMenu';
+import { StoresMenu } from './StoresMenu/StoresMenu';
 
 interface Props {}
 

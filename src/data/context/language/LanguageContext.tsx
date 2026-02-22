@@ -1,9 +1,13 @@
 "use client";
 
-import { createContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useEffect,
+  useState,
+} from 'react';
 
-import enTranslations from "../../../locales/en/en.json";
-import ptBRTranslations from "../../../locales/pt-BR/pt-BR.json";
+import enTranslations from '../../../locales/en/en.json';
+import ptBRTranslations from '../../../locales/pt-BR/pt-BR.json';
 
 export type Language = "en" | "pt-BR";
 

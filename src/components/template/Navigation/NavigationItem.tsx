@@ -1,8 +1,8 @@
-import { Tooltip } from "antd";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Tooltip } from 'antd';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-import Loading from "../../common/Loading/Loading";
+import Loading from '../../common/Loading/Loading';
 
 interface Props {
   icon?: any;

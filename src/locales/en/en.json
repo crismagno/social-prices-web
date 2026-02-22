@@ -84,7 +84,8 @@
     "noData": "No data",
     "noResults": "No results found",
     "items": "items",
-    "goBack": "Go Back"
+    "goBack": "Go Back",
+    "previewImage": "Preview Image"
   },
   "navigation": {
     "home": "Home",
@@ -128,6 +129,8 @@
     "emailOrUsername": "Email or Username"
   },
   "sales": {
+    "salesTable": "Sales Table",
+    "salesChart": "Sales Chart",
     "title": "Sales",
     "createSale": "Create Sale",
     "updateSale": "Update Sale",
@@ -200,7 +203,12 @@
     "editCustomerDetails": "Edit customer details",
     "customerCreatedSuccessfully": "Your customer has been created successfully!",
     "customerUpdatedSuccessfully": "Your customer has been updated successfully!",
-    "customerNotFoundToUpdate": "Customer not found to update!"
+    "customerNotFoundToUpdate": "Customer not found to update!",
+    "customerProfile": "Customer Profile",
+    "customerProfileSubtitle": "Customer profile of {{name}}",
+    "customerEmailTooltip": "Customer email, click to send an email",
+    "uniqueUsername": "Unique username",
+    "uploadFilename": "Upload Filename"
   },
   "stores": {
     "title": "Stores",
@@ -346,5 +354,15 @@
     "enterBirthDate": "Enter birth date",
     "selectGender": "Select gender",
     "enterAbout": "Enter about"
+  },
+  "upload": {
+    "selectProductBeforeUpload": "Please select a product before upload files!",
+    "filesBeingProcessed": "Your files are been processed! We will send a notification when ready, or any information related to process.",
+    "maxFilesReached": "Max bulk files to upload reached. Max {{max}} files!",
+    "downloadTemplateFile": "Download Template File",
+    "clickOrDragFile": "Click or drag file to this area to upload",
+    "uploadHint": "Support for a single or bulk upload. Strictly prohibited from uploading company data or other banned files.",
+    "uploading": "Uploading",
+    "startUpload": "Start Upload"
   }
 }

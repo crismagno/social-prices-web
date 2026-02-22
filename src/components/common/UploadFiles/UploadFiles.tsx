@@ -1,16 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Button, Divider, message, Upload, UploadFile } from "antd";
-import { RcFile } from "antd/es/upload";
+import {
+  Button,
+  Divider,
+  message,
+  Upload,
+  UploadFile,
+} from 'antd';
+import { RcFile } from 'antd/es/upload';
 
-import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  InboxOutlined,
+  UploadOutlined,
+} from '@ant-design/icons';
 
-import { IProduct } from "../../../shared/business/products/products.interface";
-import { DownloadFile } from "../DownloadFile/DownloadFile";
-import handleClientError from "../HandleClientError/HandleClientError";
-import SelectProduct from "../SelectProduct/SelectProduct";
+import useLanguageData from '../../../data/context/language/useLanguageData';
+import { IProduct } from '../../../shared/business/products/products.interface';
+import { DownloadFile } from '../DownloadFile/DownloadFile';
+import handleClientError from '../HandleClientError/HandleClientError';
+import SelectProduct from '../SelectProduct/SelectProduct';
 
 const { Dragger } = Upload;
 
@@ -29,6 +39,7 @@ export const UploadFiles: React.FC<UploadFilesProps> = ({
   onUploadFiles,
   useProduct = false,
 }) => {
+  const { t } = useLanguageData()!;
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -38,7 +49,7 @@ export const UploadFiles: React.FC<UploadFilesProps> = ({
   const handleUpload = async () => {
     try {
       if (useProduct && !selectedProductId) {
-        message.error("Please select a product before upload files!");
+        message.error(t("upload.selectProductBeforeUpload"));
         return;
       }
 
@@ -56,9 +67,7 @@ export const UploadFiles: React.FC<UploadFilesProps> = ({
 
       await onUploadFiles?.(formData);
 
-      message.info(
-        "Your files are been processed! We will send a notification when ready, or any information related to process."
-      );
+      message.info(t("upload.filesBeingProcessed"));
 
       setFileList([]);
     } catch (error) {
@@ -77,9 +86,7 @@ export const UploadFiles: React.FC<UploadFilesProps> = ({
 
   const onBeforeUpload = (_: RcFile, files: RcFile[]) => {
     if (fileList.length + files.length > maxFilesToUpload) {
-      message.error(
-        `Max bulk files to upload reached. Max ${maxFilesToUpload} files!`
-      );
+      message.error(t("upload.maxFilesReached", { max: maxFilesToUpload }));
       return;
     }
 
@@ -98,7 +105,7 @@ export const UploadFiles: React.FC<UploadFilesProps> = ({
               className: "my-1",
               type: "success",
             }}
-            btnLabel="Download Template File"
+            btnLabel={t("upload.downloadTemplateFile")}
           />
         )}
 
@@ -129,13 +136,8 @@ export const UploadFiles: React.FC<UploadFilesProps> = ({
           <p className="ant-upload-drag-icon">
             <InboxOutlined />
           </p>
-          <p className="ant-upload-text">
-            Click or drag file to this area to upload
-          </p>
-          <p className="ant-upload-hint px-5">
-            Support for a single or bulk upload. Strictly prohibited from
-            uploading company data or other banned files.
-          </p>
+          <p className="ant-upload-text">{t("upload.clickOrDragFile")}</p>
+          <p className="ant-upload-hint px-5">{t("upload.uploadHint")}</p>
         </Dragger>
 
         <Button
@@ -146,7 +148,7 @@ export const UploadFiles: React.FC<UploadFilesProps> = ({
           loading={isUploading}
           icon={<UploadOutlined />}
         >
-          {isUploading ? "Uploading" : "Start Upload"}
+          {isUploading ? t("upload.uploading") : t("upload.startUpload")}
         </Button>
       </div>
     </div>

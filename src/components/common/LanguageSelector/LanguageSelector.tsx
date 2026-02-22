@@ -1,11 +1,11 @@
 "use client";
 
-import { Select } from "antd";
+import { Select } from 'antd';
 
-import { GlobalOutlined } from "@ant-design/icons";
+import { GlobalOutlined } from '@ant-design/icons';
 
-import { Language } from "../../../data/context/language/LanguageContext";
-import useLanguageData from "../../../data/context/language/useLanguageData";
+import { Language } from '../../../data/context/language/LanguageContext';
+import useLanguageData from '../../../data/context/language/useLanguageData';
 
 const { Option } = Select;
 

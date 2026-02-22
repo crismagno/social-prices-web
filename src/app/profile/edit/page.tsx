@@ -1,18 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Card } from "antd";
+import { Card } from 'antd';
 
-import Avatar from "../../../components/common/Avatar/Avatar";
-import EditAvatarModal from "../../../components/common/EditAvatarModal/EditAvatarModal";
-import Layout from "../../../components/template/Layout/Layout";
-import useAuthData from "../../../data/context/auth/useAuthData";
-import useLanguageData from "../../../data/context/language/useLanguageData";
-import ProfileAddressesEdit from "./components/ProfileAddressesEdit/ProfileAddressesEdit";
-import ProfileAuthEdit from "./components/ProfileAuthEdit/ProfileAuthEdit";
-import ProfileEdit from "./components/ProfileEdit/ProfileEdit";
-import ProfilePhonesEdit from "./components/ProfilePhonesEdit/ProfilePhonesEdit";
+import Avatar from '../../../components/common/Avatar/Avatar';
+import EditAvatarModal
+  from '../../../components/common/EditAvatarModal/EditAvatarModal';
+import Layout from '../../../components/template/Layout/Layout';
+import useAuthData from '../../../data/context/auth/useAuthData';
+import useLanguageData from '../../../data/context/language/useLanguageData';
+import ProfileAddressesEdit
+  from './components/ProfileAddressesEdit/ProfileAddressesEdit';
+import ProfileAuthEdit from './components/ProfileAuthEdit/ProfileAuthEdit';
+import ProfileEdit from './components/ProfileEdit/ProfileEdit';
+import ProfilePhonesEdit
+  from './components/ProfilePhonesEdit/ProfilePhonesEdit';
 
 export default function ProfileEditPage() {
   const { user } = useAuthData();

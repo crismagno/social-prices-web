@@ -1,10 +1,17 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
-import handleClientError from "../../../../../components/common/HandleClientError/HandleClientError";
-import { serviceMethodsInstance } from "../../../../../services/social-prices-api/service-methods";
-import useAuthData from "../../../auth/useAuthData";
+import handleClientError
+  from '../../../../../components/common/HandleClientError/HandleClientError';
+import {
+  serviceMethodsInstance,
+} from '../../../../../services/social-prices-api/service-methods';
+import useAuthData from '../../../auth/useAuthData';
 
 export interface IAppContextNotifications {
   countNotificationNotSeen: number;

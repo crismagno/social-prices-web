@@ -84,7 +84,8 @@
     "noData": "Sem dados",
     "noResults": "Nenhum resultado encontrado",
     "items": "itens",
-    "goBack": "Voltar"
+    "goBack": "Voltar",
+    "previewImage": "Visualizar Imagem"
   },
   "navigation": {
     "home": "Início",
@@ -128,6 +129,8 @@
     "emailOrUsername": "E-mail ou Usuário"
   },
   "sales": {
+    "salesTable": "Tabela de Vendas",
+    "salesChart": "Gráfico de Vendas",
     "title": "Vendas",
     "createSale": "Criar Venda",
     "updateSale": "Atualizar Venda",
@@ -200,7 +203,12 @@
     "editCustomerDetails": "Editar detalhes do cliente",
     "customerCreatedSuccessfully": "Seu cliente foi criado com sucesso!",
     "customerUpdatedSuccessfully": "Seu cliente foi atualizado com sucesso!",
-    "customerNotFoundToUpdate": "Cliente não encontrado para atualizar!"
+    "customerNotFoundToUpdate": "Cliente não encontrado para atualizar!",
+    "customerProfile": "Perfil do Cliente",
+    "customerProfileSubtitle": "Perfil do cliente {{name}}",
+    "customerEmailTooltip": "E-mail do cliente, clique para enviar um e-mail",
+    "uniqueUsername": "Nome de usuário único",
+    "uploadFilename": "Nome do Arquivo de Upload"
   },
   "stores": {
     "title": "Lojas",
@@ -346,5 +354,15 @@
     "enterBirthDate": "Digite a data de nascimento",
     "selectGender": "Selecione o gênero",
     "enterAbout": "Digite sobre você"
+  },
+  "upload": {
+    "selectProductBeforeUpload": "Por favor, selecione um produto antes de enviar os arquivos!",
+    "filesBeingProcessed": "Seus arquivos estão sendo processados! Enviaremos uma notificação quando estiver pronto, ou qualquer informação relacionada ao processo.",
+    "maxFilesReached": "Número máximo de arquivos para envio atingido. Máximo de {{max}} arquivos!",
+    "downloadTemplateFile": "Baixar Arquivo de Modelo",
+    "clickOrDragFile": "Clique ou arraste o arquivo para esta área para enviar",
+    "uploadHint": "Suporte para envio único ou em massa. É estritamente proibido enviar dados da empresa ou outros arquivos proibidos.",
+    "uploading": "Enviando",
+    "startUpload": "Iniciar Envio"
   }
 }

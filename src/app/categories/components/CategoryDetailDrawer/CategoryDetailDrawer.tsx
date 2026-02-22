@@ -1,28 +1,61 @@
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from 'react';
 
-import { Button, Col, Drawer, message, Row, Select } from "antd";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
+import {
+  Button,
+  Col,
+  Drawer,
+  message,
+  Row,
+  Select,
+} from 'antd';
+import {
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
+import { z } from 'zod';
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
-import HrCustom from "../../../../components/common/HrCustom/HrCustom";
-import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
-import { ColorPickerCustomAntd } from "../../../../components/custom/antd/ColorPickerCustomAntd/ColorPickerCustomAntd";
-import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
-import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
-import { TextareaCustomAntd } from "../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
-import useAuthData from "../../../../data/context/auth/useAuthData";
-import useLanguageData from "../../../../data/context/language/useLanguageData";
-import CreateCategoryDto from "../../../../services/social-prices-api/categories/dto/createCategory.dto";
-import UpdateCategoryDto from "../../../../services/social-prices-api/categories/dto/updateCategory.dto";
-import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
-import CategoriesEnum from "../../../../shared/business/categories/categories.enum";
-import { ICategory } from "../../../../shared/business/categories/categories.interface";
-import { parseColorPickerToHexString } from "../../../../shared/utils/antd/color-picker/color-picker";
-import { parseToUpperAndUnderline } from "../../../../shared/utils/strings/string";
-import { useFindCategoryById } from "../../useFindCategoryById";
+import handleClientError
+  from '../../../../components/common/HandleClientError/HandleClientError';
+import HrCustom from '../../../../components/common/HrCustom/HrCustom';
+import LoadingFull from '../../../../components/common/LoadingFull/LoadingFull';
+import {
+  ColorPickerCustomAntd,
+} from '../../../../components/custom/antd/ColorPickerCustomAntd/ColorPickerCustomAntd';
+import {
+  InputCustomAntd,
+} from '../../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
+import {
+  SelectCustomAntd,
+} from '../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
+import {
+  TextareaCustomAntd,
+} from '../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd';
+import useAuthData from '../../../../data/context/auth/useAuthData';
+import useLanguageData from '../../../../data/context/language/useLanguageData';
+import CreateCategoryDto
+  from '../../../../services/social-prices-api/categories/dto/createCategory.dto';
+import UpdateCategoryDto
+  from '../../../../services/social-prices-api/categories/dto/updateCategory.dto';
+import {
+  serviceMethodsInstance,
+} from '../../../../services/social-prices-api/service-methods';
+import CategoriesEnum
+  from '../../../../shared/business/categories/categories.enum';
+import {
+  ICategory,
+} from '../../../../shared/business/categories/categories.interface';
+import {
+  parseColorPickerToHexString,
+} from '../../../../shared/utils/antd/color-picker/color-picker';
+import {
+  parseToUpperAndUnderline,
+} from '../../../../shared/utils/strings/string';
+import { useFindCategoryById } from '../../useFindCategoryById';
 
 const formSchema = z.object({
   name: z.string().trim().nonempty("Name is required"),

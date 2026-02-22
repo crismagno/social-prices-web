@@ -1,13 +1,16 @@
 "use client";
 
-import { Card } from "antd";
+import { Card } from 'antd';
 
-import ContainerTitle from "../../components/common/ContainerTitle/ContainerTitle";
-import Description from "../../components/common/Description/Description";
-import { LanguageSelector } from "../../components/common/LanguageSelector/LanguageSelector";
-import Layout from "../../components/template/Layout/Layout";
-import ThemeButton from "../../components/template/ThemeButton/ThemeButton";
-import useLanguageData from "../../data/context/language/useLanguageData";
+import ContainerTitle
+  from '../../components/common/ContainerTitle/ContainerTitle';
+import Description from '../../components/common/Description/Description';
+import {
+  LanguageSelector,
+} from '../../components/common/LanguageSelector/LanguageSelector';
+import Layout from '../../components/template/Layout/Layout';
+import ThemeButton from '../../components/template/ThemeButton/ThemeButton';
+import useLanguageData from '../../data/context/language/useLanguageData';
 
 export default function SettingsPage() {
   const { t } = useLanguageData()!;

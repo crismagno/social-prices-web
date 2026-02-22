@@ -1,17 +1,30 @@
-import { Select, Tooltip } from "antd";
-import { useFieldArray } from "react-hook-form";
-import { z } from "zod";
+import {
+  Select,
+  Tooltip,
+} from 'antd';
+import { useFieldArray } from 'react-hook-form';
+import { z } from 'zod';
 
-import useLanguageData from "../../../data/context/language/useLanguageData";
-import PhoneNumberEnum from "../../../shared/business/shared/phone/phone-number.enum";
-import { IPhoneNumber } from "../../../shared/business/shared/phone/phone-number.interface";
-import { createPhoneNumberName } from "../../../shared/utils/strings/string";
-import { InputCustomAntd } from "../../custom/antd/InputCustomAntd/InputCustomAntd";
-import { SelectCustomAntd } from "../../custom/antd/SelectCustomAntd/SelectCustomAntd";
-import ButtonCommon from "../ButtonCommon/ButtonCommon";
-import Collapse from "../Collapse/Collapse";
-import ContainerTitle from "../ContainerTitle/ContainerTitle";
-import { IconPlus, IconTrash } from "../icons/icons";
+import useLanguageData from '../../../data/context/language/useLanguageData';
+import PhoneNumberEnum
+  from '../../../shared/business/shared/phone/phone-number.enum';
+import {
+  IPhoneNumber,
+} from '../../../shared/business/shared/phone/phone-number.interface';
+import { createPhoneNumberName } from '../../../shared/utils/strings/string';
+import {
+  InputCustomAntd,
+} from '../../custom/antd/InputCustomAntd/InputCustomAntd';
+import {
+  SelectCustomAntd,
+} from '../../custom/antd/SelectCustomAntd/SelectCustomAntd';
+import ButtonCommon from '../ButtonCommon/ButtonCommon';
+import Collapse from '../Collapse/Collapse';
+import ContainerTitle from '../ContainerTitle/ContainerTitle';
+import {
+  IconPlus,
+  IconTrash,
+} from '../icons/icons';
 
 export const phoneNumberFormSchema = z.object({
   uid: z.string(),

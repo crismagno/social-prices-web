@@ -1,4 +1,8 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useState,
+} from 'react';
 
 import {
   Button,
@@ -7,18 +11,20 @@ import {
   Table,
   TablePaginationConfig,
   TableProps,
-} from "antd";
-import Search, { SearchProps } from "antd/es/input/Search";
+} from 'antd';
+import Search, { SearchProps } from 'antd/es/input/Search';
 import {
   FilterValue,
   SorterResult,
   TableCurrentDataSource,
-} from "antd/es/table/interface";
-import { RecordType } from "zod";
+} from 'antd/es/table/interface';
+import { RecordType } from 'zod';
 
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined } from '@ant-design/icons';
 
-import { ITableStateRequest } from "../../../../shared/utils/table/table-state.interface";
+import {
+  ITableStateRequest,
+} from '../../../../shared/utils/table/table-state.interface';
 
 interface Props<T> extends TableProps<T> {
   search?: {

@@ -1,16 +1,19 @@
 "use client";
 
-import "antd/dist/reset.css";
+import 'antd/dist/reset.css';
 
-import React from "react";
+import React from 'react';
 
-import { App as AntdApp, ConfigProvider } from "antd";
+import {
+  App as AntdApp,
+  ConfigProvider,
+} from 'antd';
 
-import { antdThemeConfig } from "../../lib-antd/theme";
-import { AppProvider } from "../context/app/AppContext";
-import { AuthProvider } from "../context/auth/AuthContext";
-import { LanguageProvider } from "../context/language/LanguageContext";
-import { SocketProvider } from "../context/socket/SocketContext";
+import { antdThemeConfig } from '../../lib-antd/theme';
+import { AppProvider } from '../context/app/AppContext';
+import { AuthProvider } from '../context/auth/AuthContext';
+import { LanguageProvider } from '../context/language/LanguageContext';
+import { SocketProvider } from '../context/socket/SocketContext';
 
 export function Providers({ children }: any) {
   return (

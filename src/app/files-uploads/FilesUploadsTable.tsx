@@ -1,19 +1,40 @@
-import { forwardRef, useImperativeHandle, useState } from "react";
+import {
+  forwardRef,
+  useImperativeHandle,
+  useState,
+} from 'react';
 
-import { Button, Card, Space, Tag, Tooltip } from "antd";
-import moment from "moment";
+import {
+  Button,
+  Card,
+  Space,
+  Tag,
+  Tooltip,
+} from 'antd';
+import moment from 'moment';
 
-import { DownloadOutlined } from "@ant-design/icons";
+import { DownloadOutlined } from '@ant-design/icons';
 
-import handleClientError from "../../components/common/HandleClientError/HandleClientError";
-import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
-import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
-import { IFileUpload } from "../../shared/business/files-uploads/file-upload.interface";
-import FilesUploadsEnum from "../../shared/business/files-uploads/files-uploads.enum";
-import DatesEnum from "../../shared/utils/dates/dates.enum";
-import { createTableState } from "../../shared/utils/table/table-state";
-import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
-import { useFindFilesUploadsByUserTableState } from "./useFindFilesUploadsByUserTableState";
+import handleClientError
+  from '../../components/common/HandleClientError/HandleClientError';
+import TableCustomAntd2
+  from '../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
+import {
+  serviceMethodsInstance,
+} from '../../services/social-prices-api/service-methods';
+import {
+  IFileUpload,
+} from '../../shared/business/files-uploads/file-upload.interface';
+import FilesUploadsEnum
+  from '../../shared/business/files-uploads/files-uploads.enum';
+import DatesEnum from '../../shared/utils/dates/dates.enum';
+import { createTableState } from '../../shared/utils/table/table-state';
+import {
+  ITableStateRequest,
+} from '../../shared/utils/table/table-state.interface';
+import {
+  useFindFilesUploadsByUserTableState,
+} from './useFindFilesUploadsByUserTableState';
 
 export interface IFilesUploadsTableRefProps {
   fetchFindFilesUploadsByUserTableState: () => Promise<void> | void;

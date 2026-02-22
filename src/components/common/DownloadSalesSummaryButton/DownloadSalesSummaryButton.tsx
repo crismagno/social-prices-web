@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Button, Tooltip } from "antd";
+import {
+  Button,
+  Tooltip,
+} from 'antd';
 
-import { DownloadOutlined } from "@ant-design/icons";
+import { DownloadOutlined } from '@ant-design/icons';
 
-import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
-import { ISale } from "../../../shared/business/sales/sale.interface";
-import handleClientError from "../HandleClientError/HandleClientError";
+import {
+  serviceMethodsInstance,
+} from '../../../services/social-prices-api/service-methods';
+import { ISale } from '../../../shared/business/sales/sale.interface';
+import handleClientError from '../HandleClientError/HandleClientError';
 
 interface Props {
   sale: ISale;

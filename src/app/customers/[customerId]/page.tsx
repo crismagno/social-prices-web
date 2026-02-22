@@ -34,6 +34,7 @@ import {
   TagTagsCustomAntd,
 } from '../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
 import Layout from '../../../components/template/Layout/Layout';
+import useLanguageData from '../../../data/context/language/useLanguageData';
 import AddressEnum from '../../../shared/business/shared/address/address.enum';
 import {
   IAddress,
@@ -56,6 +57,7 @@ import { useFindTagsByType } from '../../tags/useFindTagsByType';
 import { useFindCustomerById } from '../detail/useFindCustomerById';
 
 export default function CustomerPage() {
+  const { t } = useLanguageData()!;
   const router: AppRouterInstance = useRouter();
 
   const params: Params = useParams();
@@ -82,8 +84,8 @@ export default function CustomerPage() {
 
   return (
     <Layout
-      subtitle={`Here we can see about customer - ${customer.name}`}
-      title="Customer"
+      subtitle={t("customers.customerProfileSubtitle", { name: customer.name })}
+      title={t("customers.customerProfile")}
       hasBackButton
     >
       <Card className="h-min-80 mt-2">
@@ -99,14 +101,14 @@ export default function CustomerPage() {
               src={customer.avatar}
               width={240}
               className="shadow-lg border-none cursor-pointer z-10 rounded-lg mt-10"
-              title="See avatar"
+              title={t("profile.seeAvatar")}
             />
 
             <h3 className="md:text-2xl font-semibold text-blueGray-700 mt-1 mb-1">
               {customer.name}
             </h3>
 
-            <Tooltip title={"Customer Email, click to send a email"}>
+            <Tooltip title={t("customers.customerEmailTooltip")}>
               <a
                 href={`mailto:${customer.email}`}
                 className="flex items-center text-sm leading-normal text-gray-400 
@@ -117,7 +119,7 @@ export default function CustomerPage() {
             </Tooltip>
 
             {customer.uniqName && (
-              <Tooltip title="Unique Username">
+              <Tooltip title={t("customers.uniqueUsername")}>
                 <Tag color="blue" className="mt-2">
                   {customer.uniqName}
                 </Tag>
@@ -127,15 +129,15 @@ export default function CustomerPage() {
 
           <Col xs={24} sm={14} md={19}>
             <ContainerTitle
-              title="Information"
+              title={t("profile.information")}
               extraHeader={
-                <Tooltip title="Edit customer">
+                <Tooltip title={t("customers.editCustomer")}>
                   <Button
                     type="success"
                     icon={<EditOutlined />}
                     onClick={handleEditCustomer}
                   >
-                    Edit
+                    {t("common.edit")}
                   </Button>
                 </Tooltip>
               }
@@ -148,15 +150,15 @@ export default function CustomerPage() {
                     column={{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3 }}
                     size="small"
                   >
-                    <Descriptions.Item label="Name" span={2}>
+                    <Descriptions.Item label={t("common.name")} span={2}>
                       <span className="font-medium">{customer.name}</span>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Uniq Name">
+                    <Descriptions.Item label={t("customers.uniqName")}>
                       <Tag color="blue">{customer.uniqName || "-"}</Tag>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Email">
+                    <Descriptions.Item label={t("common.email")}>
                       <a
                         href={`mailto:${customer.email}`}
                         className="text-blue-600"
@@ -165,7 +167,7 @@ export default function CustomerPage() {
                       </a>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Birth Date">
+                    <Descriptions.Item label={t("customers.birthDate")}>
                       {customer.birthDate
                         ? moment(customer.birthDate).format(
                             DatesEnum.Format.DDMMYYY
@@ -173,7 +175,7 @@ export default function CustomerPage() {
                         : "-"}
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Gender">
+                    <Descriptions.Item label={t("customers.gender")}>
                       <Tag
                         color={
                           PersonEnum.GenderColors[
@@ -195,7 +197,7 @@ export default function CustomerPage() {
                 {customer.about && (
                   <Col xs={24}>
                     <Descriptions bordered column={1} size="small">
-                      <Descriptions.Item label="About">
+                      <Descriptions.Item label={t("customers.about")}>
                         <div className="max-h-20 overflow-y-auto">
                           {customer.about}
                         </div>
@@ -208,7 +210,7 @@ export default function CustomerPage() {
                 {customer.phoneNumbers && customer.phoneNumbers.length > 0 && (
                   <Col xs={24}>
                     <Descriptions bordered column={1} size="small">
-                      <Descriptions.Item label="Phone Numbers">
+                      <Descriptions.Item label={t("profile.phoneNumbers")}>
                         <div className="flex flex-col gap-2">
                           {customer.phoneNumbers.map(
                             (phone: IPhoneNumber, index: number) => (
@@ -261,7 +263,7 @@ export default function CustomerPage() {
                 {customer.addresses && customer.addresses.length > 0 && (
                   <Col xs={24}>
                     <Descriptions bordered column={1} size="small">
-                      <Descriptions.Item label="Addresses">
+                      <Descriptions.Item label={t("profile.addresses")}>
                         <div className="flex flex-col gap-3">
                           {customer.addresses.map(
                             (address: IAddress, index: number) => (
@@ -316,7 +318,7 @@ export default function CustomerPage() {
                 {/* Tags */}
                 <Col xs={24}>
                   <Descriptions bordered column={1} size="small">
-                    <Descriptions.Item label="Tags">
+                    <Descriptions.Item label={t("tags.title")}>
                       <div className="max-w-full overflow-x-auto py-1">
                         <div className="flex flex-wrap gap-1">
                           <TagTagsCustomAntd
@@ -338,12 +340,12 @@ export default function CustomerPage() {
                     size="small"
                   >
                     {customer.uploadFilename && (
-                      <Descriptions.Item label="Upload Filename">
+                      <Descriptions.Item label={t("customers.uploadFilename")}>
                         <Tag color="orange">{customer.uploadFilename}</Tag>
                       </Descriptions.Item>
                     )}
 
-                    <Descriptions.Item label="Created At">
+                    <Descriptions.Item label={t("profile.createdAt")}>
                       {customer.createdAt
                         ? moment(customer.createdAt).format(
                             DatesEnum.Format.DDMMYYYYhhmmss
@@ -351,7 +353,7 @@ export default function CustomerPage() {
                         : "-"}
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Updated At">
+                    <Descriptions.Item label={t("profile.updatedAt")}>
                       {customer.updatedAt
                         ? moment(customer.updatedAt).format(
                             DatesEnum.Format.DDMMYYYYhhmmss
@@ -372,7 +374,7 @@ export default function CustomerPage() {
           items={[
             {
               key: "1",
-              label: "Sales Chart",
+              label: t("sales.salesChart"),
               children: (
                 <>
                   <SalesBalance customerId={customerId} />
@@ -382,7 +384,7 @@ export default function CustomerPage() {
             },
             {
               key: "2",
-              label: "Sales Table",
+              label: t("sales.salesTable"),
               children: <SalesTable customerId={customerId} />,
             },
           ]}
@@ -395,7 +397,7 @@ export default function CustomerPage() {
         onCancel={() => setPreviewOpen(false)}
       >
         <Image
-          alt="preview image"
+          alt={t("common.previewImage")}
           style={{ width: "100%" }}
           preview={false}
           src={

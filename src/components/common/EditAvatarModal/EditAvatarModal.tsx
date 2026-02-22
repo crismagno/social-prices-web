@@ -1,23 +1,36 @@
-import "./styles.scss";
+import './styles.scss';
 
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
-import { Button, message, Modal, Upload } from "antd";
-import type { RcFile, UploadProps } from "antd/es/upload";
-import type { UploadFile } from "antd/es/upload/interface";
+import {
+  Button,
+  message,
+  Modal,
+  Upload,
+} from 'antd';
+import type {
+  RcFile,
+  UploadProps,
+} from 'antd/es/upload';
+import type { UploadFile } from 'antd/es/upload/interface';
 
 import {
   DeleteOutlined,
   PlusOutlined,
   UploadOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 
-import useAuthData from "../../../data/context/auth/useAuthData";
-import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
-import IUser from "../../../shared/business/users/user.interface";
-import { getBase64 } from "../../../shared/utils/images/images-helper";
-import { getImageUrl } from "../../../shared/utils/images/images-url";
-import handleClientError from "../HandleClientError/HandleClientError";
+import useAuthData from '../../../data/context/auth/useAuthData';
+import {
+  serviceMethodsInstance,
+} from '../../../services/social-prices-api/service-methods';
+import IUser from '../../../shared/business/users/user.interface';
+import { getBase64 } from '../../../shared/utils/images/images-helper';
+import { getImageUrl } from '../../../shared/utils/images/images-url';
+import handleClientError from '../HandleClientError/HandleClientError';
 
 interface Props {
   isVisible: boolean;
