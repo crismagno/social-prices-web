@@ -163,7 +163,11 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
 
   return (
     <Drawer
-      title={categoryId ? `${t("categories.editCategory")}: ${category?.name}` : t("categories.newCategory")}
+      title={
+        categoryId
+          ? `${t("categories.editCategory")}: ${category?.name}`
+          : t("categories.newCategory")
+      }
       onClose={handleClose}
       open={isOpen}
     >

@@ -35,7 +35,11 @@ export default function CategoriesPage() {
   const [categoryId, setCategoryId] = useState<string | undefined>();
 
   return (
-    <Layout subtitle={t("categories.myCategories")} title={t("categories.title")} hasBackButton>
+    <Layout
+      subtitle={t("categories.myCategories")}
+      title={t("categories.title")}
+      hasBackButton
+    >
       <Card
         title={t("categories.title")}
         className="h-min-80 mt-5"
