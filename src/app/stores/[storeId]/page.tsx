@@ -380,11 +380,8 @@ export default function StorePage() {
               children: (
                 <>
                   <SalesBalance storeId={storeId} />
-                  <SalesChartsStatistics
-                    storeId={storeId}
-                    isShowHeaderLabel={false}
-                  />
-                  <SalesChart isShowHeader={false} storeId={storeId} />
+                  <SalesChartsStatistics storeId={storeId} />
+                  <SalesChart storeId={storeId} />
                 </>
               ),
             },
