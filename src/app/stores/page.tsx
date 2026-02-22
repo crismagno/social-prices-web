@@ -33,7 +33,6 @@ import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";
 import { useFindTagsByType } from "../tags/useFindTagsByType";
-import { StoreDetail } from "./components/StoreDetail/StoreDetail";
 import { useFindStoresByUserTableState } from "./useFindStoresByUserTableState";
 
 export default function StoresPage() {
@@ -224,9 +223,6 @@ export default function StoresPage() {
           ]}
           search={{ placeholder: "Search stores..." }}
           loading={isLoading}
-          expandable={{
-            expandedRowRender: (store: IStore) => <StoreDetail store={store} />,
-          }}
           total={total}
         />
       </Card>

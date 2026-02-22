@@ -314,7 +314,7 @@ export default function ProfilePage() {
                             (address: IAddress, index: number) => (
                               <div
                                 key={index}
-                                className="border-l-4 border-indigo-500 pl-3 py-2 bg-gray-50 rounded"
+                                className="border-l-4 border-blue-500 pl-3 py-2 bg-gray-50 rounded"
                               >
                                 <div className="flex flex-wrap gap-1 mb-2">
                                   {address.types &&
