@@ -1,6 +1,13 @@
 import { Dispatch, SetStateAction, useState } from "react";
 
-import { Col, Row, Table, TablePaginationConfig, TableProps } from "antd";
+import {
+  Button,
+  Col,
+  Row,
+  Table,
+  TablePaginationConfig,
+  TableProps,
+} from "antd";
 import Search, { SearchProps } from "antd/es/input/Search";
 import {
   FilterValue,
@@ -64,7 +71,7 @@ function TableCustomAntd2<T extends object = any>({
             style={{ margin: ".7rem 0px", width: "100%" }}
             placeholder={search.placeholder}
             allowClear
-            enterButton={<SearchOutlined style={{ marginBottom: 5 }} />}
+            enterButton={<Button icon={<SearchOutlined />} type="primary" />}
             size="middle"
             onSearch={onSearch}
             onChange={onSearchChange}
