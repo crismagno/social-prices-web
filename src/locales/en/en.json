@@ -215,7 +215,17 @@
     "district": "District",
     "types": "Types",
     "newAddress": "New Address",
-    "selectAddress": "Select Address"
+    "selectAddress": "Select Address",
+    "addNewAddress": "Add a new address",
+    "removeAddress": "Remove address",
+    "selectCountry": "Select country",
+    "enterZipcode": "Enter zipcode",
+    "enterDistrict": "Enter district",
+    "selectState": "Select state",
+    "enterAddress1": "Enter address 1",
+    "enterAddress2": "Enter address 2",
+    "selectCity": "Select city",
+    "selectTypes": "Select types"
   },
   "categories": {
     "title": "Categories",
@@ -245,6 +255,7 @@
     "subtitle": "See my information",
     "updateProfile": "Update Profile",
     "editProfile": "Edit profile",
+    "personalDataToUpdate": "Your personal data to update",
     "avatar": "Avatar",
     "uploadAvatar": "Upload Avatar",
     "removeAvatar": "Remove Avatar",
@@ -259,7 +270,21 @@
     "phoneNumbers": "Phone Numbers",
     "addresses": "Addresses",
     "createdAt": "Created At",
-    "updatedAt": "Updated At"
+    "updatedAt": "Updated At",
+    "saveProfile": "Save Profile",
+    "saveAddresses": "Save Addresses",
+    "savePhones": "Save Phones",
+    "basicInfoUpdated": "Your basic information was updated!",
+    "addressesInfoUpdated": "Your addresses information was updated!",
+    "phoneNumbersInfoUpdated": "Your phone numbers information was updated!"
+  },
+  "phoneNumber": {
+    "phoneNumber": "Phone Number",
+    "addNewPhoneNumber": "Add a new phone number",
+    "removePhoneNumber": "Remove phone number",
+    "type": "Type",
+    "messengers": "Messengers",
+    "selectMessengers": "Select messengers"
   },
   "errors": {
     "required": "This field is required",
@@ -289,6 +314,10 @@
     "enterNote": "Enter any note if you need",
     "selectOption": "Select an option",
     "searchHere": "Search here...",
-    "typeToSearch": "Type to search"
+    "typeToSearch": "Type to search",
+    "enterUsername": "Enter a username",
+    "enterBirthDate": "Enter birth date",
+    "selectGender": "Select gender",
+    "enterAbout": "Enter about"
   }
 }

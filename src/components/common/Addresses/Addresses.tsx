@@ -2,6 +2,7 @@ import { Select, Tooltip } from "antd";
 import { Control, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 
+import useLanguageData from "../../../data/context/language/useLanguageData";
 import AddressEnum from "../../../shared/business/shared/address/address.enum";
 import { IAddress } from "../../../shared/business/shared/address/address.interface";
 import citiesMockData from "../../../shared/utils/mock-data/brazil-cities.json";
@@ -75,6 +76,8 @@ export const Addresses: React.FC<Props> = ({
   errors,
   containerExtraHeader,
 }) => {
+  const { t } = useLanguageData()!;
+
   const {
     append: appendAddress,
     fields: fieldsAddresses,
@@ -99,9 +102,9 @@ export const Addresses: React.FC<Props> = ({
       extraHeader={containerExtraHeader}
       title={
         <div className="flex items-center">
-          <label className="mr-4">Addresses</label>
+          <label className="mr-4">{t("profile.addresses")}</label>
 
-          <Tooltip title="Add a new address">
+          <Tooltip title={t("address.addNewAddress")}>
             <ButtonCommon
               onClick={(e) => {
                 e.preventDefault();
@@ -126,10 +129,10 @@ export const Addresses: React.FC<Props> = ({
           <Collapse
             key={index}
             collapsed={formAddress.isCollapsed}
-            title={addressName.trim() || `Address (${index + 1})`}
+            title={addressName.trim() || `${t("common.address")} (${index + 1})`}
             className="relative mt-5"
             extraHeader={
-              <Tooltip title="Remove address">
+              <Tooltip title={t("address.removeAddress")}>
                 <ButtonCommon
                   onClick={(e) => {
                     e.preventDefault();
@@ -153,8 +156,8 @@ export const Addresses: React.FC<Props> = ({
                   errorMessage={
                     errors?.addresses?.[index]?.countryCode?.message
                   }
-                  label="Country"
-                  placeholder={"Select country"}
+                  label={t("address.country")}
+                  placeholder={t("address.selectCountry")}
                 >
                   {countries.map((country: ICountryMockData) => (
                     <Select.Option key={country.code} value={country.code}>
@@ -165,16 +168,16 @@ export const Addresses: React.FC<Props> = ({
 
                 <InputCustomAntd
                   controller={{ control, name: `addresses.${index}.zip` }}
-                  label="Zipcode"
-                  placeholder={"Enter zipcode"}
+                  label={t("address.zipcode")}
+                  placeholder={t("address.enterZipcode")}
                   errorMessage={errors?.addresses?.[index]?.zip?.message}
                   maxLength={20}
                 />
 
                 <InputCustomAntd
                   controller={{ control, name: `addresses.${index}.district` }}
-                  label="District"
-                  placeholder={"Enter district"}
+                  label={t("address.district")}
+                  placeholder={t("address.enterDistrict")}
                   errorMessage={errors?.addresses?.[index]?.district?.message}
                   maxLength={200}
                 />
@@ -184,8 +187,8 @@ export const Addresses: React.FC<Props> = ({
                 <SelectCustomAntd<IAddress>
                   controller={{ control, name: `addresses.${index}.stateCode` }}
                   errorMessage={errors?.addresses?.[index]?.stateCode?.message}
-                  label="State"
-                  placeholder={"Select state"}
+                  label={t("address.state")}
+                  placeholder={t("address.selectState")}
                 >
                   {states.map((state: IStateMockData) => (
                     <Select.Option key={state.code} value={state.code}>
@@ -196,8 +199,8 @@ export const Addresses: React.FC<Props> = ({
 
                 <InputCustomAntd
                   controller={{ control, name: `addresses.${index}.address1` }}
-                  label="Address 1"
-                  placeholder={"Enter address 1"}
+                  label={t("address.address1")}
+                  placeholder={t("address.enterAddress1")}
                   errorMessage={errors?.addresses?.[index]?.address1?.message}
                   maxLength={200}
                 />
@@ -207,8 +210,8 @@ export const Addresses: React.FC<Props> = ({
                     control,
                     name: `addresses.${index}.description`,
                   }}
-                  label="Description"
-                  placeholder={"Enter description"}
+                  label={t("common.description")}
+                  placeholder={t("placeholders.enterDescription")}
                   maxLength={400}
                 />
               </div>
@@ -217,8 +220,8 @@ export const Addresses: React.FC<Props> = ({
                 <SelectCustomAntd<IAddress>
                   controller={{ control, name: `addresses.${index}.city` }}
                   errorMessage={errors?.addresses?.[index]?.city?.message}
-                  label="City"
-                  placeholder={"Select city"}
+                  label={t("address.city")}
+                  placeholder={t("address.selectCity")}
                 >
                   {stateCities
                     .find(
@@ -233,17 +236,17 @@ export const Addresses: React.FC<Props> = ({
                 </SelectCustomAntd>
 
                 <InputCustomAntd
-                  label="Address 2"
+                  label={t("address.address2")}
                   controller={{ control, name: `addresses.${index}.address2` }}
-                  placeholder={"Enter address 2"}
+                  placeholder={t("address.enterAddress2")}
                   maxLength={200}
                 />
 
                 <SelectCustomAntd<IAddress>
                   controller={{ control, name: `addresses.${index}.types` }}
-                  label="Types"
+                  label={t("address.types")}
                   errorMessage={errors?.addresses?.[index]?.types?.message}
-                  placeholder={"Select types"}
+                  placeholder={t("address.selectTypes")}
                   mode="multiple"
                 >
                   {Object.keys(AddressEnum.Type).map((type: string) => (

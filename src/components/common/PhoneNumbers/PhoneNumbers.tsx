@@ -2,6 +2,7 @@ import { Select, Tooltip } from "antd";
 import { useFieldArray } from "react-hook-form";
 import { z } from "zod";
 
+import useLanguageData from "../../../data/context/language/useLanguageData";
 import PhoneNumberEnum from "../../../shared/business/shared/phone/phone-number.enum";
 import { IPhoneNumber } from "../../../shared/business/shared/phone/phone-number.interface";
 import { createPhoneNumberName } from "../../../shared/utils/strings/string";
@@ -45,6 +46,8 @@ export const PhoneNumbers: React.FC<Props> = ({
   watch,
   containerExtraHeader,
 }) => {
+  const { t } = useLanguageData()!;
+
   const {
     append: appendPhone,
     fields: fieldsPhones,
@@ -68,9 +71,9 @@ export const PhoneNumbers: React.FC<Props> = ({
     <ContainerTitle
       title={
         <div className="flex items-center">
-          <label className="mr-4">Phones</label>
+          <label className="mr-4">{t("profile.phoneNumbers")}</label>
 
-          <Tooltip title="Add a new phone number">
+          <Tooltip title={t("phoneNumber.addNewPhoneNumber")}>
             <ButtonCommon
               onClick={(e) => {
                 e.preventDefault();
@@ -101,10 +104,10 @@ export const PhoneNumbers: React.FC<Props> = ({
             <Collapse
               key={index}
               collapsed={formPhoneNumber.isCollapsed}
-              title={phoneNumberName.trim() || `Phone Number (${index + 1})`}
+              title={phoneNumberName.trim() || `${t("phoneNumber.phoneNumber")} (${index + 1})`}
               className="relative mt-5"
               extraHeader={
-                <Tooltip title="Remove phone number">
+                <Tooltip title={t("phoneNumber.removePhoneNumber")}>
                   <ButtonCommon
                     onClick={(e) => {
                       e.preventDefault();
@@ -122,7 +125,7 @@ export const PhoneNumbers: React.FC<Props> = ({
                 <div className="flex flex-col justify-start w-1/2">
                   <SelectCustomAntd<IPhoneNumber>
                     controller={{ control, name: `phoneNumbers.${index}.type` }}
-                    label="Type"
+                    label={t("phoneNumber.type")}
                     errorMessage={errors?.phoneNumbers?.[index]?.type?.message}
                   >
                     {Object.keys(PhoneNumberEnum.Type).map(
@@ -145,8 +148,8 @@ export const PhoneNumbers: React.FC<Props> = ({
                       control,
                       name: `phoneNumbers.${index}.number`,
                     }}
-                    label="Phone Number"
-                    placeholder={"Enter phone number"}
+                    label={t("phoneNumber.phoneNumber")}
+                    placeholder={t("placeholders.enterPhone")}
                     errorMessage={
                       errors?.phoneNumbers?.[index]?.number?.message
                     }
@@ -160,11 +163,11 @@ export const PhoneNumbers: React.FC<Props> = ({
                       control,
                       name: `phoneNumbers.${index}.messengers`,
                     }}
-                    label="Messengers"
+                    label={t("phoneNumber.messengers")}
                     errorMessage={
                       errors?.phoneNumbers?.[index]?.messengers?.message
                     }
-                    placeholder={"Select messengers"}
+                    placeholder={t("phoneNumber.selectMessengers")}
                     mode="multiple"
                   >
                     {Object.keys(PhoneNumberEnum.PhoneNumberMessenger).map(

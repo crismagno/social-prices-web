@@ -16,6 +16,7 @@ import {
   PhoneNumbers,
 } from "../../../../../components/common/PhoneNumbers/PhoneNumbers";
 import useAuthData from "../../../../../data/context/auth/useAuthData";
+import useLanguageData from "../../../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/service-methods";
 import { IPhoneNumber } from "../../../../../shared/business/shared/phone/phone-number.interface";
 import IUser from "../../../../../shared/business/users/user.interface";
@@ -32,6 +33,7 @@ interface Props {
 
 const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
   const { user, updateUserSession } = useAuthData();
+  const { t } = useLanguageData()!;
 
   const defaultValues: TFormSchema = {
     phoneNumbers: user?.phoneNumbers?.length
@@ -65,7 +67,7 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
           }
         );
 
-      message.success("Your Phone numbers information was updated!");
+      message.success(t("profile.phoneNumbersInfoUpdated"));
 
       updateUserSession(response);
     } catch (error) {
@@ -88,7 +90,7 @@ const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
             onClick={handleSubmit(onSubmit)}
             icon={<SaveOutlined />}
           >
-            Save Phones
+            {t("profile.savePhones")}
           </Button>
         }
       />

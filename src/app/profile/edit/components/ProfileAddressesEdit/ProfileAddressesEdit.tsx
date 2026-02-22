@@ -18,6 +18,7 @@ import {
 } from "../../../../../components/common/Addresses/Addresses";
 import handleClientError from "../../../../../components/common/HandleClientError/HandleClientError";
 import useAuthData from "../../../../../data/context/auth/useAuthData";
+import useLanguageData from "../../../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/service-methods";
 import AddressEnum from "../../../../../shared/business/shared/address/address.enum";
 import { IAddress } from "../../../../../shared/business/shared/address/address.interface";
@@ -35,6 +36,7 @@ interface Props {
 
 const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
   const { user, updateUserSession } = useAuthData();
+  const { t } = useLanguageData()!;
 
   const defaultValues: TFormSchema = {
     addresses: user?.addresses?.length
@@ -87,7 +89,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
           addresses,
         });
 
-      message.success("Your addresses information was updated!");
+      message.success(t("profile.addressesInfoUpdated"));
 
       updateUserSession(response);
     } catch (error) {
@@ -110,7 +112,7 @@ const ProfileAddressesEdit: React.FC<Props> = ({ className = "" }) => {
             onClick={handleSubmit(onSubmit)}
             icon={<SaveOutlined />}
           >
-            Save Addresses
+            {t("profile.saveAddresses")}
           </Button>
         }
       />

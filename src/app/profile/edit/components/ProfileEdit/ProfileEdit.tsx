@@ -17,6 +17,7 @@ import { InputCustomAntd } from "../../../../../components/custom/antd/InputCust
 import { SelectCustomAntd } from "../../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import useAuthData from "../../../../../data/context/auth/useAuthData";
+import useLanguageData from "../../../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/service-methods";
 import PersonEnum from "../../../../../shared/business/shared/person/person.enum";
 import IUser from "../../../../../shared/business/users/user.interface";
@@ -37,6 +38,7 @@ type TFormSchema = z.infer<typeof formSchema>;
 
 const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
   const { user, updateUserSession } = useAuthData();
+  const { t } = useLanguageData()!;
 
   const defaultValues: TFormSchema = {
     name: user?.name ?? "",
@@ -70,7 +72,7 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
           about: data.about,
         });
 
-      message.success("Your basic information was updated!");
+      message.success(t("profile.basicInfoUpdated"));
 
       updateUserSession(response);
     } catch (error) {
@@ -83,7 +85,7 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={`w-full ${className}`}>
       <ContainerTitle
-        title="Profile"
+        title={t("navigation.profile")}
         className="mt-10"
         extraHeader={
           <Button
@@ -92,7 +94,7 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
             onClick={handleSubmit(onSubmit)}
             icon={<SaveOutlined />}
           >
-            Save Profile
+            {t("profile.saveProfile")}
           </Button>
         }
       >
@@ -100,19 +102,19 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
           <Col xs={24} md={8}>
             <InputCustomAntd
               controller={{ control, name: "name" }}
-              label="Name"
+              label={t("common.name")}
               errorMessage={errors.name?.message}
               maxLength={100}
-              placeholder={"Enter name"}
+              placeholder={t("placeholders.enterName")}
             />
           </Col>
 
           <Col xs={24} md={8}>
             <InputCustomAntd
               controller={{ control, name: "birthDate" }}
-              label="Birth date"
+              label={t("customers.birthDate")}
               type="date"
-              placeholder={"Enter birth date"}
+              placeholder={t("placeholders.enterBirthDate")}
               errorMessage={errors.birthDate?.message}
             />
           </Col>
@@ -120,9 +122,9 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
           <Col xs={24} md={8}>
             <SelectCustomAntd<IUser>
               controller={{ control, name: "gender" }}
-              label="Gender"
+              label={t("customers.gender")}
               errorMessage={errors.gender?.message}
-              placeholder={"Select gender"}
+              placeholder={t("placeholders.selectGender")}
             >
               {Object.keys(PersonEnum.Gender).map((gender: string) => (
                 <FormSelectOption key={gender} value={gender}>
@@ -137,8 +139,8 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
           <Col xs={24}>
             <TextareaCustomAntd
               controller={{ control, name: "about" }}
-              label="About"
-              placeholder={"Enter about"}
+              label={t("customers.about")}
+              placeholder={t("placeholders.enterAbout")}
               rows={2}
             />
           </Col>

@@ -215,7 +215,17 @@
     "district": "Bairro",
     "types": "Tipos",
     "newAddress": "Novo Endereço",
-    "selectAddress": "Selecionar Endereço"
+    "selectAddress": "Selecionar Endereço",
+    "addNewAddress": "Adicionar um novo endereço",
+    "removeAddress": "Remover endereço",
+    "selectCountry": "Selecionar país",
+    "enterZipcode": "Digite o CEP",
+    "enterDistrict": "Digite o bairro",
+    "selectState": "Selecionar estado",
+    "enterAddress1": "Digite o endereço 1",
+    "enterAddress2": "Digite o endereço 2",
+    "selectCity": "Selecionar cidade",
+    "selectTypes": "Selecionar tipos"
   },
   "categories": {
     "title": "Categorias",
@@ -245,6 +255,7 @@
     "subtitle": "Veja minhas informações",
     "updateProfile": "Atualizar Perfil",
     "editProfile": "Editar perfil",
+    "personalDataToUpdate": "Seus dados pessoais para atualizar",
     "avatar": "Avatar",
     "uploadAvatar": "Enviar Avatar",
     "removeAvatar": "Remover Avatar",
@@ -259,7 +270,21 @@
     "phoneNumbers": "Números de Telefone",
     "addresses": "Endereços",
     "createdAt": "Criado em",
-    "updatedAt": "Atualizado em"
+    "updatedAt": "Atualizado em",
+    "saveProfile": "Salvar Perfil",
+    "saveAddresses": "Salvar Endereços",
+    "savePhones": "Salvar Telefones",
+    "basicInfoUpdated": "Suas informações básicas foram atualizadas!",
+    "addressesInfoUpdated": "Suas informações de endereços foram atualizadas!",
+    "phoneNumbersInfoUpdated": "Suas informações de telefones foram atualizadas!"
+  },
+  "phoneNumber": {
+    "phoneNumber": "Número de Telefone",
+    "addNewPhoneNumber": "Adicionar um novo número de telefone",
+    "removePhoneNumber": "Remover número de telefone",
+    "type": "Tipo",
+    "messengers": "Mensageiros",
+    "selectMessengers": "Selecionar mensageiros"
   },
   "errors": {
     "required": "Este campo é obrigatório",
@@ -289,6 +314,10 @@
     "enterNote": "Digite alguma observação se necessário",
     "selectOption": "Selecione uma opção",
     "searchHere": "Buscar aqui...",
-    "typeToSearch": "Digite para buscar"
+    "typeToSearch": "Digite para buscar",
+    "enterUsername": "Digite um nome de usuário",
+    "enterBirthDate": "Digite a data de nascimento",
+    "selectGender": "Selecione o gênero",
+    "enterAbout": "Digite sobre você"
   }
 }
