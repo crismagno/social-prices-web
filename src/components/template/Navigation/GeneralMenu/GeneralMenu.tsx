@@ -61,7 +61,7 @@ export const GeneralMenu: React.FC<Props> = ({}) => {
       onClick={onClick}
       mode="horizontal"
       items={items}
-      style={{ paddingLeft: 0 }}
+      style={{ paddingLeft: 0, paddingRight: 0 }}
     />
   );
 };
