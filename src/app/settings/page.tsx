@@ -26,7 +26,7 @@ export default function SettingsPage() {
               description={<ThemeButton />}
             />
 
-            <div className="mt-4">
+            <div className="mt-4 w-60">
               <LanguageSelector />
             </div>
           </div>
