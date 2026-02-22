@@ -27,7 +27,7 @@ import {
   some,
 } from "lodash";
 import moment from "moment";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import {
   ReadonlyURLSearchParams,
   useRouter,
@@ -1207,7 +1207,7 @@ export default function CreateSalePage() {
           <Button
             type="primary"
             onClick={() => router.push(Urls.SALE.replace(":saleId", saleId))}
-            className="px-3 shadow-lg"
+            className="px-3 shadow-lg mr-2"
             icon={<EnterOutlined />}
           >
             Sale
@@ -1862,7 +1862,7 @@ export default function CreateSalePage() {
             <Row>
               <Col xs={24}>
                 <Button
-                  type="primary"
+                  type="success"
                   disabled={!isEnableCreateSale}
                   className="w-full text-center mt-5 h-10 font-bold text-lg bg-green-600 hover:bg-green-700"
                   onClick={() => callHandleSubmit(true)}
@@ -1885,6 +1885,7 @@ export default function CreateSalePage() {
           <div className="flex justify-end">
             <Button
               type="primary"
+              className="mr-2"
               onClick={handleNewSaleAfterSubmit}
               icon={<ShoppingCartOutlined />}
             >
