@@ -115,7 +115,7 @@ export const SaleSummary: React.FC<Props> = ({ sale, stores, tags }) => {
 
                 return (
                   <Row
-                    key={saleStoreProduct.productItemId}
+                    key={`${saleStoreProduct.productItemId}-${indexSaleStoreProduct}`}
                     className={`border-b border-slate-100 p-2 ${rowBackgroundColor}`}
                   >
                     <Col xs={8}>
