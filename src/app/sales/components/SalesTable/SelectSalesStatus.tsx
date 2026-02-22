@@ -1,7 +1,7 @@
 "use client";
 import { memo, useState } from "react";
 
-import { Alert, Button, message, Modal, Select, Tag, Tooltip } from "antd";
+import { Alert, App, Button, message, Select, Tag, Tooltip } from "antd";
 
 import {
   CheckOutlined,
@@ -23,6 +23,8 @@ export interface Props {
 }
 
 const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
+  const { modal } = App.useApp();
+
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -36,7 +38,7 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
       sale.totals.totalFinalAmount - getTotalPayment(sale);
 
     if (totalAfterPayment !== 0) {
-      Modal.confirm({
+      modal.confirm({
         title: `Confirm Payment`,
         icon: <QuestionCircleTwoTone />,
         content: (

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import {
   Alert,
+  App,
   Button,
   Card,
   Col,
@@ -241,6 +242,8 @@ const generateFormSchemaDefault = (): TFormSchema => {
 };
 
 export default function CreateSalePage() {
+  const { modal } = App.useApp();
+
   const { user, employee } = useAuthData();
 
   const router: AppRouterInstance = useRouter();
@@ -850,20 +853,23 @@ export default function CreateSalePage() {
 
   const validatePayment = () => {
     if (totalAfterPayment !== 0) {
-      Modal.confirm({
+      modal.confirm({
         title: "Confirm Payment",
         icon: <QuestionCircleTwoTone />,
         content: (
           <Alert
-            message="Please confirm total after payment, and payment status?"
+            message={`Payment difference: $${totalAfterPayment.toFixed(2)}`}
+            description="Please confirm total after payment, and payment status?"
             type="warning"
             showIcon
           />
         ),
         okText: "Confirm",
         cancelText: "Cancel",
-        onOk: () => callHandleSubmit(false),
-        onCancel: () => false,
+        onOk: () => {
+          callHandleSubmit(false);
+        },
+        onCancel: () => {},
       });
 
       return false;
@@ -873,8 +879,11 @@ export default function CreateSalePage() {
   };
 
   const callHandleSubmit = (shouldValidatePayment: boolean = true) => {
-    if (shouldValidatePayment && !validatePayment()) {
-      return;
+    if (shouldValidatePayment) {
+      const isValid = validatePayment();
+      if (!isValid) {
+        return;
+      }
     }
 
     handleSubmit(onSubmit)();

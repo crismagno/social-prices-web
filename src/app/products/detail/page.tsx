@@ -2,33 +2,32 @@
 
 import {
   Alert,
+  App,
   Button,
   Card,
   Col,
   Divider,
   message,
-  Modal,
   Row,
   Tooltip,
-} from 'antd';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+} from "antd";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import {
   ReadonlyURLSearchParams,
   useRouter,
   useSearchParams,
-} from 'next/navigation';
+} from "next/navigation";
 
-import {
-  CheckCircleTwoTone,
-  EnterOutlined,
-} from '@ant-design/icons';
+import { CheckCircleTwoTone, EnterOutlined } from "@ant-design/icons";
 
-import Layout from '../../../components/template/Layout/Layout';
-import Urls from '../../../shared/common/routes-app/routes-app';
-import { ProductDetail } from '../components/ProductDetail/ProductDetail';
-import { useFindProductById } from './useFindProductById';
+import Layout from "../../../components/template/Layout/Layout";
+import Urls from "../../../shared/common/routes-app/routes-app";
+import { ProductDetail } from "../components/ProductDetail/ProductDetail";
+import { useFindProductById } from "./useFindProductById";
 
 export default function ProductDetailPage() {
+  const { modal } = App.useApp();
+
   const router: AppRouterInstance = useRouter();
 
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
@@ -40,7 +39,7 @@ export default function ProductDetailPage() {
   const isEditMode: boolean = !!productId && !!product;
 
   const handleCreate = () => {
-    Modal.confirm({
+    modal.confirm({
       title: "Your product has been created successfully!",
       icon: <CheckCircleTwoTone />,
       content: (
