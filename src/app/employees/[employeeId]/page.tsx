@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 
 import {
   Button,
@@ -8,8 +8,8 @@ import {
   Col,
   Descriptions,
   Image,
-  Modal,
   Row,
+  Spin,
   Tabs,
   Tag,
   Tooltip,
@@ -37,12 +37,33 @@ import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getImageUrl } from "../../../shared/utils/images/images-url";
 import ImagesEnum from "../../../shared/utils/images/images.enum";
-import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
-import { SalesChart } from "../../sales/components/SalesChart/SalesChart";
-import { SalesChartsStatistics } from "../../sales/components/SalesChartsStatistics/SalesChartsStatistics";
-import SalesTable from "../../sales/components/SalesTable/SalesTable";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindEmployeeById } from "../detail/useFindEmployeeById";
+
+// Lazy load dos componentes pesados com named exports
+const Modal = lazy(() =>
+  import("antd").then((module) => ({ default: module.Modal }))
+);
+const SalesBalance = lazy(() =>
+  import("../../sales/components/SalesBalance/SalesBalance").then((m) => ({
+    default: m.SalesBalance,
+  }))
+);
+const SalesChart = lazy(() =>
+  import("../../sales/components/SalesChart/SalesChart").then((m) => ({
+    default: m.SalesChart,
+  }))
+);
+const SalesChartsStatistics = lazy(() =>
+  import(
+    "../../sales/components/SalesChartsStatistics/SalesChartsStatistics"
+  ).then((m) => ({ default: m.SalesChartsStatistics }))
+);
+const SalesTable = lazy(() =>
+  import("../../sales/components/SalesTable/SalesTable").then((m) => ({
+    default: m.default,
+  }))
+);
 
 export default function EmployeePage() {
   const router: AppRouterInstance = useRouter();
@@ -50,6 +71,7 @@ export default function EmployeePage() {
   const params: Params = useParams();
 
   const [previewOpen, setPreviewOpen] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<string>("1");
 
   const paramsEmployeeId: string = params?.employeeId;
 
@@ -134,7 +156,7 @@ export default function EmployeePage() {
               extraHeader={
                 <Tooltip title="Edit employee">
                   <Button
-                    type="success"
+                    type="primary"
                     icon={<EditOutlined />}
                     onClick={handleEditEmployee}
                   >
@@ -384,43 +406,63 @@ export default function EmployeePage() {
       <Card className="mt-4">
         <Tabs
           defaultActiveKey="1"
+          activeKey={activeTab}
+          onChange={setActiveTab}
           items={[
             {
               key: "1",
               label: "Sales Chart",
               children: (
-                <>
+                <Suspense
+                  fallback={
+                    <div className="flex justify-center p-8">
+                      <Spin size="large" />
+                    </div>
+                  }
+                >
                   <SalesBalance employeeId={employeeId} />
                   <SalesChartsStatistics employeeId={employeeId} />
                   <SalesChart employeeId={employeeId} />
-                </>
+                </Suspense>
               ),
             },
             {
               key: "2",
               label: "Sales Table",
-              children: <SalesTable employeeId={employeeId} />,
+              children: (
+                <Suspense
+                  fallback={
+                    <div className="flex justify-center p-8">
+                      <Spin size="large" />
+                    </div>
+                  }
+                >
+                  <SalesTable employeeId={employeeId} />
+                </Suspense>
+              ),
             },
           ]}
         />
       </Card>
 
-      <Modal
-        open={previewOpen}
-        footer={null}
-        onCancel={() => setPreviewOpen(false)}
-      >
-        <Image
-          alt="preview image"
-          style={{ width: "100%" }}
-          preview={false}
-          src={
-            employee?.avatar
-              ? getImageUrl(employee.avatar)
-              : ImagesEnum.FilesNames.DefaultAvatarImage
-          }
-        />
-      </Modal>
+      <Suspense fallback={null}>
+        <Modal
+          open={previewOpen}
+          footer={null}
+          onCancel={() => setPreviewOpen(false)}
+        >
+          <Image
+            alt="preview image"
+            style={{ width: "100%" }}
+            preview={false}
+            src={
+              employee?.avatar
+                ? getImageUrl(employee.avatar)
+                : ImagesEnum.FilesNames.DefaultAvatarImage
+            }
+          />
+        </Modal>
+      </Suspense>
     </Layout>
   );
 }
