@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 import { ShoppingCartOutlined } from "@ant-design/icons";
 
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import Urls from "../../../../shared/common/routes-app/routes-app";
 import { IconCart } from "../../../common/icons/icons";
 import { getItem, MenuItem } from "../../../utils/navigation/navigation.util";
@@ -14,21 +15,34 @@ import NavigationItem from "../NavigationItem";
 interface Props {}
 
 export const SalesMenu: React.FC<Props> = ({}) => {
+  const { t } = useLanguageData();
   const router: AppRouterInstance = useRouter();
 
   const items: MenuItem[] = [
     getItem(
-      <NavigationItem icon={IconCart()} text="Sales" url={Urls.SALES} />,
+      <NavigationItem
+        icon={IconCart()}
+        text={t("navigation.sales")}
+        url={Urls.SALES}
+      />,
       "sub1",
       null,
       [
         getItem(
-          "Sales",
+          t("navigation.sales"),
           null,
           null,
           [
-            getItem("Sales", Urls.SALES, <ShoppingCartOutlined />),
-            getItem("Create Sale", Urls.SALES_CREATE, <ShoppingCartOutlined />),
+            getItem(
+              t("navigation.sales"),
+              Urls.SALES,
+              <ShoppingCartOutlined />
+            ),
+            getItem(
+              t("sales.createSale"),
+              Urls.SALES_CREATE,
+              <ShoppingCartOutlined />
+            ),
           ],
           "group"
         ),

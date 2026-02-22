@@ -12,6 +12,7 @@ import {
   TeamOutlined,
 } from "@ant-design/icons";
 
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import Urls from "../../../../shared/common/routes-app/routes-app";
 import { IconBuildingStoreFront } from "../../../common/icons/icons";
 import { getItem, MenuItem } from "../../../utils/navigation/navigation.util";
@@ -20,36 +21,53 @@ import NavigationItem from "../NavigationItem";
 interface Props {}
 
 export const StoresMenu: React.FC<Props> = ({}) => {
+  const { t } = useLanguageData();
   const router: AppRouterInstance = useRouter();
 
   const items: MenuItem[] = [
     getItem(
       <NavigationItem
         icon={IconBuildingStoreFront()}
-        text="Stores"
+        text={t("navigation.stores")}
         url={Urls.STORES}
       />,
       Urls.STORES,
       null,
       [
         getItem(
-          "Stores",
+          t("navigation.stores"),
           null,
           null,
           [
-            getItem("Stores", Urls.STORES, <HomeOutlined />),
-            getItem("Customers", Urls.CUSTOMERS, <TeamOutlined />),
-            getItem("Categories", Urls.CATEGORIES, <BlockOutlined />),
+            getItem(t("navigation.stores"), Urls.STORES, <HomeOutlined />),
+            getItem(
+              t("navigation.customers"),
+              Urls.CUSTOMERS,
+              <TeamOutlined />
+            ),
+            getItem(
+              t("navigation.categories"),
+              Urls.CATEGORIES,
+              <BlockOutlined />
+            ),
           ],
           "group"
         ),
         getItem(
-          "Products",
+          t("navigation.products"),
           null,
           null,
           [
-            getItem("Products", Urls.PRODUCTS, <AppstoreOutlined />),
-            getItem("Product Items", Urls.PRODUCT_ITEMS, <ShoppingOutlined />),
+            getItem(
+              t("navigation.products"),
+              Urls.PRODUCTS,
+              <AppstoreOutlined />
+            ),
+            getItem(
+              t("navigation.productItems"),
+              Urls.PRODUCT_ITEMS,
+              <ShoppingOutlined />
+            ),
           ],
           "group"
         ),

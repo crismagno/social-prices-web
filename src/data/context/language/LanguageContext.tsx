@@ -23,9 +23,12 @@ const translations: Record<Language, Translations> = {
   "pt-BR": ptBRTranslations,
 };
 
-const LanguageContext = createContext<LanguageContextType | undefined>(
-  undefined
-);
+const LanguageContext = createContext<LanguageContextType>({
+  language: "en",
+  setLanguage: () => {},
+  t: (key: string) => key,
+  translations: translations["en"],
+});
 
 const LANGUAGE_STORAGE_KEY = "app-language";
 

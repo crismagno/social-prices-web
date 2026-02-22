@@ -4,6 +4,7 @@ import { Modal } from "antd";
 
 import useAppData from "../../../data/context/app/useAppData";
 import useAuthData from "../../../data/context/auth/useAuthData";
+import useLanguageData from "../../../data/context/language/useLanguageData";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import { getUserName } from "../../../shared/utils/strings/string";
 import Avatar from "../../common/Avatar/Avatar";
@@ -24,6 +25,8 @@ import { StoresMenu } from "./StoresMenu/StoresMenu";
 interface Props {}
 
 const Navigation: React.FC<Props> = ({}) => {
+  const { t } = useLanguageData();
+
   const { user, logout } = useAuthData();
 
   const {
@@ -49,14 +52,18 @@ const Navigation: React.FC<Props> = ({}) => {
       >
         <div className="flex lg:w-5/12 mb-0">
           <NavigationItem
-            text="Profile"
+            text={t("navigation.profile")}
             url={Urls.PROFILE}
             title={getUserName(user)}
           >
             <Avatar src={user?.avatar} alt="Image logo" />
           </NavigationItem>
 
-          <NavigationItem icon={IconHome()} text="Home" url={Urls.DASHBOARD} />
+          <NavigationItem
+            icon={IconHome()}
+            text={t("navigation.home")}
+            url={Urls.DASHBOARD}
+          />
 
           <NavigationItem
             icon={
@@ -64,14 +71,14 @@ const Navigation: React.FC<Props> = ({}) => {
                 ? IconBellAlert("animate-pulse text-yellow-500")
                 : IconBell()
             }
-            text="Notifications"
+            text={t("navigation.notifications")}
             url={Urls.NOTIFICATIONS}
             isLoading={isLoadingCountNotificationNotSeen}
           />
 
           <NavigationItem
             icon={IconAdjustmentsHorizontal}
-            text="Settings"
+            text={t("navigation.settings")}
             url={Urls.SETTINGS}
           />
 
@@ -91,7 +98,7 @@ const Navigation: React.FC<Props> = ({}) => {
 
           <NavigationItem
             icon={IconLogout}
-            text={"Logout"}
+            text={t("navigation.logout")}
             onClick={() => setShowLogoutModal(true)}
             className="
             text-red-600 hover:bg-red-400 hover:text-white ml-2
@@ -102,15 +109,15 @@ const Navigation: React.FC<Props> = ({}) => {
 
       <Modal
         open={showLogoutModal}
-        title="Logout"
+        title={t("navigation.logout")}
         destroyOnHidden
         onCancel={() => setShowLogoutModal(false)}
         onOk={async () => {
           await logout();
           setShowLogoutModal(false);
         }}
-        okText={"Yes"}
-        cancelText={"No"}
+        okText={t("common.yes")}
+        cancelText={t("common.no")}
       >
         <div className="flex justify-center absolute right-0 w-full -top-16">
           <Avatar
@@ -119,7 +126,7 @@ const Navigation: React.FC<Props> = ({}) => {
             className="shadow-lg border-none z-10"
           />
         </div>
-        Are you sure logout?
+        {t("auth.logoutConfirm")}
       </Modal>
     </>
   );

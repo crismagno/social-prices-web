@@ -1,13 +1,14 @@
 import "./styles.scss";
 
 import { Menu, MenuProps } from "antd";
-import { ItemType } from "antd/es/menu/hooks/useItems";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import { ItemType } from "antd/es/menu/interface";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter } from "next/navigation";
 
 import { TagOutlined, TeamOutlined } from "@ant-design/icons";
 
 import useAuthData from "../../../../data/context/auth/useAuthData";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import EmployeesEnum from "../../../../shared/business/employees/employees.enum";
 import Urls from "../../../../shared/common/routes-app/routes-app";
 import { IconQuestion } from "../../../common/icons/icons";
@@ -17,16 +18,18 @@ import NavigationItem from "../NavigationItem";
 interface Props {}
 
 export const GeneralMenu: React.FC<Props> = ({}) => {
+  const { t } = useLanguageData();
+
   const { employee } = useAuthData();
 
   const router: AppRouterInstance = useRouter();
 
   const itemsSub1: ItemType[] = [
     getItem(
-      "General",
+      t("navigation.general"),
       null,
       null,
-      [getItem("Tags", Urls.TAGS, <TagOutlined />)],
+      [getItem(t("navigation.tags"), Urls.TAGS, <TagOutlined />)],
       "group"
     ),
   ];
@@ -34,10 +37,10 @@ export const GeneralMenu: React.FC<Props> = ({}) => {
   if (employee?.level !== EmployeesEnum.Level.EMPLOYEE) {
     itemsSub1.push(
       getItem(
-        "Employees",
+        t("navigation.employees"),
         null,
         null,
-        [getItem("Employees", Urls.EMPLOYEES, <TeamOutlined />)],
+        [getItem(t("navigation.employees"), Urls.EMPLOYEES, <TeamOutlined />)],
         "group"
       )
     );
@@ -45,7 +48,11 @@ export const GeneralMenu: React.FC<Props> = ({}) => {
 
   const items: MenuItem[] = [
     getItem(
-      <NavigationItem icon={IconQuestion()} text="General" url={Urls.TAGS} />,
+      <NavigationItem
+        icon={IconQuestion()}
+        text={t("navigation.general")}
+        url={Urls.TAGS}
+      />,
       "sub1",
       null,
       itemsSub1
