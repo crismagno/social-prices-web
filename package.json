@@ -38,6 +38,7 @@
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.45",
     "next": "^16.1.6",
+    "next-intl": "^4.8.3",
     "npm": "^10.6.0",
     "postcss": "8.4.27",
     "rc-virtual-list": "^3.11.5",
