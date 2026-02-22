@@ -38,7 +38,6 @@ import { getImageUrl } from "../../../shared/utils/images/images-url";
 import ImagesEnum from "../../../shared/utils/images/images.enum";
 import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
 import { SalesChart } from "../../sales/components/SalesChart/SalesChart";
-import { SalesChartsStatistics } from "../../sales/components/SalesChartsStatistics/SalesChartsStatistics";
 import SalesTable from "../../sales/components/SalesTable/SalesTable";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindCustomerById } from "../detail/useFindCustomerById";
@@ -364,10 +363,6 @@ export default function CustomerPage() {
               children: (
                 <>
                   <SalesBalance customerId={customerId} />
-                  <SalesChartsStatistics
-                    customerId={customerId}
-                    isShowHeaderLabel={false}
-                  />
                   <SalesChart isShowHeader={false} customerId={customerId} />
                 </>
               ),
