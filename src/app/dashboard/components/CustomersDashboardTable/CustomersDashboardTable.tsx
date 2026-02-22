@@ -1,21 +1,41 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Card, Tag } from "antd";
-import moment from "moment";
+import {
+  Card,
+  Tag,
+} from 'antd';
+import moment from 'moment';
 
-import { ButtonCreateSale } from "../../../../components/common/ButtonCreateSale/ButtonCreateSale";
-import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
-import { PhoneNumbersTag } from "../../../../components/common/PhoneNumbersTag/PhoneNumbersTag";
-import TableCustomAntd2 from "../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
-import { ICustomer } from "../../../../shared/business/customers/customer.interface";
-import PersonEnum from "../../../../shared/business/shared/person/person.enum";
-import { IPhoneNumber } from "../../../../shared/business/shared/phone/phone-number.interface";
-import DatesEnum from "../../../../shared/utils/dates/dates.enum";
-import { createTableState } from "../../../../shared/utils/table/table-state";
-import { ITableStateRequest } from "../../../../shared/utils/table/table-state.interface";
-import { useFindCustomersByOwnerOfUserTableState } from "../../../customers/useFindCustomersByOwnerOfUserTableState";
+import {
+  ButtonCreateSale,
+} from '../../../../components/common/ButtonCreateSale/ButtonCreateSale';
+import {
+  ImageOrDefault,
+} from '../../../../components/common/ImageOrDefault/ImageOrDefault';
+import {
+  PhoneNumbersTag,
+} from '../../../../components/common/PhoneNumbersTag/PhoneNumbersTag';
+import TableCustomAntd2
+  from '../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
+import useLanguageData from '../../../../data/context/language/useLanguageData';
+import {
+  ICustomer,
+} from '../../../../shared/business/customers/customer.interface';
+import PersonEnum from '../../../../shared/business/shared/person/person.enum';
+import {
+  IPhoneNumber,
+} from '../../../../shared/business/shared/phone/phone-number.interface';
+import DatesEnum from '../../../../shared/utils/dates/dates.enum';
+import { createTableState } from '../../../../shared/utils/table/table-state';
+import {
+  ITableStateRequest,
+} from '../../../../shared/utils/table/table-state.interface';
+import {
+  useFindCustomersByOwnerOfUserTableState,
+} from '../../../customers/useFindCustomersByOwnerOfUserTableState';
 
 export const CustomersDashboardTable: React.FC = () => {
+  const { t } = useLanguageData();
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<ICustomer> | undefined
   >(createTableState({ sort: { field: "createdAt", order: "ascend" } }));
@@ -43,13 +63,13 @@ export const CustomersDashboardTable: React.FC = () => {
             ),
           },
           {
-            title: "Name",
+            title: t("common.name"),
             dataIndex: "name",
             key: "name",
             align: "center",
           },
           {
-            title: "Email",
+            title: t("common.email"),
             dataIndex: "email",
             key: "email",
             align: "center",
@@ -60,7 +80,7 @@ export const CustomersDashboardTable: React.FC = () => {
             ),
           },
           {
-            title: "Phone Numbers",
+            title: t("profile.phoneNumbers"),
             dataIndex: "phoneNumbers",
             key: "phoneNumbers",
             align: "center",
@@ -69,7 +89,7 @@ export const CustomersDashboardTable: React.FC = () => {
             ),
           },
           {
-            title: "Gender",
+            title: t("customers.gender"),
             dataIndex: "gender",
             key: "gender",
             align: "center",
@@ -88,7 +108,7 @@ export const CustomersDashboardTable: React.FC = () => {
             ),
           },
           {
-            title: "Birth Date",
+            title: t("customers.birthDate"),
             dataIndex: "birthDate",
             key: "birthDate",
             align: "center",
@@ -97,7 +117,7 @@ export const CustomersDashboardTable: React.FC = () => {
               moment(birthDate).format(DatesEnum.Format.DDMMYYY),
           },
         ]}
-        search={{ placeholder: "Search customers.." }}
+        search={{ placeholder: t("customers.searchCustomers") }}
         loading={isLoading}
         tableStateRequest={tableStateRequest}
         setTableStateRequest={setTableStateRequest}

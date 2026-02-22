@@ -104,6 +104,25 @@
     "tags": "Tags",
     "productItems": "Product Items"
   },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Dashboard information",
+    "stores": "Stores",
+    "customers": "Customers",
+    "products": "Products",
+    "categories": "Categories",
+    "totalStores": "Total Stores",
+    "totalCustomers": "Total Customers",
+    "totalProducts": "Total Products",
+    "totalCategories": "Total Categories",
+    "seeStores": "See Stores",
+    "seeCustomers": "See Customers",
+    "seeProducts": "See Products",
+    "seeCategories": "See Categories",
+    "createNewStore": "Create a new Store",
+    "createNewCustomer": "Create a new Customer",
+    "createNewProduct": "Create a new Product"
+  },
   "settings": {
     "title": "Settings to update system",
     "subtitle": "System settings",

@@ -16,6 +16,7 @@ import {
   TeamOutlined,
 } from '@ant-design/icons';
 
+import useLanguageData from '../../../../data/context/language/useLanguageData';
 import Urls from '../../../../shared/common/routes-app/routes-app';
 import {
   useCountCustomersByUser,
@@ -23,6 +24,7 @@ import {
 
 export const CustomersCard: React.FC = () => {
   const router: AppRouterInstance = useRouter();
+  const { t } = useLanguageData();
 
   const { isLoading, count } = useCountCustomersByUser();
 
@@ -47,18 +49,18 @@ export const CustomersCard: React.FC = () => {
         </div>
       }
       actions={[
-        <Tooltip key="table" title="See Customers">
+        <Tooltip key="table" title={t("dashboard.seeCustomers")}>
           <TabletOutlined onClick={handleGoToCustomers} />
         </Tooltip>,
-        <Tooltip key="plus" title="Create a new Customer">
+        <Tooltip key="plus" title={t("dashboard.createNewCustomer")}>
           <PlusOutlined onClick={() => router.push(Urls.NEW_CUSTOMER)} />
         </Tooltip>,
       ]}
     >
       <Meta
         avatar={<TeamOutlined style={{ fontSize: 25 }} />}
-        title="Customers"
-        description={`Total Customers: ${count}`}
+        title={t("dashboard.customers")}
+        description={`${t("dashboard.totalCustomers")}: ${count}`}
       />
     </Card>
   );

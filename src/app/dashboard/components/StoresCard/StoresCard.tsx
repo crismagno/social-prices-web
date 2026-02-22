@@ -16,11 +16,13 @@ import {
   TabletOutlined,
 } from '@ant-design/icons';
 
+import useLanguageData from '../../../../data/context/language/useLanguageData';
 import Urls from '../../../../shared/common/routes-app/routes-app';
 import { useFindStoresByUser } from '../../../stores/useFindStoresByUser';
 
 export const StoresCard: React.FC = () => {
   const router: AppRouterInstance = useRouter();
+  const { t } = useLanguageData();
 
   const { isLoading, stores } = useFindStoresByUser();
 
@@ -44,18 +46,18 @@ export const StoresCard: React.FC = () => {
         </div>
       }
       actions={[
-        <Tooltip key="table" title="See Stores">
+        <Tooltip key="table" title={t("dashboard.seeStores")}>
           <TabletOutlined onClick={handleGoToStores} />
         </Tooltip>,
-        <Tooltip key="plus" title="Create a new Store">
+        <Tooltip key="plus" title={t("dashboard.createNewStore")}>
           <PlusOutlined onClick={() => router.push(Urls.NEW_STORE)} />
         </Tooltip>,
       ]}
     >
       <Meta
         avatar={<HomeOutlined style={{ fontSize: 25 }} />}
-        title="Stores"
-        description={`Total Stores: ${stores.length}`}
+        title={t("dashboard.stores")}
+        description={`${t("dashboard.totalStores")}: ${stores.length}`}
       />
     </Card>
   );

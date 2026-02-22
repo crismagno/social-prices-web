@@ -16,6 +16,7 @@ import {
   TabletOutlined,
 } from '@ant-design/icons';
 
+import useLanguageData from '../../../../data/context/language/useLanguageData';
 import Urls from '../../../../shared/common/routes-app/routes-app';
 import {
   useCountProductsByUser,
@@ -23,6 +24,7 @@ import {
 
 export const ProductsCard: React.FC = () => {
   const router: AppRouterInstance = useRouter();
+  const { t } = useLanguageData();
 
   const { isLoading, count } = useCountProductsByUser();
 
@@ -47,18 +49,18 @@ export const ProductsCard: React.FC = () => {
         </div>
       }
       actions={[
-        <Tooltip key="table" title="See Products">
+        <Tooltip key="table" title={t("dashboard.seeProducts")}>
           <TabletOutlined onClick={handleGoToProducts} />
         </Tooltip>,
-        <Tooltip key="plus" title="Create a new Product">
+        <Tooltip key="plus" title={t("dashboard.createNewProduct")}>
           <PlusOutlined onClick={() => router.push(Urls.NEW_PRODUCT)} />
         </Tooltip>,
       ]}
     >
       <Meta
         avatar={<AppstoreOutlined style={{ fontSize: 25 }} />}
-        title="Products"
-        description={`Total Products: ${count}`}
+        title={t("dashboard.products")}
+        description={`${t("dashboard.totalProducts")}: ${count}`}
       />
     </Card>
   );

@@ -104,6 +104,25 @@
     "tags": "Etiquetas",
     "productItems": "Itens de Produto"
   },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Informações do Dashboard",
+    "stores": "Lojas",
+    "customers": "Clientes",
+    "products": "Produtos",
+    "categories": "Categorias",
+    "totalStores": "Total de Lojas",
+    "totalCustomers": "Total de Clientes",
+    "totalProducts": "Total de Produtos",
+    "totalCategories": "Total de Categorias",
+    "seeStores": "Ver Lojas",
+    "seeCustomers": "Ver Clientes",
+    "seeProducts": "Ver Produtos",
+    "seeCategories": "Ver Categorias",
+    "createNewStore": "Criar uma nova Loja",
+    "createNewCustomer": "Criar um novo Cliente",
+    "createNewProduct": "Criar um novo Produto"
+  },
   "settings": {
     "title": "Configurações para atualizar o sistema",
     "subtitle": "Configurações do sistema",
