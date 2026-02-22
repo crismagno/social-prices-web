@@ -7,7 +7,7 @@ import {
 import { ItemType } from 'antd/es/menu/interface';
 import {
   AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime.shared-runtime';
+} from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter } from 'next/navigation';
 
 import {

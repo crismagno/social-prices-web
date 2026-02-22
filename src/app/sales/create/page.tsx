@@ -33,7 +33,7 @@ import {
 import moment from 'moment';
 import {
   AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime.shared-runtime';
+} from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import {
   ReadonlyURLSearchParams,
   useRouter,
