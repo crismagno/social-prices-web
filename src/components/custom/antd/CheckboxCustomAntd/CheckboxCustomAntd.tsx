@@ -24,7 +24,10 @@ export function CheckboxCustomAntd<T extends object = any>({
   return (
     <div className={`flex flex-col mt-4 mr-5 ${divClassName}`}>
       <div>
-        <label className={`text-sm ${labelClassName}`} for={controller.name}>
+        <label
+          className={`text-sm ${labelClassName}`}
+          htmlFor={controller.name}
+        >
           {label}
         </label>
         <Controller

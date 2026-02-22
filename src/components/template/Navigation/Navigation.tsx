@@ -103,7 +103,7 @@ const Navigation: React.FC<Props> = ({}) => {
       <Modal
         open={showLogoutModal}
         title="Logout"
-        destroyOnClose
+        destroyOnHidden
         onCancel={() => setShowLogoutModal(false)}
         onOk={async () => {
           await logout();

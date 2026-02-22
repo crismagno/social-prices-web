@@ -108,7 +108,7 @@ export const UpdateSaleCustomerButton: React.FC<Props> = ({
         open={isOpen}
         closable={false}
         maskClosable={false}
-        destroyOnClose
+        destroyOnHidden
       >
         <Divider />
 

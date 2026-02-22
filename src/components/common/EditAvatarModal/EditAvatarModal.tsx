@@ -138,7 +138,7 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
       okButtonProps={{ hidden: true }}
       cancelButtonProps={{ hidden: true }}
       closable={!isSubmitting}
-      destroyOnClose
+      destroyOnHidden
     >
       <div className="content-edit-avatar-modal">
         <Upload

@@ -73,7 +73,7 @@ const ImageModal: React.FC<Props> = ({ isVisible, onCancel, onOk, url }) => {
         onCancel();
       }}
       onOk={(e) => onOk(e, fileList)}
-      destroyOnClose
+      destroyOnHidden
     >
       <div className="content-edit-modal">
         <Upload

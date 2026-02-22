@@ -631,7 +631,7 @@ export const ProductDetail: React.FC<Props> = ({
                 name={`QRCode`}
                 render={({ field: { onChange, value, name, ref } }) => (
                   <Space direction="vertical" align="start">
-                    <QRCode value={value ?? ""} />
+                    <QRCode value={value as any} />
                     <Input
                       name={name}
                       placeholder="-"

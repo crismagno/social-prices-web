@@ -938,7 +938,7 @@ const SalesTable: React.FC<Props> = ({
       <Modal
         open={isVisibleDeleteSaleModal}
         title={`Delete Manual Sale`}
-        destroyOnClose
+        destroyOnHidden
         onCancel={() => {
           setSaleToDelete(null);
           setIsVisibleDeleteSaleModal(false);
@@ -1006,7 +1006,7 @@ const SalesTable: React.FC<Props> = ({
       <Modal
         open={isVisibleActivateSaleModal}
         title={`Activate Manual Sale`}
-        destroyOnClose
+        destroyOnHidden
         onCancel={() => {
           setSaleToActivate(null);
           setIsVisibleActivateSaleModal(false);

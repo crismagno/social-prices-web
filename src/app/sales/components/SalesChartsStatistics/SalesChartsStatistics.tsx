@@ -53,7 +53,7 @@ export const SalesChartsStatistics: React.FC<Props> = ({
           </Radio.Group>
         </div>
       }
-      headStyle={{ display: isShowHeader ? "" : "none" }}
+      styles={{ header: { display: isShowHeader ? "" : "none" } }}
     >
       <Row gutter={[2, 2]}>
         <Col xs={24} sm={24} md={12}>

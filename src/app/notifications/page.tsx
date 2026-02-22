@@ -179,7 +179,7 @@ export default function NotificationsPage() {
               onChange={handleChangeBySort}
               className="w-52"
               placeholder="Select a Sort"
-              value={tableStateRequest?.sort?.order}
+              value={tableStateRequest?.sort?.order as any}
             >
               {Object.keys(TableStateEnum.SortOrder).map(
                 (sortOrder: string) => (

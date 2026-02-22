@@ -69,7 +69,7 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
     return (
       <>
         <Popover
-          visible={allowEvents ? undefined : false}
+          open={allowEvents ? undefined : false}
           title="Activate Sale?"
           content={
             <div className="flex flex-col gap-4">
@@ -99,7 +99,7 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
         <Modal
           open={isVisibleActivateSaleModal}
           title={`Activate Manual Sale`}
-          destroyOnClose
+          destroyOnHidden
           onCancel={() => setIsVisibleActivateSaleModal(false)}
           onOk={async () => {
             await handleActivateSale();
@@ -120,7 +120,7 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
   return (
     <>
       <Popover
-        visible={allowEvents ? undefined : false}
+        open={allowEvents ? undefined : false}
         title="Delete Sale?"
         content={
           <div className="flex flex-col gap-4">
@@ -146,7 +146,7 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
         <Modal
           open={isVisibleDeleteSaleModal}
           title={`Delete Manual Sale`}
-          destroyOnClose
+          destroyOnHidden
           onCancel={() => setIsVisibleDeleteSaleModal(false)}
           onOk={async () => {
             await handleDeleteSale();
