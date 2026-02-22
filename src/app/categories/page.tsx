@@ -9,6 +9,7 @@ import { BlockOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
+import useLanguageData from "../../data/context/language/useLanguageData";
 import CategoriesEnum from "../../shared/business/categories/categories.enum";
 import { ICategory } from "../../shared/business/categories/categories.interface";
 import TagsEnum from "../../shared/business/tags/tags.enum";
@@ -19,6 +20,8 @@ import { CategoryDetailDrawer } from "./components/CategoryDetailDrawer/Category
 import { useFindCategoriesByUserTableState } from "./useFindCategoriesByUserTableState";
 
 export default function CategoriesPage() {
+  const { t } = useLanguageData()!;
+
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<ICategory> | undefined
   >(createTableState({ sort: { field: "createdAt", order: "ascend" } }));
@@ -32,9 +35,9 @@ export default function CategoriesPage() {
   const [categoryId, setCategoryId] = useState<string | undefined>();
 
   return (
-    <Layout subtitle="My Categories" title="Categories" hasBackButton>
+    <Layout subtitle={t("categories.myCategories")} title={t("categories.title")} hasBackButton>
       <Card
-        title="Categories"
+        title={t("categories.title")}
         className="h-min-80 mt-5"
         extra={
           <Button
@@ -45,7 +48,7 @@ export default function CategoriesPage() {
             }}
             icon={<PlusOutlined />}
           >
-            New Category
+            {t("categories.newCategory")}
           </Button>
         }
       >
@@ -54,13 +57,13 @@ export default function CategoriesPage() {
           dataSource={categories}
           columns={[
             {
-              title: "Name",
+              title: t("common.name"),
               dataIndex: "name",
               key: "name",
               align: "center",
             },
             {
-              title: "Color",
+              title: t("categories.color"),
               dataIndex: "color",
               key: "color",
               align: "center",
@@ -74,13 +77,13 @@ export default function CategoriesPage() {
               ),
             },
             {
-              title: "Description",
+              title: t("common.description"),
               dataIndex: "description",
               key: "description",
               align: "center",
             },
             {
-              title: "Type",
+              title: t("categories.type"),
               dataIndex: "type",
               key: "type",
               align: "center",
@@ -93,7 +96,7 @@ export default function CategoriesPage() {
               ),
             },
             {
-              title: "Created At",
+              title: t("profile.createdAt"),
               dataIndex: "createdAt",
               key: "createdAt",
               align: "center",
@@ -102,7 +105,7 @@ export default function CategoriesPage() {
               sorter: true,
             },
             {
-              title: "Updated At",
+              title: t("profile.updatedAt"),
               dataIndex: "updatedAt",
               key: "updatedAt",
               align: "center",
@@ -111,12 +114,12 @@ export default function CategoriesPage() {
               sorter: true,
             },
             {
-              title: "Action",
+              title: t("common.actions"),
               dataIndex: "action",
               key: "action",
               align: "center",
               render: (_: any, category: ICategory) => (
-                <Tooltip title="Edit category">
+                <Tooltip title={t("categories.editCategory")}>
                   <Button
                     className="mr-1"
                     type="success"
@@ -130,7 +133,7 @@ export default function CategoriesPage() {
               ),
             },
           ]}
-          search={{ placeholder: "Search categories..." }}
+          search={{ placeholder: t("categories.searchCategories") }}
           loading={isLoading}
           tableStateRequest={tableStateRequest}
           setTableStateRequest={setTableStateRequest}

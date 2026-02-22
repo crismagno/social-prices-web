@@ -229,9 +229,17 @@
   },
   "categories": {
     "title": "Categories",
+    "myCategories": "My Categories",
     "categoryName": "Category Name",
     "createCategory": "Create Category",
-    "updateCategory": "Update Category"
+    "updateCategory": "Update Category",
+    "editCategory": "Edit Category",
+    "newCategory": "New Category",
+    "color": "Color",
+    "type": "Type",
+    "searchCategories": "Search categories...",
+    "categoryCreatedSuccessfully": "Your category has been created successfully!",
+    "categoryUpdatedSuccessfully": "Your category has been updated successfully!"
   },
   "employees": {
     "title": "Employees",

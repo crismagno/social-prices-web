@@ -229,9 +229,17 @@
   },
   "categories": {
     "title": "Categorias",
+    "myCategories": "Minhas Categorias",
     "categoryName": "Nome da Categoria",
     "createCategory": "Criar Categoria",
-    "updateCategory": "Atualizar Categoria"
+    "updateCategory": "Atualizar Categoria",
+    "editCategory": "Editar Categoria",
+    "newCategory": "Nova Categoria",
+    "color": "Cor",
+    "type": "Tipo",
+    "searchCategories": "Buscar categorias...",
+    "categoryCreatedSuccessfully": "Sua categoria foi criada com sucesso!",
+    "categoryUpdatedSuccessfully": "Sua categoria foi atualizada com sucesso!"
   },
   "employees": {
     "title": "Funcionários",

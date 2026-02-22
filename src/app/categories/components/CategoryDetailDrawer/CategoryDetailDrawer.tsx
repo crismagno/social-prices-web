@@ -14,6 +14,7 @@ import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomA
 import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import useAuthData from "../../../../data/context/auth/useAuthData";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import CreateCategoryDto from "../../../../services/social-prices-api/categories/dto/createCategory.dto";
 import UpdateCategoryDto from "../../../../services/social-prices-api/categories/dto/updateCategory.dto";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
@@ -46,6 +47,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
   categoryId,
 }) => {
   const { user } = useAuthData();
+  const { t } = useLanguageData()!;
 
   const { isLoading, category } = useFindCategoryById(categoryId);
 
@@ -109,7 +111,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
           createCategoryDto
         );
 
-      message.success("Your category has been created successfully!");
+      message.success(t("categories.categoryCreatedSuccessfully"));
 
       onOk(newCategory);
     } catch (error) {
@@ -138,7 +140,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
           updateCategoryDto
         );
 
-      message.success("Your category has been updated successfully!");
+      message.success(t("categories.categoryUpdatedSuccessfully"));
 
       onOk(categoryUpdated);
     } catch (error) {
@@ -161,7 +163,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
 
   return (
     <Drawer
-      title={categoryId ? `Edit Category: ${category?.name}` : "New Category"}
+      title={categoryId ? `${t("categories.editCategory")}: ${category?.name}` : t("categories.newCategory")}
       onClose={handleClose}
       open={isOpen}
     >
@@ -170,8 +172,8 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
           <Col xs={24}>
             <InputCustomAntd
               controller={{ control, name: "name" }}
-              label="Name"
-              placeholder={"Enter name"}
+              label={t("common.name")}
+              placeholder={t("placeholders.enterName")}
               errorMessage={errors.name?.message}
               maxLength={200}
             />
@@ -180,7 +182,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
           <Col xs={24}>
             <SelectCustomAntd<ICategory>
               controller={{ control, name: "type" }}
-              label="Type"
+              label={t("categories.type")}
               errorMessage={errors.type?.message}
             >
               {Object.keys(CategoriesEnum.Type).map((type: string) => (
@@ -194,8 +196,8 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
           <Col xs={24}>
             <TextareaCustomAntd
               controller={{ control, name: "description" }}
-              label="Description"
-              placeholder={"Enter description"}
+              label={t("common.description")}
+              placeholder={t("placeholders.enterDescription")}
               rows={2}
             />
           </Col>
@@ -203,7 +205,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
           <Col xs={24}>
             <ColorPickerCustomAntd
               controller={{ control, name: "color" }}
-              label="Color"
+              label={t("categories.color")}
               defaultValue="#1677ff"
               showText
               allowClear
@@ -222,7 +224,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
             onClick={handleClose}
             disabled={isSubmitting}
           >
-            Cancel
+            {t("common.cancel")}
           </Button>
 
           <Button
@@ -231,7 +233,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
             loading={isSubmitting}
             disabled={isSubmitting}
           >
-            {isEditMode ? "Save" : "Create"}
+            {isEditMode ? t("common.save") : t("common.create")}
           </Button>
         </div>
       </form>
