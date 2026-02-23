@@ -1334,7 +1334,7 @@ export default function CreateSalePage() {
                     icon={<ShoppingCartOutlined />}
                     className="mx-2"
                   >
-                    Create Sale
+                    {t('sales.createSale')}
                   </Button>
                 </Tooltip>
 

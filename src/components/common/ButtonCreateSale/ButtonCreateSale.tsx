@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import { PlusOutlined } from '@ant-design/icons';
 
+import useLanguageData from '../../../data/context/language/useLanguageData';
 import Urls from '../../../shared/common/routes-app/routes-app';
 
 interface Props {
@@ -22,6 +23,7 @@ export const ButtonCreateSale: React.FC<Props> = ({
   productItemId,
 }) => {
   const router: AppRouterInstance = useRouter();
+  const { t } = useLanguageData();
 
   return (
     <Button
@@ -50,7 +52,7 @@ export const ButtonCreateSale: React.FC<Props> = ({
       }}
       icon={<PlusOutlined />}
     >
-      Create Sale
+      {t('sales.createSale')}
     </Button>
   );
 };
