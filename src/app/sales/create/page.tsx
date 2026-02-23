@@ -96,6 +96,7 @@ import {
 } from '../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd';
 import Layout from '../../../components/template/Layout/Layout';
 import useAuthData from '../../../data/context/auth/useAuthData';
+import useLanguageData from '../../../data/context/language/useLanguageData';
 import CreateSaleDto, {
   SalePaymentDto,
   SaleStoreDto,
@@ -289,6 +290,8 @@ export default function CreateSalePage() {
   const { modal } = App.useApp();
 
   const { user, employee } = useAuthData();
+  
+  const { t } = useLanguageData();
 
   const router: AppRouterInstance = useRouter();
 
@@ -1322,7 +1325,6 @@ export default function CreateSalePage() {
                   >
                     See Summary
                   </Button>
-                </Tooltip>
 
                 <Tooltip title="Open create sale in a new tab">
                   <Button
@@ -1657,7 +1659,7 @@ export default function CreateSalePage() {
             title={
               <div className="flex justify-between">
                 <div className="flex items-center">
-                  <label className="mr-2">Select Products</label>
+                  <label className="mr-2">{t('sales.selectProducts')}</label>
 
                   <Tooltip
                     title="Here you can select what stores and products will be on sale, note: only will 

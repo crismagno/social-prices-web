@@ -4,6 +4,7 @@ import { Avatar, Select } from "antd";
 import { filter, includes } from "lodash";
 
 import { useFindProductItemsByUserTableState } from "../../../app/product-items/useFindProductItemsByUserTableState";
+import useLanguageData from "../../../data/context/language/useLanguageData";
 import { IProductItem } from "../../../shared/business/product-items/product-items.interface";
 import { getImageUrl } from "../../../shared/utils/images/images-url";
 import ImagesEnum from "../../../shared/utils/images/images.enum";
@@ -27,6 +28,8 @@ const SelectProductItems: React.FC<Props> = ({
   labelClassName = "",
   disabled,
 }) => {
+  const { t } = useLanguageData();
+
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<IProductItem> | undefined
   >(
@@ -102,7 +105,7 @@ const SelectProductItems: React.FC<Props> = ({
         filterOption={false}
         style={{ width: "100%" }}
         disabled={disabled}
-        placeholder="Select product items"
+        placeholder={t('sales.selectProductItems')}
       >
         {productItems?.map((productItem: IProductItem) => (
           <Select.Option key={productItem._id} value={productItem._id}>
