@@ -1,15 +1,25 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Avatar, Select } from "antd";
-import { filter, includes } from "lodash";
+import {
+  Avatar,
+  Select,
+} from 'antd';
+import {
+  filter,
+  includes,
+} from 'lodash';
 
-import { useFindProductsByUserTableState } from "../../../app/products/useFindProductsByUserTableState";
-import useLanguageData from "../../../data/context/language/useLanguageData";
-import { IProduct } from "../../../shared/business/products/products.interface";
-import { getImageUrl } from "../../../shared/utils/images/images-url";
-import ImagesEnum from "../../../shared/utils/images/images.enum";
-import { createTableState } from "../../../shared/utils/table/table-state";
-import { ITableStateRequest } from "../../../shared/utils/table/table-state.interface";
+import {
+  useFindProductsByUserTableState,
+} from '../../../app/products/useFindProductsByUserTableState';
+import useLanguageData from '../../../data/context/language/useLanguageData';
+import { IProduct } from '../../../shared/business/products/products.interface';
+import { getImageUrl } from '../../../shared/utils/images/images-url';
+import ImagesEnum from '../../../shared/utils/images/images.enum';
+import { createTableState } from '../../../shared/utils/table/table-state';
+import {
+  ITableStateRequest,
+} from '../../../shared/utils/table/table-state.interface';
 
 const containerHeight: number = 260;
 
@@ -103,7 +113,7 @@ const SelectProducts: React.FC<Props> = ({
         filterOption={false}
         style={{ width: "100%" }}
         disabled={disabled}
-        placeholder={t('sales.selectProducts')}
+        placeholder={t("sales.selectProducts")}
       >
         {products?.map((product: IProduct) => (
           <Select.Option key={product._id} value={product._id}>

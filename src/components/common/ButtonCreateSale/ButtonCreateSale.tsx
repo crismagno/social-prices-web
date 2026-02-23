@@ -52,7 +52,7 @@ export const ButtonCreateSale: React.FC<Props> = ({
       }}
       icon={<PlusOutlined />}
     >
-      {t('sales.createSale')}
+      {t("sales.createSale")}
     </Button>
   );
 };
