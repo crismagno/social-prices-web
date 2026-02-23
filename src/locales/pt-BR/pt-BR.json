@@ -1,5 +1,7 @@
 {
   "common": {
+    "qty": "Qtd",
+    "percentage": "Porcentagem",
     "save": "Salvar",
     "cancel": "Cancelar",
     "delete": "Excluir",

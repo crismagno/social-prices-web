@@ -1,7 +1,20 @@
-import { Button, Card, Col, Empty, Image, Row, Space, Tooltip } from "antd";
-import TextArea from "antd/es/input/TextArea";
-import { find } from "lodash";
-import { Control, UseFormSetValue, UseFormWatch } from "react-hook-form";
+import {
+  Button,
+  Card,
+  Col,
+  Empty,
+  Image,
+  Row,
+  Space,
+  Tooltip,
+} from 'antd';
+import TextArea from 'antd/es/input/TextArea';
+import { find } from 'lodash';
+import {
+  Control,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form';
 
 import {
   CheckCircleTwoTone,
@@ -10,28 +23,37 @@ import {
   CloseOutlined,
   EditOutlined,
   QuestionCircleTwoTone,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 
-import ButtonCommon from "../../../../../components/common/ButtonCommon/ButtonCommon";
-import { IconTrash } from "../../../../../components/common/icons/icons";
-import { CheckboxCustomAntd } from "../../../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd";
-import { InputNumberCustomAntd } from "../../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
-import { TextareaCustomAntd } from "../../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
-import SalesEnum from "../../../../../shared/business/sales/sales.enum";
-import { IStore } from "../../../../../shared/business/stores/stores.interface";
-import { getImageUrl } from "../../../../../shared/utils/images/images-url";
-import ImagesEnum from "../../../../../shared/utils/images/images.enum";
+import ButtonCommon
+  from '../../../../../components/common/ButtonCommon/ButtonCommon';
+import { IconTrash } from '../../../../../components/common/icons/icons';
+import {
+  CheckboxCustomAntd,
+} from '../../../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd';
+import {
+  InputNumberCustomAntd,
+} from '../../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd';
+import {
+  TextareaCustomAntd,
+} from '../../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd';
+import useLanguageData
+  from '../../../../../data/context/language/useLanguageData';
+import SalesEnum from '../../../../../shared/business/sales/sales.enum';
+import { IStore } from '../../../../../shared/business/stores/stores.interface';
+import { getImageUrl } from '../../../../../shared/utils/images/images-url';
+import ImagesEnum from '../../../../../shared/utils/images/images.enum';
 import {
   formatterMoney,
   formatToMoneyDecimal,
   parserMoney,
-} from "../../../../../shared/utils/strings/string";
+} from '../../../../../shared/utils/strings/string';
 import {
   TFormSchema,
   TSaleStoreFormSchema,
   TSaleStoreProductFormSchema,
-} from "../../page";
-import { EditSelectedProductNoteButton } from "./EditSelectedProductNoteButton";
+} from '../../page';
+import { EditSelectedProductNoteButton } from './EditSelectedProductNoteButton';
 
 interface Props {
   stores: IStore[];
@@ -60,6 +82,8 @@ export const SelectedProductsList: React.FC<Props> = ({
   totalFinal,
   totalAfterDiscount,
 }) => {
+  const { t } = useLanguageData();
+
   let saleStores: TSaleStoreFormSchema[] = watch("saleStores");
 
   let deliveryType: string = watch("deliveryType");
@@ -588,8 +612,8 @@ export const SelectedProductsList: React.FC<Props> = ({
           <Col xs={5}>Total:</Col>
 
           <Col xs={8} className="text-end">
-            <Tooltip title="Quantity products selected">
-              Qty: {quantity}
+            <Tooltip title={t("sales.productQuantity")}>
+              {t("common.qty")}: {quantity}
             </Tooltip>
           </Col>
 

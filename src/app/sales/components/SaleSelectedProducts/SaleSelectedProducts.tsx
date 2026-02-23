@@ -1,26 +1,37 @@
-import { Card, Col, Empty, Row, Tooltip } from "antd";
-import TextArea from "antd/es/input/TextArea";
+import {
+  Card,
+  Col,
+  Empty,
+  Row,
+  Tooltip,
+} from 'antd';
+import TextArea from 'antd/es/input/TextArea';
 
-import { QuestionCircleTwoTone } from "@ant-design/icons";
+import { QuestionCircleTwoTone } from '@ant-design/icons';
 
-import { ICustomer } from "../../../../shared/business/customers/customer.interface";
+import useLanguageData from '../../../../data/context/language/useLanguageData';
+import {
+  ICustomer,
+} from '../../../../shared/business/customers/customer.interface';
 import {
   ISale,
   ISaleBuyer,
-} from "../../../../shared/business/sales/sale.interface";
-import SalesEnum from "../../../../shared/business/sales/sales.enum";
+} from '../../../../shared/business/sales/sale.interface';
+import SalesEnum from '../../../../shared/business/sales/sales.enum';
 import {
   getQuantity,
   getTotalAfterDiscount,
-} from "../../../../shared/business/sales/sales.utils";
-import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
-import { SaleStoresProducts } from "./SaleStoresProducts";
+} from '../../../../shared/business/sales/sales.utils';
+import { formatToMoneyDecimal } from '../../../../shared/utils/strings/string';
+import { SaleStoresProducts } from './SaleStoresProducts';
 
 interface Props {
   sale: ISale;
 }
 
 export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
+  const { t } = useLanguageData();
+
   const customer: ICustomer | undefined = sale?.stores?.[0].customer;
 
   const buyer: ISaleBuyer | null = sale?.buyer ?? null;
@@ -157,8 +168,8 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
           <Col xs={4}>Total:</Col>
 
           <Col xs={9} className="text-end">
-            <Tooltip title="Quantity products selected">
-              Qty: {quantityTotal}
+            <Tooltip title={t("sales.productQuantity")}>
+              {t("sales.productQty")}: {quantityTotal}
             </Tooltip>
           </Col>
           <Col xs={7} className="text-end">

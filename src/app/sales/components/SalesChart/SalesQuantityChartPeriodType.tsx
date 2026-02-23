@@ -88,7 +88,7 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
       >
         <p>{`${ChartsEnum.PeriodTypeLabel[periodType]}: ${item.name} `}</p>
         <p>{`${t("sales.salesQuantity")}: ${item.salesQuantity}`}</p>
-        <p>{`${t("common.percentage") || "Percentage"} by ${t(
+        <p>{`${t("common.percentage") || "Percentage"} ${t(
           "sales.salesQuantity"
         )}: ${percentageBySalesQuantity.toFixed(2)}%`}</p>
       </div>

@@ -1,5 +1,7 @@
 {
   "common": {
+    "qty": "Qty",
+    "percentage": "Percentage",
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",

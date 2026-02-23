@@ -95,11 +95,11 @@ export const SalesChartPeriodType: React.FC<Props> = ({
         <p>{`${t("sales.totalAmount")}: ${formatToMoneyDecimal(
           item.total
         )}`}</p>
-        <p>{`${t("common.percentage") || "Percentage"} by ${t(
+        <p>{`${t("common.percentage") || "Percentage"} ${t(
           "sales.totalAmount"
         )}: ${percentageByTotal.toFixed(2)}%`}</p>
         <p>{`${t("sales.productQuantity")}: ${item.quantity}`}</p>
-        <p>{`${t("common.percentage") || "Percentage"} by ${t(
+        <p>{`${t("common.percentage") || "Percentage"} ${t(
           "sales.productQuantity"
         )}: ${percentageByQuantity.toFixed(2)}%`}</p>
       </div>
@@ -177,7 +177,7 @@ export const SalesChartPeriodType: React.FC<Props> = ({
           x={x + 20}
           y={y + 4}
         >
-          P. Qty: {value}
+          {t("common.qty")}: {value}
         </text>
       </>
     );

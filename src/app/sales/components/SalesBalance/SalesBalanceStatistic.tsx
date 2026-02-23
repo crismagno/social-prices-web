@@ -126,9 +126,9 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
                     }
                   }}
                   title={name}
-                  subtitle={`Total: ${formatToMoneyDecimal(
+                  subtitle={`${t("common.total")}: ${formatToMoneyDecimal(
                     productBalance?.total
-                  )} | Qty: ${productBalance?.quantity}`}
+                  )} | ${t("common.qty")}: ${productBalance?.quantity}`}
                   className={index > 0 ? "ml-2" : ""}
                 />
               );
@@ -168,9 +168,9 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
         }
         styleLeft={{ width: product || productItem ? 282 : 318 }}
         title={name}
-        subtitle={`Total: ${formatToMoneyDecimal(
+        subtitle={`${t("common.total")}: ${formatToMoneyDecimal(
           productBalance?.total
-        )} | Qty: ${productBalance?.quantity ?? 0}`}
+        )} | ${t("common.qty")}: ${productBalance?.quantity ?? 0}`}
       />
     );
   };

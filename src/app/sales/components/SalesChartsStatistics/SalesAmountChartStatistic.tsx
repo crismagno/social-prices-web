@@ -1,7 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import { Divider } from "antd";
-import { find, reduce } from "lodash";
+import { Divider } from 'antd';
+import {
+  find,
+  reduce,
+} from 'lodash';
 import {
   Area,
   AreaChart,
@@ -11,13 +14,20 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-} from "recharts";
+} from 'recharts';
 
-import { IGetSalesAnalyticsResponse } from "../../../../shared/business/sales/sales.type";
-import { ITotalQuantity } from "../../../../shared/common/interfaces/global.interface";
-import ChartsEnum from "../../../../shared/utils/charts/charts-enum";
-import { IChartDataPeriodTypeItem } from "../../../../shared/utils/charts/charts-types";
-import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
+import useLanguageData from '../../../../data/context/language/useLanguageData';
+import {
+  IGetSalesAnalyticsResponse,
+} from '../../../../shared/business/sales/sales.type';
+import {
+  ITotalQuantity,
+} from '../../../../shared/common/interfaces/global.interface';
+import ChartsEnum from '../../../../shared/utils/charts/charts-enum';
+import {
+  IChartDataPeriodTypeItem,
+} from '../../../../shared/utils/charts/charts-types';
+import { formatToMoneyDecimal } from '../../../../shared/utils/strings/string';
 
 interface Props {
   periodType: ChartsEnum.PeriodType;
@@ -37,6 +47,8 @@ export const SalesAmountChartStatistic: React.FC<Props> = ({
   title,
   salesAnalytics,
 }) => {
+  const { t } = useLanguageData();
+
   const chartDataPeriodType: IChartDataPeriodTypeItem[] =
     salesAnalytics?.chartDataPeriodType ?? [];
 
@@ -82,12 +94,16 @@ export const SalesAmountChartStatistic: React.FC<Props> = ({
         }}
       >
         <p>{`${ChartsEnum.PeriodTypeLabel[periodType]}: ${item.name} `}</p>
-        <p>{`Total Amount: ${formatToMoneyDecimal(item.total)}`}</p>
-        <p>{`Percentage by Total Amount: ${percentageByTotal.toFixed(2)}%`}</p>
-        <p>{`Product Quantity: ${item.quantity}`}</p>
-        <p>{`Percentage by Product Quantity: ${percentageByQuantity.toFixed(
-          2
-        )}%`}</p>
+        <p>{`${t("sales.totalAmount")}: ${formatToMoneyDecimal(
+          item.total
+        )}`}</p>
+        <p>{`${t("common.percentage") || "Percentage"} ${t(
+          "sales.totalAmount"
+        )}: ${percentageByTotal.toFixed(2)}%`}</p>
+        <p>{`${t("sales.productQuantity")}: ${item.quantity}`}</p>
+        <p>{`${t("common.percentage") || "Percentage"} ${t(
+          "sales.productQuantity"
+        )}: ${percentageByQuantity.toFixed(2)}%`}</p>
       </div>
     );
   };
@@ -163,7 +179,7 @@ export const SalesAmountChartStatistic: React.FC<Props> = ({
           x={x + 20}
           y={y + 4}
         >
-          P. Qty: {value}
+          {t("common.qty")}: {value}
         </text>
       </>
     );
@@ -176,7 +192,7 @@ export const SalesAmountChartStatistic: React.FC<Props> = ({
           <label className="font-semibold">{title}</label>
         ) : (
           <>
-            <span className="mr-2">Sales Amount by Period:</span>
+            <span className="mr-2">{t("sales.salesRevenueByPeriod")}:</span>
 
             <label className="font-semibold">
               {ChartsEnum.PeriodTypeLabel[periodType]}
@@ -214,7 +230,7 @@ export const SalesAmountChartStatistic: React.FC<Props> = ({
             <Area
               type="monotone"
               dataKey="total"
-              name="Total Amount"
+              name={t("sales.totalAmount")}
               stroke={chartProps?.totalColor ?? "#8dc5f8"}
               fillOpacity={0.5}
               fill={chartProps?.totalColor ?? "#8dc5f8"}
@@ -223,7 +239,7 @@ export const SalesAmountChartStatistic: React.FC<Props> = ({
             <Area
               type="monotone"
               dataKey="quantity"
-              name="Product Quantity"
+              name={t("sales.productQuantity")}
               stroke={chartProps?.quantityColor ?? "#1f1f1f"}
               fillOpacity={1}
               fill="url(#colorPv)"
@@ -234,7 +250,7 @@ export const SalesAmountChartStatistic: React.FC<Props> = ({
 
         <div className="text-center mt-1">
           <span className="font-semibold">
-            Total Amount:
+            {t("sales.totalAmount")}:
             <span className="ml-1">
               {formatToMoneyDecimal(totalQuantityByData.total)}
             </span>
@@ -243,7 +259,7 @@ export const SalesAmountChartStatistic: React.FC<Props> = ({
           <Divider type="vertical" />
 
           <span className="font-semibold">
-            Product Quantity:
+            {t("sales.productQuantity")}:
             <span className="ml-1">{totalQuantityByData.quantity}</span>
           </span>
         </div>
