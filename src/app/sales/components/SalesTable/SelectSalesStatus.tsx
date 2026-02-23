@@ -1,21 +1,38 @@
 "use client";
-import { memo, useState } from "react";
+import {
+  memo,
+  useState,
+} from 'react';
 
-import { Alert, App, Button, message, Select, Tag, Tooltip } from "antd";
+import {
+  Alert,
+  App,
+  Button,
+  message,
+  Select,
+  Tag,
+  Tooltip,
+} from 'antd';
 
 import {
   CheckOutlined,
   CloseOutlined,
   EditOutlined,
   QuestionCircleTwoTone,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 
-import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
-import { LabelBadgeCustomAntd } from "../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
-import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
-import { ISale } from "../../../../shared/business/sales/sale.interface";
-import SalesEnum from "../../../../shared/business/sales/sales.enum";
-import { getTotalPayment } from "../../../../shared/business/sales/sales.utils";
+import handleClientError
+  from '../../../../components/common/HandleClientError/HandleClientError';
+import {
+  LabelBadgeCustomAntd,
+} from '../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd';
+import useLanguageData from '../../../../data/context/language/useLanguageData';
+import {
+  serviceMethodsInstance,
+} from '../../../../services/social-prices-api/service-methods';
+import { ISale } from '../../../../shared/business/sales/sale.interface';
+import SalesEnum from '../../../../shared/business/sales/sales.enum';
+import { getTotalPayment } from '../../../../shared/business/sales/sales.utils';
 
 export interface Props {
   sale: ISale;
@@ -24,6 +41,7 @@ export interface Props {
 
 const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
   const { modal } = App.useApp();
+  const { t } = useLanguageData();
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
@@ -153,7 +171,7 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
           <Tag color={SalesEnum.StatusColors[sale.status]} className="mr-1">
             {SalesEnum.StatusLabels[sale.status]}
           </Tag>
-          <Tooltip title="Edit">
+          <Tooltip title={t("sales.edit")}>
             <Button
               type="default"
               size="small"

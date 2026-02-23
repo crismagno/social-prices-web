@@ -1,21 +1,46 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Button, Col, Divider, Modal, Row, Select, Tooltip } from "antd";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
+import {
+  Button,
+  Col,
+  Divider,
+  Modal,
+  Row,
+  Select,
+  Tooltip,
+} from 'antd';
+import {
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
+import { z } from 'zod';
 
-import { UserSwitchOutlined } from "@ant-design/icons";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { UserSwitchOutlined } from '@ant-design/icons';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
-import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
-import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
-import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
-import { ICustomer } from "../../../../shared/business/customers/customer.interface";
-import { ISale } from "../../../../shared/business/sales/sale.interface";
-import { IAddress } from "../../../../shared/business/shared/address/address.interface";
-import { createAddressName } from "../../../../shared/utils/strings/string";
-import { SelectCustomer } from "../../create/components/SelectCustomer/SelectCustomer";
+import handleClientError
+  from '../../../../components/common/HandleClientError/HandleClientError';
+import {
+  ImageOrDefault,
+} from '../../../../components/common/ImageOrDefault/ImageOrDefault';
+import {
+  SelectCustomAntd,
+} from '../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
+import useLanguageData from '../../../../data/context/language/useLanguageData';
+import {
+  serviceMethodsInstance,
+} from '../../../../services/social-prices-api/service-methods';
+import {
+  ICustomer,
+} from '../../../../shared/business/customers/customer.interface';
+import { ISale } from '../../../../shared/business/sales/sale.interface';
+import {
+  IAddress,
+} from '../../../../shared/business/shared/address/address.interface';
+import { createAddressName } from '../../../../shared/utils/strings/string';
+import {
+  SelectCustomer,
+} from '../../create/components/SelectCustomer/SelectCustomer';
 
 const formSchema = z.object({
   newCustomerId: z.string().nonempty("New Customer is required!"),
@@ -33,6 +58,8 @@ export const UpdateSaleCustomerButton: React.FC<Props> = ({
   sale,
   onUpdatedSaleCustomer,
 }) => {
+  const { t } = useLanguageData();
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -177,7 +204,7 @@ export const UpdateSaleCustomerButton: React.FC<Props> = ({
         <Divider />
       </Modal>
 
-      <Tooltip title="Update Customer on Sale">
+      <Tooltip title={t("sales.updateCustomerOnSale")}>
         <Button
           type="default"
           loading={isSubmitting}
