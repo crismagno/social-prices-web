@@ -93,7 +93,7 @@ export const SalesChartListProducts: React.FC<Props> = ({ salesAnalytics }) => {
                 <div className="flex justify-between">
                   <div>
                     {t("common.total")}: {formatToMoneyDecimal(item.total)} |{" "}
-                    {t("sales.productQty")}: {item.quantity}
+                    {t("common.qty")}: {item.quantity}
                   </div>
 
                   {item.productId && (
