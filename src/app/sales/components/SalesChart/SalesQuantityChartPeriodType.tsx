@@ -1,7 +1,14 @@
-import React from "react";
+import React from 'react';
 
-import { Select, Tag } from "antd";
-import { find, map, reduce } from "lodash";
+import {
+  Select,
+  Tag,
+} from 'antd';
+import {
+  find,
+  map,
+  reduce,
+} from 'lodash';
 import {
   Area,
   AreaChart,
@@ -11,13 +18,19 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-} from "recharts";
+} from 'recharts';
 
-import { IGetSalesAnalyticsResponse } from "../../../../shared/business/sales/sales.type";
-import { ITotalQuantitySalesQuantity } from "../../../../shared/common/interfaces/global.interface";
-import ChartsEnum from "../../../../shared/utils/charts/charts-enum";
-import { IChartDataPeriodTypeItem } from "../../../../shared/utils/charts/charts-types";
-import useLanguageData from "../../../../data/context/language/useLanguageData";
+import useLanguageData from '../../../../data/context/language/useLanguageData';
+import {
+  IGetSalesAnalyticsResponse,
+} from '../../../../shared/business/sales/sales.type';
+import {
+  ITotalQuantitySalesQuantity,
+} from '../../../../shared/common/interfaces/global.interface';
+import ChartsEnum from '../../../../shared/utils/charts/charts-enum';
+import {
+  IChartDataPeriodTypeItem,
+} from '../../../../shared/utils/charts/charts-types';
 
 interface Props {
   salesAnalytics: IGetSalesAnalyticsResponse | null;
@@ -74,10 +87,10 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
         }}
       >
         <p>{`${ChartsEnum.PeriodTypeLabel[periodType]}: ${item.name} `}</p>
-        <p>{`${t('sales.salesQuantity')}: ${item.salesQuantity}`}</p>
-        <p>{`${t('common.percentage') || 'Percentage'} by ${t('sales.salesQuantity')}: ${percentageBySalesQuantity.toFixed(
-          2
-        )}%`}</p>
+        <p>{`${t("sales.salesQuantity")}: ${item.salesQuantity}`}</p>
+        <p>{`${t("common.percentage") || "Percentage"} by ${t(
+          "sales.salesQuantity"
+        )}: ${percentageBySalesQuantity.toFixed(2)}%`}</p>
       </div>
     );
   };
@@ -146,7 +159,9 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
   return (
     <>
       <div className="flex items-center justify-center">
-        <label className="font-semibold mr-2">{t('sales.salesQuantityByPeriod')}: </label>
+        <label className="font-semibold mr-2">
+          {t("sales.salesQuantityByPeriod")}:{" "}
+        </label>
 
         {onChange ? (
           <Select style={{ width: 120 }} value={periodType} onChange={onChange}>
@@ -185,7 +200,7 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
             <Area
               type="monotone"
               dataKey="salesQuantity"
-              name={t('sales.salesQuantity')}
+              name={t("sales.salesQuantity")}
               stroke="#73d13d"
               fillOpacity={0.5}
               fill="#73d13d"
@@ -196,7 +211,7 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
 
         <div className="text-center mt-1">
           <span className="font-semibold">
-            {t('sales.salesQuantity')}:
+            {t("sales.salesQuantity")}:
             <span className="ml-1">{totalByData.salesQuantity || 0}</span>
           </span>
         </div>

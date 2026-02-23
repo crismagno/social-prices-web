@@ -15,6 +15,7 @@ import { ShoppingCartOutlined } from '@ant-design/icons';
 import {
   AvatarDescription,
 } from '../../../../components/common/AvatarDescription/AvatarDescription';
+import useLanguageData from '../../../../data/context/language/useLanguageData';
 import {
   IProductItem,
 } from '../../../../shared/business/product-items/product-items.interface';
@@ -27,7 +28,6 @@ import {
 } from '../../../../shared/business/sales/sales.type';
 import Urls from '../../../../shared/common/routes-app/routes-app';
 import { formatToMoneyDecimal } from '../../../../shared/utils/strings/string';
-import useLanguageData from '../../../../data/context/language/useLanguageData';
 
 interface Props {
   className?: string;
@@ -79,7 +79,7 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
                   key={index}
                   src={mainUrl}
                   buttonIcon={<ShoppingCartOutlined />}
-                  buttonTooltip={t('sales.createSaleByProduct')}
+                  buttonTooltip={t("sales.createSaleByProduct")}
                   onClickButton={() => {
                     if (storeId) {
                       router.push(
@@ -149,7 +149,7 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
       <AvatarDescription
         src={mainUrl}
         buttonIcon={<ShoppingCartOutlined />}
-        buttonTooltip={t('sales.createSaleByProduct')}
+        buttonTooltip={t("sales.createSaleByProduct")}
         onClickButton={
           productItem || product
             ? () =>
@@ -182,7 +182,7 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
 
         <Divider type="vertical" dashed />
 
-        <Tooltip title={t('sales.salesQuantity')}>
+        <Tooltip title={t("sales.salesQuantity")}>
           <label className="color-black-1 text-lg">
             {salesBalanceTotals.salesQuantity || 0}
           </label>
@@ -199,7 +199,7 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
         <Divider type="vertical" dashed />
 
         <div>
-          <label className="color-black-1">{t('sales.productQty')}: </label>
+          <label className="color-black-1">{t("sales.productQty")}: </label>
           <label className="color-black-1 text-lg">
             {salesBalanceTotals.quantity}
           </label>

@@ -1,14 +1,24 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Pie, PieChart, ResponsiveContainer, Sector } from "recharts";
+import {
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Sector,
+} from 'recharts';
 
-import SelectByQuantityOrTotal from "../../../../components/common/SelectByQuantityOrTotal/SelectByQuantityOrTotal";
-import { IGetSalesAnalyticsResponse } from "../../../../shared/business/sales/sales.type";
-import CommonEnum from "../../../../shared/common/enums/common.enum";
-import { IChartDataProductItem } from "../../../../shared/utils/charts/charts-types";
-import { getImageUrl } from "../../../../shared/utils/images/images-url";
-import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
-import useLanguageData from "../../../../data/context/language/useLanguageData";
+import SelectByQuantityOrTotal
+  from '../../../../components/common/SelectByQuantityOrTotal/SelectByQuantityOrTotal';
+import useLanguageData from '../../../../data/context/language/useLanguageData';
+import {
+  IGetSalesAnalyticsResponse,
+} from '../../../../shared/business/sales/sales.type';
+import CommonEnum from '../../../../shared/common/enums/common.enum';
+import {
+  IChartDataProductItem,
+} from '../../../../shared/utils/charts/charts-types';
+import { getImageUrl } from '../../../../shared/utils/images/images-url';
+import { formatToMoneyDecimal } from '../../../../shared/utils/strings/string';
 
 interface Props {
   salesAnalytics: IGetSalesAnalyticsResponse | null;
@@ -94,8 +104,8 @@ export const SalesChartProducts: React.FC<Props> = ({ salesAnalytics }) => {
           fill="#333"
         >
           {quantityOrTotal === CommonEnum.QuantityOrTotal.TOTAL
-            ? `${t('common.total')}: ${formatToMoneyDecimal(value)}`
-            : `${t('sales.productQty')}: ${value}`}
+            ? `${t("common.total")}: ${formatToMoneyDecimal(value)}`
+            : `${t("sales.productQty")}: ${value}`}
         </text>
         <text
           x={ex + (cos >= 0 ? 1 : -1) * 12}
@@ -104,7 +114,9 @@ export const SalesChartProducts: React.FC<Props> = ({ salesAnalytics }) => {
           textAnchor={textAnchor}
           fill="#999"
         >
-          {`(${t('common.percentage') || 'Percent'}: ${(percent * 100).toFixed(2)}%)`}
+          {`(${t("common.percentage") || "Percent"}: ${(percent * 100).toFixed(
+            2
+          )}%)`}
         </text>
       </g>
     );
@@ -113,7 +125,7 @@ export const SalesChartProducts: React.FC<Props> = ({ salesAnalytics }) => {
   return (
     <>
       <SelectByQuantityOrTotal
-        label={`${t('sales.productsByHighestSalesRevenue')}: `}
+        label={`${t("sales.productsByHighestSalesRevenue")}: `}
         onChange={(quantityOrTotal: CommonEnum.QuantityOrTotal) => {
           setQuantityOrTotal(quantityOrTotal);
           setData(

@@ -18,6 +18,7 @@ import {
 } from '../../../../components/common/ImageOrDefault/ImageOrDefault';
 import SelectByQuantityOrTotal
   from '../../../../components/common/SelectByQuantityOrTotal/SelectByQuantityOrTotal';
+import useLanguageData from '../../../../data/context/language/useLanguageData';
 import {
   IGetSalesAnalyticsResponse,
 } from '../../../../shared/business/sales/sales.type';
@@ -30,7 +31,6 @@ import {
   IChartDataProductItem,
 } from '../../../../shared/utils/charts/charts-types';
 import { formatToMoneyDecimal } from '../../../../shared/utils/strings/string';
-import useLanguageData from '../../../../data/context/language/useLanguageData';
 
 interface Props {
   salesAnalytics: IGetSalesAnalyticsResponse | null;
@@ -68,7 +68,7 @@ export const SalesChartListProducts: React.FC<Props> = ({ salesAnalytics }) => {
   return (
     <>
       <SelectByQuantityOrTotal
-        label={`${t('sales.productsByHighestSalesRevenue')}: `}
+        label={`${t("sales.productsByHighestSalesRevenue")}: `}
         onChange={(quantityOrTotal: CommonEnum.QuantityOrTotal) => {
           setData(
             quantityOrTotal === CommonEnum.QuantityOrTotal.TOTAL
@@ -92,12 +92,12 @@ export const SalesChartListProducts: React.FC<Props> = ({ salesAnalytics }) => {
               description={
                 <div className="flex justify-between">
                   <div>
-                    {t('common.total')}: {formatToMoneyDecimal(item.total)} | {t('sales.productQty')}:{" "}
-                    {item.quantity}
+                    {t("common.total")}: {formatToMoneyDecimal(item.total)} |{" "}
+                    {t("sales.productQty")}: {item.quantity}
                   </div>
 
                   {item.productId && (
-                    <Tooltip title={t('sales.createSaleByProduct')}>
+                    <Tooltip title={t("sales.createSaleByProduct")}>
                       <Button
                         className="ml-3"
                         type="primary"
