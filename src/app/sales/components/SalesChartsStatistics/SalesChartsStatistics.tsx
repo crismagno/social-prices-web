@@ -1,12 +1,22 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Card, Col, Divider, Radio, Row } from "antd";
-import moment from "moment";
+import {
+  Card,
+  Col,
+  Divider,
+  Radio,
+  Row,
+} from 'antd';
+import moment from 'moment';
 
-import { DotChartOutlined, LineChartOutlined } from "@ant-design/icons";
+import {
+  DotChartOutlined,
+  LineChartOutlined,
+} from '@ant-design/icons';
 
-import ChartsEnum from "../../../../shared/utils/charts/charts-enum";
-import { SalesChartStatistic } from "./SalesChartStatistic";
+import useLanguageData from '../../../../data/context/language/useLanguageData';
+import ChartsEnum from '../../../../shared/utils/charts/charts-enum';
+import { SalesChartStatistic } from './SalesChartStatistic';
 
 interface Props {
   className?: string;
@@ -25,6 +35,7 @@ export const SalesChartsStatistics: React.FC<Props> = ({
   isShowHeader = true,
   isShowHeaderLabel = true,
 }) => {
+  const { t } = useLanguageData();
   const [isSalesQuantityMode, setIsSalesQuantityMode] =
     useState<boolean>(false);
 
@@ -33,7 +44,9 @@ export const SalesChartsStatistics: React.FC<Props> = ({
       className={`my-2 ${className}`}
       title={
         <div className="flex items-center">
-          {isShowHeaderLabel && <h2 className="mr-3">Sales Statistics:</h2>}
+          {isShowHeaderLabel && (
+            <h2 className="mr-3">{t("sales.salesStatistics")}:</h2>
+          )}
 
           <Radio.Group
             onChange={(e) => {
@@ -43,12 +56,12 @@ export const SalesChartsStatistics: React.FC<Props> = ({
           >
             <Radio.Button value={false}>
               <LineChartOutlined />
-              <span className="ml-1">Amount</span>
+              <span className="ml-1">{t("sales.amount")}</span>
             </Radio.Button>
 
             <Radio.Button value={true}>
               <DotChartOutlined />
-              <span className="ml-1">Quantity</span>
+              <span className="ml-1">{t("sales.quantity")}</span>
             </Radio.Button>
           </Radio.Group>
         </div>
@@ -71,8 +84,8 @@ export const SalesChartsStatistics: React.FC<Props> = ({
             employeeId={employeeId}
             title={
               isSalesQuantityMode
-                ? "Sales quantity of day per hour"
-                : "Sales amount of day per hour"
+                ? t("sales.salesQuantityOfDayPerHour")
+                : t("sales.salesAmountOfDayPerHour")
             }
             isSalesQuantityMode={isSalesQuantityMode}
           />
@@ -95,8 +108,8 @@ export const SalesChartsStatistics: React.FC<Props> = ({
             employeeId={employeeId}
             title={
               isSalesQuantityMode
-                ? "Sales quantity of month per day"
-                : "Sales amount of month per day"
+                ? t("sales.salesQuantityOfMonthPerDay")
+                : t("sales.salesAmountOfMonthPerDay")
             }
             isSalesQuantityMode={isSalesQuantityMode}
           />
@@ -119,8 +132,8 @@ export const SalesChartsStatistics: React.FC<Props> = ({
             employeeId={employeeId}
             title={
               isSalesQuantityMode
-                ? "Sales quantity of year per month"
-                : "Sales amount of year per month"
+                ? t("sales.salesQuantityOfYearPerMonth")
+                : t("sales.salesAmountOfYearPerMonth")
             }
             isSalesQuantityMode={isSalesQuantityMode}
           />
@@ -143,8 +156,8 @@ export const SalesChartsStatistics: React.FC<Props> = ({
             employeeId={employeeId}
             title={
               isSalesQuantityMode
-                ? "Sales quantity of year per last 6 years"
-                : "Sales amount of year per last 6 years"
+                ? t("sales.salesQuantityOfYearPerLastYears")
+                : t("sales.salesAmountOfYearPerLastYears")
             }
             isSalesQuantityMode={isSalesQuantityMode}
           />

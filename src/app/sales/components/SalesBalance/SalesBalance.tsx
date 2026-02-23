@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Card, Col, Row } from "antd";
-import moment from "moment";
+import {
+  Card,
+  Col,
+  Row,
+} from 'antd';
+import moment from 'moment';
 
-import { IGetSalesBalanceParams } from "../../../../shared/business/sales/sales.type";
-import { SalesBalanceStatistic } from "./SalesBalanceStatistic";
-import { useGetSalesBalance } from "./useGetSalesBalance";
+import useLanguageData from '../../../../data/context/language/useLanguageData';
+import {
+  IGetSalesBalanceParams,
+} from '../../../../shared/business/sales/sales.type';
+import { SalesBalanceStatistic } from './SalesBalanceStatistic';
+import { useGetSalesBalance } from './useGetSalesBalance';
 
 interface Props {
   className?: string;
@@ -24,6 +31,7 @@ export const SalesBalance: React.FC<Props> = ({
   productItemId,
   employeeId,
 }) => {
+  const { t } = useLanguageData();
   const [salesBalanceParams] = useState<IGetSalesBalanceParams>({
     rangeDate: {
       endDate: moment().endOf("years").toDate(),
@@ -42,12 +50,12 @@ export const SalesBalance: React.FC<Props> = ({
     <Card
       className={`my-2 ${className}`}
       loading={isLoading}
-      title="Sales Balance"
+      title={t("sales.salesBalance")}
     >
       <Row gutter={[10, 10]}>
         <Col xs={24} sm={12} md={6}>
           <SalesBalanceStatistic
-            title="Hour Balance"
+            title={t("sales.hourBalance")}
             storeId={storeId}
             customerId={customerId}
             salesBalanceTotals={salesBalance?.hour}
@@ -56,7 +64,7 @@ export const SalesBalance: React.FC<Props> = ({
 
         <Col xs={24} sm={12} md={6}>
           <SalesBalanceStatistic
-            title="Day Balance"
+            title={t("sales.dayBalance")}
             storeId={storeId}
             customerId={customerId}
             salesBalanceTotals={salesBalance?.day}
@@ -65,7 +73,7 @@ export const SalesBalance: React.FC<Props> = ({
 
         <Col xs={24} sm={12} md={6}>
           <SalesBalanceStatistic
-            title="Month Balance"
+            title={t("sales.monthBalance")}
             storeId={storeId}
             customerId={customerId}
             salesBalanceTotals={salesBalance?.month}
@@ -74,7 +82,7 @@ export const SalesBalance: React.FC<Props> = ({
 
         <Col xs={24} sm={12} md={6}>
           <SalesBalanceStatistic
-            title="Annual Balance"
+            title={t("sales.annualBalance")}
             storeId={storeId}
             customerId={customerId}
             salesBalanceTotals={salesBalance?.annual}

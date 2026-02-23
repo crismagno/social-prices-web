@@ -1,36 +1,66 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Badge, Button, Card, Col, Divider, Row, Select, Tooltip } from "antd";
-import { map } from "lodash";
-import moment from "moment";
+import {
+  Badge,
+  Button,
+  Card,
+  Col,
+  Divider,
+  Row,
+  Select,
+  Tooltip,
+} from 'antd';
+import { map } from 'lodash';
+import moment from 'moment';
 
-import { ReloadOutlined } from "@ant-design/icons";
+import { ReloadOutlined } from '@ant-design/icons';
 
-import { ButtonCreateSale } from "../../../../components/common/ButtonCreateSale/ButtonCreateSale";
-import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
-import { LabelBadgeCustomAntd } from "../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
-import Loading from "../../../../components/common/Loading/Loading";
-import SelectProductItems from "../../../../components/common/SelectProductItems/SelectProductItems";
-import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
-import { StoreNameStatus } from "../../../../components/common/StoreNameStatus/StoreNameStatus";
-import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
-import { IProductItem } from "../../../../shared/business/product-items/product-items.interface";
-import { IProduct } from "../../../../shared/business/products/products.interface";
-import SalesEnum from "../../../../shared/business/sales/sales.enum";
-import { IGetSalesAnalyticsParams } from "../../../../shared/business/sales/sales.type";
-import { createGetSalesAnalyticsParams } from "../../../../shared/business/sales/sales.utils";
-import { IStore } from "../../../../shared/business/stores/stores.interface";
-import TagsEnum from "../../../../shared/business/tags/tags.enum";
-import { ITag } from "../../../../shared/business/tags/tags.interface";
-import ChartsEnum from "../../../../shared/utils/charts/charts-enum";
-import DatesEnum from "../../../../shared/utils/dates/dates.enum";
-import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
-import { useFindTagsByType } from "../../../tags/useFindTagsByType";
-import { useGetSalesAnalytics } from "../../useGetSalesAnalytics";
-import { SalesChartListProducts } from "./SalesChartListProducts";
-import { SalesChartPeriodType } from "./SalesChartPeriodType";
-import { SalesChartProducts } from "./SalesChartProducts";
-import { SalesQuantityChartPeriodType } from "./SalesQuantityChartPeriodType";
+import {
+  ButtonCreateSale,
+} from '../../../../components/common/ButtonCreateSale/ButtonCreateSale';
+import {
+  CustomRangeDatePicker,
+} from '../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker';
+import {
+  LabelBadgeCustomAntd,
+} from '../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd';
+import Loading from '../../../../components/common/Loading/Loading';
+import SelectProductItems
+  from '../../../../components/common/SelectProductItems/SelectProductItems';
+import SelectProducts
+  from '../../../../components/common/SelectProducts/SelectProducts';
+import {
+  StoreNameStatus,
+} from '../../../../components/common/StoreNameStatus/StoreNameStatus';
+import {
+  TagTagCustomAntd,
+} from '../../../../components/common/TagTagCustomAntd/TagTagCustomAntd';
+import useLanguageData from '../../../../data/context/language/useLanguageData';
+import {
+  IProductItem,
+} from '../../../../shared/business/product-items/product-items.interface';
+import {
+  IProduct,
+} from '../../../../shared/business/products/products.interface';
+import SalesEnum from '../../../../shared/business/sales/sales.enum';
+import {
+  IGetSalesAnalyticsParams,
+} from '../../../../shared/business/sales/sales.type';
+import {
+  createGetSalesAnalyticsParams,
+} from '../../../../shared/business/sales/sales.utils';
+import { IStore } from '../../../../shared/business/stores/stores.interface';
+import TagsEnum from '../../../../shared/business/tags/tags.enum';
+import { ITag } from '../../../../shared/business/tags/tags.interface';
+import ChartsEnum from '../../../../shared/utils/charts/charts-enum';
+import DatesEnum from '../../../../shared/utils/dates/dates.enum';
+import { useFindStoresByUser } from '../../../stores/useFindStoresByUser';
+import { useFindTagsByType } from '../../../tags/useFindTagsByType';
+import { useGetSalesAnalytics } from '../../useGetSalesAnalytics';
+import { SalesChartListProducts } from './SalesChartListProducts';
+import { SalesChartPeriodType } from './SalesChartPeriodType';
+import { SalesChartProducts } from './SalesChartProducts';
+import { SalesQuantityChartPeriodType } from './SalesQuantityChartPeriodType';
 
 interface Props {
   title?: string;
@@ -63,6 +93,7 @@ export const SalesChart: React.FC<Props> = ({
   productItemId,
   employeeId,
 }) => {
+  const { t } = useLanguageData();
   const [getSalesAnalyticsParams, setGetSalesAnalyticsParams] =
     useState<IGetSalesAnalyticsParams>({
       ...defaultGetSalesAnalyticsParams,
@@ -89,7 +120,7 @@ export const SalesChart: React.FC<Props> = ({
 
   return (
     <Card
-      title={title ?? "Sales Chart"}
+      title={title ?? t("sales.salesChart")}
       extra={isShowButtonCreateSale && <ButtonCreateSale />}
       className={cardClassName}
       styles={{ header: { display: isShowHeader ? "" : "none" } }}
@@ -97,7 +128,7 @@ export const SalesChart: React.FC<Props> = ({
       <Row gutter={[8, 8]}>
         <Col md={6}>
           <CustomRangeDatePicker
-            label="Created Date:"
+            label={`${t("sales.createdDate")}:`}
             showTime
             defaultValue={[
               moment(getSalesAnalyticsParams?.rangeDate?.startDate),
@@ -117,7 +148,7 @@ export const SalesChart: React.FC<Props> = ({
         </Col>
 
         <Col md={4}>
-          <label className="mr-1 font-bold">Stores:</label>
+          <label className="mr-1 font-bold">{t("stores.title")}:</label>
           <Select
             allowClear
             mode="multiple"
@@ -141,7 +172,7 @@ export const SalesChart: React.FC<Props> = ({
 
         <Col md={4}>
           <SelectProducts
-            label={"Products"}
+            label={t("products.title")}
             disabled={!!productId}
             selectedProductIds={getSalesAnalyticsParams.productIds ?? []}
             onSelectProducts={(selectProducts: IProduct[]) => {
@@ -155,7 +186,7 @@ export const SalesChart: React.FC<Props> = ({
 
         <Col md={4}>
           <SelectProductItems
-            label={"Product Items"}
+            label={t("navigation.productItems")}
             disabled={!!productItemId}
             selectedProductItemIds={
               getSalesAnalyticsParams.productItemIds ?? []
@@ -170,7 +201,7 @@ export const SalesChart: React.FC<Props> = ({
         </Col>
 
         <Col md={3}>
-          <label className="mr-1 font-bold">Types:</label>
+          <label className="mr-1 font-bold">{t("sales.types")}:</label>
           <Select
             allowClear
             mode="multiple"
@@ -192,7 +223,7 @@ export const SalesChart: React.FC<Props> = ({
         </Col>
 
         <Col md={3}>
-          <label className="mr-1 font-bold">Status:</label>
+          <label className="mr-1 font-bold">{t("common.status")}:</label>
           <Select
             allowClear
             mode="multiple"
@@ -216,7 +247,7 @@ export const SalesChart: React.FC<Props> = ({
         </Col>
 
         <Col md={3}>
-          <label className="mr-1 font-bold">Tags:</label>
+          <label className="mr-1 font-bold">{t("sales.tags")}:</label>
           <Select
             allowClear
             mode="multiple"
@@ -238,7 +269,7 @@ export const SalesChart: React.FC<Props> = ({
         </Col>
 
         <Col md={3}>
-          <label className="mr-1 font-bold">Payment Status:</label>
+          <label className="mr-1 font-bold">{t("sales.paymentStatus")}:</label>
           <Select
             allowClear
             mode="multiple"
@@ -266,7 +297,7 @@ export const SalesChart: React.FC<Props> = ({
         </Col>
 
         <Col md={3}>
-          <label className="mr-1 font-bold">Delivery Type:</label>
+          <label className="mr-1 font-bold">{t("sales.deliveryType")}:</label>
           <Select
             allowClear
             mode="multiple"
@@ -291,7 +322,7 @@ export const SalesChart: React.FC<Props> = ({
         </Col>
 
         <Col md={1}>
-          <Tooltip title="Reload filters">
+          <Tooltip title={t("sales.reloadFilters")}>
             <Button
               className="mt-5"
               icon={<ReloadOutlined />}

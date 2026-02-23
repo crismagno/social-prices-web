@@ -77,6 +77,7 @@ import YesNo from '../../../../components/common/YesNo/YesNo';
 import TableCustomAntd2
   from '../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
 import useAuthData from '../../../../data/context/auth/useAuthData';
+import useLanguageData from '../../../../data/context/language/useLanguageData';
 import useSocketData from '../../../../data/context/socket/useSocketData';
 import {
   serviceMethodsInstance,
@@ -149,6 +150,7 @@ const SalesTable: React.FC<Props> = ({
   employeeId,
 }) => {
   const { user } = useAuthData();
+  const { t } = useLanguageData();
 
   const { socket } = useSocketData();
 
@@ -330,7 +332,7 @@ const SalesTable: React.FC<Props> = ({
         pagination: { pageSize: 10, skip: 0, current: undefined, total: 0 },
       });
 
-      message.success("Selected sales completed successfully.");
+      message.success(t("sales.selectedSalesCompletedSuccessfully"));
     } catch (error: any) {
       handleClientError(error);
     } finally {
@@ -341,7 +343,7 @@ const SalesTable: React.FC<Props> = ({
   return (
     <>
       <Card
-        title="Sales"
+        title={t("sales.title")}
         className="h-min-80 mt-2"
         extra={
           <>
@@ -351,7 +353,7 @@ const SalesTable: React.FC<Props> = ({
               className="mr-2"
               icon={<DownloadOutlined />}
             >
-              Download
+              {t("sales.download")}
             </Button>
 
             <Button
@@ -360,7 +362,7 @@ const SalesTable: React.FC<Props> = ({
               className="mr-2"
               icon={<UploadOutlined />}
             >
-              Upload
+              {t("sales.upload")}
             </Button>
 
             <ButtonCreateSale
@@ -374,14 +376,14 @@ const SalesTable: React.FC<Props> = ({
       >
         <Row className="mb-4" gutter={[16, 16]}>
           <Col xs={24} className="flex justify-end items-center">
-            <Tooltip title="Complete Multiple Sales">
+            <Tooltip title={t("sales.completeMultipleSales")}>
               <Button
                 icon={<CheckOutlined />}
                 type="success"
                 disabled={selectedSaleIds.length === 0}
                 onClick={handleCompleteMultipleSales}
               >
-                Complete
+                {t("sales.complete")}
               </Button>
             </Tooltip>
           </Col>
@@ -402,7 +404,7 @@ const SalesTable: React.FC<Props> = ({
 
           <Col md={6}>
             <SelectProducts
-              label={"Products"}
+              label={t("products.title")}
               disabled={!!productId}
               selectedProductIds={tableStateRequest?.filters?.productIds ?? []}
               onSelectProducts={(selectProducts: IProduct[]) => {
@@ -425,7 +427,7 @@ const SalesTable: React.FC<Props> = ({
 
           <Col md={6}>
             <SelectProductItems
-              label={"Product Items"}
+              label={t("navigation.productItems")}
               disabled={!!productItemId}
               selectedProductItemIds={
                 tableStateRequest?.filters?.productItemIds ?? []
@@ -509,7 +511,7 @@ const SalesTable: React.FC<Props> = ({
           className="overflow-auto"
           columns={[
             {
-              title: "Number",
+              title: t("sales.number"),
               dataIndex: "number",
               key: "number",
               align: "center",
@@ -520,7 +522,7 @@ const SalesTable: React.FC<Props> = ({
               ),
             },
             {
-              title: "Number Manual",
+              title: t("sales.numberManual"),
               dataIndex: "numberManual",
               key: "numberManual",
               align: "center",
@@ -531,7 +533,7 @@ const SalesTable: React.FC<Props> = ({
               ),
             },
             {
-              title: "Buyer",
+              title: t("sales.buyer"),
               dataIndex: "buyer",
               key: "buyer",
               align: "center",
@@ -584,7 +586,7 @@ const SalesTable: React.FC<Props> = ({
               },
             },
             {
-              title: "Type",
+              title: t("sales.type"),
               dataIndex: "type",
               key: "type",
               align: "center",
@@ -599,7 +601,7 @@ const SalesTable: React.FC<Props> = ({
               ),
             },
             {
-              title: "Delivery Type",
+              title: t("sales.deliveryType"),
               dataIndex: "deliveryType",
               key: "deliveryType",
               align: "center",
@@ -624,7 +626,7 @@ const SalesTable: React.FC<Props> = ({
               ),
             },
             {
-              title: "Status",
+              title: t("common.status"),
               dataIndex: "status",
               key: "status",
               align: "center",
@@ -665,7 +667,7 @@ const SalesTable: React.FC<Props> = ({
               },
             },
             {
-              title: "Payment Status",
+              title: t("sales.paymentStatus"),
               dataIndex: "paymentStatus",
               key: "paymentStatus",
               align: "center",
@@ -718,7 +720,7 @@ const SalesTable: React.FC<Props> = ({
               },
             },
             {
-              title: "Stores",
+              title: t("stores.title"),
               dataIndex: "stores",
               key: "stores",
               align: "center",
@@ -747,7 +749,7 @@ const SalesTable: React.FC<Props> = ({
               },
             },
             {
-              title: "Tags",
+              title: t("sales.tags"),
               dataIndex: "tagsIds",
               key: "tagsIds",
               filters: tagsSort.map((tag: ITag) => ({
@@ -760,7 +762,7 @@ const SalesTable: React.FC<Props> = ({
               ),
             },
             {
-              title: "Completed At",
+              title: t("sales.completedAt"),
               dataIndex: "completedAt",
               key: "completedAt",
               align: "center",
@@ -771,7 +773,7 @@ const SalesTable: React.FC<Props> = ({
               sorter: true,
             },
             {
-              title: "Delivery At",
+              title: t("sales.deliveryAt"),
               dataIndex: "deliveryAt",
               key: "deliveryAt",
               align: "center",
@@ -790,7 +792,7 @@ const SalesTable: React.FC<Props> = ({
                       SalesEnum.StatusToShowDeliveryAt,
                       sale.status
                     ) && (
-                      <Tooltip title="Days Remaining">
+                      <Tooltip title={t("sales.daysRemaining")}>
                         <Badge
                           offset={[5, -5]}
                           color={SalesEnum.getDeliveryAtColor(deliveryAt)}
@@ -807,7 +809,7 @@ const SalesTable: React.FC<Props> = ({
               sorter: true,
             },
             {
-              title: "Created At",
+              title: t("sales.createdAt"),
               dataIndex: "createdAt",
               key: "createdAt",
               align: "center",
@@ -816,7 +818,7 @@ const SalesTable: React.FC<Props> = ({
               sorter: true,
             },
             {
-              title: "Created Date",
+              title: t("sales.createdDate"),
               dataIndex: "createdDate",
               key: "createdDate",
               align: "center",
@@ -825,7 +827,7 @@ const SalesTable: React.FC<Props> = ({
               sorter: true,
             },
             {
-              title: "Updated At",
+              title: t("sales.updatedAt"),
               dataIndex: "updatedAt",
               key: "updatedAt",
               align: "center",
@@ -834,7 +836,7 @@ const SalesTable: React.FC<Props> = ({
               sorter: true,
             },
             {
-              title: "Is Active",
+              title: t("sales.isActive"),
               dataIndex: "isActive",
               key: "isActive",
               align: "center",
@@ -849,7 +851,7 @@ const SalesTable: React.FC<Props> = ({
               ),
             },
             {
-              title: "Action",
+              title: t("sales.action"),
               dataIndex: "action",
               key: "action",
               align: "center",
@@ -860,7 +862,7 @@ const SalesTable: React.FC<Props> = ({
                 return (
                   <Space.Compact>
                     {!isSaleDeleted && (
-                      <Tooltip title="Edit sale">
+                      <Tooltip title={t("sales.editSale")}>
                         <Button
                           type="success"
                           onClick={() => handleEditSale(sale)}
@@ -869,7 +871,7 @@ const SalesTable: React.FC<Props> = ({
                       </Tooltip>
                     )}
 
-                    <Tooltip title="Go to sale">
+                    <Tooltip title={t("sales.goToSale")}>
                       <Button
                         type="default"
                         onClick={() =>
@@ -879,7 +881,7 @@ const SalesTable: React.FC<Props> = ({
                       />
                     </Tooltip>
 
-                    <Tooltip title="See sale summary">
+                    <Tooltip title={t("sales.seeSaleSummary")}>
                       <Button
                         type="primary"
                         onClick={() => {
@@ -891,7 +893,7 @@ const SalesTable: React.FC<Props> = ({
                     </Tooltip>
 
                     {!isSaleDeleted && (
-                      <Tooltip title="Delete sale">
+                      <Tooltip title={t("sales.deleteSale")}>
                         <Button
                           loading={
                             saleToDelete?._id === sale._id && isDeletingSale
@@ -907,7 +909,7 @@ const SalesTable: React.FC<Props> = ({
                     )}
 
                     {isSaleDeleted && (
-                      <Tooltip title="Activate sale">
+                      <Tooltip title={t("sales.activateSale")}>
                         <Button
                           loading={
                             saleToActivate?._id === sale._id && isActivatingSale
@@ -926,7 +928,7 @@ const SalesTable: React.FC<Props> = ({
               },
             },
           ]}
-          search={{ placeholder: "Search sales..." }}
+          search={{ placeholder: t("sales.searchSales") }}
           loading={isLoading || isSubmitting}
           total={total}
           rowSelection={{
@@ -958,27 +960,27 @@ const SalesTable: React.FC<Props> = ({
             return (
               <div className="flex justify-center">
                 <div>
-                  <b className="mr-2">Discount:</b>
+                  <b className="mr-2">{t("common.discount")}:</b>
                   <span>{formatToMoneyDecimal(salesSummary.discount)}</span>
                 </div>
                 <Divider type="vertical" className="mx-7" />
                 <div>
-                  <b className="mr-2">Tax:</b>
+                  <b className="mr-2">{t("common.tax")}:</b>
                   <span>{formatToMoneyDecimal(salesSummary.tax)}</span>
                 </div>
                 <Divider type="vertical" className="mx-7" />
                 <div>
-                  <b className="mr-2">Shipping:</b>
+                  <b className="mr-2">{t("common.shipping")}:</b>
                   <span>{formatToMoneyDecimal(salesSummary.shipping)}</span>
                 </div>
                 <Divider type="vertical" className="mx-7" />
                 <div>
-                  <b className="mr-2">Subtotal:</b>
+                  <b className="mr-2">{t("common.subtotal")}:</b>
                   <span>{formatToMoneyDecimal(salesSummary.subtotal)}</span>
                 </div>
                 <Divider type="vertical" className="mx-7" />
                 <div>
-                  <b className="mr-2">Total:</b>
+                  <b className="mr-2">{t("common.total")}:</b>
                   <span>{formatToMoneyDecimal(salesSummary.totalFinal)}</span>
                 </div>
               </div>
@@ -989,7 +991,7 @@ const SalesTable: React.FC<Props> = ({
 
       <Modal
         open={isVisibleDeleteSaleModal}
-        title={`Delete Manual Sale`}
+        title={t("sales.deleteManualSale")}
         destroyOnHidden
         onCancel={() => {
           setSaleToDelete(null);
@@ -998,15 +1000,15 @@ const SalesTable: React.FC<Props> = ({
         onOk={async () => {
           await handleDeleteSale(saleToDelete!);
         }}
-        okText={"Yes"}
-        cancelText={"No"}
+        okText={t("common.yes")}
+        cancelText={t("common.no")}
       >
-        Are you sure delete sale? Sale Number:{" "}
+        {t("sales.areYouSureDeleteSale")}{" "}
         <strong>{saleToDelete?.number ?? ""}</strong>
       </Modal>
 
       <Modal
-        title={`Sale Summary: ${saleSelectedToSummary?.number}`}
+        title={`${t("sales.saleSummary")}: ${saleSelectedToSummary?.number}`}
         open={isOpenSaleSummaryModal}
         cancelButtonProps={{ hidden: true }}
         onOk={() => {
@@ -1034,7 +1036,7 @@ const SalesTable: React.FC<Props> = ({
         }}
         downloadFileName="social-prices-sales-template.xlsx"
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        title="Upload Sales"
+        title={t("sales.uploadSales")}
       >
         <FilesUploadsTable
           type={FilesUploadsEnum.Type.UPLOAD_SALES}
@@ -1046,7 +1048,7 @@ const SalesTable: React.FC<Props> = ({
         isOpen={isDownloadSalesDrawerOpen}
         onClose={() => setIsDownloadSalesDrawerOpen(false)}
         tags={tagsSort}
-        title="Download Sales"
+        title={t("sales.downloadSales")}
         stores={stores}
         storeId={storeId}
         customerId={customerId}
@@ -1057,7 +1059,7 @@ const SalesTable: React.FC<Props> = ({
 
       <Modal
         open={isVisibleActivateSaleModal}
-        title={`Activate Manual Sale`}
+        title={t("sales.activateManualSale")}
         destroyOnHidden
         onCancel={() => {
           setSaleToActivate(null);
@@ -1066,10 +1068,10 @@ const SalesTable: React.FC<Props> = ({
         onOk={async () => {
           await handleActivateSale(saleToActivate!);
         }}
-        okText={"Yes"}
-        cancelText={"No"}
+        okText={t("common.yes")}
+        cancelText={t("common.no")}
       >
-        Are you sure activate sale? Sale Number:{" "}
+        {t("sales.areYouSureActivateSale")}{" "}
         <strong>{saleToActivate?.number ?? ""}</strong>
       </Modal>
     </>
