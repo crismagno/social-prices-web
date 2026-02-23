@@ -8,12 +8,14 @@ import CommonEnum from "../../../../shared/common/enums/common.enum";
 import { IChartDataProductItem } from "../../../../shared/utils/charts/charts-types";
 import { getImageUrl } from "../../../../shared/utils/images/images-url";
 import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 
 interface Props {
   salesAnalytics: IGetSalesAnalyticsResponse | null;
 }
 
 export const SalesChartProducts: React.FC<Props> = ({ salesAnalytics }) => {
+  const { t } = useLanguageData();
   const [pieActiveIndex, setPieActiveIndex] = useState<number>(0);
 
   const [data, setData] = useState<IChartDataProductItem[]>(
@@ -92,8 +94,8 @@ export const SalesChartProducts: React.FC<Props> = ({ salesAnalytics }) => {
           fill="#333"
         >
           {quantityOrTotal === CommonEnum.QuantityOrTotal.TOTAL
-            ? `Total: ${formatToMoneyDecimal(value)}`
-            : `Qty: ${value}`}
+            ? `${t('common.total')}: ${formatToMoneyDecimal(value)}`
+            : `${t('sales.productQty')}: ${value}`}
         </text>
         <text
           x={ex + (cos >= 0 ? 1 : -1) * 12}
@@ -102,7 +104,7 @@ export const SalesChartProducts: React.FC<Props> = ({ salesAnalytics }) => {
           textAnchor={textAnchor}
           fill="#999"
         >
-          {`(Percent: ${(percent * 100).toFixed(2)}%)`}
+          {`(${t('common.percentage') || 'Percent'}: ${(percent * 100).toFixed(2)}%)`}
         </text>
       </g>
     );
@@ -111,7 +113,7 @@ export const SalesChartProducts: React.FC<Props> = ({ salesAnalytics }) => {
   return (
     <>
       <SelectByQuantityOrTotal
-        label="Products by Highest Sales Revenue: "
+        label={`${t('sales.productsByHighestSalesRevenue')}: `}
         onChange={(quantityOrTotal: CommonEnum.QuantityOrTotal) => {
           setQuantityOrTotal(quantityOrTotal);
           setData(

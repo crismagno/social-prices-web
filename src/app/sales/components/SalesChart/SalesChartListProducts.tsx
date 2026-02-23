@@ -30,6 +30,7 @@ import {
   IChartDataProductItem,
 } from '../../../../shared/utils/charts/charts-types';
 import { formatToMoneyDecimal } from '../../../../shared/utils/strings/string';
+import useLanguageData from '../../../../data/context/language/useLanguageData';
 
 interface Props {
   salesAnalytics: IGetSalesAnalyticsResponse | null;
@@ -37,6 +38,7 @@ interface Props {
 
 export const SalesChartListProducts: React.FC<Props> = ({ salesAnalytics }) => {
   const router: AppRouterInstance = useRouter();
+  const { t } = useLanguageData();
 
   const [data, setData] = useState<IChartDataProductItem[]>(
     salesAnalytics?.chartDataProductsByTotal ?? []
@@ -66,7 +68,7 @@ export const SalesChartListProducts: React.FC<Props> = ({ salesAnalytics }) => {
   return (
     <>
       <SelectByQuantityOrTotal
-        label="Products by Highest Sales Revenue: "
+        label={`${t('sales.productsByHighestSalesRevenue')}: `}
         onChange={(quantityOrTotal: CommonEnum.QuantityOrTotal) => {
           setData(
             quantityOrTotal === CommonEnum.QuantityOrTotal.TOTAL
@@ -90,12 +92,12 @@ export const SalesChartListProducts: React.FC<Props> = ({ salesAnalytics }) => {
               description={
                 <div className="flex justify-between">
                   <div>
-                    Total: {formatToMoneyDecimal(item.total)} | Qty:{" "}
+                    {t('common.total')}: {formatToMoneyDecimal(item.total)} | {t('sales.productQty')}:{" "}
                     {item.quantity}
                   </div>
 
                   {item.productId && (
-                    <Tooltip title="Create Sale By Product">
+                    <Tooltip title={t('sales.createSaleByProduct')}>
                       <Button
                         className="ml-3"
                         type="primary"

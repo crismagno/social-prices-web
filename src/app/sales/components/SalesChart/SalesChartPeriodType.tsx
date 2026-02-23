@@ -13,6 +13,7 @@ import {
   YAxis,
 } from "recharts";
 
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import { IGetSalesAnalyticsResponse } from "../../../../shared/business/sales/sales.type";
 import { ITotalQuantity } from "../../../../shared/common/interfaces/global.interface";
 import ChartsEnum from "../../../../shared/utils/charts/charts-enum";
@@ -30,6 +31,8 @@ export const SalesChartPeriodType: React.FC<Props> = ({
   onChange,
   periodType,
 }) => {
+  const { t } = useLanguageData();
+  
   const chartDataPeriodType: IChartDataPeriodTypeItem[] =
     salesAnalytics?.chartDataPeriodType ?? [];
 
@@ -75,10 +78,10 @@ export const SalesChartPeriodType: React.FC<Props> = ({
         }}
       >
         <p>{`${ChartsEnum.PeriodTypeLabel[periodType]}: ${item.name} `}</p>
-        <p>{`Total Amount: ${formatToMoneyDecimal(item.total)}`}</p>
-        <p>{`Percentage by Total Amount: ${percentageByTotal.toFixed(2)}%`}</p>
-        <p>{`Product Quantity: ${item.quantity}`}</p>
-        <p>{`Percentage by Product Quantity: ${percentageByQuantity.toFixed(
+        <p>{`${t('sales.totalAmount')}: ${formatToMoneyDecimal(item.total)}`}</p>
+        <p>{`${t('common.percentage') || 'Percentage'} by ${t('sales.totalAmount')}: ${percentageByTotal.toFixed(2)}%`}</p>
+        <p>{`${t('sales.productQuantity')}: ${item.quantity}`}</p>
+        <p>{`${t('common.percentage') || 'Percentage'} by ${t('sales.productQuantity')}: ${percentageByQuantity.toFixed(
           2
         )}%`}</p>
       </div>
@@ -167,7 +170,7 @@ export const SalesChartPeriodType: React.FC<Props> = ({
   return (
     <>
       <div className="flex items-center justify-center">
-        <label className="font-semibold mr-2">Sales Revenue by Period: </label>
+        <label className="font-semibold mr-2">{t('sales.salesRevenueByPeriod')}: </label>
 
         {onChange ? (
           <Select style={{ width: 120 }} value={periodType} onChange={onChange}>
@@ -211,7 +214,7 @@ export const SalesChartPeriodType: React.FC<Props> = ({
             <Area
               type="monotone"
               dataKey="total"
-              name="Total Amount"
+              name={t('sales.totalAmount')}
               stroke="#8dc5f8"
               fillOpacity={0.5}
               fill="#8dc5f8"
@@ -220,7 +223,7 @@ export const SalesChartPeriodType: React.FC<Props> = ({
             <Area
               type="monotone"
               dataKey="quantity"
-              name="Product Quantity"
+              name={t('sales.productQuantity')}
               stroke="#1f1f1f"
               fillOpacity={1}
               fill="url(#colorPv)"
@@ -231,7 +234,7 @@ export const SalesChartPeriodType: React.FC<Props> = ({
 
         <div className="text-center mt-1">
           <span className="font-semibold">
-            Total Amount:
+            {t('sales.totalAmount')}:
             <span className="ml-1">
               {formatToMoneyDecimal(totalQuantityByData.total)}
             </span>
@@ -240,7 +243,7 @@ export const SalesChartPeriodType: React.FC<Props> = ({
           <Divider type="vertical" />
 
           <span className="font-semibold">
-            Product Quantity:
+            {t('sales.productQuantity')}:
             <span className="ml-1">{totalQuantityByData.quantity}</span>
           </span>
         </div>

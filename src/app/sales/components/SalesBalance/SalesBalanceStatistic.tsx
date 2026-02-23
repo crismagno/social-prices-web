@@ -27,6 +27,7 @@ import {
 } from '../../../../shared/business/sales/sales.type';
 import Urls from '../../../../shared/common/routes-app/routes-app';
 import { formatToMoneyDecimal } from '../../../../shared/utils/strings/string';
+import useLanguageData from '../../../../data/context/language/useLanguageData';
 
 interface Props {
   className?: string;
@@ -49,6 +50,7 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
   customerId,
 }) => {
   const router: AppRouterInstance = useRouter();
+  const { t } = useLanguageData();
 
   const productBalance: IGetSalesProductBalanceResponse | undefined =
     salesBalanceTotals?.productsBalance?.[0];
@@ -77,7 +79,7 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
                   key={index}
                   src={mainUrl}
                   buttonIcon={<ShoppingCartOutlined />}
-                  buttonTooltip="Create Sale By Product"
+                  buttonTooltip={t('sales.createSaleByProduct')}
                   onClickButton={() => {
                     if (storeId) {
                       router.push(
@@ -147,7 +149,7 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
       <AvatarDescription
         src={mainUrl}
         buttonIcon={<ShoppingCartOutlined />}
-        buttonTooltip="Create Sale By Product"
+        buttonTooltip={t('sales.createSaleByProduct')}
         onClickButton={
           productItem || product
             ? () =>
@@ -180,7 +182,7 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
 
         <Divider type="vertical" dashed />
 
-        <Tooltip title="Sales Quantity">
+        <Tooltip title={t('sales.salesQuantity')}>
           <label className="color-black-1 text-lg">
             {salesBalanceTotals.salesQuantity || 0}
           </label>
@@ -197,7 +199,7 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
         <Divider type="vertical" dashed />
 
         <div>
-          <label className="color-black-1">Product Qty: </label>
+          <label className="color-black-1">{t('sales.productQty')}: </label>
           <label className="color-black-1 text-lg">
             {salesBalanceTotals.quantity}
           </label>
