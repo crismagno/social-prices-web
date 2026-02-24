@@ -36,7 +36,7 @@ function ListCustomAntd<T extends object = any>({
   ...props
 }: Props<T>) {
   const { t } = useLanguageData();
-  
+
   const [searchValue, setSearchValue] = useState<string>(search?.value ?? "");
 
   const renderSearch = () => {
@@ -105,7 +105,7 @@ function ListCustomAntd<T extends object = any>({
               Total: {data.length} / {total}
             </div>
             <Button onClick={handleScroll} loading={isLoading}>
-              {t('notifications.loadMore')}
+              {t("notifications.loadMore")}
             </Button>
 
             <div></div>
