@@ -143,7 +143,7 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
             ))}
           </Select>
 
-          <Tooltip title="Update">
+          <Tooltip title={t('common.update')}>
             <Button
               type="primary"
               size="small"
@@ -153,7 +153,7 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
               className="mr-1"
             />
           </Tooltip>
-          <Tooltip title="Cancel update">
+          <Tooltip title={t('common.cancel')}>
             <Button
               type="default"
               size="small"

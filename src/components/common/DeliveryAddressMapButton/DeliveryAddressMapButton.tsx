@@ -4,6 +4,7 @@ import { Tooltip } from "antd";
 
 import { EnvironmentOutlined } from "@ant-design/icons";
 
+import useLanguageData from "../../../data/context/language/useLanguageData";
 import { IAddress } from "../../../shared/business/shared/address/address.interface";
 
 interface Props {
@@ -11,6 +12,8 @@ interface Props {
 }
 
 export const DeliveryAddressMapButton: React.FC<Props> = ({ address }) => {
+  const { t } = useLanguageData();
+  
   if (!address) {
     return null;
   }
@@ -58,7 +61,7 @@ export const DeliveryAddressMapButton: React.FC<Props> = ({ address }) => {
   };
 
   return (
-    <Tooltip title="Open Delivery Route">
+    <Tooltip title={t('sales.openDeliveryRoute')}>
       <EnvironmentOutlined
         onClick={handleOpenRoute}
         style={{ fontSize: 17, color: "#1677FF" }}
