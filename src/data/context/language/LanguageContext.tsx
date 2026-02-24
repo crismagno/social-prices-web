@@ -10,7 +10,7 @@ export enum LanguageEnum {
   ptBR = "ptBR",
 }
 
-interface Translations {
+export interface Translations {
   en: any;
   ptBR: any;
 }
