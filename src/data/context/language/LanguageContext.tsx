@@ -1,37 +1,37 @@
 "use client";
 
-import {
-  createContext,
-  useEffect,
-  useState,
-} from 'react';
+import { createContext, useEffect, useState } from "react";
 
-import enTranslations from '../../../locales/en/en.json';
-import ptBRTranslations from '../../../locales/pt-BR/pt-BR.json';
+import enTranslations from "../../../locales/en/en.json";
+import ptBRTranslations from "../../../locales/ptBR/ptBR.json";
 
-export type Language = "en" | "pt-BR";
-
-interface Translations {
-  [key: string]: any;
+export enum LanguageEnum {
+  en = "en",
+  ptBR = "ptBR",
 }
 
-interface LanguageContextType {
-  language: Language;
-  setLanguage: (language: Language) => void;
+interface Translations {
+  en: any;
+  ptBR: any;
+}
+
+interface ILanguageContext {
+  language: LanguageEnum;
+  setLanguage: (language: LanguageEnum) => void;
   t: (key: string) => string;
   translations: Translations;
 }
 
-const translations: Record<Language, Translations> = {
+const translations: Translations = {
   en: enTranslations,
-  "pt-BR": ptBRTranslations,
+  ptBR: ptBRTranslations,
 };
 
-const LanguageContext = createContext<LanguageContextType>({
-  language: "en",
+const LanguageContext = createContext<ILanguageContext>({
+  language: LanguageEnum.en,
   setLanguage: () => {},
   t: (key: string) => key,
-  translations: translations["en"],
+  translations: translations[LanguageEnum.en],
 });
 
 const LANGUAGE_STORAGE_KEY = "app-language";
@@ -41,24 +41,24 @@ export const LanguageProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [language, setLanguageState] = useState<Language>("en");
+  const [language, setLanguageState] = useState<LanguageEnum>(LanguageEnum.en);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Load language from localStorage on mount
   useEffect(() => {
     const savedLanguage = localStorage.getItem(
       LANGUAGE_STORAGE_KEY
-    ) as Language;
+    ) as unknown as LanguageEnum;
     if (
       savedLanguage &&
-      (savedLanguage === "en" || savedLanguage === "pt-BR")
+      (savedLanguage === LanguageEnum.en || savedLanguage === LanguageEnum.ptBR)
     ) {
       setLanguageState(savedLanguage);
     }
     setIsLoaded(true);
   }, []);
 
-  const setLanguage = (newLanguage: Language) => {
+  const setLanguage = (newLanguage: LanguageEnum) => {
     setLanguageState(newLanguage);
     localStorage.setItem(LANGUAGE_STORAGE_KEY, newLanguage);
   };

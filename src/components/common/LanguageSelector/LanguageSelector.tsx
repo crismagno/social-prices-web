@@ -1,29 +1,29 @@
 "use client";
 
-import { Select } from 'antd';
+import { Select } from "antd";
 
-import { GlobalOutlined } from '@ant-design/icons';
+import { GlobalOutlined } from "@ant-design/icons";
 
-import { Language } from '../../../data/context/language/LanguageContext';
-import useLanguageData from '../../../data/context/language/useLanguageData';
+import { LanguageEnum } from "../../../data/context/language/LanguageContext";
+import useLanguageData from "../../../data/context/language/useLanguageData";
 
 const { Option } = Select;
 
 interface LanguageOption {
-  value: Language;
+  value: LanguageEnum;
   label: string;
   flag: string;
 }
 
 const languages: LanguageOption[] = [
-  { value: "en", label: "English", flag: "🇺🇸" },
-  { value: "pt-BR", label: "Português (BR)", flag: "🇧🇷" },
+  { value: LanguageEnum.en, label: "English", flag: "🇺🇸" },
+  { value: LanguageEnum.ptBR, label: "Português (BR)", flag: "🇧🇷" },
 ];
 
 export const LanguageSelector: React.FC = () => {
   const { language, setLanguage, t } = useLanguageData()!;
 
-  const handleChange = (value: Language) => {
+  const handleChange = (value: LanguageEnum) => {
     setLanguage(value);
   };
 
