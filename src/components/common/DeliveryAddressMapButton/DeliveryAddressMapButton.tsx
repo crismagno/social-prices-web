@@ -13,7 +13,7 @@ interface Props {
 
 export const DeliveryAddressMapButton: React.FC<Props> = ({ address }) => {
   const { t } = useLanguageData();
-  
+
   if (!address) {
     return null;
   }
@@ -61,7 +61,7 @@ export const DeliveryAddressMapButton: React.FC<Props> = ({ address }) => {
   };
 
   return (
-    <Tooltip title={t('sales.openDeliveryRoute')}>
+    <Tooltip title={t("sales.openDeliveryRoute")}>
       <EnvironmentOutlined
         onClick={handleOpenRoute}
         style={{ fontSize: 17, color: "#1677FF" }}

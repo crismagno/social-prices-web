@@ -1,38 +1,22 @@
 "use client";
-import {
-  memo,
-  useState,
-} from 'react';
+import { memo, useState } from "react";
 
-import {
-  Alert,
-  App,
-  Button,
-  message,
-  Select,
-  Tag,
-  Tooltip,
-} from 'antd';
+import { Alert, App, Button, message, Select, Tag, Tooltip } from "antd";
 
 import {
   CheckOutlined,
   CloseOutlined,
   EditOutlined,
   QuestionCircleTwoTone,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import handleClientError
-  from '../../../../components/common/HandleClientError/HandleClientError';
-import {
-  LabelBadgeCustomAntd,
-} from '../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd';
-import useLanguageData from '../../../../data/context/language/useLanguageData';
-import {
-  serviceMethodsInstance,
-} from '../../../../services/social-prices-api/service-methods';
-import { ISale } from '../../../../shared/business/sales/sale.interface';
-import SalesEnum from '../../../../shared/business/sales/sales.enum';
-import { getTotalPayment } from '../../../../shared/business/sales/sales.utils';
+import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
+import { LabelBadgeCustomAntd } from "../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
+import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
+import { ISale } from "../../../../shared/business/sales/sale.interface";
+import SalesEnum from "../../../../shared/business/sales/sales.enum";
+import { getTotalPayment } from "../../../../shared/business/sales/sales.utils";
 
 export interface Props {
   sale: ISale;
@@ -143,7 +127,7 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
             ))}
           </Select>
 
-          <Tooltip title={t('common.update')}>
+          <Tooltip title={t("common.update")}>
             <Button
               type="primary"
               size="small"
@@ -153,7 +137,7 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
               className="mr-1"
             />
           </Tooltip>
-          <Tooltip title={t('common.cancel')}>
+          <Tooltip title={t("common.cancel")}>
             <Button
               type="default"
               size="small"

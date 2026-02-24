@@ -1,52 +1,35 @@
 "use client";
-import {
-  memo,
-  useState,
-} from 'react';
+import { memo, useState } from "react";
 
-import {
-  Button,
-  message,
-  Modal,
-  Select,
-  Tag,
-  Tooltip,
-} from 'antd';
-import { map } from 'lodash';
+import { Button, message, Modal, Select, Tag, Tooltip } from "antd";
+import { map } from "lodash";
 
 import {
   CheckOutlined,
   CloseOutlined,
   EditOutlined,
   EyeOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import handleClientError
-  from '../../../../components/common/HandleClientError/HandleClientError';
-import {
-  LabelBadgeCustomAntd,
-} from '../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd';
-import useLanguageData from '../../../../data/context/language/useLanguageData';
-import {
-  serviceMethodsInstance,
-} from '../../../../services/social-prices-api/service-methods';
+import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
+import { LabelBadgeCustomAntd } from "../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
+import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import {
   ISale,
   ISalePayment,
-} from '../../../../shared/business/sales/sale.interface';
-import SalesEnum from '../../../../shared/business/sales/sales.enum';
+} from "../../../../shared/business/sales/sale.interface";
+import SalesEnum from "../../../../shared/business/sales/sales.enum";
 import {
   getTotalAfterPayment,
   getTotalPayment,
-} from '../../../../shared/business/sales/sales.utils';
-import {
-  SalePaymentsReadOnly,
-} from '../SalePaymentsReadOnly/SalePaymentsReadOnly';
+} from "../../../../shared/business/sales/sales.utils";
+import { SalePaymentsReadOnly } from "../SalePaymentsReadOnly/SalePaymentsReadOnly";
 import {
   TFormUpdateSalePaymentsSchema,
   TSalePaymentFormSchema,
   UpdateSalePayments,
-} from '../UpdateSalePayments/UpdateSalePayments';
+} from "../UpdateSalePayments/UpdateSalePayments";
 
 export interface Props {
   sale: ISale;
@@ -189,7 +172,7 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
             )}
           </Select>
 
-          <Tooltip title={t('common.update')}>
+          <Tooltip title={t("common.update")}>
             <Button
               type="primary"
               size="small"
@@ -199,7 +182,7 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
               className="mr-1"
             />
           </Tooltip>
-          <Tooltip title={t('common.cancel')}>
+          <Tooltip title={t("common.cancel")}>
             <Button
               type="default"
               size="small"
