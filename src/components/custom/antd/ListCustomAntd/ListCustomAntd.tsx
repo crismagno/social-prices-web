@@ -6,6 +6,8 @@ import VirtualList from "rc-virtual-list";
 
 import { SearchOutlined } from "@ant-design/icons";
 
+import useLanguageData from "../../../../data/context/language/useLanguageData";
+
 interface Props<T> extends ListProps<T> {
   search?: {
     placeholder?: string;
@@ -33,6 +35,8 @@ function ListCustomAntd<T extends object = any>({
   total,
   ...props
 }: Props<T>) {
+  const { t } = useLanguageData();
+  
   const [searchValue, setSearchValue] = useState<string>(search?.value ?? "");
 
   const renderSearch = () => {
@@ -101,7 +105,7 @@ function ListCustomAntd<T extends object = any>({
               Total: {data.length} / {total}
             </div>
             <Button onClick={handleScroll} loading={isLoading}>
-              Load More
+              {t('notifications.loadMore')}
             </Button>
 
             <div></div>

@@ -9,6 +9,7 @@ import { IconBellAlert } from "../../components/common/icons/icons";
 import ListCustomAntd from "../../components/custom/antd/ListCustomAntd/ListCustomAntd";
 import Layout from "../../components/template/Layout/Layout";
 import useAppData from "../../data/context/app/useAppData";
+import useLanguageData from "../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import { INotification } from "../../shared/business/notifications/notification.interface";
 import NotificationsEnum from "../../shared/business/notifications/notifications.enum";
@@ -22,6 +23,8 @@ export default function NotificationsPage() {
   const {
     notifications: { fetchCountNotSeenNotificationsByUser },
   } = useAppData();
+
+  const { t } = useLanguageData();
 
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<INotification> | undefined
@@ -153,18 +156,24 @@ export default function NotificationsPage() {
   };
 
   return (
-    <Layout subtitle="My Notifications" title="Notifications" hasBackButton>
-      <Card title="Notifications" className="h-min-80 mt-5">
+    <Layout
+      subtitle={t("notifications.subtitle")}
+      title={t("notifications.title")}
+      hasBackButton
+    >
+      <Card title={t("notifications.title")} className="h-min-80 mt-5">
         <Row gutter={[8, 8]}>
           <Col lg={5} md={8} sm={12} xs={24}>
-            <label className="font-bold mr-2">Type:</label>
+            <label className="font-bold mr-2">{t("notifications.type")}:</label>
             <Select
               onChange={handleChangeType}
               className="w-52"
-              placeholder="Select a Type"
+              placeholder={t("notifications.selectType")}
               value={tableStateRequest?.filters?.type?.[0]! as any}
             >
-              <Select.Option value={""}>Select a Type</Select.Option>
+              <Select.Option value={""}>
+                {t("notifications.selectType")}
+              </Select.Option>
 
               {Object.keys(NotificationsEnum.Type).map((type: string) => (
                 <Select.Option key={type} value={type}>
@@ -175,11 +184,11 @@ export default function NotificationsPage() {
           </Col>
 
           <Col lg={5} md={8} sm={12} xs={24}>
-            <label className="font-bold mr-2">Sort :</label>
+            <label className="font-bold mr-2">{t("notifications.sort")}:</label>
             <Select
               onChange={handleChangeBySort}
               className="w-52"
-              placeholder="Select a Sort"
+              placeholder={t("notifications.selectSort")}
               value={tableStateRequest?.sort?.order as any}
             >
               {Object.keys(TableStateEnum.SortOrder).map(
@@ -206,7 +215,10 @@ export default function NotificationsPage() {
               itemKey="_id"
               renderDataItem={renderDataItem}
               isLoading={isLoading}
-              search={{ onSearch, placeholder: "Search notifications..." }}
+              search={{
+                onSearch,
+                placeholder: t("notifications.searchNotifications"),
+              }}
               total={total}
             />
           </Col>

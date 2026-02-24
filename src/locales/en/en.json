@@ -367,9 +367,17 @@
   },
   "notifications": {
     "title": "Notifications",
+    "subtitle": "My Notifications",
+    "myNotifications": "My Notifications",
     "markAsRead": "Mark as Read",
     "markAllAsRead": "Mark All as Read",
-    "noNotifications": "No notifications"
+    "noNotifications": "No notifications",
+    "type": "Type",
+    "sort": "Sort",
+    "selectType": "Select a Type",
+    "selectSort": "Select a Sort",
+    "searchNotifications": "Search notifications...",
+    "loadMore": "Load More"
   },
   "profile": {
     "title": "Profile",
