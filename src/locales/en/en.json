@@ -298,11 +298,19 @@
   },
   "stores": {
     "title": "Stores",
+    "subtitle": "My Stores",
+    "myStores": "My Stores",
     "storeName": "Store Name",
     "selectStores": "Select Stores",
     "createStore": "Create Store",
     "updateStore": "Update Store",
-    "storeDetails": "Store Details"
+    "storeDetails": "Store Details",
+    "newStore": "New Store",
+    "editStore": "Edit Store",
+    "goToStore": "Go to Store",
+    "createSale": "Create Sale",
+    "searchStores": "Search stores...",
+    "logo": "Logo"
   },
   "products": {
     "title": "Products",

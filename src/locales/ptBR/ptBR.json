@@ -296,11 +296,19 @@
   },
   "stores": {
     "title": "Lojas",
+    "subtitle": "Minhas Lojas",
+    "myStores": "Minhas Lojas",
     "storeName": "Nome da Loja",
     "selectStores": "Selecionar Lojas",
     "createStore": "Criar Loja",
     "updateStore": "Atualizar Loja",
-    "storeDetails": "Detalhes da Loja"
+    "storeDetails": "Detalhes da Loja",
+    "newStore": "Nova Loja",
+    "editStore": "Editar Loja",
+    "goToStore": "Ir para Loja",
+    "createSale": "Criar Venda",
+    "searchStores": "Buscar lojas...",
+    "logo": "Logo"
   },
   "products": {
     "title": "Produtos",

@@ -1,61 +1,44 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  Button,
-  Card,
-  Space,
-  Tag,
-  Tooltip,
-} from 'antd';
-import moment from 'moment';
-import {
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useRouter } from 'next/navigation';
+import { Button, Card, Space, Tag, Tooltip } from "antd";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
 
 import {
   EditOutlined,
   EnterOutlined,
   PlusOutlined,
   ShoppingCartOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import {
-  ImageOrDefault,
-} from '../../components/common/ImageOrDefault/ImageOrDefault';
-import LoadingFull from '../../components/common/LoadingFull/LoadingFull';
-import {
-  TagCategoriesCustomAntd,
-} from '../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd';
-import {
-  TagTagsCustomAntd,
-} from '../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
-import TableCustomAntd2
-  from '../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
-import Layout from '../../components/template/Layout/Layout';
-import CategoriesEnum from '../../shared/business/categories/categories.enum';
-import {
-  ICategory,
-} from '../../shared/business/categories/categories.interface';
-import StoresEnum from '../../shared/business/stores/stores.enum';
-import { IStore } from '../../shared/business/stores/stores.interface';
-import TagsEnum from '../../shared/business/tags/tags.enum';
-import { ITag } from '../../shared/business/tags/tags.interface';
-import Urls from '../../shared/common/routes-app/routes-app';
-import { sortArray } from '../../shared/utils/array/array-functions';
-import DatesEnum from '../../shared/utils/dates/dates.enum';
-import { createTableState } from '../../shared/utils/table/table-state';
-import {
-  ITableStateRequest,
-} from '../../shared/utils/table/table-state.interface';
-import { useFindCategoriesByType } from '../categories/useFindCategoriesByType';
-import { useFindTagsByType } from '../tags/useFindTagsByType';
-import { useFindStoresByUserTableState } from './useFindStoresByUserTableState';
+import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
+import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
+import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
+import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
+import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
+import Layout from "../../components/template/Layout/Layout";
+import useLanguageData from "../../data/context/language/useLanguageData";
+import CategoriesEnum from "../../shared/business/categories/categories.enum";
+import { ICategory } from "../../shared/business/categories/categories.interface";
+import StoresEnum from "../../shared/business/stores/stores.enum";
+import { IStore } from "../../shared/business/stores/stores.interface";
+import TagsEnum from "../../shared/business/tags/tags.enum";
+import { ITag } from "../../shared/business/tags/tags.interface";
+import Urls from "../../shared/common/routes-app/routes-app";
+import { sortArray } from "../../shared/utils/array/array-functions";
+import DatesEnum from "../../shared/utils/dates/dates.enum";
+import { createTableState } from "../../shared/utils/table/table-state";
+import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
+import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";
+import { useFindTagsByType } from "../tags/useFindTagsByType";
+import { useFindStoresByUserTableState } from "./useFindStoresByUserTableState";
 
 export default function StoresPage() {
   const router: AppRouterInstance = useRouter();
+  const { t } = useLanguageData();
 
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<IStore> | undefined
@@ -92,9 +75,13 @@ export default function StoresPage() {
   const tagsSort: ITag[] = sortArray(tags, "name");
 
   return (
-    <Layout subtitle="My Stores" title="Stores" hasBackButton>
+    <Layout
+      subtitle={t("stores.subtitle")}
+      title={t("stores.title")}
+      hasBackButton
+    >
       <Card
-        title="Stores"
+        title={t("stores.title")}
         className="h-min-80 mt-5"
         extra={
           !stores.length && (
@@ -104,7 +91,7 @@ export default function StoresPage() {
                 onClick={handleNewStore}
                 icon={<PlusOutlined />}
               >
-                New Store
+                {t("stores.newStore")}
               </Button>
             </>
           )
@@ -117,7 +104,7 @@ export default function StoresPage() {
           dataSource={stores}
           columns={[
             {
-              title: "#",
+              title: t("stores.logo"),
               dataIndex: "logo",
               key: "logo",
               align: "center",
@@ -126,19 +113,19 @@ export default function StoresPage() {
               ),
             },
             {
-              title: "Name",
+              title: t("common.name"),
               dataIndex: "name",
               key: "name",
               align: "center",
             },
             {
-              title: "Email",
+              title: t("common.email"),
               dataIndex: "email",
               key: "email",
               align: "center",
             },
             {
-              title: "Categories",
+              title: t("categories.title"),
               dataIndex: "categoriesIds",
               key: "categoriesIds",
               filters: categoriesSort.map((category: ICategory) => ({
@@ -154,7 +141,7 @@ export default function StoresPage() {
               ),
             },
             {
-              title: "Tags",
+              title: t("tags.title"),
               dataIndex: "tagsIds",
               key: "tagsIds",
               filters: tagsSort.map((tag: ITag) => ({
@@ -167,7 +154,7 @@ export default function StoresPage() {
               ),
             },
             {
-              title: "Status",
+              title: t("common.status"),
               dataIndex: "status",
               filters: Object.keys(StoresEnum.Status).map((status: string) => ({
                 text: StoresEnum.StatusLabel[status as StoresEnum.Status],
@@ -182,7 +169,7 @@ export default function StoresPage() {
               ),
             },
             {
-              title: "Created At",
+              title: t("profile.createdAt"),
               dataIndex: "createdAt",
               key: "createdAt",
               align: "center",
@@ -191,7 +178,7 @@ export default function StoresPage() {
               sorter: true,
             },
             {
-              title: "Updated At",
+              title: t("profile.updatedAt"),
               dataIndex: "updatedAt",
               key: "updatedAt",
               align: "center",
@@ -200,28 +187,28 @@ export default function StoresPage() {
               sorter: true,
             },
             {
-              title: "Action",
+              title: t("common.actions"),
               dataIndex: "action",
               key: "action",
               align: "center",
               render: (_: any, store: IStore) => {
                 return (
                   <Space.Compact>
-                    <Tooltip title="Edit store">
+                    <Tooltip title={t("stores.editStore")}>
                       <Button
                         type="success"
                         onClick={() => handleEditStore(store)}
                         icon={<EditOutlined />}
                       />
                     </Tooltip>
-                    <Tooltip title="Go to store">
+                    <Tooltip title={t("stores.goToStore")}>
                       <Button
                         type="default"
                         onClick={() => handleGotToStore(store)}
                         icon={<EnterOutlined />}
                       />
                     </Tooltip>
-                    <Tooltip title="Create Sale">
+                    <Tooltip title={t("stores.createSale")}>
                       <Button
                         type="primary"
                         onClick={() =>
@@ -240,7 +227,7 @@ export default function StoresPage() {
               },
             },
           ]}
-          search={{ placeholder: "Search stores..." }}
+          search={{ placeholder: t("stores.searchStores") }}
           loading={isLoading}
           total={total}
         />
