@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 import {
   Button,
@@ -13,63 +13,44 @@ import {
   Tabs,
   Tag,
   Tooltip,
-} from 'antd';
-import moment from 'moment';
-import {
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import {
-  useParams,
-  useRouter,
-} from 'next/navigation';
+} from "antd";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+import { useParams, useRouter } from "next/navigation";
 
-import { EditOutlined } from '@ant-design/icons';
+import { EditOutlined } from "@ant-design/icons";
 
-import Avatar from '../../../components/common/Avatar/Avatar';
-import ContainerTitle
-  from '../../../components/common/ContainerTitle/ContainerTitle';
-import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
-import {
-  TagCategoriesCustomAntd,
-} from '../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd';
-import {
-  TagTagsCustomAntd,
-} from '../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
-import Layout from '../../../components/template/Layout/Layout';
-import CategoriesEnum
-  from '../../../shared/business/categories/categories.enum';
-import AddressEnum from '../../../shared/business/shared/address/address.enum';
-import {
-  IAddress,
-} from '../../../shared/business/shared/address/address.interface';
-import PhoneNumberEnum
-  from '../../../shared/business/shared/phone/phone-number.enum';
-import {
-  IPhoneNumber,
-} from '../../../shared/business/shared/phone/phone-number.interface';
-import StoresEnum from '../../../shared/business/stores/stores.enum';
-import TagsEnum from '../../../shared/business/tags/tags.enum';
-import Urls from '../../../shared/common/routes-app/routes-app';
-import DatesEnum from '../../../shared/utils/dates/dates.enum';
-import { getImageUrl } from '../../../shared/utils/images/images-url';
-import ImagesEnum from '../../../shared/utils/images/images.enum';
-import {
-  useFindCategoriesByType,
-} from '../../categories/useFindCategoriesByType';
-import { SalesBalance } from '../../sales/components/SalesBalance/SalesBalance';
-import { SalesChart } from '../../sales/components/SalesChart/SalesChart';
-import {
-  SalesChartsStatistics,
-} from '../../sales/components/SalesChartsStatistics/SalesChartsStatistics';
-import SalesTable from '../../sales/components/SalesTable/SalesTable';
-import { useFindTagsByType } from '../../tags/useFindTagsByType';
-import { useFindStoreById } from '../detail/useFindStoreById';
+import Avatar from "../../../components/common/Avatar/Avatar";
+import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
+import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+import { TagCategoriesCustomAntd } from "../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
+import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
+import Layout from "../../../components/template/Layout/Layout";
+import useLanguageData from "../../../data/context/language/useLanguageData";
+import CategoriesEnum from "../../../shared/business/categories/categories.enum";
+import AddressEnum from "../../../shared/business/shared/address/address.enum";
+import { IAddress } from "../../../shared/business/shared/address/address.interface";
+import PhoneNumberEnum from "../../../shared/business/shared/phone/phone-number.enum";
+import { IPhoneNumber } from "../../../shared/business/shared/phone/phone-number.interface";
+import StoresEnum from "../../../shared/business/stores/stores.enum";
+import TagsEnum from "../../../shared/business/tags/tags.enum";
+import Urls from "../../../shared/common/routes-app/routes-app";
+import DatesEnum from "../../../shared/utils/dates/dates.enum";
+import { getImageUrl } from "../../../shared/utils/images/images-url";
+import ImagesEnum from "../../../shared/utils/images/images.enum";
+import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
+import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
+import { SalesChart } from "../../sales/components/SalesChart/SalesChart";
+import { SalesChartsStatistics } from "../../sales/components/SalesChartsStatistics/SalesChartsStatistics";
+import SalesTable from "../../sales/components/SalesTable/SalesTable";
+import { useFindTagsByType } from "../../tags/useFindTagsByType";
+import { useFindStoreById } from "../detail/useFindStoreById";
 
 export default function StorePage() {
   const router: AppRouterInstance = useRouter();
-
   const params: Params = useParams();
+  const { t } = useLanguageData();
 
   const [previewOpen, setPreviewOpen] = useState<boolean>(false);
 
@@ -94,8 +75,8 @@ export default function StorePage() {
 
   return (
     <Layout
-      subtitle={`Here we can see about store - ${store.name}`}
-      title="Store"
+      subtitle={`${t("stores.storeSubtitle")} - ${store.name}`}
+      title={t("stores.title")}
       hasBackButton
     >
       <Card className="h-min-80 mt-2">
@@ -111,14 +92,14 @@ export default function StorePage() {
               src={store.logo}
               width={240}
               className="shadow-lg border-none cursor-pointer z-10 rounded-lg mt-10"
-              title="See logo"
+              title={t("stores.seeLogo")}
             />
 
             <h3 className="md:text-2xl font-semibold text-blueGray-700 mt-1 mb-1">
               {store.name}
             </h3>
 
-            <Tooltip title={"Store Email, click to send a email"}>
+            <Tooltip title={t("stores.storeEmail")}>
               <a
                 href={`mailto:${store.email}`}
                 className="flex items-center text-sm leading-normal text-gray-400 
@@ -135,15 +116,15 @@ export default function StorePage() {
 
           <Col xs={24} sm={14} md={19}>
             <ContainerTitle
-              title="Information"
+              title={t("stores.information")}
               extraHeader={
-                <Tooltip title="Edit store">
+                <Tooltip title={t("stores.editStore")}>
                   <Button
                     type="success"
                     icon={<EditOutlined />}
                     onClick={handleEditStore}
                   >
-                    Edit
+                    {t("common.edit")}
                   </Button>
                 </Tooltip>
               }
@@ -156,11 +137,11 @@ export default function StorePage() {
                     column={{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3 }}
                     size="small"
                   >
-                    <Descriptions.Item label="Name" span={2}>
+                    <Descriptions.Item label={t("common.name")} span={2}>
                       <span className="font-medium">{store.name}</span>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Type">
+                    <Descriptions.Item label={t("stores.type")}>
                       <Tag color="blue">
                         {
                           StoresEnum.TypeLabels[
@@ -170,7 +151,7 @@ export default function StorePage() {
                       </Tag>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Email">
+                    <Descriptions.Item label={t("common.email")}>
                       <a
                         href={`mailto:${store.email}`}
                         className="text-blue-600"
@@ -179,17 +160,17 @@ export default function StorePage() {
                       </a>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="CNPJ / CPF">
+                    <Descriptions.Item label={t("stores.cnpjCpf")}>
                       <Tag color="purple">{store.cnpj || "-"}</Tag>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Status">
+                    <Descriptions.Item label={t("common.status")}>
                       <Tag color={StoresEnum.StatusColor[store.status]}>
                         {StoresEnum.StatusLabel[store.status]}
                       </Tag>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Started At">
+                    <Descriptions.Item label={t("stores.startedAt")}>
                       {store.startedAt
                         ? moment(store.startedAt).format(
                             DatesEnum.Format.DDMMYYY
@@ -204,7 +185,7 @@ export default function StorePage() {
                   <Col xs={24}>
                     <Descriptions bordered column={1} size="small">
                       {store.description && (
-                        <Descriptions.Item label="Description">
+                        <Descriptions.Item label={t("stores.description")}>
                           <div className="max-h-20 overflow-y-auto">
                             {store.description}
                           </div>
@@ -212,7 +193,7 @@ export default function StorePage() {
                       )}
 
                       {store.about && (
-                        <Descriptions.Item label="About">
+                        <Descriptions.Item label={t("stores.about")}>
                           <div className="max-h-20 overflow-y-auto">
                             {store.about}
                           </div>
@@ -226,7 +207,7 @@ export default function StorePage() {
                 {store.phoneNumbers && store.phoneNumbers.length > 0 && (
                   <Col xs={24}>
                     <Descriptions bordered column={1} size="small">
-                      <Descriptions.Item label="Phone Numbers">
+                      <Descriptions.Item label={t("stores.phoneNumbers")}>
                         <div className="flex flex-col gap-2">
                           {store.phoneNumbers.map(
                             (phone: IPhoneNumber, index: number) => (
@@ -279,7 +260,7 @@ export default function StorePage() {
                 {store.addresses && store.addresses.length > 0 && (
                   <Col xs={24}>
                     <Descriptions bordered column={1} size="small">
-                      <Descriptions.Item label="Addresses">
+                      <Descriptions.Item label={t("stores.addresses")}>
                         <div className="flex flex-col gap-3">
                           {store.addresses.map(
                             (address: IAddress, index: number) => (
@@ -334,7 +315,7 @@ export default function StorePage() {
                 {/* Categories & Tags */}
                 <Col xs={24}>
                   <Descriptions bordered column={1} size="small">
-                    <Descriptions.Item label="Categories">
+                    <Descriptions.Item label={t("categories.title")}>
                       <div className="max-w-full overflow-x-auto py-1">
                         <div className="flex flex-wrap gap-1">
                           <TagCategoriesCustomAntd
@@ -346,7 +327,7 @@ export default function StorePage() {
                       </div>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Tags">
+                    <Descriptions.Item label={t("tags.title")}>
                       <div className="max-w-full overflow-x-auto py-1">
                         <div className="flex flex-wrap gap-1">
                           <TagTagsCustomAntd
@@ -367,7 +348,7 @@ export default function StorePage() {
                     column={{ xs: 1, sm: 2, md: 2, lg: 3, xl: 3 }}
                     size="small"
                   >
-                    <Descriptions.Item label="Created At">
+                    <Descriptions.Item label={t("profile.createdAt")}>
                       {store.createdAt
                         ? moment(store.createdAt).format(
                             DatesEnum.Format.DDMMYYYYhhmmss
@@ -375,7 +356,7 @@ export default function StorePage() {
                         : "-"}
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Updated At">
+                    <Descriptions.Item label={t("profile.updatedAt")}>
                       {store.updatedAt
                         ? moment(store.updatedAt).format(
                             DatesEnum.Format.DDMMYYYYhhmmss
@@ -396,7 +377,7 @@ export default function StorePage() {
           items={[
             {
               key: "1",
-              label: "Sales Chart",
+              label: t("stores.salesChart"),
               children: (
                 <>
                   <SalesBalance storeId={storeId} />
@@ -407,7 +388,7 @@ export default function StorePage() {
             },
             {
               key: "2",
-              label: "Sales Table",
+              label: t("stores.salesTable"),
               children: <SalesTable storeId={storeId} />,
             },
           ]}
@@ -420,7 +401,7 @@ export default function StorePage() {
         onCancel={() => setPreviewOpen(false)}
       >
         <Image
-          alt="preview image"
+          alt={t("common.previewImage")}
           style={{ width: "100%" }}
           preview={false}
           src={

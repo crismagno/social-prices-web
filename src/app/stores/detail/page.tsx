@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect, useState } from "react";
 
 import {
   Badge,
@@ -16,26 +13,21 @@ import {
   Select,
   Tooltip,
   UploadFile,
-} from 'antd';
-import { RcFile } from 'antd/es/upload';
-import { isArray } from 'class-validator';
-import moment from 'moment';
-import {
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime';
+} from "antd";
+import { RcFile } from "antd/es/upload";
+import { isArray } from "class-validator";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import {
   ReadonlyURLSearchParams,
   useRouter,
   useSearchParams,
-} from 'next/navigation';
-import {
-  SubmitHandler,
-  useForm,
-} from 'react-hook-form';
-import z from 'zod';
+} from "next/navigation";
+import { SubmitHandler, useForm } from "react-hook-form";
+import z from "zod";
 
-import { EnterOutlined } from '@ant-design/icons';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { EnterOutlined } from "@ant-design/icons";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   Addresses,
@@ -43,66 +35,43 @@ import {
   countries,
   generateNewAddress,
   states,
-} from '../../../components/common/Addresses/Addresses';
-import Avatar from '../../../components/common/Avatar/Avatar';
-import handleClientError
-  from '../../../components/common/HandleClientError/HandleClientError';
-import HrCustom from '../../../components/common/HrCustom/HrCustom';
-import ImageModal from '../../../components/common/ImageModal/ImageModal';
-import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
+} from "../../../components/common/Addresses/Addresses";
+import Avatar from "../../../components/common/Avatar/Avatar";
+import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
+import HrCustom from "../../../components/common/HrCustom/HrCustom";
+import ImageModal from "../../../components/common/ImageModal/ImageModal";
+import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import {
   generateNewPhoneNumber,
   phoneNumberFormSchema,
   PhoneNumbers,
-} from '../../../components/common/PhoneNumbers/PhoneNumbers';
-import {
-  TagCategoryCustomAntd,
-} from '../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd';
-import {
-  TagTagCustomAntd,
-} from '../../../components/common/TagTagCustomAntd/TagTagCustomAntd';
-import {
-  InputCustomAntd,
-} from '../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
-import {
-  SelectCustomAntd,
-} from '../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
-import {
-  TextareaCustomAntd,
-} from '../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd';
-import Layout from '../../../components/template/Layout/Layout';
-import {
-  serviceMethodsInstance,
-} from '../../../services/social-prices-api/service-methods';
-import CreateStoreDto
-  from '../../../services/social-prices-api/stores/dto/createStore.dto';
-import UpdateStoreDto
-  from '../../../services/social-prices-api/stores/dto/updateStore.dto';
-import CategoriesEnum
-  from '../../../shared/business/categories/categories.enum';
-import {
-  ICategory,
-} from '../../../shared/business/categories/categories.interface';
-import AddressEnum from '../../../shared/business/shared/address/address.enum';
-import {
-  IAddress,
-} from '../../../shared/business/shared/address/address.interface';
-import {
-  IPhoneNumber,
-} from '../../../shared/business/shared/phone/phone-number.interface';
-import StoresEnum from '../../../shared/business/stores/stores.enum';
-import { IStore } from '../../../shared/business/stores/stores.interface';
-import TagsEnum from '../../../shared/business/tags/tags.enum';
-import { ITag } from '../../../shared/business/tags/tags.interface';
-import Urls from '../../../shared/common/routes-app/routes-app';
-import DatesEnum from '../../../shared/utils/dates/dates.enum';
-import { getFileUrl } from '../../../shared/utils/images/images-helper';
-import { getImageUrl } from '../../../shared/utils/images/images-url';
-import {
-  useFindCategoriesByType,
-} from '../../categories/useFindCategoriesByType';
-import { useFindTagsByType } from '../../tags/useFindTagsByType';
-import { useFindStoreById } from './useFindStoreById';
+} from "../../../components/common/PhoneNumbers/PhoneNumbers";
+import { TagCategoryCustomAntd } from "../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
+import { TagTagCustomAntd } from "../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
+import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
+import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
+import Layout from "../../../components/template/Layout/Layout";
+import useLanguageData from "../../../data/context/language/useLanguageData";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
+import CreateStoreDto from "../../../services/social-prices-api/stores/dto/createStore.dto";
+import UpdateStoreDto from "../../../services/social-prices-api/stores/dto/updateStore.dto";
+import CategoriesEnum from "../../../shared/business/categories/categories.enum";
+import { ICategory } from "../../../shared/business/categories/categories.interface";
+import AddressEnum from "../../../shared/business/shared/address/address.enum";
+import { IAddress } from "../../../shared/business/shared/address/address.interface";
+import { IPhoneNumber } from "../../../shared/business/shared/phone/phone-number.interface";
+import StoresEnum from "../../../shared/business/stores/stores.enum";
+import { IStore } from "../../../shared/business/stores/stores.interface";
+import TagsEnum from "../../../shared/business/tags/tags.enum";
+import { ITag } from "../../../shared/business/tags/tags.interface";
+import Urls from "../../../shared/common/routes-app/routes-app";
+import DatesEnum from "../../../shared/utils/dates/dates.enum";
+import { getFileUrl } from "../../../shared/utils/images/images-helper";
+import { getImageUrl } from "../../../shared/utils/images/images-url";
+import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
+import { useFindTagsByType } from "../../tags/useFindTagsByType";
+import { useFindStoreById } from "./useFindStoreById";
 
 const formSchema = z.object({
   name: z.string().trim().nonempty("Name is required"),
@@ -123,8 +92,8 @@ type TFormSchema = z.infer<typeof formSchema>;
 
 export default function StoreDetailPage() {
   const router: AppRouterInstance = useRouter();
-
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
+  const { t } = useLanguageData();
 
   const storeId: string | null = searchParams.get("sid");
 
@@ -268,7 +237,7 @@ export default function StoreDetailPage() {
 
       await serviceMethodsInstance.storesServiceMethods.create(formData);
 
-      message.success("Your store has been created successfully!");
+      message.success(t("stores.storeCreatedSuccessfully"));
 
       router.back();
     } catch (error) {
@@ -281,7 +250,7 @@ export default function StoreDetailPage() {
   const handleUpdate = async (data: TFormSchema) => {
     try {
       if (!store) {
-        message.warning("Store not found to update!");
+        message.warning(t("stores.storeNotFoundToUpdate"));
         return;
       }
 
@@ -340,7 +309,7 @@ export default function StoreDetailPage() {
 
       await serviceMethodsInstance.storesServiceMethods.update(formData);
 
-      message.success("Your store has been updated successfully!");
+      message.success(t("stores.storeUpdatedSuccessfully"));
 
       router.back();
     } catch (error) {
@@ -365,15 +334,21 @@ export default function StoreDetailPage() {
 
   return (
     <Layout
-      subtitle={isEditMode ? "Edit store details" : "New store details"}
-      title={isEditMode ? `Edit store: ${store?.name}` : "New store"}
+      subtitle={
+        isEditMode ? t("stores.editStoreDetails") : t("stores.newStoreDetails")
+      }
+      title={
+        isEditMode
+          ? `${t("stores.editStore")}: ${store?.name}`
+          : t("stores.newStore")
+      }
       hasBackButton
     >
       <Card className="h-min-80 mt-2">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex justify-center w-full">
             <div className="cursor-pointer z-10">
-              <Tooltip title="Edit logo" placement="bottom">
+              <Tooltip title={t("stores.editLogo")} placement="bottom">
                 <Avatar
                   src={logoUrl}
                   width={180}
@@ -394,7 +369,7 @@ export default function StoreDetailPage() {
 
           <Row gutter={24} justify={"end"}>
             <Col>
-              <Tooltip title="Go to store">
+              <Tooltip title={t("stores.goToStore")}>
                 <Button
                   type="primary"
                   onClick={() =>
@@ -402,7 +377,7 @@ export default function StoreDetailPage() {
                   }
                   icon={<EnterOutlined />}
                 >
-                  Store
+                  {t("stores.store")}
                 </Button>
               </Tooltip>
             </Col>
@@ -414,8 +389,8 @@ export default function StoreDetailPage() {
             <Col xs={24} md={8}>
               <InputCustomAntd
                 controller={{ control, name: `name` }}
-                label="Name"
-                placeholder={"Enter name"}
+                label={t("common.name")}
+                placeholder={t("placeholders.enterName")}
                 errorMessage={errors.name?.message}
                 maxLength={200}
               />
@@ -424,8 +399,8 @@ export default function StoreDetailPage() {
             <Col xs={24} md={8}>
               <InputCustomAntd
                 controller={{ control, name: `email` }}
-                label="Email"
-                placeholder={"Enter email"}
+                label={t("common.email")}
+                placeholder={t("placeholders.enterEmail")}
                 errorMessage={errors.email?.message}
                 maxLength={200}
                 type="email"
@@ -434,9 +409,9 @@ export default function StoreDetailPage() {
             <Col xs={24} md={8}>
               <InputCustomAntd
                 controller={{ control, name: `startedAt` }}
-                label="Started At"
+                label={t("stores.startedAt")}
                 type="date"
-                placeholder={"Enter started at"}
+                placeholder={t("stores.startedAt")}
                 errorMessage={errors.startedAt?.message}
               />
             </Col>
@@ -446,8 +421,8 @@ export default function StoreDetailPage() {
             <Col xs={24} md={8}>
               <InputCustomAntd
                 controller={{ control, name: `description` }}
-                label="Description"
-                placeholder={"Enter description"}
+                label={t("stores.description")}
+                placeholder={t("placeholders.enterDescription")}
                 errorMessage={errors.description?.message}
                 maxLength={200}
               />
@@ -455,8 +430,8 @@ export default function StoreDetailPage() {
             <Col xs={8}>
               <SelectCustomAntd<IStore>
                 controller={{ control, name: "status" }}
-                label="Status"
-                placeholder={"Select status"}
+                label={t("common.status")}
+                placeholder={t("stores.selectStatus")}
                 errorMessage={errors.status?.message}
               >
                 {Object.keys(StoresEnum.Status).map((status: string) => (
@@ -477,8 +452,8 @@ export default function StoreDetailPage() {
             <Col xs={24} md={8}>
               <SelectCustomAntd<IStore>
                 controller={{ control, name: "categoriesIds" }}
-                label="Categories"
-                placeholder={"Select categories"}
+                label={t("categories.title")}
+                placeholder={t("stores.selectCategories")}
                 mode="multiple"
                 errorMessage={errors.categoriesIds?.message}
               >
@@ -493,8 +468,8 @@ export default function StoreDetailPage() {
             <Col xs={24} md={8}>
               <SelectCustomAntd<IStore>
                 controller={{ control, name: "tagsIds" }}
-                label="Tags"
-                placeholder={"Select tags"}
+                label={t("tags.title")}
+                placeholder={t("stores.selectTags")}
                 mode="multiple"
                 errorMessage={errors.tagsIds?.message}
               >
@@ -509,8 +484,8 @@ export default function StoreDetailPage() {
             <Col xs={24} md={8}>
               <InputCustomAntd
                 controller={{ control, name: `cnpj` }}
-                label="Cnpj / Cpf"
-                placeholder={"Enter cnpj/cpf"}
+                label={t("stores.cnpjCpf")}
+                placeholder={t("stores.enterCnpjCpf")}
                 errorMessage={errors.cnpj?.message}
               />
             </Col>
@@ -518,8 +493,8 @@ export default function StoreDetailPage() {
             <Col xs={24} md={8}>
               <SelectCustomAntd<IStore>
                 controller={{ control, name: "type" }}
-                label="Type"
-                placeholder={"Select type"}
+                label={t("stores.type")}
+                placeholder={t("stores.selectType")}
                 errorMessage={errors.type?.message}
               >
                 {Object.keys(StoresEnum.Type).map((type: string) => (
@@ -534,9 +509,9 @@ export default function StoreDetailPage() {
           <Row>
             <Col xs={24}>
               <TextareaCustomAntd
-                label="About"
+                label={t("stores.about")}
                 controller={{ control, name: "about" }}
-                placeholder={"Enter about"}
+                placeholder={t("stores.enterAbout")}
                 rows={2}
               />
             </Col>
@@ -555,7 +530,7 @@ export default function StoreDetailPage() {
               onClick={() => router.back()}
               disabled={isSubmitting}
             >
-              Cancel
+              {t("common.cancel")}
             </Button>
 
             <Button
@@ -564,7 +539,7 @@ export default function StoreDetailPage() {
               loading={isSubmitting}
               disabled={isSubmitting}
             >
-              {isEditMode ? "Save" : "Create"}
+              {isEditMode ? t("common.save") : t("common.create")}
             </Button>
           </div>
         </form>
