@@ -1,24 +1,11 @@
 "use client";
 
-import {
-  RefObject,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { RefObject, useEffect, useRef, useState } from "react";
 
-import {
-  Button,
-  Card,
-  Space,
-  Tag,
-  Tooltip,
-} from 'antd';
-import moment from 'moment';
-import {
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useRouter } from 'next/navigation';
+import { Button, Card, Space, Tag, Tooltip } from "antd";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
 
 import {
   DownloadOutlined,
@@ -26,61 +13,43 @@ import {
   EnterOutlined,
   PlusOutlined,
   UploadOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import {
-  ImageOrDefault,
-} from '../../components/common/ImageOrDefault/ImageOrDefault';
-import LoadingFull from '../../components/common/LoadingFull/LoadingFull';
-import {
-  PhoneNumbersTag,
-} from '../../components/common/PhoneNumbersTag/PhoneNumbersTag';
-import {
-  TagTagsCustomAntd,
-} from '../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
-import {
-  UploadFilesDrawer,
-} from '../../components/common/UploadFilesDrawer/UploadFilesDrawer';
-import TableCustomAntd2
-  from '../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
-import Layout from '../../components/template/Layout/Layout';
-import useAuthData from '../../data/context/auth/useAuthData';
-import useSocketData from '../../data/context/socket/useSocketData';
-import {
-  serviceMethodsInstance,
-} from '../../services/social-prices-api/service-methods';
-import { IEmployee } from '../../shared/business/employees/employee.interface';
-import EmployeesEnum from '../../shared/business/employees/employees.enum';
-import FilesUploadsEnum
-  from '../../shared/business/files-uploads/files-uploads.enum';
-import PersonEnum from '../../shared/business/shared/person/person.enum';
-import {
-  IPhoneNumber,
-} from '../../shared/business/shared/phone/phone-number.interface';
-import SocketsEnum from '../../shared/business/sockets/sockets.enum';
-import TagsEnum from '../../shared/business/tags/tags.enum';
-import { ITag } from '../../shared/business/tags/tags.interface';
-import Urls from '../../shared/common/routes-app/routes-app';
-import { sortArray } from '../../shared/utils/array/array-functions';
-import DatesEnum from '../../shared/utils/dates/dates.enum';
-import { createTableState } from '../../shared/utils/table/table-state';
-import {
-  ITableStateRequest,
-} from '../../shared/utils/table/table-state.interface';
+import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
+import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
+import { PhoneNumbersTag } from "../../components/common/PhoneNumbersTag/PhoneNumbersTag";
+import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
+import { UploadFilesDrawer } from "../../components/common/UploadFilesDrawer/UploadFilesDrawer";
+import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
+import Layout from "../../components/template/Layout/Layout";
+import useAuthData from "../../data/context/auth/useAuthData";
+import useLanguageData from "../../data/context/language/useLanguageData";
+import useSocketData from "../../data/context/socket/useSocketData";
+import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
+import { IEmployee } from "../../shared/business/employees/employee.interface";
+import EmployeesEnum from "../../shared/business/employees/employees.enum";
+import FilesUploadsEnum from "../../shared/business/files-uploads/files-uploads.enum";
+import PersonEnum from "../../shared/business/shared/person/person.enum";
+import { IPhoneNumber } from "../../shared/business/shared/phone/phone-number.interface";
+import SocketsEnum from "../../shared/business/sockets/sockets.enum";
+import TagsEnum from "../../shared/business/tags/tags.enum";
+import { ITag } from "../../shared/business/tags/tags.interface";
+import Urls from "../../shared/common/routes-app/routes-app";
+import { sortArray } from "../../shared/utils/array/array-functions";
+import DatesEnum from "../../shared/utils/dates/dates.enum";
+import { createTableState } from "../../shared/utils/table/table-state";
+import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import {
   FilesUploadsTable,
   IFilesUploadsTableRefProps,
-} from '../files-uploads/FilesUploadsTable';
-import { useFindTagsByType } from '../tags/useFindTagsByType';
-import {
-  DownloadEmployeesDrawer,
-} from './components/DownloadEmployeesDrawer/DownloadEmployeesDrawer';
-import {
-  useFindEmployeesByUserTableState,
-} from './useFindEmployeesByUserTableState';
+} from "../files-uploads/FilesUploadsTable";
+import { useFindTagsByType } from "../tags/useFindTagsByType";
+import { DownloadEmployeesDrawer } from "./components/DownloadEmployeesDrawer/DownloadEmployeesDrawer";
+import { useFindEmployeesByUserTableState } from "./useFindEmployeesByUserTableState";
 
 export default function EmployeesPage() {
   const { employee, user } = useAuthData();
+  const { t } = useLanguageData()!;
 
   const { socket } = useSocketData();
 
@@ -133,9 +102,13 @@ export default function EmployeesPage() {
   const tagsSort: ITag[] = sortArray(tags, "name");
 
   return (
-    <Layout subtitle="Manager my Employees" title="Employees" hasBackButton>
+    <Layout
+      subtitle={t("employees.manageMyEmployees")}
+      title={t("employees.title")}
+      hasBackButton
+    >
       <Card
-        title="Employees"
+        title={t("employees.title")}
         className="h-min-80 mt-5"
         extra={
           employee?.level !== EmployeesEnum.Level.EMPLOYEE && (
@@ -146,7 +119,7 @@ export default function EmployeesPage() {
                 className="mr-2"
                 icon={<DownloadOutlined />}
               >
-                Download
+                {t("common.download")}
               </Button>
 
               <Button
@@ -155,7 +128,7 @@ export default function EmployeesPage() {
                 className="mr-2"
                 icon={<UploadOutlined />}
               >
-                Upload
+                {t("common.upload")}
               </Button>
 
               <Button
@@ -163,7 +136,7 @@ export default function EmployeesPage() {
                 onClick={() => router.push(Urls.NEW_EMPLOYEE)}
                 icon={<PlusOutlined />}
               >
-                New Employee
+                {t("employees.newEmployee")}
               </Button>
             </>
           )
@@ -183,19 +156,19 @@ export default function EmployeesPage() {
               ),
             },
             {
-              title: "Name",
+              title: t("common.name"),
               dataIndex: "name",
               key: "name",
               align: "center",
             },
             {
-              title: "Username",
+              title: t("employees.username"),
               dataIndex: "username",
               key: "username",
               align: "center",
             },
             {
-              title: "Email",
+              title: t("common.email"),
               dataIndex: "email",
               key: "email",
               align: "center",
@@ -206,7 +179,7 @@ export default function EmployeesPage() {
               ),
             },
             {
-              title: "Phone Numbers",
+              title: t("profile.phoneNumbers"),
               dataIndex: "phoneNumbers",
               key: "phoneNumbers",
               align: "center",
@@ -215,7 +188,7 @@ export default function EmployeesPage() {
               ),
             },
             {
-              title: "Gender",
+              title: t("customers.gender"),
               dataIndex: "gender",
               key: "gender",
               align: "center",
@@ -234,7 +207,7 @@ export default function EmployeesPage() {
               ),
             },
             {
-              title: "Birth Date",
+              title: t("customers.birthDate"),
               dataIndex: "birthDate",
               key: "birthDate",
               align: "center",
@@ -243,7 +216,7 @@ export default function EmployeesPage() {
                 moment(birthDate).format(DatesEnum.Format.DDMMYYY),
             },
             {
-              title: "Tags",
+              title: t("tags.title"),
               dataIndex: "tagsIds",
               key: "tagsIds",
               filters: tagsSort.map((tag: ITag) => ({
@@ -256,7 +229,7 @@ export default function EmployeesPage() {
               ),
             },
             {
-              title: "Level",
+              title: t("employees.level"),
               dataIndex: "level",
               key: "level",
               filters: EmployeesEnum.getLevelsByEmployeeLevel(
@@ -273,7 +246,7 @@ export default function EmployeesPage() {
               ),
             },
             {
-              title: "Status",
+              title: t("common.status"),
               dataIndex: "status",
               filters: Object.keys(EmployeesEnum.Status).map(
                 (status: string) => ({
@@ -292,14 +265,14 @@ export default function EmployeesPage() {
               ),
             },
             {
-              title: "Action",
+              title: t("common.actions"),
               dataIndex: "action",
               key: "action",
               align: "center",
               render: (_: any, employee: IEmployee) => {
                 return (
                   <Space.Compact>
-                    <Tooltip title="Edit Employee">
+                    <Tooltip title={t("employees.editEmployee")}>
                       <Button
                         type="success"
                         onClick={() =>
@@ -314,7 +287,7 @@ export default function EmployeesPage() {
                       />
                     </Tooltip>
 
-                    <Tooltip title="Go to employee">
+                    <Tooltip title={t("employees.goToEmployee")}>
                       <Button
                         type="default"
                         onClick={() =>
@@ -330,7 +303,7 @@ export default function EmployeesPage() {
               },
             },
           ]}
-          search={{ placeholder: "Search employees..." }}
+          search={{ placeholder: t("employees.searchEmployees") }}
           loading={isLoading}
           tableStateRequest={tableStateRequest}
           setTableStateRequest={setTableStateRequest}
@@ -351,7 +324,7 @@ export default function EmployeesPage() {
         }}
         downloadFileName="social-prices-employees-template.xlsx"
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        title="Upload Employees"
+        title={t("employees.uploadEmployees")}
       >
         <FilesUploadsTable
           type={FilesUploadsEnum.Type.UPLOAD_EMPLOYEES}
@@ -362,7 +335,7 @@ export default function EmployeesPage() {
       <DownloadEmployeesDrawer
         isOpen={isDownloadEmployeesDrawerOpen}
         onClose={() => setIsDownloadEmployeesDrawerOpen(false)}
-        title="Download Employees"
+        title={t("employees.downloadEmployees")}
         tags={tagsSort}
       />
     </Layout>

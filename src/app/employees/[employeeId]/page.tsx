@@ -95,8 +95,8 @@ export default function EmployeePage() {
 
   return (
     <Layout
-      subtitle={`Here we can see about employee - ${employee.name}`}
-      title="Employee"
+      subtitle={`${t("employees.employeeSubtitle")} - ${employee.name}`}
+      title={t("employees.employee")}
       hasBackButton
     >
       <Card className="h-min-80 mt-2">
@@ -112,14 +112,14 @@ export default function EmployeePage() {
               src={employee.avatar}
               width={240}
               className="shadow-lg border-none cursor-pointer z-10 rounded-lg mt-10"
-              title="See avatar"
+              title={t("profile.seeAvatar")}
             />
 
             <h3 className="md:text-2xl font-semibold text-blueGray-700 mt-1 mb-1">
               {employee.name}
             </h3>
 
-            <Tooltip title={"Employee Email, click to send a email"}>
+            <Tooltip title={t("employees.employeeEmailTooltip")}>
               <a
                 href={`mailto:${employee.email}`}
                 className="flex items-center text-sm leading-normal text-gray-400 
@@ -130,7 +130,7 @@ export default function EmployeePage() {
             </Tooltip>
 
             {employee.username && (
-              <Tooltip title="Username">
+              <Tooltip title={t("employees.username")}>
                 <Tag color="blue" className="mt-2">
                   {employee.username}
                 </Tag>
@@ -154,15 +154,15 @@ export default function EmployeePage() {
 
           <Col xs={24} sm={14} md={19}>
             <ContainerTitle
-              title="Information"
+              title={t("profile.information")}
               extraHeader={
-                <Tooltip title="Edit employee">
+                <Tooltip title={t("employees.editEmployee")}>
                   <Button
                     type="success"
                     icon={<EditOutlined />}
                     onClick={handleEditEmployee}
                   >
-                    Edit
+                    {t("common.edit")}
                   </Button>
                 </Tooltip>
               }
@@ -175,15 +175,15 @@ export default function EmployeePage() {
                     column={{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3 }}
                     size="small"
                   >
-                    <Descriptions.Item label="Name" span={2}>
+                    <Descriptions.Item label={t("common.name")} span={2}>
                       <span className="font-medium">{employee.name}</span>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Username">
+                    <Descriptions.Item label={t("employees.username")}>
                       <Tag color="blue">{employee.username || "-"}</Tag>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Email">
+                    <Descriptions.Item label={t("common.email")}>
                       <a
                         href={`mailto:${employee.email}`}
                         className="text-blue-600"
@@ -192,7 +192,7 @@ export default function EmployeePage() {
                       </a>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Birth Date">
+                    <Descriptions.Item label={t("customers.birthDate")}>
                       {employee.birthDate
                         ? moment(employee.birthDate).format(
                             DatesEnum.Format.DDMMYYY
@@ -200,7 +200,7 @@ export default function EmployeePage() {
                         : "-"}
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Gender">
+                    <Descriptions.Item label={t("customers.gender")}>
                       <Tag
                         color={
                           PersonEnum.GenderColors[
@@ -216,13 +216,13 @@ export default function EmployeePage() {
                       </Tag>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Level">
+                    <Descriptions.Item label={t("employees.level")}>
                       <Tag color={EmployeesEnum.LevelColors[employee.level]}>
                         {EmployeesEnum.LevelLabels[employee.level]}
                       </Tag>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Status">
+                    <Descriptions.Item label={t("common.status")}>
                       <Tag color={EmployeesEnum.StatusColors[employee.status]}>
                         {EmployeesEnum.StatusLabels[employee.status]}
                       </Tag>
@@ -234,7 +234,7 @@ export default function EmployeePage() {
                 {employee.about && (
                   <Col xs={24}>
                     <Descriptions bordered column={1} size="small">
-                      <Descriptions.Item label="About">
+                      <Descriptions.Item label={t("customers.about")}>
                         <div className="max-h-20 overflow-y-auto">
                           {employee.about}
                         </div>
@@ -247,7 +247,7 @@ export default function EmployeePage() {
                 {employee.phoneNumbers && employee.phoneNumbers.length > 0 && (
                   <Col xs={24}>
                     <Descriptions bordered column={1} size="small">
-                      <Descriptions.Item label="Phone Numbers">
+                      <Descriptions.Item label={t("profile.phoneNumbers")}>
                         <div className="flex flex-col gap-2">
                           {employee.phoneNumbers.map(
                             (phone: IPhoneNumber, index: number) => (
@@ -300,7 +300,7 @@ export default function EmployeePage() {
                 {employee.addresses && employee.addresses.length > 0 && (
                   <Col xs={24}>
                     <Descriptions bordered column={1} size="small">
-                      <Descriptions.Item label="Addresses">
+                      <Descriptions.Item label={t("profile.addresses")}>
                         <div className="flex flex-col gap-3">
                           {employee.addresses.map(
                             (address: IAddress, index: number) => (
@@ -355,7 +355,7 @@ export default function EmployeePage() {
                 {/* Tags */}
                 <Col xs={24}>
                   <Descriptions bordered column={1} size="small">
-                    <Descriptions.Item label="Tags">
+                    <Descriptions.Item label={t("tags.title")}>
                       <div className="max-w-full overflow-x-auto py-1">
                         <div className="flex flex-wrap gap-1">
                           <TagTagsCustomAntd
@@ -377,12 +377,12 @@ export default function EmployeePage() {
                     size="small"
                   >
                     {employee.uploadFilename && (
-                      <Descriptions.Item label="Upload Filename">
+                      <Descriptions.Item label={t("employees.uploadFilename")}>
                         <Tag color="orange">{employee.uploadFilename}</Tag>
                       </Descriptions.Item>
                     )}
 
-                    <Descriptions.Item label="Created At">
+                    <Descriptions.Item label={t("profile.createdAt")}>
                       {employee.createdAt
                         ? moment(employee.createdAt).format(
                             DatesEnum.Format.DDMMYYYYhhmmss
@@ -390,7 +390,7 @@ export default function EmployeePage() {
                         : "-"}
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Updated At">
+                    <Descriptions.Item label={t("profile.updatedAt")}>
                       {employee.updatedAt
                         ? moment(employee.updatedAt).format(
                             DatesEnum.Format.DDMMYYYYhhmmss
@@ -454,7 +454,7 @@ export default function EmployeePage() {
           onCancel={() => setPreviewOpen(false)}
         >
           <Image
-            alt="preview image"
+            alt={t("common.previewImage")}
             style={{ width: "100%" }}
             preview={false}
             src={

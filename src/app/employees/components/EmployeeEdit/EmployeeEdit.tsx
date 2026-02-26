@@ -1,9 +1,6 @@
 "use client";
 
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from "react";
 
 import {
   Button,
@@ -15,25 +12,17 @@ import {
   Tag,
   Tooltip,
   UploadFile,
-} from 'antd';
-import { RcFile } from 'antd/es/upload';
-import { isArray } from 'class-validator';
-import moment from 'moment';
-import {
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useRouter } from 'next/navigation';
-import {
-  SubmitHandler,
-  useForm,
-} from 'react-hook-form';
-import z from 'zod';
+} from "antd";
+import { RcFile } from "antd/es/upload";
+import { isArray } from "class-validator";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
+import { SubmitHandler, useForm } from "react-hook-form";
+import z from "zod";
 
-import {
-  EnterOutlined,
-  QuestionCircleTwoTone,
-} from '@ant-design/icons';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { EnterOutlined, QuestionCircleTwoTone } from "@ant-design/icons";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   Addresses,
@@ -41,61 +30,41 @@ import {
   countries,
   generateNewAddress,
   states,
-} from '../../../../components/common/Addresses/Addresses';
-import Avatar from '../../../../components/common/Avatar/Avatar';
-import handleClientError
-  from '../../../../components/common/HandleClientError/HandleClientError';
-import HrCustom from '../../../../components/common/HrCustom/HrCustom';
-import ImageModal from '../../../../components/common/ImageModal/ImageModal';
-import LoadingFull from '../../../../components/common/LoadingFull/LoadingFull';
+} from "../../../../components/common/Addresses/Addresses";
+import Avatar from "../../../../components/common/Avatar/Avatar";
+import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
+import HrCustom from "../../../../components/common/HrCustom/HrCustom";
+import ImageModal from "../../../../components/common/ImageModal/ImageModal";
+import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
 import {
   generateNewPhoneNumber,
   phoneNumberFormSchema,
   PhoneNumbers,
-} from '../../../../components/common/PhoneNumbers/PhoneNumbers';
-import {
-  TagTagCustomAntd,
-} from '../../../../components/common/TagTagCustomAntd/TagTagCustomAntd';
-import {
-  InputCustomAntd,
-} from '../../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
-import {
-  SelectCustomAntd,
-} from '../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
-import {
-  TextareaCustomAntd,
-} from '../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd';
-import useAuthData from '../../../../data/context/auth/useAuthData';
-import CreateEmployeeDto
-  from '../../../../services/social-prices-api/employees/dto/createEmployee.dto';
-import UpdateEmployeeDto
-  from '../../../../services/social-prices-api/employees/dto/updateEmployee.dto';
-import {
-  serviceMethodsInstance,
-} from '../../../../services/social-prices-api/service-methods';
-import {
-  IEmployee,
-} from '../../../../shared/business/employees/employee.interface';
-import EmployeesEnum
-  from '../../../../shared/business/employees/employees.enum';
-import AddressEnum
-  from '../../../../shared/business/shared/address/address.enum';
-import {
-  IAddress,
-} from '../../../../shared/business/shared/address/address.interface';
-import PersonEnum from '../../../../shared/business/shared/person/person.enum';
-import {
-  IPhoneNumber,
-} from '../../../../shared/business/shared/phone/phone-number.interface';
-import TagsEnum from '../../../../shared/business/tags/tags.enum';
-import { ITag } from '../../../../shared/business/tags/tags.interface';
-import Urls from '../../../../shared/common/routes-app/routes-app';
-import { sortArray } from '../../../../shared/utils/array/array-functions';
-import DatesEnum from '../../../../shared/utils/dates/dates.enum';
-import { getFileUrl } from '../../../../shared/utils/images/images-helper';
-import { getImageUrl } from '../../../../shared/utils/images/images-url';
-import { useFindTagsByType } from '../../../tags/useFindTagsByType';
-import { useFindEmployeeById } from '../../detail/useFindEmployeeById';
+} from "../../../../components/common/PhoneNumbers/PhoneNumbers";
+import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
+import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
+import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { TextareaCustomAntd } from "../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
+import useAuthData from "../../../../data/context/auth/useAuthData";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
+import CreateEmployeeDto from "../../../../services/social-prices-api/employees/dto/createEmployee.dto";
+import UpdateEmployeeDto from "../../../../services/social-prices-api/employees/dto/updateEmployee.dto";
+import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
+import { IEmployee } from "../../../../shared/business/employees/employee.interface";
+import EmployeesEnum from "../../../../shared/business/employees/employees.enum";
+import AddressEnum from "../../../../shared/business/shared/address/address.enum";
+import { IAddress } from "../../../../shared/business/shared/address/address.interface";
+import PersonEnum from "../../../../shared/business/shared/person/person.enum";
+import { IPhoneNumber } from "../../../../shared/business/shared/phone/phone-number.interface";
+import TagsEnum from "../../../../shared/business/tags/tags.enum";
+import { ITag } from "../../../../shared/business/tags/tags.interface";
+import Urls from "../../../../shared/common/routes-app/routes-app";
+import { sortArray } from "../../../../shared/utils/array/array-functions";
+import DatesEnum from "../../../../shared/utils/dates/dates.enum";
+import { getFileUrl } from "../../../../shared/utils/images/images-helper";
+import { getImageUrl } from "../../../../shared/utils/images/images-url";
+import { useFindTagsByType } from "../../../tags/useFindTagsByType";
+import { useFindEmployeeById } from "../../detail/useFindEmployeeById";
 
 const formSchema = z.object({
   name: z.string().trim().nonempty("Name is required"),
@@ -128,6 +97,7 @@ export const EmployeeEdit: React.FC<Props> = ({
   onCancel,
   isFromProfile = false,
 }) => {
+  const { t } = useLanguageData()!;
   const router: AppRouterInstance = useRouter();
 
   const { employee } = useAuthData();
@@ -222,7 +192,7 @@ export const EmployeeEdit: React.FC<Props> = ({
       setIsSubmitting(true);
 
       if (!data.password?.trim()) {
-        message.warning("Password is required!");
+        message.warning(t("employees.passwordRequired"));
         return;
       }
 
@@ -278,7 +248,7 @@ export const EmployeeEdit: React.FC<Props> = ({
       const response: IEmployee =
         await serviceMethodsInstance.employeesServiceMethods.create(formData);
 
-      message.success("Your employee has been created successfully!");
+      message.success(t("employees.employeeCreatedSuccessfully"));
 
       onSave(response);
     } catch (error) {
@@ -291,7 +261,7 @@ export const EmployeeEdit: React.FC<Props> = ({
   const handleUpdate = async (data: TFormSchema) => {
     try {
       if (!employeeToEdit) {
-        message.warning("Employee not found to update!");
+        message.warning(t("employees.employeeNotFoundToUpdate"));
         return;
       }
 
@@ -350,7 +320,7 @@ export const EmployeeEdit: React.FC<Props> = ({
       const response: IEmployee =
         await serviceMethodsInstance.employeesServiceMethods.update(formData);
 
-      message.success("Your employee has been updated successfully!");
+      message.success(t("employees.employeeUpdatedSuccessfully"));
 
       onSave(response);
     } catch (error) {
@@ -386,7 +356,7 @@ export const EmployeeEdit: React.FC<Props> = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex justify-center w-full">
         <div className="cursor-pointer z-10">
-          <Tooltip title="Edit avatar" placement="bottom">
+          <Tooltip title={t("profile.editAvatar")} placement="bottom">
             <Avatar
               src={avatarUrl}
               width={180}
@@ -407,7 +377,7 @@ export const EmployeeEdit: React.FC<Props> = ({
 
       <Row gutter={24} justify={"end"}>
         <Col>
-          <Tooltip title="Go to customer">
+          <Tooltip title={t("employees.goToEmployee")}>
             <Button
               type="primary"
               onClick={() =>
@@ -415,7 +385,7 @@ export const EmployeeEdit: React.FC<Props> = ({
               }
               icon={<EnterOutlined />}
             >
-              Employee
+              {t("employees.employee")}
             </Button>
           </Tooltip>
         </Col>
@@ -427,8 +397,8 @@ export const EmployeeEdit: React.FC<Props> = ({
         <Col xs={24} md={8}>
           <InputCustomAntd
             controller={{ control, name: "name" }}
-            label="Name"
-            placeholder={"Enter name"}
+            label={t("common.name")}
+            placeholder={t("placeholders.enterName")}
             errorMessage={errors.name?.message}
             maxLength={200}
           />
@@ -437,8 +407,8 @@ export const EmployeeEdit: React.FC<Props> = ({
         <Col xs={24} md={8}>
           <InputCustomAntd
             controller={{ control, name: "email" }}
-            label="Email"
-            placeholder={"Enter email"}
+            label={t("common.email")}
+            placeholder={t("placeholders.enterEmail")}
             errorMessage={errors.email?.message}
             maxLength={200}
             type="email"
@@ -450,10 +420,10 @@ export const EmployeeEdit: React.FC<Props> = ({
             controller={{ control, name: "password" }}
             label={
               <div>
-                <span>Password</span>
+                <span>{t("auth.password")}</span>
                 {isEditMode && (
                   <Tooltip
-                    title="If you want to update 'password' you just need type on input."
+                    title={t("employees.passwordUpdateTooltip")}
                     className="ml-1"
                   >
                     <QuestionCircleTwoTone />
@@ -461,7 +431,7 @@ export const EmployeeEdit: React.FC<Props> = ({
                 )}
               </div>
             }
-            placeholder={"Enter password"}
+            placeholder={t("auth.password")}
             type="password"
             errorMessage={errors.password?.message}
             maxLength={200}
@@ -471,9 +441,9 @@ export const EmployeeEdit: React.FC<Props> = ({
         <Col xs={24} md={8}>
           <InputCustomAntd
             controller={{ control, name: "birthDate" }}
-            label="Birth Date"
+            label={t("customers.birthDate")}
             type="date"
-            placeholder={"Enter birth date"}
+            placeholder={t("placeholders.enterBirthDate")}
             errorMessage={errors.birthDate?.message}
           />
         </Col>
@@ -481,7 +451,7 @@ export const EmployeeEdit: React.FC<Props> = ({
         <Col xs={24} md={8}>
           <SelectCustomAntd<IEmployee>
             controller={{ control, name: "gender" }}
-            label="Gender"
+            label={t("customers.gender")}
             errorMessage={errors.gender?.message}
           >
             {Object.keys(PersonEnum.Gender).map((gender: string) => (
@@ -495,9 +465,9 @@ export const EmployeeEdit: React.FC<Props> = ({
         <Col xs={24} md={8}>
           <SelectCustomAntd<IEmployee>
             controller={{ control, name: "tagsIds" }}
-            label="Tags"
+            label={t("tags.title")}
             errorMessage={errors.tagsIds?.message}
-            placeholder={"Select tags"}
+            placeholder={t("tags.selectTags")}
             mode="multiple"
           >
             {sortArray(tags, "name").map((tag: ITag) => (
@@ -511,7 +481,7 @@ export const EmployeeEdit: React.FC<Props> = ({
         <Col xs={24} md={8}>
           <SelectCustomAntd<IEmployee>
             controller={{ control, name: "level" }}
-            label="Level"
+            label={t("employees.level")}
             errorMessage={errors.level?.message}
             disabled={isFromProfile}
           >
@@ -532,7 +502,7 @@ export const EmployeeEdit: React.FC<Props> = ({
         <Col xs={24} md={8}>
           <SelectCustomAntd<IEmployee>
             controller={{ control, name: "status" }}
-            label="Status"
+            label={t("common.status")}
             errorMessage={errors.status?.message}
             disabled={isFromProfile || !allowActionByMyEmployeeAndOtherEmployee}
           >
@@ -554,9 +524,9 @@ export const EmployeeEdit: React.FC<Props> = ({
       <Row>
         <Col xs={24}>
           <TextareaCustomAntd
-            label="About"
+            label={t("customers.about")}
             controller={{ control, name: "about" }}
-            placeholder={"Enter about"}
+            placeholder={t("placeholders.enterAbout")}
             rows={2}
           />
         </Col>
@@ -575,7 +545,7 @@ export const EmployeeEdit: React.FC<Props> = ({
           onClick={() => onCancel(employeeToEdit)}
           disabled={isSubmitting}
         >
-          Cancel
+          {t("common.cancel")}
         </Button>
 
         <Button
@@ -584,7 +554,7 @@ export const EmployeeEdit: React.FC<Props> = ({
           loading={isSubmitting}
           disabled={isSubmitting}
         >
-          {isEditMode ? "Save" : "Create"}
+          {isEditMode ? t("common.save") : t("common.create")}
         </Button>
       </div>
     </form>
