@@ -518,5 +518,27 @@
     "uploadHint": "Support for a single or bulk upload. Strictly prohibited from uploading company data or other banned files.",
     "uploading": "Uploading",
     "startUpload": "Start Upload"
+  },
+  "filesUploads": {
+    "title": "Files Uploads",
+    "filename": "Filename",
+    "status": "Status",
+    "createdAt": "Created At",
+    "totalToProcess": "Total To Process",
+    "totalSuccess": "Total Success",
+    "totalError": "Total Error",
+    "totalProcessed": "Total Processed",
+    "action": "Action",
+    "downloadErrors": "Download Errors",
+    "searchFilesUploads": "Search files uploads...",
+    "pending": "Pending",
+    "processing": "Processing",
+    "completed": "Completed",
+    "error": "Error",
+    "uploadCustomers": "Upload Customers",
+    "uploadProducts": "Upload Products",
+    "uploadProductItems": "Upload Product Items",
+    "uploadEmployees": "Upload Employees",
+    "uploadSales": "Upload Sales"
   }
 }

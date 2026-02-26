@@ -1,40 +1,20 @@
-import {
-  forwardRef,
-  useImperativeHandle,
-  useState,
-} from 'react';
+import { forwardRef, useImperativeHandle, useState } from "react";
 
-import {
-  Button,
-  Card,
-  Space,
-  Tag,
-  Tooltip,
-} from 'antd';
-import moment from 'moment';
+import { Button, Card, Space, Tag, Tooltip } from "antd";
+import moment from "moment";
 
-import { DownloadOutlined } from '@ant-design/icons';
+import { DownloadOutlined } from "@ant-design/icons";
 
-import handleClientError
-  from '../../components/common/HandleClientError/HandleClientError';
-import TableCustomAntd2
-  from '../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
-import {
-  serviceMethodsInstance,
-} from '../../services/social-prices-api/service-methods';
-import {
-  IFileUpload,
-} from '../../shared/business/files-uploads/file-upload.interface';
-import FilesUploadsEnum
-  from '../../shared/business/files-uploads/files-uploads.enum';
-import DatesEnum from '../../shared/utils/dates/dates.enum';
-import { createTableState } from '../../shared/utils/table/table-state';
-import {
-  ITableStateRequest,
-} from '../../shared/utils/table/table-state.interface';
-import {
-  useFindFilesUploadsByUserTableState,
-} from './useFindFilesUploadsByUserTableState';
+import handleClientError from "../../components/common/HandleClientError/HandleClientError";
+import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
+import useLanguageData from "../../data/context/language/useLanguageData";
+import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
+import { IFileUpload } from "../../shared/business/files-uploads/file-upload.interface";
+import FilesUploadsEnum from "../../shared/business/files-uploads/files-uploads.enum";
+import DatesEnum from "../../shared/utils/dates/dates.enum";
+import { createTableState } from "../../shared/utils/table/table-state";
+import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
+import { useFindFilesUploadsByUserTableState } from "./useFindFilesUploadsByUserTableState";
 
 export interface IFilesUploadsTableRefProps {
   fetchFindFilesUploadsByUserTableState: () => Promise<void> | void;
@@ -47,6 +27,8 @@ interface Props {
 // eslint-disable-next-line react/display-name
 export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
   ({ type }, ref) => {
+    const { t } = useLanguageData()!;
+
     const [tableStateRequest, setTableStateRequest] = useState<
       ITableStateRequest<IFileUpload> | undefined
     >(
@@ -98,19 +80,19 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
     };
 
     return (
-      <Card title="Files Uploads" className="h-min-80 mt-5">
+      <Card title={t("filesUploads.title")} className="h-min-80 mt-5">
         <TableCustomAntd2<IFileUpload>
           rowKey={"_id"}
           dataSource={filesUploads}
           columns={[
             {
-              title: "Filename",
+              title: t("filesUploads.filename"),
               dataIndex: "filename",
               key: "filename",
               align: "center",
             },
             {
-              title: "Status",
+              title: t("filesUploads.status"),
               dataIndex: "status",
               key: "status",
               align: "center",
@@ -129,7 +111,7 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
               ),
             },
             {
-              title: "Created At",
+              title: t("filesUploads.createdAt"),
               dataIndex: "createdAt",
               key: "createdAt",
               align: "center",
@@ -138,31 +120,31 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
                 moment(createdAt).format(DatesEnum.Format.DDMMYYY),
             },
             {
-              title: "Total To Process",
+              title: t("filesUploads.totalToProcess"),
               dataIndex: "totalToProcess",
               key: "totalToProcess",
               align: "center",
             },
             {
-              title: "Total Success",
+              title: t("filesUploads.totalSuccess"),
               dataIndex: "totalSuccess",
               key: "totalSuccess",
               align: "center",
             },
             {
-              title: "Total Error",
+              title: t("filesUploads.totalError"),
               dataIndex: "totalError",
               key: "totalError",
               align: "center",
             },
             {
-              title: "Total Processed",
+              title: t("filesUploads.totalProcessed"),
               dataIndex: "totalProcessed",
               key: "totalProcessed",
               align: "center",
             },
             {
-              title: "Action",
+              title: t("filesUploads.action"),
               dataIndex: "action",
               key: "action",
               align: "center",
@@ -172,9 +154,10 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
 
                   return (
                     <Space.Compact>
-                      <Tooltip title="Download Errors">
+                      <Tooltip title={t("filesUploads.downloadErrors")}>
                         <Button
-                          type="danger"
+                          type="primary"
+                          danger
                           disabled={
                             downloadingErrors?.isDownloading &&
                             downloadingErrors.fileUploadId !== fileUploadId
@@ -195,7 +178,7 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
               },
             },
           ]}
-          search={{ placeholder: "Search files uploads..." }}
+          search={{ placeholder: t("filesUploads.searchFilesUploads") }}
           loading={isLoading}
           tableStateRequest={tableStateRequest}
           setTableStateRequest={(tableStateRequestFileUpload: any) => {

@@ -508,13 +508,35 @@
     "enterAbout": "Digite sobre você"
   },
   "upload": {
-    "selectProductBeforeUpload": "Por favor, selecione um produto antes de enviar os arquivos!",
+    "selectProductBeforeUpload": "Por favor, selecione um produto antes de carregar arquivos!",
     "filesBeingProcessed": "Seus arquivos estão sendo processados! Enviaremos uma notificação quando estiver pronto, ou qualquer informação relacionada ao processo.",
-    "maxFilesReached": "Número máximo de arquivos para envio atingido. Máximo de {{max}} arquivos!",
-    "downloadTemplateFile": "Baixar Arquivo de Modelo",
-    "clickOrDragFile": "Clique ou arraste o arquivo para esta área para enviar",
-    "uploadHint": "Suporte para envio único ou em massa. É estritamente proibido enviar dados da empresa ou outros arquivos proibidos.",
-    "uploading": "Enviando",
-    "startUpload": "Iniciar Envio"
+    "maxFilesReached": "Máximo de arquivos em lote para carregar atingido. Máximo de {{max}} arquivos!",
+    "downloadTemplateFile": "Baixar Arquivo Modelo",
+    "clickOrDragFile": "Clique ou arraste o arquivo para esta área para carregar",
+    "uploadHint": "Suporte para carregamento único ou em lote. É estritamente proibido carregar dados da empresa ou outros arquivos banidos.",
+    "uploading": "Carregando",
+    "startUpload": "Iniciar Carregamento"
+  },
+  "filesUploads": {
+    "title": "Arquivos Carregados",
+    "filename": "Nome do Arquivo",
+    "status": "Status",
+    "createdAt": "Criado Em",
+    "totalToProcess": "Total para Processar",
+    "totalSuccess": "Total de Sucessos",
+    "totalError": "Total de Erros",
+    "totalProcessed": "Total Processado",
+    "action": "Ação",
+    "downloadErrors": "Baixar Erros",
+    "searchFilesUploads": "Pesquisar arquivos carregados...",
+    "pending": "Pendente",
+    "processing": "Processando",
+    "completed": "Concluído",
+    "error": "Erro",
+    "uploadCustomers": "Carregar Clientes",
+    "uploadProducts": "Carregar Produtos",
+    "uploadProductItems": "Carregar Itens de Produto",
+    "uploadEmployees": "Carregar Funcionários",
+    "uploadSales": "Carregar Vendas"
   }
 }
