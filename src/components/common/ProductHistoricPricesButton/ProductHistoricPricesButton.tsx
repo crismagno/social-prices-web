@@ -5,6 +5,7 @@ import moment from "moment";
 
 import { UnorderedListOutlined } from "@ant-design/icons";
 
+import useLanguageData from "../../../data/context/language/useLanguageData";
 import { IProduct } from "../../../shared/business/products/products.interface";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { formatterMoney } from "../../../shared/utils/strings/string";
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export const ProductHistoricPricesButton: React.FC<Props> = ({ product }) => {
+  const { t } = useLanguageData();
   const [open, setOpen] = useState<boolean>(false);
 
   if (!product.historicPrices.length) {
@@ -22,7 +24,7 @@ export const ProductHistoricPricesButton: React.FC<Props> = ({ product }) => {
 
   return (
     <>
-      <Tooltip title="See product historic prices">
+      <Tooltip title={t("products.seeProductHistoricPrices")}>
         <Button
           size="small"
           icon={<UnorderedListOutlined />}
@@ -35,7 +37,7 @@ export const ProductHistoricPricesButton: React.FC<Props> = ({ product }) => {
         title={
           <>
             <div>
-              Product Historic Prices:{" "}
+              {t("products.productHistoricPrices")}:{" "}
               <span className="italic text-blue-500">{product.name}</span>
             </div>
           </>
@@ -49,16 +51,16 @@ export const ProductHistoricPricesButton: React.FC<Props> = ({ product }) => {
           className="mt-10"
           columns={[
             {
-              title: "Barcode",
+              title: t("products.barcode"),
               dataIndex: "barcode",
             },
             {
-              title: "Price",
+              title: t("common.price"),
               dataIndex: "price",
               render: (price: number) => formatterMoney(price),
             },
             {
-              title: "Updated At",
+              title: t("sales.updatedAt"),
               dataIndex: "updatedAt",
               render: (updatedAt: Date) =>
                 moment(updatedAt).format(DatesEnum.Format.DDMMYYYYhhmmss),

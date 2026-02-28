@@ -1,27 +1,12 @@
 "use client";
 
-import {
-  RefObject,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { RefObject, useEffect, useRef, useState } from "react";
 
-import {
-  Avatar,
-  Button,
-  Card,
-  Image,
-  Space,
-  Tag,
-  Tooltip,
-} from 'antd';
-import { find } from 'lodash';
-import moment from 'moment';
-import {
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useRouter } from 'next/navigation';
+import { Avatar, Button, Card, Image, Space, Tag, Tooltip } from "antd";
+import { find } from "lodash";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
 
 import {
   DownloadOutlined,
@@ -31,70 +16,50 @@ import {
   QuestionCircleOutlined,
   ShoppingCartOutlined,
   UploadOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import LoadingFull from '../../components/common/LoadingFull/LoadingFull';
-import {
-  ProductHistoricPricesButton,
-} from '../../components/common/ProductHistoricPricesButton/ProductHistoricPricesButton';
-import {
-  StoreNameStatus,
-} from '../../components/common/StoreNameStatus/StoreNameStatus';
-import {
-  TagCategoriesCustomAntd,
-} from '../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd';
-import {
-  TagTagsCustomAntd,
-} from '../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
-import {
-  UploadFilesDrawer,
-} from '../../components/common/UploadFilesDrawer/UploadFilesDrawer';
-import YesNo from '../../components/common/YesNo/YesNo';
-import TableCustomAntd2
-  from '../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
-import Layout from '../../components/template/Layout/Layout';
-import useAuthData from '../../data/context/auth/useAuthData';
-import useSocketData from '../../data/context/socket/useSocketData';
-import {
-  serviceMethodsInstance,
-} from '../../services/social-prices-api/service-methods';
-import CategoriesEnum from '../../shared/business/categories/categories.enum';
-import {
-  ICategory,
-} from '../../shared/business/categories/categories.interface';
-import FilesUploadsEnum
-  from '../../shared/business/files-uploads/files-uploads.enum';
-import { IProduct } from '../../shared/business/products/products.interface';
-import SocketsEnum from '../../shared/business/sockets/sockets.enum';
-import { IStore } from '../../shared/business/stores/stores.interface';
-import TagsEnum from '../../shared/business/tags/tags.enum';
-import { ITag } from '../../shared/business/tags/tags.interface';
-import CommonEnum from '../../shared/common/enums/common.enum';
-import Urls from '../../shared/common/routes-app/routes-app';
-import { sortArray } from '../../shared/utils/array/array-functions';
-import DatesEnum from '../../shared/utils/dates/dates.enum';
-import { getImageUrl } from '../../shared/utils/images/images-url';
-import ImagesEnum from '../../shared/utils/images/images.enum';
-import { formatterMoney } from '../../shared/utils/strings/string';
-import { createTableState } from '../../shared/utils/table/table-state';
-import {
-  ITableStateRequest,
-} from '../../shared/utils/table/table-state.interface';
-import { useFindCategoriesByType } from '../categories/useFindCategoriesByType';
+import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
+import { ProductHistoricPricesButton } from "../../components/common/ProductHistoricPricesButton/ProductHistoricPricesButton";
+import { StoreNameStatus } from "../../components/common/StoreNameStatus/StoreNameStatus";
+import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
+import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
+import { UploadFilesDrawer } from "../../components/common/UploadFilesDrawer/UploadFilesDrawer";
+import YesNo from "../../components/common/YesNo/YesNo";
+import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
+import Layout from "../../components/template/Layout/Layout";
+import useAuthData from "../../data/context/auth/useAuthData";
+import useLanguageData from "../../data/context/language/useLanguageData";
+import useSocketData from "../../data/context/socket/useSocketData";
+import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
+import CategoriesEnum from "../../shared/business/categories/categories.enum";
+import { ICategory } from "../../shared/business/categories/categories.interface";
+import FilesUploadsEnum from "../../shared/business/files-uploads/files-uploads.enum";
+import { IProduct } from "../../shared/business/products/products.interface";
+import SocketsEnum from "../../shared/business/sockets/sockets.enum";
+import { IStore } from "../../shared/business/stores/stores.interface";
+import TagsEnum from "../../shared/business/tags/tags.enum";
+import { ITag } from "../../shared/business/tags/tags.interface";
+import CommonEnum from "../../shared/common/enums/common.enum";
+import Urls from "../../shared/common/routes-app/routes-app";
+import { sortArray } from "../../shared/utils/array/array-functions";
+import DatesEnum from "../../shared/utils/dates/dates.enum";
+import { getImageUrl } from "../../shared/utils/images/images-url";
+import ImagesEnum from "../../shared/utils/images/images.enum";
+import { formatterMoney } from "../../shared/utils/strings/string";
+import { createTableState } from "../../shared/utils/table/table-state";
+import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
+import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";
 import {
   FilesUploadsTable,
   IFilesUploadsTableRefProps,
-} from '../files-uploads/FilesUploadsTable';
-import { useFindStoresByUser } from '../stores/useFindStoresByUser';
-import { useFindTagsByType } from '../tags/useFindTagsByType';
-import {
-  DownloadProductsDrawer,
-} from './components/DownloadProductsDrawer/DownloadProductsDrawer';
-import {
-  useFindProductsByUserTableState,
-} from './useFindProductsByUserTableState';
+} from "../files-uploads/FilesUploadsTable";
+import { useFindStoresByUser } from "../stores/useFindStoresByUser";
+import { useFindTagsByType } from "../tags/useFindTagsByType";
+import { DownloadProductsDrawer } from "./components/DownloadProductsDrawer/DownloadProductsDrawer";
+import { useFindProductsByUserTableState } from "./useFindProductsByUserTableState";
 
 export default function ProductsPage() {
+  const { t } = useLanguageData();
   const { user } = useAuthData();
 
   const { socket } = useSocketData();
@@ -153,9 +118,13 @@ export default function ProductsPage() {
   const tagsSort: ITag[] = sortArray(tags, "name");
 
   return (
-    <Layout subtitle="My Products" title="Products" hasBackButton>
+    <Layout
+      subtitle={t("products.manageMyProducts")}
+      title={t("products.title")}
+      hasBackButton
+    >
       <Card
-        title="Products"
+        title={t("products.title")}
         className="h-min-80 mt-5"
         extra={
           <>
@@ -165,7 +134,7 @@ export default function ProductsPage() {
               className="mr-2"
               icon={<DownloadOutlined />}
             >
-              Download
+              {t("common.download")}
             </Button>
 
             <Button
@@ -174,7 +143,7 @@ export default function ProductsPage() {
               className="mr-2"
               icon={<UploadOutlined />}
             >
-              Upload
+              {t("common.upload")}
             </Button>
 
             <Button
@@ -182,7 +151,7 @@ export default function ProductsPage() {
               onClick={() => router.push(Urls.NEW_PRODUCT)}
               icon={<PlusOutlined />}
             >
-              New Product
+              {t("products.newProduct")}
             </Button>
           </>
         }
@@ -234,7 +203,7 @@ export default function ProductsPage() {
               },
             },
             {
-              title: "Name",
+              title: t("common.name"),
               dataIndex: "name",
               key: "name",
               align: "center",
@@ -250,20 +219,20 @@ export default function ProductsPage() {
               },
             },
             {
-              title: "Barcode",
+              title: t("products.barcode"),
               dataIndex: "barcode",
               key: "barcode",
               align: "center",
             },
             {
-              title: "SKU",
+              title: t("products.sku"),
               dataIndex: "sku",
               key: "sku",
               align: "center",
               render: (sku: string) => sku || "-",
             },
             {
-              title: "Quantity",
+              title: t("common.quantity"),
               dataIndex: "quantity",
               key: "quantity",
               align: "center",
@@ -287,7 +256,7 @@ export default function ProductsPage() {
               },
             },
             {
-              title: "Price",
+              title: t("common.price"),
               dataIndex: "price",
               key: "price",
               align: "center",
@@ -303,7 +272,7 @@ export default function ProductsPage() {
               },
             },
             {
-              title: "Categories",
+              title: t("navigation.categories"),
               dataIndex: "categoriesIds",
               key: "categoriesIds",
               align: "center",
@@ -319,7 +288,7 @@ export default function ProductsPage() {
               ),
             },
             {
-              title: "Tags",
+              title: t("navigation.tags"),
               dataIndex: "tagsIds",
               key: "tagsIds",
               filters: tagsSort.map((tag: ITag) => ({
@@ -332,7 +301,7 @@ export default function ProductsPage() {
               ),
             },
             {
-              title: "Active",
+              title: t("common.active"),
               dataIndex: "isActive",
               key: "isActive",
               align: "center",
@@ -347,7 +316,7 @@ export default function ProductsPage() {
               ),
             },
             {
-              title: "Stores",
+              title: t("sales.stores"),
               dataIndex: "storeIds",
               key: "storeIds",
               align: "center",
@@ -374,7 +343,7 @@ export default function ProductsPage() {
               },
             },
             {
-              title: "Release Date",
+              title: t("common.date"),
               dataIndex: "releaseDate",
               key: "releaseDate",
               align: "center",
@@ -385,7 +354,7 @@ export default function ProductsPage() {
               sorter: true,
             },
             {
-              title: "Expiration Date",
+              title: t("common.date"),
               dataIndex: "expirationDate",
               key: "expirationDate",
               align: "center",
@@ -398,7 +367,7 @@ export default function ProductsPage() {
               sorter: true,
             },
             {
-              title: "Created At",
+              title: t("sales.createdAt"),
               dataIndex: "createdAt",
               key: "createdAt",
               align: "center",
@@ -407,7 +376,7 @@ export default function ProductsPage() {
               sorter: true,
             },
             {
-              title: "Updated At",
+              title: t("sales.updatedAt"),
               dataIndex: "updatedAt",
               key: "updatedAt",
               align: "center",
@@ -416,14 +385,14 @@ export default function ProductsPage() {
               sorter: true,
             },
             {
-              title: "Action",
+              title: t("common.actions"),
               dataIndex: "action",
               key: "action",
               align: "center",
               fixed: "right",
               render: (_: any, product: IProduct) => (
                 <Space.Compact>
-                  <Tooltip title="Edit product">
+                  <Tooltip title={t("products.editProduct")}>
                     <Button
                       type="success"
                       onClick={() =>
@@ -435,7 +404,7 @@ export default function ProductsPage() {
                     />
                   </Tooltip>
 
-                  <Tooltip title="Go to product">
+                  <Tooltip title={t("products.goToProduct")}>
                     <Button
                       type="default"
                       onClick={() =>
@@ -447,7 +416,7 @@ export default function ProductsPage() {
                     />
                   </Tooltip>
 
-                  <Tooltip title="Create Sale">
+                  <Tooltip title={t("sales.createSale")}>
                     <Button
                       type="primary"
                       onClick={() =>
@@ -465,7 +434,7 @@ export default function ProductsPage() {
               ),
             },
           ]}
-          search={{ placeholder: "Search products..." }}
+          search={{ placeholder: t("products.searchProducts") }}
           loading={isLoading}
           total={total}
         />
@@ -484,7 +453,7 @@ export default function ProductsPage() {
         }}
         downloadFileName="social-prices-products-template.xlsx"
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        title="Upload Products"
+        title={t("products.uploadProducts")}
       >
         <FilesUploadsTable
           type={FilesUploadsEnum.Type.UPLOAD_PRODUCTS}
@@ -495,7 +464,7 @@ export default function ProductsPage() {
       <DownloadProductsDrawer
         isOpen={isDownloadProductsDrawerOpen}
         onClose={() => setIsDownloadProductsDrawerOpen(false)}
-        title="Download Products"
+        title={t("products.downloadProducts")}
         tags={tagsSort}
         categories={categories}
         stores={stores}

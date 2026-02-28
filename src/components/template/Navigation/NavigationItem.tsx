@@ -1,8 +1,8 @@
-import { Tooltip } from 'antd';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { Tooltip } from "antd";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-import Loading from '../../common/Loading/Loading';
+import Loading from "../../common/Loading/Loading";
 
 interface Props {
   icon?: any;
@@ -37,7 +37,7 @@ const NavigationItem: React.FC<Props> = ({
 
   const classNameDefault: string = `flex flex-col justify-center items-center cursor-pointer ${
     isActivePath ? "text-blue-500 dark:text-yellow-200" : ""
-  } hover:text-blue-500 dark:hover:text-yellow-200`;
+  } hover:text-blue-500 dark:hover:text-yellow-200 px-2`;
 
   const renderLink = () => {
     return children ? (
