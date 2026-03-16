@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
   Card,
   Col,
@@ -21,6 +23,7 @@ import {
 } from "../../../../../components/common/icons/icons";
 import { InputNumberCustomAntd } from "../../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import { SelectCustomAntd } from "../../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import useLanguageData from "../../../../../data/context/language/useLanguageData";
 import SalesEnum from "../../../../../shared/business/sales/sales.enum";
 import {
   formatterMoney,
@@ -59,6 +62,7 @@ export const SalePayments: React.FC<Props> = ({
   totalPayment,
   totalAfterPayment,
 }) => {
+  const { t } = useLanguageData();
   const {
     append,
     fields: fieldsPayments,
@@ -82,7 +86,7 @@ export const SalePayments: React.FC<Props> = ({
     <Card
       title={
         <div className="flex">
-          <label className="mr-2">Payment</label>
+          <label className="mr-2">{t("sales.payment")}</label>
           <Tooltip title="Here you can create which payments were made on the purchase">
             <QuestionCircleTwoTone />
           </Tooltip>
@@ -92,9 +96,9 @@ export const SalePayments: React.FC<Props> = ({
       <ContainerTitle
         title={
           <div className="flex items-center">
-            <label className="mr-4">Payments</label>
+            <label className="mr-4">{t("sales.addPayment")}</label>
 
-            <Tooltip title="Add a payment">
+            <Tooltip title={t("sales.addPayment")}>
               <ButtonCommon
                 onClick={(e) => {
                   e.preventDefault();
@@ -140,7 +144,7 @@ export const SalePayments: React.FC<Props> = ({
                           }
                         </Tag>
                       </Select.Option>
-                    )
+                    ),
                   )}
                 </SelectCustomAntd>
               </Col>
@@ -161,7 +165,7 @@ export const SalePayments: React.FC<Props> = ({
               </Col>
 
               <Col xs={2}>
-                <Tooltip title="Remove payment">
+                <Tooltip title={t("sales.removePayment")}>
                   <ButtonCommon
                     onClick={(e) => {
                       e.preventDefault();
@@ -187,15 +191,15 @@ export const SalePayments: React.FC<Props> = ({
         labelStyle={{ width: 200 }}
         className="md:w-2/3 sm:w-full"
       >
-        <Descriptions.Item label="Total" span={3}>
+        <Descriptions.Item label={t("common.total")} span={3}>
           {formatToMoneyDecimal(totalFinal)}
         </Descriptions.Item>
 
-        <Descriptions.Item label="Total Payment" span={3}>
+        <Descriptions.Item label={t("sales.totalPayment")} span={3}>
           {formatToMoneyDecimal(totalPayment)}
         </Descriptions.Item>
 
-        <Descriptions.Item label="Total After Payment" span={3}>
+        <Descriptions.Item label={t("sales.totalAfterPayment")} span={3}>
           {formatToMoneyDecimal(totalAfterPayment)}
 
           <SalesMissingPaymentLabel totalAfterPayment={totalAfterPayment} />

@@ -9,6 +9,7 @@ import { Button, Drawer, Tooltip } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 import { IProduct } from "../../../../shared/business/products/products.interface";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import { ProductDetail } from "../ProductDetail/ProductDetail";
 
 interface Props {
@@ -26,10 +27,11 @@ export const AddProductButton: React.FC<Props> = ({
   buttonProps,
 }) => {
   const [isOpen, setOpen] = useState<boolean>(false);
+  const { t } = useLanguageData();
 
   return (
     <>
-      <Tooltip title="Add new product">
+      <Tooltip title={t("products.addProductTooltip")}>
         <Button
           icon={buttonProps?.icon || <PlusOutlined />}
           type="primary"
@@ -43,7 +45,7 @@ export const AddProductButton: React.FC<Props> = ({
         closable={false}
         maskClosable={false}
         open={isOpen}
-        title={"Add Product"}
+        title={t("products.addProductDrawerTitle")}
         onClose={() => {
           onCancel?.();
           setOpen(false);

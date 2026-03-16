@@ -9,6 +9,7 @@ import { EditOutlined, PlusOutlined, TagFilled } from "@ant-design/icons";
 
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
+import useLanguageData from "../../data/context/language/useLanguageData";
 import TagsEnum from "../../shared/business/tags/tags.enum";
 import { ITag } from "../../shared/business/tags/tags.interface";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
@@ -18,6 +19,8 @@ import { TagDetailDrawer } from "./components/TagDetailDrawer/TagDetailDrawer";
 import { useFindTagsByUserTableState } from "./useFindTagsByUserTableState";
 
 export default function TagsPage() {
+  const { t } = useLanguageData();
+
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<ITag> | undefined
   >(createTableState({ sort: { field: "createdAt", order: "ascend" } }));
@@ -31,9 +34,9 @@ export default function TagsPage() {
   const [tagId, setTagId] = useState<string | undefined>();
 
   return (
-    <Layout subtitle="My Tags" title="Tags" hasBackButton>
+    <Layout subtitle={t("tags.myTags")} title={t("tags.title")} hasBackButton>
       <Card
-        title="Tags"
+        title={t("tags.title")}
         className="h-min-80 mt-5"
         extra={
           <Button
@@ -44,7 +47,7 @@ export default function TagsPage() {
             }}
             icon={<PlusOutlined />}
           >
-            New Tag
+            {t("tags.newTag")}
           </Button>
         }
       >
@@ -53,13 +56,13 @@ export default function TagsPage() {
           dataSource={tags}
           columns={[
             {
-              title: "Name",
+              title: t("common.name"),
               dataIndex: "name",
               key: "name",
               align: "center",
             },
             {
-              title: "Color",
+              title: t("tags.color"),
               dataIndex: "color",
               key: "color",
               align: "center",
@@ -73,13 +76,13 @@ export default function TagsPage() {
               ),
             },
             {
-              title: "Description",
+              title: t("common.description"),
               dataIndex: "description",
               key: "description",
               align: "center",
             },
             {
-              title: "Type",
+              title: t("tags.type"),
               dataIndex: "type",
               key: "type",
               align: "center",
@@ -92,7 +95,7 @@ export default function TagsPage() {
               ),
             },
             {
-              title: "Created At",
+              title: t("tags.createdAt"),
               dataIndex: "createdAt",
               key: "createdAt",
               align: "center",
@@ -101,7 +104,7 @@ export default function TagsPage() {
               sorter: true,
             },
             {
-              title: "Updated At",
+              title: t("tags.updatedAt"),
               dataIndex: "updatedAt",
               key: "updatedAt",
               align: "center",
@@ -110,12 +113,12 @@ export default function TagsPage() {
               sorter: true,
             },
             {
-              title: "Action",
+              title: t("tags.action"),
               dataIndex: "action",
               key: "action",
               align: "center",
               render: (_: any, tag: ITag) => (
-                <Tooltip title="Edit tag">
+                <Tooltip title={t("tags.editTagTooltip")}>
                   <Button
                     className="mr-1"
                     type="success"
@@ -129,7 +132,7 @@ export default function TagsPage() {
               ),
             },
           ]}
-          search={{ placeholder: "Search tags..." }}
+          search={{ placeholder: t("tags.searchTags") }}
           loading={isLoading}
           tableStateRequest={tableStateRequest}
           setTableStateRequest={setTableStateRequest}

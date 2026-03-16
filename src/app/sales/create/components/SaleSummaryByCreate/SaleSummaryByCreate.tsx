@@ -1,3 +1,5 @@
+import React from "react";
+
 import { Col, Divider, Empty, Image, Row } from "antd";
 import { find } from "lodash";
 import moment from "moment";
@@ -5,6 +7,7 @@ import moment from "moment";
 import { DeliveryAddressMapButton } from "../../../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton";
 import { ImageOrDefault } from "../../../../../components/common/ImageOrDefault/ImageOrDefault";
 import { TagTagsCustomAntd } from "../../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
+import useLanguageData from "../../../../../data/context/language/useLanguageData";
 import { ICustomer } from "../../../../../shared/business/customers/customer.interface";
 import SalesEnum from "../../../../../shared/business/sales/sales.enum";
 import AddressEnum from "../../../../../shared/business/shared/address/address.enum";
@@ -50,6 +53,7 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
   totalPayment,
   totalAfterPayment,
 }) => {
+  const { t } = useLanguageData();
   const saleStores: TSaleStoreFormSchema[] = formSchema.saleStores;
 
   const customerAddress = formSchema.customer.address;
@@ -78,7 +82,7 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
             {saleStore.products?.map(
               (
                 saleStoreProduct: TSaleStoreProductFormSchema,
-                indexSaleStoreProduct: number
+                indexSaleStoreProduct: number,
               ) => {
                 const fileUrl: string = saleStoreProduct.fileUrl
                   ? getImageUrl(saleStoreProduct.fileUrl)
@@ -133,11 +137,11 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
                           </span>
 
                           <span className="text-xs">
-                            Barcode: {saleStoreProduct.barcode}
+                            {t("products.barcode")}: {saleStoreProduct.barcode}
                           </span>
 
                           <span className="text-xs">
-                            SKU: {saleStoreProduct.sku}
+                            {t("products.sku")}: {saleStoreProduct.sku}
                           </span>
                         </div>
                       </div>
@@ -156,11 +160,11 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
                     </Col>
                   </Row>
                 );
-              }
+              },
             )}
           </div>
         );
-      }
+      },
     );
 
     return storesProductsElements;
@@ -180,7 +184,7 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
         <label>
           {formSchema.customer.birthDate
             ? moment(formSchema.customer.birthDate).format(
-                DatesEnum.Format.DDMMYYY
+                DatesEnum.Format.DDMMYYY,
               )
             : ""}{" "}
           /{" "}
@@ -192,7 +196,7 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
         </label>
 
         <div className="text-center">
-          <b>Shipping Address: </b>
+          <b>{t("address.shippingAddress")}: </b>
 
           <span className="mr-1">{createAddressName(customerAddress)}</span>
 
@@ -216,7 +220,7 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
       <Divider />
 
       <div className="text-center">
-        <b>Delivery Type: </b>
+        <b>{t("sales.deliveryType")}: </b>
         <span>
           {
             SalesEnum.DeliveryTypeLabels[
@@ -229,50 +233,52 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
       <Divider />
 
       <div className="text-center">
-        <b>Store Products</b>
+        <b>{t("sales.storeProducts")}</b>
 
         <div className="mt-3">{renderStoresProducts()}</div>
       </div>
 
       <div className="flex justify-between pr-10 mt-2">
-        <label className="font-semibold">Quantity: </label>
+        <label className="font-semibold">{t("common.quantity")}: </label>
         <label>x {quantity}</label>
       </div>
 
       <div className="flex justify-between pr-10 mt-2">
-        <label className="font-semibold">Subtotal: </label>
+        <label className="font-semibold">{t("common.subtotal")}: </label>
         <label>{formatToMoneyDecimal(subtotal ?? 0)}</label>
       </div>
 
       <div className="flex justify-between pr-10 mt-2">
-        <label className="font-semibold">Discount: </label>
+        <label className="font-semibold">{t("common.discount")}: </label>
         <label>{formatToMoneyDecimal(formSchema.discount.amount ?? 0)}</label>
       </div>
 
       <div className="flex justify-between pr-10 mt-2">
-        <label className="font-semibold">Total After Discount: </label>
+        <label className="font-semibold">
+          {t("sales.subtotalAfterDiscount")}{" "}
+        </label>
         <label>{formatToMoneyDecimal(totalAfterDiscount)}</label>
       </div>
 
       <div className="flex justify-between pr-10 mt-2">
-        <label className="font-semibold">Shipping: </label>
+        <label className="font-semibold">{t("common.shipping")}: </label>
         <label>{formatToMoneyDecimal(formSchema.shipping.amount ?? 0)}</label>
       </div>
 
       <div className="flex justify-between pr-10 mt-2">
-        <label className="font-semibold">Tax: </label>
+        <label className="font-semibold">{t("common.tax")}: </label>
         <label>{formatToMoneyDecimal(formSchema.tax.amount ?? 0)}</label>
       </div>
 
       <div className="flex justify-between pr-10 mt-2">
-        <label className="font-semibold">Total: </label>
+        <label className="font-semibold">{t("common.total")}: </label>
         <label>{formatToMoneyDecimal(totalFinal)}</label>
       </div>
 
       <Divider />
 
       <div className="text-center">
-        <b>Payment</b>
+        <b>{t("sales.payment")}</b>
 
         {formSchema.payments.map((payment: TSalePaymentFormSchema) => {
           return (
@@ -296,26 +302,28 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
       <Divider className="my-1" />
 
       <div className="flex justify-between pr-10 mt-2">
-        <label className="font-semibold">Total Payment: </label>
+        <label className="font-semibold">{t("sales.totalPayment")}: </label>
         <label>{formatToMoneyDecimal(totalPayment)}</label>
       </div>
 
       <div className="flex justify-between pr-10 mt-2">
-        <label className="font-semibold">Total After Payment: </label>
+        <label className="font-semibold">
+          {t("sales.totalAfterPayment")}:{" "}
+        </label>
         <label>{formatToMoneyDecimal(totalAfterPayment)}</label>
       </div>
 
       <Divider />
 
       <div className="flex justify-between pr-10 mt-2">
-        <label className="font-semibold">Sale Status: </label>
+        <label className="font-semibold">{t("sales.saleStatus")} </label>
         <label>
           {SalesEnum.StatusLabels[formSchema.status as SalesEnum.Status]}
         </label>
       </div>
 
       <div className="flex justify-between pr-10 mt-2">
-        <label className="font-semibold">Payment Status: </label>
+        <label className="font-semibold">{t("sales.paymentStatus")} </label>
         <label>
           {
             SalesEnum.PaymentStatusLabels[
@@ -326,7 +334,7 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
       </div>
 
       <div className="flex justify-between pr-10 mt-2">
-        <label className="font-semibold">Delivery At: </label>
+        <label className="font-semibold">{t("sales.deliveryDate")} </label>
         <label>
           {formSchema.deliveryAt
             ? moment(formSchema.deliveryAt).format(DatesEnum.Format.DDMMYYY)
@@ -335,39 +343,41 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
       </div>
 
       <div className="flex justify-between pr-10 mt-2">
-        <label className="font-semibold">Created Date: </label>
+        <label className="font-semibold">{t("sales.createdDate")} </label>
         <label>
           {formSchema.createdDate
             ? moment(formSchema.createdDate).format(
-                DatesEnum.Format.DDMMYYYYhhmmss
+                DatesEnum.Format.DDMMYYYYhhmmss,
               )
             : ""}
         </label>
       </div>
 
       <div className="flex justify-between pr-10 mt-2">
-        <label className="font-semibold">Sale Number Manual: </label>
+        <label className="font-semibold">{t("sales.saleNumberManual")} </label>
         <label>{formSchema.numberManual ?? ""}</label>
       </div>
 
       <Divider />
 
       <div className="flex pr-10 mt-2">
-        <label className="font-semibold mr-1">Note: </label>
+        <label className="font-semibold mr-1">{t("sales.note")} </label>
         <label>{formSchema.note}</label>
       </div>
 
       <Divider />
 
       <div className="flex pr-10 mt-2">
-        <label className="font-semibold mr-1">Note to Customer: </label>
+        <label className="font-semibold mr-1">
+          {t("sales.noteToCustomer")}{" "}
+        </label>
         <label>{formSchema.noteToCustomer}</label>
       </div>
 
       <Divider />
 
       <div className="flex pr-10 mt-2">
-        <label className="font-semibold mr-1">Tags: </label>
+        <label className="font-semibold mr-1">{t("sales.tags")} </label>
         <TagTagsCustomAntd tags={tags} tagsIds={formSchema.tagsIds} useTag />
       </div>
 

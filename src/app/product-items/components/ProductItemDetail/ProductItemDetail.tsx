@@ -44,6 +44,7 @@ import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomA
 import { InputNumberCustomAntd } from "../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import CreateProductItemDto from "../../../../services/social-prices-api/product-items/dto/createProductItem.dto";
 import UpdateProductItemDto from "../../../../services/social-prices-api/product-items/dto/updateProductItem.dto";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
@@ -115,6 +116,7 @@ export const ProductItemDetail: React.FC<Props> = ({
   onCancel,
   onUpdate,
 }) => {
+  const { t } = useLanguageData();
   const { products, isLoading: isLoadingProducts } = useFindProductsByUser();
 
   const { categories, isLoading: isLoadingCategories } =
@@ -431,16 +433,14 @@ export const ProductItemDetail: React.FC<Props> = ({
       {isReadonly && (
         <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded">
           <p className="text-blue-800">
-            ℹ️ This is a default product item. It is automatically synchronized
-            with the product and cannot be edited directly. Please edit the
-            product to update this item.
+            ℹ️ {t("productItems.defaultProductItemNotice")}
           </p>
         </div>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="content-edit-files flex flex-col justify-start">
-          <label className={`text-sm`}>Images</label>
+          <label className={`text-sm`}>{t("products.images")}</label>
 
           <div className="mt-2 w-full overflow-auto">
             <ImgCrop rotationSlider>
@@ -453,7 +453,7 @@ export const ProductItemDetail: React.FC<Props> = ({
                 multiple
                 disabled={isReadonly}
               >
-                {fileList.length < 10 && !isReadonly && "+ Upload"}
+                {fileList.length < 10 && !isReadonly && `+ ${t("common.upload")}`}
               </Upload>
             </ImgCrop>
 
@@ -486,7 +486,7 @@ export const ProductItemDetail: React.FC<Props> = ({
             className="flex flex-col justify-end"
           >
             <SelectProduct
-              label={"Product"}
+              label={t("productItems.product")}
               labelClassName="font-normal"
               disabled={!!isEditMode}
               selectedProductId={productItem?.productId ?? watch("productId")}
@@ -504,8 +504,8 @@ export const ProductItemDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
               controller={{ control, name: "name" }}
-              label="Name"
-              placeholder={"Enter name"}
+              label={t("productItems.name")}
+              placeholder={t("products.enterName")}
               errorMessage={errors.name?.message}
               maxLength={200}
               disabled={isReadonly}
@@ -517,13 +517,13 @@ export const ProductItemDetail: React.FC<Props> = ({
               controller={{ control, name: "barcode" }}
               label={
                 <>
-                  <span>Barcode</span>
+                  <span>{t("productItems.barcode")}</span>
                   {productItem && (
                     <ProductPreviousBarcodesPopover product={productItem} />
                   )}
                 </>
               }
-              placeholder={"Enter barcode"}
+              placeholder={t("products.enterBarcode")}
               errorMessage={errors.barcode?.message}
               maxLength={100}
               disabled={isReadonly}
@@ -535,8 +535,8 @@ export const ProductItemDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
               controller={{ control, name: "sku" }}
-              label="SKU"
-              placeholder={"Enter sku"}
+              label={t("productItems.sku")}
+              placeholder={t("products.enterSku")}
               errorMessage={errors.sku?.message}
               maxLength={400}
               disabled={isReadonly}
@@ -546,7 +546,7 @@ export const ProductItemDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <InputNumberCustomAntd
               controller={{ control, name: "price" }}
-              label="Price"
+              label={t("productItems.price")}
               formatter={formatterMoney}
               parser={parserMoney}
               disabled={isReadonly}
@@ -556,8 +556,8 @@ export const ProductItemDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
               controller={{ control, name: "quantity" }}
-              label="Quantity"
-              placeholder={"Enter quantity"}
+              label={t("productItems.quantity")}
+              placeholder={t("products.enterQuantity")}
               type="number"
               disabled={isReadonly}
             />
@@ -568,8 +568,8 @@ export const ProductItemDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
               controller={{ control, name: "brand" }}
-              label="Brand"
-              placeholder={"Enter brand"}
+              label={t("products.brand")}
+              placeholder={t("products.enterBrand")}
               errorMessage={errors.brand?.message}
               disabled={isReadonly}
             />
@@ -578,9 +578,9 @@ export const ProductItemDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <SelectCustomAntd<IProductItem>
               controller={{ control, name: "categoriesIds" }}
-              label="Categories"
+              label={t("productItems.categories")}
               errorMessage={errors.categoriesIds?.message}
-              placeholder={"Select categories"}
+              placeholder={t("products.selectCategories")}
               mode="multiple"
               disabled={isReadonly}
             >
@@ -595,9 +595,9 @@ export const ProductItemDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <SelectCustomAntd<IProductItem>
               controller={{ control, name: "tagsIds" }}
-              label="Tags"
+              label={t("productItems.tags")}
               errorMessage={errors.tagsIds?.message}
-              placeholder={"Select tags"}
+              placeholder={t("products.selectTags")}
               mode="multiple"
               disabled={isReadonly}
             >
@@ -612,9 +612,9 @@ export const ProductItemDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
               controller={{ control, name: "releaseDate" }}
-              label="Release Date"
+              label={t("productItems.releaseDate")}
               type="date"
-              placeholder={"Enter release date"}
+              placeholder={t("products.enterReleaseDate")}
               errorMessage={errors.releaseDate?.message as string}
               disabled={isReadonly}
             />
@@ -623,9 +623,9 @@ export const ProductItemDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
               controller={{ control, name: "expirationDate" }}
-              label="Expiration Date"
+              label={t("productItems.expirationDate")}
               type="date"
-              placeholder={"Enter expiration date"}
+              placeholder={t("products.enterExpirationDate")}
               errorMessage={errors.expirationDate?.message as string}
               disabled={isReadonly}
             />
@@ -636,7 +636,7 @@ export const ProductItemDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <CheckboxCustomAntd<IProductItem>
               controller={{ control, name: "isActive" }}
-              label="Is Active"
+              label={t("products.isActive")}
               labelClassName="mr-1"
               disabled={isReadonly}
             />
@@ -645,7 +645,7 @@ export const ProductItemDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <CheckboxCustomAntd<IProductItem>
               controller={{ control, name: "isDefault" }}
-              label="Is Default"
+              label={t("products.isDefault")}
               labelClassName="mr-1"
               disabled={true}
             />
@@ -653,7 +653,7 @@ export const ProductItemDetail: React.FC<Props> = ({
 
           <Col xs={24} md={8} sm={12} lg={8}>
             <div className={`flex flex-col mt-4`}>
-              <label className={`text-sm mr-1`}>QRCode</label>
+              <label className={`text-sm mr-1`}>{t("products.qrcode")}</label>
 
               <Controller
                 control={control}
@@ -680,7 +680,7 @@ export const ProductItemDetail: React.FC<Props> = ({
           <Col xs={24}>
             <TextareaCustomAntd
               controller={{ control, name: "description" }}
-              label="Description"
+              label={t("common.description")}
               placeholder={"Enter description"}
               errorMessage={errors.description?.message}
               rows={4}
@@ -693,7 +693,7 @@ export const ProductItemDetail: React.FC<Props> = ({
           <Col xs={24}>
             <TextareaCustomAntd
               controller={{ control, name: "details" }}
-              label="Details"
+              label={t("common.details")}
               placeholder={"Enter details"}
               errorMessage={errors.details?.message}
               rows={4}
@@ -702,12 +702,12 @@ export const ProductItemDetail: React.FC<Props> = ({
           </Col>
         </Row>
 
-        <ContainerTitle title="Dimensions" className="mt-7">
+        <ContainerTitle title={t("products.dimensions")} className="mt-7">
           <Row>
             <Col xs={24} md={4} sm={6} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.size" }}
-                label="Size"
+                label={t("products.size")}
                 placeholder={"Enter size"}
                 disabled={isReadonly}
               />
@@ -716,7 +716,7 @@ export const ProductItemDetail: React.FC<Props> = ({
             <Col xs={24} md={4} sm={6} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.height" }}
-                label="Height(m)"
+                label={t("products.height")}
                 placeholder={"Enter height"}
                 type="number"
                 min={0}
@@ -727,7 +727,7 @@ export const ProductItemDetail: React.FC<Props> = ({
             <Col xs={24} md={4} sm={6} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.width" }}
-                label="Width(m)"
+                label={t("products.width")}
                 placeholder={"Enter width"}
                 type="number"
                 min={0}
@@ -738,7 +738,7 @@ export const ProductItemDetail: React.FC<Props> = ({
             <Col xs={24} md={4} sm={6} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.length" }}
-                label="Length(m)"
+                label={t("products.length")}
                 placeholder={"Enter length"}
                 type="number"
                 min={0}
@@ -749,7 +749,7 @@ export const ProductItemDetail: React.FC<Props> = ({
             <Col xs={24} md={4} sm={6} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.depth" }}
-                label="Depth(m)"
+                label={t("products.depth")}
                 placeholder={"Enter depth"}
                 type="number"
                 min={0}
@@ -760,7 +760,7 @@ export const ProductItemDetail: React.FC<Props> = ({
             <Col xs={24} md={4} sm={6} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.diameter" }}
-                label="Diameter(m)"
+                label={t("products.diameter")}
                 placeholder={"Enter diameter"}
                 type="number"
                 min={0}
@@ -771,7 +771,7 @@ export const ProductItemDetail: React.FC<Props> = ({
             <Col xs={24} md={4} sm={6} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.thickness" }}
-                label="Thickness(m)"
+                label={t("products.thickness")}
                 placeholder={"Enter thickness"}
                 type="number"
                 min={0}
@@ -782,7 +782,7 @@ export const ProductItemDetail: React.FC<Props> = ({
             <Col xs={24} md={4} sm={6} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.volume" }}
-                label="Volume(l)"
+                label={t("products.volume")}
                 placeholder={"Enter volume"}
                 type="number"
                 min={0}
@@ -793,7 +793,7 @@ export const ProductItemDetail: React.FC<Props> = ({
             <Col xs={24} md={4} sm={6} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.weight" }}
-                label="Weight(kg)"
+                label={t("products.weight")}
                 placeholder={"Enter weight"}
                 type="number"
                 min={0}
@@ -817,7 +817,7 @@ export const ProductItemDetail: React.FC<Props> = ({
             }}
             disabled={isSubmitting}
           >
-            Cancel
+            {t("common.cancel")}
           </Button>
 
           {!isReadonly && (
@@ -827,7 +827,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               loading={isSubmitting}
               disabled={isSubmitting}
             >
-              {isEditMode ? "Save" : "Create"}
+              {isEditMode ? t("common.save") : t("common.create")}
             </Button>
           )}
         </div>

@@ -2,6 +2,7 @@
 import { memo } from "react";
 
 import { ISale } from "../../../../shared/business/sales/sale.interface";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import {
   getTotalAfterPayment,
   getTotalPayment,
@@ -16,6 +17,8 @@ const SalesMissingPaymentLabel: React.FC<Props> = ({
   sale,
   totalAfterPayment,
 }) => {
+  const { t } = useLanguageData();
+
   if (totalAfterPayment === undefined && !sale) {
     return null;
   }
@@ -31,7 +34,7 @@ const SalesMissingPaymentLabel: React.FC<Props> = ({
     return null;
   }
 
-  return <small className="text-red-500 italic ml-2">Incorrect Payment</small>;
+  return <small className="text-red-500 italic ml-2">{t("sales.incorrectPayment")}</small>;
 };
 
 export default memo(SalesMissingPaymentLabel);

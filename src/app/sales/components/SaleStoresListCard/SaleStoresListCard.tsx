@@ -3,6 +3,8 @@
 import React from "react";
 
 import { Card } from "antd";
+
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import { find } from "lodash";
 
 import { TagStoreCustomAntd } from "../../../../components/common/TagStoreCustomAntd/TagStoreCustomAntd";
@@ -18,8 +20,10 @@ interface Props {
 }
 
 export const SaleStoresListCard: React.FC<Props> = ({ sale, stores }) => {
+  const { t } = useLanguageData();
+
   return (
-    <Card title="Stores">
+    <Card title={t("sales.storesCard")}>
       {sale?.stores?.map((saleStore: ISaleStore) => {
         const storeId: string =
           typeof saleStore.storeId === "object"

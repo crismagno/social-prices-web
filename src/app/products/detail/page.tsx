@@ -27,11 +27,13 @@ import {
 
 import Layout from '../../../components/template/Layout/Layout';
 import Urls from '../../../shared/common/routes-app/routes-app';
+import useLanguageData from '../../../data/context/language/useLanguageData';
 import { ProductDetail } from '../components/ProductDetail/ProductDetail';
 import { useFindProductById } from './useFindProductById';
 
 export default function ProductDetailPage() {
   const { modal } = App.useApp();
+  const { t } = useLanguageData();
 
   const router: AppRouterInstance = useRouter();
 
@@ -45,37 +47,37 @@ export default function ProductDetailPage() {
 
   const handleCreate = () => {
     modal.confirm({
-      title: "Your product has been created successfully!",
+      title: t("products.productCreatedSuccessfully"),
       icon: <CheckCircleTwoTone />,
       content: (
         <Alert
-          message="Please confirm if you want to create a new product"
+          message={t("products.confirmCreateProduct")}
           type="success"
           showIcon
         />
       ),
-      okText: "Confirm",
-      cancelText: "Cancel",
+      okText: t("common.confirm"),
+      cancelText: t("common.cancel"),
       onOk: () => {},
       onCancel: () => router.back(),
     });
   };
 
   const handleUpdate = () => {
-    message.success("Your product has been update successfully!");
+    message.success(t("products.productUpdatedSuccessfully"));
     router.back();
   };
 
   return (
     <Layout
-      subtitle={isEditMode ? "Edit product details" : "New product details"}
-      title={isEditMode ? `Edit product: ${product?.name}` : "New product"}
+      subtitle={isEditMode ? t("products.editProductDetails") : t("products.newProductDetails")}
+      title={isEditMode ? `${t("products.editProduct")}: ${product?.name}` : t("products.newProduct")}
       hasBackButton
     >
       <Card className="h-min-80 mt-2">
         <Row gutter={24} justify={"end"}>
           <Col>
-            <Tooltip title="Go to product">
+            <Tooltip title={t("products.goToProduct")}>
               <Button
                 type="primary"
                 onClick={() =>
@@ -83,7 +85,7 @@ export default function ProductDetailPage() {
                 }
                 icon={<EnterOutlined />}
               >
-                Product
+                {t("products.product")}
               </Button>
             </Tooltip>
           </Col>

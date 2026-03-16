@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
   Card,
   Col,
@@ -8,6 +10,8 @@ import {
   Select,
   Tag,
 } from "antd";
+
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 
 import ContainerTitle from "../../../../components/common/ContainerTitle/ContainerTitle";
 import {
@@ -32,6 +36,8 @@ interface Props {
 }
 
 export const SalePaymentsReadOnly: React.FC<Props> = ({ sale, title }) => {
+  const { t } = useLanguageData();
+
   const totalFinal: number = sale.totals.totalFinalAmount;
 
   const totalPayment: number = getTotalPayment(sale);
@@ -46,7 +52,7 @@ export const SalePaymentsReadOnly: React.FC<Props> = ({ sale, title }) => {
         ) : (
           <div className="flex justify-between">
             <div>
-              <label className="mr-2">Sale Payments: {sale.number}</label>
+              <label className="mr-2">{`${t("sales.payment")}: ${sale.number}`}</label>
             </div>
           </div>
         )
@@ -55,7 +61,7 @@ export const SalePaymentsReadOnly: React.FC<Props> = ({ sale, title }) => {
       <ContainerTitle
         title={
           <div className="flex items-center">
-            <label className="mr-4">Payments</label>
+            <label className="mr-4">{t("sales.payment")}</label>
           </div>
         }
       >
@@ -96,15 +102,15 @@ export const SalePaymentsReadOnly: React.FC<Props> = ({ sale, title }) => {
         labelStyle={{ width: 200 }}
         className="sm:w-full"
       >
-        <Descriptions.Item label="Total" span={3}>
+        <Descriptions.Item label={t("common.total")} span={3}>
           {formatToMoneyDecimal(totalFinal)}
         </Descriptions.Item>
 
-        <Descriptions.Item label="Total Payment" span={3}>
+        <Descriptions.Item label={t("sales.totalPayment")} span={3}>
           {formatToMoneyDecimal(totalPayment)}
         </Descriptions.Item>
 
-        <Descriptions.Item label="Total After Payment" span={3}>
+        <Descriptions.Item label={t("sales.totalAfterPayment")} span={3}>
           {formatToMoneyDecimal(totalAfterPayment)}
 
           <SalesMissingPaymentLabel totalAfterPayment={totalAfterPayment} />

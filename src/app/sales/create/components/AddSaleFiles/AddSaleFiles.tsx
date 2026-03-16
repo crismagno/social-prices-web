@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Upload, UploadFile, UploadProps } from "antd";
 import { map } from "lodash";
 
+import useLanguageData from "../../../../../data/context/language/useLanguageData";
 import { ISale } from "../../../../../shared/business/sales/sale.interface";
 import FilesEnum from "../../../../../shared/utils/files/files.enum";
 import {
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export const AddSaleFiles: React.FC<Props> = ({ sale, onSetFileList }) => {
+  const { t } = useLanguageData();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   useEffect(() => {
@@ -30,7 +32,7 @@ export const AddSaleFiles: React.FC<Props> = ({ sale, onSetFileList }) => {
           name: fileUrl,
           status: "done",
           url: getImageUrl(fileUrl),
-        })
+        }),
       );
 
       setFileList(saleFilesUrlToFileList);
@@ -60,14 +62,14 @@ export const AddSaleFiles: React.FC<Props> = ({ sale, onSetFileList }) => {
             frameborder="0" 
             style="border:0; top:0; left:0; bottom:0; right:0; width:100%; height:100%; position:fixed;"
             allowfullscreen>
-          </iframe>`
+          </iframe>`,
       );
     }
   };
 
   return (
     <div className="flex flex-col">
-      <label>Files</label>
+      <label>{t("sales.files")}</label>
 
       <div className="mt-2">
         <Upload
@@ -92,7 +94,7 @@ export const AddSaleFiles: React.FC<Props> = ({ sale, onSetFileList }) => {
             )
           }
         >
-          {fileList.length < 10 && "+ Upload"}
+          {fileList.length < 10 && `+ ${t("common.upload")}`}
         </Upload>
       </div>
     </div>

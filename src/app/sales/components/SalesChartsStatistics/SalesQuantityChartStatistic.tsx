@@ -12,6 +12,7 @@ import {
   YAxis,
 } from "recharts";
 
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import { IGetSalesAnalyticsResponse } from "../../../../shared/business/sales/sales.type";
 import { ITotalQuantitySalesQuantity } from "../../../../shared/common/interfaces/global.interface";
 import ChartsEnum from "../../../../shared/utils/charts/charts-enum";
@@ -35,6 +36,7 @@ export const SalesQuantityChartStatistic: React.FC<Props> = ({
   title,
   salesAnalytics,
 }) => {
+  const { t } = useLanguageData();
   const chartDataPeriodType: IChartDataPeriodTypeItem[] =
     salesAnalytics?.chartDataPeriodType ?? [];
 
@@ -51,7 +53,7 @@ export const SalesQuantityChartStatistic: React.FC<Props> = ({
       total: 0,
       quantity: 0,
       salesQuantity: 0,
-    }
+    },
   ) || { total: 0, quantity: 0, salesQuantity: 0 };
 
   const renderTooltip = (props: any) => {
@@ -77,9 +79,9 @@ export const SalesQuantityChartStatistic: React.FC<Props> = ({
         }}
       >
         <p>{`${ChartsEnum.PeriodTypeLabel[periodType]}: ${item.name} `}</p>
-        <p>{`Sales Quantity: ${itemSalesQuantity}`}</p>
+        <p>{`${t("sales.salesQuantityLabel")} ${itemSalesQuantity}`}</p>
         <p>{`Percentage by Sales Quantity: ${percentageBySalesQuantity.toFixed(
-          2
+          2,
         )}%`}</p>
       </div>
     );
@@ -93,7 +95,7 @@ export const SalesQuantityChartStatistic: React.FC<Props> = ({
 
     const item: IChartDataPeriodTypeItem | undefined = find(
       chartDataPeriodType,
-      { name: value }
+      { name: value },
     );
 
     const itemSalesQuantity: number = item?.salesQuantity || 0;
@@ -151,7 +153,7 @@ export const SalesQuantityChartStatistic: React.FC<Props> = ({
           <label className="font-semibold">{title}</label>
         ) : (
           <>
-            <span className="mr-2">Sales Amount by Period:</span>
+            <span className="mr-2">{t("sales.salesAmountByPeriod")}</span>
 
             <label className="font-semibold">
               {ChartsEnum.PeriodTypeLabel[periodType]}
@@ -184,7 +186,7 @@ export const SalesQuantityChartStatistic: React.FC<Props> = ({
             <Area
               type="monotone"
               dataKey="salesQuantity"
-              name="Sales Quantity"
+              name={t("sales.salesQuantityLabel").replace(":", "")}
               stroke={chartProps?.totalColor ?? "#73d13d"}
               fillOpacity={0.5}
               fill={chartProps?.totalColor ?? "#73d13d"}
@@ -195,7 +197,7 @@ export const SalesQuantityChartStatistic: React.FC<Props> = ({
 
         <div className="text-center mt-1">
           <span className="font-semibold">
-            Sales Quantity:
+            {t("sales.salesQuantityLabel")}
             <span className="ml-1">
               {totalQuantityByData.salesQuantity || 0}
             </span>

@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 import { Button, Card, Col, Drawer, Row, Select, Tag } from "antd";
+
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import { map } from "lodash";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -81,6 +83,8 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
   productItemId,
   employeeId,
 }) => {
+  const { t } = useLanguageData();
+
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
 
   const {
@@ -136,7 +140,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
 
   return (
     <Drawer title={title} onClose={onClose} open={isOpen} width={width}>
-      <Card title="Filters">
+      <Card title={t("employees.filters")}>
         <Row gutter={[8, 8]}>
           <Col xs={24} sm={24} className="flex items-end">
             <CustomRangeDatePicker
@@ -161,8 +165,8 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
           <Col xs={24} sm={24}>
             <InputCustomAntd
               controller={{ control, name: "search" }}
-              label="Search"
-              placeholder={"Search sales..."}
+              label={t("common.search")}
+              placeholder={t("sales.searchSales")}
               errorMessage={errors.search?.message}
               maxLength={200}
               allowClear
@@ -171,7 +175,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
 
           <Col xs={24} sm={12}>
             <SelectProducts
-              label="Products"
+              label={t("products.title")}
               labelClassName="font-normal"
               selectedProductIds={watch("selectedProductIds")}
               onSelectProducts={(selectProducts: IProduct[]) =>
@@ -182,7 +186,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
 
           <Col xs={24} sm={12}>
             <SelectProductItems
-              label="Products Items"
+              label={t("productItems.title")}
               labelClassName="font-normal"
               selectedProductItemIds={watch("selectedProductItemIds")}
               onSelectProductItems={(selectProductItems: IProductItem[]) =>
@@ -197,7 +201,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
           <Col xs={24} sm={6}>
             <SelectCustomAntd
               controller={{ control, name: "types" }}
-              label="Types"
+              label={t("sales.types")}
               errorMessage={errors.types?.message}
               placeholder={"Select types"}
               mode="multiple"
@@ -217,7 +221,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
           <Col xs={24} sm={6}>
             <SelectCustomAntd
               controller={{ control, name: "deliveryTypes" }}
-              label="Delivery Types"
+              label={t("sales.deliveryTypes")}
               errorMessage={errors.deliveryTypes?.message}
               placeholder={"Select delivery types"}
               mode="multiple"
@@ -243,7 +247,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
           <Col xs={24} sm={6}>
             <SelectCustomAntd
               controller={{ control, name: "status" }}
-              label="Status"
+              label={t("sales.status")}
               errorMessage={errors.status?.message}
               placeholder={"Select status"}
               mode="multiple"
@@ -266,7 +270,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
           <Col xs={24} sm={6}>
             <SelectCustomAntd
               controller={{ control, name: "paymentStatus" }}
-              label="Payment Status"
+              label={t("sales.paymentStatus")}
               errorMessage={errors.paymentStatus?.message}
               placeholder={"Select payment status"}
               mode="multiple"
@@ -299,7 +303,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
           <Col xs={24} sm={12}>
             <SelectCustomAntd
               controller={{ control, name: "storeIds" }}
-              label="Stores"
+              label={t("sales.stores")}
               errorMessage={errors.storeIds?.message}
               placeholder={"Select stores"}
               mode="multiple"
@@ -322,7 +326,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
           <Col xs={24} sm={12}>
             <SelectCustomAntd
               controller={{ control, name: "tagsIds" }}
-              label="Tags"
+              label={t("sales.tags")}
               errorMessage={errors.tagsIds?.message}
               placeholder={"Select tags"}
               mode="multiple"
@@ -339,7 +343,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
           <Col xs={24} sm={12}>
             <SelectCustomAntd
               controller={{ control, name: "sortField" }}
-              label="Sort Field"
+              label={t("sales.sortField")}
               errorMessage={errors.sortField?.message}
               placeholder={"Select sort field"}
             >
@@ -354,7 +358,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
           <Col xs={24} sm={12}>
             <SelectCustomAntd
               controller={{ control, name: "sortOrder" }}
-              label="Sort Order"
+              label={t("sales.sortOrder")}
               errorMessage={errors.sortOrder?.message}
               placeholder={"Select sort order"}
             >
@@ -375,12 +379,12 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
           <Col xs={24} sm={12}>
             <SelectCustomAntd
               controller={{ control, name: "isActive" }}
-              label="Is Active"
+              label={t("sales.isActive")}
               errorMessage={errors.sortField?.message}
               placeholder={"Select a status active"}
             >
               <Select.Option key={"BOTH"} value={null}>
-                <Tag>Both</Tag>
+                <Tag>{t("sales.both")}</Tag>
               </Select.Option>
               {Object.keys(CommonEnum.YesNo).map((option: string) => (
                 <Select.Option key={option} value={option}>
@@ -404,7 +408,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
         loading={isDownloading}
         disabled={isDownloading}
       >
-        Download
+        {t("sales.downloadSales")}
       </Button>
     </Drawer>
   );

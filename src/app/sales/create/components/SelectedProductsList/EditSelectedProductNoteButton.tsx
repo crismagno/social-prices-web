@@ -1,10 +1,11 @@
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 
 import { Modal, Tooltip } from "antd";
 import TextArea from "antd/es/input/TextArea";
 
 import ButtonCommon from "../../../../../components/common/ButtonCommon/ButtonCommon";
 import { IconPencilSquare } from "../../../../../components/common/icons/icons";
+import useLanguageData from "../../../../../data/context/language/useLanguageData";
 import { TSaleStoreProductFormSchema } from "../../page";
 
 interface Props {
@@ -16,13 +17,14 @@ export const EditSelectedProductNoteButton: React.FC<Props> = ({
   saleStoreProduct,
   onConfirmNote,
 }) => {
+  const { t } = useLanguageData();
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const [note, setNote] = useState<string | null>(saleStoreProduct.note);
 
   return (
     <>
-      <Tooltip title="Edit note product">
+      <Tooltip title={t("sales.editNoteProduct")}>
         <ButtonCommon
           onClick={() => setIsVisible(true)}
           color="transparent"
@@ -36,7 +38,7 @@ export const EditSelectedProductNoteButton: React.FC<Props> = ({
         width={600}
         title={
           <div className="flex flex-col">
-            <label>Edit Product Note</label>
+            <label>{t("sales.editProductNote")}</label>
 
             <span className="text-sm italic mt-2">
               {saleStoreProduct.name}
@@ -55,7 +57,7 @@ export const EditSelectedProductNoteButton: React.FC<Props> = ({
           setIsVisible(false);
           onConfirmNote(note);
         }}
-        okText="Confirm"
+        okText={t("common.confirm")}
       >
         <div>
           <TextArea

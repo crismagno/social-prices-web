@@ -22,6 +22,7 @@ import { TagCategoryCustomAntd } from "../../../../../components/common/TagCateg
 import { TagTagCustomAntd } from "../../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
 import { InputNumberCustomAntd } from "../../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import TableCustomAntd2 from "../../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
+import useLanguageData from "../../../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/service-methods";
 import CategoriesEnum from "../../../../../shared/business/categories/categories.enum";
 import { ICategory } from "../../../../../shared/business/categories/categories.interface";
@@ -86,6 +87,7 @@ export const AddProductsTable: React.FC<Props> = ({
   stores,
   onAddProductToSale,
 }) => {
+  const { t } = useLanguageData();
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<IProduct> | undefined
   >(createTableState({ sort: { field: "createdAt", order: "ascend" } }));
@@ -110,7 +112,7 @@ export const AddProductsTable: React.FC<Props> = ({
     useFindCategoriesByType(CategoriesEnum.Type.PRODUCT);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    TagsEnum.Type.SALE
+    TagsEnum.Type.SALE,
   );
 
   const [isSelectProductItemModalOpen, setIsSelectProductItemModalOpen] =
@@ -127,7 +129,7 @@ export const AddProductsTable: React.FC<Props> = ({
           price: product.price,
           productId: product._id,
           quantity: 1,
-        })
+        }),
       ),
     });
   }, [products]);
@@ -154,23 +156,24 @@ export const AddProductsTable: React.FC<Props> = ({
     // If product is not found in the current list, fetch it from the API
     if (!product) {
       try {
-        product = await serviceMethodsInstance.productsServiceMethods.findById(
-          productId
-        );
+        product =
+          await serviceMethodsInstance.productsServiceMethods.findById(
+            productId,
+          );
       } catch (error) {
-        message.error("Product not found");
+        message.error(t("sales.productNotFound"));
         return;
       }
     }
 
     if (!product) {
-      message.error("Product not found");
+      message.error(t("sales.productNotFound"));
       return;
     }
 
     const productForm: TProductFormSchema | undefined = find(
       getValues("products"),
-      { productId }
+      { productId },
     );
 
     // If product form is not found, use default values
@@ -178,22 +181,22 @@ export const AddProductsTable: React.FC<Props> = ({
     const price = productForm?.price ?? product.price;
 
     if (quantity <= 0) {
-      message.warning("Product quantity invalid");
+      message.warning(t("sales.productQuantityInvalid"));
       return;
     }
 
     try {
       const productItemsResponse: IProductItem[] =
         await serviceMethodsInstance.productItemsServiceMethods.findByProduct(
-          productId
+          productId,
         );
 
       const activeProductItems: IProductItem[] = productItemsResponse.filter(
-        (item) => item.isActive
+        (item) => item.isActive,
       );
 
       if (activeProductItems.length === 0) {
-        message.warning("This product has no active product items");
+        message.warning(t("sales.productHasNoActiveProductItems"));
         return;
       }
 
@@ -212,7 +215,7 @@ export const AddProductsTable: React.FC<Props> = ({
             productItemId: productItem._id,
           },
         });
-        message.success("Product added to sale successfully!");
+        message.success(t("sales.productAddedToSaleSuccessfully"));
       } else {
         setSelectedProduct(product);
         setProductItems(activeProductItems);
@@ -220,7 +223,7 @@ export const AddProductsTable: React.FC<Props> = ({
         setIsSelectProductItemModalOpen(true);
       }
     } catch (error) {
-      message.error("Error loading product items");
+      message.error(t("sales.errorLoadingProductItems"));
       console.error(error);
     }
   };
@@ -230,11 +233,11 @@ export const AddProductsTable: React.FC<Props> = ({
 
     const productForm: TProductFormSchema | undefined = find(
       getValues("products"),
-      { productId: selectedProduct._id }
+      { productId: selectedProduct._id },
     );
 
     if (!productForm) {
-      message.error("Product not found");
+      message.error(t("sales.productNotFound"));
       return;
     }
 
@@ -253,7 +256,7 @@ export const AddProductsTable: React.FC<Props> = ({
       },
     });
 
-    message.success("Product added to sale successfully!");
+    message.success(t("sales.productAddedToSaleSuccessfully"));
 
     setSelectedProduct(null);
     setProductItems([]);
@@ -272,7 +275,7 @@ export const AddProductsTable: React.FC<Props> = ({
     if (selectedStoreIds.length) {
       storeId =
         find(product.storeIds, (productStoreId: string) =>
-          includes(selectedStoreIds, productStoreId)
+          includes(selectedStoreIds, productStoreId),
         ) ?? selectedStoreIds[0];
     }
 
@@ -286,7 +289,7 @@ export const AddProductsTable: React.FC<Props> = ({
           <Select
             onChange={setCategoriesIds}
             allowClear
-            placeholder={"Filter by Categories"}
+            placeholder={t("sales.filterByCategories")}
             mode="multiple"
             style={{ width: "100%" }}
           >
@@ -302,7 +305,7 @@ export const AddProductsTable: React.FC<Props> = ({
           <Select
             onChange={setTagsIds}
             allowClear
-            placeholder={"Filter by Tags"}
+            placeholder={t("sales.filterByTags")}
             mode="multiple"
             style={{ width: "100%" }}
           >
@@ -320,26 +323,26 @@ export const AddProductsTable: React.FC<Props> = ({
             onChange={(value: boolean | null) =>
               setIsActive(value == null ? [] : [value])
             }
-            placeholder={"Filter by Active"}
+            placeholder={t("sales.filterByActive")}
             style={{ width: "100%" }}
           >
             <Select.Option key={"BOTH"} value={null}>
-              Both
+              {t("sales.both")}
             </Select.Option>
 
             <Select.Option key={"ACTIVE"} value={true}>
-              Active
+              {t("common.active")}
             </Select.Option>
 
             <Select.Option key={"INACTIVE"} value={false}>
-              Inactive
+              {t("common.inactive")}
             </Select.Option>
           </Select>
         </Col>
 
         <Col md={5} className="flex justify-end">
           <AddProductButton
-            buttonProps={{ text: "Add Product" }}
+            buttonProps={{ text: t("sales.addProduct") }}
             onCreate={handleAddProductToSaleByCreate}
           />
         </Col>
@@ -352,7 +355,7 @@ export const AddProductsTable: React.FC<Props> = ({
         dataSource={products}
         columns={[
           {
-            title: "Product",
+            title: t("navigation.products"),
             dataIndex: "filesUrl",
             key: "filesUrl",
             align: "center",
@@ -385,15 +388,19 @@ export const AddProductsTable: React.FC<Props> = ({
 
                   <div className="flex flex-col text-start">
                     <span className="text-lg">{product.name}</span>
-                    <span className="text-xs">Barcode: {product.barcode}</span>
-                    <span className="text-xs">SKU: {product.sku}</span>
+                    <span className="text-xs">
+                      {t("products.barcode")}: {product.barcode}
+                    </span>
+                    <span className="text-xs">
+                      {t("products.sku")}: {product.sku}
+                    </span>
                   </div>
                 </div>
               );
             },
           },
           {
-            title: "Quantity",
+            title: t("common.quantity"),
             dataIndex: "quantity",
             key: "quantity",
             align: "center",
@@ -401,7 +408,7 @@ export const AddProductsTable: React.FC<Props> = ({
               return (
                 <div className="flex flex-col items-center">
                   <span className={quantity <= 0 ? "text-red-600" : ""}>
-                    Current: {quantity}
+                    {t("common.quantity")}: {quantity}
                   </span>
 
                   <Divider style={{ margin: "7px 0px" }} />
@@ -419,14 +426,16 @@ export const AddProductsTable: React.FC<Props> = ({
             },
           },
           {
-            title: "Price",
+            title: t("common.price"),
             dataIndex: "price",
             key: "price",
             align: "center",
             render: (price: number, _, index: number) => {
               return (
                 <div className="flex flex-col justify-center items-center">
-                  <span>Current: R${price}</span>
+                  <span>
+                    {t("common.price")}: R${price}
+                  </span>
 
                   <Divider style={{ margin: "7px 0px" }} />
 
@@ -445,7 +454,7 @@ export const AddProductsTable: React.FC<Props> = ({
             },
           },
           {
-            title: "Action",
+            title: t("sales.addProductByStore"),
             dataIndex: "storeIds",
             key: "storeIds",
             align: "center",
@@ -455,7 +464,7 @@ export const AddProductsTable: React.FC<Props> = ({
 
                 const isSelectedStore: boolean = includes(
                   selectedStoreIds,
-                  store?._id
+                  store?._id,
                 );
 
                 if (!store || !isSelectedStore) {

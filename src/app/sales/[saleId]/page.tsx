@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 import {
   Button,
@@ -12,66 +12,46 @@ import {
   Row,
   Tag,
   Tooltip,
-} from 'antd';
-import TextArea from 'antd/es/input/TextArea';
-import moment from 'moment';
-import {
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import {
-  useParams,
-  useRouter,
-} from 'next/navigation';
+} from "antd";
+import TextArea from "antd/es/input/TextArea";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+import { useParams, useRouter } from "next/navigation";
 
 import {
   EditOutlined,
   EyeOutlined,
   QuestionCircleTwoTone,
   TableOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import {
-  DeliveryAddressMapButton,
-} from '../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton';
-import Description from '../../../components/common/Description/Description';
-import {
-  ImageOrDefault,
-} from '../../../components/common/ImageOrDefault/ImageOrDefault';
-import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
-import {
-  SaleSummary,
-} from '../../../components/common/SaleSummary/SaleSummary';
-import Layout from '../../../components/template/Layout/Layout';
-import {
-  ICustomer,
-} from '../../../shared/business/customers/customer.interface';
-import { ISaleBuyer } from '../../../shared/business/sales/sale.interface';
-import SalesEnum from '../../../shared/business/sales/sales.enum';
-import {
-  IAddress,
-} from '../../../shared/business/shared/address/address.interface';
-import PersonEnum from '../../../shared/business/shared/person/person.enum';
-import TagsEnum from '../../../shared/business/tags/tags.enum';
-import Urls from '../../../shared/common/routes-app/routes-app';
-import DatesEnum from '../../../shared/utils/dates/dates.enum';
-import { addressTypesToString } from '../../../shared/utils/strings/string';
-import { useFindStoresByUser } from '../../stores/useFindStoresByUser';
-import { useFindTagsByType } from '../../tags/useFindTagsByType';
-import { SaleExtraInfo } from '../components/SaleExtraInfo/SaleExtraInfo';
-import { SaleFilesList } from '../components/SaleFilesList/SaleFilesList';
-import {
-  SalePaymentsReadOnly,
-} from '../components/SalePaymentsReadOnly/SalePaymentsReadOnly';
-import {
-  SaleSelectedProducts,
-} from '../components/SaleSelectedProducts/SaleSelectedProducts';
-import SalesTable from '../components/SalesTable/SalesTable';
-import {
-  SaleStoresListCard,
-} from '../components/SaleStoresListCard/SaleStoresListCard';
-import { SaleTagsList } from '../components/SaleTagsList/SaleTagsList';
-import { useFindSaleFilledByIdOrFail } from '../useFindSaleFilledByIdOrFail';
+import { DeliveryAddressMapButton } from "../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton";
+import Description from "../../../components/common/Description/Description";
+import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
+import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+import { SaleSummary } from "../../../components/common/SaleSummary/SaleSummary";
+import Layout from "../../../components/template/Layout/Layout";
+import useLanguageData from "../../../data/context/language/useLanguageData";
+import { ICustomer } from "../../../shared/business/customers/customer.interface";
+import { ISaleBuyer } from "../../../shared/business/sales/sale.interface";
+import SalesEnum from "../../../shared/business/sales/sales.enum";
+import { IAddress } from "../../../shared/business/shared/address/address.interface";
+import PersonEnum from "../../../shared/business/shared/person/person.enum";
+import TagsEnum from "../../../shared/business/tags/tags.enum";
+import Urls from "../../../shared/common/routes-app/routes-app";
+import DatesEnum from "../../../shared/utils/dates/dates.enum";
+import { addressTypesToString } from "../../../shared/utils/strings/string";
+import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
+import { useFindTagsByType } from "../../tags/useFindTagsByType";
+import { SaleExtraInfo } from "../components/SaleExtraInfo/SaleExtraInfo";
+import { SaleFilesList } from "../components/SaleFilesList/SaleFilesList";
+import { SalePaymentsReadOnly } from "../components/SalePaymentsReadOnly/SalePaymentsReadOnly";
+import { SaleSelectedProducts } from "../components/SaleSelectedProducts/SaleSelectedProducts";
+import SalesTable from "../components/SalesTable/SalesTable";
+import { SaleStoresListCard } from "../components/SaleStoresListCard/SaleStoresListCard";
+import { SaleTagsList } from "../components/SaleTagsList/SaleTagsList";
+import { useFindSaleFilledByIdOrFail } from "../useFindSaleFilledByIdOrFail";
 
 export default function SalePage() {
   const router: AppRouterInstance = useRouter();
@@ -86,12 +66,14 @@ export default function SalePage() {
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    TagsEnum.Type.SALE
+    TagsEnum.Type.SALE,
   );
   const [isOpenSalesTable, setIsOpenSalesTable] = useState<boolean>(false);
 
   const [isOpenSaleSummaryModal, setIsOpenSaleSummaryModal] =
     useState<boolean>(false);
+
+  const { t } = useLanguageData();
 
   if (isLoading || !sale || isLoadingTags || isLoadingStores) {
     return <LoadingFull />;
@@ -104,20 +86,26 @@ export default function SalePage() {
   const buyerAddress: IAddress | null = buyer?.address ?? null;
 
   return (
-    <Layout subtitle={"Information about sale"} title={"Sale"} hasBackButton>
+    <Layout
+      subtitle={t("sales.saleInfo")}
+      title={t("sales.sale")}
+      hasBackButton
+    >
       <Row gutter={[16, 16]} className="mt-5" justify={"end"}>
         <Col xs={24}>
           <div className="bg-white w-full py-3 px-5 rounded-md">
             <div className="flex justify-between w-full">
               <div>
-                <span className="text-lg mr-2">Sale Number: </span>
+                <span className="text-lg mr-2">
+                  {t("sales.saleNumberLabel")}
+                </span>
                 {sale?.number ? (
                   <label className="font-bold text-lg">{sale?.number}</label>
                 ) : null}
               </div>
 
               <div>
-                <Tooltip title="Edit sale">
+                <Tooltip title={t("sales.editSaleInfo")}>
                   <Button
                     type="success"
                     onClick={() =>
@@ -126,39 +114,39 @@ export default function SalePage() {
                     className="px-3 shadow-lg mr-2"
                     icon={<EditOutlined />}
                   >
-                    Edit
+                    {t("sales.editSale")}
                   </Button>
                 </Tooltip>
 
-                <Tooltip title="See sale summary">
+                <Tooltip title={t("sales.seeSummaryTooltip")}>
                   <Button
                     type="primary"
                     className="mr-2"
                     onClick={() => setIsOpenSaleSummaryModal(true)}
                     icon={<EyeOutlined />}
                   >
-                    See Summary
+                    {t("sales.seeSummary")}
                   </Button>
                 </Tooltip>
 
-                <Tooltip title="Open Sales">
+                <Tooltip title={t("sales.openSalesTooltip")}>
                   <Button
                     type="primary"
                     onClick={() => setIsOpenSalesTable(true)}
                     icon={<TableOutlined />}
                     className="mr-2"
                   >
-                    Open Sales
+                    {t("sales.openSales")}
                   </Button>
                 </Tooltip>
 
-                <Tooltip title="Go to Sales">
+                <Tooltip title={t("sales.goToSalesTooltip")}>
                   <Button
                     type="primary"
                     onClick={() => router.push(Urls.SALES)}
                     icon={<TableOutlined />}
                   >
-                    Go to Sales
+                    {t("sales.goToSales")}
                   </Button>
                 </Tooltip>
               </div>
@@ -182,7 +170,7 @@ export default function SalePage() {
           <Card
             title={
               <div className="flex">
-                <label className="mr-2">Customer </label>
+                <label className="mr-2">{t("sales.customer")} </label>
               </div>
             }
             className="h-min-80"
@@ -196,7 +184,7 @@ export default function SalePage() {
 
               <Col xs={24} md={10}>
                 <Description
-                  label="Name"
+                  label={t("sales.name")}
                   containerClassName="mt-0"
                   description={
                     <Button
@@ -204,7 +192,7 @@ export default function SalePage() {
                       className="p-0 max-h-fit"
                       onClick={() =>
                         router.push(
-                          Urls.CUSTOMER.replace(":customerId", customer?._id!)
+                          Urls.CUSTOMER.replace(":customerId", customer?._id!),
                         )
                       }
                     >
@@ -214,14 +202,14 @@ export default function SalePage() {
                 />
 
                 <Description
-                  label="Email"
+                  label={t("sales.email")}
                   description={
                     <a href={`mailto:${buyer?.email}`}>{buyer?.email}</a>
                   }
                 />
 
                 <Description
-                  label="Phone Number"
+                  label={t("sales.phoneNumber")}
                   description={
                     <a href={`tel:${buyer?.phoneNumber?.number}`}>
                       {buyer?.phoneNumber?.number}
@@ -232,19 +220,19 @@ export default function SalePage() {
 
               <Col xs={24} md={10}>
                 <Description
-                  label="Birth Date"
+                  label={t("sales.birthDate")}
                   containerClassName="mt-0"
                   description={
                     buyer?.birthDate
                       ? moment(buyer.birthDate).format(
-                          DatesEnum.Format.MMDDYYYY
+                          DatesEnum.Format.MMDDYYYY,
                         )
                       : ""
                   }
                 />
 
                 <Description
-                  label="Gender"
+                  label={t("sales.gender")}
                   description={
                     <Tag
                       color={
@@ -273,7 +261,7 @@ export default function SalePage() {
               <div className="flex justify-between">
                 <div className="flex">
                   <label className="mr-2">
-                    <span className="mr-2">Shipping Address</span>
+                    <span className="mr-2">{t("address.shippingAddress")}</span>
 
                     {buyerAddress && (
                       <DeliveryAddressMapButton address={buyerAddress} />
@@ -282,7 +270,7 @@ export default function SalePage() {
                 </div>
 
                 <div className="flex items-baseline">
-                  <label className="mr-2">Delivery Type</label>
+                  <label className="mr-2">{t("sales.deliveryType")}</label>
 
                   <Tag>
                     {SalesEnum.DeliveryTypeLabels[sale.header.deliveryType]}
@@ -296,17 +284,17 @@ export default function SalePage() {
               <Col xs={24} md={8}>
                 <Description
                   containerClassName="mt-0"
-                  label="Country"
+                  label={t("sales.country")}
                   description={buyerAddress?.country.name || "-"}
                 />
 
                 <Description
-                  label="State"
+                  label={t("sales.state")}
                   description={buyerAddress?.state?.name || "-"}
                 />
 
                 <Description
-                  label="City"
+                  label={t("sales.city")}
                   description={buyerAddress?.city || "-"}
                 />
               </Col>
@@ -314,17 +302,17 @@ export default function SalePage() {
               <Col xs={24} md={8}>
                 <Description
                   containerClassName="mt-0"
-                  label="Address1"
+                  label={t("sales.address1")}
                   description={buyerAddress?.address1 || "-"}
                 />
 
                 <Description
-                  label="Address2"
+                  label={t("sales.address2")}
                   description={buyerAddress?.address2 || "-"}
                 />
 
                 <Description
-                  label="District"
+                  label={t("sales.district")}
                   description={buyerAddress?.district || "-"}
                 />
               </Col>
@@ -332,7 +320,7 @@ export default function SalePage() {
               <Col xs={24} md={8}>
                 <Description
                   containerClassName="mt-0"
-                  label="Zipcode"
+                  label={t("sales.zipcode")}
                   description={buyerAddress?.zip || "-"}
                 />
 
@@ -342,7 +330,7 @@ export default function SalePage() {
                 />
 
                 <Description
-                  label="Types"
+                  label={t("sales.types")}
                   description={
                     buyerAddress ? addressTypesToString(buyerAddress) : "-"
                   }
@@ -374,7 +362,7 @@ export default function SalePage() {
             sale={sale}
             title={
               <div className="flex">
-                <label className="mr-2">Payment</label>
+                <label className="mr-2">{t("sales.paymentConfirmation")}</label>
                 <Tooltip title="Here you can see sale payments information">
                   <QuestionCircleTwoTone />
                 </Tooltip>
@@ -388,7 +376,7 @@ export default function SalePage() {
           <Card
             title={
               <div className="flex justify-between">
-                <span>Confirmation</span>
+                <span>{t("sales.confirmation")}</span>
               </div>
             }
           >
@@ -401,7 +389,7 @@ export default function SalePage() {
             <Row>
               <Col xs={24}>
                 <Description
-                  label="Note"
+                  label={t("sales.note")}
                   className="w-full"
                   description={<TextArea readOnly value={sale?.note!} />}
                 />
@@ -411,7 +399,7 @@ export default function SalePage() {
             <Row className="mt-2">
               <Col xs={24}>
                 <Description
-                  label="Note to Customer"
+                  label={t("sales.noteToCustomer")}
                   className="w-full"
                   description={
                     <TextArea readOnly value={sale?.noteToCustomer!} />
@@ -423,7 +411,7 @@ export default function SalePage() {
             <Row>
               <Col xs={24}>
                 <Description
-                  label="Tags"
+                  label={t("sales.tags")}
                   className="w-full"
                   description={<SaleTagsList sale={sale} tags={tags} />}
                 />
@@ -433,7 +421,7 @@ export default function SalePage() {
             <Row>
               <Col xs={24} md={8}>
                 <Description
-                  label="Status"
+                  label={t("sales.status")}
                   description={
                     <>
                       <Tag
@@ -444,10 +432,10 @@ export default function SalePage() {
                       </Tag>
 
                       {sale.completedAt && (
-                        <Tooltip title="Completed At">
+                        <Tooltip title={t("sales.completedAt")}>
                           <small className="ml-1 italic">
                             {moment(sale.completedAt).format(
-                              DatesEnum.Format.DDMMYYYYhhmmss
+                              DatesEnum.Format.DDMMYYYYhhmmss,
                             )}
                           </small>
                         </Tooltip>
@@ -459,7 +447,7 @@ export default function SalePage() {
 
               <Col xs={24} md={8}>
                 <Description
-                  label="Payment Status"
+                  label={t("sales.paymentStatus")}
                   description={
                     <Tag
                       className="w-fit"
@@ -475,12 +463,12 @@ export default function SalePage() {
             <Row className="mt-3">
               <Col xs={24} md={8} className="pr-5">
                 <Description
-                  label="Delivery Date"
+                  label={t("sales.deliveryDate")}
                   containerClassName="mt-0"
                   description={
                     sale?.deliveryAt
                       ? moment(sale.deliveryAt).format(
-                          DatesEnum.Format.MMDDYYYY
+                          DatesEnum.Format.MMDDYYYY,
                         )
                       : "-"
                   }
@@ -489,7 +477,7 @@ export default function SalePage() {
 
               <Col xs={24} md={8} className="pr-5">
                 <Description
-                  label="Created Date"
+                  label={t("sales.createdDate")}
                   containerClassName="mt-0"
                   description={
                     sale?.createdAt
@@ -500,7 +488,7 @@ export default function SalePage() {
               </Col>
               <Col xs={24} md={8} className="pr-5">
                 <Description
-                  label="Sale Number Manual"
+                  label={t("sales.saleNumberManual")}
                   containerClassName="mt-0"
                   description={<b>{sale?.numberManual || "-"}</b>}
                 />
@@ -510,11 +498,13 @@ export default function SalePage() {
             <Row>
               <Col xs={24}>
                 <Description
-                  label="Send Customer Notifications"
+                  label={t("sales.sendCustomerNotifications")}
                   description={
                     <div>
                       <Tag>
-                        {sale.isSendCustomerNotifications ? "Yes" : "No"}
+                        {sale.isSendCustomerNotifications
+                          ? t("common.yes")
+                          : t("common.no")}
                       </Tag>
                     </div>
                   }
@@ -526,7 +516,7 @@ export default function SalePage() {
       </Row>
 
       <Modal
-        title="Sale Summary"
+        title={t("sales.saleSummary")}
         open={isOpenSaleSummaryModal}
         cancelButtonProps={{ hidden: true }}
         onOk={() => setIsOpenSaleSummaryModal(false)}

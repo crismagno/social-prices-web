@@ -18,6 +18,7 @@ import ProductsEnum from "../../../../shared/business/products/products.enum";
 import { IFiltersDownloadProducts } from "../../../../shared/business/products/products.type";
 import { IStore } from "../../../../shared/business/stores/stores.interface";
 import { ITag } from "../../../../shared/business/tags/tags.interface";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import TableStateEnum from "../../../../shared/utils/table/table-state.enum";
 
 const formSchema = z.object({
@@ -53,6 +54,7 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
   stores = [],
 }) => {
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
+  const { t } = useLanguageData();
 
   const {
     handleSubmit,
@@ -97,13 +99,13 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
 
   return (
     <Drawer title={title} onClose={onClose} open={isOpen} width={width}>
-      <Card title="Filters">
+      <Card title={t("common.filter")}>
         <Row>
           <Col xs={24} sm={24}>
             <InputCustomAntd
               controller={{ control, name: "search" }}
-              label="Search"
-              placeholder={"Search products..."}
+              label={t("common.search")}
+              placeholder={t("products.searchProducts")}
               errorMessage={errors.search?.message}
               maxLength={200}
               allowClear
@@ -115,7 +117,7 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
               controller={{ control, name: "tagsIds" }}
               label="Tags"
               errorMessage={errors.tagsIds?.message}
-              placeholder={"Select tags"}
+              placeholder={t("products.selectTags")}
               mode="multiple"
               allowClear
             >
@@ -132,7 +134,7 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
               controller={{ control, name: "categoriesIds" }}
               label="Categories"
               errorMessage={errors.categoriesIds?.message}
-              placeholder={"Select categories"}
+              placeholder={t("products.selectCategories")}
               mode="multiple"
               allowClear
             >
@@ -149,7 +151,7 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
               controller={{ control, name: "storeIds" }}
               label="Stores"
               errorMessage={errors.storeIds?.message}
-              placeholder={"Select stores"}
+              placeholder={t("products.selectStores")}
               mode="multiple"
               allowClear
             >
@@ -164,18 +166,18 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
           <Col xs={24} sm={8}>
             <SelectCustomAntd
               controller={{ control, name: "isActive" }}
-              label="Active"
+              label={t("common.active")}
               errorMessage={errors.isActive?.message}
-              placeholder={"Select is active"}
+              placeholder={t("products.isActive")}
             >
               <Select.Option key={"SELECT_ALL"} value={null}>
                 - Select -
               </Select.Option>
               <Select.Option key={"YES"} value={true}>
-                Yes
+                {t("common.yes")}
               </Select.Option>
               <Select.Option key={"NO"} value={false}>
-                No
+                {t("common.no")}
               </Select.Option>
             </SelectCustomAntd>
           </Col>
@@ -183,9 +185,9 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
           <Col xs={24} sm={8}>
             <SelectCustomAntd
               controller={{ control, name: "sortField" }}
-              label="Sort Field"
+              label={t("products.sortField")}
               errorMessage={errors.sortField?.message}
-              placeholder={"Select sort field"}
+              placeholder={t("products.selectSortField")}
             >
               {Object.keys(ProductsEnum.SortField).map((sortField: string) => (
                 <Select.Option key={sortField} value={sortField}>
@@ -202,9 +204,9 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
           <Col xs={24} sm={8}>
             <SelectCustomAntd
               controller={{ control, name: "sortOrder" }}
-              label="Sort Order"
+              label={t("products.sortOrder")}
               errorMessage={errors.sortOrder?.message}
-              placeholder={"Select sort order"}
+              placeholder={t("products.selectSortOrder")}
             >
               {Object.keys(TableStateEnum.SortOrder).map(
                 (sortOrder: string) => (
@@ -230,7 +232,7 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
         loading={isDownloading}
         disabled={isDownloading}
       >
-        Download
+        {t("common.download")}
       </Button>
     </Drawer>
   );

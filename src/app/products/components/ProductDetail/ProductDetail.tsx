@@ -66,6 +66,7 @@ import {
 import { useFindCategoriesByType } from "../../../categories/useFindCategoriesByType";
 import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../../tags/useFindTagsByType";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import { useFindProductById } from "../../detail/useFindProductById";
 
 const dimensionsFormSchema = z.object({
@@ -125,6 +126,8 @@ export const ProductDetail: React.FC<Props> = ({
   );
 
   const { product, isLoading } = useFindProductById(productId);
+
+  const { t } = useLanguageData();
 
   const [formValues, setFormValues] = useState<TFormSchema>();
 
@@ -432,7 +435,7 @@ export const ProductDetail: React.FC<Props> = ({
     <div className="h-min-80 mt-2">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="content-edit-files flex flex-col justify-start">
-          <label className={`text-sm`}>Images</label>
+          <label className={`text-sm`}>{t("products.images")}</label>
 
           <div className="mt-2 w-full overflow-auto">
             <ImgCrop rotationSlider>
@@ -444,7 +447,7 @@ export const ProductDetail: React.FC<Props> = ({
                 onPreview={onPreview}
                 multiple
               >
-                {fileList.length < 10 && "+ Upload"}
+                {fileList.length < 10 && `+ ${t("common.upload")}`}
               </Upload>
             </ImgCrop>
 
@@ -471,8 +474,8 @@ export const ProductDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
               controller={{ control, name: "name" }}
-              label="Name"
-              placeholder={"Enter name"}
+              label={t("common.name")}
+              placeholder={t("products.enterName")}
               errorMessage={errors.name?.message}
               maxLength={200}
             />
@@ -483,13 +486,13 @@ export const ProductDetail: React.FC<Props> = ({
               controller={{ control, name: "barcode" }}
               label={
                 <>
-                  <span>Barcode</span>
+                  <span>{t("products.barcode")}</span>
                   {product && (
                     <ProductPreviousBarcodesPopover product={product} />
                   )}
                 </>
               }
-              placeholder={"Enter barcode"}
+              placeholder={t("products.enterBarcode")}
               errorMessage={errors.barcode?.message}
               maxLength={100}
             />
@@ -500,10 +503,10 @@ export const ProductDetail: React.FC<Props> = ({
               controller={{ control, name: "sku" }}
               label={
                 <>
-                  <span>SKU</span>
+                  <span>{t("products.sku")}</span>
                 </>
               }
-              placeholder={"Enter sku"}
+              placeholder={t("products.enterSku")}
               errorMessage={errors.sku?.message}
               maxLength={400}
             />
@@ -516,7 +519,7 @@ export const ProductDetail: React.FC<Props> = ({
               controller={{ control, name: "price" }}
               label={
                 <div>
-                  <span className="mr-2">Price</span>
+                  <span className="mr-2">{t("common.price")}</span>
                   {product && <ProductHistoricPricesButton product={product} />}
                 </div>
               }
@@ -528,8 +531,8 @@ export const ProductDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
               controller={{ control, name: "quantity" }}
-              label="Quantity"
-              placeholder={"Enter quantity"}
+              label={t("common.quantity")}
+              placeholder={t("products.enterQuantity")}
               type="number"
             />
           </Col>
@@ -538,7 +541,7 @@ export const ProductDetail: React.FC<Props> = ({
               controller={{ control, name: "storeIds" }}
               label="Stores"
               errorMessage={errors.storeIds?.message}
-              placeholder={"Select stores"}
+              placeholder={t("products.selectStores")}
               mode="multiple"
             >
               {stores.map((store: IStore) => (
@@ -554,8 +557,8 @@ export const ProductDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
               controller={{ control, name: "brand" }}
-              label="Brand"
-              placeholder={"Enter brand"}
+              label={t("products.brand")}
+              placeholder={t("products.enterBrand")}
               errorMessage={errors.brand?.message}
             />
           </Col>
@@ -565,7 +568,7 @@ export const ProductDetail: React.FC<Props> = ({
               controller={{ control, name: "categoriesIds" }}
               label="Categories"
               errorMessage={errors.categoriesIds?.message}
-              placeholder={"Select categories"}
+              placeholder={t("products.selectCategories")}
               mode="multiple"
             >
               {sortArray(categories, "name").map((category: ICategory) => (
@@ -581,7 +584,7 @@ export const ProductDetail: React.FC<Props> = ({
               controller={{ control, name: "tagsIds" }}
               label="Tags"
               errorMessage={errors.tagsIds?.message}
-              placeholder={"Select tags"}
+              placeholder={t("products.selectTags")}
               mode="multiple"
             >
               {sortArray(tags, "name").map((tag: ITag) => (
@@ -595,9 +598,9 @@ export const ProductDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
               controller={{ control, name: "releaseDate" }}
-              label="Release Date"
+              label={t("products.releaseDate")}
               type="date"
-              placeholder={"Enter release date"}
+              placeholder={t("products.enterReleaseDate")}
               errorMessage={errors.releaseDate?.message}
             />
           </Col>
@@ -605,9 +608,9 @@ export const ProductDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <InputCustomAntd
               controller={{ control, name: "expirationDate" }}
-              label="Expiration Date"
+              label={t("products.expirationDate")}
               type="date"
-              placeholder={"Enter expiration date"}
+              placeholder={t("products.enterExpirationDate")}
               errorMessage={errors.expirationDate?.message}
             />
           </Col>
@@ -617,14 +620,14 @@ export const ProductDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <CheckboxCustomAntd<IProduct>
               controller={{ control, name: "isActive" }}
-              label="Is Active"
+              label={t("products.isActive")}
               labelClassName="mr-1"
             />
           </Col>
 
           <Col xs={24} md={8} sm={12} lg={8}>
             <div className={`flex flex-col mt-4`}>
-              <label className={`text-sm mr-1`}>QRCode</label>
+              <label className={`text-sm mr-1`}>{t("products.qrcode")}</label>
 
               <Controller
                 control={control}
@@ -650,8 +653,8 @@ export const ProductDetail: React.FC<Props> = ({
           <Col xs={24}>
             <TextareaCustomAntd
               controller={{ control, name: "description" }}
-              label="Description"
-              placeholder={"Enter description"}
+              label={t("common.description")}
+              placeholder={t("common.description")}
               errorMessage={errors.description?.message}
               rows={4}
             />
@@ -662,29 +665,29 @@ export const ProductDetail: React.FC<Props> = ({
           <Col xs={24}>
             <TextareaCustomAntd
               controller={{ control, name: "details" }}
-              label="Details"
-              placeholder={"Enter details"}
+              label={t("common.details")}
+              placeholder={t("common.details")}
               errorMessage={errors.details?.message}
               rows={4}
             />
           </Col>
         </Row>
 
-        <ContainerTitle title="Dimensions" className="mt-7">
+        <ContainerTitle title={t("products.dimensions")} className="mt-7">
           <Row gutter={[16, 16]}>
             <Col xs={24} md={12} sm={12} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.size" }}
-                label="Size"
-                placeholder={"Enter size"}
+                label={t("products.size")}
+                placeholder={t("products.size")}
               />
             </Col>
 
             <Col xs={24} md={12} sm={12} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.height" }}
-                label="Height(m)"
-                placeholder={"Enter height"}
+                label={t("products.height")}
+                placeholder={t("products.height")}
                 type="number"
                 min={0}
               />
@@ -693,8 +696,8 @@ export const ProductDetail: React.FC<Props> = ({
             <Col xs={24} md={12} sm={12} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.width" }}
-                label="Width(m)"
-                placeholder={"Enter width"}
+                label={t("products.width")}
+                placeholder={t("products.width")}
                 type="number"
                 min={0}
               />
@@ -703,8 +706,8 @@ export const ProductDetail: React.FC<Props> = ({
             <Col xs={24} md={12} sm={12} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.length" }}
-                label="Length(m)"
-                placeholder={"Enter length"}
+                label={t("products.length")}
+                placeholder={t("products.length")}
                 type="number"
                 min={0}
               />
@@ -713,8 +716,8 @@ export const ProductDetail: React.FC<Props> = ({
             <Col xs={24} md={12} sm={12} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.depth" }}
-                label="Depth(m)"
-                placeholder={"Enter depth"}
+                label={t("products.depth")}
+                placeholder={t("products.depth")}
                 type="number"
                 min={0}
               />
@@ -723,8 +726,8 @@ export const ProductDetail: React.FC<Props> = ({
             <Col xs={24} md={12} sm={12} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.diameter" }}
-                label="Diameter(m)"
-                placeholder={"Enter diameter"}
+                label={t("products.diameter")}
+                placeholder={t("products.diameter")}
                 type="number"
                 min={0}
               />
@@ -733,8 +736,8 @@ export const ProductDetail: React.FC<Props> = ({
             <Col xs={24} md={12} sm={12} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.thickness" }}
-                label="Thickness(m) "
-                placeholder={"Enter thickness"}
+                label={t("products.thickness")}
+                placeholder={t("products.thickness")}
                 type="number"
                 min={0}
               />
@@ -743,8 +746,8 @@ export const ProductDetail: React.FC<Props> = ({
             <Col xs={24} md={12} sm={12} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.volume" }}
-                label="Volume(l)"
-                placeholder={"Enter volume"}
+                label={t("products.volume")}
+                placeholder={t("products.volume")}
                 type="number"
                 min={0}
               />
@@ -753,8 +756,8 @@ export const ProductDetail: React.FC<Props> = ({
             <Col xs={24} md={12} sm={12} lg={5}>
               <InputCustomAntd
                 controller={{ control, name: "dimensions.weight" }}
-                label="Weight(kg)"
-                placeholder={"Enter weight"}
+                label={t("products.weight")}
+                placeholder={t("products.weight")}
                 type="number"
                 min={0}
               />
@@ -776,7 +779,7 @@ export const ProductDetail: React.FC<Props> = ({
             }}
             disabled={isSubmitting}
           >
-            Cancel
+            {t("common.cancel")}
           </Button>
 
           <Button
@@ -785,7 +788,7 @@ export const ProductDetail: React.FC<Props> = ({
             loading={isSubmitting}
             disabled={isSubmitting}
           >
-            {isEditMode ? "Save" : "Create"}
+            {isEditMode ? t("common.save") : t("common.create")}
           </Button>
         </div>
       </form>

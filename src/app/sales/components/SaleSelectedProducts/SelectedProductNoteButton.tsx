@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 import { Modal, Tooltip } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -6,6 +6,7 @@ import TextArea from "antd/es/input/TextArea";
 import { CommentOutlined } from "@ant-design/icons";
 
 import ButtonCommon from "../../../../components/common/ButtonCommon/ButtonCommon";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import { ISaleStoreProduct } from "../../../../shared/business/sales/sale.interface";
 
 interface Props {
@@ -15,11 +16,12 @@ interface Props {
 export const SelectedProductNoteButton: React.FC<Props> = ({
   saleStoreProduct,
 }) => {
+  const { t } = useLanguageData();
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   return (
     <>
-      <Tooltip title="See note product">
+      <Tooltip title={t("sales.seeNoteProduct")}>
         <ButtonCommon
           onClick={() => setIsVisible(true)}
           color="transparent"
@@ -33,7 +35,7 @@ export const SelectedProductNoteButton: React.FC<Props> = ({
         width={600}
         title={
           <div className="flex flex-col">
-            <label>Product Note</label>
+            <label>{t("sales.productNote")}</label>
 
             <span className="text-sm italic mt-2">
               {saleStoreProduct.product?.name}

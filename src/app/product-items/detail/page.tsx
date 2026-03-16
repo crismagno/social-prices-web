@@ -25,6 +25,7 @@ import {
 } from '@ant-design/icons';
 
 import Layout from '../../../components/template/Layout/Layout';
+import useLanguageData from '../../../data/context/language/useLanguageData';
 import Urls from '../../../shared/common/routes-app/routes-app';
 import {
   ProductItemDetail,
@@ -33,6 +34,7 @@ import { useFindProductItemById } from '../useFindProductItemById';
 
 export default function ProductItemDetailPage() {
   const { modal } = App.useApp();
+  const { t } = useLanguageData();
 
   const router: AppRouterInstance = useRouter();
   const searchParams = useSearchParams();
@@ -44,36 +46,36 @@ export default function ProductItemDetailPage() {
 
   const handleCreate = () => {
     modal.confirm({
-      title: "Your product item has been created successfully!",
+      title: t("productItems.productItemCreatedSuccessfully"),
       icon: <CheckCircleTwoTone />,
       content: (
         <Alert
-          message="Please confirm if you want to create a new product item"
+          message={t("productItems.confirmCreateProductItem")}
           type="success"
           showIcon
         />
       ),
-      okText: "Confirm",
-      cancelText: "Cancel",
+      okText: t("common.confirm"),
+      cancelText: t("common.cancel"),
       onOk: () => {},
       onCancel: () => router.back(),
     });
   };
 
   const handleUpdate = () => {
-    message.success("Your product item has been update successfully!");
+    message.success(t("productItems.productItemUpdatedSuccessfully"));
     router.back();
   };
 
   return (
     <Layout
       subtitle={
-        isEditMode ? "Edit product item details" : "New product item details"
+        isEditMode ? t("productItems.editProductItemDetails") : t("productItems.newProductItemDetails")
       }
       title={
         isEditMode
-          ? `Edit product item: ${productItem?.name}`
-          : "New product item"
+          ? `${t("productItems.editProductItem")}: ${productItem?.name}`
+          : t("productItems.newProductItem")
       }
       hasBackButton
     >
@@ -82,7 +84,7 @@ export default function ProductItemDetailPage() {
           <>
             <Row gutter={24} justify={"end"}>
               <Col>
-                <Tooltip title="Go to product item">
+                <Tooltip title={t("productItems.goToProductItem")}>
                   <Button
                     type="primary"
                     onClick={() =>
@@ -95,7 +97,7 @@ export default function ProductItemDetailPage() {
                     }
                     icon={<EnterOutlined />}
                   >
-                    Product Item
+                    {t("productItems.productItem")}
                   </Button>
                 </Tooltip>
               </Col>

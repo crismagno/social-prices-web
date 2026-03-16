@@ -4,6 +4,8 @@ import "./styles.scss";
 
 import React, { useEffect, useState } from "react";
 
+import useLanguageData from "../../../../data/context/language/useLanguageData";
+
 import { Empty, Upload, UploadFile } from "antd";
 import { map } from "lodash";
 
@@ -19,6 +21,7 @@ interface Props {
 }
 
 export const SaleFilesList: React.FC<Props> = ({ sale }) => {
+  const { t } = useLanguageData();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   useEffect(() => {
@@ -59,16 +62,16 @@ export const SaleFilesList: React.FC<Props> = ({ sale }) => {
   if (fileList.length === 0) {
     return (
       <div className="flex flex-col">
-        <label>Files</label>
+        <label>{t("sales.files")}</label>
 
-        <Empty className="mt-2" description="No files uploaded yet" />
+        <Empty className="mt-2" description={t("sales.noFilesUploaded")} />
       </div>
     );
   }
 
   return (
     <div className="flex flex-col">
-      <label>Files</label>
+      <label>{t("sales.files")}</label>
 
       <div className="mt-2">
         <Upload

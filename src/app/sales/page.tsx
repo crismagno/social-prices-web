@@ -3,12 +3,19 @@
 import { Collapse } from "antd";
 
 import Layout from "../../components/template/Layout/Layout";
+import useLanguageData from "../../data/context/language/useLanguageData";
 import { SalesChart } from "./components/SalesChart/SalesChart";
 import SalesTable from "./components/SalesTable/SalesTable";
 
 export default function SalesPage() {
+  const { t } = useLanguageData();
+
   return (
-    <Layout subtitle="Sales information" title="Sales" hasBackButton>
+    <Layout
+      subtitle={t("sales.information")}
+      title={t("sales.title")}
+      hasBackButton
+    >
       <Collapse
         className="mt-5"
         style={{ backgroundColor: "#fff", boxShadow: "none" }}
@@ -16,7 +23,11 @@ export default function SalesPage() {
         items={[
           {
             key: "1",
-            label: <span className="font-semibold text-base">Sales Chart</span>,
+            label: (
+              <span className="font-semibold text-base">
+                {t("sales.salesChart")}
+              </span>
+            ),
             children: <SalesChart isShowHeader={false} />,
           },
         ]}

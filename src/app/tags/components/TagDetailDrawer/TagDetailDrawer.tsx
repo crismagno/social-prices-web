@@ -15,6 +15,7 @@ import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomA
 import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import useAuthData from "../../../../data/context/auth/useAuthData";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import CreateTagDto from "../../../../services/social-prices-api/tags/dto/createTag.dto";
 import UpdateTagDto from "../../../../services/social-prices-api/tags/dto/updateTag.dto";
@@ -52,6 +53,8 @@ export const TagDetailDrawer: React.FC<Props> = ({
   onOk,
   tagId,
 }) => {
+  const { t } = useLanguageData();
+
   const { user } = useAuthData();
 
   const { isLoading, tag } = useFindTagById(tagId);
@@ -113,7 +116,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
       const newTag: ITag =
         await serviceMethodsInstance.tagsServiceMethods.create(createTagDto);
 
-      message.success("Your tag has been created successfully!");
+      message.success(t("tags.tagCreatedSuccessfully"));
 
       setFormValues(initialTag());
 
@@ -140,7 +143,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
       const tagUpdated: ITag =
         await serviceMethodsInstance.tagsServiceMethods.update(updateTagDto);
 
-      message.success("Your tag has been updated successfully!");
+      message.success(t("tags.tagUpdatedSuccessfully"));
 
       setFormValues(initialTag());
 
@@ -165,7 +168,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
 
   return (
     <Drawer
-      title={tagId ? `Edit Tag: ${tag?.name}` : "New Tag"}
+      title={tagId ? `${t("tags.editTag")}: ${tag?.name}` : t("tags.newTag")}
       onClose={handleClose}
       open={isOpen}
     >
@@ -174,8 +177,8 @@ export const TagDetailDrawer: React.FC<Props> = ({
           <Col xs={24}>
             <InputCustomAntd
               controller={{ control, name: "name" }}
-              label="Name"
-              placeholder={"Enter name"}
+              label={t("common.name")}
+              placeholder={t("tags.enterName")}
               errorMessage={errors.name?.message}
               maxLength={200}
             />
@@ -184,7 +187,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
           <Col xs={24}>
             <SelectCustomAntd<ITag>
               controller={{ control, name: "type" }}
-              label="Type"
+              label={t("tags.type")}
               errorMessage={errors.type?.message}
             >
               {sortBy(Object.keys(TagsEnum.Type)).map((type: string) => (
@@ -198,8 +201,8 @@ export const TagDetailDrawer: React.FC<Props> = ({
           <Col xs={24}>
             <TextareaCustomAntd
               controller={{ control, name: "description" }}
-              label="Description"
-              placeholder={"Enter description"}
+              label={t("common.description")}
+              placeholder={t("tags.enterDescription")}
               rows={2}
             />
           </Col>
@@ -207,7 +210,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
           <Col xs={24}>
             <ColorPickerCustomAntd
               controller={{ control, name: "color" }}
-              label="Color"
+              label={t("tags.color")}
               defaultValue="#1677ff"
               showText
               allowClear
@@ -226,7 +229,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
             onClick={handleClose}
             disabled={isSubmitting}
           >
-            Cancel
+            {t("common.cancel")}
           </Button>
 
           <Button
@@ -235,7 +238,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
             loading={isSubmitting}
             disabled={isSubmitting}
           >
-            {isEditMode ? "Save" : "Create"}
+            {isEditMode ? t("common.save") : t("common.create")}
           </Button>
         </div>
       </form>

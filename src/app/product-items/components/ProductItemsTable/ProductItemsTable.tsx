@@ -56,6 +56,7 @@ import YesNo from '../../../../components/common/YesNo/YesNo';
 import TableCustomAntd2
   from '../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
 import useAuthData from '../../../../data/context/auth/useAuthData';
+import useLanguageData from '../../../../data/context/language/useLanguageData';
 import useSocketData from '../../../../data/context/socket/useSocketData';
 import {
   serviceMethodsInstance,
@@ -112,6 +113,7 @@ interface Props {
 export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
   const { user } = useAuthData();
   const { socket } = useSocketData();
+  const { t } = useLanguageData();
   const router: AppRouterInstance = useRouter();
 
   const [tableStateRequest, setTableStateRequest] = useState<
@@ -185,7 +187,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
   return (
     <div>
       <Card
-        title="Product Items"
+        title={t("productItems.title")}
         className="h-min-80 mt-5"
         extra={
           <>
@@ -195,7 +197,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               className="mr-2"
               icon={<DownloadOutlined />}
             >
-              Download
+              {t("common.download")}
             </Button>
 
             <Button
@@ -204,7 +206,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               className="mr-2"
               icon={<UploadOutlined />}
             >
-              Upload
+              {t("common.upload")}
             </Button>
 
             <Button
@@ -212,7 +214,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               onClick={() => router.push(Urls.NEW_PRODUCT_ITEM)}
               icon={<PlusOutlined />}
             >
-              New Product Item
+              {t("productItems.newProductItem")}
             </Button>
           </>
         }
@@ -345,7 +347,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               },
             },
             {
-              title: "Name",
+              title: t("productItems.name"),
               dataIndex: "name",
               key: "name",
               align: "center",
@@ -361,7 +363,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               },
             },
             {
-              title: "Product",
+              title: t("productItems.product"),
               dataIndex: "product",
               key: "product",
               align: "center",
@@ -371,20 +373,20 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               },
             },
             {
-              title: "Barcode",
+              title: t("productItems.barcode"),
               dataIndex: "barcode",
               key: "barcode",
               align: "center",
             },
             {
-              title: "SKU",
+              title: t("productItems.sku"),
               dataIndex: "sku",
               key: "sku",
               align: "center",
               render: (sku: string) => sku || "-",
             },
             {
-              title: "Quantity",
+              title: t("productItems.quantity"),
               dataIndex: "quantity",
               key: "quantity",
               align: "center",
@@ -399,7 +401,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
                     </div>
 
                     {quantity <= 0 ? (
-                      <Tooltip title="Needs to be filled stock">
+                      <Tooltip title={t("products.needsToBeFilledStock")}>
                         <QuestionCircleOutlined style={{ color: "orange" }} />
                       </Tooltip>
                     ) : null}
@@ -408,7 +410,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               },
             },
             {
-              title: "Price",
+              title: t("productItems.price"),
               dataIndex: "price",
               key: "price",
               align: "center",
@@ -423,7 +425,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               },
             },
             {
-              title: "Categories",
+              title: t("productItems.categories"),
               dataIndex: "categoriesIds",
               key: "categoriesIds",
               align: "center",
@@ -439,7 +441,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               ),
             },
             {
-              title: "Tags",
+              title: t("productItems.tags"),
               dataIndex: "tagsIds",
               key: "tagsIds",
               filters: tagsSort.map((tag: ITag) => ({
@@ -452,7 +454,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               ),
             },
             {
-              title: "Stores",
+              title: t("productItems.stores"),
               dataIndex: "storeIds",
               key: "storeIds",
               align: "center",
@@ -465,7 +467,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               ),
             },
             {
-              title: "Active",
+              title: t("productItems.active"),
               dataIndex: "isActive",
               key: "isActive",
               align: "center",
@@ -480,7 +482,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               ),
             },
             {
-              title: "Default",
+              title: t("productItems.default"),
               dataIndex: "isDefault",
               key: "isDefault",
               align: "center",
@@ -495,7 +497,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               ),
             },
             {
-              title: "Release Date",
+              title: t("productItems.releaseDate"),
               dataIndex: "releaseDate",
               key: "releaseDate",
               align: "center",
@@ -506,7 +508,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               sorter: true,
             },
             {
-              title: "Expiration Date",
+              title: t("productItems.expirationDate"),
               dataIndex: "expirationDate",
               key: "expirationDate",
               align: "center",
@@ -519,7 +521,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               sorter: true,
             },
             {
-              title: "Created At",
+              title: t("productItems.createdAt"),
               dataIndex: "createdAt",
               key: "createdAt",
               align: "center",
@@ -528,7 +530,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               sorter: true,
             },
             {
-              title: "Updated At",
+              title: t("productItems.updatedAt"),
               dataIndex: "updatedAt",
               key: "updatedAt",
               align: "center",
@@ -537,14 +539,14 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               sorter: true,
             },
             {
-              title: "Action",
+              title: t("productItems.action"),
               dataIndex: "action",
               key: "action",
               align: "center",
               fixed: "right",
               render: (_: any, productItem: IProductItem) => (
                 <Space.Compact>
-                  <Tooltip title="Edit product item">
+                  <Tooltip title={t("productItems.editProductItemTooltip")}>
                     <Button
                       type="success"
                       onClick={() =>
@@ -559,7 +561,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
                     />
                   </Tooltip>
 
-                  <Tooltip title="Go to product item">
+                  <Tooltip title={t("productItems.goToProductItemTooltip")}>
                     <Button
                       type="default"
                       onClick={() =>
@@ -574,7 +576,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
                     />
                   </Tooltip>
 
-                  <Tooltip title="Create Sale">
+                  <Tooltip title={t("productItems.createSale")}>
                     <Button
                       type="primary"
                       onClick={() =>
@@ -592,7 +594,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               ),
             },
           ]}
-          search={{ placeholder: "Search product items..." }}
+          search={{ placeholder: t("productItems.searchProductItems") }}
           loading={isLoading}
           total={total}
         />
@@ -611,7 +613,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
         }}
         downloadFileName="social-prices-product-items-template.xlsx"
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        title="Upload Product Items"
+        title={t("productItems.uploadProductItems")}
         useProduct={true}
       >
         <FilesUploadsTable
@@ -623,7 +625,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
       <DownloadProductItemsDrawer
         isOpen={isDownloadDrawerOpen}
         onClose={() => setIsDownloadDrawerOpen(false)}
-        title="Download Product Items"
+        title={t("productItems.downloadProductItems")}
         width="50%"
         tags={tagsSort}
         categories={categoriesSort}

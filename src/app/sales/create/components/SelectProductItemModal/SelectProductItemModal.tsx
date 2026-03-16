@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Button, Image, Input, Tag, Tooltip } from "antd";
 
 import { CheckCircleOutlined, SearchOutlined } from "@ant-design/icons";
 
+import useLanguageData from "../../../../../data/context/language/useLanguageData";
 import { IProductItem } from "../../../../../shared/business/product-items/product-items.interface";
 import { IProduct } from "../../../../../shared/business/products/products.interface";
 import { getImageUrl } from "../../../../../shared/utils/images/images-url";
@@ -25,6 +26,7 @@ export const SelectProductItemModal: React.FC<Props> = ({
   onClose,
   onSelectProductItem,
 }) => {
+  const { t } = useLanguageData();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredProductItems, setFilteredProductItems] = useState<
     IProductItem[]
@@ -72,17 +74,21 @@ export const SelectProductItemModal: React.FC<Props> = ({
         <div className="p-6 border-b">
           <div className="flex justify-between items-center mb-4">
             <div>
-              <h2 className="text-2xl font-bold">Select Product Item</h2>
+              <h2 className="text-2xl font-bold">
+                {t("sales.selectProductItems")}
+              </h2>
               {product && (
                 <span className="text-sm text-gray-500">({product.name})</span>
               )}
             </div>
-            <Button onClick={onClose}>Close</Button>
+            <Button onClick={onClose}>
+              {t("sales.closeSelectProductItem")}
+            </Button>
           </div>
 
           {/* Search */}
           <Input
-            placeholder="Search by name, barcode, or SKU..."
+            placeholder={t("sales.searchProductItemsByName")}
             prefix={<SearchOutlined />}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -95,7 +101,7 @@ export const SelectProductItemModal: React.FC<Props> = ({
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)]">
           {filteredProductItems.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
-              No product items found
+              {t("sales.noProductItemsFound")}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -133,7 +139,7 @@ export const SelectProductItemModal: React.FC<Props> = ({
                           )}
                           {!productItem.isActive && (
                             <Tag color="red" className="text-xs">
-                              Inactive
+                              {t("common.inactive")}
                             </Tag>
                           )}
                         </div>
@@ -143,17 +149,19 @@ export const SelectProductItemModal: React.FC<Props> = ({
                       <div className="space-y-1 text-sm text-gray-600">
                         {productItem.barcode && (
                           <div>
-                            <strong>Barcode:</strong> {productItem.barcode}
+                            <strong>{t("products.barcode")}:</strong>{" "}
+                            {productItem.barcode}
                           </div>
                         )}
                         {productItem.sku && (
                           <div>
-                            <strong>SKU:</strong> {productItem.sku}
+                            <strong>{t("products.sku")}:</strong>{" "}
+                            {productItem.sku}
                           </div>
                         )}
                         <div className="flex gap-4">
                           <div>
-                            <strong>Quantity:</strong>{" "}
+                            <strong>{t("common.quantity")}:</strong>{" "}
                             <span
                               className={
                                 productItem.quantity <= 0 ? "text-red-600" : ""
@@ -163,18 +171,20 @@ export const SelectProductItemModal: React.FC<Props> = ({
                             </span>
                           </div>
                           <div>
-                            <strong>Price:</strong>{" "}
+                            <strong>{t("common.price")}:</strong>{" "}
                             {formatterMoney(productItem.price)}
                           </div>
                         </div>
                         {productItem.brand && (
                           <div>
-                            <strong>Brand:</strong> {productItem.brand}
+                            <strong>{t("products.brand")}:</strong>{" "}
+                            {productItem.brand}
                           </div>
                         )}
                         {productItem.dimensions?.size && (
                           <div>
-                            <strong>Size:</strong> {productItem.dimensions.size}
+                            <strong>{t("products.size")}:</strong>{" "}
+                            {productItem.dimensions.size}
                           </div>
                         )}
                         {productItem.colors &&
@@ -202,7 +212,7 @@ export const SelectProductItemModal: React.FC<Props> = ({
                         className="w-full mt-3"
                         onClick={() => handleSelectProductItem(productItem)}
                       >
-                        Select
+                        {t("common.select")}
                       </Button>
                     </div>
                   </div>

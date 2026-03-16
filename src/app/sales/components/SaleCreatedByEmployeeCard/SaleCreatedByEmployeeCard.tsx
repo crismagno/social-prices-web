@@ -2,6 +2,8 @@ import {
   Button,
   Tooltip,
 } from 'antd';
+
+import useLanguageData from '../../../../data/context/language/useLanguageData';
 import {
   AppRouterInstance,
 } from 'next/dist/shared/lib/app-router-context.shared-runtime';
@@ -24,6 +26,7 @@ interface Props {
 }
 
 export const SaleCreatedByEmployeeCard: React.FC<Props> = ({ sale }) => {
+  const { t } = useLanguageData();
   const router: AppRouterInstance = useRouter();
 
   const employee: IEmployee | undefined = sale.createdByEmployee;
@@ -33,7 +36,7 @@ export const SaleCreatedByEmployeeCard: React.FC<Props> = ({ sale }) => {
   }
 
   return (
-    <Tooltip title="Sale created by employee" placement="top">
+    <Tooltip title={t("sales.saleCreatedByEmployee")} placement="top">
       <div className="flex items-center">
         <ImageOrDefault
           width={35}

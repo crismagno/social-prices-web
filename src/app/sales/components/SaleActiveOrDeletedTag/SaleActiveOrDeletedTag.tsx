@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import { Button, Modal, Popover, Tag } from "antd";
 
+import useLanguageData from "../../../../data/context/language/useLanguageData";
+
 import { QuestionCircleTwoTone } from "@ant-design/icons";
 
 import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
@@ -29,6 +31,8 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
     useState<boolean>(false);
 
   const [isActivatingSale, setIsIsActivatingSale] = useState<boolean>(false);
+
+  const { t } = useLanguageData();
 
   const isSaleDeleted: boolean = !!sale.softDelete;
 
@@ -70,7 +74,7 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
       <>
         <Popover
           open={allowEvents ? undefined : false}
-          title="Activate Sale?"
+          title={t("sales.activateSale")}
           content={
             <div className="flex flex-col gap-4">
               <p>
@@ -82,7 +86,7 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
                 type="success"
                 onClick={() => setIsVisibleActivateSaleModal(true)}
               >
-                Activate Sale
+                {t("sales.activateSale")}
               </Button>
             </div>
           }
@@ -92,25 +96,25 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
             className="mb-2 h-fit w-fit"
             icon={allowEvents && <QuestionCircleTwoTone />}
           >
-            <label>This sale is deleted</label>
+            <label>{t("sales.deleteSale")}</label>
           </Tag>
         </Popover>
 
         <Modal
           open={isVisibleActivateSaleModal}
-          title={`Activate Manual Sale`}
+          title={t("sales.activateManualSale")}
           destroyOnHidden
           onCancel={() => setIsVisibleActivateSaleModal(false)}
           onOk={async () => {
             await handleActivateSale();
           }}
-          okText={"Yes"}
-          cancelText={"No"}
+          okText={t("common.yes")}
+          cancelText={t("common.no")}
           closable={!isActivatingSale}
           okButtonProps={{ loading: isActivatingSale, type: "success" }}
           cancelButtonProps={{ disabled: isActivatingSale }}
         >
-          Are you sure activate sale? Sale Number:{" "}
+          {t("sales.areYouSureActivateSale")}{" "}
           <strong>{sale.number}</strong>
         </Modal>
       </>
@@ -121,7 +125,7 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
     <>
       <Popover
         open={allowEvents ? undefined : false}
-        title="Delete Sale?"
+        title={t("sales.deleteSale")}
         content={
           <div className="flex flex-col gap-4">
             <p>This sale is currently active. Do you want to delete it?</p>
@@ -130,7 +134,7 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
               type="danger"
               onClick={() => setIsVisibleDeleteSaleModal(true)}
             >
-              Delete Sale
+              {t("sales.deleteSale")}
             </Button>
           </div>
         }
@@ -140,24 +144,24 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
           className="mb-2 h-fit w-fit"
           icon={allowEvents && <QuestionCircleTwoTone />}
         >
-          <label>This sale is active</label>
+          <label>{t("sales.activateSale")}</label>
         </Tag>
 
         <Modal
           open={isVisibleDeleteSaleModal}
-          title={`Delete Manual Sale`}
+          title={t("sales.deleteManualSale")}
           destroyOnHidden
           onCancel={() => setIsVisibleDeleteSaleModal(false)}
           onOk={async () => {
             await handleDeleteSale();
           }}
           closable={!isDeletingSale}
-          okText={"Yes"}
-          cancelText={"No"}
+          okText={t("common.yes")}
+          cancelText={t("common.no")}
           okButtonProps={{ loading: isDeletingSale, type: "danger" }}
           cancelButtonProps={{ disabled: isDeletingSale }}
         >
-          Are you sure delete sale? Sale Number: <strong>{sale.number}</strong>
+          {t("sales.areYouSureDeleteSale")} <strong>{sale.number}</strong>
         </Modal>
       </Popover>
     </>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import { Avatar, Select } from "antd";
 
+import useLanguageData from "../../../../../data/context/language/useLanguageData";
 import { ICustomer } from "../../../../../shared/business/customers/customer.interface";
 import { getImageUrl } from "../../../../../shared/utils/images/images-url";
 import ImagesEnum from "../../../../../shared/utils/images/images.enum";
@@ -26,13 +27,14 @@ export const SelectCustomer: React.FC<Props> = ({
   selectProps,
   style,
 }) => {
+  const { t } = useLanguageData();
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<ICustomer> | undefined
   >(
     createTableState({
       sort: { field: "createdAt", order: "descend" },
       pagination: { pageSize: 10, skip: 0, current: undefined, total: 0 },
-    })
+    }),
   );
 
   const { customers } =
@@ -81,7 +83,7 @@ export const SelectCustomer: React.FC<Props> = ({
       onSelect={(customerId) => {
         const selectedCustomer: ICustomer | undefined | null = customerId
           ? customers.find(
-              (customer: ICustomer) => customer._id === (customerId as any)
+              (customer: ICustomer) => customer._id === (customerId as any),
             )
           : null;
 
@@ -91,7 +93,7 @@ export const SelectCustomer: React.FC<Props> = ({
       styles={{ popup: { root: { maxHeight: containerHeight } } }}
       listHeight={containerHeight}
       filterOption={false}
-      placeholder="Select Customer"
+      placeholder={t("sales.selectCustomer")}
       style={style ?? { width: 250 }}
       className={selectProps?.className}
     >
@@ -103,7 +105,7 @@ export const SelectCustomer: React.FC<Props> = ({
               size={"small"}
               className="mr-2"
             />
-            <span>New Customer</span>
+            <span>{t("sales.newCustomer")}</span>
           </div>
         </Select.Option>
       )}
