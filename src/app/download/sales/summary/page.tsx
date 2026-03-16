@@ -13,6 +13,7 @@ import Avatar from "../../../../components/common/Avatar/Avatar";
 import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
 import { Logo1 } from "../../../../components/common/Logo/Logo1";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import { ICustomer } from "../../../../shared/business/customers/customer.interface";
 import { ISale } from "../../../../shared/business/sales/sale.interface";
@@ -20,6 +21,8 @@ import Urls from "../../../../shared/common/routes-app/routes-app";
 
 export default function DownloadSalesSummaryPage() {
   const router = useRouter();
+
+  const { t } = useLanguageData();
 
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
 
@@ -92,7 +95,7 @@ export default function DownloadSalesSummaryPage() {
           "
         >
           <label className="text-lg mt-10">
-            Sale Summary: {sale.number ?? "N/A"}
+            {t("sales.saleSummary")}: {sale.number ?? "N/A"}
           </label>
 
           <Avatar
@@ -122,7 +125,7 @@ export default function DownloadSalesSummaryPage() {
       <div className="mt-2">
         <Divider />
 
-        <Tooltip title="Go to Social Prices App">
+        <Tooltip title={t("navigation.home")}>
           <a
             className="text-blue-500 hover:text-blue-600 cursor-pointer underline"
             onClick={() => router.push(Urls.ROOT)}

@@ -11,6 +11,7 @@ import { IconUsers } from "../../components/common/icons/icons";
 import Loading from "../../components/common/Loading/Loading";
 import { Logo1 } from "../../components/common/Logo/Logo1";
 import useAuthData from "../../data/context/auth/useAuthData";
+import useLanguageData from "../../data/context/language/useLanguageData";
 import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
 import LoginEnum from "../../shared/common/enums/login.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
@@ -19,6 +20,8 @@ export default function LoginPage() {
   useForceRedirect();
 
   const { loginGoogle, login, create, isLoading } = useAuthData();
+
+  const { t } = useLanguageData();
 
   const router = useRouter();
 
@@ -39,11 +42,11 @@ export default function LoginPage() {
       setIsSubmitting(true);
 
       if (!emailOrUsername || !password) {
-        throw new Error("Please enter with your credentials!");
+        throw new Error(t("auth.pleaseEnterCredentials"));
       }
 
       if (mode === LoginEnum.Mode.CREATE && password !== confirmPassword) {
-        throw new Error("Please check confirm password!");
+        throw new Error(t("auth.pleaseCheckConfirmPassword"));
       }
 
       if (mode === LoginEnum.Mode.CREATE) {
@@ -99,28 +102,28 @@ export default function LoginPage() {
 
         <h1 className="text-xl font-bold text-center">
           {mode === LoginEnum.Mode.LOGIN
-            ? "Enter with your account"
-            : "Create a new account"}
+            ? t("auth.enterWithYourAccount")
+            : t("auth.createNewAccount")}
         </h1>
 
         <AuthInput
           value={emailOrUsername}
           onChange={setEmailOrUsername}
-          label="User"
+          label={t("auth.user")}
           type="text"
           placeholder={
             mode === LoginEnum.Mode.LOGIN
-              ? "Type email or username"
-              : "Type email"
+              ? t("auth.typeEmailOrUsername")
+              : t("auth.typeEmail")
           }
         />
 
         <AuthInput
           value={password}
           onChange={setPassword}
-          label="Password"
+          label={t("auth.password")}
           type="password"
-          placeholder="Type your password"
+          placeholder={t("auth.typeYourPassword")}
           useShowPassword
         />
 
@@ -128,9 +131,9 @@ export default function LoginPage() {
           <AuthInput
             value={confirmPassword}
             onChange={setConfirmPassword}
-            label="Confirm Password"
+            label={t("auth.confirmPassword")}
             type="password"
-            placeholder="Type confirm your password"
+            placeholder={t("auth.typeConfirmYourPassword")}
             useShowPassword
           />
         )}
@@ -139,14 +142,14 @@ export default function LoginPage() {
           className="text-slate-500 hover:text-slate-800 text-sm cursor-pointer text-end mt-2 mr-2"
           onClick={() => router.push(Urls.RECOVER_PASSWORD)}
         >
-          Recover password
+          {t("auth.recoverPassword")}
         </a>
 
         <button
           className="mt-4 bg-indigo-500 hover:bg-indigo-400 text-white rounded-lg py-3 px-4"
           onClick={handleLoginOrCreate}
         >
-          {mode === LoginEnum.Mode.LOGIN ? "Login" : "Create"}
+          {mode === LoginEnum.Mode.LOGIN ? t("auth.login") : t("common.create")}
         </button>
 
         <hr className="border-gray-300 my-6 w-full" />
@@ -164,7 +167,7 @@ export default function LoginPage() {
             height={40}
             className="mr-1"
           />
-          Enter with Google
+          {t("auth.enterWithGoogle")}
         </button>
 
         <button
@@ -174,13 +177,13 @@ export default function LoginPage() {
            flex justify-center items-center"
         >
           {IconUsers("mr-3")}
-          Enter as a Employee
+          {t("auth.enterAsEmployee")}
         </button>
 
         <p className="mt-8">
           {mode === LoginEnum.Mode.LOGIN
-            ? "Don`t you have a account?"
-            : "I have account already!"}
+            ? t("auth.dontHaveAccount")
+            : t("auth.haveAccountAlready")}
           <a
             className="text-blue-500 hover:text-blue-600 font-semibold cursor-pointer ml-2"
             onClick={() =>
@@ -192,8 +195,8 @@ export default function LoginPage() {
             }
           >
             {mode === LoginEnum.Mode.LOGIN
-              ? "Create your credentials"
-              : "Enter with my credentials"}
+              ? t("auth.createYourCredentials")
+              : t("auth.enterWithMyCredentials")}
           </a>
         </p>
       </form>

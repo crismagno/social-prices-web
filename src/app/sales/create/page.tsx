@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect, useState } from "react";
 
 import {
   Alert,
@@ -18,8 +15,8 @@ import {
   Select,
   Tooltip,
   UploadFile,
-} from 'antd';
-import { RcFile } from 'antd/es/upload';
+} from "antd";
+import { RcFile } from "antd/es/upload";
 import {
   filter,
   find,
@@ -29,21 +26,16 @@ import {
   map,
   reduce,
   some,
-} from 'lodash';
-import moment from 'moment';
-import {
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime';
+} from "lodash";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import {
   ReadonlyURLSearchParams,
   useRouter,
   useSearchParams,
-} from 'next/navigation';
-import {
-  SubmitHandler,
-  useForm,
-} from 'react-hook-form';
-import { z } from 'zod';
+} from "next/navigation";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
 
 import {
   CheckCircleOutlined,
@@ -52,8 +44,8 @@ import {
   QuestionCircleTwoTone,
   ShoppingCartOutlined,
   TableOutlined,
-} from '@ant-design/icons';
-import { zodResolver } from '@hookform/resolvers/zod';
+} from "@ant-design/icons";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   addressFormSchema,
@@ -62,115 +54,79 @@ import {
   stateCities,
   states,
   TAddressFormSchema,
-} from '../../../components/common/Addresses/Addresses';
-import {
-  DeliveryAddressMapButton,
-} from '../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton';
-import handleClientError
-  from '../../../components/common/HandleClientError/HandleClientError';
-import {
-  ImageOrDefault,
-} from '../../../components/common/ImageOrDefault/ImageOrDefault';
-import {
-  LabelBadgeCustomAntd,
-} from '../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd';
-import Loading from '../../../components/common/Loading/Loading';
-import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
-import {
-  StoreNameStatus,
-} from '../../../components/common/StoreNameStatus/StoreNameStatus';
-import {
-  TagTagCustomAntd,
-} from '../../../components/common/TagTagCustomAntd/TagTagCustomAntd';
-import {
-  CheckboxCustomAntd,
-} from '../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd';
-import {
-  InputCustomAntd,
-} from '../../../components/custom/antd/InputCustomAntd/InputCustomAntd';
-import {
-  SelectCustomAntd,
-} from '../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
-import {
-  TextareaCustomAntd,
-} from '../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd';
-import Layout from '../../../components/template/Layout/Layout';
-import useAuthData from '../../../data/context/auth/useAuthData';
-import useLanguageData from '../../../data/context/language/useLanguageData';
+} from "../../../components/common/Addresses/Addresses";
+import { DeliveryAddressMapButton } from "../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton";
+import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
+import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
+import { LabelBadgeCustomAntd } from "../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
+import Loading from "../../../components/common/Loading/Loading";
+import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+import { StoreNameStatus } from "../../../components/common/StoreNameStatus/StoreNameStatus";
+import { TagTagCustomAntd } from "../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
+import { CheckboxCustomAntd } from "../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd";
+import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
+import { SelectCustomAntd } from "../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { TextareaCustomAntd } from "../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
+import Layout from "../../../components/template/Layout/Layout";
+import useAuthData from "../../../data/context/auth/useAuthData";
+import useLanguageData from "../../../data/context/language/useLanguageData";
 import CreateSaleDto, {
   SalePaymentDto,
   SaleStoreDto,
   SaleStoreProductDto,
-} from '../../../services/social-prices-api/sales/dto/createSale.dto';
-import UpdateSaleDto
-  from '../../../services/social-prices-api/sales/dto/updateSale.dto';
-import UpdateSaleFilesDto
-  from '../../../services/social-prices-api/sales/dto/updateSaleFiles.dto';
-import {
-  serviceMethodsInstance,
-} from '../../../services/social-prices-api/service-methods';
-import {
-  ICustomer,
-} from '../../../shared/business/customers/customer.interface';
-import {
-  IProductItem,
-} from '../../../shared/business/product-items/product-items.interface';
-import { IProduct } from '../../../shared/business/products/products.interface';
+} from "../../../services/social-prices-api/sales/dto/createSale.dto";
+import UpdateSaleDto from "../../../services/social-prices-api/sales/dto/updateSale.dto";
+import UpdateSaleFilesDto from "../../../services/social-prices-api/sales/dto/updateSaleFiles.dto";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
+import { ICustomer } from "../../../shared/business/customers/customer.interface";
+import { IProductItem } from "../../../shared/business/product-items/product-items.interface";
+import { IProduct } from "../../../shared/business/products/products.interface";
 import {
   ISale,
   ISaleStore,
   ISaleStoreProduct,
-} from '../../../shared/business/sales/sale.interface';
-import SalesEnum from '../../../shared/business/sales/sales.enum';
-import AddressEnum from '../../../shared/business/shared/address/address.enum';
-import {
-  IAddress,
-} from '../../../shared/business/shared/address/address.interface';
-import {
-  CreateAddressDto,
-} from '../../../shared/business/shared/address/CreateAddress.dto';
-import PersonEnum from '../../../shared/business/shared/person/person.enum';
-import PhoneNumberEnum
-  from '../../../shared/business/shared/phone/phone-number.enum';
-import { IStore } from '../../../shared/business/stores/stores.interface';
-import TagsEnum from '../../../shared/business/tags/tags.enum';
-import { ITag } from '../../../shared/business/tags/tags.interface';
-import Urls from '../../../shared/common/routes-app/routes-app';
-import { sortArray } from '../../../shared/utils/array/array-functions';
-import DatesEnum from '../../../shared/utils/dates/dates.enum';
+} from "../../../shared/business/sales/sale.interface";
+import SalesEnum from "../../../shared/business/sales/sales.enum";
+import AddressEnum from "../../../shared/business/shared/address/address.enum";
+import { IAddress } from "../../../shared/business/shared/address/address.interface";
+import { CreateAddressDto } from "../../../shared/business/shared/address/CreateAddress.dto";
+import PersonEnum from "../../../shared/business/shared/person/person.enum";
+import PhoneNumberEnum from "../../../shared/business/shared/phone/phone-number.enum";
+import { IStore } from "../../../shared/business/stores/stores.interface";
+import TagsEnum from "../../../shared/business/tags/tags.enum";
+import { ITag } from "../../../shared/business/tags/tags.interface";
+import Urls from "../../../shared/common/routes-app/routes-app";
+import { sortArray } from "../../../shared/utils/array/array-functions";
+import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import {
   ICityMockData,
   ICountryMockData,
   IStateMockData,
-} from '../../../shared/utils/mock-data/interfaces';
+} from "../../../shared/utils/mock-data/interfaces";
 import {
   getPercentageByValue,
   getValueByPercentage,
-} from '../../../shared/utils/numbers/numbers';
-import { createAddressName } from '../../../shared/utils/strings/string';
-import { useFindStoresByUser } from '../../stores/useFindStoresByUser';
-import { useFindTagsByType } from '../../tags/useFindTagsByType';
-import { SaleExtraInfo } from '../components/SaleExtraInfo/SaleExtraInfo';
-import SalesTable from '../components/SalesTable/SalesTable';
-import { useFindSaleById } from '../useFindSaleById';
+} from "../../../shared/utils/numbers/numbers";
+import { createAddressName } from "../../../shared/utils/strings/string";
+import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
+import { useFindTagsByType } from "../../tags/useFindTagsByType";
+import { SaleExtraInfo } from "../components/SaleExtraInfo/SaleExtraInfo";
+import SalesTable from "../components/SalesTable/SalesTable";
+import { useFindSaleById } from "../useFindSaleById";
 import {
   AddProductsTable,
   IStoreProductToAddOnSale,
-} from './components/AddProductsTable/AddProductsTable';
-import { AddSaleFiles } from './components/AddSaleFiles/AddSaleFiles';
+} from "./components/AddProductsTable/AddProductsTable";
+import { AddSaleFiles } from "./components/AddSaleFiles/AddSaleFiles";
 import {
   generateNewSalePayment,
   salePaymentFormSchema,
   SalePayments,
   TSalePaymentFormSchema,
-} from './components/SalePayments/SalePayments';
-import {
-  SaleSummaryByCreate,
-} from './components/SaleSummaryByCreate/SaleSummaryByCreate';
-import { SelectCustomer } from './components/SelectCustomer/SelectCustomer';
-import {
-  SelectedProductsList,
-} from './components/SelectedProductsList/SelectedProductsList';
+} from "./components/SalePayments/SalePayments";
+import { SaleSummaryByCreate } from "./components/SaleSummaryByCreate/SaleSummaryByCreate";
+import { SelectCustomer } from "./components/SelectCustomer/SelectCustomer";
+import { SelectedProductsList } from "./components/SelectedProductsList/SelectedProductsList";
 
 export interface ISaleStoresProductsTotals {
   subtotal: number;
@@ -290,7 +246,7 @@ export default function CreateSalePage() {
   const { modal } = App.useApp();
 
   const { user, employee } = useAuthData();
-  
+
   const { t } = useLanguageData();
 
   const router: AppRouterInstance = useRouter();
@@ -298,7 +254,7 @@ export default function CreateSalePage() {
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
 
   const [saleIdByParam, setSaleIdByParam] = useState<string | null>(
-    searchParams.get("said")
+    searchParams.get("said"),
   );
 
   const customerIdByParam: string | null = searchParams.get("cid");
@@ -315,21 +271,21 @@ export default function CreateSalePage() {
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    TagsEnum.Type.SALE
+    TagsEnum.Type.SALE,
   );
 
   const isEditMode: boolean = !!saleIdByParam && !!saleById;
 
   const [formValues, setFormValues] = useState<TFormSchema>(
-    generateFormSchemaDefault()
+    generateFormSchemaDefault(),
   );
 
   const [selectedCustomer, setSelectedCustomer] = useState<ICustomer | null>(
-    null
+    null,
   );
 
   const [selectedAddressUid, setSelectedAddressUid] = useState<string | null>(
-    null
+    null,
   );
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -361,7 +317,7 @@ export default function CreateSalePage() {
     let firstAddress: IAddress | undefined = find(
       customer?.addresses,
       (customerAddress: IAddress) =>
-        includes(customerAddress.types, AddressEnum.Type.SHIPPING)
+        includes(customerAddress.types, AddressEnum.Type.SHIPPING),
     );
 
     firstAddress = firstAddress ?? customer?.addresses?.[0];
@@ -415,7 +371,7 @@ export default function CreateSalePage() {
 
         const customerBySale: ICustomer | null = customerId
           ? await serviceMethodsInstance.customersServiceMethods.findById(
-              customerId
+              customerId,
             )
           : null;
 
@@ -426,23 +382,23 @@ export default function CreateSalePage() {
         const saleByIdProductIds: string[] = flatMap(
           saleById.stores,
           (saleByIdStore: ISaleStore) =>
-            map(saleByIdStore.products, "productId")
+            map(saleByIdStore.products, "productId"),
         );
 
         const saleByIdProductItemIds: string[] = flatMap(
           saleById.stores,
           (saleByIdStore: ISaleStore) =>
-            map(saleByIdStore.products, "productItemId")
+            map(saleByIdStore.products, "productItemId"),
         );
 
         const products: IProduct[] =
           await serviceMethodsInstance.productsServiceMethods.findByIds(
-            saleByIdProductIds
+            saleByIdProductIds,
           );
 
         const productItems: IProductItem[] =
           await serviceMethodsInstance.productItemsServiceMethods.findByIds(
-            saleByIdProductItemIds
+            saleByIdProductItemIds,
           );
 
         const saleByIdSaleStores = map(
@@ -452,7 +408,7 @@ export default function CreateSalePage() {
             products: map(
               store.products,
               (
-                storeProduct: ISaleStoreProduct
+                storeProduct: ISaleStoreProduct,
               ): TSaleStoreProductFormSchema => {
                 const productItemId =
                   storeProduct.productItem?._id ?? storeProduct.productItemId;
@@ -461,7 +417,7 @@ export default function CreateSalePage() {
                   productItems,
                   {
                     _id: productItemId,
-                  }
+                  },
                 );
 
                 const product: IProduct | undefined = find(products, {
@@ -485,9 +441,9 @@ export default function CreateSalePage() {
                   sku: storeProduct.sku,
                   productItemId,
                 };
-              }
+              },
             ),
-          })
+          }),
         );
 
         setFormValues({
@@ -525,8 +481,8 @@ export default function CreateSalePage() {
           selectedStoreIds: saleById
             ? saleByIdStoreIds
             : stores.length > 1
-            ? [stores[0]._id]
-            : [],
+              ? [stores[0]._id]
+              : [],
           saleStores: saleByIdSaleStores,
           discount: saleById?.totals.discount
             ? {
@@ -583,7 +539,7 @@ export default function CreateSalePage() {
       const componentWillMountByProductItemIdParam = async () => {
         const productItem: IProductItem | null =
           await serviceMethodsInstance.productItemsServiceMethods.findById(
-            productItemIdByParam
+            productItemIdByParam,
           );
 
         if (productItem) {
@@ -623,7 +579,7 @@ export default function CreateSalePage() {
       const componentWillMountByProductIdParam = async () => {
         const product: IProduct | null =
           await serviceMethodsInstance.productsServiceMethods.findById(
-            productIdByParam
+            productIdByParam,
           );
 
         const productItemDefault: IProductItem | undefined =
@@ -670,7 +626,7 @@ export default function CreateSalePage() {
       const componentWillMountByCustomerIdParam = async () => {
         const customer: ICustomer | null =
           await serviceMethodsInstance.customersServiceMethods.findById(
-            customerIdByParam
+            customerIdByParam,
           );
 
         handleSelectCustomer(customer);
@@ -724,7 +680,7 @@ export default function CreateSalePage() {
   };
 
   const handleAddProductToSale = (
-    productToAddOnSale: IStoreProductToAddOnSale
+    productToAddOnSale: IStoreProductToAddOnSale,
   ) => {
     const storeProduct: TSaleStoreFormSchema | undefined = find(saleStores, {
       storeId: productToAddOnSale.storeId,
@@ -775,7 +731,7 @@ export default function CreateSalePage() {
   const handleRemoveAllProductByStore = (storeId: string) => {
     saleStores = filter(
       saleStores,
-      (saleStore: TSaleStoreFormSchema) => saleStore.storeId !== storeId
+      (saleStore: TSaleStoreFormSchema) => saleStore.storeId !== storeId,
     );
 
     setValue("saleStores", saleStores);
@@ -790,12 +746,12 @@ export default function CreateSalePage() {
       saleStore.products = filter(
         saleStore.products,
         (_, indexSaleStoreProduct: number) =>
-          indexSaleStoreProduct !== indexToRemove
+          indexSaleStoreProduct !== indexToRemove,
       );
     } else {
       saleStores = filter(
         saleStores,
-        (saleStore: TSaleStoreFormSchema) => saleStore.storeId !== storeId
+        (saleStore: TSaleStoreFormSchema) => saleStore.storeId !== storeId,
       );
     }
 
@@ -809,13 +765,13 @@ export default function CreateSalePage() {
       saleStores,
       (
         accSaleStore: ISaleStoresProductsTotals,
-        saleStore: TSaleStoreFormSchema
+        saleStore: TSaleStoreFormSchema,
       ) => {
         const productsQuantityPrice = reduce(
           saleStore.products,
           (
             accSaleStoreProduct: ISaleStoresProductsTotals,
-            saleStoreProduct: TSaleStoreProductFormSchema
+            saleStoreProduct: TSaleStoreProductFormSchema,
           ) => {
             if (!saleStoreProduct.isValid) {
               return accSaleStoreProduct;
@@ -829,7 +785,7 @@ export default function CreateSalePage() {
           {
             quantity: 0,
             subtotal: 0,
-          }
+          },
         );
 
         accSaleStore.quantity += productsQuantityPrice.quantity;
@@ -840,7 +796,7 @@ export default function CreateSalePage() {
       {
         quantity: 0,
         subtotal: 0,
-      }
+      },
     );
 
     return {
@@ -866,7 +822,7 @@ export default function CreateSalePage() {
   const getTotalFinal = (): number => {
     const shippingAmount: number =
       deliveryType === SalesEnum.DeliveryType.DELIVERY
-        ? watch("shipping.amount") ?? 0
+        ? (watch("shipping.amount") ?? 0)
         : 0;
 
     const taxAmount: number = watch("tax.amount") ?? 0;
@@ -886,7 +842,7 @@ export default function CreateSalePage() {
 
         return acc;
       },
-      0
+      0,
     );
 
     return total > 0 ? total : 0;
@@ -939,7 +895,7 @@ export default function CreateSalePage() {
   const updateSaleFiles = async (
     fileListToUpload: UploadFile[],
     updateSaleFilesDto: UpdateSaleFilesDto,
-    defaultSale: ISale
+    defaultSale: ISale,
   ): Promise<ISale> => {
     try {
       if (
@@ -966,7 +922,7 @@ export default function CreateSalePage() {
       }
 
       return serviceMethodsInstance.salesServiceMethods.updateSaleFiles(
-        formData
+        formData,
       );
     } catch {
       return defaultSale;
@@ -976,7 +932,7 @@ export default function CreateSalePage() {
   const create = async (createSaleDto: CreateSaleDto): Promise<ISale> => {
     const createdSale: ISale =
       await serviceMethodsInstance.salesServiceMethods.createManual(
-        createSaleDto
+        createSaleDto,
       );
 
     return await updateSaleFiles(
@@ -985,27 +941,27 @@ export default function CreateSalePage() {
         deletedFilesUrl: [],
         saleId: createdSale._id,
       },
-      createdSale
+      createdSale,
     );
   };
 
   const update = async (updateSaleDto: UpdateSaleDto): Promise<ISale> => {
     const updatedSale: ISale =
       await serviceMethodsInstance.salesServiceMethods.updateManual(
-        updateSaleDto
+        updateSaleDto,
       );
 
     const fileListToUpload: UploadFile<any>[] = fileList.filter(
-      (file) => file.originFileObj
+      (file) => file.originFileObj,
     );
 
     const deletedFilesUrl: string[] = filter(
       saleById!.filesUrl,
       (fileUrl: string) => {
         return !fileList.find(
-          (file) => file.name === fileUrl && !file.originFileObj
+          (file) => file.name === fileUrl && !file.originFileObj,
         );
-      }
+      },
     );
 
     return await updateSaleFiles(
@@ -1014,7 +970,7 @@ export default function CreateSalePage() {
         deletedFilesUrl,
         saleId: updatedSale._id,
       },
-      updatedSale
+      updatedSale,
     );
   };
 
@@ -1106,7 +1062,7 @@ export default function CreateSalePage() {
             provider: null,
             status: data.paymentStatus as SalesEnum.PaymentStatus,
             type: payment.type as SalesEnum.PaymentType,
-          })
+          }),
         ),
         paymentStatus: data.paymentStatus as SalesEnum.PaymentStatus,
         status: data.status as SalesEnum.Status,
@@ -1133,7 +1089,7 @@ export default function CreateSalePage() {
               saleStore.products,
               (
                 accSaleStoreProduct: ISaleStoresProductsTotals,
-                saleStoreProduct: TSaleStoreProductFormSchema
+                saleStoreProduct: TSaleStoreProductFormSchema,
               ) => {
                 if (!saleStoreProduct.isValid) {
                   return accSaleStoreProduct;
@@ -1147,7 +1103,7 @@ export default function CreateSalePage() {
               {
                 quantity: 0,
                 subtotal: 0,
-              }
+              },
             );
 
             const getTotalAfterDiscountByStore = (): number => {
@@ -1184,12 +1140,12 @@ export default function CreateSalePage() {
                   const saleStoreProductPercentage: number =
                     getPercentageByValue(
                       saleStoreProduct.price * saleStoreProduct.quantity,
-                      productsQuantityPrice.subtotal
+                      productsQuantityPrice.subtotal,
                     );
 
                   const discountByPercentage: number = getValueByPercentage(
                     saleStoreProductPercentage,
-                    dataDiscountAmountByStore
+                    dataDiscountAmountByStore,
                   );
 
                   return {
@@ -1201,7 +1157,7 @@ export default function CreateSalePage() {
                           }
                         : null,
                   };
-                }
+                },
               ),
               storeId: saleStore.storeId,
               totals: {
@@ -1219,7 +1175,7 @@ export default function CreateSalePage() {
                 totalFinalAmount: totalFinalAmountByStore,
               },
             };
-          }
+          },
         ),
         deliveryAt: data.deliveryAt ? moment(data.deliveryAt).toDate() : null,
         createdDate: data.createdDate
@@ -1325,6 +1281,7 @@ export default function CreateSalePage() {
                   >
                     See Summary
                   </Button>
+                </Tooltip>
 
                 <Tooltip title="Open create sale in a new tab">
                   <Button
@@ -1334,7 +1291,7 @@ export default function CreateSalePage() {
                     icon={<ShoppingCartOutlined />}
                     className="mx-2"
                   >
-                    {t('sales.createSale')}
+                    {t("sales.createSale")}
                   </Button>
                 </Tooltip>
 
@@ -1574,7 +1531,7 @@ export default function CreateSalePage() {
                     .find(
                       (stateCity: ICityMockData) =>
                         stateCity.stateCode ===
-                        watch("customer.address.stateCode")
+                        watch("customer.address.stateCode"),
                     )
                     ?.cities.map((city: string) => (
                       <Select.Option key={city} value={city}>
@@ -1659,7 +1616,7 @@ export default function CreateSalePage() {
             title={
               <div className="flex justify-between">
                 <div className="flex items-center">
-                  <label className="mr-2">{t('sales.selectProducts')}</label>
+                  <label className="mr-2">{t("sales.selectProducts")}</label>
 
                   <Tooltip
                     title="Here you can select what stores and products will be on sale, note: only will 
@@ -1822,7 +1779,7 @@ export default function CreateSalePage() {
                   <Tooltip title="Completed At">
                     <small className="ml-1 italic">
                       {moment(saleById.completedAt).format(
-                        DatesEnum.Format.DDMMYYYYhhmmss
+                        DatesEnum.Format.DDMMYYYYhhmmss,
                       )}
                     </small>
                   </Tooltip>
@@ -1856,7 +1813,7 @@ export default function CreateSalePage() {
                           }
                         />
                       </Select.Option>
-                    )
+                    ),
                   )}
                 </SelectCustomAntd>
               </Col>

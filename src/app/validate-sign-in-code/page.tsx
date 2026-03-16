@@ -11,6 +11,7 @@ import handleClientError from "../../components/common/HandleClientError/HandleC
 import HrCustom from "../../components/common/HrCustom/HrCustom";
 import { Logo1 } from "../../components/common/Logo/Logo1";
 import useAuthData from "../../data/context/auth/useAuthData";
+import useLanguageData from "../../data/context/language/useLanguageData";
 import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
 import Urls from "../../shared/common/routes-app/routes-app";
 
@@ -18,6 +19,8 @@ export default function ValidateSignInCodePage() {
   useForceRedirect();
 
   const { user, validateSignInCode, setUser } = useAuthData();
+
+  const { t } = useLanguageData();
 
   const router = useRouter();
 
@@ -33,7 +36,7 @@ export default function ValidateSignInCodePage() {
       if (!codeValue.trim()) {
         setCodeValue("");
 
-        message.warning("Please fill code value!");
+        message.warning(t("auth.pleaseFillCodeValue"));
 
         return;
       }
@@ -41,7 +44,7 @@ export default function ValidateSignInCodePage() {
       const isCodeValueValid: boolean = await validateSignInCode(codeValue);
 
       if (!isCodeValueValid) {
-        message.error("Code invalid");
+        message.error(t("auth.codeInvalid"));
       }
     } catch (error: any) {
       handleClientError(error);
@@ -69,12 +72,12 @@ export default function ValidateSignInCodePage() {
 
           <span className="text-xs text-center mt-1">{user?.email}</span>
 
-          <span className="text-lg text-center mt-4">Sign In Code</span>
+          <span className="text-lg text-center mt-4">{t("auth.signInCode")}</span>
 
           <input
             value={codeValue}
             onChange={(e) => setCodeValue(e.target.value)}
-            placeholder="Type your code here..."
+            placeholder={t("auth.typeYourCodeHere")}
             className="px-4 py-3 bg-gray-100 rounded-lg mt-8 w-full
               focus:bg-white focus:border-blue-100
               transition-all text-lg text-center"
@@ -92,7 +95,7 @@ export default function ValidateSignInCodePage() {
               width: 30,
             }}
           >
-            Send
+            {t("auth.send")}
           </ButtonCommon>
         </div>
 
@@ -108,7 +111,7 @@ export default function ValidateSignInCodePage() {
           type="button"
           disabled={isSubmitting}
         >
-          Go to login
+          {t("auth.goToLogin")}
         </ButtonCommon>
       </div>
 

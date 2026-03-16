@@ -12,10 +12,13 @@ import HrCustom from "../../components/common/HrCustom/HrCustom";
 import Loading from "../../components/common/Loading/Loading";
 import { Logo1 } from "../../components/common/Logo/Logo1";
 import useAuthData from "../../data/context/auth/useAuthData";
+import useLanguageData from "../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 
 export default function RecoverPasswordPage() {
   const { user } = useAuthData();
+
+  const { t } = useLanguageData();
 
   const router = useRouter();
 
@@ -38,7 +41,7 @@ export default function RecoverPasswordPage() {
 
       if (!email.trim()) {
         setCodeValue("");
-        message.warning("Please fill email.");
+        message.warning(t("auth.pleaseFillEmail"));
         return;
       }
 
@@ -48,9 +51,9 @@ export default function RecoverPasswordPage() {
 
       setIsSentRecoverPassword(true);
 
-      message.success("Code to recover password was sent to your email.");
+      message.success(t("auth.codeToRecoverPasswordSent"));
     } catch (error: any) {
-      message.error("Error when attempt send recover password code.");
+      message.error(t("auth.errorSendRecoverPasswordCode"));
     } finally {
       setIsSubmitting(false);
     }
@@ -63,7 +66,7 @@ export default function RecoverPasswordPage() {
       setIsSubmitting(true);
 
       if (!email.trim() || !codeValue.trim() || !newPassword.trim()) {
-        message.warning("Please fill input values.");
+        message.warning(t("auth.pleaseFillInputValues"));
         return;
       }
 
@@ -73,11 +76,11 @@ export default function RecoverPasswordPage() {
         newPassword,
       });
 
-      message.success("Your password has been reset.");
+      message.success(t("auth.passwordHasBeenReset"));
 
       router.back();
     } catch (error: any) {
-      message.error("Error when attempt recover password.");
+      message.error(t("auth.errorRecoverPassword"));
     } finally {
       setIsSubmitting(false);
     }
@@ -96,7 +99,7 @@ export default function RecoverPasswordPage() {
           w-full h-full p-3 shadow-2xl bg-white rounded-lg"
         >
           <span className="text-lg text-center mt-6 mb-4">
-            Recover Password
+            {t("auth.recoverPassword")}
           </span>
 
           <Avatar src={user?.avatar} alt="Image logo" width={100} />
@@ -105,9 +108,9 @@ export default function RecoverPasswordPage() {
             <AuthInput
               value={email}
               onChange={setEmail}
-              placeholder="Type your email"
+              placeholder={t("auth.typeYourEmail")}
               disabled={isSubmitting}
-              label="Email"
+              label={t("common.email")}
               divClassName="w-full"
             />
 
@@ -119,7 +122,7 @@ export default function RecoverPasswordPage() {
               {isSubmitting ? (
                 <Loading height={30} width={30} />
               ) : (
-                "Send recover password code"
+                t("auth.sendRecoverPasswordCode")
               )}
             </button>
           </form>
@@ -131,18 +134,18 @@ export default function RecoverPasswordPage() {
               <AuthInput
                 value={codeValue}
                 onChange={setCodeValue}
-                placeholder="Type code value"
+                placeholder={t("auth.typeCodeValue")}
                 disabled={isSubmitting}
-                label="Code"
+                label={t("auth.code")}
                 divClassName="w-full"
               />
 
               <AuthInput
                 value={newPassword}
                 onChange={setNewPassword}
-                placeholder="Type your new password"
+                placeholder={t("auth.typeYourNewPassword")}
                 disabled={isSubmitting}
-                label="New Password"
+                label={t("auth.newPassword")}
                 divClassName="w-full"
                 type="password"
                 useShowPassword
@@ -159,7 +162,7 @@ export default function RecoverPasswordPage() {
                   width: 30,
                 }}
               >
-                Recover
+                {t("auth.recover")}
               </ButtonCommon>
             </form>
           )}
@@ -173,7 +176,7 @@ export default function RecoverPasswordPage() {
           disabled={isSubmitting}
           color="primary"
         >
-          Go Back
+          {t("common.goBack")}
         </ButtonCommon>
       </div>
 

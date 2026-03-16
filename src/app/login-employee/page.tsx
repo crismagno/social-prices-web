@@ -14,6 +14,7 @@ import handleClientError from "../../components/common/HandleClientError/HandleC
 import Loading from "../../components/common/Loading/Loading";
 import { Logo1 } from "../../components/common/Logo/Logo1";
 import useAuthData from "../../data/context/auth/useAuthData";
+import useLanguageData from "../../data/context/language/useLanguageData";
 import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import { ISearchEmployee } from "../../shared/business/employees/employees.types";
@@ -23,6 +24,8 @@ export default function LoginPage() {
   useForceRedirect(Urls.LOGIN_EMPLOYEE);
 
   const { loginEmployee } = useAuthData();
+
+  const { t } = useLanguageData();
 
   const router = useRouter();
 
@@ -46,7 +49,7 @@ export default function LoginPage() {
       setSearchEmployees([]);
 
       if (!emailOrUsername) {
-        throw new Error("Please enter with your email or username!");
+        throw new Error(t("auth.pleaseEnterEmailOrUsername"));
       }
 
       const response: ISearchEmployee[] =
@@ -55,9 +58,7 @@ export default function LoginPage() {
         );
 
       if (response?.length === 0) {
-        message.error(
-          "Please enter with correct credential, email or username valid"
-        );
+        message.error(t("auth.pleaseEnterCorrectCredential"));
       }
 
       if (response.length === 1) {
@@ -79,11 +80,11 @@ export default function LoginPage() {
       setIsSubmitting(true);
 
       if (!selectedSearchEmployee?.employeeUsername) {
-        throw new Error("Selected employee invalid!");
+        throw new Error(t("auth.selectedEmployeeInvalid"));
       }
 
       if (!password) {
-        throw new Error("Please enter with your password!");
+        throw new Error(t("auth.pleaseEnterPassword"));
       }
 
       await loginEmployee(selectedSearchEmployee.employeeUsername, password);
@@ -117,16 +118,16 @@ export default function LoginPage() {
           <Logo1 />
         </div>
 
-        <h1 className="text-xl font-bold text-center">Enter as a Employee</h1>
+        <h1 className="text-xl font-bold text-center">{t("auth.enterAsEmployee")}</h1>
 
         {!selectedSearchEmployee && (
           <>
             <AuthInput
               value={emailOrUsername}
               onChange={setEmailOrUsername}
-              label="User"
+              label={t("auth.user")}
               type="text"
-              placeholder="Type email or username"
+              placeholder={t("auth.typeEmailOrUsername")}
             />
 
             {searchEmployees.length > 0 && (
@@ -164,7 +165,7 @@ export default function LoginPage() {
                       description={item.employeeEmail}
                     />
 
-                    <Tooltip title="Select Employee">
+                    <Tooltip title={t("auth.selectEmployee")}>
                       <Button
                         icon={<RightOutlined />}
                         onClick={() => setSelectedSearchEmployee(item)}
@@ -180,7 +181,7 @@ export default function LoginPage() {
               className="mt-4 bg-green-500 hover:bg-green-400 text-white rounded-lg py-3 px-4"
               onClick={handleSearchEmployee}
             >
-              Search
+              {t("common.search")}
             </button>
           </>
         )}
@@ -224,9 +225,9 @@ export default function LoginPage() {
             <AuthInput
               value={password}
               onChange={setPassword}
-              label="Password"
+              label={t("auth.password")}
               type="password"
-              placeholder="Type your password"
+              placeholder={t("auth.typeYourPassword")}
               useShowPassword
             />
 
@@ -234,14 +235,14 @@ export default function LoginPage() {
               className="mt-4 bg-indigo-500 hover:bg-indigo-400 text-white rounded-lg py-3 px-4 w-full"
               onClick={handleLoginEmployee}
             >
-              Login
+              {t("auth.login")}
             </button>
 
             <button
               className="mt-4 bg-green-500 hover:bg-green-400 text-white rounded-lg py-3 px-4 w-full"
               onClick={() => setSelectedSearchEmployee(null)}
             >
-              Back Search
+              {t("auth.backSearch")}
             </button>
           </div>
         )}
@@ -253,7 +254,7 @@ export default function LoginPage() {
             className="text-blue-500 hover:text-blue-600 font-semibold cursor-pointer ml-2"
             onClick={() => router.push(Urls.LOGIN)}
           >
-            Enter as a User?
+            {t("auth.enterAsUser")}
           </a>
         </p>
       </form>
