@@ -518,7 +518,8 @@
     "colors": "Cores",
     "productSubtitle": "Aqui podemos ver sobre o produto",
     "seeImage": "Ver imagem",
-    "productBarcode": "Código de barras do produto"
+    "productBarcode": "Código de barras do produto",
+    "productHistoricPrices": "Históricos de Preços do Produto"
   },
   "productItems": {
     "title": "Itens de Produto",

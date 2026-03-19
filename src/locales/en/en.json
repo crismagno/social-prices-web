@@ -520,7 +520,8 @@
     "colors": "Colors",
     "productSubtitle": "Here we can see about product",
     "seeImage": "See image",
-    "productBarcode": "Product Barcode"
+    "productBarcode": "Product Barcode",
+    "productHistoricPrices": "Product Historic Prices"
   },
   "productItems": {
     "title": "Product Items",
