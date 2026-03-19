@@ -4,6 +4,7 @@ import { Avatar, Select } from "antd";
 import { find } from "lodash";
 
 import { useFindProductsByUserTableState } from "../../../app/products/useFindProductsByUserTableState";
+import useLanguageData from "../../../data/context/language/useLanguageData";
 import { IProduct } from "../../../shared/business/products/products.interface";
 import { getImageUrl } from "../../../shared/utils/images/images-url";
 import ImagesEnum from "../../../shared/utils/images/images.enum";
@@ -29,6 +30,7 @@ const SelectProduct: React.FC<Props> = ({
   disabled,
   className,
 }) => {
+  const { t } = useLanguageData();
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<IProduct> | undefined
   >(
@@ -38,7 +40,7 @@ const SelectProduct: React.FC<Props> = ({
       filters: selectedProductId
         ? { productIds: [selectedProductId] }
         : undefined,
-    })
+    }),
   );
 
   const { products } = useFindProductsByUserTableState(tableStateRequest);
@@ -101,7 +103,7 @@ const SelectProduct: React.FC<Props> = ({
         filterOption={false}
         style={{ width: "100%" }}
         disabled={disabled}
-        placeholder="Select a product"
+        placeholder={t("products.selectProduct")}
         className={className}
       >
         {products?.map((product: IProduct) => (
