@@ -565,7 +565,10 @@
     "updatedAt": "Updated At",
     "action": "Action",
     "editProductItemTooltip": "Edit product item",
-    "goToProductItemTooltip": "Go to product item"
+    "goToProductItemTooltip": "Go to product item",
+    "productItemSubtitle": "Here we can see about product item",
+    "productItemBarcode": "Product Item Barcode",
+    "defaultItem": "Default Item"
   },
   "address": {
     "shippingAddress": "Shipping Address",

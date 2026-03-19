@@ -563,7 +563,10 @@
     "updatedAt": "Atualizado em",
     "action": "Ação",
     "editProductItemTooltip": "Editar item de produto",
-    "goToProductItemTooltip": "Ir para item de produto"
+    "goToProductItemTooltip": "Ir para item de produto",
+    "productItemSubtitle": "Aqui podemos ver sobre o item de produto",
+    "productItemBarcode": "Código de barras do item de produto",
+    "defaultItem": "Item Padrão"
   },
   "address": {
     "shippingAddress": "Endereço de Entrega",
