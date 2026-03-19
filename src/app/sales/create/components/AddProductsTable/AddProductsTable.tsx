@@ -474,7 +474,7 @@ export const AddProductsTable: React.FC<Props> = ({
                 return (
                   <Tooltip
                     key={storeId}
-                    title={`Add product by store "${store.name}"`}
+                    title={`${t("sales.addProductByStore")} "${store.name}"`}
                   >
                     <Button
                       size="middle"

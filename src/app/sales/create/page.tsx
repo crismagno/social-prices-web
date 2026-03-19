@@ -1219,7 +1219,7 @@ export default function CreateSalePage() {
           <Button
             type="primary"
             onClick={() => router.push(Urls.SALE.replace(":saleId", saleId))}
-            className="px-3 shadow-lg mr-2"
+            className="px-3 shadow-lg"
             icon={<EnterOutlined />}
           >
             {t("sales.sale")}

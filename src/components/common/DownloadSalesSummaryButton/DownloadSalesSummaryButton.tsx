@@ -7,6 +7,7 @@ import {
 
 import { DownloadOutlined } from '@ant-design/icons';
 
+import useLanguageData from '../../../data/context/language/useLanguageData';
 import {
   serviceMethodsInstance,
 } from '../../../services/social-prices-api/service-methods';
@@ -23,6 +24,8 @@ export const DownloadSalesSummaryButton: React.FC<Props> = ({
   buttonText,
 }) => {
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
+
+  const { t } = useLanguageData();
 
   const handleDownloadSaleSummaryPdf = async () => {
     try {
@@ -48,7 +51,7 @@ export const DownloadSalesSummaryButton: React.FC<Props> = ({
   };
 
   return (
-    <Tooltip title="Download sale summary">
+    <Tooltip title={t("sales.downloadSaleSummary")}>
       <Button
         onClick={handleDownloadSaleSummaryPdf}
         type="primary"

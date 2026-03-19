@@ -2,6 +2,8 @@ import { Checkbox, Col, Empty, Image, Row, Tooltip } from "antd";
 
 import { CheckCircleTwoTone, CloseCircleTwoTone } from "@ant-design/icons";
 
+import useLanguageData from "../../../../data/context/language/useLanguageData";
+
 import {
   ISale,
   ISaleStore,
@@ -18,6 +20,8 @@ interface Props {
 }
 
 export const SaleStoresProducts: React.FC<Props> = ({ sale }) => {
+  const { t } = useLanguageData();
+
   if (!sale) {
     return <Empty />;
   }
@@ -37,7 +41,7 @@ export const SaleStoresProducts: React.FC<Props> = ({ sale }) => {
           className={`flex items-center border-b-2 border-slate-100 mb-1 w-full`}
         >
           <label className="my-2 text-lg font-semibold mr-2">
-            <Tooltip title="Store Name">{store?.name ?? ""}</Tooltip>
+            <Tooltip title={t("stores.storeName")}>{store?.name ?? ""}</Tooltip>
           </label>
         </div>
 
@@ -46,7 +50,7 @@ export const SaleStoresProducts: React.FC<Props> = ({ sale }) => {
           className="p-1 px-2 bg-zinc-50 text-black font-semibold"
         >
           <Col xs={1}>
-            <Tooltip title="Mark product as completed">
+            <Tooltip title={t("sales.markProductAsCompleted")}>
               <CheckCircleTwoTone
                 twoToneColor={["green", "yellow"]}
                 style={{ fontSize: 18 }}
@@ -54,25 +58,25 @@ export const SaleStoresProducts: React.FC<Props> = ({ sale }) => {
             </Tooltip>
           </Col>
           <Col xs={1}>
-            <Tooltip title="Mark product as valid">
+            <Tooltip title={t("sales.markProductAsValid")}>
               <CloseCircleTwoTone
                 twoToneColor={["red", "orange"]}
                 style={{ fontSize: 18 }}
               />
             </Tooltip>
           </Col>
-          <Col xs={9}>Product</Col>
+          <Col xs={9}>{t("products.product")}</Col>
           <Col xs={3} className="text-center">
-            Quantity
+            {t("common.quantity")}
           </Col>
           <Col xs={4} className="text-center">
-            Price
+            {t("common.price")}
           </Col>
           <Col xs={3} className="text-center">
-            Total
+            {t("common.total")}
           </Col>
           <Col xs={2} className="text-center">
-            Action
+            {t("common.actions")}
           </Col>
         </Row>
 
@@ -115,13 +119,13 @@ export const SaleStoresProducts: React.FC<Props> = ({ sale }) => {
                 className={`border-b border-slate-100 p-2 ${rowBackgroundColor}`}
               >
                 <Col xs={1}>
-                  <Tooltip title="Is Completed?">
+                  <Tooltip title={t("sales.isCompleted")}>
                     <Checkbox checked={saleStoreProduct.isCompleted} />
                   </Tooltip>
                 </Col>
 
                 <Col xs={1}>
-                  <Tooltip title="Is Valid?">
+                  <Tooltip title={t("sales.isValid")}>
                     <Checkbox checked={saleStoreProduct.isValid} />
                   </Tooltip>
                 </Col>
@@ -152,10 +156,10 @@ export const SaleStoresProducts: React.FC<Props> = ({ sale }) => {
                       <span className="text-base">{name}</span>
 
                       <span className="text-xs">
-                        Barcode: {saleStoreProduct.barcode}
+                        {t("products.barcode")}: {saleStoreProduct.barcode}
                       </span>
                       <span className="text-xs">
-                        SKU: {saleStoreProduct.sku}
+                        {t("products.sku")}: {saleStoreProduct.sku}
                       </span>
                     </div>
                   </div>

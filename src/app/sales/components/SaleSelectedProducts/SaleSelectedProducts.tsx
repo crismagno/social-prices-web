@@ -49,9 +49,9 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
       title={
         <div className="flex justify-between">
           <div className="flex items-center">
-            <label className="mr-2">Selected Products</label>
+            <label className="mr-2">{t("sales.selectedProducts")}</label>
 
-            <Tooltip title="Here you can see what products has been selected for the sale.">
+            <Tooltip title={t("sales.selectedProductsTooltip")}>
               <QuestionCircleTwoTone />
             </Tooltip>
           </div>
@@ -66,10 +66,10 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
       <div className="mt-5">
         {/* Subtotal */}
         <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
-          <Col xs={4}>SubTotal:</Col>
+          <Col xs={4}>{t("common.subtotal")}:</Col>
 
           <Col xs={16} className="text-end">
-            <Tooltip title="Sum all prices products">
+            <Tooltip title={t("sales.sumAllPricesProducts")}>
               {formatToMoneyDecimal(sale.totals.subtotalAmount)}
             </Tooltip>
           </Col>
@@ -78,11 +78,11 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
         {/* Discount */}
         <Row className="border-b px-4 border-slate-100 p-2">
           <Col xs={4}>
-            <label className="font-semibold mr-2">Discount:</label>
+            <label className="font-semibold mr-2">{t("common.discount")}:</label>
           </Col>
 
           <Col xs={16} className="text-end">
-            <Tooltip title="Discount amount">
+            <Tooltip title={t("sales.discountAmount")}>
               -{" "}
               {formatToMoneyDecimal(
                 sale.totals.discount
@@ -93,7 +93,7 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
           </Col>
 
           <Col xs={24} className="py-2">
-            <label className="font-semibold">Note: </label>
+            <label className="font-semibold">{t("common.note")}: </label>
 
             <Tooltip title={sale.totals?.discount?.distributed?.note || ""}>
               <TextArea
@@ -106,10 +106,10 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
 
         {/* Total Discount */}
         <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
-          <Col xs={4}>Total After Discount:</Col>
+          <Col xs={4}>{t("sales.subtotalAfterDiscount")}</Col>
 
           <Col xs={16} className="text-end">
-            <Tooltip title="Sum total after all discounts">
+            <Tooltip title={t("sales.sumTotalAfterDiscounts")}>
               - {formatToMoneyDecimal(totalAfterDiscount)}
             </Tooltip>
           </Col>
@@ -119,11 +119,11 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
         {sale.header.deliveryType === SalesEnum.DeliveryType.DELIVERY && (
           <Row className="border-b px-4 border-slate-100 p-2">
             <Col xs={4}>
-              <label className="font-semibold mr-2">Shipping:</label>
+              <label className="font-semibold mr-2">{t("common.shipping")}:</label>
             </Col>
 
             <Col xs={16} className="text-end">
-              <Tooltip title="Shipping amount">
+              <Tooltip title={t("sales.shippingAmount")}>
                 {formatToMoneyDecimal(
                   sale.totals.shipping ? sale.totals.shipping.amount : 0
                 )}
@@ -131,7 +131,7 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
             </Col>
 
             <Col xs={24}>
-              <label className="font-semibold">Note: </label>
+              <label className="font-semibold">{t("common.note")}: </label>
 
               <Tooltip title={sale.totals?.shipping?.note || ""}>
                 <TextArea readOnly value={sale.totals?.shipping?.note || ""} />
@@ -143,11 +143,11 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
         {/* Tax */}
         <Row className="border-b px-4 border-slate-100 p-2">
           <Col xs={4}>
-            <label className="font-semibold mr-2">Tax:</label>
+            <label className="font-semibold mr-2">{t("common.tax")}:</label>
           </Col>
 
           <Col xs={16} className="text-end">
-            <Tooltip title="Tax amount">
+            <Tooltip title={t("sales.taxAmount")}>
               {formatToMoneyDecimal(
                 sale.totals.tax ? sale.totals.tax.amount : 0
               )}
@@ -155,7 +155,7 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
           </Col>
 
           <Col xs={24}>
-            <label className="font-semibold">Note: </label>
+            <label className="font-semibold">{t("common.note")}: </label>
 
             <Tooltip title={sale.totals?.tax?.note || ""}>
               <TextArea readOnly value={sale.totals?.tax?.note || ""} />
@@ -165,7 +165,7 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
 
         {/* Total */}
         <Row className="p-2 px-4 bg-emerald-50 text-black font-bold">
-          <Col xs={4}>Total:</Col>
+          <Col xs={4}>{t("common.total")}:</Col>
 
           <Col xs={9} className="text-end">
             <Tooltip title={t("sales.productQuantity")}>
@@ -173,7 +173,7 @@ export const SaleSelectedProducts: React.FC<Props> = ({ sale }) => {
             </Tooltip>
           </Col>
           <Col xs={7} className="text-end">
-            <Tooltip title="Sum all prices products">
+            <Tooltip title={t("sales.sumAllPricesProducts")}>
               {formatToMoneyDecimal(sale.totals.totalFinalAmount)}
             </Tooltip>
           </Col>

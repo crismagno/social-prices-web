@@ -4,6 +4,7 @@ import { Button, Divider, Input, message, Tooltip } from "antd";
 
 import { SendOutlined } from "@ant-design/icons";
 
+import useLanguageData from "../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import {
@@ -31,13 +32,15 @@ export const SendSaleSummary: React.FC<Props> = ({ sale }) => {
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+  const { t } = useLanguageData();
+
   if (!sale || !customer || !buyer) {
     return null;
   }
 
   const handleSendEmail = async () => {
     const messageLoading = message.loading(
-      "Sending sale summary message...",
+      t("sales.sendingSaleSummaryMessage"),
       0
     );
 
@@ -49,7 +52,7 @@ export const SendSaleSummary: React.FC<Props> = ({ sale }) => {
         toEmail: emailToSend,
       });
 
-      message.success("Sent Message!");
+      message.success(t("sales.sentMessage"));
     } catch (error) {
       handleClientError(error);
     } finally {
@@ -61,7 +64,7 @@ export const SendSaleSummary: React.FC<Props> = ({ sale }) => {
   return (
     <div className="w-full">
       <div className="flex">
-        <Tooltip title="Enter the email address where you want to send the sale summary">
+        <Tooltip title={t("sales.enterEmailToSendSaleSummary")}>
           <Input
             disabled={isSubmitting}
             className="mr-1 flex-1"
@@ -70,7 +73,7 @@ export const SendSaleSummary: React.FC<Props> = ({ sale }) => {
           />
         </Tooltip>
 
-        <Tooltip title="Send sale summary via email">
+        <Tooltip title={t("sales.sendSaleSummaryViaEmail")}>
           <Button
             loading={isSubmitting}
             disabled={isSubmitting}
