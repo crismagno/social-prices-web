@@ -29,6 +29,7 @@ import {
   formatToMoneyDecimal,
   parserMoney,
 } from "../../../../shared/utils/strings/string";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import SalesMissingPaymentLabel from "../SalesTable/SalesMissingPaymentLabel";
 
 export const salePaymentFormSchema = z.object({
@@ -62,6 +63,7 @@ export const UpdateSalePayments: React.FC<Props> = ({
   onCancel,
   onConfirm,
 }) => {
+  const { t } = useLanguageData();
   const [formValues, setFormValues] = useState<TFormUpdateSalePaymentsSchema>({
     payments:
       sale.payments.length > 0 ? sale.payments : [generateNewSalePayment()],
@@ -136,7 +138,7 @@ export const UpdateSalePayments: React.FC<Props> = ({
       title={
         <div className="flex justify-between">
           <div>
-            <label className="mr-2">Update Sale Payments: {sale.number}</label>
+            <label className="mr-2">{t("sales.updateSalePayments")}: {sale.number}</label>
           </div>
         </div>
       }
@@ -144,9 +146,9 @@ export const UpdateSalePayments: React.FC<Props> = ({
       <ContainerTitle
         title={
           <div className="flex items-center">
-            <label className="mr-4">Payments</label>
+            <label className="mr-4">{t("sales.payment")}</label>
 
-            <Tooltip title="Add a payment">
+            <Tooltip title={t("sales.addPayment")}>
               <ButtonCommon
                 onClick={(e) => {
                   e.preventDefault();
@@ -212,7 +214,7 @@ export const UpdateSalePayments: React.FC<Props> = ({
               </Col>
 
               <Col xs={2}>
-                <Tooltip title="Remove payment">
+                <Tooltip title={t("sales.removePayment")}>
                   <ButtonCommon
                     onClick={(e) => {
                       e.preventDefault();
@@ -238,15 +240,15 @@ export const UpdateSalePayments: React.FC<Props> = ({
         labelStyle={{ width: 200 }}
         className="sm:w-full"
       >
-        <Descriptions.Item label="Total" span={3}>
+        <Descriptions.Item label={t("common.total")} span={3}>
           {formatToMoneyDecimal(totalFinal)}
         </Descriptions.Item>
 
-        <Descriptions.Item label="Total Payment" span={3}>
+        <Descriptions.Item label={t("sales.totalPayment")} span={3}>
           {formatToMoneyDecimal(totalPayment)}
         </Descriptions.Item>
 
-        <Descriptions.Item label="Total After Payment" span={3}>
+        <Descriptions.Item label={t("sales.totalAfterPayment")} span={3}>
           {formatToMoneyDecimal(totalAfterPayment)}
 
           <SalesMissingPaymentLabel totalAfterPayment={totalAfterPayment} />
@@ -257,11 +259,11 @@ export const UpdateSalePayments: React.FC<Props> = ({
 
       <div className="flex justify-end">
         <Button type="default" className="mr-2" onClick={onCancel}>
-          Cancel
+          {t("common.cancel")}
         </Button>
 
         <Button type="primary" onClick={handleSubmit(onSubmit)}>
-          Confirm
+          {t("common.confirm")}
         </Button>
       </div>
     </Card>

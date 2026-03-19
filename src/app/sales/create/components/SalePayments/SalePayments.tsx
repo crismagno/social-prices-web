@@ -87,7 +87,7 @@ export const SalePayments: React.FC<Props> = ({
       title={
         <div className="flex">
           <label className="mr-2">{t("sales.payment")}</label>
-          <Tooltip title="Here you can create which payments were made on the purchase">
+          <Tooltip title={t("sales.paymentsTooltip")}>
             <QuestionCircleTwoTone />
           </Tooltip>
         </div>

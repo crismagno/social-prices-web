@@ -1244,7 +1244,11 @@ export default function CreateSalePage() {
 
   return (
     <Layout
-      subtitle={isEditMode ? t("sales.updateManualSaleSubtitle") : t("sales.createManualSaleSubtitle")}
+      subtitle={
+        isEditMode
+          ? t("sales.updateManualSaleSubtitle")
+          : t("sales.createManualSaleSubtitle")
+      }
       title={isEditMode ? t("sales.updateSale") : t("sales.createSale")}
       hasBackButton
     >
@@ -1259,7 +1263,9 @@ export default function CreateSalePage() {
           <div className="bg-white w-full py-3 px-5 rounded-md">
             <div className="flex justify-between w-full">
               <div>
-                <span className="text-lg mr-2">{t("sales.saleNumberLabel")}</span>
+                <span className="text-lg mr-2">
+                  {t("sales.saleNumberLabel")}
+                </span>
                 {saleById?.number ? (
                   <label className="font-bold text-lg">
                     {saleById?.number}
@@ -1616,9 +1622,7 @@ export default function CreateSalePage() {
                 <div className="flex items-center">
                   <label className="mr-2">{t("sales.selectProducts")}</label>
 
-                  <Tooltip
-                    title={t("sales.selectProductsTooltip")}
-                  >
+                  <Tooltip title={t("sales.selectProductsTooltip")}>
                     <QuestionCircleTwoTone />
                   </Tooltip>
                 </div>
@@ -1701,7 +1705,7 @@ export default function CreateSalePage() {
               </Col>
             </Row>
 
-            <Row>
+            <Row className="mt-2">
               <Col xs={24}>
                 <TextareaCustomAntd
                   controller={{ control, name: "note" }}
@@ -1915,7 +1919,9 @@ export default function CreateSalePage() {
           message={
             <div>
               <div>
-                {isEditMode ? t("sales.saleUpdatedSuccessfully") : t("sales.saleCreatedSuccessfully")}
+                {isEditMode
+                  ? t("sales.saleUpdatedSuccessfully")
+                  : t("sales.saleCreatedSuccessfully")}
               </div>
               <div>
                 {t("sales.saleNumberLabel")} <b>{sale?.number}</b>

@@ -77,10 +77,7 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
           title={t("sales.activateSale")}
           content={
             <div className="flex flex-col gap-4">
-              <p>
-                This sale is currently deleted. Do you want to activate it
-                again?
-              </p>
+              <p>{t("sales.saleCurrentlyDeleted")}</p>
 
               <Button
                 type="success"
@@ -128,7 +125,7 @@ export const SaleActiveOrDeletedTag: React.FC<Props> = ({
         title={t("sales.deleteSale")}
         content={
           <div className="flex flex-col gap-4">
-            <p>This sale is currently active. Do you want to delete it?</p>
+            <p>{t("sales.saleCurrentlyActive")}</p>
 
             <Button
               type="danger"

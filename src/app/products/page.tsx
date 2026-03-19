@@ -247,7 +247,7 @@ export default function ProductsPage() {
                     </div>
 
                     {quantity <= 0 ? (
-                      <Tooltip title="Needs to be filled stock">
+                      <Tooltip title={t("products.needsToBeFilledStock")}>
                         <QuestionCircleOutlined style={{ color: "orange" }} />
                       </Tooltip>
                     ) : null}

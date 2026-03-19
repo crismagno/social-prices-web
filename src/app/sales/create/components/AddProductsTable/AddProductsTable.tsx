@@ -493,7 +493,7 @@ export const AddProductsTable: React.FC<Props> = ({
             },
           },
         ]}
-        search={{ placeholder: "Search products.." }}
+        search={{ placeholder: t("products.searchProducts") }}
         loading={isLoading || isLoadingCategories || isLoadingTags}
         total={total}
         className="overflow-auto"

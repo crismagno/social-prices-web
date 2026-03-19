@@ -177,7 +177,7 @@ export default function SalePage() {
           >
             <Row gutter={[8, 8]}>
               <Col xs={24} md={4}>
-                <Tooltip title="See avatar">
+                <Tooltip title={t("profile.seeAvatar")}>
                   <ImageOrDefault width={110} src={customer?.avatar} />
                 </Tooltip>
               </Col>
@@ -325,7 +325,7 @@ export default function SalePage() {
                 />
 
                 <Description
-                  label="Description"
+                  label={t("common.description")}
                   description={buyerAddress?.description || "-"}
                 />
 
@@ -363,7 +363,7 @@ export default function SalePage() {
             title={
               <div className="flex">
                 <label className="mr-2">{t("sales.paymentConfirmation")}</label>
-                <Tooltip title="Here you can see sale payments information">
+                <Tooltip title={t("sales.salePaymentsInfoTooltip")}>
                   <QuestionCircleTwoTone />
                 </Tooltip>
               </div>
