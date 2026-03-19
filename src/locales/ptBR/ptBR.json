@@ -359,7 +359,14 @@
     "saleNumberLabel": "Número da Venda: ",
     "seeSummaryTooltip": "Ver resumo da venda",
     "openSalesTooltip": "Abrir Vendas",
-    "goToSalesTooltip": "Ir para Vendas"
+    "goToSalesTooltip": "Ir para Vendas",
+    "selectTypes": "Selecionar tipos",
+    "selectDeliveryTypes": "Selecionar tipos de entrega",
+    "selectStatus": "Selecionar status",
+    "selectPaymentStatus": "Selecionar status de pagamento",
+    "selectStores": "Selecionar lojas",
+    "selectTags": "Selecionar etiquetas",
+    "selectStatusActive": "Selecionar um status ativo"
   },
   "customers": {
     "title": "Clientes",

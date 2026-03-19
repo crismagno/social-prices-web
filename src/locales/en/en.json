@@ -361,7 +361,14 @@
     "saleNumberLabel": "Sale Number: ",
     "seeSummaryTooltip": "See sale summary",
     "openSalesTooltip": "Open Sales",
-    "goToSalesTooltip": "Go to Sales"
+    "goToSalesTooltip": "Go to Sales",
+    "selectTypes": "Select types",
+    "selectDeliveryTypes": "Select delivery types",
+    "selectStatus": "Select status",
+    "selectPaymentStatus": "Select payment status",
+    "selectStores": "Select stores",
+    "selectTags": "Select tags",
+    "selectStatusActive": "Select a status active"
   },
   "customers": {
     "title": "Customers",

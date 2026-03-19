@@ -203,7 +203,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
               controller={{ control, name: "types" }}
               label={t("sales.types")}
               errorMessage={errors.types?.message}
-              placeholder={"Select types"}
+              placeholder={t("sales.selectTypes")}
               mode="multiple"
               allowClear
             >
@@ -223,7 +223,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
               controller={{ control, name: "deliveryTypes" }}
               label={t("sales.deliveryTypes")}
               errorMessage={errors.deliveryTypes?.message}
-              placeholder={"Select delivery types"}
+              placeholder={t("sales.selectDeliveryTypes")}
               mode="multiple"
               allowClear
             >
@@ -249,7 +249,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
               controller={{ control, name: "status" }}
               label={t("sales.status")}
               errorMessage={errors.status?.message}
-              placeholder={"Select status"}
+              placeholder={t("sales.selectStatus")}
               mode="multiple"
               allowClear
             >
@@ -272,7 +272,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
               controller={{ control, name: "paymentStatus" }}
               label={t("sales.paymentStatus")}
               errorMessage={errors.paymentStatus?.message}
-              placeholder={"Select payment status"}
+              placeholder={t("sales.selectPaymentStatus")}
               mode="multiple"
               allowClear
             >
@@ -305,7 +305,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
               controller={{ control, name: "storeIds" }}
               label={t("sales.stores")}
               errorMessage={errors.storeIds?.message}
-              placeholder={"Select stores"}
+              placeholder={t("sales.selectStores")}
               mode="multiple"
               allowClear
             >
@@ -328,7 +328,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
               controller={{ control, name: "tagsIds" }}
               label={t("sales.tags")}
               errorMessage={errors.tagsIds?.message}
-              placeholder={"Select tags"}
+              placeholder={t("sales.selectTags")}
               mode="multiple"
               allowClear
             >
@@ -345,7 +345,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
               controller={{ control, name: "sortField" }}
               label={t("sales.sortField")}
               errorMessage={errors.sortField?.message}
-              placeholder={"Select sort field"}
+              placeholder={t("products.selectSortField")}
             >
               {Object.keys(SalesEnum.SortField).map((sortField: string) => (
                 <Select.Option key={sortField} value={sortField}>
@@ -360,7 +360,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
               controller={{ control, name: "sortOrder" }}
               label={t("sales.sortOrder")}
               errorMessage={errors.sortOrder?.message}
-              placeholder={"Select sort order"}
+              placeholder={t("products.selectSortOrder")}
             >
               {Object.keys(TableStateEnum.SortOrder).map(
                 (sortOrder: string) => (
@@ -381,7 +381,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
               controller={{ control, name: "isActive" }}
               label={t("sales.isActive")}
               errorMessage={errors.sortField?.message}
-              placeholder={"Select a status active"}
+              placeholder={t("sales.selectStatusActive")}
             >
               <Select.Option key={"BOTH"} value={null}>
                 <Tag>{t("sales.both")}</Tag>
