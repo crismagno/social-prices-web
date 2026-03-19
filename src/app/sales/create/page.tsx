@@ -857,18 +857,18 @@ export default function CreateSalePage() {
   const validatePayment = () => {
     if (totalAfterPayment !== 0) {
       modal.confirm({
-        title: "Confirm Payment",
+        title: t("sales.confirmPayment"),
         icon: <QuestionCircleTwoTone />,
         content: (
           <Alert
-            message={`Payment difference: $${totalAfterPayment.toFixed(2)}`}
-            description="Please confirm total after payment, and payment status?"
+            message={`${t("sales.paymentDifference")}: $${totalAfterPayment.toFixed(2)}`}
+            description={t("sales.confirmPaymentMessage")}
             type="warning"
             showIcon
           />
         ),
-        okText: "Confirm",
-        cancelText: "Cancel",
+        okText: t("common.confirm"),
+        cancelText: t("common.cancel"),
         onOk: () => {
           callHandleSubmit(false);
         },
@@ -1215,14 +1215,14 @@ export default function CreateSalePage() {
 
     if (saleId) {
       return (
-        <Tooltip title="Go to Sale">
+        <Tooltip title={t("sales.goToSale")}>
           <Button
             type="primary"
             onClick={() => router.push(Urls.SALE.replace(":saleId", saleId))}
             className="px-3 shadow-lg mr-2"
             icon={<EnterOutlined />}
           >
-            Sale
+            {t("sales.sale")}
           </Button>
         </Tooltip>
       );
@@ -1244,10 +1244,8 @@ export default function CreateSalePage() {
 
   return (
     <Layout
-      subtitle={
-        isEditMode ? "Update information for manual sale" : "Create manual sale"
-      }
-      title={isEditMode ? "Update Sale" : "Create Sale"}
+      subtitle={isEditMode ? t("sales.updateManualSaleSubtitle") : t("sales.createManualSaleSubtitle")}
+      title={isEditMode ? t("sales.updateSale") : t("sales.createSale")}
       hasBackButton
     >
       {isSubmitting && (
@@ -1261,7 +1259,7 @@ export default function CreateSalePage() {
           <div className="bg-white w-full py-3 px-5 rounded-md">
             <div className="flex justify-between w-full">
               <div>
-                <span className="text-lg mr-2">Sale Number: </span>
+                <span className="text-lg mr-2">{t("sales.saleNumberLabel")}</span>
                 {saleById?.number ? (
                   <label className="font-bold text-lg">
                     {saleById?.number}
@@ -1272,18 +1270,18 @@ export default function CreateSalePage() {
               <div>
                 {renderGoToSaleButton()}
 
-                <Tooltip title="See sale summary">
+                <Tooltip title={t("sales.seeSummaryTooltip")}>
                   <Button
                     type="primary"
                     className="ml-2"
                     onClick={() => setIsOpenSaleSummaryModal(true)}
                     icon={<EyeOutlined />}
                   >
-                    See Summary
+                    {t("sales.seeSummary")}
                   </Button>
                 </Tooltip>
 
-                <Tooltip title="Open create sale in a new tab">
+                <Tooltip title={t("sales.openCreateSaleTooltip")}>
                   <Button
                     type="primary"
                     href={Urls.SALES_CREATE}
@@ -1295,24 +1293,24 @@ export default function CreateSalePage() {
                   </Button>
                 </Tooltip>
 
-                <Tooltip title="Open Sales">
+                <Tooltip title={t("sales.openSalesTooltip")}>
                   <Button
                     type="primary"
                     onClick={() => setIsOpenSalesTable(true)}
                     icon={<TableOutlined />}
                     className="mr-2"
                   >
-                    Open Sales
+                    {t("sales.openSales")}
                   </Button>
                 </Tooltip>
 
-                <Tooltip title="Go to Sales">
+                <Tooltip title={t("sales.goToSalesTooltip")}>
                   <Button
                     type="primary"
                     onClick={() => router.push(Urls.SALES)}
                     icon={<TableOutlined />}
                   >
-                    Go to Sales
+                    {t("sales.goToSales")}
                   </Button>
                 </Tooltip>
               </div>
@@ -1335,7 +1333,7 @@ export default function CreateSalePage() {
           <Card
             title={
               <div className="flex">
-                <label className="mr-2">Customer </label>
+                <label className="mr-2">{t("sales.customer") + " "}</label>
                 {!isEditMode && (
                   <SelectCustomer onSelectCustomer={handleSelectCustomer} />
                 )}
@@ -1345,7 +1343,7 @@ export default function CreateSalePage() {
           >
             <Row gutter={[8, 8]}>
               <Col xs={24} md={4}>
-                <Tooltip title="See avatar">
+                <Tooltip title={t("profile.seeAvatar")}>
                   <ImageOrDefault width={110} src={selectedCustomer?.avatar} />
                 </Tooltip>
               </Col>
@@ -1353,28 +1351,28 @@ export default function CreateSalePage() {
               <Col xs={24} md={10}>
                 <InputCustomAntd
                   controller={{ control, name: "customer.name" }}
-                  label="Name"
+                  label={t("common.name")}
                   divClassName="mt-0"
-                  placeholder={"Enter customer name"}
+                  placeholder={t("sales.enterCustomerName")}
                   errorMessage={errors?.customer?.name?.message}
                   maxLength={200}
                 />
 
                 <InputCustomAntd
                   controller={{ control, name: "customer.email" }}
-                  label="Email"
+                  label={t("common.email")}
                   type="email"
                   divClassName="mt-1"
-                  placeholder={"Enter customer email"}
+                  placeholder={t("sales.enterCustomerEmail")}
                   errorMessage={errors?.customer?.email?.message}
                   maxLength={200}
                 />
 
                 <InputCustomAntd
                   controller={{ control, name: "customer.phoneNumber" }}
-                  label="Phone Number"
+                  label={t("sales.phoneNumber")}
                   divClassName="mt-1"
-                  placeholder={"Enter customer phone number"}
+                  placeholder={t("sales.enterCustomerPhone")}
                   errorMessage={errors?.customer?.phoneNumber?.message}
                   maxLength={200}
                 />
@@ -1383,17 +1381,17 @@ export default function CreateSalePage() {
               <Col xs={24} md={10}>
                 <InputCustomAntd
                   controller={{ control, name: "customer.birthDate" }}
-                  label="Birth Date"
+                  label={t("sales.birthDate")}
                   divClassName="mt-0"
                   type="date"
-                  placeholder={"Enter customer birthDate"}
+                  placeholder={t("sales.enterCustomerBirthDate")}
                   errorMessage={errors?.customer?.birthDate?.message}
                   maxLength={200}
                 />
 
                 <SelectCustomAntd
                   controller={{ control, name: "customer.gender" }}
-                  label="Gender"
+                  label={t("sales.gender")}
                   divClassName="mt-1"
                   errorMessage={errors.customer?.gender?.message}
                 >
@@ -1415,7 +1413,7 @@ export default function CreateSalePage() {
               <div className="flex justify-between">
                 <div className="flex">
                   <label className="mr-2">
-                    <span className="mr-2">Shipping Address</span>
+                    <span className="mr-2">{t("address.shippingAddress")}</span>
 
                     {customerAddress && (
                       <DeliveryAddressMapButton
@@ -1443,7 +1441,7 @@ export default function CreateSalePage() {
                       value={selectedAddressUid}
                     >
                       <Select.Option key={"NEW_ADDRESS"} value={null}>
-                        New Address
+                        {t("address.newAddress")}
                       </Select.Option>
 
                       {selectedCustomer?.addresses.map((address: IAddress) => (
@@ -1458,7 +1456,7 @@ export default function CreateSalePage() {
                 </div>
 
                 <div className="flex">
-                  <label className="mr-2">Delivery Type</label>
+                  <label className="mr-2">{t("sales.deliveryType")}</label>
 
                   <SelectCustomAntd
                     controller={{
@@ -1467,7 +1465,7 @@ export default function CreateSalePage() {
                     }}
                     divClassName="mt-0"
                     errorMessage={errors?.deliveryType?.message}
-                    placeholder={"Select delivery type"}
+                    placeholder={t("sales.selectDeliveryType")}
                     style={{ width: 150 }}
                   >
                     {Object.keys(SalesEnum.DeliveryType).map((type: string) => (
@@ -1496,8 +1494,8 @@ export default function CreateSalePage() {
                   }}
                   divClassName="mt-0"
                   errorMessage={errors?.customer?.address?.countryCode?.message}
-                  label="Country"
-                  placeholder={"Select country"}
+                  label={t("sales.country")}
+                  placeholder={t("address.selectCountry")}
                 >
                   {countries.map((country: ICountryMockData) => (
                     <Select.Option key={country.code} value={country.code}>
@@ -1509,9 +1507,9 @@ export default function CreateSalePage() {
                 <SelectCustomAntd
                   controller={{ control, name: `customer.address.stateCode` }}
                   errorMessage={errors?.customer?.address?.stateCode?.message}
-                  label="State"
+                  label={t("sales.state")}
                   divClassName="mt-1"
-                  placeholder={"Select state"}
+                  placeholder={t("address.selectState")}
                 >
                   {states.map((state: IStateMockData) => (
                     <Select.Option key={state.code} value={state.code}>
@@ -1523,9 +1521,9 @@ export default function CreateSalePage() {
                 <SelectCustomAntd
                   controller={{ control, name: `customer.address.city` }}
                   errorMessage={errors?.customer?.address?.city?.message}
-                  label="City"
+                  label={t("sales.city")}
                   divClassName="mt-1"
-                  placeholder={"Select city"}
+                  placeholder={t("address.selectCity")}
                 >
                   {stateCities
                     .find(
@@ -1544,27 +1542,27 @@ export default function CreateSalePage() {
               <Col xs={24} md={8}>
                 <InputCustomAntd
                   controller={{ control, name: "customer.address.address1" }}
-                  label="Address1"
+                  label={t("sales.address1")}
                   divClassName="mt-0"
-                  placeholder={"Enter address1"}
+                  placeholder={t("address.enterAddress1")}
                   errorMessage={errors?.customer?.address?.address1?.message}
                   maxLength={200}
                 />
 
                 <InputCustomAntd
                   controller={{ control, name: "customer.address.address2" }}
-                  label="Address2"
+                  label={t("sales.address2")}
                   divClassName="mt-1"
-                  placeholder={"Enter address2"}
+                  placeholder={t("address.enterAddress2")}
                   errorMessage={errors?.customer?.address?.address2?.message}
                   maxLength={200}
                 />
 
                 <InputCustomAntd
                   controller={{ control, name: "customer.address.district" }}
-                  label="District"
+                  label={t("sales.district")}
                   divClassName="mt-1"
-                  placeholder={"Enter district"}
+                  placeholder={t("address.enterDistrict")}
                   errorMessage={errors?.customer?.address?.district?.message}
                   maxLength={200}
                 />
@@ -1573,27 +1571,27 @@ export default function CreateSalePage() {
               <Col xs={24} md={8}>
                 <InputCustomAntd
                   controller={{ control, name: "customer.address.zip" }}
-                  label="Zipcode"
+                  label={t("sales.zipcode")}
                   divClassName="mt-0"
-                  placeholder={"Enter zip"}
+                  placeholder={t("address.enterZipcode")}
                   errorMessage={errors?.customer?.address?.zip?.message}
                   maxLength={200}
                 />
 
                 <InputCustomAntd
                   controller={{ control, name: "customer.address.description" }}
-                  label="Description"
+                  label={t("common.description")}
                   divClassName="mt-1"
-                  placeholder={"Enter description"}
+                  placeholder={t("placeholders.enterDescription")}
                   errorMessage={errors?.customer?.address?.description?.message}
                   maxLength={200}
                 />
 
                 <SelectCustomAntd
                   controller={{ control, name: `customer.address.types` }}
-                  label="Types"
+                  label={t("sales.types")}
                   divClassName="mt-1"
-                  placeholder={"Select types"}
+                  placeholder={t("sales.selectTypes")}
                   errorMessage={errors?.customer?.address?.types?.message?.toString()}
                   mode="multiple"
                 >
@@ -1619,20 +1617,19 @@ export default function CreateSalePage() {
                   <label className="mr-2">{t("sales.selectProducts")}</label>
 
                   <Tooltip
-                    title="Here you can select what stores and products will be on sale, note: only will 
-                  show products available in stores selected"
+                    title={t("sales.selectProductsTooltip")}
                   >
                     <QuestionCircleTwoTone />
                   </Tooltip>
                 </div>
 
                 <span className="flex">
-                  <label className="mr-2">Select Stores</label>
+                  <label className="mr-2">{t("stores.selectStores")}</label>
                   <SelectCustomAntd
                     allowClear
                     controller={{ control, name: "selectedStoreIds" }}
                     errorMessage={errors.selectedStoreIds?.message}
-                    placeholder={"Select stores"}
+                    placeholder={t("sales.selectStores")}
                     onClear={handleRemoveAllProduct}
                     onDeselect={(value: any) =>
                       handleRemoveAllProductByStore(value as string)
@@ -1694,7 +1691,7 @@ export default function CreateSalePage() {
           <Card
             title={
               <div className="flex justify-between">
-                <span>Confirmation</span>
+                <span>{t("sales.confirmation")}</span>
               </div>
             }
           >
@@ -1708,9 +1705,9 @@ export default function CreateSalePage() {
               <Col xs={24}>
                 <TextareaCustomAntd
                   controller={{ control, name: "note" }}
-                  label="Note"
+                  label={t("common.note")}
                   divClassName="mt-0"
-                  placeholder={"Enter any note if you need"}
+                  placeholder={t("placeholders.enterNote")}
                   errorMessage={errors?.note?.message}
                   maxLength={1000}
                 />
@@ -1721,9 +1718,9 @@ export default function CreateSalePage() {
               <Col xs={24}>
                 <TextareaCustomAntd
                   controller={{ control, name: "noteToCustomer" }}
-                  label="Note to Customer"
+                  label={t("sales.noteToCustomer")}
                   divClassName="mt-0"
-                  placeholder={"Enter any note if you need"}
+                  placeholder={t("placeholders.enterNote")}
                   errorMessage={errors?.noteToCustomer?.message}
                   maxLength={1000}
                 />
@@ -1734,10 +1731,10 @@ export default function CreateSalePage() {
               <Col xs={24}>
                 <SelectCustomAntd<ICustomer>
                   controller={{ control, name: "tagsIds" }}
-                  label="Tags"
+                  label={t("sales.tags")}
                   divClassName="mt-3"
                   errorMessage={errors.tagsIds?.message}
-                  placeholder={"Select tags"}
+                  placeholder={t("sales.selectTags")}
                   mode="multiple"
                 >
                   {sortArray(tags, "name").map((tag: ITag) => (
@@ -1756,9 +1753,9 @@ export default function CreateSalePage() {
                     control,
                     name: `status`,
                   }}
-                  label="Sale Status"
+                  label={t("sales.saleStatus")}
                   errorMessage={errors?.status?.message}
-                  placeholder={"Select sale status"}
+                  placeholder={t("sales.selectSaleStatus")}
                   style={{ width: "100%" }}
                 >
                   {Object.keys(SalesEnum.Status).map((status: string) => (
@@ -1776,7 +1773,7 @@ export default function CreateSalePage() {
                 </SelectCustomAntd>
 
                 {saleById?.completedAt && (
-                  <Tooltip title="Completed At">
+                  <Tooltip title={t("sales.completedAt")}>
                     <small className="ml-1 italic">
                       {moment(saleById.completedAt).format(
                         DatesEnum.Format.DDMMYYYYhhmmss,
@@ -1792,9 +1789,9 @@ export default function CreateSalePage() {
                     control,
                     name: `paymentStatus`,
                   }}
-                  label="Payment Status"
+                  label={t("sales.paymentStatus")}
                   errorMessage={errors?.status?.message}
-                  placeholder={"Select payment status"}
+                  placeholder={t("sales.selectPaymentStatus")}
                   style={{ width: "100%" }}
                 >
                   {Object.keys(SalesEnum.PaymentStatus).map(
@@ -1822,7 +1819,7 @@ export default function CreateSalePage() {
                 <Col xs={24} md={8}>
                   <CheckboxCustomAntd
                     controller={{ control, name: "isCreateQuote" }}
-                    label="Create Quote"
+                    label={t("sales.createQuote")}
                   />
                 </Col>
               )}
@@ -1832,10 +1829,10 @@ export default function CreateSalePage() {
               <Col xs={24} md={8} className="pr-5">
                 <InputCustomAntd
                   controller={{ control, name: "deliveryAt" }}
-                  label="Delivery Date"
+                  label={t("sales.deliveryDate")}
                   divClassName="mt-0"
                   type="date"
-                  placeholder={"Enter deliveryAt"}
+                  placeholder={t("sales.enterDeliveryAt")}
                   errorMessage={errors?.deliveryAt?.message}
                 />
               </Col>
@@ -1843,19 +1840,19 @@ export default function CreateSalePage() {
               <Col xs={24} md={8} className="pr-5">
                 <InputCustomAntd
                   controller={{ control, name: "createdDate" }}
-                  label="Created Date"
+                  label={t("sales.createdDate")}
                   divClassName="mt-0"
                   type="date"
-                  placeholder={"Enter created date"}
+                  placeholder={t("sales.enterCreatedDate")}
                   errorMessage={errors?.createdDate?.message}
                 />
               </Col>
               <Col xs={24} md={8} className="pr-5">
                 <InputCustomAntd
                   controller={{ control, name: "numberManual" }}
-                  label="Sale Number Manual"
+                  label={t("sales.saleNumberManual")}
                   divClassName="mt-0"
-                  placeholder={"Enter sale number manual"}
+                  placeholder={t("sales.enterSaleNumberManual")}
                   errorMessage={errors?.numberManual?.message}
                 />
               </Col>
@@ -1865,7 +1862,7 @@ export default function CreateSalePage() {
               <Col xs={24}>
                 <CheckboxCustomAntd
                   controller={{ control, name: "isSendCustomerNotifications" }}
-                  label="Send Customer Notifications"
+                  label={t("sales.sendCustomerNotifications")}
                   className="ml-1"
                 />
               </Col>
@@ -1880,7 +1877,7 @@ export default function CreateSalePage() {
                   onClick={() => callHandleSubmit(true)}
                   loading={isSubmitting}
                 >
-                  {isEditMode ? "SAVE" : "CREATE"} SALE
+                  {isEditMode ? t("sales.saveSale") : t("sales.createSaleBtn")}
                 </Button>
               </Col>
             </Row>
@@ -1889,7 +1886,7 @@ export default function CreateSalePage() {
       </Row>
 
       <Modal
-        title="Sale"
+        title={t("sales.sale")}
         closable={false}
         open={isOpenSaleSuccessfullyModal}
         cancelButtonProps={{ hidden: true }}
@@ -1901,13 +1898,13 @@ export default function CreateSalePage() {
               onClick={handleNewSaleAfterSubmit}
               icon={<ShoppingCartOutlined />}
             >
-              New Sale
+              {t("sales.newSale")}
             </Button>
 
             {renderGoToSaleButton()}
 
             <Button type="primary" onClick={() => router.push(Urls.SALES)}>
-              Go to Sales
+              {t("sales.goToSales")}
             </Button>
           </div>
         }
@@ -1918,10 +1915,10 @@ export default function CreateSalePage() {
           message={
             <div>
               <div>
-                Sale has been {isEditMode ? "updated" : "created"} successfully!
+                {isEditMode ? t("sales.saleUpdatedSuccessfully") : t("sales.saleCreatedSuccessfully")}
               </div>
               <div>
-                Sale Number: <b>{sale?.number}</b>
+                {t("sales.saleNumberLabel")} <b>{sale?.number}</b>
               </div>
             </div>
           }
@@ -1929,7 +1926,7 @@ export default function CreateSalePage() {
       </Modal>
 
       <Modal
-        title="Sale Summary"
+        title={t("sales.saleSummary")}
         open={isOpenSaleSummaryModal}
         cancelButtonProps={{ hidden: true }}
         onOk={() => setIsOpenSaleSummaryModal(false)}

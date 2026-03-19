@@ -105,11 +105,11 @@ export const SelectedProductsList: React.FC<Props> = ({
               className={`flex items-center border-b-2 border-slate-100 mb-1 w-full`}
             >
               <label className="my-2 text-lg font-semibold mr-2">
-                <Tooltip title="Store Name">{store?.name ?? ""}</Tooltip>
+                <Tooltip title={t("stores.storeName")}>{store?.name ?? ""}</Tooltip>
               </label>
 
               {saleStore.products.length > 1 ? (
-                <Tooltip title="Remove all products by store">
+                <Tooltip title={t("sales.removeAllProductsByStore")}>
                   <ButtonCommon
                     onClick={() =>
                       handleRemoveAllProductByStore(saleStore.storeId)
@@ -128,7 +128,7 @@ export const SelectedProductsList: React.FC<Props> = ({
               className="p-1 px-2 bg-zinc-50 text-black font-semibold"
             >
               <Col xs={1}>
-                <Tooltip title="Mark product as completed">
+                <Tooltip title={t("sales.markProductAsCompleted")}>
                   <CheckCircleTwoTone
                     twoToneColor={["green", "yellow"]}
                     style={{ fontSize: 18 }}
@@ -136,20 +136,20 @@ export const SelectedProductsList: React.FC<Props> = ({
                 </Tooltip>
               </Col>
               <Col xs={1}>
-                <Tooltip title="Mark product as valid">
+                <Tooltip title={t("sales.markProductAsValid")}>
                   <CloseCircleTwoTone
                     twoToneColor={["red", "orange"]}
                     style={{ fontSize: 18 }}
                   />
                 </Tooltip>
               </Col>
-              <Col xs={9}>Product</Col>
-              <Col xs={3}>Quantity</Col>
-              <Col xs={4}>Price</Col>
+              <Col xs={9}>{t("products.product")}</Col>
+              <Col xs={3}>{t("common.quantity")}</Col>
+              <Col xs={4}>{t("common.price")}</Col>
               <Col xs={3} className="text-center">
-                Total
+                {t("common.total")}
               </Col>
-              <Col xs={2}>Action</Col>
+              <Col xs={2}>{t("common.actions")}</Col>
             </Row>
 
             {saleStore.products?.map(
@@ -186,7 +186,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                     className={`border-b border-slate-100 p-2 ${rowBackgroundColor}`}
                   >
                     <Col xs={1}>
-                      <Tooltip title="Is Completed?">
+                      <Tooltip title={t("sales.isCompleted")}>
                         <CheckboxCustomAntd
                           controller={{
                             control,
@@ -197,7 +197,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                     </Col>
 
                     <Col xs={1}>
-                      <Tooltip title="Is Valid?">
+                      <Tooltip title={t("sales.isValid")}>
                         <CheckboxCustomAntd
                           controller={{
                             control,
@@ -235,11 +235,11 @@ export const SelectedProductsList: React.FC<Props> = ({
                           </span>
 
                           <span className="text-xs">
-                            Barcode: {saleStoreProduct.barcode}
+                            {`${t("products.barcode")}: ${saleStoreProduct.barcode}`}
                           </span>
 
                           <span className="text-xs">
-                            SKU: {saleStoreProduct.sku || ""}
+                            {`${t("products.sku")}: ${saleStoreProduct.sku || ""}`}
                           </span>
                         </div>
                       </div>
@@ -274,7 +274,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                     </Col>
 
                     <Col xs={2} className="flex items-center justify-center">
-                      <Tooltip title="Remove product">
+                      <Tooltip title={t("sales.removeProduct")}>
                         <ButtonCommon
                           onClick={() =>
                             handleRemoveProduct(
@@ -318,15 +318,15 @@ export const SelectedProductsList: React.FC<Props> = ({
       title={
         <div className="flex justify-between">
           <div className="flex items-center">
-            <label className="mr-2">Selected Products</label>
+            <label className="mr-2">{t("sales.selectedProducts")}</label>
 
-            <Tooltip title="Here you can see what products has been selected and also you can edit in same time the product price, quantity and also add a note for this product if you need">
+            <Tooltip title={t("sales.selectedProductsTooltip")}>
               <QuestionCircleTwoTone />
             </Tooltip>
           </div>
 
           {saleStores?.length > 1 ? (
-            <Tooltip title="Remove all products">
+            <Tooltip title={t("sales.removeAllProducts")}>
               <ButtonCommon
                 onClick={handleRemoveAllProduct}
                 color="transparent"
@@ -345,10 +345,10 @@ export const SelectedProductsList: React.FC<Props> = ({
       <div className="mt-5">
         {/* Subtotal */}
         <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
-          <Col xs={4}>SubTotal:</Col>
+          <Col xs={4}>{t("common.subtotal")}:</Col>
 
           <Col xs={17} className="text-end">
-            <Tooltip title="Sum all prices products" className="mr-4">
+            <Tooltip title={t("sales.sumAllPricesProducts")} className="mr-4">
               {formatToMoneyDecimal(subtotal)}
             </Tooltip>
           </Col>
@@ -357,9 +357,9 @@ export const SelectedProductsList: React.FC<Props> = ({
         {/* Discount */}
         <Row className="border-b px-4 border-slate-100 p-2">
           <Col xs={4}>
-            <label className="font-semibold mr-2">Discount:</label>
+            <label className="font-semibold mr-2">{t("common.discount")}:</label>
             {!watch("discount.show") ? (
-              <Tooltip title="Edit Discount">
+              <Tooltip title={t("sales.editDiscount")}>
                 <Button
                   icon={<EditOutlined />}
                   size="small"
@@ -370,7 +370,7 @@ export const SelectedProductsList: React.FC<Props> = ({
               </Tooltip>
             ) : (
               <Space.Compact>
-                <Tooltip title="Use Discount">
+                <Tooltip title={t("sales.useDiscount")}>
                   <Button
                     icon={<CheckOutlined />}
                     size="small"
@@ -380,7 +380,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                     }}
                   />
                 </Tooltip>
-                <Tooltip title="Remove Discount">
+                <Tooltip title={t("sales.removeDiscount")}>
                   <Button
                     icon={<CloseOutlined />}
                     size="small"
@@ -410,14 +410,14 @@ export const SelectedProductsList: React.FC<Props> = ({
                 }}
               />
             ) : (
-              <Tooltip title="Discount amount" className="mr-4">
+              <Tooltip title={t("sales.discountAmount")} className="mr-4">
                 - {formatToMoneyDecimal(watch("discount.amount") ?? 0)}
               </Tooltip>
             )}
           </Col>
 
           <Col xs={24} className="py-2">
-            <label className="font-semibold">Note: </label>
+            <label className="font-semibold">{t("common.note")}: </label>
             {watch("discount.show") ? (
               <TextareaCustomAntd
                 divClassName="w-full"
@@ -436,10 +436,10 @@ export const SelectedProductsList: React.FC<Props> = ({
 
         {/* Total Discount */}
         <Row className="p-2 px-4 bg-zinc-100 text-black font-bold">
-          <Col xs={5}>Total After Discount:</Col>
+          <Col xs={5}>{t("sales.subtotalAfterDiscount")}</Col>
 
           <Col xs={16} className="text-end">
-            <Tooltip title="Sum total after all discounts" className="mr-4">
+            <Tooltip title={t("sales.sumTotalAfterDiscounts")} className="mr-4">
               - {formatToMoneyDecimal(totalAfterDiscount)}
             </Tooltip>
           </Col>
@@ -449,10 +449,10 @@ export const SelectedProductsList: React.FC<Props> = ({
         {deliveryType === SalesEnum.DeliveryType.DELIVERY && (
           <Row className="border-b px-4 border-slate-100 p-2">
             <Col xs={4}>
-              <label className="font-semibold mr-2">Shipping:</label>
+              <label className="font-semibold mr-2">{t("common.shipping")}:</label>
 
               {!watch("shipping.show") ? (
-                <Tooltip title="Edit Shipping">
+                <Tooltip title={t("sales.editShipping")}>
                   <Button
                     icon={<EditOutlined />}
                     size="small"
@@ -463,7 +463,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                 </Tooltip>
               ) : (
                 <Space.Compact>
-                  <Tooltip title="Use Shipping">
+                  <Tooltip title={t("sales.useShipping")}>
                     <Button
                       icon={<CheckOutlined />}
                       size="small"
@@ -473,7 +473,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                       }}
                     />
                   </Tooltip>
-                  <Tooltip title="Remove Shipping">
+                  <Tooltip title={t("sales.removeShipping")}>
                     <Button
                       icon={<CloseOutlined />}
                       size="small"
@@ -502,14 +502,14 @@ export const SelectedProductsList: React.FC<Props> = ({
                   }}
                 />
               ) : (
-                <Tooltip title="Shipping amount" className="mr-4">
+                <Tooltip title={t("sales.shippingAmount")} className="mr-4">
                   {formatToMoneyDecimal(watch("shipping.amount") ?? 0)}
                 </Tooltip>
               )}
             </Col>
 
             <Col xs={24}>
-              <label className="font-semibold">Note: </label>
+              <label className="font-semibold">{t("common.note")}: </label>
               {watch("shipping.show") ? (
                 <TextareaCustomAntd
                   divClassName="w-full"
@@ -530,10 +530,10 @@ export const SelectedProductsList: React.FC<Props> = ({
         {/* Tax */}
         <Row className="border-b px-4 border-slate-100 p-2">
           <Col xs={4}>
-            <label className="font-semibold mr-2">Tax:</label>
+            <label className="font-semibold mr-2">{t("common.tax")}:</label>
 
             {!watch("tax.show") ? (
-              <Tooltip title="Edit Tax">
+              <Tooltip title={t("sales.editTax")}>
                 <Button
                   icon={<EditOutlined />}
                   size="small"
@@ -544,7 +544,7 @@ export const SelectedProductsList: React.FC<Props> = ({
               </Tooltip>
             ) : (
               <Space.Compact>
-                <Tooltip title="Use Tax">
+                <Tooltip title={t("sales.useTax")}>
                   <Button
                     icon={<CheckOutlined />}
                     size="small"
@@ -554,7 +554,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                     }}
                   />
                 </Tooltip>
-                <Tooltip title="Remove Tax">
+                <Tooltip title={t("sales.removeTax")}>
                   <Button
                     icon={<CloseOutlined />}
                     size="small"
@@ -583,14 +583,14 @@ export const SelectedProductsList: React.FC<Props> = ({
                 }}
               />
             ) : (
-              <Tooltip title="Tax amount" className="mr-4">
+              <Tooltip title={t("sales.taxAmount")} className="mr-4">
                 {formatToMoneyDecimal(watch("tax.amount") ?? 0)}
               </Tooltip>
             )}
           </Col>
 
           <Col xs={24}>
-            <label className="font-semibold">Note: </label>
+            <label className="font-semibold">{t("common.note")}: </label>
             {watch("tax.show") ? (
               <TextareaCustomAntd
                 divClassName="w-full"
@@ -609,7 +609,7 @@ export const SelectedProductsList: React.FC<Props> = ({
 
         {/* Total */}
         <Row className="p-2 px-4 bg-emerald-50 text-black font-bold">
-          <Col xs={5}>Total:</Col>
+          <Col xs={5}>{t("common.total")}:</Col>
 
           <Col xs={8} className="text-end">
             <Tooltip title={t("sales.productQuantity")}>
@@ -618,7 +618,7 @@ export const SelectedProductsList: React.FC<Props> = ({
           </Col>
 
           <Col xs={8} className="text-end">
-            <Tooltip title="Sum all prices products" className="mr-4">
+            <Tooltip title={t("sales.sumAllPricesProducts")} className="mr-4">
               {formatToMoneyDecimal(totalFinal)}
             </Tooltip>
           </Col>
