@@ -515,7 +515,10 @@
     "confirmCreateProduct": "Por favor, confirme se deseja criar um novo produto",
     "stores": "Lojas",
     "editImages": "Editar Imagens",
-    "colors": "Cores"
+    "colors": "Cores",
+    "productSubtitle": "Aqui podemos ver sobre o produto",
+    "seeImage": "Ver imagem",
+    "productBarcode": "Código de barras do produto"
   },
   "productItems": {
     "title": "Itens de Produto",

@@ -88,8 +88,8 @@ export default function ProductPage() {
 
   return (
     <Layout
-      subtitle={`Here we can see about product - ${product.name}`}
-      title="Product"
+      subtitle={`${t("products.productSubtitle")} - ${product.name}`}
+      title={t("products.product")}
       hasBackButton
     >
       <Card className="h-min-80 mt-2">
@@ -105,7 +105,7 @@ export default function ProductPage() {
               src={product.mainUrl}
               width={240}
               className="shadow-lg border-none cursor-pointer z-10 rounded-lg mt-10"
-              title="See image"
+              title={t("products.seeImage")}
             />
 
             <div className="mt-2">
@@ -131,22 +131,22 @@ export default function ProductPage() {
               {product.name}
             </h3>
 
-            <Tooltip title={"Product Barcode"}>
+            <Tooltip title={t("products.productBarcode")}>
               <Tag>{product.barcode}</Tag>
             </Tooltip>
           </Col>
 
           <Col xs={24} sm={14} md={19}>
             <ContainerTitle
-              title="Information"
+              title={t("stores.information")}
               extraHeader={
-                <Tooltip title="Edit product">
+                <Tooltip title={t("products.editProduct")}>
                   <Button
                     type="success"
                     icon={<EditOutlined />}
                     onClick={handleEditProduct}
                   >
-                    Edit
+                    {t("common.edit")}
                   </Button>
                 </Tooltip>
               }
@@ -159,23 +159,23 @@ export default function ProductPage() {
                     column={{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3 }}
                     size="small"
                   >
-                    <Descriptions.Item label="Name" span={3}>
+                    <Descriptions.Item label={t("common.name")} span={3}>
                       <span className="font-medium">{product.name}</span>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Barcode">
+                    <Descriptions.Item label={t("products.barcode")}>
                       <Tag color="blue">{product.barcode}</Tag>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="SKU">
+                    <Descriptions.Item label={t("products.sku")}>
                       <Tag color="purple">{product.sku || "-"}</Tag>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Brand">
+                    <Descriptions.Item label={t("products.brand")}>
                       {product.brand || "-"}
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Price">
+                    <Descriptions.Item label={t("common.price")}>
                       <div className="flex items-center gap-2">
                         <span className="font-semibold text-green-600">
                           {formatToMoneyDecimal(product.price)}
@@ -184,13 +184,13 @@ export default function ProductPage() {
                       </div>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Quantity">
+                    <Descriptions.Item label={t("common.quantity")}>
                       <Tag color={product.quantity > 0 ? "success" : "error"}>
                         {product.quantity}
                       </Tag>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Is Active">
+                    <Descriptions.Item label={t("products.isActive")}>
                       <Tag color={product.isActive ? "green" : "red"}>
                         <YesNo isTrue={product.isActive} />
                       </Tag>
@@ -201,13 +201,13 @@ export default function ProductPage() {
                 {/* Description & Details */}
                 <Col xs={24}>
                   <Descriptions bordered column={1} size="small">
-                    <Descriptions.Item label="Description">
+                    <Descriptions.Item label={t("common.description")}>
                       <div className="max-h-20 overflow-y-auto">
                         {product.description || "-"}
                       </div>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Details">
+                    <Descriptions.Item label={t("common.details")}>
                       <div className="max-h-20 overflow-y-auto">
                         {product.details || "-"}
                       </div>
@@ -218,7 +218,7 @@ export default function ProductPage() {
                 {/* Categories, Tags & Stores */}
                 <Col xs={24}>
                   <Descriptions bordered column={1} size="small">
-                    <Descriptions.Item label="Categories">
+                    <Descriptions.Item label={t("products.categories")}>
                       <div className="max-w-full overflow-x-auto py-1">
                         <div className="flex flex-wrap gap-1">
                           <TagCategoriesCustomAntd
@@ -230,7 +230,7 @@ export default function ProductPage() {
                       </div>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Tags">
+                    <Descriptions.Item label={t("products.tags")}>
                       <div className="max-w-full overflow-x-auto py-1">
                         <div className="flex flex-wrap gap-1">
                           <TagTagsCustomAntd
@@ -242,7 +242,7 @@ export default function ProductPage() {
                       </div>
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Stores">
+                    <Descriptions.Item label={t("products.stores")}>
                       <div className="max-w-full overflow-x-auto py-1">
                         <div className="flex flex-wrap gap-1">
                           <TagStoresCustomAntd
@@ -263,7 +263,7 @@ export default function ProductPage() {
                     column={{ xs: 1, sm: 2, md: 2, lg: 3, xl: 3 }}
                     size="small"
                   >
-                    <Descriptions.Item label="Release Date">
+                    <Descriptions.Item label={t("products.releaseDate")}>
                       {product.releaseDate
                         ? moment(product.releaseDate).format(
                             DatesEnum.Format.DDMMYYY
@@ -271,7 +271,7 @@ export default function ProductPage() {
                         : "-"}
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Expiration Date">
+                    <Descriptions.Item label={t("products.expirationDate")}>
                       {product.expirationDate
                         ? moment(product.expirationDate).format(
                             DatesEnum.Format.DDMMYYY
@@ -279,11 +279,11 @@ export default function ProductPage() {
                         : "-"}
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Upload Filename">
+                    <Descriptions.Item label={t("products.uploadFilename")}>
                       {product.uploadFilename || "-"}
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Created At">
+                    <Descriptions.Item label={t("sales.createdAt")}>
                       {product.createdAt
                         ? moment(product.createdAt).format(
                             DatesEnum.Format.DDMMYYYYhhmmss
@@ -291,7 +291,7 @@ export default function ProductPage() {
                         : "-"}
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="Updated At">
+                    <Descriptions.Item label={t("sales.updatedAt")}>
                       {product.updatedAt
                         ? moment(product.updatedAt).format(
                             DatesEnum.Format.DDMMYYYYhhmmss
@@ -305,7 +305,7 @@ export default function ProductPage() {
                 {product.QRCode && (
                   <Col xs={24}>
                     <Descriptions bordered column={1} size="small">
-                      <Descriptions.Item label="QR Code">
+                      <Descriptions.Item label={t("products.qrcode")}>
                         <div className="flex items-center gap-4">
                           <QRCode value={product.QRCode} size={100} />
                           <span className="text-gray-600">
@@ -321,7 +321,7 @@ export default function ProductPage() {
                 {product.colors && product.colors.length > 0 && (
                   <Col xs={24}>
                     <Descriptions bordered column={1} size="small">
-                      <Descriptions.Item label="Colors">
+                      <Descriptions.Item label={t("products.colors")}>
                         <div className="flex flex-wrap gap-2">
                           {product.colors.map(
                             (color: string, index: number) => (
@@ -354,58 +354,58 @@ export default function ProductPage() {
                       bordered
                       column={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
                       size="small"
-                      title="Dimensions"
+                      title={t("products.dimensions")}
                     >
                       {product.dimensions.size && (
-                        <Descriptions.Item label="Size">
+                        <Descriptions.Item label={t("products.size")}>
                           <Tag color="cyan">{product.dimensions.size}</Tag>
                         </Descriptions.Item>
                       )}
 
                       {(product.dimensions.height ?? 0) > 0 && (
-                        <Descriptions.Item label="Height">
+                        <Descriptions.Item label={t("products.height")}>
                           {product.dimensions.height} m
                         </Descriptions.Item>
                       )}
 
                       {(product.dimensions.width ?? 0) > 0 && (
-                        <Descriptions.Item label="Width">
+                        <Descriptions.Item label={t("products.width")}>
                           {product.dimensions.width} m
                         </Descriptions.Item>
                       )}
 
                       {(product.dimensions.length ?? 0) > 0 && (
-                        <Descriptions.Item label="Length">
+                        <Descriptions.Item label={t("products.length")}>
                           {product.dimensions.length} m
                         </Descriptions.Item>
                       )}
 
                       {(product.dimensions.depth ?? 0) > 0 && (
-                        <Descriptions.Item label="Depth">
+                        <Descriptions.Item label={t("products.depth")}>
                           {product.dimensions.depth} m
                         </Descriptions.Item>
                       )}
 
                       {(product.dimensions.diameter ?? 0) > 0 && (
-                        <Descriptions.Item label="Diameter">
+                        <Descriptions.Item label={t("products.diameter")}>
                           {product.dimensions.diameter} m
                         </Descriptions.Item>
                       )}
 
                       {(product.dimensions.thickness ?? 0) > 0 && (
-                        <Descriptions.Item label="Thickness">
+                        <Descriptions.Item label={t("products.thickness")}>
                           {product.dimensions.thickness} m
                         </Descriptions.Item>
                       )}
 
                       {(product.dimensions.volume ?? 0) > 0 && (
-                        <Descriptions.Item label="Volume">
+                        <Descriptions.Item label={t("products.volume")}>
                           {product.dimensions.volume} l
                         </Descriptions.Item>
                       )}
 
                       {(product.dimensions.weight ?? 0) > 0 && (
-                        <Descriptions.Item label="Weight">
+                        <Descriptions.Item label={t("products.weight")}>
                           {product.dimensions.weight} kg
                         </Descriptions.Item>
                       )}
