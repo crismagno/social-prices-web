@@ -8,8 +8,8 @@ import { Button, Drawer, Tooltip } from "antd";
 
 import { PlusOutlined } from "@ant-design/icons";
 
-import { IProduct } from "../../../../shared/business/products/products.interface";
 import useLanguageData from "../../../../data/context/language/useLanguageData";
+import { IProduct } from "../../../../shared/business/products/products.interface";
 import { ProductDetail } from "../ProductDetail/ProductDetail";
 
 interface Props {
@@ -18,6 +18,7 @@ interface Props {
   buttonProps?: {
     text?: any;
     icon?: any;
+    className?: string;
   };
 }
 
@@ -36,6 +37,7 @@ export const AddProductButton: React.FC<Props> = ({
           icon={buttonProps?.icon || <PlusOutlined />}
           type="primary"
           onClick={() => setOpen(true)}
+          className={buttonProps?.className}
         >
           {buttonProps?.text}
         </Button>

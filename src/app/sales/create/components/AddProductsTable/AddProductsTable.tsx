@@ -342,7 +342,7 @@ export const AddProductsTable: React.FC<Props> = ({
 
         <Col md={5} className="flex justify-end">
           <AddProductButton
-            buttonProps={{ text: t("sales.addProduct") }}
+            buttonProps={{ text: t("sales.product"), className: "ml-1" }}
             onCreate={handleAddProductToSaleByCreate}
           />
         </Col>
