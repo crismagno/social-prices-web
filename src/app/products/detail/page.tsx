@@ -10,26 +10,21 @@ import {
   message,
   Row,
   Tooltip,
-} from 'antd';
-import {
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime';
+} from "antd";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import {
   ReadonlyURLSearchParams,
   useRouter,
   useSearchParams,
-} from 'next/navigation';
+} from "next/navigation";
 
-import {
-  CheckCircleTwoTone,
-  EnterOutlined,
-} from '@ant-design/icons';
+import { CheckCircleTwoTone, EnterOutlined } from "@ant-design/icons";
 
-import Layout from '../../../components/template/Layout/Layout';
-import Urls from '../../../shared/common/routes-app/routes-app';
-import useLanguageData from '../../../data/context/language/useLanguageData';
-import { ProductDetail } from '../components/ProductDetail/ProductDetail';
-import { useFindProductById } from './useFindProductById';
+import Layout from "../../../components/template/Layout/Layout";
+import useLanguageData from "../../../data/context/language/useLanguageData";
+import Urls from "../../../shared/common/routes-app/routes-app";
+import { ProductDetail } from "../components/ProductDetail/ProductDetail";
+import { useFindProductById } from "./useFindProductById";
 
 export default function ProductDetailPage() {
   const { modal } = App.useApp();
@@ -70,28 +65,42 @@ export default function ProductDetailPage() {
 
   return (
     <Layout
-      subtitle={isEditMode ? t("products.editProductDetails") : t("products.newProductDetails")}
-      title={isEditMode ? `${t("products.editProduct")}: ${product?.name}` : t("products.newProduct")}
+      subtitle={
+        isEditMode
+          ? t("products.editProductDetails")
+          : t("products.newProductDetails")
+      }
+      title={
+        isEditMode
+          ? `${t("products.editProduct")}: ${product?.name}`
+          : t("products.newProduct")
+      }
       hasBackButton
     >
       <Card className="h-min-80 mt-2">
-        <Row gutter={24} justify={"end"}>
-          <Col>
-            <Tooltip title={t("products.goToProduct")}>
-              <Button
-                type="primary"
-                onClick={() =>
-                  router.push(Urls.PRODUCT.replace(":productId", product!._id))
-                }
-                icon={<EnterOutlined />}
-              >
-                {t("products.product")}
-              </Button>
-            </Tooltip>
-          </Col>
-        </Row>
+        {product && (
+          <>
+            <Row gutter={24} justify={"end"}>
+              <Col>
+                <Tooltip title={t("products.goToProduct")}>
+                  <Button
+                    type="primary"
+                    onClick={() =>
+                      router.push(
+                        Urls.PRODUCT.replace(":productId", product!._id),
+                      )
+                    }
+                    icon={<EnterOutlined />}
+                  >
+                    {t("products.product")}
+                  </Button>
+                </Tooltip>
+              </Col>
+            </Row>
 
-        <Divider className="mt-2" />
+            <Divider className="mt-2" />
+          </>
+        )}
 
         <ProductDetail
           productId={productId}

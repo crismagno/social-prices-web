@@ -352,8 +352,6 @@
     "state": "Estado",
     "city": "Cidade",
     "note": "Observação",
-    "types": "Tipos",
-    "tags": "Etiquetas",
     "status": "Status",
     "paymentConfirmation": "Pagamento",
     "editSaleInfo": "Editar venda",
@@ -444,6 +442,8 @@
   },
   "products": {
     "title": "Produtos",
+    "tags": "Etiquetas",
+    "categories": "Categorias",
     "seeProductHistoricPrices": "Ver Preços Históricos do Produto",
     "productName": "Nome do Produto",
     "barcode": "Código de Barras",
@@ -512,7 +512,10 @@
     "qrcode": "QRCode",
     "enterQuantity": "Digite a quantidade",
     "selectStores": "Selecionar lojas",
-    "confirmCreateProduct": "Por favor, confirme se deseja criar um novo produto"
+    "confirmCreateProduct": "Por favor, confirme se deseja criar um novo produto",
+    "stores": "Lojas",
+    "editImages": "Editar Imagens",
+    "colors": "Cores"
   },
   "productItems": {
     "title": "Itens de Produto",

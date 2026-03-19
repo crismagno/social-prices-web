@@ -354,8 +354,6 @@
     "state": "State",
     "city": "City",
     "note": "Note",
-    "types": "Types",
-    "tags": "Tags",
     "status": "Status",
     "paymentConfirmation": "Payment",
     "editSaleInfo": "Edit sale",
@@ -446,6 +444,8 @@
   },
   "products": {
     "title": "Products",
+    "tags": "Tags",
+    "categories": "Categories",
     "productName": "Product Name",
     "barcode": "Barcode",
     "sku": "SKU",
@@ -514,7 +514,10 @@
     "qrcode": "QRCode",
     "enterQuantity": "Enter quantity",
     "selectStores": "Select stores",
-    "confirmCreateProduct": "Please confirm if you want to create a new product"
+    "confirmCreateProduct": "Please confirm if you want to create a new product",
+    "stores": "Stores",
+    "editImages": "Edit Images",
+    "colors": "Colors"
   },
   "productItems": {
     "title": "Product Items",

@@ -12,13 +12,13 @@ import { TagCategoryCustomAntd } from "../../../../components/common/TagCategory
 import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
 import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import { ICategory } from "../../../../shared/business/categories/categories.interface";
 import ProductsEnum from "../../../../shared/business/products/products.enum";
 import { IFiltersDownloadProducts } from "../../../../shared/business/products/products.type";
 import { IStore } from "../../../../shared/business/stores/stores.interface";
 import { ITag } from "../../../../shared/business/tags/tags.interface";
-import useLanguageData from "../../../../data/context/language/useLanguageData";
 import TableStateEnum from "../../../../shared/utils/table/table-state.enum";
 
 const formSchema = z.object({
@@ -80,7 +80,7 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
 
       const response: Buffer =
         await serviceMethodsInstance.productsServiceMethods.downloadProducts(
-          data as IFiltersDownloadProducts
+          data as IFiltersDownloadProducts,
         );
 
       const url: string = window.URL.createObjectURL(new Blob([response]));
@@ -115,7 +115,7 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
           <Col xs={24} sm={8}>
             <SelectCustomAntd
               controller={{ control, name: "tagsIds" }}
-              label="Tags"
+              label={t("products.tags")}
               errorMessage={errors.tagsIds?.message}
               placeholder={t("products.selectTags")}
               mode="multiple"
@@ -132,7 +132,7 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
           <Col xs={24} sm={8}>
             <SelectCustomAntd
               controller={{ control, name: "categoriesIds" }}
-              label="Categories"
+              label={t("products.categories")}
               errorMessage={errors.categoriesIds?.message}
               placeholder={t("products.selectCategories")}
               mode="multiple"
@@ -149,7 +149,7 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
           <Col xs={24} sm={8}>
             <SelectCustomAntd
               controller={{ control, name: "storeIds" }}
-              label="Stores"
+              label={t("products.stores")}
               errorMessage={errors.storeIds?.message}
               placeholder={t("products.selectStores")}
               mode="multiple"
@@ -217,7 +217,7 @@ export const DownloadProductsDrawer: React.FC<Props> = ({
                       ]
                     }
                   </Select.Option>
-                )
+                ),
               )}
             </SelectCustomAntd>
           </Col>

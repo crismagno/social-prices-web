@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 
+import useLanguageData from "../../../data/context/language/useLanguageData";
 import { ColorPickerCustomAntd } from "../../custom/antd/ColorPickerCustomAntd/ColorPickerCustomAntd";
 import ContainerTitle from "../ContainerTitle/ContainerTitle";
 
@@ -26,6 +27,7 @@ export const MultiColors: React.FC<Props> = ({
   containerExtraHeader,
   disabled,
 }) => {
+  const { t } = useLanguageData();
   const { fields, append, remove } = useFieldArray({
     control,
     name: "colors",
@@ -47,7 +49,7 @@ export const MultiColors: React.FC<Props> = ({
     <ContainerTitle
       title={
         <div className="flex items-center">
-          <label className="mr-4">Colors</label>
+          <label className="mr-4">{t("products.colors")}</label>
 
           <Button
             type="primary"

@@ -45,6 +45,7 @@ import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomA
 import { InputNumberCustomAntd } from "../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import { TextareaCustomAntd } from "../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import CreateProductDto from "../../../../services/social-prices-api/products/dto/createProduct.dto";
 import UpdateProductDto from "../../../../services/social-prices-api/products/dto/updateProduct.dto";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
@@ -66,7 +67,6 @@ import {
 import { useFindCategoriesByType } from "../../../categories/useFindCategoriesByType";
 import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../../tags/useFindTagsByType";
-import useLanguageData from "../../../../data/context/language/useLanguageData";
 import { useFindProductById } from "../../detail/useFindProductById";
 
 const dimensionsFormSchema = z.object({
@@ -122,7 +122,7 @@ export const ProductDetail: React.FC<Props> = ({
     useFindCategoriesByType(CategoriesEnum.Type.PRODUCT);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    TagsEnum.Type.PRODUCT
+    TagsEnum.Type.PRODUCT,
   );
 
   const { product, isLoading } = useFindProductById(productId);
@@ -159,7 +159,7 @@ export const ProductDetail: React.FC<Props> = ({
           name: fileUrl,
           status: "done",
           url: getImageUrl(fileUrl),
-        })
+        }),
       );
 
       setFileList(productFilesUrlToFileList);
@@ -315,9 +315,9 @@ export const ProductDetail: React.FC<Props> = ({
           ? map(
               filter(
                 data.colors ?? [],
-                (c): c is { value: string } => !!c?.value
+                (c): c is { value: string } => !!c?.value,
               ),
-              (c) => parseColorPickerToHexString(c.value)
+              (c) => parseColorPickerToHexString(c.value),
             )
           : [],
         dimensions: data?.dimensions as any,
@@ -357,15 +357,15 @@ export const ProductDetail: React.FC<Props> = ({
       const deletedFilesUrl: string[] = product!.filesUrl.filter(
         (fileUrl: string) => {
           return !fileList.find(
-            (file) => file.name === fileUrl && !file.originFileObj
+            (file) => file.name === fileUrl && !file.originFileObj,
           );
-        }
+        },
       );
 
       const formData = new FormData();
 
       const fileListToUpload: UploadFile<any>[] = fileList.filter(
-        (file) => file.originFileObj
+        (file) => file.originFileObj,
       );
 
       for (var i = 0; i < fileListToUpload.length; i++) {
@@ -402,9 +402,9 @@ export const ProductDetail: React.FC<Props> = ({
           ? map(
               filter(
                 data.colors ?? [],
-                (c): c is { value: string } => !!c?.value
+                (c): c is { value: string } => !!c?.value,
               ),
-              (c) => parseColorPickerToHexString(c.value)
+              (c) => parseColorPickerToHexString(c.value),
             )
           : [],
         dimensions: data?.dimensions as any,
@@ -438,7 +438,7 @@ export const ProductDetail: React.FC<Props> = ({
           <label className={`text-sm`}>{t("products.images")}</label>
 
           <div className="mt-2 w-full overflow-auto">
-            <ImgCrop rotationSlider>
+            <ImgCrop rotationSlider modalTitle={t("products.editImages")}>
               <Upload
                 action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
                 listType="picture-card"
@@ -539,7 +539,7 @@ export const ProductDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <SelectCustomAntd<IProduct>
               controller={{ control, name: "storeIds" }}
-              label="Stores"
+              label={t("products.stores")}
               errorMessage={errors.storeIds?.message}
               placeholder={t("products.selectStores")}
               mode="multiple"
@@ -566,7 +566,7 @@ export const ProductDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <SelectCustomAntd<IProduct>
               controller={{ control, name: "categoriesIds" }}
-              label="Categories"
+              label={t("products.categories")}
               errorMessage={errors.categoriesIds?.message}
               placeholder={t("products.selectCategories")}
               mode="multiple"
@@ -582,7 +582,7 @@ export const ProductDetail: React.FC<Props> = ({
           <Col xs={24} md={8} sm={12} lg={8}>
             <SelectCustomAntd<IProduct>
               controller={{ control, name: "tagsIds" }}
-              label="Tags"
+              label={t("products.tags")}
               errorMessage={errors.tagsIds?.message}
               placeholder={t("products.selectTags")}
               mode="multiple"
