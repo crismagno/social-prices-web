@@ -134,7 +134,7 @@ namespace SalesEnum {
   };
 
   export const getDeliveryAtDifferenceDays = (
-    deliveryAt: Date | null
+    deliveryAt: Date | null,
   ): number => {
     if (!deliveryAt) {
       return 0;
@@ -178,12 +178,11 @@ namespace SalesEnum {
 
   export const StatusRed: Status[] = [Status.ERROR, Status.STOPPED];
 
-  export const SelectOptionsRangeDatePicker = Object.values(SortField).map(
-    (value) => ({
-      label: SalesEnum.SortFieldLabels[value],
+  export const SelectOptionsRangeDatePicker = (t: (key: string) => string) =>
+    Object.values(SortField).map((value) => ({
+      label: t(SalesEnum.SortFieldLabels[value]),
       value,
-    })
-  );
+    }));
 }
 
 export default SalesEnum;

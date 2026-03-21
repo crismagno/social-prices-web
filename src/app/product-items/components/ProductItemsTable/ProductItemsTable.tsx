@@ -198,7 +198,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
                 });
               }}
               select={{
-                options: ProductItemsEnum.SelectOptionsRangeDatePicker,
+                options: ProductItemsEnum.SelectOptionsRangeDatePicker(t),
                 value:
                   (tableStateRequest?.filters?.fieldDate as string) ||
                   ProductItemsEnum.SortField.createdAt,

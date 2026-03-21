@@ -19,14 +19,28 @@ namespace ProductItemsEnum {
     [SortField.quantity]: "common.quantity",
   };
 
-  export const SelectOptionsRangeDatePicker: {
+  export const SelectOptionsRangeDatePicker = (
+    t: (key: string) => string,
+  ): {
     label: string;
     value: SortField;
-  }[] = [
-    { label: SortFieldLabels[SortField.createdAt], value: SortField.createdAt },
-    { label: SortFieldLabels[SortField.updatedAt], value: SortField.updatedAt },
-    { label: SortFieldLabels[SortField.releaseDate], value: SortField.releaseDate },
-    { label: SortFieldLabels[SortField.expirationDate], value: SortField.expirationDate },
+  }[] => [
+    {
+      label: t(SortFieldLabels[SortField.createdAt]),
+      value: SortField.createdAt,
+    },
+    {
+      label: t(SortFieldLabels[SortField.updatedAt]),
+      value: SortField.updatedAt,
+    },
+    {
+      label: t(SortFieldLabels[SortField.releaseDate]),
+      value: SortField.releaseDate,
+    },
+    {
+      label: t(SortFieldLabels[SortField.expirationDate]),
+      value: SortField.expirationDate,
+    },
   ];
 }
 

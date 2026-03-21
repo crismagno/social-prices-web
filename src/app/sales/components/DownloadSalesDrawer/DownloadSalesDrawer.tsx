@@ -1,8 +1,6 @@
 import { useState } from "react";
 
 import { Button, Card, Col, Drawer, Row, Select, Tag } from "antd";
-
-import useLanguageData from "../../../../data/context/language/useLanguageData";
 import { map } from "lodash";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -19,6 +17,7 @@ import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd
 import YesNo from "../../../../components/common/YesNo/YesNo";
 import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import { IProductItem } from "../../../../shared/business/product-items/product-items.interface";
 import { IProduct } from "../../../../shared/business/products/products.interface";
@@ -121,7 +120,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
 
       const response: Buffer =
         await serviceMethodsInstance.salesServiceMethods.downloadSales(
-          data as IFiltersDownloadSales
+          data as IFiltersDownloadSales,
         );
 
       const url: string = window.URL.createObjectURL(new Blob([response]));
@@ -147,7 +146,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
               showTime
               labelClassName="font-normal"
               select={{
-                options: SalesEnum.SelectOptionsRangeDatePicker,
+                options: SalesEnum.SelectOptionsRangeDatePicker(t),
                 onChange: (value: string) => setValue("rangeField", value),
                 value: watch("rangeField")!,
               }}
@@ -156,7 +155,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
                   "rangeDate",
                   startDate === null || endDate === null
                     ? null
-                    : { startDate, endDate }
+                    : { startDate, endDate },
                 );
               }}
             />
@@ -192,7 +191,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
               onSelectProductItems={(selectProductItems: IProductItem[]) =>
                 setValue(
                   "selectedProductItemIds",
-                  map(selectProductItems, "_id")
+                  map(selectProductItems, "_id"),
                 )
               }
             />
@@ -233,9 +232,13 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
                     key={`download-filter-sales-delivery-type-${deliveryType}`}
                     value={deliveryType}
                   >
-                    {t(SalesEnum.DeliveryTypeLabels[deliveryType as SalesEnum.DeliveryType])}
+                    {t(
+                      SalesEnum.DeliveryTypeLabels[
+                        deliveryType as SalesEnum.DeliveryType
+                      ],
+                    )}
                   </Select.Option>
-                )
+                ),
               )}
             </SelectCustomAntd>
           </Col>
@@ -255,7 +258,9 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
                   value={status}
                 >
                   <LabelBadgeCustomAntd
-                    label={t(SalesEnum.StatusLabels[status as SalesEnum.Status])}
+                    label={t(
+                      SalesEnum.StatusLabels[status as SalesEnum.Status],
+                    )}
                     color={SalesEnum.StatusColors[status as SalesEnum.Status]}
                   />
                 </Select.Option>
@@ -279,7 +284,11 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
                     value={paymentStatus}
                   >
                     <LabelBadgeCustomAntd
-                      label={t(SalesEnum.PaymentStatusLabels[paymentStatus as SalesEnum.PaymentStatus])}
+                      label={t(
+                        SalesEnum.PaymentStatusLabels[
+                          paymentStatus as SalesEnum.PaymentStatus
+                        ],
+                      )}
                       color={
                         SalesEnum.PaymentStatusColors[
                           paymentStatus as SalesEnum.PaymentStatus
@@ -287,7 +296,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
                       }
                     />
                   </Select.Option>
-                )
+                ),
               )}
             </SelectCustomAntd>
           </Col>
@@ -341,7 +350,9 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
             >
               {Object.keys(SalesEnum.SortField).map((sortField: string) => (
                 <Select.Option key={sortField} value={sortField}>
-                  {t(SalesEnum.SortFieldLabels[sortField as SalesEnum.SortField])}
+                  {t(
+                    SalesEnum.SortFieldLabels[sortField as SalesEnum.SortField],
+                  )}
                 </Select.Option>
               ))}
             </SelectCustomAntd>
@@ -363,7 +374,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
                       ]
                     }
                   </Select.Option>
-                )
+                ),
               )}
             </SelectCustomAntd>
           </Col>

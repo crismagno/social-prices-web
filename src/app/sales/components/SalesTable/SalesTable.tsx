@@ -344,7 +344,7 @@ const SalesTable: React.FC<Props> = ({
               showTime
               onChange={handleFilterSaleByRangeDates}
               select={{
-                options: SalesEnum.SelectOptionsRangeDatePicker,
+                options: SalesEnum.SelectOptionsRangeDatePicker(t),
                 onChange: handleFilterSaleByRangeField,
                 value: tableStateRequest?.filters?.rangeField,
               }}
@@ -561,9 +561,11 @@ const SalesTable: React.FC<Props> = ({
               align: "center",
               filters: Object.keys(SalesEnum.DeliveryType).map(
                 (deliveryType: string) => ({
-                  text: t(SalesEnum.DeliveryTypeLabels[
-                    deliveryType as SalesEnum.DeliveryType
-                  ]),
+                  text: t(
+                    SalesEnum.DeliveryTypeLabels[
+                      deliveryType as SalesEnum.DeliveryType
+                    ],
+                  ),
                   value: deliveryType,
                 }),
               ),
@@ -627,9 +629,11 @@ const SalesTable: React.FC<Props> = ({
               align: "center",
               filters: Object.keys(SalesEnum.PaymentStatus).map(
                 (paymentStatus: string) => ({
-                  text: t(SalesEnum.PaymentStatusLabels[
-                    paymentStatus as SalesEnum.PaymentStatus
-                  ]),
+                  text: t(
+                    SalesEnum.PaymentStatusLabels[
+                      paymentStatus as SalesEnum.PaymentStatus
+                    ],
+                  ),
                   value: paymentStatus,
                 }),
               ),
