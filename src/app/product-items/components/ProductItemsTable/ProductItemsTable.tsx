@@ -438,7 +438,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               align: "center",
               filters: Object.keys(CommonEnum.YesNo).map((value: string) => ({
                 value: value === CommonEnum.YesNo.YES,
-                text: CommonEnum.YesNoLabels[value as CommonEnum.YesNo],
+                text: t(CommonEnum.YesNoLabels[value as CommonEnum.YesNo]),
               })),
               render: (isActive: boolean) => (
                 <Tag color={isActive ? "green" : "red"}>
@@ -453,7 +453,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               align: "center",
               filters: Object.keys(CommonEnum.YesNo).map((value: string) => ({
                 value: value === CommonEnum.YesNo.YES,
-                text: CommonEnum.YesNoLabels[value as CommonEnum.YesNo],
+                text: t(CommonEnum.YesNoLabels[value as CommonEnum.YesNo]),
               })),
               render: (isDefault: boolean) => (
                 <Tag color={isDefault ? "blue" : "gray"}>

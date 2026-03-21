@@ -216,7 +216,7 @@ export const SalesChart: React.FC<Props> = ({
           >
             {map(Object.keys(SalesEnum.Type), (type: SalesEnum.Type) => (
               <Select.Option key={type} value={type}>
-                {SalesEnum.TypeLabels[type]}
+                {t(SalesEnum.TypeLabels[type])}
               </Select.Option>
             ))}
           </Select>
@@ -238,7 +238,7 @@ export const SalesChart: React.FC<Props> = ({
           >
             {map(Object.keys(SalesEnum.Status), (status: SalesEnum.Status) => (
               <Select.Option key={status} value={status}>
-                <span className="mr-1">{SalesEnum.StatusLabels[status]}</span>
+                <span className="mr-1">{t(SalesEnum.StatusLabels[status])}</span>
 
                 <Badge color={SalesEnum.StatusColors[status]} />
               </Select.Option>
@@ -287,7 +287,7 @@ export const SalesChart: React.FC<Props> = ({
               (paymentStatus: SalesEnum.PaymentStatus) => (
                 <Select.Option key={paymentStatus} value={paymentStatus}>
                   <LabelBadgeCustomAntd
-                    label={SalesEnum.PaymentStatusLabels[paymentStatus]}
+                    label={t(SalesEnum.PaymentStatusLabels[paymentStatus])}
                     color={SalesEnum.PaymentStatusColors[paymentStatus]}
                   />
                 </Select.Option>
@@ -314,7 +314,7 @@ export const SalesChart: React.FC<Props> = ({
               Object.keys(SalesEnum.DeliveryType),
               (deliveryType: SalesEnum.DeliveryType) => (
                 <Select.Option key={deliveryType} value={deliveryType}>
-                  {SalesEnum.DeliveryTypeLabels[deliveryType]}
+                  {t(SalesEnum.DeliveryTypeLabels[deliveryType])}
                 </Select.Option>
               )
             )}

@@ -241,11 +241,11 @@ export default function SalePage() {
                         ]
                       }
                     >
-                      {
+                      {t(
                         PersonEnum.GenderLabels[
                           buyer?.gender as PersonEnum.Gender
-                        ]
-                      }
+                        ],
+                      )}
                     </Tag>
                   }
                 />
@@ -273,7 +273,7 @@ export default function SalePage() {
                   <label className="mr-2">{t("sales.deliveryType")}</label>
 
                   <Tag>
-                    {SalesEnum.DeliveryTypeLabels[sale.header.deliveryType]}
+                    {t(SalesEnum.DeliveryTypeLabels[sale.header.deliveryType])}
                   </Tag>
                 </div>
               </div>
@@ -332,7 +332,7 @@ export default function SalePage() {
                 <Description
                   label={t("sales.types")}
                   description={
-                    buyerAddress ? addressTypesToString(buyerAddress) : "-"
+                    buyerAddress ? addressTypesToString(buyerAddress, t) : "-"
                   }
                 />
               </Col>
@@ -428,7 +428,7 @@ export default function SalePage() {
                         color={SalesEnum.StatusColors[sale.status]}
                         className="w-fit h-fit"
                       >
-                        {SalesEnum.StatusLabels[sale.status]}
+                        {t(SalesEnum.StatusLabels[sale.status])}
                       </Tag>
 
                       {sale.completedAt && (
@@ -453,7 +453,7 @@ export default function SalePage() {
                       className="w-fit"
                       color={SalesEnum.PaymentStatusColors[sale.paymentStatus]}
                     >
-                      {SalesEnum.PaymentStatusLabels[sale.paymentStatus]}
+                      {t(SalesEnum.PaymentStatusLabels[sale.paymentStatus])}
                     </Tag>
                   }
                 />

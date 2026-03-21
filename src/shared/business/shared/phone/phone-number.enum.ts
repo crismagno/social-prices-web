@@ -7,10 +7,10 @@ namespace PhoneNumberEnum {
   }
 
   export const TypeLabels = {
-    [Type.MOBILE]: "Mobile",
-    [Type.HOME]: "Home",
-    [Type.BUSINESS]: "Business",
-    [Type.OTHER]: "Other",
+    [Type.MOBILE]: "common.mobile",
+    [Type.HOME]: "common.home",
+    [Type.BUSINESS]: "common.business",
+    [Type.OTHER]: "common.other",
   };
 
   export enum PhoneNumberMessenger {
@@ -21,10 +21,10 @@ namespace PhoneNumberEnum {
   }
 
   export const PhoneNumberMessengerLabels = {
-    [PhoneNumberMessenger.WHATSAPP]: "Whatsapp",
-    [PhoneNumberMessenger.TELEGRAM]: "Telegram",
-    [PhoneNumberMessenger.MESSENGER]: "Messenger",
-    [PhoneNumberMessenger.OTHER]: "Other",
+    [PhoneNumberMessenger.WHATSAPP]: "common.whatsapp",
+    [PhoneNumberMessenger.TELEGRAM]: "common.telegram",
+    [PhoneNumberMessenger.MESSENGER]: "common.messenger",
+    [PhoneNumberMessenger.OTHER]: "common.other",
   };
 }
 

@@ -9,12 +9,12 @@ namespace TagsEnum {
   }
 
   export const TypeLabels = {
-    [Type.STORE]: "Store",
-    [Type.SALE]: "Sale",
-    [Type.ANY]: "Any",
-    [Type.PRODUCT]: "Product",
-    [Type.CUSTOMER]: "Customer",
-    [Type.EMPLOYEE]: "Employee",
+    [Type.STORE]: "stores.store",
+    [Type.SALE]: "sales.sale",
+    [Type.ANY]: "common.any",
+    [Type.PRODUCT]: "products.product",
+    [Type.CUSTOMER]: "customers.customer",
+    [Type.EMPLOYEE]: "employees.employee",
   };
 
   export const defaultTagColor: string = "black";

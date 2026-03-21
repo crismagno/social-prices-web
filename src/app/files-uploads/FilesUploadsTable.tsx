@@ -98,15 +98,15 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
               align: "center",
               filters: Object.keys(FilesUploadsEnum.Status).map(
                 (status: string) => ({
-                  text: FilesUploadsEnum.StatusLabels[
+                  text: t(FilesUploadsEnum.StatusLabels[
                     status as FilesUploadsEnum.Status
-                  ],
+                  ]),
                   value: status,
                 })
               ),
               render: (status: FilesUploadsEnum.Status) => (
                 <Tag color={FilesUploadsEnum.StatusColors[status]}>
-                  {FilesUploadsEnum.StatusLabels[status]}
+                  {t(FilesUploadsEnum.StatusLabels[status])}
                 </Tag>
               ),
             },

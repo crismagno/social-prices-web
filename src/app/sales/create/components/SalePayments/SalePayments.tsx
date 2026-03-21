@@ -137,11 +137,11 @@ export const SalePayments: React.FC<Props> = ({
                             ]
                           }
                         >
-                          {
+                          {t(
                             SalesEnum.PaymentTypeLabels[
                               salePaymentType as SalesEnum.PaymentType
-                            ]
-                          }
+                            ],
+                          )}
                         </Tag>
                       </Select.Option>
                     ),

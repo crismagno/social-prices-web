@@ -1,4 +1,3 @@
-import AddressEnum from "../../business/shared/address/address.enum";
 import { IAddress } from "../../business/shared/address/address.interface";
 import PhoneNumberEnum from "../../business/shared/phone/phone-number.enum";
 import { IPhoneNumber } from "../../business/shared/phone/phone-number.interface";
@@ -7,25 +6,27 @@ import IUser from "../../business/users/user.interface";
 export const createComma = (str: string): string =>
   str?.trim() ? ", " + str : str;
 
-export const messengersToString = (messengers: string[]): string =>
+export const messengersToString = (
+  messengers: string[],
+  t: (key: string) => string
+): string =>
   messengers.reduce((acc, curr, index) => {
+    const label = t(
+      PhoneNumberEnum.PhoneNumberMessengerLabels[curr as PhoneNumberEnum.PhoneNumberMessenger]
+    );
     if (index !== 0) {
-      acc += `, ${
-        PhoneNumberEnum.PhoneNumberMessengerLabels[
-          curr as PhoneNumberEnum.PhoneNumberMessenger
-        ]
-      }`;
+      acc += `, ${label}`;
     } else {
-      acc =
-        PhoneNumberEnum.PhoneNumberMessengerLabels[
-          curr as PhoneNumberEnum.PhoneNumberMessenger
-        ];
+      acc = label;
     }
 
     return acc;
   }, "");
 
-export const createAddressName = (address: IAddress | any): string => {
+export const createAddressName = (
+  address: IAddress | any,
+  t: (key: string) => string
+): string => {
   let addressName: string = "";
 
   if (address.countryCode || address.country) {
@@ -53,17 +54,20 @@ export const createAddressName = (address: IAddress | any): string => {
   }
 
   if (address.types?.length) {
-    addressName += ` (${addressTypesToString(address)})`;
+    addressName += ` (${addressTypesToString(address, t)})`;
   }
 
   return addressName;
 };
 
-export const createPhoneNumberName = (phoneNumber: IPhoneNumber): string => {
+export const createPhoneNumberName = (
+  phoneNumber: IPhoneNumber,
+  t: (key: string) => string
+): string => {
   let phoneNumberName: string = "";
 
   if (phoneNumber?.type) {
-    phoneNumberName += PhoneNumberEnum.TypeLabels[phoneNumber.type];
+    phoneNumberName += t(PhoneNumberEnum.TypeLabels[phoneNumber.type]);
   }
 
   if (phoneNumber.number) {
@@ -75,7 +79,7 @@ export const createPhoneNumberName = (phoneNumber: IPhoneNumber): string => {
   }
 
   if (phoneNumber.messengers.length) {
-    phoneNumberName += `(${messengersToString(phoneNumber.messengers)})`;
+    phoneNumberName += `(${messengersToString(phoneNumber.messengers, t)})`;
   }
 
   return phoneNumberName;
@@ -98,16 +102,22 @@ export const formatToMoneyDecimal = (
   decimal: number = 2
 ): string => `R$ ${value?.toFixed(decimal) ?? 0}`;
 
-export const addressTypesToString = (address: IAddress): string =>
+export const addressTypesToString = (
+  address: IAddress,
+  t: (key: string) => string
+): string =>
   address?.types?.length
     ? address.types.reduce(
-        (acc: string, curr: AddressEnum.Type, index: number) => {
+        (acc: string, curr: string, index: number) => {
           const lastIndexElement: number = address.types.length - 1;
+          const label = t(
+            AddressEnum.TypesLabels[curr as AddressEnum.Type]
+          );
 
           if (index !== lastIndexElement) {
-            acc += `${AddressEnum.TypesLabels[curr]}, `;
+            acc += `${label}, `;
           } else if (index === lastIndexElement) {
-            acc += `${AddressEnum.TypesLabels[curr]}`;
+            acc += `${label}`;
           }
 
           return acc;

@@ -192,7 +192,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
             >
               {sortBy(Object.keys(TagsEnum.Type)).map((type: string) => (
                 <Select.Option key={type} value={type}>
-                  {TagsEnum.TypeLabels[type as TagsEnum.Type]}
+                  {t(TagsEnum.TypeLabels[type as TagsEnum.Type])}
                 </Select.Option>
               ))}
             </SelectCustomAntd>

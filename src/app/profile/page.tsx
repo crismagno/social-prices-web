@@ -105,7 +105,7 @@ export default function ProfilePage() {
               }
               className="mt-2"
             >
-              {UsersEnum.StatusLabels[user.status ?? UsersEnum.Status.PENDING]}
+              {t(UsersEnum.StatusLabels[user.status ?? UsersEnum.Status.PENDING])}
             </Tag>
           </Col>
 
@@ -151,10 +151,10 @@ export default function ProfilePage() {
                         }
                       >
                         {
-                          UsersEnum.ProviderLabels[
+                          t(UsersEnum.ProviderLabels[
                             user.loggedByAuthProvider ??
                               UsersEnum.Provider.OTHER
-                          ]
+                          ])
                         }
                       </Tag>
                     </Descriptions.Item>
@@ -173,9 +173,9 @@ export default function ProfilePage() {
                         }
                       >
                         {
-                          UsersEnum.ProviderLabels[
+                          t(UsersEnum.ProviderLabels[
                             user.authProvider ?? UsersEnum.Provider.OTHER
-                          ]
+                          ])
                         }
                       </Tag>
                     </Descriptions.Item>
@@ -189,9 +189,9 @@ export default function ProfilePage() {
                         }
                       >
                         {
-                          UsersEnum.StatusLabels[
+                          t(UsersEnum.StatusLabels[
                             user.status ?? UsersEnum.Status.PENDING
-                          ]
+                          ])
                         }
                       </Tag>
                     </Descriptions.Item>
@@ -240,9 +240,9 @@ export default function ProfilePage() {
                         }
                       >
                         {
-                          PersonEnum.GenderLabels[
+                          t(PersonEnum.GenderLabels[
                             user.gender ?? PersonEnum.Gender.OTHER
-                          ]
+                          ])
                         }
                       </Tag>
                     </Descriptions.Item>
@@ -275,7 +275,7 @@ export default function ProfilePage() {
                                 className="flex items-center gap-2 flex-wrap"
                               >
                                 <Tag color="blue">
-                                  {PhoneNumberEnum.TypeLabels[phone.type]}
+                                  {t(PhoneNumberEnum.TypeLabels[phone.type])}
                                 </Tag>
                                 <a
                                   href={`tel:${phone.number}`}
@@ -296,10 +296,9 @@ export default function ProfilePage() {
                                             color="green"
                                           >
                                             {
-                                              PhoneNumberEnum
-                                                .PhoneNumberMessengerLabels[
+                                              t(PhoneNumberEnum.PhoneNumberMessengerLabels[
                                                 messenger
-                                              ]
+                                              ])
                                             }
                                           </Tag>
                                         )
@@ -335,7 +334,7 @@ export default function ProfilePage() {
                                         typeIndex: number
                                       ) => (
                                         <Tag key={typeIndex} color="purple">
-                                          {AddressEnum.TypesLabels[type]}
+                                          {t(AddressEnum.TypesLabels[type])}
                                         </Tag>
                                       )
                                     )}

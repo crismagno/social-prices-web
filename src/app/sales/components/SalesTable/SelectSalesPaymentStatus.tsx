@@ -164,7 +164,7 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
               (paymentStatus: SalesEnum.PaymentStatus) => (
                 <Select.Option key={paymentStatus} value={paymentStatus}>
                   <LabelBadgeCustomAntd
-                    label={SalesEnum.PaymentStatusLabels[paymentStatus]}
+                    label={t(SalesEnum.PaymentStatusLabels[paymentStatus])}
                     color={SalesEnum.PaymentStatusColors[paymentStatus]}
                   />
                 </Select.Option>
@@ -201,7 +201,7 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
             color={SalesEnum.PaymentStatusColors[sale.paymentStatus]}
             className="mr-1"
           >
-            {SalesEnum.PaymentStatusLabels[sale.paymentStatus]}
+            {t(SalesEnum.PaymentStatusLabels[sale.paymentStatus])}
           </Tag>
           <Tooltip title={t("sales.edit")}>
             <Button

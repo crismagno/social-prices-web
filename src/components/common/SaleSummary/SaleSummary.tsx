@@ -4,6 +4,7 @@ import moment from "moment";
 
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
+import PersonEnum from "../../../shared/business/shared/person/person.enum";
 import {
   ISale,
   ISaleBuyer,
@@ -11,14 +12,12 @@ import {
   ISaleStore,
   ISaleStoreProduct,
 } from "../../../shared/business/sales/sale.interface";
-import SalesEnum from "../../../shared/business/sales/sales.enum";
 import {
   getQuantity,
   getTotalAfterDiscount,
   getTotalAfterPayment,
   getTotalPayment,
 } from "../../../shared/business/sales/sales.utils";
-import PersonEnum from "../../../shared/business/shared/person/person.enum";
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import { ITag } from "../../../shared/business/tags/tags.interface";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
@@ -197,13 +196,13 @@ export const SaleSummary: React.FC<Props> = ({ sale, stores, tags }) => {
           {buyer.birthDate
             ? moment(buyer.birthDate).format(DatesEnum.Format.MMDDYYYY)
             : ""}{" "}
-          / {PersonEnum.GenderLabels[customer.gender as PersonEnum.Gender]}
+          / {t(PersonEnum.GenderLabels[customer.gender as PersonEnum.Gender])}
         </label>
 
         <div className="text-center">
           <b>{t("address.shippingAddress")}: </b>
 
-          <span className="mr-1">{createAddressName(buyer.address)}</span>
+          <span className="mr-1">{createAddressName(buyer.address, t)}</span>
 
           <DeliveryAddressMapButton address={buyer.address} />
         </div>
@@ -213,7 +212,7 @@ export const SaleSummary: React.FC<Props> = ({ sale, stores, tags }) => {
 
       <div className="text-center">
         <b>{t("sales.deliveryType")}: </b>
-        <span>{SalesEnum.DeliveryTypeLabels[sale.header.deliveryType]}</span>
+        <span>{t(SalesEnum.DeliveryTypeLabels[sale.header.deliveryType])}</span>
       </div>
 
       <Divider />
@@ -273,7 +272,7 @@ export const SaleSummary: React.FC<Props> = ({ sale, stores, tags }) => {
             <div key={payment.type}>
               <div className="flex justify-between pr-10 mt-2">
                 <label className="font-semibold">
-                  {SalesEnum.PaymentTypeLabels[payment.type]}:{" "}
+                  {t(SalesEnum.PaymentTypeLabels[payment.type])}:{" "}
                 </label>
                 <label>{formatToMoneyDecimal(payment.amount)}</label>
               </div>
@@ -300,12 +299,12 @@ export const SaleSummary: React.FC<Props> = ({ sale, stores, tags }) => {
 
       <div className="flex justify-between pr-10 mt-2">
         <label className="font-semibold">{t("sales.saleStatus")}: </label>
-        <label>{SalesEnum.StatusLabels[sale.status]}</label>
+        <label>{t(SalesEnum.StatusLabels[sale.status])}</label>
       </div>
 
       <div className="flex justify-between pr-10 mt-2">
         <label className="font-semibold">{t("sales.paymentStatus")}: </label>
-        <label>{SalesEnum.PaymentStatusLabels[sale.paymentStatus]}</label>
+        <label>{t(SalesEnum.PaymentStatusLabels[sale.paymentStatus])}</label>
       </div>
 
       <div className="flex justify-between pr-10 mt-2">

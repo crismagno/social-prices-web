@@ -150,7 +150,7 @@ export const DownloadCustomersDrawer: React.FC<Props> = ({
               </Select.Option>
               {Object.keys(PersonEnum.Gender).map((gender: string) => (
                 <Select.Option key={gender} value={gender}>
-                  {PersonEnum.GenderLabels[gender as PersonEnum.Gender]}
+                  {t(PersonEnum.GenderLabels[gender as PersonEnum.Gender])}
                 </Select.Option>
               ))}
             </SelectCustomAntd>
@@ -165,11 +165,7 @@ export const DownloadCustomersDrawer: React.FC<Props> = ({
             >
               {Object.keys(CustomersEnum.SortField).map((sortField: string) => (
                 <Select.Option key={sortField} value={sortField}>
-                  {
-                    CustomersEnum.SortFieldLabels[
-                      sortField as CustomersEnum.SortField
-                    ]
-                  }
+                  {t(CustomersEnum.SortFieldLabels[sortField as CustomersEnum.SortField])}
                 </Select.Option>
               ))}
             </SelectCustomAntd>

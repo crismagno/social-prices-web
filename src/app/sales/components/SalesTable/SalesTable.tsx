@@ -545,12 +545,12 @@ const SalesTable: React.FC<Props> = ({
               key: "type",
               align: "center",
               filters: Object.keys(SalesEnum.Type).map((type: string) => ({
-                text: SalesEnum.TypeLabels[type as SalesEnum.Type],
+                text: t(SalesEnum.TypeLabels[type as SalesEnum.Type]),
                 value: type,
               })),
               render: (type: SalesEnum.Type) => (
                 <Tag color={SalesEnum.TypeColors[type]}>
-                  {SalesEnum.TypeLabels[type]}
+                  {t(SalesEnum.TypeLabels[type])}
                 </Tag>
               ),
             },
@@ -561,16 +561,16 @@ const SalesTable: React.FC<Props> = ({
               align: "center",
               filters: Object.keys(SalesEnum.DeliveryType).map(
                 (deliveryType: string) => ({
-                  text: SalesEnum.DeliveryTypeLabels[
+                  text: t(SalesEnum.DeliveryTypeLabels[
                     deliveryType as SalesEnum.DeliveryType
-                  ],
+                  ]),
                   value: deliveryType,
                 }),
               ),
               render: (_, sale: ISale) => (
                 <div className="flex">
                   <Tag className="mr-2">
-                    {SalesEnum.DeliveryTypeLabels[sale.header.deliveryType]}
+                    {t(SalesEnum.DeliveryTypeLabels[sale.header.deliveryType])}
                   </Tag>
 
                   {sale.buyer?.address && (
@@ -585,7 +585,7 @@ const SalesTable: React.FC<Props> = ({
               key: "status",
               align: "center",
               filters: Object.keys(SalesEnum.Status).map((status: string) => ({
-                text: SalesEnum.StatusLabels[status as SalesEnum.Status],
+                text: t(SalesEnum.StatusLabels[status as SalesEnum.Status]),
                 value: status,
               })),
               render: (_, sale: ISale) => {
@@ -597,7 +597,7 @@ const SalesTable: React.FC<Props> = ({
                       color={SalesEnum.StatusColors[sale.status]}
                       className="mr-1"
                     >
-                      {SalesEnum.StatusLabels[sale.status]}
+                      {t(SalesEnum.StatusLabels[sale.status])}
                     </Tag>
                   );
                 }
@@ -627,9 +627,9 @@ const SalesTable: React.FC<Props> = ({
               align: "center",
               filters: Object.keys(SalesEnum.PaymentStatus).map(
                 (paymentStatus: string) => ({
-                  text: SalesEnum.PaymentStatusLabels[
+                  text: t(SalesEnum.PaymentStatusLabels[
                     paymentStatus as SalesEnum.PaymentStatus
-                  ],
+                  ]),
                   value: paymentStatus,
                 }),
               ),
@@ -643,7 +643,7 @@ const SalesTable: React.FC<Props> = ({
                         color={SalesEnum.StatusColors[sale.status]}
                         className="mr-1"
                       >
-                        {SalesEnum.StatusLabels[sale.status]}
+                        {t(SalesEnum.StatusLabels[sale.status])}
                       </Tag>
 
                       <SalesMissingPaymentLabel sale={sale} />
@@ -796,7 +796,7 @@ const SalesTable: React.FC<Props> = ({
               align: "center",
               filters: Object.keys(CommonEnum.YesNo).map((value: string) => ({
                 value: value === CommonEnum.YesNo.YES,
-                text: CommonEnum.YesNoLabels[value as CommonEnum.YesNo],
+                text: t(CommonEnum.YesNoLabels[value as CommonEnum.YesNo]),
               })),
               render: (_, sale: ISale) => (
                 <Tag color={sale.softDelete ? "red" : "green"}>

@@ -437,7 +437,7 @@ export default function StoreDetailPage() {
                 {Object.keys(StoresEnum.Status).map((status: string) => (
                   <Select.Option key={status} value={status}>
                     <span className="mr-1">
-                      {StoresEnum.StatusLabel[status as StoresEnum.Status]}
+                      {t(StoresEnum.StatusLabel[status as StoresEnum.Status])}
                     </span>
                     <Badge
                       color={
@@ -499,7 +499,7 @@ export default function StoreDetailPage() {
               >
                 {Object.keys(StoresEnum.Type).map((type: string) => (
                   <Select.Option key={type} value={type}>
-                    {StoresEnum.TypeLabels[type as StoresEnum.Type]}
+                    {t(StoresEnum.TypeLabels[type as StoresEnum.Type])}
                   </Select.Option>
                 ))}
               </SelectCustomAntd>

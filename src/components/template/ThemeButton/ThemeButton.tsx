@@ -44,8 +44,8 @@ const ThemeButton: React.FC = () => {
         </span>
         <span>
           {theme === ThemeEnum.Theme.LIGHT
-            ? ThemeEnum.ThemeLabels[ThemeEnum.Theme.DARK]
-            : ThemeEnum.ThemeLabels[ThemeEnum.Theme.LIGHT]}
+            ? t(ThemeEnum.ThemeLabels[ThemeEnum.Theme.DARK])
+            : t(ThemeEnum.ThemeLabels[ThemeEnum.Theme.LIGHT])}
         </span>
       </button>
     </Tooltip>

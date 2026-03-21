@@ -8,9 +8,9 @@ namespace EmployeesEnum {
   }
 
   export const LevelLabels = {
-    [Level.ADMIN]: "Admin",
-    [Level.MASTER]: "Master",
-    [Level.EMPLOYEE]: "Employee",
+    [Level.ADMIN]: "common.admin",
+    [Level.MASTER]: "common.master",
+    [Level.EMPLOYEE]: "common.employee",
   };
 
   export const LevelColors = {
@@ -26,9 +26,9 @@ namespace EmployeesEnum {
   }
 
   export const StatusLabels = {
-    [Status.PENDING]: "Pending",
-    [Status.ACTIVE]: "Active",
-    [Status.STOPPED]: "Stopped",
+    [Status.PENDING]: "common.pending",
+    [Status.ACTIVE]: "common.active",
+    [Status.STOPPED]: "common.stopped",
   };
 
   export const StatusColors = {
@@ -43,8 +43,8 @@ namespace EmployeesEnum {
   }
 
   export const SortFieldLabels = {
-    [SortField.birthDate]: "Birth Date",
-    [SortField.createdAt]: "Created At",
+    [SortField.birthDate]: "common.birthDate",
+    [SortField.createdAt]: "sales.createdAt",
   };
 
   export const getLevelsByEmployeeLevel = (level: Level): string[] => {

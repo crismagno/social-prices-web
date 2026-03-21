@@ -211,11 +211,7 @@ export const DownloadProductItemsDrawer: React.FC<Props> = ({
               {Object.keys(ProductItemsEnum.SortField).map(
                 (sortField: string) => (
                   <Select.Option key={sortField} value={sortField}>
-                    {
-                      ProductItemsEnum.SortFieldLabels[
-                        sortField as ProductItemsEnum.SortField
-                      ]
-                    }
+                    {t(ProductItemsEnum.SortFieldLabels[sortField as ProductItemsEnum.SortField])}
                   </Select.Option>
                 )
               )}

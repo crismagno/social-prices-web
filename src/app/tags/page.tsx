@@ -89,11 +89,11 @@ export default function TagsPage() {
               key: "type",
               align: "center",
               filters: Object.keys(TagsEnum.Type).map((type: string) => ({
-                text: TagsEnum.TypeLabels[type as TagsEnum.Type],
+                text: t(TagsEnum.TypeLabels[type as TagsEnum.Type]),
                 value: type,
               })),
               render: (type: TagsEnum.Type) => (
-                <Tag>{TagsEnum.TypeLabels[type]}</Tag>
+                <Tag>{t(TagsEnum.TypeLabels[type])}</Tag>
               ),
             },
             {

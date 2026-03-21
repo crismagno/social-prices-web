@@ -193,7 +193,7 @@ export default function EmployeesPage() {
               key: "gender",
               align: "center",
               filters: Object.keys(PersonEnum.Gender).map((gender: string) => ({
-                text: PersonEnum.GenderLabels[gender as PersonEnum.Gender],
+                text: t(PersonEnum.GenderLabels[gender as PersonEnum.Gender]),
                 value: gender,
               })),
               render: (gender: PersonEnum.Gender | null) => (
@@ -202,7 +202,7 @@ export default function EmployeesPage() {
                     PersonEnum.GenderColors[gender ?? PersonEnum.Gender.OTHER]
                   }
                 >
-                  {PersonEnum.GenderLabels[gender ?? PersonEnum.Gender.OTHER]}
+                  {t(PersonEnum.GenderLabels[gender ?? PersonEnum.Gender.OTHER])}
                 </Tag>
               ),
             },
@@ -235,13 +235,13 @@ export default function EmployeesPage() {
               filters: EmployeesEnum.getLevelsByEmployeeLevel(
                 employee?.level!
               ).map((level: string) => ({
-                text: EmployeesEnum.LevelLabels[level as EmployeesEnum.Level],
+                text: t(EmployeesEnum.LevelLabels[level as EmployeesEnum.Level]),
                 value: level,
               })),
               align: "center",
               render: (level: EmployeesEnum.Level) => (
                 <Tag color={EmployeesEnum.LevelColors[level]}>
-                  {EmployeesEnum.LevelLabels[level]}
+                  {t(EmployeesEnum.LevelLabels[level])}
                 </Tag>
               ),
             },
@@ -250,9 +250,9 @@ export default function EmployeesPage() {
               dataIndex: "status",
               filters: Object.keys(EmployeesEnum.Status).map(
                 (status: string) => ({
-                  text: EmployeesEnum.StatusLabels[
-                    status as EmployeesEnum.Status
-                  ],
+                  text: t(
+                    EmployeesEnum.StatusLabels[status as EmployeesEnum.Status]
+                  ),
                   value: status,
                 })
               ),
@@ -260,7 +260,7 @@ export default function EmployeesPage() {
               align: "center",
               render: (status: EmployeesEnum.Status) => (
                 <Tag color={EmployeesEnum.StatusColors[status]}>
-                  {EmployeesEnum.StatusLabels[status]}
+                  {t(EmployeesEnum.StatusLabels[status])}
                 </Tag>
               ),
             },

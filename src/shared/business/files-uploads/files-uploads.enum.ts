@@ -15,10 +15,10 @@ namespace FilesUploadsEnum {
   }
 
   export const StatusLabels = {
-    [Status.PENDING]: "Pending",
-    [Status.PROCESSING]: "Processing",
-    [Status.COMPLETED]: "Completed",
-    [Status.ERROR]: "Error",
+    [Status.PENDING]: "filesUploads.pending",
+    [Status.PROCESSING]: "filesUploads.processing",
+    [Status.COMPLETED]: "filesUploads.completed",
+    [Status.ERROR]: "filesUploads.error",
   };
 
   export const StatusColors = {
@@ -29,11 +29,11 @@ namespace FilesUploadsEnum {
   };
 
   export const TypeLabels = {
-    [Type.UPLOAD_CUSTOMERS]: "Upload Customers",
-    [Type.UPLOAD_PRODUCTS]: "Upload Products",
-    [Type.UPLOAD_PRODUCT_ITEMS]: "Upload Product Items",
-    [Type.UPLOAD_EMPLOYEES]: "Upload Employees",
-    [Type.UPLOAD_SALES]: "Upload Sales",
+    [Type.UPLOAD_CUSTOMERS]: "filesUploads.uploadCustomers",
+    [Type.UPLOAD_PRODUCTS]: "filesUploads.uploadProducts",
+    [Type.UPLOAD_PRODUCT_ITEMS]: "filesUploads.uploadProductItems",
+    [Type.UPLOAD_EMPLOYEES]: "filesUploads.uploadEmployees",
+    [Type.UPLOAD_SALES]: "filesUploads.uploadSales",
   };
 }
 

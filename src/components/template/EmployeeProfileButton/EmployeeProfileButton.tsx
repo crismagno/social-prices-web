@@ -6,6 +6,7 @@ import { Avatar, Tag, Tooltip } from "antd";
 
 import { EmployeeEditDrawer } from "../../../app/employees/components/EmployeeEditDrawer/DownloadEmployeesDrawer";
 import useAuthData from "../../../data/context/auth/useAuthData";
+import useLanguageData from "../../../data/context/language/useLanguageData";
 import { IEmployee } from "../../../shared/business/employees/employee.interface";
 import EmployeesEnum from "../../../shared/business/employees/employees.enum";
 import { getImageUrl } from "../../../shared/utils/images/images-url";
@@ -13,6 +14,7 @@ import ImagesEnum from "../../../shared/utils/images/images.enum";
 
 export const EmployeeProfileButton: React.FC = () => {
   const { employee, updateEmployeeSession } = useAuthData();
+  const { t } = useLanguageData();
 
   const [isEmployeeEditDrawerOpen, setIsEmployeeEditDrawerOpen] =
     useState<boolean>(false);
@@ -50,7 +52,7 @@ export const EmployeeProfileButton: React.FC = () => {
           </Tooltip>
 
           <Tag color={EmployeesEnum.LevelColors[employee.level]}>
-            {EmployeesEnum.LevelLabels[employee.level]}
+            {t(EmployeesEnum.LevelLabels[employee.level])}
           </Tag>
         </div>
       </div>

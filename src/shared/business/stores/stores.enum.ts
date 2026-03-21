@@ -6,9 +6,9 @@ namespace StoresEnum {
   }
 
   export const StatusLabel = {
-    [Status.ACTIVE]: "Active",
-    [Status.INACTIVE]: "Inactive",
-    [Status.STOPPED]: "Stopped",
+    [Status.ACTIVE]: "stores.statusActive",
+    [Status.INACTIVE]: "stores.statusInactive",
+    [Status.STOPPED]: "stores.statusStopped",
   };
 
   export const StatusColor = {
@@ -31,10 +31,10 @@ namespace StoresEnum {
   }
 
   export const TypeLabels = {
-    [Type.ONLINE]: "Online",
-    [Type.PHYSICAL]: "Physical",
-    [Type.HYBRID]: "Hybrid",
-    [Type.OTHER]: "Other",
+    [Type.ONLINE]: "stores.typeOnline",
+    [Type.PHYSICAL]: "stores.typePhysical",
+    [Type.HYBRID]: "stores.typeHybrid",
+    [Type.OTHER]: "stores.typeOther",
   };
 }
 

@@ -141,14 +141,14 @@ export default function EmployeePage() {
               color={EmployeesEnum.LevelColors[employee.level]}
               className="mt-2"
             >
-              {EmployeesEnum.LevelLabels[employee.level]}
+              {t(EmployeesEnum.LevelLabels[employee.level])}
             </Tag>
 
             <Tag
               color={EmployeesEnum.StatusColors[employee.status]}
               className="mt-2"
             >
-              {EmployeesEnum.StatusLabels[employee.status]}
+              {t(EmployeesEnum.StatusLabels[employee.status])}
             </Tag>
           </Col>
 
@@ -208,23 +208,23 @@ export default function EmployeePage() {
                           ]
                         }
                       >
-                        {
+                        {t(
                           PersonEnum.GenderLabels[
                             employee.gender ?? PersonEnum.Gender.OTHER
                           ]
-                        }
+                        )}
                       </Tag>
                     </Descriptions.Item>
 
                     <Descriptions.Item label={t("employees.level")}>
                       <Tag color={EmployeesEnum.LevelColors[employee.level]}>
-                        {EmployeesEnum.LevelLabels[employee.level]}
+                        {t(EmployeesEnum.LevelLabels[employee.level])}
                       </Tag>
                     </Descriptions.Item>
 
                     <Descriptions.Item label={t("common.status")}>
                       <Tag color={EmployeesEnum.StatusColors[employee.status]}>
-                        {EmployeesEnum.StatusLabels[employee.status]}
+                        {t(EmployeesEnum.StatusLabels[employee.status])}
                       </Tag>
                     </Descriptions.Item>
                   </Descriptions>
@@ -256,7 +256,7 @@ export default function EmployeePage() {
                                 className="flex items-center gap-2 flex-wrap"
                               >
                                 <Tag color="blue">
-                                  {PhoneNumberEnum.TypeLabels[phone.type]}
+                                  {t(PhoneNumberEnum.TypeLabels[phone.type])}
                                 </Tag>
                                 <a
                                   href={`tel:${phone.number}`}
@@ -276,12 +276,9 @@ export default function EmployeePage() {
                                             key={messengerIndex}
                                             color="green"
                                           >
-                                            {
-                                              PhoneNumberEnum
-                                                .PhoneNumberMessengerLabels[
-                                                messenger
-                                              ]
-                                            }
+                                            {t(
+                                              PhoneNumberEnum.PhoneNumberMessengerLabels[messenger]
+                                            )}
                                           </Tag>
                                         )
                                       )}
@@ -316,7 +313,7 @@ export default function EmployeePage() {
                                         typeIndex: number
                                       ) => (
                                         <Tag key={typeIndex} color="purple">
-                                          {AddressEnum.TypesLabels[type]}
+                                          {t(AddressEnum.TypesLabels[type])}
                                         </Tag>
                                       )
                                     )}

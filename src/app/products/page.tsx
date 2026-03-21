@@ -312,7 +312,7 @@ export default function ProductsPage() {
               align: "center",
               filters: Object.keys(CommonEnum.YesNo).map((value: string) => ({
                 value: value === CommonEnum.YesNo.YES,
-                text: CommonEnum.YesNoLabels[value as CommonEnum.YesNo],
+                text: t(CommonEnum.YesNoLabels[value as CommonEnum.YesNo]),
               })),
               render: (isActive: boolean) => (
                 <Tag color={isActive ? "green" : "red"}>

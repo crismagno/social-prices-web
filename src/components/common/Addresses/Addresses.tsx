@@ -138,7 +138,7 @@ export const Addresses: React.FC<Props> = ({
       {fieldsAddresses.map((formAddress: TAddressFormSchema, index: number) => {
         const address: TAddressFormSchema = watch(`addresses.${index}`);
 
-        const addressName: string = createAddressName(address);
+        const addressName: string = createAddressName(address, t);
 
         return (
           <Collapse
@@ -268,7 +268,7 @@ export const Addresses: React.FC<Props> = ({
                 >
                   {Object.keys(AddressEnum.Type).map((type: string) => (
                     <Select.Option key={type} value={type}>
-                      {AddressEnum.TypesLabels[type as AddressEnum.Type]}
+                      {t(AddressEnum.TypesLabels[type as AddressEnum.Type])}
                     </Select.Option>
                   ))}
                 </SelectCustomAntd>

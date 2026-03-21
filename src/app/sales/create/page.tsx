@@ -1443,7 +1443,7 @@ export default function CreateSalePage() {
                 >
                   {Object.keys(PersonEnum.Gender).map((gender: string) => (
                     <Select.Option key={gender} value={gender}>
-                      {PersonEnum.GenderLabels[gender as PersonEnum.Gender]}
+                      {t(PersonEnum.GenderLabels[gender as PersonEnum.Gender])}
                     </Select.Option>
                   ))}
                 </SelectCustomAntd>
@@ -1492,8 +1492,8 @@ export default function CreateSalePage() {
 
                       {selectedCustomer?.addresses.map((address: IAddress) => (
                         <Select.Option key={address.uid} value={address.uid}>
-                          <Tooltip title={createAddressName(address)}>
-                            {createAddressName(address)}
+                          <Tooltip title={createAddressName(address, t)}>
+                            {createAddressName(address, t)}
                           </Tooltip>
                         </Select.Option>
                       ))}
@@ -1516,11 +1516,11 @@ export default function CreateSalePage() {
                   >
                     {Object.keys(SalesEnum.DeliveryType).map((type: string) => (
                       <Select.Option key={type} value={type}>
-                        <Tooltip title={createAddressName(type)}>
+                        <Tooltip title={createAddressName(type, t)}>
                           {
-                            SalesEnum.DeliveryTypeLabels[
+                            t(SalesEnum.DeliveryTypeLabels[
                               type as SalesEnum.DeliveryType
-                            ]
+                            ])
                           }
                         </Tooltip>
                       </Select.Option>
@@ -1643,7 +1643,7 @@ export default function CreateSalePage() {
                 >
                   {Object.keys(AddressEnum.Type).map((type: string) => (
                     <Select.Option key={type} value={type}>
-                      {AddressEnum.TypesLabels[type as AddressEnum.Type]}
+                      {t(AddressEnum.TypesLabels[type as AddressEnum.Type])}
                     </Select.Option>
                   ))}
                 </SelectCustomAntd>
@@ -1806,7 +1806,7 @@ export default function CreateSalePage() {
                     <Select.Option key={status} value={status}>
                       <LabelBadgeCustomAntd
                         label={
-                          SalesEnum.StatusLabels[status as SalesEnum.Status]
+                          t(SalesEnum.StatusLabels[status as SalesEnum.Status])
                         }
                         color={
                           SalesEnum.StatusColors[status as SalesEnum.Status]
@@ -1843,9 +1843,9 @@ export default function CreateSalePage() {
                       <Select.Option key={paymentStatus} value={paymentStatus}>
                         <LabelBadgeCustomAntd
                           label={
-                            SalesEnum.PaymentStatusLabels[
+                            t(SalesEnum.PaymentStatusLabels[
                               paymentStatus as SalesEnum.PaymentStatus
-                            ]
+                            ])
                           }
                           color={
                             SalesEnum.PaymentStatusColors[

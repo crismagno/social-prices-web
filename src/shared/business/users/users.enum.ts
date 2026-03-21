@@ -6,9 +6,9 @@ namespace UsersEnum {
   }
 
   export const ProviderLabels = {
-    [Provider.GOOGLE]: "Google",
-    [Provider.SOCIAL_PRICES]: "Social Prices",
-    [Provider.OTHER]: "Other",
+    [Provider.GOOGLE]: "common.google",
+    [Provider.SOCIAL_PRICES]: "common.socialPrices",
+    [Provider.OTHER]: "common.other",
   };
 
   export const ProviderColors = {
@@ -24,9 +24,9 @@ namespace UsersEnum {
   }
 
   export const StatusLabels = {
-    [Status.PENDING]: "Pending",
-    [Status.ACTIVE]: "Active",
-    [Status.STOPPED]: "Stopped",
+    [Status.PENDING]: "common.pending",
+    [Status.ACTIVE]: "common.active",
+    [Status.STOPPED]: "common.stopped",
   };
 
   export const StatusColors = {
@@ -41,8 +41,8 @@ namespace UsersEnum {
   }
 
   export const TypeLabels = {
-    [Type.COMPANY]: "Company",
-    [Type.COMMON]: "Common",
+    [Type.COMPANY]: "users.typeCompany",
+    [Type.COMMON]: "users.typeCommon",
   };
 }
 

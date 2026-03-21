@@ -157,14 +157,14 @@ export default function StoresPage() {
               title: t("common.status"),
               dataIndex: "status",
               filters: Object.keys(StoresEnum.Status).map((status: string) => ({
-                text: StoresEnum.StatusLabel[status as StoresEnum.Status],
+                text: t(StoresEnum.StatusLabel[status as StoresEnum.Status]),
                 value: status,
               })),
               key: "status",
               align: "center",
               render: (status: StoresEnum.Status) => (
                 <Tag color={StoresEnum.StatusColor[status]}>
-                  {StoresEnum.StatusLabel[status]}
+                  {t(StoresEnum.StatusLabel[status])}
                 </Tag>
               ),
             },

@@ -7,10 +7,10 @@ namespace NotificationsEnum {
   }
 
   export const TypeLabels = {
-    [Type.INFO]: "Info",
-    [Type.WARNING]: "Warning",
-    [Type.NEWS]: "News",
-    [Type.DEFAULT]: "Default",
+    [Type.INFO]: "common.info",
+    [Type.WARNING]: "common.warning",
+    [Type.NEWS]: "common.news",
+    [Type.DEFAULT]: "common.default",
   };
 
   export const TypeColors = {

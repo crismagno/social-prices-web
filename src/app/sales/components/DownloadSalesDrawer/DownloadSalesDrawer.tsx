@@ -212,7 +212,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
                   key={`download-filter-sales-type-${type}`}
                   value={type}
                 >
-                  {SalesEnum.TypeLabels[type as SalesEnum.Type]}
+                  {t(SalesEnum.TypeLabels[type as SalesEnum.Type])}
                 </Select.Option>
               ))}
             </SelectCustomAntd>
@@ -233,11 +233,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
                     key={`download-filter-sales-delivery-type-${deliveryType}`}
                     value={deliveryType}
                   >
-                    {
-                      SalesEnum.DeliveryTypeLabels[
-                        deliveryType as SalesEnum.DeliveryType
-                      ]
-                    }
+                    {t(SalesEnum.DeliveryTypeLabels[deliveryType as SalesEnum.DeliveryType])}
                   </Select.Option>
                 )
               )}
@@ -259,7 +255,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
                   value={status}
                 >
                   <LabelBadgeCustomAntd
-                    label={SalesEnum.StatusLabels[status as SalesEnum.Status]}
+                    label={t(SalesEnum.StatusLabels[status as SalesEnum.Status])}
                     color={SalesEnum.StatusColors[status as SalesEnum.Status]}
                   />
                 </Select.Option>
@@ -283,11 +279,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
                     value={paymentStatus}
                   >
                     <LabelBadgeCustomAntd
-                      label={
-                        SalesEnum.PaymentStatusLabels[
-                          paymentStatus as SalesEnum.PaymentStatus
-                        ]
-                      }
+                      label={t(SalesEnum.PaymentStatusLabels[paymentStatus as SalesEnum.PaymentStatus])}
                       color={
                         SalesEnum.PaymentStatusColors[
                           paymentStatus as SalesEnum.PaymentStatus
@@ -349,7 +341,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
             >
               {Object.keys(SalesEnum.SortField).map((sortField: string) => (
                 <Select.Option key={sortField} value={sortField}>
-                  {SalesEnum.SortFieldLabels[sortField as SalesEnum.SortField]}
+                  {t(SalesEnum.SortFieldLabels[sortField as SalesEnum.SortField])}
                 </Select.Option>
               ))}
             </SelectCustomAntd>

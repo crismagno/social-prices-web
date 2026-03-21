@@ -7,8 +7,8 @@ namespace SalesEnum {
   }
 
   export const TypeLabels = {
-    [Type.MANUAL]: "Manual",
-    [Type.SHOPPING]: "Shopping",
+    [Type.MANUAL]: "sales.typeManual",
+    [Type.SHOPPING]: "sales.typeShopping",
   };
 
   export const TypeColors = {
@@ -22,8 +22,8 @@ namespace SalesEnum {
   }
 
   export const DeliveryTypeLabels = {
-    [DeliveryType.PICKUP]: "Pickup",
-    [DeliveryType.DELIVERY]: "Delivery",
+    [DeliveryType.PICKUP]: "sales.deliveryPickup",
+    [DeliveryType.DELIVERY]: "sales.deliveryDelivery",
   };
 
   export enum PaymentType {
@@ -34,10 +34,10 @@ namespace SalesEnum {
   }
 
   export const PaymentTypeLabels = {
-    [PaymentType.PIX]: "PIX",
-    [PaymentType.CASH]: "Cash",
-    [PaymentType.CARD]: "Card",
-    [PaymentType.OTHER]: "Other",
+    [PaymentType.PIX]: "sales.paymentPix",
+    [PaymentType.CASH]: "sales.paymentCash",
+    [PaymentType.CARD]: "sales.paymentCard",
+    [PaymentType.OTHER]: "sales.paymentOther",
   };
 
   export const PaymentTypeColors = {
@@ -56,11 +56,11 @@ namespace SalesEnum {
   }
 
   export const PaymentStatusLabels = {
-    [PaymentStatus.COMPLETED]: "Completed",
-    [PaymentStatus.PENDING]: "Pending",
-    [PaymentStatus.PARTIALLY]: "Partially",
-    [PaymentStatus.CANCELLED]: "Cancelled",
-    [PaymentStatus.REFUNDED]: "Refunded",
+    [PaymentStatus.COMPLETED]: "sales.paymentCompleted",
+    [PaymentStatus.PENDING]: "sales.paymentPending",
+    [PaymentStatus.PARTIALLY]: "sales.paymentPartially",
+    [PaymentStatus.CANCELLED]: "sales.paymentCancelled",
+    [PaymentStatus.REFUNDED]: "sales.paymentRefunded",
   };
 
   export const PaymentStatusColors = {
@@ -84,15 +84,15 @@ namespace SalesEnum {
   }
 
   export const StatusLabels = {
-    [Status.STARTED]: "Started",
-    [Status.CANCELLED]: "Cancelled",
-    [Status.STOPPED]: "Stopped",
-    [Status.ERROR]: "Error",
-    [Status.COMPLETED]: "Completed",
-    [Status.PROCESSING]: "Processing",
-    [Status.PENDING]: "Pending",
-    [Status.REFUNDED]: "Refunded",
-    [Status.DELIVERY]: "Delivery",
+    [Status.STARTED]: "sales.statusStarted",
+    [Status.CANCELLED]: "sales.statusCancelled",
+    [Status.STOPPED]: "sales.statusStopped",
+    [Status.ERROR]: "sales.statusError",
+    [Status.COMPLETED]: "sales.statusCompleted",
+    [Status.PROCESSING]: "sales.statusProcessing",
+    [Status.PENDING]: "sales.statusPending",
+    [Status.REFUNDED]: "sales.statusRefunded",
+    [Status.DELIVERY]: "sales.statusDelivery",
   };
 
   export const StatusColors = {
@@ -161,11 +161,11 @@ namespace SalesEnum {
   }
 
   export const SortFieldLabels = {
-    [SortField.deliveryAt]: "Delivery At",
-    [SortField.createdAt]: "Created At",
-    [SortField.createdDate]: "Created Date",
-    [SortField.completedAt]: "Completed At",
-    [SortField.updatedAt]: "Updated At",
+    [SortField.deliveryAt]: "sales.deliveryAt",
+    [SortField.createdAt]: "sales.createdAt",
+    [SortField.createdDate]: "sales.createdDate",
+    [SortField.completedAt]: "sales.completedAt",
+    [SortField.updatedAt]: "sales.updatedAt",
   };
 
   export const StatusToFilterCharts: Status[] = [

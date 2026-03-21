@@ -110,7 +110,8 @@ export const PhoneNumbers: React.FC<Props> = ({
           );
 
           const phoneNumberName: string = createPhoneNumberName(
-            phoneNUmber as IPhoneNumber
+            phoneNUmber as IPhoneNumber,
+            t
           );
 
           return (
@@ -148,9 +149,9 @@ export const PhoneNumbers: React.FC<Props> = ({
                       (phoneType: string) => (
                         <Select.Option key={phoneType} value={phoneType}>
                           {
-                            PhoneNumberEnum.TypeLabels[
+                            t(PhoneNumberEnum.TypeLabels[
                               phoneType as PhoneNumberEnum.Type
-                            ]
+                            ])
                           }
                         </Select.Option>
                       )
@@ -193,9 +194,9 @@ export const PhoneNumbers: React.FC<Props> = ({
                           value={phoneMessenger}
                         >
                           {
-                            PhoneNumberEnum.PhoneNumberMessengerLabels[
+                            t(PhoneNumberEnum.PhoneNumberMessengerLabels[
                               phoneMessenger as PhoneNumberEnum.PhoneNumberMessenger
-                            ]
+                            ])
                           }
                         </Select.Option>
                       )

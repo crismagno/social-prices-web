@@ -7,10 +7,10 @@ namespace ProductsEnum {
   }
 
   export const SortFieldLabels = {
-    [SortField.releaseDate]: "Release Date",
-    [SortField.createdAt]: "Created At",
-    [SortField.expirationDate]: "Expiration Date",
-    [SortField.updatedAt]: "Updated At",
+    [SortField.releaseDate]: "products.releaseDate",
+    [SortField.createdAt]: "sales.createdAt",
+    [SortField.expirationDate]: "products.expirationDate",
+    [SortField.updatedAt]: "sales.updatedAt",
   };
 }
 

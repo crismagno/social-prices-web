@@ -120,7 +120,7 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
             {Object.values(SalesEnum.Status).map((status: SalesEnum.Status) => (
               <Select.Option key={status} value={status}>
                 <LabelBadgeCustomAntd
-                  label={SalesEnum.StatusLabels[status]}
+                  label={t(SalesEnum.StatusLabels[status])}
                   color={SalesEnum.StatusColors[status]}
                 />
               </Select.Option>
@@ -153,7 +153,7 @@ const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
       ) : (
         <div className="w-40">
           <Tag color={SalesEnum.StatusColors[sale.status]} className="mr-1">
-            {SalesEnum.StatusLabels[sale.status]}
+            {t(SalesEnum.StatusLabels[sale.status])}
           </Tag>
           <Tooltip title={t("sales.edit")}>
             <Button

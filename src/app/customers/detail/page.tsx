@@ -450,7 +450,7 @@ export default function CustomerDetailPage() {
               >
                 {Object.keys(PersonEnum.Gender).map((gender: string) => (
                   <Select.Option key={gender} value={gender}>
-                    {PersonEnum.GenderLabels[gender as PersonEnum.Gender]}
+                    {t(PersonEnum.GenderLabels[gender as PersonEnum.Gender])}
                   </Select.Option>
                 ))}
               </SelectCustomAntd>

@@ -5,8 +5,8 @@ namespace CustomersEnum {
   }
 
   export const SortFieldLabels = {
-    [SortField.birthDate]: "Birth Date",
-    [SortField.createdAt]: "Created At",
+    [SortField.birthDate]: "customers.birthDate",
+    [SortField.createdAt]: "sales.createdAt",
   };
 }
 

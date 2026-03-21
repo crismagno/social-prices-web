@@ -136,7 +136,7 @@ export const DownloadEmployeesDrawer: React.FC<Props> = ({
                       EmployeesEnum.LevelColors[level as EmployeesEnum.Level]
                     }
                   >
-                    {EmployeesEnum.LevelLabels[level as EmployeesEnum.Level]}
+                    {t(EmployeesEnum.LevelLabels[level as EmployeesEnum.Level])}
                   </Tag>
                 </Select.Option>
               ))}
@@ -153,7 +153,7 @@ export const DownloadEmployeesDrawer: React.FC<Props> = ({
             >
               {Object.keys(EmployeesEnum.Status).map((status: string) => (
                 <Select.Option key={status} value={status}>
-                  {EmployeesEnum.StatusLabels[status as EmployeesEnum.Status]}
+                  {t(EmployeesEnum.StatusLabels[status as EmployeesEnum.Status])}
                 </Select.Option>
               ))}
             </SelectCustomAntd>
@@ -170,7 +170,7 @@ export const DownloadEmployeesDrawer: React.FC<Props> = ({
               </Select.Option>
               {Object.keys(PersonEnum.Gender).map((gender: string) => (
                 <Select.Option key={gender} value={gender}>
-                  {PersonEnum.GenderLabels[gender as PersonEnum.Gender]}
+                  {t(PersonEnum.GenderLabels[gender as PersonEnum.Gender])}
                 </Select.Option>
               ))}
             </SelectCustomAntd>
@@ -185,11 +185,11 @@ export const DownloadEmployeesDrawer: React.FC<Props> = ({
             >
               {Object.keys(EmployeesEnum.SortField).map((sortField: string) => (
                 <Select.Option key={sortField} value={sortField}>
-                  {
+                  {t(
                     EmployeesEnum.SortFieldLabels[
                       sortField as EmployeesEnum.SortField
                     ]
-                  }
+                  )}
                 </Select.Option>
               ))}
             </SelectCustomAntd>

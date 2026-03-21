@@ -188,17 +188,17 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
               )
             : ""}{" "}
           /{" "}
-          {
+          {t(
             PersonEnum.GenderLabels[
               formSchema.customer.gender as PersonEnum.Gender
-            ]
-          }
+            ],
+          )}
         </label>
 
         <div className="text-center">
           <b>{t("address.shippingAddress")}: </b>
 
-          <span className="mr-1">{createAddressName(customerAddress)}</span>
+          <span className="mr-1">{createAddressName(customerAddress, t)}</span>
 
           <DeliveryAddressMapButton
             address={{
@@ -222,11 +222,11 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
       <div className="text-center">
         <b>{t("sales.deliveryType")}: </b>
         <span>
-          {
+          {t(
             SalesEnum.DeliveryTypeLabels[
               formSchema.deliveryType as SalesEnum.DeliveryType
-            ]
-          }
+            ],
+          )}
         </span>
       </div>
 
@@ -285,11 +285,11 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
             <div key={payment.type}>
               <div className="flex justify-between pr-10 mt-2">
                 <label className="font-semibold">
-                  {
+                  {t(
                     SalesEnum.PaymentTypeLabels[
                       payment.type as SalesEnum.PaymentType
-                    ]
-                  }
+                    ],
+                  )}
                   :{" "}
                 </label>
                 <label>{formatToMoneyDecimal(payment.amount)}</label>
@@ -318,18 +318,18 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
       <div className="flex justify-between pr-10 mt-2">
         <label className="font-semibold">{t("sales.saleStatus")} </label>
         <label>
-          {SalesEnum.StatusLabels[formSchema.status as SalesEnum.Status]}
+          {t(SalesEnum.StatusLabels[formSchema.status as SalesEnum.Status])}
         </label>
       </div>
 
       <div className="flex justify-between pr-10 mt-2">
         <label className="font-semibold">{t("sales.paymentStatus")} </label>
         <label>
-          {
+          {t(
             SalesEnum.PaymentStatusLabels[
               formSchema.paymentStatus as SalesEnum.PaymentStatus
-            ]
-          }
+            ],
+          )}
         </label>
       </div>
 

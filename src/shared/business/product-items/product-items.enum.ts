@@ -10,23 +10,23 @@ namespace ProductItemsEnum {
   }
 
   export const SortFieldLabels = {
-    [SortField.createdAt]: "Created At",
-    [SortField.updatedAt]: "Updated At",
-    [SortField.releaseDate]: "Release Date",
-    [SortField.expirationDate]: "Expiration Date",
-    [SortField.name]: "Name",
-    [SortField.price]: "Price",
-    [SortField.quantity]: "Quantity",
+    [SortField.createdAt]: "productItems.createdAt",
+    [SortField.updatedAt]: "productItems.updatedAt",
+    [SortField.releaseDate]: "productItems.releaseDate",
+    [SortField.expirationDate]: "productItems.expirationDate",
+    [SortField.name]: "common.name",
+    [SortField.price]: "common.price",
+    [SortField.quantity]: "common.quantity",
   };
 
   export const SelectOptionsRangeDatePicker: {
     label: string;
     value: SortField;
   }[] = [
-    { label: "Created At", value: SortField.createdAt },
-    { label: "Updated At", value: SortField.updatedAt },
-    { label: "Release Date", value: SortField.releaseDate },
-    { label: "Expiration Date", value: SortField.expirationDate },
+    { label: SortFieldLabels[SortField.createdAt], value: SortField.createdAt },
+    { label: SortFieldLabels[SortField.updatedAt], value: SortField.updatedAt },
+    { label: SortFieldLabels[SortField.releaseDate], value: SortField.releaseDate },
+    { label: SortFieldLabels[SortField.expirationDate], value: SortField.expirationDate },
   ];
 }
 

@@ -198,7 +198,7 @@ export default function CustomersPage() {
               key: "gender",
               align: "center",
               filters: Object.keys(PersonEnum.Gender).map((gender: string) => ({
-                text: PersonEnum.GenderLabels[gender as PersonEnum.Gender],
+                text: t(PersonEnum.GenderLabels[gender as PersonEnum.Gender]),
                 value: gender,
               })),
               render: (gender: PersonEnum.Gender | null) => (
@@ -207,7 +207,7 @@ export default function CustomersPage() {
                     PersonEnum.GenderColors[gender ?? PersonEnum.Gender.OTHER]
                   }
                 >
-                  {PersonEnum.GenderLabels[gender ?? PersonEnum.Gender.OTHER]}
+                  {t(PersonEnum.GenderLabels[gender ?? PersonEnum.Gender.OTHER])}
                 </Tag>
               ),
             },

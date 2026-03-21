@@ -5,8 +5,8 @@ namespace CommonEnum {
   }
 
   export const YesNoLabels = {
-    [YesNo.YES]: "Yes",
-    [YesNo.NO]: "No",
+    [YesNo.YES]: "common.yes",
+    [YesNo.NO]: "common.no",
   };
 
   export enum QuantityOrTotal {
@@ -15,8 +15,8 @@ namespace CommonEnum {
   }
 
   export const QuantityOrTotalLabels = {
-    [QuantityOrTotal.QUANTITY]: "Quantity",
-    [QuantityOrTotal.TOTAL]: "Total",
+    [QuantityOrTotal.QUANTITY]: "common.quantity",
+    [QuantityOrTotal.TOTAL]: "common.total",
   };
 }
 

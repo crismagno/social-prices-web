@@ -131,7 +131,7 @@ export default function NotificationsPage() {
                 className="ml-2"
                 color={NotificationsEnum.TypeColors[notification.type]}
               >
-                {NotificationsEnum.TypeLabels[notification.type]}
+                {t(NotificationsEnum.TypeLabels[notification.type])}
               </Tag>
 
               <span>
@@ -177,7 +177,7 @@ export default function NotificationsPage() {
 
               {Object.keys(NotificationsEnum.Type).map((type: string) => (
                 <Select.Option key={type} value={type}>
-                  {NotificationsEnum.TypeLabels[type as NotificationsEnum.Type]}
+                  {t(NotificationsEnum.TypeLabels[type as NotificationsEnum.Type])}
                 </Select.Option>
               ))}
             </Select>

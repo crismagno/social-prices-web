@@ -110,7 +110,7 @@ export default function StorePage() {
             </Tooltip>
 
             <Tag color={StoresEnum.StatusColor[store.status]} className="mt-2">
-              {StoresEnum.StatusLabel[store.status]}
+              {t(StoresEnum.StatusLabel[store.status])}
             </Tag>
           </Col>
 
@@ -144,9 +144,9 @@ export default function StorePage() {
                     <Descriptions.Item label={t("stores.type")}>
                       <Tag color="blue">
                         {
-                          StoresEnum.TypeLabels[
+                          t(StoresEnum.TypeLabels[
                             store.type ?? StoresEnum.Type.OTHER
-                          ]
+                          ])
                         }
                       </Tag>
                     </Descriptions.Item>
@@ -166,7 +166,7 @@ export default function StorePage() {
 
                     <Descriptions.Item label={t("common.status")}>
                       <Tag color={StoresEnum.StatusColor[store.status]}>
-                        {StoresEnum.StatusLabel[store.status]}
+                        {t(StoresEnum.StatusLabel[store.status])}
                       </Tag>
                     </Descriptions.Item>
 
@@ -216,7 +216,7 @@ export default function StorePage() {
                                 className="flex items-center gap-2 flex-wrap"
                               >
                                 <Tag color="blue">
-                                  {PhoneNumberEnum.TypeLabels[phone.type]}
+                                  {t(PhoneNumberEnum.TypeLabels[phone.type])}
                                 </Tag>
                                 <a
                                   href={`tel:${phone.number}`}
@@ -237,10 +237,9 @@ export default function StorePage() {
                                             color="green"
                                           >
                                             {
-                                              PhoneNumberEnum
-                                                .PhoneNumberMessengerLabels[
+                                              t(PhoneNumberEnum.PhoneNumberMessengerLabels[
                                                 messenger
-                                              ]
+                                              ])
                                             }
                                           </Tag>
                                         )
@@ -276,7 +275,7 @@ export default function StorePage() {
                                         typeIndex: number
                                       ) => (
                                         <Tag key={typeIndex} color="purple">
-                                          {AddressEnum.TypesLabels[type]}
+                                          {t(AddressEnum.TypesLabels[type])}
                                         </Tag>
                                       )
                                     )}

@@ -224,7 +224,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
             >
               {Object.keys(CategoriesEnum.Type).map((type: string) => (
                 <Select.Option key={type} value={type}>
-                  {CategoriesEnum.TypeLabels[type as CategoriesEnum.Type]}
+                  {t(CategoriesEnum.TypeLabels[type as CategoriesEnum.Type])}
                 </Select.Option>
               ))}
             </SelectCustomAntd>

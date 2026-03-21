@@ -21,6 +21,7 @@ import {
   IconTrash,
 } from "../../../../../components/common/icons/icons";
 import useAuthData from "../../../../../data/context/auth/useAuthData";
+import useLanguageData from "../../../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../../../services/social-prices-api/service-methods";
 import PhoneNumberEnum from "../../../../../shared/business/shared/phone/phone-number.enum";
 import { IPhoneNumber } from "../../../../../shared/business/shared/phone/phone-number.interface";
@@ -57,6 +58,7 @@ const generateNewPhoneNumber = (
 
 const ProfileCardsPaymentsEdit: React.FC<Props> = ({ className = "" }) => {
   const { user, updateUserSession } = useAuthData();
+  const { t } = useLanguageData()!;
 
   const defaultValues: TFormSchema = {
     phoneNumbers: user?.phoneNumbers?.length
@@ -161,7 +163,8 @@ const ProfileCardsPaymentsEdit: React.FC<Props> = ({ className = "" }) => {
             );
 
             const phoneNumberName: string = createPhoneNumberName(
-              phoneNUmber as IPhoneNumber
+              phoneNUmber as IPhoneNumber,
+              t
             );
 
             return (
@@ -202,9 +205,9 @@ const ProfileCardsPaymentsEdit: React.FC<Props> = ({ className = "" }) => {
                         (phoneType: string) => (
                           <FormSelectOption key={phoneType} value={phoneType}>
                             {
-                              PhoneNumberEnum.TypeLabels[
+                              t(PhoneNumberEnum.TypeLabels[
                                 phoneType as PhoneNumberEnum.Type
-                              ]
+                              ])
                             }
                           </FormSelectOption>
                         )

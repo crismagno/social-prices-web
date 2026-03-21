@@ -7,8 +7,8 @@ namespace ThemeEnum {
   }
 
   export const ThemeLabels = {
-    [Theme.LIGHT]: "Light",
-    [Theme.DARK]: "Dark",
+    [Theme.LIGHT]: "common.light",
+    [Theme.DARK]: "common.dark",
   };
 
   export const ThemeIcons = {

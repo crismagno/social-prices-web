@@ -151,7 +151,7 @@ export const UpdateSaleCustomerButton: React.FC<Props> = ({
             <label className="text-xs mt-1">{saleCustomer?.email}</label>
 
             <label className="text-xs mt-1 text-center">
-              {createAddressName(sale.buyer?.address)}
+              {createAddressName(sale.buyer?.address, t)}
             </label>
           </Col>
         </Row>
@@ -191,8 +191,8 @@ export const UpdateSaleCustomerButton: React.FC<Props> = ({
               >
                 {newCustomer?.addresses.map((address: IAddress) => (
                   <Select.Option key={address.uid} value={address.uid}>
-                    <Tooltip title={createAddressName(address)}>
-                      {createAddressName(address)}
+                    <Tooltip title={createAddressName(address, t)}>
+                      {createAddressName(address, t)}
                     </Tooltip>
                   </Select.Option>
                 ))}

@@ -161,7 +161,7 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
             >
               {Object.keys(PersonEnum.Gender).map((gender: string) => (
                 <FormSelectOption key={gender} value={gender}>
-                  {PersonEnum.GenderLabels[gender as PersonEnum.Gender]}
+                  {t(PersonEnum.GenderLabels[gender as PersonEnum.Gender])}
                 </FormSelectOption>
               ))}
             </SelectCustomAntd>

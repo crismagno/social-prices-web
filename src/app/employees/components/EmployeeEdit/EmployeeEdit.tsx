@@ -456,7 +456,7 @@ export const EmployeeEdit: React.FC<Props> = ({
           >
             {Object.keys(PersonEnum.Gender).map((gender: string) => (
               <Select.Option key={gender} value={gender}>
-                {PersonEnum.GenderLabels[gender as PersonEnum.Gender]}
+                {t(PersonEnum.GenderLabels[gender as PersonEnum.Gender])}
               </Select.Option>
             ))}
           </SelectCustomAntd>
@@ -492,7 +492,7 @@ export const EmployeeEdit: React.FC<Props> = ({
                     EmployeesEnum.LevelColors[level as EmployeesEnum.Level]
                   }
                 >
-                  {EmployeesEnum.LevelLabels[level as EmployeesEnum.Level]}
+                  {t(EmployeesEnum.LevelLabels[level as EmployeesEnum.Level])}
                 </Tag>
               </Select.Option>
             ))}
@@ -513,7 +513,7 @@ export const EmployeeEdit: React.FC<Props> = ({
                     EmployeesEnum.StatusColors[status as EmployeesEnum.Status]
                   }
                 >
-                  {EmployeesEnum.StatusLabels[status as EmployeesEnum.Status]}
+                  {t(EmployeesEnum.StatusLabels[status as EmployeesEnum.Status])}
                 </Tag>
               </Select.Option>
             ))}

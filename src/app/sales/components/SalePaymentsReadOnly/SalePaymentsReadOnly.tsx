@@ -75,7 +75,7 @@ export const SalePaymentsReadOnly: React.FC<Props> = ({ sale, title }) => {
                     value={salePayment.type}
                   >
                     <Tag color={SalesEnum.PaymentTypeColors[salePayment.type]}>
-                      {SalesEnum.PaymentTypeLabels[salePayment.type]}
+                      {t(SalesEnum.PaymentTypeLabels[salePayment.type])}
                     </Tag>
                   </Select.Option>
                 </Select>

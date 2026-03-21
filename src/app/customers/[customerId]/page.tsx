@@ -183,11 +183,7 @@ export default function CustomerPage() {
                           ]
                         }
                       >
-                        {
-                          PersonEnum.GenderLabels[
-                            customer.gender ?? PersonEnum.Gender.OTHER
-                          ]
-                        }
+                        {t(PersonEnum.GenderLabels[customer.gender ?? PersonEnum.Gender.OTHER])}
                       </Tag>
                     </Descriptions.Item>
                   </Descriptions>
@@ -219,7 +215,7 @@ export default function CustomerPage() {
                                 className="flex items-center gap-2 flex-wrap"
                               >
                                 <Tag color="blue">
-                                  {PhoneNumberEnum.TypeLabels[phone.type]}
+                                  {t(PhoneNumberEnum.TypeLabels[phone.type])}
                                 </Tag>
                                 <a
                                   href={`tel:${phone.number}`}
@@ -239,12 +235,7 @@ export default function CustomerPage() {
                                             key={messengerIndex}
                                             color="green"
                                           >
-                                            {
-                                              PhoneNumberEnum
-                                                .PhoneNumberMessengerLabels[
-                                                messenger
-                                              ]
-                                            }
+                                            {t(PhoneNumberEnum.PhoneNumberMessengerLabels[messenger])}
                                           </Tag>
                                         )
                                       )}
@@ -279,7 +270,7 @@ export default function CustomerPage() {
                                         typeIndex: number
                                       ) => (
                                         <Tag key={typeIndex} color="purple">
-                                          {AddressEnum.TypesLabels[type]}
+                                          {t(AddressEnum.TypesLabels[type])}
                                         </Tag>
                                       )
                                     )}

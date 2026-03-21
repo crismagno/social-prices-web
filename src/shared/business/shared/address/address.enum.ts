@@ -7,10 +7,10 @@ namespace AddressEnum {
   }
 
   export const TypesLabels = {
-    [Type.SHIPPING]: "Shipping",
-    [Type.HOME]: "Home",
-    [Type.NORMAL]: "Normal",
-    [Type.BUSINESS]: "Business",
+    [Type.SHIPPING]: "address.shipping",
+    [Type.HOME]: "address.home",
+    [Type.NORMAL]: "address.normal",
+    [Type.BUSINESS]: "address.business",
   };
 }
 

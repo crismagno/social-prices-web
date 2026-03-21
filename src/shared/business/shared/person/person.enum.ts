@@ -6,9 +6,9 @@ namespace PersonEnum {
   }
 
   export const GenderLabels = {
-    [Gender.OTHER]: "Other",
-    [Gender.FEMALE]: "Female",
-    [Gender.MALE]: "Male",
+    [Gender.OTHER]: "common.other",
+    [Gender.FEMALE]: "common.female",
+    [Gender.MALE]: "common.male",
   };
 
   export const GenderColors = {

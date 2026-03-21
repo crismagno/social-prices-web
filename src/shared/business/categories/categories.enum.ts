@@ -5,8 +5,8 @@ namespace CategoriesEnum {
   }
 
   export const TypeLabels = {
-    [Type.PRODUCT]: "Product",
-    [Type.STORE]: "Store",
+    [Type.PRODUCT]: "products.product",
+    [Type.STORE]: "stores.store",
   };
 }
 

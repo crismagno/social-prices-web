@@ -94,11 +94,11 @@ export default function CategoriesPage() {
               key: "type",
               align: "center",
               filters: Object.keys(CategoriesEnum.Type).map((type: string) => ({
-                text: CategoriesEnum.TypeLabels[type as CategoriesEnum.Type],
+                text: t(CategoriesEnum.TypeLabels[type as CategoriesEnum.Type]),
                 value: type,
               })),
               render: (type: CategoriesEnum.Type) => (
-                <Tag>{CategoriesEnum.TypeLabels[type]}</Tag>
+                <Tag>{t(CategoriesEnum.TypeLabels[type])}</Tag>
               ),
             },
             {
