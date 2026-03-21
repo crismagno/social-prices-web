@@ -78,21 +78,21 @@ export default function EmployeesPage() {
         async () => {
           await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();
           await fetchFindEmployeesByUserTableState();
-        }
+        },
       );
 
       return () => {
         socket.off(
           SocketsEnum.EventNames.RESPONSE_UPLOAD_EMPLOYEES_FILE_TO_USER(
-            user._id
-          )
+            user._id,
+          ),
         );
       };
     }
   }, [socket, filesUploadsTableRef, user]);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    TagsEnum.Type.EMPLOYEE
+    TagsEnum.Type.EMPLOYEE,
   );
 
   if (isLoadingTags) {
@@ -160,18 +160,21 @@ export default function EmployeesPage() {
               dataIndex: "name",
               key: "name",
               align: "center",
+              sorter: true,
             },
             {
               title: t("employees.username"),
               dataIndex: "username",
               key: "username",
               align: "center",
+              sorter: true,
             },
             {
               title: t("common.email"),
               dataIndex: "email",
               key: "email",
               align: "center",
+              sorter: true,
               render: (email: string) => (
                 <a href={`mailto:${email}`} className="text-blue-500">
                   {email}
@@ -202,7 +205,9 @@ export default function EmployeesPage() {
                     PersonEnum.GenderColors[gender ?? PersonEnum.Gender.OTHER]
                   }
                 >
-                  {t(PersonEnum.GenderLabels[gender ?? PersonEnum.Gender.OTHER])}
+                  {t(
+                    PersonEnum.GenderLabels[gender ?? PersonEnum.Gender.OTHER],
+                  )}
                 </Tag>
               ),
             },
@@ -233,9 +238,11 @@ export default function EmployeesPage() {
               dataIndex: "level",
               key: "level",
               filters: EmployeesEnum.getLevelsByEmployeeLevel(
-                employee?.level!
+                employee?.level!,
               ).map((level: string) => ({
-                text: t(EmployeesEnum.LevelLabels[level as EmployeesEnum.Level]),
+                text: t(
+                  EmployeesEnum.LevelLabels[level as EmployeesEnum.Level],
+                ),
                 value: level,
               })),
               align: "center",
@@ -251,10 +258,10 @@ export default function EmployeesPage() {
               filters: Object.keys(EmployeesEnum.Status).map(
                 (status: string) => ({
                   text: t(
-                    EmployeesEnum.StatusLabels[status as EmployeesEnum.Status]
+                    EmployeesEnum.StatusLabels[status as EmployeesEnum.Status],
                   ),
                   value: status,
-                })
+                }),
               ),
               key: "status",
               align: "center",
@@ -279,8 +286,8 @@ export default function EmployeesPage() {
                           router.push(
                             Urls.EDIT_EMPLOYEE.replace(
                               ":employeeId",
-                              employee._id
-                            )
+                              employee._id,
+                            ),
                           )
                         }
                         icon={<EditOutlined />}
@@ -292,7 +299,7 @@ export default function EmployeesPage() {
                         type="default"
                         onClick={() =>
                           router.push(
-                            Urls.EMPLOYEE.replace(":employeeId", employee._id)
+                            Urls.EMPLOYEE.replace(":employeeId", employee._id),
                           )
                         }
                         icon={<EnterOutlined />}
@@ -317,7 +324,7 @@ export default function EmployeesPage() {
         onClose={() => setIsUploadFilesDrawerOpen(false)}
         onUploadFiles={async (formData: FormData) => {
           await serviceMethodsInstance.employeesServiceMethods.uploadEmployees(
-            formData
+            formData,
           );
 
           await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();
