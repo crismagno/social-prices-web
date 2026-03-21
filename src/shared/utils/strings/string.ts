@@ -1,3 +1,4 @@
+import AddressEnum from "../../business/shared/address/address.enum";
 import { IAddress } from "../../business/shared/address/address.interface";
 import PhoneNumberEnum from "../../business/shared/phone/phone-number.enum";
 import { IPhoneNumber } from "../../business/shared/phone/phone-number.interface";
@@ -8,11 +9,13 @@ export const createComma = (str: string): string =>
 
 export const messengersToString = (
   messengers: string[],
-  t: (key: string) => string
+  t: (key: string) => string,
 ): string =>
   messengers.reduce((acc, curr, index) => {
     const label = t(
-      PhoneNumberEnum.PhoneNumberMessengerLabels[curr as PhoneNumberEnum.PhoneNumberMessenger]
+      PhoneNumberEnum.PhoneNumberMessengerLabels[
+        curr as PhoneNumberEnum.PhoneNumberMessenger
+      ],
     );
     if (index !== 0) {
       acc += `, ${label}`;
@@ -25,7 +28,7 @@ export const messengersToString = (
 
 export const createAddressName = (
   address: IAddress | any,
-  t: (key: string) => string
+  t: (key: string) => string,
 ): string => {
   let addressName: string = "";
 
@@ -62,7 +65,7 @@ export const createAddressName = (
 
 export const createPhoneNumberName = (
   phoneNumber: IPhoneNumber,
-  t: (key: string) => string
+  t: (key: string) => string,
 ): string => {
   let phoneNumberName: string = "";
 
@@ -99,29 +102,24 @@ export const parseToUpperAndUnderline = (value: string): string =>
 
 export const formatToMoneyDecimal = (
   value: number,
-  decimal: number = 2
+  decimal: number = 2,
 ): string => `R$ ${value?.toFixed(decimal) ?? 0}`;
 
 export const addressTypesToString = (
   address: IAddress,
-  t: (key: string) => string
+  t: (key: string) => string,
 ): string =>
   address?.types?.length
-    ? address.types.reduce(
-        (acc: string, curr: string, index: number) => {
-          const lastIndexElement: number = address.types.length - 1;
-          const label = t(
-            AddressEnum.TypesLabels[curr as AddressEnum.Type]
-          );
+    ? address.types.reduce((acc: string, curr: string, index: number) => {
+        const lastIndexElement: number = address.types.length - 1;
+        const label = t(AddressEnum.TypesLabels[curr as AddressEnum.Type]);
 
-          if (index !== lastIndexElement) {
-            acc += `${label}, `;
-          } else if (index === lastIndexElement) {
-            acc += `${label}`;
-          }
+        if (index !== lastIndexElement) {
+          acc += `${label}, `;
+        } else if (index === lastIndexElement) {
+          acc += `${label}`;
+        }
 
-          return acc;
-        },
-        ""
-      )
+        return acc;
+      }, "")
     : "";
