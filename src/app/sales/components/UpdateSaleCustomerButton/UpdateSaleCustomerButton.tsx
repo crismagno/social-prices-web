@@ -1,46 +1,22 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  Button,
-  Col,
-  Divider,
-  Modal,
-  Row,
-  Select,
-  Tooltip,
-} from 'antd';
-import {
-  SubmitHandler,
-  useForm,
-} from 'react-hook-form';
-import { z } from 'zod';
+import { Button, Col, Divider, Modal, Row, Select, Tooltip } from "antd";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { UserSwitchOutlined } from '@ant-design/icons';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { UserSwitchOutlined } from "@ant-design/icons";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import handleClientError
-  from '../../../../components/common/HandleClientError/HandleClientError';
-import {
-  ImageOrDefault,
-} from '../../../../components/common/ImageOrDefault/ImageOrDefault';
-import {
-  SelectCustomAntd,
-} from '../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd';
-import useLanguageData from '../../../../data/context/language/useLanguageData';
-import {
-  serviceMethodsInstance,
-} from '../../../../services/social-prices-api/service-methods';
-import {
-  ICustomer,
-} from '../../../../shared/business/customers/customer.interface';
-import { ISale } from '../../../../shared/business/sales/sale.interface';
-import {
-  IAddress,
-} from '../../../../shared/business/shared/address/address.interface';
-import { createAddressName } from '../../../../shared/utils/strings/string';
-import {
-  SelectCustomer,
-} from '../../create/components/SelectCustomer/SelectCustomer';
+import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
+import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
+import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
+import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
+import { ICustomer } from "../../../../shared/business/customers/customer.interface";
+import { ISale } from "../../../../shared/business/sales/sale.interface";
+import { IAddress } from "../../../../shared/business/shared/address/address.interface";
+import { createAddressName } from "../../../../shared/utils/strings/string";
+import { SelectCustomer } from "../../create/components/SelectCustomer/SelectCustomer";
 
 const formSchema = z.object({
   newCustomerId: z.string().nonempty("New Customer is required!"),
@@ -100,7 +76,7 @@ export const UpdateSaleCustomerButton: React.FC<Props> = ({
             saleId: sale._id,
             newAddressUid: data.newAddressUid!,
             newCustomerId: data.newCustomerId,
-          }
+          },
         );
 
       onUpdatedSaleCustomer?.(response);
@@ -126,7 +102,7 @@ export const UpdateSaleCustomerButton: React.FC<Props> = ({
   return (
     <>
       <Modal
-        title={`Update Customer For Sale: ${sale.number}`}
+        title={`${t("sales.updateCustomerOnSale")}: ${sale.number}`}
         onCancel={() => {
           resetForm();
           setIsOpen(false);
@@ -136,12 +112,17 @@ export const UpdateSaleCustomerButton: React.FC<Props> = ({
         closable={false}
         maskClosable={false}
         destroyOnHidden
+        cancelText={t("common.cancel")}
+        okText={t("common.confirm")}
+        confirmLoading={isSubmitting}
       >
         <Divider />
 
         <Row gutter={[8, 8]}>
           <Col xs={24} className="flex flex-col justify-center items-center">
-            <label className="text-base mb-5">Current Customer</label>
+            <label className="text-base mb-5">
+              {t("sales.currentCustomer")}
+            </label>
             <Tooltip title="See avatar">
               <ImageOrDefault width={100} src={saleCustomer?.avatar} />
             </Tooltip>
@@ -160,7 +141,7 @@ export const UpdateSaleCustomerButton: React.FC<Props> = ({
 
         <Row gutter={[8, 8]}>
           <Col xs={24} className="flex flex-col justify-center items-center">
-            <label className="text-base mb-5">New Customer</label>
+            <label className="text-base mb-5">{t("sales.newCustomer")}</label>
             <Tooltip title="See avatar">
               <ImageOrDefault width={100} src={newCustomer?.avatar} />
             </Tooltip>
@@ -185,7 +166,7 @@ export const UpdateSaleCustomerButton: React.FC<Props> = ({
                   name: `newAddressUid`,
                 }}
                 errorMessage={errors?.newAddressUid?.message}
-                placeholder={"Select address?"}
+                placeholder={t("address.selectAddress")}
                 style={{ width: 400 }}
                 divClassName="mt-0"
               >
