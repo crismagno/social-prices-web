@@ -1,41 +1,23 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  Button,
-  Card,
-  Tag,
-  Tooltip,
-} from 'antd';
-import moment from 'moment';
+import { Button, Card, Tag, Tooltip } from "antd";
+import moment from "moment";
 
-import {
-  BlockOutlined,
-  EditOutlined,
-  PlusOutlined,
-} from '@ant-design/icons';
+import { BlockOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 
-import TableCustomAntd2
-  from '../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
-import Layout from '../../components/template/Layout/Layout';
-import useLanguageData from '../../data/context/language/useLanguageData';
-import CategoriesEnum from '../../shared/business/categories/categories.enum';
-import {
-  ICategory,
-} from '../../shared/business/categories/categories.interface';
-import TagsEnum from '../../shared/business/tags/tags.enum';
-import DatesEnum from '../../shared/utils/dates/dates.enum';
-import { createTableState } from '../../shared/utils/table/table-state';
-import {
-  ITableStateRequest,
-} from '../../shared/utils/table/table-state.interface';
-import {
-  CategoryDetailDrawer,
-} from './components/CategoryDetailDrawer/CategoryDetailDrawer';
-import {
-  useFindCategoriesByUserTableState,
-} from './useFindCategoriesByUserTableState';
+import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
+import Layout from "../../components/template/Layout/Layout";
+import useLanguageData from "../../data/context/language/useLanguageData";
+import CategoriesEnum from "../../shared/business/categories/categories.enum";
+import { ICategory } from "../../shared/business/categories/categories.interface";
+import TagsEnum from "../../shared/business/tags/tags.enum";
+import DatesEnum from "../../shared/utils/dates/dates.enum";
+import { createTableState } from "../../shared/utils/table/table-state";
+import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
+import { CategoryDetailDrawer } from "./components/CategoryDetailDrawer/CategoryDetailDrawer";
+import { useFindCategoriesByUserTableState } from "./useFindCategoriesByUserTableState";
 
 export default function CategoriesPage() {
   const { t } = useLanguageData()!;
@@ -83,11 +65,13 @@ export default function CategoriesPage() {
               dataIndex: "name",
               key: "name",
               align: "center",
+              sorter: true,
             },
             {
               title: t("categories.color"),
               dataIndex: "color",
               key: "color",
+              sorter: true,
               align: "center",
               render: (color: string | null) => (
                 <BlockOutlined

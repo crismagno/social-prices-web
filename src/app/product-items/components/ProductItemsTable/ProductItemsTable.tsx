@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  RefObject,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { RefObject, useEffect, useRef, useState } from "react";
 
 import {
   Avatar,
@@ -17,12 +12,10 @@ import {
   Space,
   Tag,
   Tooltip,
-} from 'antd';
-import moment from 'moment';
-import {
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useRouter } from 'next/navigation';
+} from "antd";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
 
 import {
   DownloadOutlined,
@@ -32,79 +25,48 @@ import {
   QuestionCircleOutlined,
   ShoppingCartOutlined,
   UploadOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import {
-  CustomRangeDatePicker,
-} from '../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker';
-import LoadingFull from '../../../../components/common/LoadingFull/LoadingFull';
-import SelectProducts
-  from '../../../../components/common/SelectProducts/SelectProducts';
-import {
-  TagCategoriesCustomAntd,
-} from '../../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd';
-import {
-  TagStoresCustomAntd,
-} from '../../../../components/common/TagStoresCustomAntd/TagStoresCustomAntd';
-import {
-  TagTagsCustomAntd,
-} from '../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
-import {
-  UploadFilesDrawer,
-} from '../../../../components/common/UploadFilesDrawer/UploadFilesDrawer';
-import YesNo from '../../../../components/common/YesNo/YesNo';
-import TableCustomAntd2
-  from '../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
-import useAuthData from '../../../../data/context/auth/useAuthData';
-import useLanguageData from '../../../../data/context/language/useLanguageData';
-import useSocketData from '../../../../data/context/socket/useSocketData';
-import {
-  serviceMethodsInstance,
-} from '../../../../services/social-prices-api/service-methods';
-import CategoriesEnum
-  from '../../../../shared/business/categories/categories.enum';
-import {
-  ICategory,
-} from '../../../../shared/business/categories/categories.interface';
-import FilesUploadsEnum
-  from '../../../../shared/business/files-uploads/files-uploads.enum';
-import ProductItemsEnum
-  from '../../../../shared/business/product-items/product-items.enum';
-import {
-  IProductItem,
-} from '../../../../shared/business/product-items/product-items.interface';
-import {
-  IProduct,
-} from '../../../../shared/business/products/products.interface';
-import SocketsEnum from '../../../../shared/business/sockets/sockets.enum';
-import TagsEnum from '../../../../shared/business/tags/tags.enum';
-import { ITag } from '../../../../shared/business/tags/tags.interface';
-import CommonEnum from '../../../../shared/common/enums/common.enum';
-import Urls from '../../../../shared/common/routes-app/routes-app';
-import { sortArray } from '../../../../shared/utils/array/array-functions';
-import DatesEnum from '../../../../shared/utils/dates/dates.enum';
-import { getImageUrl } from '../../../../shared/utils/images/images-url';
-import ImagesEnum from '../../../../shared/utils/images/images.enum';
-import { formatterMoney } from '../../../../shared/utils/strings/string';
-import { createTableState } from '../../../../shared/utils/table/table-state';
-import {
-  ITableStateRequest,
-} from '../../../../shared/utils/table/table-state.interface';
-import {
-  useFindCategoriesByType,
-} from '../../../categories/useFindCategoriesByType';
+import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
+import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
+import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
+import { TagCategoriesCustomAntd } from "../../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
+import { TagStoresCustomAntd } from "../../../../components/common/TagStoresCustomAntd/TagStoresCustomAntd";
+import { TagTagsCustomAntd } from "../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
+import { UploadFilesDrawer } from "../../../../components/common/UploadFilesDrawer/UploadFilesDrawer";
+import YesNo from "../../../../components/common/YesNo/YesNo";
+import TableCustomAntd2 from "../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
+import useAuthData from "../../../../data/context/auth/useAuthData";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
+import useSocketData from "../../../../data/context/socket/useSocketData";
+import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
+import CategoriesEnum from "../../../../shared/business/categories/categories.enum";
+import { ICategory } from "../../../../shared/business/categories/categories.interface";
+import FilesUploadsEnum from "../../../../shared/business/files-uploads/files-uploads.enum";
+import ProductItemsEnum from "../../../../shared/business/product-items/product-items.enum";
+import { IProductItem } from "../../../../shared/business/product-items/product-items.interface";
+import { IProduct } from "../../../../shared/business/products/products.interface";
+import SocketsEnum from "../../../../shared/business/sockets/sockets.enum";
+import TagsEnum from "../../../../shared/business/tags/tags.enum";
+import { ITag } from "../../../../shared/business/tags/tags.interface";
+import CommonEnum from "../../../../shared/common/enums/common.enum";
+import Urls from "../../../../shared/common/routes-app/routes-app";
+import { sortArray } from "../../../../shared/utils/array/array-functions";
+import DatesEnum from "../../../../shared/utils/dates/dates.enum";
+import { getImageUrl } from "../../../../shared/utils/images/images-url";
+import ImagesEnum from "../../../../shared/utils/images/images.enum";
+import { formatterMoney } from "../../../../shared/utils/strings/string";
+import { createTableState } from "../../../../shared/utils/table/table-state";
+import { ITableStateRequest } from "../../../../shared/utils/table/table-state.interface";
+import { useFindCategoriesByType } from "../../../categories/useFindCategoriesByType";
 import {
   FilesUploadsTable,
   IFilesUploadsTableRefProps,
-} from '../../../files-uploads/FilesUploadsTable';
-import {
-  DownloadProductItemsDrawer,
-} from '../../../product-items/components/DownloadProductItemsDrawer/DownloadProductItemsDrawer';
-import {
-  useFindProductItemsByUserTableState,
-} from '../../../product-items/useFindProductItemsByUserTableState';
-import { useFindStoresByUser } from '../../../stores/useFindStoresByUser';
-import { useFindTagsByType } from '../../../tags/useFindTagsByType';
+} from "../../../files-uploads/FilesUploadsTable";
+import { DownloadProductItemsDrawer } from "../../../product-items/components/DownloadProductItemsDrawer/DownloadProductItemsDrawer";
+import { useFindProductItemsByUserTableState } from "../../../product-items/useFindProductItemsByUserTableState";
+import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
+import { useFindTagsByType } from "../../../tags/useFindTagsByType";
 
 interface Props {
   productId?: string;
@@ -122,7 +84,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
     createTableState({
       sort: { field: "createdAt", order: "ascend" },
       filters: { productIds: productId ? [productId] : undefined },
-    })
+    }),
   );
 
   const {
@@ -136,7 +98,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
     useFindCategoriesByType(CategoriesEnum.Type.PRODUCT);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    TagsEnum.Type.PRODUCT
+    TagsEnum.Type.PRODUCT,
   );
 
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
@@ -154,19 +116,19 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
     if (socket && filesUploadsTableRef && user) {
       socket.on(
         SocketsEnum.EventNames.RESPONSE_UPLOAD_PRODUCT_ITEMS_FILE_TO_USER(
-          user._id
+          user._id,
         ),
         async () => {
           await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();
           await fetchFindProductItemsByUserTableState();
-        }
+        },
       );
 
       return () => {
         socket.off(
           SocketsEnum.EventNames.RESPONSE_UPLOAD_PRODUCT_ITEMS_FILE_TO_USER(
-            user._id
-          )
+            user._id,
+          ),
         );
       };
     }
@@ -267,7 +229,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
                   filters: {
                     ...tableStateRequest?.filters,
                     productIds: selectedProducts.map(
-                      (product: IProduct) => product._id
+                      (product: IProduct) => product._id,
                     ),
                   },
                 });
@@ -350,6 +312,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               title: t("productItems.name"),
               dataIndex: "name",
               key: "name",
+              sorter: true,
               align: "center",
               render: (_, productItem: IProductItem) => {
                 return (
@@ -376,11 +339,13 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               title: t("productItems.barcode"),
               dataIndex: "barcode",
               key: "barcode",
+              sorter: true,
               align: "center",
             },
             {
               title: t("productItems.sku"),
               dataIndex: "sku",
+              sorter: true,
               key: "sku",
               align: "center",
               render: (sku: string) => sku || "-",
@@ -515,7 +480,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               render: (expirationDate: Date) =>
                 expirationDate
                   ? moment(expirationDate).format(
-                      DatesEnum.Format.DDMMYYYYhhmmss
+                      DatesEnum.Format.DDMMYYYYhhmmss,
                     )
                   : "-",
               sorter: true,
@@ -553,8 +518,8 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
                         router.push(
                           Urls.EDIT_PRODUCT_ITEM.replace(
                             ":productItemId",
-                            productItem._id
-                          )
+                            productItem._id,
+                          ),
                         )
                       }
                       icon={<EditOutlined />}
@@ -568,8 +533,8 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
                         router.push(
                           Urls.PRODUCT_ITEM.replace(
                             ":productItemId",
-                            productItem._id
-                          )
+                            productItem._id,
+                          ),
                         )
                       }
                       icon={<EnterOutlined />}
@@ -583,8 +548,8 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
                         router.push(
                           Urls.SALES_CREATE_BY_PRODUCT_ITEM.replace(
                             ":productItemId",
-                            productItem._id
-                          )
+                            productItem._id,
+                          ),
                         )
                       }
                       icon={<ShoppingCartOutlined />}
@@ -606,7 +571,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
         onClose={() => setIsUploadFilesDrawerOpen(false)}
         onUploadFiles={async (formData: FormData) => {
           await serviceMethodsInstance.productItemsServiceMethods.uploadProductItems(
-            formData
+            formData,
           );
 
           await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();

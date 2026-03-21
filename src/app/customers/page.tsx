@@ -1,24 +1,11 @@
 "use client";
 
-import {
-  RefObject,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { RefObject, useEffect, useRef, useState } from "react";
 
-import {
-  Button,
-  Card,
-  Space,
-  Tag,
-  Tooltip,
-} from 'antd';
-import moment from 'moment';
-import {
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useRouter } from 'next/navigation';
+import { Button, Card, Space, Tag, Tooltip } from "antd";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
 
 import {
   DownloadOutlined,
@@ -27,58 +14,38 @@ import {
   PlusOutlined,
   ShoppingCartOutlined,
   UploadOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import {
-  ImageOrDefault,
-} from '../../components/common/ImageOrDefault/ImageOrDefault';
-import LoadingFull from '../../components/common/LoadingFull/LoadingFull';
-import {
-  PhoneNumbersTag,
-} from '../../components/common/PhoneNumbersTag/PhoneNumbersTag';
-import {
-  TagTagsCustomAntd,
-} from '../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
-import {
-  UploadFilesDrawer,
-} from '../../components/common/UploadFilesDrawer/UploadFilesDrawer';
-import TableCustomAntd2
-  from '../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
-import Layout from '../../components/template/Layout/Layout';
-import useAuthData from '../../data/context/auth/useAuthData';
-import useLanguageData from '../../data/context/language/useLanguageData';
-import useSocketData from '../../data/context/socket/useSocketData';
-import {
-  serviceMethodsInstance,
-} from '../../services/social-prices-api/service-methods';
-import { ICustomer } from '../../shared/business/customers/customer.interface';
-import FilesUploadsEnum
-  from '../../shared/business/files-uploads/files-uploads.enum';
-import PersonEnum from '../../shared/business/shared/person/person.enum';
-import {
-  IPhoneNumber,
-} from '../../shared/business/shared/phone/phone-number.interface';
-import SocketsEnum from '../../shared/business/sockets/sockets.enum';
-import TagsEnum from '../../shared/business/tags/tags.enum';
-import { ITag } from '../../shared/business/tags/tags.interface';
-import Urls from '../../shared/common/routes-app/routes-app';
-import { sortArray } from '../../shared/utils/array/array-functions';
-import DatesEnum from '../../shared/utils/dates/dates.enum';
-import { createTableState } from '../../shared/utils/table/table-state';
-import {
-  ITableStateRequest,
-} from '../../shared/utils/table/table-state.interface';
+import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
+import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
+import { PhoneNumbersTag } from "../../components/common/PhoneNumbersTag/PhoneNumbersTag";
+import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
+import { UploadFilesDrawer } from "../../components/common/UploadFilesDrawer/UploadFilesDrawer";
+import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
+import Layout from "../../components/template/Layout/Layout";
+import useAuthData from "../../data/context/auth/useAuthData";
+import useLanguageData from "../../data/context/language/useLanguageData";
+import useSocketData from "../../data/context/socket/useSocketData";
+import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
+import { ICustomer } from "../../shared/business/customers/customer.interface";
+import FilesUploadsEnum from "../../shared/business/files-uploads/files-uploads.enum";
+import PersonEnum from "../../shared/business/shared/person/person.enum";
+import { IPhoneNumber } from "../../shared/business/shared/phone/phone-number.interface";
+import SocketsEnum from "../../shared/business/sockets/sockets.enum";
+import TagsEnum from "../../shared/business/tags/tags.enum";
+import { ITag } from "../../shared/business/tags/tags.interface";
+import Urls from "../../shared/common/routes-app/routes-app";
+import { sortArray } from "../../shared/utils/array/array-functions";
+import DatesEnum from "../../shared/utils/dates/dates.enum";
+import { createTableState } from "../../shared/utils/table/table-state";
+import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import {
   FilesUploadsTable,
   IFilesUploadsTableRefProps,
-} from '../files-uploads/FilesUploadsTable';
-import { useFindTagsByType } from '../tags/useFindTagsByType';
-import {
-  DownloadCustomersDrawer,
-} from './components/DownloadCustomersDrawer/DownloadCustomersDrawer';
-import {
-  useFindCustomersByOwnerOfUserTableState,
-} from './useFindCustomersByOwnerOfUserTableState';
+} from "../files-uploads/FilesUploadsTable";
+import { useFindTagsByType } from "../tags/useFindTagsByType";
+import { DownloadCustomersDrawer } from "./components/DownloadCustomersDrawer/DownloadCustomersDrawer";
+import { useFindCustomersByOwnerOfUserTableState } from "./useFindCustomersByOwnerOfUserTableState";
 
 export default function CustomersPage() {
   const { user } = useAuthData();
@@ -106,7 +73,7 @@ export default function CustomersPage() {
     useState<boolean>(false);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    TagsEnum.Type.CUSTOMER
+    TagsEnum.Type.CUSTOMER,
   );
 
   const filesUploadsTableRef: RefObject<IFilesUploadsTableRefProps> =
@@ -119,14 +86,14 @@ export default function CustomersPage() {
         async () => {
           await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();
           await fetchFindCustomersByOwnerOfUserTableState();
-        }
+        },
       );
 
       return () => {
         socket.off(
           SocketsEnum.EventNames.RESPONSE_UPLOAD_CUSTOMERS_FILE_TO_USER(
-            user._id
-          )
+            user._id,
+          ),
         );
       };
     }
@@ -195,17 +162,20 @@ export default function CustomersPage() {
               dataIndex: "name",
               key: "name",
               align: "center",
+              sorter: true,
             },
             {
               title: t("customers.uniqName"),
               dataIndex: "uniqName",
               key: "uniqName",
+              sorter: true,
               align: "center",
             },
             {
               title: t("common.email"),
               dataIndex: "email",
               key: "email",
+              sorter: true,
               align: "center",
               render: (email: string) => (
                 <a href={`mailto:${email}`} className="text-blue-500">
@@ -278,8 +248,8 @@ export default function CustomersPage() {
                           router.push(
                             Urls.EDIT_CUSTOMER.replace(
                               ":customerId",
-                              customer._id
-                            )
+                              customer._id,
+                            ),
                           )
                         }
                         icon={<EditOutlined />}
@@ -291,7 +261,7 @@ export default function CustomersPage() {
                         type="default"
                         onClick={() =>
                           router.push(
-                            Urls.CUSTOMER.replace(":customerId", customer._id)
+                            Urls.CUSTOMER.replace(":customerId", customer._id),
                           )
                         }
                         icon={<EnterOutlined />}
@@ -305,8 +275,8 @@ export default function CustomersPage() {
                           router.push(
                             Urls.SALES_CREATE_BY_CUSTOMER.replace(
                               ":customerId",
-                              customer._id
-                            )
+                              customer._id,
+                            ),
                           )
                         }
                         icon={<ShoppingCartOutlined />}
@@ -331,7 +301,7 @@ export default function CustomersPage() {
         onClose={() => setIsUploadFilesDrawerOpen(false)}
         onUploadFiles={async (formData: FormData) => {
           await serviceMethodsInstance.customersServiceMethods.uploadCustomers(
-            formData
+            formData,
           );
 
           await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();

@@ -77,7 +77,7 @@ export default function ProductsPage() {
     useFindCategoriesByType(CategoriesEnum.Type.PRODUCT);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    TagsEnum.Type.PRODUCT
+    TagsEnum.Type.PRODUCT,
   );
 
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
@@ -98,12 +98,14 @@ export default function ProductsPage() {
         async () => {
           await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();
           await fetchFindProductsByUserTableState();
-        }
+        },
       );
 
       return () => {
         socket.off(
-          SocketsEnum.EventNames.RESPONSE_UPLOAD_PRODUCTS_FILE_TO_USER(user._id)
+          SocketsEnum.EventNames.RESPONSE_UPLOAD_PRODUCTS_FILE_TO_USER(
+            user._id,
+          ),
         );
       };
     }
@@ -206,6 +208,7 @@ export default function ProductsPage() {
               title: t("common.name"),
               dataIndex: "name",
               key: "name",
+              sorter: true,
               align: "center",
               render: (_, product: IProduct) => {
                 return (
@@ -222,12 +225,14 @@ export default function ProductsPage() {
               title: t("products.barcode"),
               dataIndex: "barcode",
               key: "barcode",
+              sorter: true,
               align: "center",
             },
             {
               title: t("products.sku"),
               dataIndex: "sku",
               key: "sku",
+              sorter: true,
               align: "center",
               render: (sku: string) => sku || "-",
             },
@@ -361,7 +366,7 @@ export default function ProductsPage() {
               render: (expirationDate: Date) =>
                 expirationDate
                   ? moment(expirationDate).format(
-                      DatesEnum.Format.DDMMYYYYhhmmss
+                      DatesEnum.Format.DDMMYYYYhhmmss,
                     )
                   : "-",
               sorter: true,
@@ -397,7 +402,7 @@ export default function ProductsPage() {
                       type="success"
                       onClick={() =>
                         router.push(
-                          Urls.EDIT_PRODUCT.replace(":productId", product._id)
+                          Urls.EDIT_PRODUCT.replace(":productId", product._id),
                         )
                       }
                       icon={<EditOutlined />}
@@ -409,7 +414,7 @@ export default function ProductsPage() {
                       type="default"
                       onClick={() =>
                         router.push(
-                          Urls.PRODUCT.replace(":productId", product._id)
+                          Urls.PRODUCT.replace(":productId", product._id),
                         )
                       }
                       icon={<EnterOutlined />}
@@ -423,8 +428,8 @@ export default function ProductsPage() {
                         router.push(
                           Urls.SALES_CREATE_BY_PRODUCT.replace(
                             ":productId",
-                            product._id
-                          )
+                            product._id,
+                          ),
                         )
                       }
                       icon={<ShoppingCartOutlined />}
@@ -446,7 +451,7 @@ export default function ProductsPage() {
         onClose={() => setIsUploadFilesDrawerOpen(false)}
         onUploadFiles={async (formData: FormData) => {
           await serviceMethodsInstance.productsServiceMethods.uploadProducts(
-            formData
+            formData,
           );
 
           await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();

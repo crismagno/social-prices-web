@@ -476,6 +476,7 @@ const SalesTable: React.FC<Props> = ({
               dataIndex: "numberManual",
               key: "numberManual",
               align: "center",
+              sorter: true,
               render: (numberManual: string) => (
                 <>
                   <strong className="mr-2">{numberManual ?? "-"}</strong>

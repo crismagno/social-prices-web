@@ -60,10 +60,12 @@ export default function TagsPage() {
               dataIndex: "name",
               key: "name",
               align: "center",
+              sorter: true,
             },
             {
               title: t("tags.color"),
               dataIndex: "color",
+              sorter: true,
               key: "color",
               align: "center",
               render: (color: string | null) => (
