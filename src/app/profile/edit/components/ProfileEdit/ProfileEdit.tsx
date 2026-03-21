@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import {
   Button,
@@ -49,18 +49,29 @@ interface Props {
   className?: string;
 }
 
-const formSchema = z.object({
-  name: z.string().trim().nonempty("Name is required"),
-  birthDate: z.string().nonempty("Birth date is required"),
+const _baseFormSchema = z.object({
+  name: z.string().trim(),
+  birthDate: z.string(),
   gender: z.string().nullable(),
   about: z.string().trim().nullable(),
 });
 
-type TFormSchema = z.infer<typeof formSchema>;
+type TFormSchema = z.infer<typeof _baseFormSchema>;
 
 const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
   const { user, updateUserSession } = useAuthData();
   const { t } = useLanguageData()!;
+
+  const formSchema = useMemo(
+    () =>
+      z.object({
+        name: z.string().trim().nonempty(t("errors.nameRequired")),
+        birthDate: z.string().nonempty(t("errors.birthDateRequired")),
+        gender: z.string().nullable(),
+        about: z.string().trim().nullable(),
+      }),
+    [t]
+  );
 
   const defaultValues: TFormSchema = {
     name: user?.name ?? "",

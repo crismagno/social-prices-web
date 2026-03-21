@@ -1,6 +1,7 @@
 import React from "react";
 
 import { IAddress } from "../../../shared/business/shared/address/address.interface";
+import useLanguageData from "../../../data/context/language/useLanguageData";
 import { AddressesTag } from "../AddressesTag/AddressesTag";
 import { IconQuestion } from "../icons/icons";
 
@@ -10,11 +11,12 @@ interface Props {
 }
 
 export const DescriptionAddresses: React.FC<Props> = ({ addresses, icon }) => {
+  const { t } = useLanguageData();
   return (
     <div className="flex items-start mt-4 ">
       <span className="mr-3">{icon ?? IconQuestion()}</span>
       <div className={`flex flex-col overflow-x-auto`}>
-        <label className="">Addresses</label>
+        <label className="">{t("stores.addresses")}</label>
         <div className="w-full overflow-x-auto flex">
           <AddressesTag addresses={addresses} />
         </div>

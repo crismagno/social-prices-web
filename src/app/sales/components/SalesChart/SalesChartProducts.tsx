@@ -114,7 +114,7 @@ export const SalesChartProducts: React.FC<Props> = ({ salesAnalytics }) => {
           textAnchor={textAnchor}
           fill="#999"
         >
-          {`(${t("common.percentage") || "Percent"}: ${(percent * 100).toFixed(
+          {`(${t("common.percentage")}: ${(percent * 100).toFixed(
             2
           )}%)`}
         </text>

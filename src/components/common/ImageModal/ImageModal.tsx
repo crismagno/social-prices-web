@@ -8,6 +8,7 @@ import type { UploadFile } from "antd/es/upload/interface";
 
 import { PlusOutlined } from "@ant-design/icons";
 
+import useLanguageData from "../../../data/context/language/useLanguageData";
 import { getBase64 } from "../../../shared/utils/images/images-helper";
 
 interface Props {
@@ -18,6 +19,7 @@ interface Props {
 }
 
 const ImageModal: React.FC<Props> = ({ isVisible, onCancel, onOk, url }) => {
+  const { t } = useLanguageData();
   const getDefaultFile = (): UploadFile => {
     return {
       uid: "12345",
@@ -60,7 +62,7 @@ const ImageModal: React.FC<Props> = ({ isVisible, onCancel, onOk, url }) => {
   const uploadButton = (
     <div>
       <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
+      <div style={{ marginTop: 8 }}>{t("common.upload")}</div>
     </div>
   );
 

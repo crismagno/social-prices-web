@@ -2,7 +2,7 @@
 
 import "./styles.scss";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   Button,
@@ -81,14 +81,14 @@ const dimensionsFormSchema = z.object({
   weight: z.any().optional(),
 });
 
-const formSchema = z.object({
-  name: z.string().trim().nonempty("Name is required"),
+const _baseFormSchema = z.object({
+  name: z.string().trim(),
   quantity: z.any().optional(),
   description: z.string().trim().optional(),
   details: z.string().trim().optional(),
   price: z.any().optional(),
   isActive: z.boolean(),
-  storeIds: z.array(z.string()).min(1, "Should select at least one store"),
+  storeIds: z.array(z.string()),
   barcode: z.string().trim().optional(),
   sku: z.string().trim().optional(),
   QRCode: z.string().optional(),
@@ -101,7 +101,7 @@ const formSchema = z.object({
   colors: z.array(colorSchema).optional(),
 });
 
-type TFormSchema = z.infer<typeof formSchema>;
+type TFormSchema = z.infer<typeof _baseFormSchema>;
 
 interface Props {
   productId: string | null;
@@ -128,6 +128,30 @@ export const ProductDetail: React.FC<Props> = ({
   const { product, isLoading } = useFindProductById(productId);
 
   const { t } = useLanguageData();
+
+  const formSchema = useMemo(
+    () =>
+      z.object({
+        name: z.string().trim().nonempty(t("errors.nameRequired")),
+        quantity: z.any().optional(),
+        description: z.string().trim().optional(),
+        details: z.string().trim().optional(),
+        price: z.any().optional(),
+        isActive: z.boolean(),
+        storeIds: z.array(z.string()).min(1, t("errors.selectAtLeastOneStore")),
+        barcode: z.string().trim().optional(),
+        sku: z.string().trim().optional(),
+        QRCode: z.string().optional(),
+        categoriesIds: z.array(z.string()),
+        tagsIds: z.array(z.string()),
+        brand: z.string().trim().optional(),
+        releaseDate: z.any().nullable().optional(),
+        expirationDate: z.any().nullable().optional(),
+        dimensions: dimensionsFormSchema.optional(),
+        colors: z.array(colorSchema).optional(),
+      }),
+    [t]
+  );
 
   const [formValues, setFormValues] = useState<TFormSchema>();
 

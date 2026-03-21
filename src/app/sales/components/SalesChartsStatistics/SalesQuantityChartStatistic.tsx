@@ -78,7 +78,7 @@ export const SalesQuantityChartStatistic: React.FC<Props> = ({
           padding: "5px",
         }}
       >
-        <p>{`${ChartsEnum.PeriodTypeLabel[periodType]}: ${item.name} `}</p>
+        <p>{`${t(`sales.${periodType.toLowerCase()}`)}: ${item.name} `}</p>
         <p>{`${t("sales.salesQuantityLabel")} ${itemSalesQuantity}`}</p>
         <p>{`Percentage by Sales Quantity: ${percentageBySalesQuantity.toFixed(
           2,
@@ -156,7 +156,7 @@ export const SalesQuantityChartStatistic: React.FC<Props> = ({
             <span className="mr-2">{t("sales.salesAmountByPeriod")}</span>
 
             <label className="font-semibold">
-              {ChartsEnum.PeriodTypeLabel[periodType]}
+              {t(`sales.${periodType.toLowerCase()}`)}
             </label>
           </>
         )}

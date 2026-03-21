@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  RefObject,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { RefObject, useEffect, useRef, useState } from "react";
 
 import {
   Badge,
@@ -19,18 +14,11 @@ import {
   Space,
   Tag,
   Tooltip,
-} from 'antd';
-import {
-  find,
-  first,
-  includes,
-  map,
-} from 'lodash';
-import moment from 'moment';
-import {
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useRouter } from 'next/navigation';
+} from "antd";
+import { find, first, includes, map } from "lodash";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
 
 import {
   CheckOutlined,
@@ -40,99 +28,60 @@ import {
   EnterOutlined,
   EyeOutlined,
   UploadOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import {
-  ButtonCreateSale,
-} from '../../../../components/common/ButtonCreateSale/ButtonCreateSale';
-import {
-  CustomRangeDatePicker,
-} from '../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker';
-import {
-  DeliveryAddressMapButton,
-} from '../../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton';
-import handleClientError
-  from '../../../../components/common/HandleClientError/HandleClientError';
-import {
-  ImageOrDefault,
-} from '../../../../components/common/ImageOrDefault/ImageOrDefault';
-import LoadingFull from '../../../../components/common/LoadingFull/LoadingFull';
-import {
-  SaleSummary,
-} from '../../../../components/common/SaleSummary/SaleSummary';
-import SelectProductItems
-  from '../../../../components/common/SelectProductItems/SelectProductItems';
-import SelectProducts
-  from '../../../../components/common/SelectProducts/SelectProducts';
-import {
-  StoreNameStatus,
-} from '../../../../components/common/StoreNameStatus/StoreNameStatus';
-import {
-  TagTagsCustomAntd,
-} from '../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
-import {
-  UploadFilesDrawer,
-} from '../../../../components/common/UploadFilesDrawer/UploadFilesDrawer';
-import YesNo from '../../../../components/common/YesNo/YesNo';
-import TableCustomAntd2
-  from '../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
-import useAuthData from '../../../../data/context/auth/useAuthData';
-import useLanguageData from '../../../../data/context/language/useLanguageData';
-import useSocketData from '../../../../data/context/socket/useSocketData';
-import {
-  serviceMethodsInstance,
-} from '../../../../services/social-prices-api/service-methods';
-import {
-  ICustomer,
-} from '../../../../shared/business/customers/customer.interface';
-import FilesUploadsEnum
-  from '../../../../shared/business/files-uploads/files-uploads.enum';
-import {
-  IProductItem,
-} from '../../../../shared/business/product-items/product-items.interface';
-import {
-  IProduct,
-} from '../../../../shared/business/products/products.interface';
+import { ButtonCreateSale } from "../../../../components/common/ButtonCreateSale/ButtonCreateSale";
+import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
+import { DeliveryAddressMapButton } from "../../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton";
+import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
+import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
+import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
+import { SaleSummary } from "../../../../components/common/SaleSummary/SaleSummary";
+import SelectProductItems from "../../../../components/common/SelectProductItems/SelectProductItems";
+import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
+import { StoreNameStatus } from "../../../../components/common/StoreNameStatus/StoreNameStatus";
+import { TagTagsCustomAntd } from "../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
+import { UploadFilesDrawer } from "../../../../components/common/UploadFilesDrawer/UploadFilesDrawer";
+import YesNo from "../../../../components/common/YesNo/YesNo";
+import TableCustomAntd2 from "../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
+import useAuthData from "../../../../data/context/auth/useAuthData";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
+import useSocketData from "../../../../data/context/socket/useSocketData";
+import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
+import { ICustomer } from "../../../../shared/business/customers/customer.interface";
+import FilesUploadsEnum from "../../../../shared/business/files-uploads/files-uploads.enum";
+import { IProductItem } from "../../../../shared/business/product-items/product-items.interface";
+import { IProduct } from "../../../../shared/business/products/products.interface";
 import {
   ISale,
   ISaleBuyer,
   ISaleStore,
-} from '../../../../shared/business/sales/sale.interface';
-import SalesEnum from '../../../../shared/business/sales/sales.enum';
-import SocketsEnum from '../../../../shared/business/sockets/sockets.enum';
-import { IStore } from '../../../../shared/business/stores/stores.interface';
-import TagsEnum from '../../../../shared/business/tags/tags.enum';
-import { ITag } from '../../../../shared/business/tags/tags.interface';
-import CommonEnum from '../../../../shared/common/enums/common.enum';
-import Urls from '../../../../shared/common/routes-app/routes-app';
-import { sortArray } from '../../../../shared/utils/array/array-functions';
-import DatesEnum from '../../../../shared/utils/dates/dates.enum';
-import { formatToMoneyDecimal } from '../../../../shared/utils/strings/string';
-import { createTableState } from '../../../../shared/utils/table/table-state';
-import {
-  ITableStateRequest,
-} from '../../../../shared/utils/table/table-state.interface';
+} from "../../../../shared/business/sales/sale.interface";
+import SalesEnum from "../../../../shared/business/sales/sales.enum";
+import SocketsEnum from "../../../../shared/business/sockets/sockets.enum";
+import { IStore } from "../../../../shared/business/stores/stores.interface";
+import TagsEnum from "../../../../shared/business/tags/tags.enum";
+import { ITag } from "../../../../shared/business/tags/tags.interface";
+import CommonEnum from "../../../../shared/common/enums/common.enum";
+import Urls from "../../../../shared/common/routes-app/routes-app";
+import { sortArray } from "../../../../shared/utils/array/array-functions";
+import DatesEnum from "../../../../shared/utils/dates/dates.enum";
+import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
+import { createTableState } from "../../../../shared/utils/table/table-state";
+import { ITableStateRequest } from "../../../../shared/utils/table/table-state.interface";
 import {
   FilesUploadsTable,
   IFilesUploadsTableRefProps,
-} from '../../../files-uploads/FilesUploadsTable';
-import { useFindStoresByUser } from '../../../stores/useFindStoresByUser';
-import { useFindTagsByType } from '../../../tags/useFindTagsByType';
-import {
-  useFindSalesByUserTableState,
-} from '../../useFindSalesByUserTableState';
-import {
-  useGetSalesSummaryByUserTableState,
-} from '../../useGetSalesSummaryByUserTableState';
-import {
-  DownloadSalesDrawer,
-} from '../DownloadSalesDrawer/DownloadSalesDrawer';
-import {
-  UpdateSaleCustomerButton,
-} from '../UpdateSaleCustomerButton/UpdateSaleCustomerButton';
-import SalesMissingPaymentLabel from './SalesMissingPaymentLabel';
-import SelectSalesPaymentStatus from './SelectSalesPaymentStatus';
-import SelectSalesStatus from './SelectSalesStatus';
+} from "../../../files-uploads/FilesUploadsTable";
+import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
+import { useFindTagsByType } from "../../../tags/useFindTagsByType";
+import { useFindSalesByUserTableState } from "../../useFindSalesByUserTableState";
+import { useGetSalesSummaryByUserTableState } from "../../useGetSalesSummaryByUserTableState";
+import { DownloadSalesDrawer } from "../DownloadSalesDrawer/DownloadSalesDrawer";
+import { UpdateSaleCustomerButton } from "../UpdateSaleCustomerButton/UpdateSaleCustomerButton";
+import SalesMissingPaymentLabel from "./SalesMissingPaymentLabel";
+import SelectSalesPaymentStatus from "./SelectSalesPaymentStatus";
+import SelectSalesStatus from "./SelectSalesStatus";
 
 interface Props {
   storeId?: string;
@@ -171,7 +120,7 @@ const SalesTable: React.FC<Props> = ({
         rangeField: SalesEnum.SortField.createdAt,
         employeeIds: employeeId ? [employeeId] : [],
       },
-    })
+    }),
   );
 
   const [isVisibleDeleteSaleModal, setIsVisibleDeleteSaleModal] =
@@ -219,7 +168,7 @@ const SalesTable: React.FC<Props> = ({
   const { stores, isLoading: isLoadingStores } = useFindStoresByUser();
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    TagsEnum.Type.SALE
+    TagsEnum.Type.SALE,
   );
 
   useEffect(() => {
@@ -230,12 +179,12 @@ const SalesTable: React.FC<Props> = ({
           await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();
           await fetchFindSalesByUserTableState();
           await fetchSalesSummaryByUserTableState();
-        }
+        },
       );
 
       return () => {
         socket.off(
-          SocketsEnum.EventNames.RESPONSE_UPLOAD_SALES_FILE_TO_USER(user._id)
+          SocketsEnum.EventNames.RESPONSE_UPLOAD_SALES_FILE_TO_USER(user._id),
         );
       };
     }
@@ -291,7 +240,7 @@ const SalesTable: React.FC<Props> = ({
 
   const handleFilterSaleByRangeDates = (
     startDate: Date | null,
-    endDate: Date | null
+    endDate: Date | null,
   ) => {
     setTableStateRequest({
       ...tableStateRequest,
@@ -321,7 +270,7 @@ const SalesTable: React.FC<Props> = ({
       await serviceMethodsInstance.salesServiceMethods.completeMultipleSalesManual(
         {
           saleIds: selectedSaleIds,
-        }
+        },
       );
 
       setSelectedSaleIds([]);
@@ -515,6 +464,7 @@ const SalesTable: React.FC<Props> = ({
               dataIndex: "number",
               key: "number",
               align: "center",
+              sorter: true,
               render: (number: string) => (
                 <>
                   <strong className="mr-2">{number}</strong>
@@ -539,7 +489,7 @@ const SalesTable: React.FC<Props> = ({
               align: "center",
               render: (buyer: ISaleBuyer, sale: ISale) => {
                 const customer: ICustomer | undefined = first(
-                  sale.stores
+                  sale.stores,
                 )?.customer;
 
                 const isSaleDeleted: boolean = !!sale.softDelete;
@@ -555,7 +505,10 @@ const SalesTable: React.FC<Props> = ({
                         className="p-0"
                         onClick={() =>
                           router.push(
-                            Urls.CUSTOMER.replace(":customerId", customer?._id!)
+                            Urls.CUSTOMER.replace(
+                              ":customerId",
+                              customer?._id!,
+                            ),
                           )
                         }
                       >
@@ -611,7 +564,7 @@ const SalesTable: React.FC<Props> = ({
                     deliveryType as SalesEnum.DeliveryType
                   ],
                   value: deliveryType,
-                })
+                }),
               ),
               render: (_, sale: ISale) => (
                 <div className="flex">
@@ -677,7 +630,7 @@ const SalesTable: React.FC<Props> = ({
                     paymentStatus as SalesEnum.PaymentStatus
                   ],
                   value: paymentStatus,
-                })
+                }),
               ),
               render: (_, sale: ISale) => {
                 const isSaleDeleted: boolean = !!sale.softDelete;
@@ -790,14 +743,14 @@ const SalesTable: React.FC<Props> = ({
 
                     {includes(
                       SalesEnum.StatusToShowDeliveryAt,
-                      sale.status
+                      sale.status,
                     ) && (
                       <Tooltip title={t("sales.daysRemaining")}>
                         <Badge
                           offset={[5, -5]}
                           color={SalesEnum.getDeliveryAtColor(deliveryAt)}
                           count={SalesEnum.getDeliveryAtDifferenceDays(
-                            deliveryAt
+                            deliveryAt,
                           )}
                           showZero
                         />
@@ -1030,7 +983,7 @@ const SalesTable: React.FC<Props> = ({
         onClose={() => setIsUploadFilesDrawerOpen(false)}
         onUploadFiles={async (formData: FormData) => {
           await serviceMethodsInstance.salesServiceMethods.uploadSales(
-            formData
+            formData,
           );
           await filesUploadsTableRef?.current?.fetchFindFilesUploadsByUserTableState();
         }}

@@ -24,6 +24,7 @@ import {
 } from '@ant-design/icons';
 
 import useAuthData from '../../../data/context/auth/useAuthData';
+import useLanguageData from '../../../data/context/language/useLanguageData';
 import {
   serviceMethodsInstance,
 } from '../../../services/social-prices-api/service-methods';
@@ -40,6 +41,7 @@ interface Props {
 
 const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
   const { updateUserSession, user } = useAuthData();
+  const { t } = useLanguageData();
 
   const getDefaultFile = (): UploadFile => {
     const defaultAvatarUrl: string = getImageUrl(user?.avatar!);
@@ -92,7 +94,7 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
 
   const handleSubmit = async (e: any) => {
     if (fileList.length === 0) {
-      message.error("Please select a image to avatar.");
+      message.error(t("profile.pleaseSelectImage"));
       return;
     }
 
@@ -135,7 +137,7 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
   const uploadButton = (
     <div>
       <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
+      <div style={{ marginTop: 8 }}>{t("common.upload")}</div>
     </div>
   );
 
@@ -174,7 +176,7 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
             loading={isSubmitting}
           >
             <UploadOutlined />
-            Upload
+            {t("common.upload")}
           </Button>
 
           {user?.avatar && (
@@ -184,7 +186,7 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
               loading={isSubmitting}
             >
               <DeleteOutlined />
-              Remove
+              {t("common.remove")}
             </Button>
           )}
         </div>

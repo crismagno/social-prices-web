@@ -86,9 +86,9 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
           padding: "5px",
         }}
       >
-        <p>{`${ChartsEnum.PeriodTypeLabel[periodType]}: ${item.name} `}</p>
+        <p>{`${t(`sales.${periodType.toLowerCase()}`)}: ${item.name} `}</p>
         <p>{`${t("sales.salesQuantity")}: ${item.salesQuantity}`}</p>
-        <p>{`${t("common.percentage") || "Percentage"} ${t(
+        <p>{`${t("common.percentage")} ${t(
           "sales.salesQuantity"
         )}: ${percentageBySalesQuantity.toFixed(2)}%`}</p>
       </div>
@@ -154,7 +154,7 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
     );
   };
 
-  const periodTypeLabel: string = ChartsEnum.PeriodTypeLabel[periodType];
+  const periodTypeLabel: string = t(`sales.${periodType.toLowerCase()}`);
 
   return (
     <>
@@ -169,7 +169,7 @@ export const SalesQuantityChartPeriodType: React.FC<Props> = ({
               Object.keys(ChartsEnum.PeriodType),
               (periodTypeParam: ChartsEnum.PeriodType) => (
                 <Select.Option key={periodTypeParam} value={periodTypeParam}>
-                  {ChartsEnum.PeriodTypeLabel[periodTypeParam]}
+                  {t(`sales.${periodTypeParam.toLowerCase()}`)}
                 </Select.Option>
               )
             )}

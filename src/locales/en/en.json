@@ -131,7 +131,9 @@
     "layout": "Layout",
     "colorMode": "Color Mode",
     "language": "Language",
-    "selectLanguage": "Select Language"
+    "selectLanguage": "Select Language",
+    "setThemeLight": "Set theme to light",
+    "setThemeDark": "Set theme to dark"
   },
   "auth": {
     "login": "Login",
@@ -241,7 +243,6 @@
     "activateManualSale": "Activate Manual Sale",
     "areYouSureDeleteSale": "Are you sure delete sale? Sale Number:",
     "areYouSureActivateSale": "Are you sure activate sale? Sale Number:",
-    "completedAt": "Completed At",
     "deliveryAt": "Delivery At",
     "createdAt": "Created At",
     "updatedAt": "Updated At",
@@ -282,7 +283,6 @@
     "seeSummary": "See Summary",
     "saleSummary": "Sale Summary",
     "goToSales": "Go to Sales",
-    "goToSale": "Go to Sale",
     "openSales": "Open Sales",
     "sale": "Sale",
     "completedAt": "Completed At",
@@ -745,7 +745,8 @@
     "savePhones": "Save Phones",
     "basicInfoUpdated": "Your basic information was updated!",
     "addressesInfoUpdated": "Your addresses information was updated!",
-    "phoneNumbersInfoUpdated": "Your phone numbers information was updated!"
+    "phoneNumbersInfoUpdated": "Your phone numbers information was updated!",
+    "pleaseSelectImage": "Please select a image to avatar."
   },
   "phoneNumber": {
     "phoneNumber": "Phone Number",
@@ -761,7 +762,15 @@
     "invalidPhone": "Invalid phone",
     "somethingWentWrong": "Something went wrong",
     "errorOccurred": "An error occurred",
-    "tryAgain": "Please try again"
+    "tryAgain": "Please try again",
+    "nameRequired": "Name is required",
+    "birthDateRequired": "Birth date is required",
+    "selectAtLeastOneStore": "Should select at least one store",
+    "customerNameRequired": "Customer name is required",
+    "customerEmailRequired": "Customer email is required",
+    "deliveryTypeRequired": "Delivery type is required",
+    "statusRequired": "Status is required",
+    "paymentStatusRequired": "Payment status is required"
   },
   "messages": {
     "savedSuccessfully": "Saved successfully",

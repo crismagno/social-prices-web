@@ -4,6 +4,7 @@ import { Button, ButtonProps } from "antd";
 
 import { DownloadOutlined } from "@ant-design/icons";
 
+import useLanguageData from "../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import handleClientError from "../HandleClientError/HandleClientError";
 
@@ -17,6 +18,7 @@ export const DownloadFile: React.FC<Props> = ({
   btnLabel,
   filename,
 }) => {
+  const { t } = useLanguageData();
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
 
   const handleDownloadFile = async () => {
@@ -48,7 +50,7 @@ export const DownloadFile: React.FC<Props> = ({
         icon={<DownloadOutlined />}
         {...btnProps}
       >
-        {btnLabel ?? "Download"}
+        {btnLabel ?? t("common.download")}
       </Button>
     </>
   );

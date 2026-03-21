@@ -3,19 +3,21 @@
 import { Tooltip } from "antd";
 
 import useAppData from "../../../data/context/app/useAppData";
+import useLanguageData from "../../../data/context/language/useLanguageData";
 import ThemeEnum from "../../../shared/common/enums/theme.enum";
 
 const ThemeButton: React.FC = () => {
   const {
     theme: { changeTheme, theme },
   } = useAppData();
+  const { t } = useLanguageData();
 
   return (
     <Tooltip
       title={
         theme === ThemeEnum.Theme.DARK
-          ? "Set theme to light"
-          : "Set theme to dark"
+          ? t("settings.setThemeLight")
+          : t("settings.setThemeDark")
       }
     >
       <button
@@ -27,8 +29,8 @@ const ThemeButton: React.FC = () => {
         onClick={changeTheme}
         title={
           theme === ThemeEnum.Theme.DARK
-            ? "Set theme to light"
-            : "Set theme to dark"
+            ? t("settings.setThemeLight")
+            : t("settings.setThemeDark")
         }
       >
         <span

@@ -131,7 +131,9 @@
     "layout": "Layout",
     "colorMode": "Modo de Cor",
     "language": "Idioma",
-    "selectLanguage": "Selecionar Idioma"
+    "selectLanguage": "Selecionar Idioma",
+    "setThemeLight": "Definir tema para claro",
+    "setThemeDark": "Definir tema para escuro"
   },
   "auth": {
     "login": "Entrar",
@@ -743,7 +745,8 @@
     "savePhones": "Salvar Telefones",
     "basicInfoUpdated": "Suas informações básicas foram atualizadas!",
     "addressesInfoUpdated": "Suas informações de endereços foram atualizadas!",
-    "phoneNumbersInfoUpdated": "Suas informações de telefones foram atualizadas!"
+    "phoneNumbersInfoUpdated": "Suas informações de telefones foram atualizadas!",
+    "pleaseSelectImage": "Por favor selecione uma imagem para o avatar."
   },
   "phoneNumber": {
     "phoneNumber": "Número de Telefone",
@@ -759,7 +762,15 @@
     "invalidPhone": "Telefone inválido",
     "somethingWentWrong": "Algo deu errado",
     "errorOccurred": "Ocorreu um erro",
-    "tryAgain": "Por favor, tente novamente"
+    "tryAgain": "Por favor, tente novamente",
+    "nameRequired": "Nome é obrigatório",
+    "birthDateRequired": "Data de nascimento é obrigatória",
+    "selectAtLeastOneStore": "Deve selecionar pelo menos uma loja",
+    "customerNameRequired": "Nome do cliente é obrigatório",
+    "customerEmailRequired": "E-mail do cliente é obrigatório",
+    "deliveryTypeRequired": "Tipo de entrega é obrigatório",
+    "statusRequired": "Status é obrigatório",
+    "paymentStatusRequired": "Status de pagamento é obrigatório"
   },
   "messages": {
     "savedSuccessfully": "Salvo com sucesso",

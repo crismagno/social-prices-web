@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   Alert,
@@ -135,8 +135,8 @@ export interface ISaleStoresProductsTotals {
 
 const customerFormSchema = z.object({
   customerId: z.string().nullable(),
-  name: z.string().trim().nonempty("Customer name is required"),
-  email: z.string().trim().nonempty("Customer email is required"),
+  name: z.string().trim().nonempty(),
+  email: z.string().trim().nonempty(),
   address: addressFormSchema,
   phoneNumber: z.string().trim().nullable(),
   about: z.string().trim().nullable(),
@@ -181,7 +181,7 @@ export type TShowValueNoteFormSchema = z.infer<typeof showValueNoteFormSchema>;
 
 const formSchema = z.object({
   customer: customerFormSchema,
-  deliveryType: z.string().nonempty("Delivery type is required"),
+  deliveryType: z.string().nonempty(),
   selectedStoreIds: z.array(z.string()),
   saleStores: z.array(saleStoreFormSchema),
   discount: showValueNoteFormSchema,
@@ -189,9 +189,9 @@ const formSchema = z.object({
   shipping: showValueNoteFormSchema,
   payments: z.array(salePaymentFormSchema),
   note: z.string().trim().nullable(),
-  status: z.string().nonempty("Status is required"),
+  status: z.string().nonempty(),
   isCreateQuote: z.boolean(),
-  paymentStatus: z.string().nonempty("Payment status is required"),
+  paymentStatus: z.string().nonempty(),
   tagsIds: z.array(z.string()),
   deliveryAt: z.string().nullable(),
   createdDate: z.string().nullable(),
@@ -248,6 +248,46 @@ export default function CreateSalePage() {
   const { user, employee } = useAuthData();
 
   const { t } = useLanguageData();
+
+  const validatedCustomerSchema = useMemo(
+    () =>
+      z.object({
+        customerId: z.string().nullable(),
+        name: z.string().trim().nonempty(t("errors.customerNameRequired")),
+        email: z.string().trim().nonempty(t("errors.customerEmailRequired")),
+        address: addressFormSchema,
+        phoneNumber: z.string().trim().nullable(),
+        about: z.string().trim().nullable(),
+        birthDate: z.string().nullable(),
+        gender: z.string().nullable(),
+      }),
+    [t],
+  );
+
+  const validatedFormSchema = useMemo(
+    () =>
+      z.object({
+        customer: validatedCustomerSchema,
+        deliveryType: z.string().nonempty(t("errors.deliveryTypeRequired")),
+        selectedStoreIds: z.array(z.string()),
+        saleStores: z.array(saleStoreFormSchema),
+        discount: showValueNoteFormSchema,
+        tax: showValueNoteFormSchema,
+        shipping: showValueNoteFormSchema,
+        payments: z.array(salePaymentFormSchema),
+        note: z.string().trim().nullable(),
+        status: z.string().nonempty(t("errors.statusRequired")),
+        isCreateQuote: z.boolean(),
+        paymentStatus: z.string().nonempty(t("errors.paymentStatusRequired")),
+        tagsIds: z.array(z.string()),
+        deliveryAt: z.string().nullable(),
+        createdDate: z.string().nullable(),
+        numberManual: z.string().nullable(),
+        noteToCustomer: z.string().nullable(),
+        isSendCustomerNotifications: z.boolean(),
+      }),
+    [validatedCustomerSchema, t],
+  );
 
   const router: AppRouterInstance = useRouter();
 
@@ -310,7 +350,7 @@ export default function CreateSalePage() {
     watch,
   } = useForm<TFormSchema>({
     values: formValues,
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(validatedFormSchema),
   });
 
   const handleSelectCustomer = (customer: ICustomer | null) => {
@@ -1907,7 +1947,11 @@ export default function CreateSalePage() {
 
             {renderGoToSaleButton()}
 
-            <Button type="primary" onClick={() => router.push(Urls.SALES)}>
+            <Button
+              type="primary"
+              className="ml-2"
+              onClick={() => router.push(Urls.SALES)}
+            >
               {t("sales.goToSales")}
             </Button>
           </div>

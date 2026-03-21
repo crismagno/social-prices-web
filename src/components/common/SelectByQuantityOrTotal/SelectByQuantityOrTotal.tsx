@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Select } from "antd";
 import { map } from "lodash";
 
+import useLanguageData from "../../../data/context/language/useLanguageData";
 import CommonEnum from "../../../shared/common/enums/common.enum";
 
 interface Props {
@@ -11,8 +12,14 @@ interface Props {
 }
 
 const SelectByQuantityOrTotal: React.FC<Props> = ({ onChange, label }) => {
+  const { t } = useLanguageData();
   const [quantityOrTotal, setQuantityOrTotal] =
     useState<CommonEnum.QuantityOrTotal>(CommonEnum.QuantityOrTotal.TOTAL);
+
+  const quantityOrTotalLabels: Record<CommonEnum.QuantityOrTotal, string> = {
+    [CommonEnum.QuantityOrTotal.QUANTITY]: t("common.quantity"),
+    [CommonEnum.QuantityOrTotal.TOTAL]: t("common.total"),
+  };
 
   return (
     <div>
@@ -31,7 +38,7 @@ const SelectByQuantityOrTotal: React.FC<Props> = ({ onChange, label }) => {
           Object.keys(CommonEnum.QuantityOrTotal),
           (quantityOrTotal: CommonEnum.QuantityOrTotal) => (
             <Select.Option key={quantityOrTotal} value={quantityOrTotal}>
-              {CommonEnum.QuantityOrTotalLabels[quantityOrTotal]}
+              {quantityOrTotalLabels[quantityOrTotal]}
             </Select.Option>
           )
         )}
