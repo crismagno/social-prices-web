@@ -1,43 +1,28 @@
-import {
-  Select,
-  Tooltip,
-} from 'antd';
-import {
-  Control,
-  useFieldArray,
-} from 'react-hook-form';
-import { z } from 'zod';
+import { Select, Tooltip } from "antd";
+import { Control, useFieldArray } from "react-hook-form";
+import { z } from "zod";
 
-import useLanguageData from '../../../data/context/language/useLanguageData';
-import AddressEnum from '../../../shared/business/shared/address/address.enum';
-import {
-  IAddress,
-} from '../../../shared/business/shared/address/address.interface';
-import citiesMockData from '../../../shared/utils/mock-data/brazil-cities.json';
-import statesMockData from '../../../shared/utils/mock-data/brazil-states.json';
-import countriesMockData from '../../../shared/utils/mock-data/countries.json';
+import useLanguageData from "../../../data/context/language/useLanguageData";
+import AddressEnum from "../../../shared/business/shared/address/address.enum";
+import { IAddress } from "../../../shared/business/shared/address/address.interface";
+import citiesMockData from "../../../shared/utils/mock-data/brazil-cities.json";
+import statesMockData from "../../../shared/utils/mock-data/brazil-states.json";
+import countriesMockData from "../../../shared/utils/mock-data/countries.json";
 import {
   ICityMockData,
   ICountryMockData,
   IStateMockData,
-} from '../../../shared/utils/mock-data/interfaces';
-import { createAddressName } from '../../../shared/utils/strings/string';
-import {
-  InputCustomAntd,
-} from '../../custom/antd/InputCustomAntd/InputCustomAntd';
-import {
-  SelectCustomAntd,
-} from '../../custom/antd/SelectCustomAntd/SelectCustomAntd';
-import ButtonCommon from '../ButtonCommon/ButtonCommon';
-import Collapse from '../Collapse/Collapse';
-import ContainerTitle from '../ContainerTitle/ContainerTitle';
-import {
-  IconPlus,
-  IconTrash,
-} from '../icons/icons';
+} from "../../../shared/utils/mock-data/interfaces";
+import { createAddressName } from "../../../shared/utils/strings/string";
+import { InputCustomAntd } from "../../custom/antd/InputCustomAntd/InputCustomAntd";
+import { SelectCustomAntd } from "../../custom/antd/SelectCustomAntd/SelectCustomAntd";
+import ButtonCommon from "../ButtonCommon/ButtonCommon";
+import Collapse from "../Collapse/Collapse";
+import ContainerTitle from "../ContainerTitle/ContainerTitle";
+import { IconPlus, IconTrash } from "../icons/icons";
 
 export const countries: ICountryMockData[] = countriesMockData.filter(
-  (country) => country.code === "BR"
+  (country) => country.code === "BR",
 );
 
 export const states: IStateMockData[] = statesMockData;
@@ -62,7 +47,7 @@ export const addressFormSchema = z.object({
 export type TAddressFormSchema = z.infer<typeof addressFormSchema>;
 
 export const generateNewAddress = (
-  isCollapsed: boolean = true
+  isCollapsed: boolean = true,
 ): TAddressFormSchema => ({
   address1: "",
   city: "",
@@ -175,6 +160,7 @@ export const Addresses: React.FC<Props> = ({
                   }
                   label={t("address.country")}
                   placeholder={t("address.selectCountry")}
+                  showSearch
                 >
                   {countries.map((country: ICountryMockData) => (
                     <Select.Option key={country.code} value={country.code}>
@@ -206,6 +192,7 @@ export const Addresses: React.FC<Props> = ({
                   errorMessage={errors?.addresses?.[index]?.stateCode?.message}
                   label={t("address.state")}
                   placeholder={t("address.selectState")}
+                  showSearch
                 >
                   {states.map((state: IStateMockData) => (
                     <Select.Option key={state.code} value={state.code}>
@@ -239,11 +226,12 @@ export const Addresses: React.FC<Props> = ({
                   errorMessage={errors?.addresses?.[index]?.city?.message}
                   label={t("address.city")}
                   placeholder={t("address.selectCity")}
+                  showSearch
                 >
                   {stateCities
                     .find(
                       (stateCity: ICityMockData) =>
-                        stateCity.stateCode === address.stateCode
+                        stateCity.stateCode === address.stateCode,
                     )
                     ?.cities.map((city: string) => (
                       <Select.Option key={city} value={city}>
@@ -265,6 +253,7 @@ export const Addresses: React.FC<Props> = ({
                   errorMessage={errors?.addresses?.[index]?.types?.message}
                   placeholder={t("address.selectTypes")}
                   mode="multiple"
+                  showSearch
                 >
                   {Object.keys(AddressEnum.Type).map((type: string) => (
                     <Select.Option key={type} value={type}>

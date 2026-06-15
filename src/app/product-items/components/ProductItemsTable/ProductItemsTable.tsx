@@ -18,6 +18,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import { useRouter } from "next/navigation";
 
 import {
+  AppstoreOutlined,
   DownloadOutlined,
   EditOutlined,
   EnterOutlined,
@@ -153,6 +154,15 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
         className="h-min-80 mt-5"
         extra={
           <>
+            <Button
+              type="primary"
+              onClick={() => router.push(Urls.PRODUCTS)}
+              className="mr-2"
+              icon={<AppstoreOutlined />}
+            >
+              {t("navigation.products")}
+            </Button>
+
             <Button
               type="primary"
               onClick={() => setIsDownloadDrawerOpen(true)}
