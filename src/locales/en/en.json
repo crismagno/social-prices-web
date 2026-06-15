@@ -126,7 +126,8 @@
     "telegram": "Telegram",
     "messenger": "Messenger",
     "socialPrices": "Social Prices",
-    "birthDate": "Birth Date"
+    "birthDate": "Birth Date",
+    "editImage": "Edit Image"
   },
   "navigation": {
     "home": "Home",
@@ -638,7 +639,7 @@
     "selectStores": "Select stores",
     "confirmCreateProduct": "Please confirm if you want to create a new product",
     "stores": "Stores",
-    "editImages": "Edit Images",
+    "editImage": "Edit Image",
     "colors": "Colors",
     "productSubtitle": "Here we can see about product",
     "seeImage": "See image",

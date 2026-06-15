@@ -3,6 +3,7 @@ import "./styles.scss";
 import React, { useEffect, useState } from "react";
 
 import { Modal, Upload } from "antd";
+import ImgCrop from "antd-img-crop";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
 
@@ -36,7 +37,7 @@ const ImageModal: React.FC<Props> = ({ isVisible, onCancel, onOk, url }) => {
   const [previewTitle, setPreviewTitle] = useState<string>("");
 
   const [fileList, setFileList] = useState<UploadFile[]>(
-    url ? [getDefaultFile()] : []
+    url ? [getDefaultFile()] : [],
   );
 
   useEffect(() => {
@@ -51,7 +52,7 @@ const ImageModal: React.FC<Props> = ({ isVisible, onCancel, onOk, url }) => {
     setPreviewImage(file.url || (file.preview as string));
     setPreviewOpen(true);
     setPreviewTitle(
-      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
+      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1),
     );
   };
 
@@ -78,17 +79,19 @@ const ImageModal: React.FC<Props> = ({ isVisible, onCancel, onOk, url }) => {
       destroyOnHidden
     >
       <div className="content-edit-modal">
-        <Upload
-          action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-          listType="picture-circle"
-          fileList={fileList}
-          onPreview={handlePreview}
-          onChange={handleChange}
-          className="avatar-uploader"
-          style={{ width: 100 }}
-        >
-          {fileList.length === 1 ? null : uploadButton}
-        </Upload>
+        <ImgCrop rotationSlider modalTitle={t("common.editImage")}>
+          <Upload
+            action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+            listType="picture-circle"
+            fileList={fileList}
+            onPreview={handlePreview}
+            onChange={handleChange}
+            className="avatar-uploader"
+            style={{ width: 200 }}
+          >
+            {fileList.length === 1 ? null : uploadButton}
+          </Upload>
+        </ImgCrop>
       </div>
 
       <Modal

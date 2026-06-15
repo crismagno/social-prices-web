@@ -126,7 +126,8 @@
     "telegram": "Telegram",
     "messenger": "Messenger",
     "socialPrices": "Social Prices",
-    "birthDate": "Data de Nascimento"
+    "birthDate": "Data de Nascimento",
+    "editImage": "Editar Imagem"
   },
   "navigation": {
     "home": "Início",

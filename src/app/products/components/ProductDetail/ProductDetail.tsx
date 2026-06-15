@@ -150,7 +150,7 @@ export const ProductDetail: React.FC<Props> = ({
         dimensions: dimensionsFormSchema.optional(),
         colors: z.array(colorSchema).optional(),
       }),
-    [t]
+    [t],
   );
 
   const [formValues, setFormValues] = useState<TFormSchema>();
@@ -462,7 +462,7 @@ export const ProductDetail: React.FC<Props> = ({
           <label className={`text-sm`}>{t("products.images")}</label>
 
           <div className="mt-2 w-full overflow-auto">
-            <ImgCrop rotationSlider modalTitle={t("products.editImages")}>
+            <ImgCrop rotationSlider modalTitle={t("common.editImage")}>
               <Upload
                 action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
                 listType="picture-card"

@@ -1,37 +1,24 @@
-import './styles.scss';
+import "./styles.scss";
 
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from "react";
 
-import {
-  Button,
-  message,
-  Modal,
-  Upload,
-} from 'antd';
-import type {
-  RcFile,
-  UploadProps,
-} from 'antd/es/upload';
-import type { UploadFile } from 'antd/es/upload/interface';
+import { Button, message, Modal, Upload } from "antd";
+import type { RcFile, UploadProps } from "antd/es/upload";
+import type { UploadFile } from "antd/es/upload/interface";
 
 import {
   DeleteOutlined,
   PlusOutlined,
   UploadOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import useAuthData from '../../../data/context/auth/useAuthData';
-import useLanguageData from '../../../data/context/language/useLanguageData';
-import {
-  serviceMethodsInstance,
-} from '../../../services/social-prices-api/service-methods';
-import IUser from '../../../shared/business/users/user.interface';
-import { getBase64 } from '../../../shared/utils/images/images-helper';
-import { getImageUrl } from '../../../shared/utils/images/images-url';
-import handleClientError from '../HandleClientError/HandleClientError';
+import useAuthData from "../../../data/context/auth/useAuthData";
+import useLanguageData from "../../../data/context/language/useLanguageData";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
+import IUser from "../../../shared/business/users/user.interface";
+import { getBase64 } from "../../../shared/utils/images/images-helper";
+import { getImageUrl } from "../../../shared/utils/images/images-url";
+import handleClientError from "../HandleClientError/HandleClientError";
 
 interface Props {
   isVisible: boolean;
@@ -63,7 +50,7 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
   const [previewTitle, setPreviewTitle] = useState<string>("");
 
   const [fileList, setFileList] = useState<UploadFile[]>(
-    user?.avatar ? [getDefaultFile()] : []
+    user?.avatar ? [getDefaultFile()] : [],
   );
 
   useEffect(() => {
@@ -84,7 +71,7 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
     setPreviewImage(file.url || (file.preview as string));
     setPreviewOpen(true);
     setPreviewTitle(
-      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
+      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1),
     );
   };
 
@@ -163,7 +150,7 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
           onPreview={handlePreview}
           onChange={handleChange}
           className="avatar-uploader"
-          style={{ width: 100 }}
+          style={{ width: 200 }}
           disabled={isSubmitting}
         >
           {fileList.length === 1 ? null : uploadButton}
