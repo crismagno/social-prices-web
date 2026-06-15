@@ -4,7 +4,6 @@ import moment from "moment";
 
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
-import PersonEnum from "../../../shared/business/shared/person/person.enum";
 import {
   ISale,
   ISaleBuyer,
@@ -12,12 +11,14 @@ import {
   ISaleStore,
   ISaleStoreProduct,
 } from "../../../shared/business/sales/sale.interface";
+import SalesEnum from "../../../shared/business/sales/sales.enum";
 import {
   getQuantity,
   getTotalAfterDiscount,
   getTotalAfterPayment,
   getTotalPayment,
 } from "../../../shared/business/sales/sales.utils";
+import PersonEnum from "../../../shared/business/shared/person/person.enum";
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import { ITag } from "../../../shared/business/tags/tags.interface";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";

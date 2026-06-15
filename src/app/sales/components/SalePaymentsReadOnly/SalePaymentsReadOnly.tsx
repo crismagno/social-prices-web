@@ -23,11 +23,7 @@ import {
   getTotalAfterPayment,
   getTotalPayment,
 } from "../../../../shared/business/sales/sales.utils";
-import {
-  formatterMoney,
-  formatToMoneyDecimal,
-  parserMoney,
-} from "../../../../shared/utils/strings/string";
+import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
 import SalesMissingPaymentLabel from "../SalesTable/SalesMissingPaymentLabel";
 
 interface Props {
@@ -83,10 +79,8 @@ export const SalePaymentsReadOnly: React.FC<Props> = ({ sale, title }) => {
 
               <Col xs={9}>
                 <Input
-                  formatter={formatterMoney}
-                  parser={parserMoney}
                   readOnly
-                  value={salePayment.amount}
+                  value={formatToMoneyDecimal(salePayment.amount)}
                 />
               </Col>
             </Row>
@@ -99,7 +93,7 @@ export const SalePaymentsReadOnly: React.FC<Props> = ({ sale, title }) => {
       <Descriptions
         bordered
         size="small"
-        labelStyle={{ width: 200 }}
+        styles={{ label: { width: 200 } }}
         className="sm:w-full"
       >
         <Descriptions.Item label={t("common.total")} span={3}>
