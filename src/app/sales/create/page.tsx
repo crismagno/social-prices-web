@@ -1517,11 +1517,11 @@ export default function CreateSalePage() {
                     {Object.keys(SalesEnum.DeliveryType).map((type: string) => (
                       <Select.Option key={type} value={type}>
                         <Tooltip title={createAddressName(type, t)}>
-                          {
-                            t(SalesEnum.DeliveryTypeLabels[
+                          {t(
+                            SalesEnum.DeliveryTypeLabels[
                               type as SalesEnum.DeliveryType
-                            ])
-                          }
+                            ],
+                          )}
                         </Tooltip>
                       </Select.Option>
                     ))}
@@ -1556,6 +1556,7 @@ export default function CreateSalePage() {
                   label={t("sales.state")}
                   divClassName="mt-1"
                   placeholder={t("address.selectState")}
+                  showSearch
                 >
                   {states.map((state: IStateMockData) => (
                     <Select.Option key={state.code} value={state.code}>
@@ -1570,6 +1571,7 @@ export default function CreateSalePage() {
                   label={t("sales.city")}
                   divClassName="mt-1"
                   placeholder={t("address.selectCity")}
+                  showSearch
                 >
                   {stateCities
                     .find(
@@ -1805,9 +1807,9 @@ export default function CreateSalePage() {
                   {Object.keys(SalesEnum.Status).map((status: string) => (
                     <Select.Option key={status} value={status}>
                       <LabelBadgeCustomAntd
-                        label={
-                          t(SalesEnum.StatusLabels[status as SalesEnum.Status])
-                        }
+                        label={t(
+                          SalesEnum.StatusLabels[status as SalesEnum.Status],
+                        )}
                         color={
                           SalesEnum.StatusColors[status as SalesEnum.Status]
                         }
@@ -1842,11 +1844,11 @@ export default function CreateSalePage() {
                     (paymentStatus: string) => (
                       <Select.Option key={paymentStatus} value={paymentStatus}>
                         <LabelBadgeCustomAntd
-                          label={
-                            t(SalesEnum.PaymentStatusLabels[
+                          label={t(
+                            SalesEnum.PaymentStatusLabels[
                               paymentStatus as SalesEnum.PaymentStatus
-                            ])
-                          }
+                            ],
+                          )}
                           color={
                             SalesEnum.PaymentStatusColors[
                               paymentStatus as SalesEnum.PaymentStatus

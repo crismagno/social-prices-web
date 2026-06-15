@@ -15,6 +15,7 @@ import {
   PlusOutlined,
   QuestionCircleOutlined,
   ShoppingCartOutlined,
+  ShoppingOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
 
@@ -130,6 +131,15 @@ export default function ProductsPage() {
         className="h-min-80 mt-5"
         extra={
           <>
+            <Button
+              type="primary"
+              onClick={() => router.push(Urls.PRODUCT_ITEMS)}
+              className="mr-2"
+              icon={<ShoppingOutlined />}
+            >
+              {t("navigation.productItems")}
+            </Button>
+
             <Button
               type="primary"
               onClick={() => setIsDownloadProductsDrawerOpen(true)}
