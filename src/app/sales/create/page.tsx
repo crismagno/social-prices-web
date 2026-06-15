@@ -554,14 +554,10 @@ export default function CreateSalePage() {
             saleById?.paymentStatus ?? SalesEnum.PaymentStatus.PENDING,
           tagsIds: saleById?.tagsIds ?? [],
           deliveryAt: saleById?.deliveryAt
-            ? moment(saleById.deliveryAt)
-                .utc()
-                .format(DatesEnum.Format.YYYYMMDD_DASHED)
+            ? moment(saleById.deliveryAt).format(DatesEnum.Format.YYYYMMDD_DASHED)
             : null,
           createdDate: saleById?.createdDate
-            ? moment(saleById.createdDate)
-                .utc()
-                .format(DatesEnum.Format.YYYYMMDD_DASHED)
+            ? moment(saleById.createdDate).format(DatesEnum.Format.YYYYMMDD_DASHED)
             : null,
           numberManual: saleById?.numberManual ?? null,
           noteToCustomer: saleById?.noteToCustomer ?? null,
