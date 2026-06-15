@@ -188,7 +188,7 @@ export const SalePayments: React.FC<Props> = ({
       <Descriptions
         bordered
         size="small"
-        labelStyle={{ width: 200 }}
+        styles={{ label: { width: 200 } }}
         className="md:w-2/3 sm:w-full"
       >
         <Descriptions.Item label={t("common.total")} span={3}>
