@@ -1,60 +1,32 @@
 "use client";
 
-import { useState } from 'react';
+import { Button, Card, Col, Descriptions, Row, Tabs, Tag, Tooltip } from "antd";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+import { useParams, useRouter } from "next/navigation";
 
-import {
-  Button,
-  Card,
-  Col,
-  Descriptions,
-  Image,
-  Modal,
-  Row,
-  Tabs,
-  Tag,
-  Tooltip,
-} from 'antd';
-import moment from 'moment';
-import {
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import {
-  useParams,
-  useRouter,
-} from 'next/navigation';
+import { EditOutlined } from "@ant-design/icons";
 
-import { EditOutlined } from '@ant-design/icons';
-
-import Avatar from '../../../components/common/Avatar/Avatar';
-import ContainerTitle
-  from '../../../components/common/ContainerTitle/ContainerTitle';
-import LoadingFull from '../../../components/common/LoadingFull/LoadingFull';
-import {
-  TagTagsCustomAntd,
-} from '../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
-import Layout from '../../../components/template/Layout/Layout';
-import useLanguageData from '../../../data/context/language/useLanguageData';
-import AddressEnum from '../../../shared/business/shared/address/address.enum';
-import {
-  IAddress,
-} from '../../../shared/business/shared/address/address.interface';
-import PersonEnum from '../../../shared/business/shared/person/person.enum';
-import PhoneNumberEnum
-  from '../../../shared/business/shared/phone/phone-number.enum';
-import {
-  IPhoneNumber,
-} from '../../../shared/business/shared/phone/phone-number.interface';
-import TagsEnum from '../../../shared/business/tags/tags.enum';
-import Urls from '../../../shared/common/routes-app/routes-app';
-import DatesEnum from '../../../shared/utils/dates/dates.enum';
-import { getImageUrl } from '../../../shared/utils/images/images-url';
-import ImagesEnum from '../../../shared/utils/images/images.enum';
-import { SalesBalance } from '../../sales/components/SalesBalance/SalesBalance';
-import { SalesChart } from '../../sales/components/SalesChart/SalesChart';
-import SalesTable from '../../sales/components/SalesTable/SalesTable';
-import { useFindTagsByType } from '../../tags/useFindTagsByType';
-import { useFindCustomerById } from '../detail/useFindCustomerById';
+import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
+import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
+import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
+import Layout from "../../../components/template/Layout/Layout";
+import useLanguageData from "../../../data/context/language/useLanguageData";
+import AddressEnum from "../../../shared/business/shared/address/address.enum";
+import { IAddress } from "../../../shared/business/shared/address/address.interface";
+import PersonEnum from "../../../shared/business/shared/person/person.enum";
+import PhoneNumberEnum from "../../../shared/business/shared/phone/phone-number.enum";
+import { IPhoneNumber } from "../../../shared/business/shared/phone/phone-number.interface";
+import TagsEnum from "../../../shared/business/tags/tags.enum";
+import Urls from "../../../shared/common/routes-app/routes-app";
+import DatesEnum from "../../../shared/utils/dates/dates.enum";
+import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
+import { SalesChart } from "../../sales/components/SalesChart/SalesChart";
+import SalesTable from "../../sales/components/SalesTable/SalesTable";
+import { useFindTagsByType } from "../../tags/useFindTagsByType";
+import { useFindCustomerById } from "../detail/useFindCustomerById";
 
 export default function CustomerPage() {
   const { t } = useLanguageData()!;
@@ -62,14 +34,12 @@ export default function CustomerPage() {
 
   const params: Params = useParams();
 
-  const [previewOpen, setPreviewOpen] = useState<boolean>(false);
-
   const paramsCustomerId: string = params?.customerId;
 
   const { isLoading, customer } = useFindCustomerById(paramsCustomerId);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    TagsEnum.Type.CUSTOMER
+    TagsEnum.Type.CUSTOMER,
   );
 
   if (isLoading || !customer || isLoadingTags) {
@@ -96,13 +66,7 @@ export default function CustomerPage() {
             md={5}
             className="flex flex-col justify-start items-center"
           >
-            <Avatar
-              onClick={() => setPreviewOpen(true)}
-              src={customer.avatar}
-              width={240}
-              className="shadow-lg border-none cursor-pointer z-10 rounded-lg mt-10"
-              title={t("profile.seeAvatar")}
-            />
+            <ImageOrDefault src={customer.avatar} width={240} />
 
             <h3 className="md:text-2xl font-semibold text-blueGray-700 mt-1 mb-1">
               {customer.name}
@@ -170,7 +134,7 @@ export default function CustomerPage() {
                     <Descriptions.Item label={t("customers.birthDate")}>
                       {customer.birthDate
                         ? moment(customer.birthDate).format(
-                            DatesEnum.Format.DDMMYYY
+                            DatesEnum.Format.DDMMYYY,
                           )
                         : "-"}
                     </Descriptions.Item>
@@ -183,7 +147,11 @@ export default function CustomerPage() {
                           ]
                         }
                       >
-                        {t(PersonEnum.GenderLabels[customer.gender ?? PersonEnum.Gender.OTHER])}
+                        {t(
+                          PersonEnum.GenderLabels[
+                            customer.gender ?? PersonEnum.Gender.OTHER
+                          ],
+                        )}
                       </Tag>
                     </Descriptions.Item>
                   </Descriptions>
@@ -229,20 +197,25 @@ export default function CustomerPage() {
                                       {phone.messengers.map(
                                         (
                                           messenger: PhoneNumberEnum.PhoneNumberMessenger,
-                                          messengerIndex: number
+                                          messengerIndex: number,
                                         ) => (
                                           <Tag
                                             key={messengerIndex}
                                             color="green"
                                           >
-                                            {t(PhoneNumberEnum.PhoneNumberMessengerLabels[messenger])}
+                                            {t(
+                                              PhoneNumberEnum
+                                                .PhoneNumberMessengerLabels[
+                                                messenger
+                                              ],
+                                            )}
                                           </Tag>
-                                        )
+                                        ),
                                       )}
                                     </div>
                                   )}
                               </div>
-                            )
+                            ),
                           )}
                         </div>
                       </Descriptions.Item>
@@ -267,12 +240,12 @@ export default function CustomerPage() {
                                     address.types.map(
                                       (
                                         type: AddressEnum.Type,
-                                        typeIndex: number
+                                        typeIndex: number,
                                       ) => (
                                         <Tag key={typeIndex} color="purple">
                                           {t(AddressEnum.TypesLabels[type])}
                                         </Tag>
-                                      )
+                                      ),
                                     )}
                                 </div>
                                 <div className="text-sm space-y-1">
@@ -298,7 +271,7 @@ export default function CustomerPage() {
                                   )}
                                 </div>
                               </div>
-                            )
+                            ),
                           )}
                         </div>
                       </Descriptions.Item>
@@ -339,7 +312,7 @@ export default function CustomerPage() {
                     <Descriptions.Item label={t("profile.createdAt")}>
                       {customer.createdAt
                         ? moment(customer.createdAt).format(
-                            DatesEnum.Format.DDMMYYYYhhmmss
+                            DatesEnum.Format.DDMMYYYYhhmmss,
                           )
                         : "-"}
                     </Descriptions.Item>
@@ -347,7 +320,7 @@ export default function CustomerPage() {
                     <Descriptions.Item label={t("profile.updatedAt")}>
                       {customer.updatedAt
                         ? moment(customer.updatedAt).format(
-                            DatesEnum.Format.DDMMYYYYhhmmss
+                            DatesEnum.Format.DDMMYYYYhhmmss,
                           )
                         : "-"}
                     </Descriptions.Item>
@@ -381,23 +354,6 @@ export default function CustomerPage() {
           ]}
         />
       </Card>
-
-      <Modal
-        open={previewOpen}
-        footer={null}
-        onCancel={() => setPreviewOpen(false)}
-      >
-        <Image
-          alt={t("common.previewImage")}
-          style={{ width: "100%" }}
-          preview={false}
-          src={
-            customer?.avatar
-              ? getImageUrl(customer.avatar)
-              : ImagesEnum.FilesNames.DefaultAvatarImage
-          }
-        />
-      </Modal>
     </Layout>
   );
 }

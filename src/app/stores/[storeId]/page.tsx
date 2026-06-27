@@ -1,19 +1,6 @@
 "use client";
 
-import { useState } from "react";
-
-import {
-  Button,
-  Card,
-  Col,
-  Descriptions,
-  Image,
-  Modal,
-  Row,
-  Tabs,
-  Tag,
-  Tooltip,
-} from "antd";
+import { Button, Card, Col, Descriptions, Row, Tabs, Tag, Tooltip } from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
@@ -21,8 +8,8 @@ import { useParams, useRouter } from "next/navigation";
 
 import { EditOutlined } from "@ant-design/icons";
 
-import Avatar from "../../../components/common/Avatar/Avatar";
 import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
+import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { TagCategoriesCustomAntd } from "../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
 import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
@@ -37,8 +24,6 @@ import StoresEnum from "../../../shared/business/stores/stores.enum";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
-import { getImageUrl } from "../../../shared/utils/images/images-url";
-import ImagesEnum from "../../../shared/utils/images/images.enum";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
 import { SalesBalance } from "../../sales/components/SalesBalance/SalesBalance";
 import { SalesChart } from "../../sales/components/SalesChart/SalesChart";
@@ -52,15 +37,13 @@ export default function StorePage() {
   const params: Params = useParams();
   const { t } = useLanguageData();
 
-  const [previewOpen, setPreviewOpen] = useState<boolean>(false);
-
   const { isLoadingStore, store } = useFindStoreById(params?.storeId);
 
   const { categories, isLoading: isLoadingCategories } =
     useFindCategoriesByType(CategoriesEnum.Type.STORE);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    TagsEnum.Type.STORE
+    TagsEnum.Type.STORE,
   );
 
   if (isLoadingStore || !store || isLoadingCategories || isLoadingTags) {
@@ -87,13 +70,7 @@ export default function StorePage() {
             md={5}
             className="flex flex-col justify-start items-center"
           >
-            <Avatar
-              onClick={() => setPreviewOpen(true)}
-              src={store.logo}
-              width={240}
-              className="shadow-lg border-none cursor-pointer z-10 rounded-lg mt-10"
-              title={t("stores.seeLogo")}
-            />
+            <ImageOrDefault src={store.logo} width={240} />
 
             <h3 className="md:text-2xl font-semibold text-blueGray-700 mt-1 mb-1">
               {store.name}
@@ -143,11 +120,11 @@ export default function StorePage() {
 
                     <Descriptions.Item label={t("stores.type")}>
                       <Tag color="blue">
-                        {
-                          t(StoresEnum.TypeLabels[
+                        {t(
+                          StoresEnum.TypeLabels[
                             store.type ?? StoresEnum.Type.OTHER
-                          ])
-                        }
+                          ],
+                        )}
                       </Tag>
                     </Descriptions.Item>
 
@@ -173,7 +150,7 @@ export default function StorePage() {
                     <Descriptions.Item label={t("stores.startedAt")}>
                       {store.startedAt
                         ? moment(store.startedAt).format(
-                            DatesEnum.Format.DDMMYYY
+                            DatesEnum.Format.DDMMYYY,
                           )
                         : "-"}
                     </Descriptions.Item>
@@ -230,24 +207,25 @@ export default function StorePage() {
                                       {phone.messengers.map(
                                         (
                                           messenger: PhoneNumberEnum.PhoneNumberMessenger,
-                                          messengerIndex: number
+                                          messengerIndex: number,
                                         ) => (
                                           <Tag
                                             key={messengerIndex}
                                             color="green"
                                           >
-                                            {
-                                              t(PhoneNumberEnum.PhoneNumberMessengerLabels[
+                                            {t(
+                                              PhoneNumberEnum
+                                                .PhoneNumberMessengerLabels[
                                                 messenger
-                                              ])
-                                            }
+                                              ],
+                                            )}
                                           </Tag>
-                                        )
+                                        ),
                                       )}
                                     </div>
                                   )}
                               </div>
-                            )
+                            ),
                           )}
                         </div>
                       </Descriptions.Item>
@@ -272,12 +250,12 @@ export default function StorePage() {
                                     address.types.map(
                                       (
                                         type: AddressEnum.Type,
-                                        typeIndex: number
+                                        typeIndex: number,
                                       ) => (
                                         <Tag key={typeIndex} color="purple">
                                           {t(AddressEnum.TypesLabels[type])}
                                         </Tag>
-                                      )
+                                      ),
                                     )}
                                 </div>
                                 <div className="text-sm space-y-1">
@@ -303,7 +281,7 @@ export default function StorePage() {
                                   )}
                                 </div>
                               </div>
-                            )
+                            ),
                           )}
                         </div>
                       </Descriptions.Item>
@@ -350,7 +328,7 @@ export default function StorePage() {
                     <Descriptions.Item label={t("profile.createdAt")}>
                       {store.createdAt
                         ? moment(store.createdAt).format(
-                            DatesEnum.Format.DDMMYYYYhhmmss
+                            DatesEnum.Format.DDMMYYYYhhmmss,
                           )
                         : "-"}
                     </Descriptions.Item>
@@ -358,7 +336,7 @@ export default function StorePage() {
                     <Descriptions.Item label={t("profile.updatedAt")}>
                       {store.updatedAt
                         ? moment(store.updatedAt).format(
-                            DatesEnum.Format.DDMMYYYYhhmmss
+                            DatesEnum.Format.DDMMYYYYhhmmss,
                           )
                         : "-"}
                     </Descriptions.Item>
@@ -393,23 +371,6 @@ export default function StorePage() {
           ]}
         />
       </Card>
-
-      <Modal
-        open={previewOpen}
-        footer={null}
-        onCancel={() => setPreviewOpen(false)}
-      >
-        <Image
-          alt={t("common.previewImage")}
-          style={{ width: "100%" }}
-          preview={false}
-          src={
-            store?.logo
-              ? getImageUrl(store.logo)
-              : ImagesEnum.FilesNames.DefaultAvatarImage
-          }
-        />
-      </Modal>
     </Layout>
   );
 }

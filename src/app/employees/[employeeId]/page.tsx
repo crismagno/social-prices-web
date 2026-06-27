@@ -7,7 +7,6 @@ import {
   Card,
   Col,
   Descriptions,
-  Image,
   Row,
   Spin,
   Tabs,
@@ -21,8 +20,8 @@ import { useParams, useRouter } from "next/navigation";
 
 import { EditOutlined } from "@ant-design/icons";
 
-import Avatar from "../../../components/common/Avatar/Avatar";
 import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
+import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
@@ -36,34 +35,32 @@ import { IPhoneNumber } from "../../../shared/business/shared/phone/phone-number
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
-import { getImageUrl } from "../../../shared/utils/images/images-url";
-import ImagesEnum from "../../../shared/utils/images/images.enum";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindEmployeeById } from "../detail/useFindEmployeeById";
 
 // Lazy load dos componentes pesados com named exports
 const Modal = lazy(() =>
-  import("antd").then((module) => ({ default: module.Modal }))
+  import("antd").then((module) => ({ default: module.Modal })),
 );
 const SalesBalance = lazy(() =>
   import("../../sales/components/SalesBalance/SalesBalance").then((m) => ({
     default: m.SalesBalance,
-  }))
+  })),
 );
 const SalesChart = lazy(() =>
   import("../../sales/components/SalesChart/SalesChart").then((m) => ({
     default: m.SalesChart,
-  }))
+  })),
 );
 const SalesChartsStatistics = lazy(() =>
-  import(
-    "../../sales/components/SalesChartsStatistics/SalesChartsStatistics"
-  ).then((m) => ({ default: m.SalesChartsStatistics }))
+  import("../../sales/components/SalesChartsStatistics/SalesChartsStatistics").then(
+    (m) => ({ default: m.SalesChartsStatistics }),
+  ),
 );
 const SalesTable = lazy(() =>
   import("../../sales/components/SalesTable/SalesTable").then((m) => ({
     default: m.default,
-  }))
+  })),
 );
 
 export default function EmployeePage() {
@@ -72,7 +69,6 @@ export default function EmployeePage() {
 
   const params: Params = useParams();
 
-  const [previewOpen, setPreviewOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>("1");
 
   const paramsEmployeeId: string = params?.employeeId;
@@ -80,7 +76,7 @@ export default function EmployeePage() {
   const { isLoading, employee } = useFindEmployeeById(paramsEmployeeId);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    TagsEnum.Type.EMPLOYEE
+    TagsEnum.Type.EMPLOYEE,
   );
 
   if (isLoading || !employee || isLoadingTags) {
@@ -107,13 +103,7 @@ export default function EmployeePage() {
             md={5}
             className="flex flex-col justify-start items-center"
           >
-            <Avatar
-              onClick={() => setPreviewOpen(true)}
-              src={employee.avatar}
-              width={240}
-              className="shadow-lg border-none cursor-pointer z-10 rounded-lg mt-10"
-              title={t("profile.seeAvatar")}
-            />
+            <ImageOrDefault src={employee.avatar} width={240} />
 
             <h3 className="md:text-2xl font-semibold text-blueGray-700 mt-1 mb-1">
               {employee.name}
@@ -195,7 +185,7 @@ export default function EmployeePage() {
                     <Descriptions.Item label={t("customers.birthDate")}>
                       {employee.birthDate
                         ? moment(employee.birthDate).format(
-                            DatesEnum.Format.DDMMYYY
+                            DatesEnum.Format.DDMMYYY,
                           )
                         : "-"}
                     </Descriptions.Item>
@@ -211,7 +201,7 @@ export default function EmployeePage() {
                         {t(
                           PersonEnum.GenderLabels[
                             employee.gender ?? PersonEnum.Gender.OTHER
-                          ]
+                          ],
                         )}
                       </Tag>
                     </Descriptions.Item>
@@ -270,22 +260,25 @@ export default function EmployeePage() {
                                       {phone.messengers.map(
                                         (
                                           messenger: PhoneNumberEnum.PhoneNumberMessenger,
-                                          messengerIndex: number
+                                          messengerIndex: number,
                                         ) => (
                                           <Tag
                                             key={messengerIndex}
                                             color="green"
                                           >
                                             {t(
-                                              PhoneNumberEnum.PhoneNumberMessengerLabels[messenger]
+                                              PhoneNumberEnum
+                                                .PhoneNumberMessengerLabels[
+                                                messenger
+                                              ],
                                             )}
                                           </Tag>
-                                        )
+                                        ),
                                       )}
                                     </div>
                                   )}
                               </div>
-                            )
+                            ),
                           )}
                         </div>
                       </Descriptions.Item>
@@ -310,12 +303,12 @@ export default function EmployeePage() {
                                     address.types.map(
                                       (
                                         type: AddressEnum.Type,
-                                        typeIndex: number
+                                        typeIndex: number,
                                       ) => (
                                         <Tag key={typeIndex} color="purple">
                                           {t(AddressEnum.TypesLabels[type])}
                                         </Tag>
-                                      )
+                                      ),
                                     )}
                                 </div>
                                 <div className="text-sm space-y-1">
@@ -341,7 +334,7 @@ export default function EmployeePage() {
                                   )}
                                 </div>
                               </div>
-                            )
+                            ),
                           )}
                         </div>
                       </Descriptions.Item>
@@ -382,7 +375,7 @@ export default function EmployeePage() {
                     <Descriptions.Item label={t("profile.createdAt")}>
                       {employee.createdAt
                         ? moment(employee.createdAt).format(
-                            DatesEnum.Format.DDMMYYYYhhmmss
+                            DatesEnum.Format.DDMMYYYYhhmmss,
                           )
                         : "-"}
                     </Descriptions.Item>
@@ -390,7 +383,7 @@ export default function EmployeePage() {
                     <Descriptions.Item label={t("profile.updatedAt")}>
                       {employee.updatedAt
                         ? moment(employee.updatedAt).format(
-                            DatesEnum.Format.DDMMYYYYhhmmss
+                            DatesEnum.Format.DDMMYYYYhhmmss,
                           )
                         : "-"}
                     </Descriptions.Item>
@@ -443,25 +436,6 @@ export default function EmployeePage() {
           ]}
         />
       </Card>
-
-      <Suspense fallback={null}>
-        <Modal
-          open={previewOpen}
-          footer={null}
-          onCancel={() => setPreviewOpen(false)}
-        >
-          <Image
-            alt={t("common.previewImage")}
-            style={{ width: "100%" }}
-            preview={false}
-            src={
-              employee?.avatar
-                ? getImageUrl(employee.avatar)
-                : ImagesEnum.FilesNames.DefaultAvatarImage
-            }
-          />
-        </Modal>
-      </Suspense>
     </Layout>
   );
 }

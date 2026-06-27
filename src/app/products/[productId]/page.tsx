@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import {
   Avatar as AvatarAntd,
   Button,
@@ -9,7 +7,6 @@ import {
   Col,
   Descriptions,
   Image,
-  Modal,
   QRCode,
   Row,
   Tabs,
@@ -23,8 +20,8 @@ import { useParams, useRouter } from "next/navigation";
 
 import { EditOutlined } from "@ant-design/icons";
 
-import Avatar from "../../../components/common/Avatar/Avatar";
 import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
+import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { ProductHistoricPricesButton } from "../../../components/common/ProductHistoricPricesButton/ProductHistoricPricesButton";
 import { TagCategoriesCustomAntd } from "../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
@@ -38,7 +35,6 @@ import TagsEnum from "../../../shared/business/tags/tags.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getImageUrl } from "../../../shared/utils/images/images-url";
-import ImagesEnum from "../../../shared/utils/images/images.enum";
 import { formatToMoneyDecimal } from "../../../shared/utils/strings/string";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
 import { ProductItemsTable } from "../../product-items/components/ProductItemsTable/ProductItemsTable";
@@ -55,14 +51,12 @@ export default function ProductPage() {
 
   const params: Params = useParams();
 
-  const [previewOpen, setPreviewOpen] = useState<boolean>(false);
-
   const paramsProductId: string = params?.productId;
 
   const { isLoading, product } = useFindProductById(paramsProductId);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    TagsEnum.Type.PRODUCT
+    TagsEnum.Type.PRODUCT,
   );
 
   const { categories, isLoading: isLoadingCategories } =
@@ -100,13 +94,7 @@ export default function ProductPage() {
             md={5}
             className="flex flex-col justify-start items-center"
           >
-            <Avatar
-              onClick={() => setPreviewOpen(true)}
-              src={product.mainUrl}
-              width={240}
-              className="shadow-lg border-none cursor-pointer z-10 rounded-lg mt-10"
-              title={t("products.seeImage")}
-            />
+            <ImageOrDefault src={product.mainUrl} width={240} />
 
             <div className="mt-2">
               <AvatarAntd.Group
@@ -266,7 +254,7 @@ export default function ProductPage() {
                     <Descriptions.Item label={t("products.releaseDate")}>
                       {product.releaseDate
                         ? moment(product.releaseDate).format(
-                            DatesEnum.Format.DDMMYYY
+                            DatesEnum.Format.DDMMYYY,
                           )
                         : "-"}
                     </Descriptions.Item>
@@ -274,7 +262,7 @@ export default function ProductPage() {
                     <Descriptions.Item label={t("products.expirationDate")}>
                       {product.expirationDate
                         ? moment(product.expirationDate).format(
-                            DatesEnum.Format.DDMMYYY
+                            DatesEnum.Format.DDMMYYY,
                           )
                         : "-"}
                     </Descriptions.Item>
@@ -286,7 +274,7 @@ export default function ProductPage() {
                     <Descriptions.Item label={t("sales.createdAt")}>
                       {product.createdAt
                         ? moment(product.createdAt).format(
-                            DatesEnum.Format.DDMMYYYYhhmmss
+                            DatesEnum.Format.DDMMYYYYhhmmss,
                           )
                         : "-"}
                     </Descriptions.Item>
@@ -294,7 +282,7 @@ export default function ProductPage() {
                     <Descriptions.Item label={t("sales.updatedAt")}>
                       {product.updatedAt
                         ? moment(product.updatedAt).format(
-                            DatesEnum.Format.DDMMYYYYhhmmss
+                            DatesEnum.Format.DDMMYYYYhhmmss,
                           )
                         : "-"}
                     </Descriptions.Item>
@@ -339,7 +327,7 @@ export default function ProductPage() {
                                   <span className="text-xs">{color}</span>
                                 </div>
                               </Tooltip>
-                            )
+                            ),
                           )}
                         </div>
                       </Descriptions.Item>
@@ -445,23 +433,6 @@ export default function ProductPage() {
           ]}
         />
       </Card>
-
-      <Modal
-        open={previewOpen}
-        footer={null}
-        onCancel={() => setPreviewOpen(false)}
-      >
-        <Image
-          alt="preview image"
-          style={{ width: "100%" }}
-          preview={false}
-          src={
-            product?.mainUrl
-              ? getImageUrl(product.mainUrl)
-              : ImagesEnum.FilesNames.DefaultAvatarImage
-          }
-        />
-      </Modal>
     </Layout>
   );
 }

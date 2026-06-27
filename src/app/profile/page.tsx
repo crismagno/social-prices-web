@@ -1,59 +1,33 @@
 "use client";
 
-import { useState } from 'react';
+import { Button, Card, Col, Descriptions, Row, Tag, Tooltip } from "antd";
+import moment from "moment";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
 
-import {
-  Button,
-  Card,
-  Col,
-  Descriptions,
-  Image,
-  Modal,
-  Row,
-  Tag,
-  Tooltip,
-} from 'antd';
-import moment from 'moment';
-import {
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useRouter } from 'next/navigation';
+import { EditOutlined, GoogleOutlined } from "@ant-design/icons";
 
-import {
-  EditOutlined,
-  GoogleOutlined,
-} from '@ant-design/icons';
-
-import Avatar from '../../components/common/Avatar/Avatar';
-import ContainerTitle
-  from '../../components/common/ContainerTitle/ContainerTitle';
-import LoadingFull from '../../components/common/LoadingFull/LoadingFull';
-import Layout from '../../components/template/Layout/Layout';
-import useAuthData from '../../data/context/auth/useAuthData';
-import useLanguageData from '../../data/context/language/useLanguageData';
-import EmployeesEnum from '../../shared/business/employees/employees.enum';
-import AddressEnum from '../../shared/business/shared/address/address.enum';
-import {
-  IAddress,
-} from '../../shared/business/shared/address/address.interface';
-import PersonEnum from '../../shared/business/shared/person/person.enum';
-import PhoneNumberEnum
-  from '../../shared/business/shared/phone/phone-number.enum';
-import {
-  IPhoneNumber,
-} from '../../shared/business/shared/phone/phone-number.interface';
-import UsersEnum from '../../shared/business/users/users.enum';
-import Urls from '../../shared/common/routes-app/routes-app';
-import DatesEnum from '../../shared/utils/dates/dates.enum';
-import { getImageUrl } from '../../shared/utils/images/images-url';
-import ImagesEnum from '../../shared/utils/images/images.enum';
-import { getUserName } from '../../shared/utils/strings/string';
+import ContainerTitle from "../../components/common/ContainerTitle/ContainerTitle";
+import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
+import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
+import Layout from "../../components/template/Layout/Layout";
+import useAuthData from "../../data/context/auth/useAuthData";
+import useLanguageData from "../../data/context/language/useLanguageData";
+import EmployeesEnum from "../../shared/business/employees/employees.enum";
+import AddressEnum from "../../shared/business/shared/address/address.enum";
+import { IAddress } from "../../shared/business/shared/address/address.interface";
+import PersonEnum from "../../shared/business/shared/person/person.enum";
+import PhoneNumberEnum from "../../shared/business/shared/phone/phone-number.enum";
+import { IPhoneNumber } from "../../shared/business/shared/phone/phone-number.interface";
+import UsersEnum from "../../shared/business/users/users.enum";
+import Urls from "../../shared/common/routes-app/routes-app";
+import DatesEnum from "../../shared/utils/dates/dates.enum";
+import { getUserName } from "../../shared/utils/strings/string";
 
 export default function ProfilePage() {
   const { user, employee } = useAuthData();
   const { t } = useLanguageData()!;
   const router: AppRouterInstance = useRouter();
-  const [previewOpen, setPreviewOpen] = useState<boolean>(false);
 
   if (!user) {
     return <LoadingFull />;
@@ -69,13 +43,7 @@ export default function ProfilePage() {
             md={5}
             className="flex flex-col justify-start items-center"
           >
-            <Avatar
-              onClick={() => setPreviewOpen(true)}
-              src={user.avatar}
-              width={240}
-              className="shadow-lg border-none cursor-pointer z-10 rounded-lg mt-10"
-              title={t("profile.seeAvatar")}
-            />
+            <ImageOrDefault src={user.avatar} width={240} />
 
             <h3 className="md:text-2xl font-semibold text-blueGray-700 mt-1 mb-1">
               {getUserName(user)}
@@ -105,7 +73,9 @@ export default function ProfilePage() {
               }
               className="mt-2"
             >
-              {t(UsersEnum.StatusLabels[user.status ?? UsersEnum.Status.PENDING])}
+              {t(
+                UsersEnum.StatusLabels[user.status ?? UsersEnum.Status.PENDING],
+              )}
             </Tag>
           </Col>
 
@@ -150,12 +120,12 @@ export default function ProfilePage() {
                           ) : null
                         }
                       >
-                        {
-                          t(UsersEnum.ProviderLabels[
+                        {t(
+                          UsersEnum.ProviderLabels[
                             user.loggedByAuthProvider ??
                               UsersEnum.Provider.OTHER
-                          ])
-                        }
+                          ],
+                        )}
                       </Tag>
                     </Descriptions.Item>
 
@@ -172,11 +142,11 @@ export default function ProfilePage() {
                           ) : null
                         }
                       >
-                        {
-                          t(UsersEnum.ProviderLabels[
+                        {t(
+                          UsersEnum.ProviderLabels[
                             user.authProvider ?? UsersEnum.Provider.OTHER
-                          ])
-                        }
+                          ],
+                        )}
                       </Tag>
                     </Descriptions.Item>
 
@@ -188,11 +158,11 @@ export default function ProfilePage() {
                           ]
                         }
                       >
-                        {
-                          t(UsersEnum.StatusLabels[
+                        {t(
+                          UsersEnum.StatusLabels[
                             user.status ?? UsersEnum.Status.PENDING
-                          ])
-                        }
+                          ],
+                        )}
                       </Tag>
                     </Descriptions.Item>
                   </Descriptions>
@@ -226,7 +196,7 @@ export default function ProfilePage() {
                     <Descriptions.Item label={t("customers.birthDate")}>
                       {user.birthDate
                         ? moment(user.birthDate).format(
-                            DatesEnum.Format.DDMMYYY
+                            DatesEnum.Format.DDMMYYY,
                           )
                         : "-"}
                     </Descriptions.Item>
@@ -239,11 +209,11 @@ export default function ProfilePage() {
                           ]
                         }
                       >
-                        {
-                          t(PersonEnum.GenderLabels[
+                        {t(
+                          PersonEnum.GenderLabels[
                             user.gender ?? PersonEnum.Gender.OTHER
-                          ])
-                        }
+                          ],
+                        )}
                       </Tag>
                     </Descriptions.Item>
                   </Descriptions>
@@ -289,24 +259,25 @@ export default function ProfilePage() {
                                       {phone.messengers.map(
                                         (
                                           messenger: PhoneNumberEnum.PhoneNumberMessenger,
-                                          messengerIndex: number
+                                          messengerIndex: number,
                                         ) => (
                                           <Tag
                                             key={messengerIndex}
                                             color="green"
                                           >
-                                            {
-                                              t(PhoneNumberEnum.PhoneNumberMessengerLabels[
+                                            {t(
+                                              PhoneNumberEnum
+                                                .PhoneNumberMessengerLabels[
                                                 messenger
-                                              ])
-                                            }
+                                              ],
+                                            )}
                                           </Tag>
-                                        )
+                                        ),
                                       )}
                                     </div>
                                   )}
                               </div>
-                            )
+                            ),
                           )}
                         </div>
                       </Descriptions.Item>
@@ -331,12 +302,12 @@ export default function ProfilePage() {
                                     address.types.map(
                                       (
                                         type: AddressEnum.Type,
-                                        typeIndex: number
+                                        typeIndex: number,
                                       ) => (
                                         <Tag key={typeIndex} color="purple">
                                           {t(AddressEnum.TypesLabels[type])}
                                         </Tag>
-                                      )
+                                      ),
                                     )}
                                 </div>
                                 <div className="text-sm space-y-1">
@@ -362,7 +333,7 @@ export default function ProfilePage() {
                                   )}
                                 </div>
                               </div>
-                            )
+                            ),
                           )}
                         </div>
                       </Descriptions.Item>
@@ -380,7 +351,7 @@ export default function ProfilePage() {
                     <Descriptions.Item label={t("profile.createdAt")}>
                       {user.createdAt
                         ? moment(user.createdAt).format(
-                            DatesEnum.Format.DDMMYYYYhhmmss
+                            DatesEnum.Format.DDMMYYYYhhmmss,
                           )
                         : "-"}
                     </Descriptions.Item>
@@ -388,7 +359,7 @@ export default function ProfilePage() {
                     <Descriptions.Item label={t("profile.updatedAt")}>
                       {user.updatedAt
                         ? moment(user.updatedAt).format(
-                            DatesEnum.Format.DDMMYYYYhhmmss
+                            DatesEnum.Format.DDMMYYYYhhmmss,
                           )
                         : "-"}
                     </Descriptions.Item>
@@ -399,23 +370,6 @@ export default function ProfilePage() {
           </Col>
         </Row>
       </Card>
-
-      <Modal
-        open={previewOpen}
-        footer={null}
-        onCancel={() => setPreviewOpen(false)}
-      >
-        <Image
-          alt="preview image"
-          style={{ width: "100%" }}
-          preview={false}
-          src={
-            user.avatar
-              ? getImageUrl(user.avatar)
-              : ImagesEnum.FilesNames.DefaultAvatarImage
-          }
-        />
-      </Modal>
     </Layout>
   );
 }
