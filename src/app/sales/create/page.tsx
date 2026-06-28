@@ -62,6 +62,7 @@ import { LabelBadgeCustomAntd } from "../../../components/common/LabelBadgeCusto
 import Loading from "../../../components/common/Loading/Loading";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { StoreNameStatus } from "../../../components/common/StoreNameStatus/StoreNameStatus";
+import { TagCategoryCustomAntd } from "../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
 import { TagTagCustomAntd } from "../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
 import { CheckboxCustomAntd } from "../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd";
 import { InputCustomAntd } from "../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
@@ -93,6 +94,8 @@ import { CreateAddressDto } from "../../../shared/business/shared/address/Create
 import PersonEnum from "../../../shared/business/shared/person/person.enum";
 import PhoneNumberEnum from "../../../shared/business/shared/phone/phone-number.enum";
 import { IStore } from "../../../shared/business/stores/stores.interface";
+import CategoriesEnum from "../../../shared/business/categories/categories.enum";
+import { ICategory } from "../../../shared/business/categories/categories.interface";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../shared/business/tags/tags.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
@@ -109,6 +112,7 @@ import {
 } from "../../../shared/utils/numbers/numbers";
 import { createAddressName } from "../../../shared/utils/strings/string";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
+import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { SaleExtraInfo } from "../components/SaleExtraInfo/SaleExtraInfo";
 import SalesTable from "../components/SalesTable/SalesTable";
@@ -193,6 +197,7 @@ const formSchema = z.object({
   isCreateQuote: z.boolean(),
   paymentStatus: z.string().nonempty(),
   tagsIds: z.array(z.string()),
+  categoriesIds: z.array(z.string()),
   deliveryAt: z.string().nullable(),
   createdDate: z.string().nullable(),
   numberManual: z.string().nullable(),
@@ -235,6 +240,7 @@ const generateFormSchemaDefault = (): TFormSchema => {
     isSendCustomerNotifications: false,
     paymentStatus: SalesEnum.PaymentStatus.PENDING,
     tagsIds: [],
+    categoriesIds: [],
     deliveryAt: null,
     createdDate: null,
     numberManual: null,
@@ -313,6 +319,9 @@ export default function CreateSalePage() {
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
     TagsEnum.Type.SALE,
   );
+
+  const { categories, isLoading: isLoadingCategories } =
+    useFindCategoriesByType(CategoriesEnum.Type.SALE);
 
   const isEditMode: boolean = !!saleIdByParam && !!saleById;
 
@@ -553,6 +562,7 @@ export default function CreateSalePage() {
           paymentStatus:
             saleById?.paymentStatus ?? SalesEnum.PaymentStatus.PENDING,
           tagsIds: saleById?.tagsIds ?? [],
+          categoriesIds: saleById?.categoriesIds ?? [],
           deliveryAt: saleById?.deliveryAt
             ? moment(saleById.deliveryAt).format(DatesEnum.Format.YYYYMMDD_DASHED)
             : null,
@@ -1119,6 +1129,7 @@ export default function CreateSalePage() {
           totalFinalAmount: totalFinal,
         },
         tagsIds: data.tagsIds,
+        categoriesIds: data.categoriesIds,
         stores: map(
           data.saleStores,
           (saleStore: TSaleStoreFormSchema): SaleStoreDto => {
@@ -1783,6 +1794,26 @@ export default function CreateSalePage() {
                   {sortArray(tags, "name").map((tag: ITag) => (
                     <Select.Option key={tag._id} value={tag._id}>
                       <TagTagCustomAntd tag={tag} useTag={false} />
+                    </Select.Option>
+                  ))}
+                </SelectCustomAntd>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col xs={24}>
+                <SelectCustomAntd<ICategory>
+                  controller={{ control, name: "categoriesIds" }}
+                  label={t("sales.categories")}
+                  divClassName="mt-3"
+                  errorMessage={errors.categoriesIds?.message}
+                  placeholder={t("sales.selectCategories")}
+                  mode="multiple"
+                  loading={isLoadingCategories}
+                >
+                  {sortArray(categories, "name").map((category: ICategory) => (
+                    <Select.Option key={category._id} value={category._id}>
+                      <TagCategoryCustomAntd category={category} useTag={false} />
                     </Select.Option>
                   ))}
                 </SelectCustomAntd>

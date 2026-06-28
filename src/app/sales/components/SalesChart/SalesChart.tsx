@@ -33,6 +33,9 @@ import {
   StoreNameStatus,
 } from '../../../../components/common/StoreNameStatus/StoreNameStatus';
 import {
+  TagCategoryCustomAntd,
+} from '../../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd';
+import {
   TagTagCustomAntd,
 } from '../../../../components/common/TagTagCustomAntd/TagTagCustomAntd';
 import useLanguageData from '../../../../data/context/language/useLanguageData';
@@ -50,11 +53,14 @@ import {
   createGetSalesAnalyticsParams,
 } from '../../../../shared/business/sales/sales.utils';
 import { IStore } from '../../../../shared/business/stores/stores.interface';
+import CategoriesEnum from '../../../../shared/business/categories/categories.enum';
+import { ICategory } from '../../../../shared/business/categories/categories.interface';
 import TagsEnum from '../../../../shared/business/tags/tags.enum';
 import { ITag } from '../../../../shared/business/tags/tags.interface';
 import ChartsEnum from '../../../../shared/utils/charts/charts-enum';
 import DatesEnum from '../../../../shared/utils/dates/dates.enum';
 import { useFindStoresByUser } from '../../../stores/useFindStoresByUser';
+import { useFindCategoriesByType } from '../../../categories/useFindCategoriesByType';
 import { useFindTagsByType } from '../../../tags/useFindTagsByType';
 import { useGetSalesAnalytics } from '../../useGetSalesAnalytics';
 import { SalesChartListProducts } from './SalesChartListProducts';
@@ -114,7 +120,10 @@ export const SalesChart: React.FC<Props> = ({
     TagsEnum.Type.SALE
   );
 
-  if (isLoading || isLoadingStores || isLoadingTags) {
+  const { categories, isLoading: isLoadingCategories } =
+    useFindCategoriesByType(CategoriesEnum.Type.SALE);
+
+  if (isLoading || isLoadingStores || isLoadingTags || isLoadingCategories) {
     return <Loading />;
   }
 
@@ -263,6 +272,28 @@ export const SalesChart: React.FC<Props> = ({
             {map(tags, (tag: ITag) => (
               <Select.Option key={tag._id} value={tag._id}>
                 <TagTagCustomAntd tag={tag} useTag={false} />
+              </Select.Option>
+            ))}
+          </Select>
+        </Col>
+
+        <Col md={3}>
+          <label className="mr-1 font-bold">{t("sales.categories")}:</label>
+          <Select
+            allowClear
+            mode="multiple"
+            value={getSalesAnalyticsParams.categoriesIds}
+            style={{ width: "100%" }}
+            onChange={(categoriesIds: string[]) => {
+              setGetSalesAnalyticsParams({
+                ...getSalesAnalyticsParams,
+                categoriesIds: categoriesIds ?? [],
+              });
+            }}
+          >
+            {map(categories, (category: ICategory) => (
+              <Select.Option key={category._id} value={category._id}>
+                <TagCategoryCustomAntd category={category} useTag={false} />
               </Select.Option>
             ))}
           </Select>

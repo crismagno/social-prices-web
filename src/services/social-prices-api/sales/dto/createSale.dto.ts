@@ -103,6 +103,7 @@ export default class CreateSaleDto {
   isCreateQuote: boolean = false;
   paymentStatus: SalesEnum.PaymentStatus = SalesEnum.PaymentStatus.PENDING;
   tagsIds: string[] = [];
+  categoriesIds: string[] = [];
   deliveryAt: Date | null = null;
   createdDate: Date | null = null;
   numberManual: string | null = null;

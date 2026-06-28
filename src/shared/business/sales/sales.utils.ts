@@ -17,6 +17,7 @@ export const createGetSalesAnalyticsParams = (
     rangeDate: params?.rangeDate,
     storesIds: params?.storesIds,
     tagsIds: params?.tagsIds,
+    categoriesIds: params?.categoriesIds,
     productIds: params?.productIds,
     customerIds: params?.customerIds,
     types: params?.types,

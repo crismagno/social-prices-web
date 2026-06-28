@@ -34,6 +34,7 @@ export interface ISale
   stores: ISaleStore[];
   paymentStatus: SalesEnum.PaymentStatus;
   tagsIds: string[];
+  categoriesIds: string[];
   deliveryAt: Date | null;
   createdDate: Date;
   numberManual: string | null;

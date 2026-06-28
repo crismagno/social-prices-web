@@ -9,12 +9,12 @@ interface Props {
 
 export const TagCategoriesCustomAntd: React.FC<Props> = ({
   categories,
-  categoriesIds,
+  categoriesIds = [],
   useTag = true,
 }) => {
   return categoriesIds.map((categoryId: string) => {
     const category: ICategory | undefined = categories.find(
-      (category: ICategory) => category._id === categoryId
+      (category: ICategory) => category._id === categoryId,
     );
 
     if (!category) {

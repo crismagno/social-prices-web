@@ -263,6 +263,7 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
                 type: payment.type as SalesEnum.PaymentType,
                 status: newPaymentStatus,
                 provider: null,
+                note: null,
               })
             );
 

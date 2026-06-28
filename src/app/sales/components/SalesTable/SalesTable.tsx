@@ -40,6 +40,7 @@ import { SaleSummary } from "../../../../components/common/SaleSummary/SaleSumma
 import SelectProductItems from "../../../../components/common/SelectProductItems/SelectProductItems";
 import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
 import { StoreNameStatus } from "../../../../components/common/StoreNameStatus/StoreNameStatus";
+import { TagCategoriesCustomAntd } from "../../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
 import { TagTagsCustomAntd } from "../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import { UploadFilesDrawer } from "../../../../components/common/UploadFilesDrawer/UploadFilesDrawer";
 import YesNo from "../../../../components/common/YesNo/YesNo";
@@ -48,6 +49,8 @@ import useAuthData from "../../../../data/context/auth/useAuthData";
 import useLanguageData from "../../../../data/context/language/useLanguageData";
 import useSocketData from "../../../../data/context/socket/useSocketData";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
+import CategoriesEnum from "../../../../shared/business/categories/categories.enum";
+import { ICategory } from "../../../../shared/business/categories/categories.interface";
 import { ICustomer } from "../../../../shared/business/customers/customer.interface";
 import FilesUploadsEnum from "../../../../shared/business/files-uploads/files-uploads.enum";
 import { IProductItem } from "../../../../shared/business/product-items/product-items.interface";
@@ -69,6 +72,7 @@ import DatesEnum from "../../../../shared/utils/dates/dates.enum";
 import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
 import { createTableState } from "../../../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../../../shared/utils/table/table-state.interface";
+import { useFindCategoriesByType } from "../../../categories/useFindCategoriesByType";
 import {
   FilesUploadsTable,
   IFilesUploadsTableRefProps,
@@ -171,6 +175,9 @@ const SalesTable: React.FC<Props> = ({
     TagsEnum.Type.SALE,
   );
 
+  const { categories, isLoading: isLoadingCategories } =
+    useFindCategoriesByType(CategoriesEnum.Type.SALE);
+
   useEffect(() => {
     if (socket && filesUploadsTableRef && user) {
       socket.on(
@@ -190,11 +197,12 @@ const SalesTable: React.FC<Props> = ({
     }
   }, [socket, filesUploadsTableRef, user]);
 
-  if (isLoadingStores || isLoadingTags) {
+  if (isLoadingStores || isLoadingTags || isLoadingCategories) {
     return <LoadingFull />;
   }
 
-  const tagsSort: ITag[] = sortArray(tags, "name");
+  const tagsSort: ITag[] = sortArray(tags, "name") ?? [];
+  const categoriesSort: ICategory[] = sortArray(categories, "name") ?? [];
 
   const handleEditSale = (sale: ISale) => {
     router.push(Urls.SALES_EDIT.replace(":saleId", sale._id));
@@ -710,13 +718,29 @@ const SalesTable: React.FC<Props> = ({
               title: t("sales.tags"),
               dataIndex: "tagsIds",
               key: "tagsIds",
-              filters: tagsSort.map((tag: ITag) => ({
+              filters: tagsSort?.map((tag: ITag) => ({
                 text: tag.name,
                 value: tag._id,
               })),
               align: "center",
               render: (tagsIds: string[]) => (
                 <TagTagsCustomAntd tags={tagsSort} tagsIds={tagsIds} />
+              ),
+            },
+            {
+              title: t("sales.categories"),
+              dataIndex: "categoriesIds",
+              key: "categoriesIds",
+              filters: categoriesSort?.map((category: ICategory) => ({
+                text: category.name,
+                value: category._id,
+              })),
+              align: "center",
+              render: (categoriesIds: string[]) => (
+                <TagCategoriesCustomAntd
+                  categories={categoriesSort}
+                  categoriesIds={categoriesIds}
+                />
               ),
             },
             {
@@ -1006,6 +1030,7 @@ const SalesTable: React.FC<Props> = ({
         isOpen={isDownloadSalesDrawerOpen}
         onClose={() => setIsDownloadSalesDrawerOpen(false)}
         tags={tagsSort}
+        categories={categoriesSort}
         title={t("sales.downloadSales")}
         stores={stores}
         storeId={storeId}

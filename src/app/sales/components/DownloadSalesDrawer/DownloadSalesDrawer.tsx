@@ -13,6 +13,7 @@ import handleClientError from "../../../../components/common/HandleClientError/H
 import { LabelBadgeCustomAntd } from "../../../../components/common/LabelBadgeCustomAntd/LabelBadgeCustomAntd";
 import SelectProductItems from "../../../../components/common/SelectProductItems/SelectProductItems";
 import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
+import { TagCategoryCustomAntd } from "../../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
 import { TagTagCustomAntd } from "../../../../components/common/TagTagCustomAntd/TagTagCustomAntd";
 import YesNo from "../../../../components/common/YesNo/YesNo";
 import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
@@ -25,6 +26,7 @@ import SalesEnum from "../../../../shared/business/sales/sales.enum";
 import { IFiltersDownloadSales } from "../../../../shared/business/sales/sales.type";
 import StoresEnum from "../../../../shared/business/stores/stores.enum";
 import { IStore } from "../../../../shared/business/stores/stores.interface";
+import { ICategory } from "../../../../shared/business/categories/categories.interface";
 import { ITag } from "../../../../shared/business/tags/tags.interface";
 import CommonEnum from "../../../../shared/common/enums/common.enum";
 import TableStateEnum from "../../../../shared/utils/table/table-state.enum";
@@ -32,6 +34,7 @@ import TableStateEnum from "../../../../shared/utils/table/table-state.enum";
 const formSchema = z.object({
   search: z.string().nullable(),
   tagsIds: z.array(z.string()),
+  categoriesIds: z.array(z.string()),
   customerIds: z.array(z.string()),
   types: z.array(z.string()),
   deliveryTypes: z.array(z.string()),
@@ -61,6 +64,7 @@ interface Props {
   title?: string;
   width?: string | number;
   tags: ITag[];
+  categories: ICategory[];
   stores: IStore[];
   storeId?: string;
   customerId?: string;
@@ -75,6 +79,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
   title,
   width = "50%",
   tags = [],
+  categories = [],
   stores = [],
   storeId,
   customerId,
@@ -96,6 +101,7 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
     values: {
       search: null,
       tagsIds: [],
+      categoriesIds: [],
       types: [],
       rangeDate: null,
       deliveryTypes: [],
@@ -336,6 +342,23 @@ export const DownloadSalesDrawer: React.FC<Props> = ({
               {tags.map((tag: ITag) => (
                 <Select.Option key={tag._id} value={tag._id}>
                   <TagTagCustomAntd tag={tag} useTag={false} />
+                </Select.Option>
+              ))}
+            </SelectCustomAntd>
+          </Col>
+
+          <Col xs={24} sm={12}>
+            <SelectCustomAntd<ICategory>
+              controller={{ control, name: "categoriesIds" }}
+              label={t("sales.categories")}
+              errorMessage={errors.categoriesIds?.message}
+              placeholder={t("sales.selectCategories")}
+              mode="multiple"
+              allowClear
+            >
+              {categories.map((category: ICategory) => (
+                <Select.Option key={category._id} value={category._id}>
+                  <TagCategoryCustomAntd category={category} useTag={false} />
                 </Select.Option>
               ))}
             </SelectCustomAntd>
