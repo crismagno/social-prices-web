@@ -839,7 +839,8 @@
     "deleteAccountWarning5": "If you have any questions, please contact support before proceeding.",
     "deleteAccountReason": "Please provide a reason for deleting your account (optional).",
     "deleteEnterReason": "Enter the reason for deleting your account",
-    "deleteAccountConfirmLabel": "I understand that this action is permanent and cannot be undone."
+    "deleteAccountConfirmLabel": "I understand that this action is permanent and cannot be undone.",
+    "dangerZone": "Danger Zone"
   },
   "phoneNumber": {
     "phoneNumber": "Phone Number",

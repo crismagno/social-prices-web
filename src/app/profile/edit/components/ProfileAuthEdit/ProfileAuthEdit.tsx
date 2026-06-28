@@ -2,8 +2,6 @@
 
 import { Button, Space } from "antd";
 
-import { DeleteOutlined } from "@ant-design/icons";
-
 import ContainerTitle from "../../../../../components/common/ContainerTitle/ContainerTitle";
 import DescriptionInput from "../../../../../components/common/DescriptionInput/DescriptionInput";
 import useAuthData from "../../../../../data/context/auth/useAuthData";
@@ -51,17 +49,6 @@ const ProfileAuthEdit: React.FC = () => {
             disabled
           />
         </div>
-      </div>
-
-      <div className="mt-6">
-        <Button
-          danger
-          type="primary"
-          href={Urls.PROFILE_DELETE}
-          icon={<DeleteOutlined />}
-        >
-          {t("profile.deleteAccount")}
-        </Button>
       </div>
     </ContainerTitle>
   );

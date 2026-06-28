@@ -2,13 +2,17 @@
 
 import { useState } from "react";
 
-import { Card } from "antd";
+import { Button, Card } from "antd";
+
+import DeleteOutlined from "@ant-design/icons/lib/icons/DeleteOutlined";
 
 import Avatar from "../../../components/common/Avatar/Avatar";
+import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
 import EditAvatarModal from "../../../components/common/EditAvatarModal/EditAvatarModal";
 import Layout from "../../../components/template/Layout/Layout";
 import useAuthData from "../../../data/context/auth/useAuthData";
 import useLanguageData from "../../../data/context/language/useLanguageData";
+import Urls from "../../../shared/common/routes-app/routes-app";
 import ProfileAddressesEdit from "./components/ProfileAddressesEdit/ProfileAddressesEdit";
 import ProfileAuthEdit from "./components/ProfileAuthEdit/ProfileAuthEdit";
 import ProfileEdit from "./components/ProfileEdit/ProfileEdit";
@@ -51,6 +55,26 @@ export default function ProfileEditPage() {
         <ProfileAddressesEdit />
 
         <ProfilePhonesEdit />
+
+        <ContainerTitle
+          title={
+            <div className="flex items-center">
+              <label className="mr-4">{t("profile.dangerZone")}</label>
+            </div>
+          }
+          className="mt-10"
+        >
+          <div className="mt-6">
+            <Button
+              danger
+              type="primary"
+              href={Urls.PROFILE_DELETE}
+              icon={<DeleteOutlined />}
+            >
+              {t("profile.deleteAccount")}
+            </Button>
+          </div>
+        </ContainerTitle>
 
         {/* <ProfileCardsPaymentsEdit /> */}
       </Card>

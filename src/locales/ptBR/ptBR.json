@@ -842,7 +842,8 @@
     "deleteAccountWarning5": "Se você tiver alguma dúvida, entre em contato com o suporte antes de prosseguir.",
     "deleteAccountReason": "Por favor, forneça um motivo para a exclusão da conta (opcional).",
     "deleteEnterReason": "Digite o motivo da exclusão da conta",
-    "deleteAccountConfirmLabel": "Eu entendo que esta ação é permanente e não pode ser desfeita."
+    "deleteAccountConfirmLabel": "Eu entendo que esta ação é permanente e não pode ser desfeita.",
+    "dangerZone": "Zona de Perigo"
   },
   "phoneNumber": {
     "phoneNumber": "Número de Telefone",
