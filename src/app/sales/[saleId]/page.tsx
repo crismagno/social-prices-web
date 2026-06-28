@@ -38,11 +38,14 @@ import { ISaleBuyer } from "../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../shared/business/sales/sales.enum";
 import { IAddress } from "../../../shared/business/shared/address/address.interface";
 import PersonEnum from "../../../shared/business/shared/person/person.enum";
+import CategoriesEnum from "../../../shared/business/categories/categories.enum";
+import { ICategory } from "../../../shared/business/categories/categories.interface";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { addressTypesToString } from "../../../shared/utils/strings/string";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
+import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { SaleExtraInfo } from "../components/SaleExtraInfo/SaleExtraInfo";
 import { SaleFilesList } from "../components/SaleFilesList/SaleFilesList";
@@ -50,6 +53,7 @@ import { SalePaymentsReadOnly } from "../components/SalePaymentsReadOnly/SalePay
 import { SaleSelectedProducts } from "../components/SaleSelectedProducts/SaleSelectedProducts";
 import SalesTable from "../components/SalesTable/SalesTable";
 import { SaleStoresListCard } from "../components/SaleStoresListCard/SaleStoresListCard";
+import { SaleCategoriesList } from "../components/SaleCategoriesList/SaleCategoriesList";
 import { SaleTagsList } from "../components/SaleTagsList/SaleTagsList";
 import { useFindSaleFilledByIdOrFail } from "../useFindSaleFilledByIdOrFail";
 
@@ -68,6 +72,9 @@ export default function SalePage() {
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
     TagsEnum.Type.SALE,
   );
+
+  const { categories, isLoading: isLoadingCategories } =
+    useFindCategoriesByType(CategoriesEnum.Type.SALE);
   const [isOpenSalesTable, setIsOpenSalesTable] = useState<boolean>(false);
 
   const [isOpenSaleSummaryModal, setIsOpenSaleSummaryModal] =
@@ -75,7 +82,7 @@ export default function SalePage() {
 
   const { t } = useLanguageData();
 
-  if (isLoading || !sale || isLoadingTags || isLoadingStores) {
+  if (isLoading || !sale || isLoadingTags || isLoadingStores || isLoadingCategories) {
     return <LoadingFull />;
   }
 
@@ -419,6 +426,18 @@ export default function SalePage() {
             </Row>
 
             <Row>
+              <Col xs={24}>
+                <Description
+                  label={t("sales.categories")}
+                  className="w-full"
+                  description={
+                    <SaleCategoriesList sale={sale} categories={categories} />
+                  }
+                />
+              </Col>
+            </Row>
+
+            <Row>
               <Col xs={24} md={8}>
                 <Description
                   label={t("sales.status")}
@@ -523,7 +542,7 @@ export default function SalePage() {
         onCancel={() => setIsOpenSaleSummaryModal(false)}
         width={700}
       >
-        <SaleSummary sale={sale} stores={stores} tags={tags} />
+        <SaleSummary sale={sale} stores={stores} tags={tags} categories={categories} />
       </Modal>
 
       <Drawer

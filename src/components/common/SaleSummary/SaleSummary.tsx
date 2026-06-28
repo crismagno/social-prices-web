@@ -20,6 +20,7 @@ import {
 } from "../../../shared/business/sales/sales.utils";
 import PersonEnum from "../../../shared/business/shared/person/person.enum";
 import { IStore } from "../../../shared/business/stores/stores.interface";
+import { ICategory } from "../../../shared/business/categories/categories.interface";
 import { ITag } from "../../../shared/business/tags/tags.interface";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getImageUrl } from "../../../shared/utils/images/images-url";
@@ -31,15 +32,17 @@ import {
 import { DeliveryAddressMapButton } from "../DeliveryAddressMapButton/DeliveryAddressMapButton";
 import { ImageOrDefault } from "../ImageOrDefault/ImageOrDefault";
 import { SendSaleSummary } from "../SendSaleSummary/SendSaleSummary";
+import { TagCategoriesCustomAntd } from "../TagCategoriesCustomAntd/TagCategoriesCustomAntd";
 import { TagTagsCustomAntd } from "../TagTagsCustomAntd/TagTagsCustomAntd";
 
 interface Props {
   sale: ISale | null;
   stores: IStore[];
   tags: ITag[];
+  categories?: ICategory[];
 }
 
-export const SaleSummary: React.FC<Props> = ({ sale, stores, tags }) => {
+export const SaleSummary: React.FC<Props> = ({ sale, stores, tags, categories = [] }) => {
   const { t } = useLanguageData();
 
   const saleStores: ISaleStore[] = sale?.stores ?? [];
@@ -352,6 +355,17 @@ export const SaleSummary: React.FC<Props> = ({ sale, stores, tags }) => {
       <div className="flex pr-10 mt-2">
         <label className="font-semibold mr-1">{t("sales.tags")}: </label>
         <TagTagsCustomAntd tags={tags} tagsIds={sale.tagsIds} useTag />
+      </div>
+
+      <Divider />
+
+      <div className="flex pr-10 mt-2">
+        <label className="font-semibold mr-1">{t("sales.categories")}: </label>
+        <TagCategoriesCustomAntd
+          categories={categories}
+          categoriesIds={sale.categoriesIds}
+          useTag
+        />
       </div>
 
       <Divider />
