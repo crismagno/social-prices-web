@@ -478,7 +478,8 @@
     "deliveryPickup": "Pickup",
     "deliveryDelivery": "Delivery",
     "typeManual": "Manual",
-    "typeShopping": "Shopping"
+    "typeShopping": "Shopping",
+    "paymentNote": "Note about payment"
   },
   "customers": {
     "title": "Customers",

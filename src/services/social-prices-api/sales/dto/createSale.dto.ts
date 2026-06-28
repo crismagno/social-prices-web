@@ -34,6 +34,7 @@ export class SalePaymentDto {
   status: SalesEnum.PaymentStatus = SalesEnum.PaymentStatus.PENDING;
   amount: number = 0;
   provider: any | null = null;
+  note: string | null = null;
 }
 
 export class SaleTotalsDto {

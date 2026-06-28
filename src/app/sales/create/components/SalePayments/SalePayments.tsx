@@ -21,6 +21,7 @@ import {
   IconPlus,
   IconTrash,
 } from "../../../../../components/common/icons/icons";
+import { InputCustomAntd } from "../../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { InputNumberCustomAntd } from "../../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import { SelectCustomAntd } from "../../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
 import useLanguageData from "../../../../../data/context/language/useLanguageData";
@@ -36,6 +37,7 @@ import { TFormSchema } from "../../page";
 export const salePaymentFormSchema = z.object({
   amount: z.number(),
   type: z.string().nonempty("Payment type is required"),
+  note: z.string().nullable().optional(),
 });
 
 export type TSalePaymentFormSchema = z.infer<typeof salePaymentFormSchema>;
@@ -43,6 +45,7 @@ export type TSalePaymentFormSchema = z.infer<typeof salePaymentFormSchema>;
 export const generateNewSalePayment = (): TSalePaymentFormSchema => ({
   type: SalesEnum.PaymentType.OTHER,
   amount: 0,
+  note: null,
 });
 
 interface Props {
@@ -117,7 +120,7 @@ export const SalePayments: React.FC<Props> = ({
         {fieldsPayments.map((_, index: number) => {
           return (
             <Row gutter={[8, 8]} key={index} className="mt-2">
-              <Col xs={9}>
+              <Col xs={7}>
                 <SelectCustomAntd
                   divClassName="mt-0 mr-0"
                   className="w-full"
@@ -149,9 +152,9 @@ export const SalePayments: React.FC<Props> = ({
                 </SelectCustomAntd>
               </Col>
 
-              <Col xs={6}>
+              <Col xs={5}>
                 <InputNumberCustomAntd
-                  divClassName="w-full mt-0 mr-0 mr-2"
+                  divClassName="w-full mt-0 mr-0"
                   className="w-full"
                   min={0}
                   formatter={formatterMoney}
@@ -161,6 +164,15 @@ export const SalePayments: React.FC<Props> = ({
                     control,
                     name: `payments.${index}.amount`,
                   }}
+                />
+              </Col>
+
+              <Col xs={10}>
+                <InputCustomAntd
+                  divClassName="mt-0 mr-0"
+                  controller={{ control, name: `payments.${index}.note` }}
+                  placeholder={t("sales.paymentNote")}
+                  errorMessage={(errors?.payments?.[index] as any)?.note?.message}
                 />
               </Col>
 

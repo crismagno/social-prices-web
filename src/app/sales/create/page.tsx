@@ -1098,6 +1098,7 @@ export default function CreateSalePage() {
             provider: null,
             status: data.paymentStatus as SalesEnum.PaymentStatus,
             type: payment.type as SalesEnum.PaymentType,
+            note: payment.note ?? null,
           }),
         ),
         paymentStatus: data.paymentStatus as SalesEnum.PaymentStatus,

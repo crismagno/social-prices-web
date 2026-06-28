@@ -481,7 +481,8 @@
     "typeShopping": "Shopping",
     "sortDeliveryAt": "Data de Entrega",
     "sortCreatedDate": "Data Criada",
-    "sortCompletedAt": "Concluída Em"
+    "sortCompletedAt": "Concluída Em",
+    "paymentNote": "Nota sobre o pagamento"
   },
   "customers": {
     "title": "Clientes",
