@@ -15,6 +15,7 @@ const Urls = {
   // profile
   PROFILE: "/profile",
   PROFILE_EDIT: "/profile/edit",
+  PROFILE_DELETE: "/profile/delete",
 
   // stores
   STORES: "/stores",

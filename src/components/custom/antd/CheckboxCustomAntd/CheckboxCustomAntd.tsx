@@ -22,7 +22,7 @@ export function CheckboxCustomAntd<T extends object = any>({
   ...props
 }: Props<T>) {
   return (
-    <div className={`flex flex-col mt-4 mr-5 ${divClassName}`}>
+    <div className={divClassName ?? `flex flex-col mt-4 mr-5`}>
       <div>
         <label
           className={`text-sm ${labelClassName}`}

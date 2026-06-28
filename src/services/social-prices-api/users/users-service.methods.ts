@@ -158,4 +158,17 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
 
     return response.data;
   }
+
+  public async removeAccount(reason: string | null): Promise<void> {
+    await this._fetchAxios.delete(
+      `${this._socialPricesApiV1}${UsersServiceEnum.Methods.REMOVE_ACCOUNT}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+        data: { reason },
+      }
+    );
+  }
 }

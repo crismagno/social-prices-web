@@ -1,18 +1,14 @@
 "use client";
 
-import {
-  Button,
-  Space,
-} from 'antd';
+import { Button, Space } from "antd";
 
-import ContainerTitle
-  from '../../../../../components/common/ContainerTitle/ContainerTitle';
-import DescriptionInput
-  from '../../../../../components/common/DescriptionInput/DescriptionInput';
-import useAuthData from '../../../../../data/context/auth/useAuthData';
-import useLanguageData
-  from '../../../../../data/context/language/useLanguageData';
-import Urls from '../../../../../shared/common/routes-app/routes-app';
+import { DeleteOutlined } from "@ant-design/icons";
+
+import ContainerTitle from "../../../../../components/common/ContainerTitle/ContainerTitle";
+import DescriptionInput from "../../../../../components/common/DescriptionInput/DescriptionInput";
+import useAuthData from "../../../../../data/context/auth/useAuthData";
+import useLanguageData from "../../../../../data/context/language/useLanguageData";
+import Urls from "../../../../../shared/common/routes-app/routes-app";
 
 const ProfileAuthEdit: React.FC = () => {
   const { user } = useAuthData();
@@ -55,6 +51,16 @@ const ProfileAuthEdit: React.FC = () => {
             disabled
           />
         </div>
+      </div>
+
+      <div className="mt-6">
+        <Button
+          type="danger"
+          href={Urls.PROFILE_DELETE}
+          icon={<DeleteOutlined />}
+        >
+          {t("profile.deleteAccount")}
+        </Button>
       </div>
     </ContainerTitle>
   );
