@@ -286,6 +286,7 @@ export default function CreateSalePage() {
         isCreateQuote: z.boolean(),
         paymentStatus: z.string().nonempty(t("errors.paymentStatusRequired")),
         tagsIds: z.array(z.string()),
+        categoriesIds: z.array(z.string()),
         deliveryAt: z.string().nullable(),
         createdDate: z.string().nullable(),
         numberManual: z.string().nullable(),
