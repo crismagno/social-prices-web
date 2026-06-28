@@ -55,7 +55,8 @@ const ProfileAuthEdit: React.FC = () => {
 
       <div className="mt-6">
         <Button
-          type="danger"
+          danger
+          type="primary"
           href={Urls.PROFILE_DELETE}
           icon={<DeleteOutlined />}
         >
