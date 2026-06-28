@@ -127,7 +127,8 @@
     "messenger": "Messenger",
     "socialPrices": "Social Prices",
     "birthDate": "Birth Date",
-    "editImage": "Edit Image"
+    "editImage": "Edit Image",
+    "inactive": "Inactive"
   },
   "navigation": {
     "home": "Home",

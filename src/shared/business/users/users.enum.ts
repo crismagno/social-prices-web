@@ -21,18 +21,21 @@ namespace UsersEnum {
     PENDING = "PENDING",
     ACTIVE = "ACTIVE",
     STOPPED = "STOPPED",
+    INACTIVE = "INACTIVE",
   }
 
   export const StatusLabels = {
     [Status.PENDING]: "common.pending",
     [Status.ACTIVE]: "common.active",
     [Status.STOPPED]: "common.stopped",
+    [Status.INACTIVE]: "common.inactive",
   };
 
   export const StatusColors = {
     [Status.PENDING]: "warning",
     [Status.ACTIVE]: "success",
     [Status.STOPPED]: "red",
+    [Status.INACTIVE]: "gray",
   };
 
   export enum Type {
