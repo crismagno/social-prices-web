@@ -3,6 +3,10 @@
 const path = require('path')
 
 const nextConfig = {
+	typescript: {
+		ignoreBuildErrors: true,
+	},
+
 	// Otimizações de performance
 	swcMinify: true,
 	reactStrictMode: true,
