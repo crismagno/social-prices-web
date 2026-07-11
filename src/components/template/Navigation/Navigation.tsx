@@ -1,28 +1,29 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { Modal } from 'antd';
+import { Modal, Tooltip } from "antd";
+import Link from "next/link";
 
-import useAppData from '../../../data/context/app/useAppData';
-import useAuthData from '../../../data/context/auth/useAuthData';
-import useLanguageData from '../../../data/context/language/useLanguageData';
-import Urls from '../../../shared/common/routes-app/routes-app';
-import { getUserName } from '../../../shared/utils/strings/string';
-import Avatar from '../../common/Avatar/Avatar';
+import { ShoppingCartOutlined } from "@ant-design/icons";
+
+import useAppData from "../../../data/context/app/useAppData";
+import useAuthData from "../../../data/context/auth/useAuthData";
+import useLanguageData from "../../../data/context/language/useLanguageData";
+import Urls from "../../../shared/common/routes-app/routes-app";
+import { getUserName } from "../../../shared/utils/strings/string";
+import Avatar from "../../common/Avatar/Avatar";
 import {
   IconAdjustmentsHorizontal,
   IconBell,
   IconBellAlert,
   IconHome,
   IconLogout,
-} from '../../common/icons/icons';
-import { Logo1 } from '../../common/Logo/Logo1';
-import {
-  EmployeeProfileButton,
-} from '../EmployeeProfileButton/EmployeeProfileButton';
-import { GeneralMenu } from './GeneralMenu/GeneralMenu';
-import NavigationItem from './NavigationItem';
-import { SalesMenu } from './SalesMenu/SalesMenu';
-import { StoresMenu } from './StoresMenu/StoresMenu';
+} from "../../common/icons/icons";
+import { Logo1 } from "../../common/Logo/Logo1";
+import { EmployeeProfileButton } from "../EmployeeProfileButton/EmployeeProfileButton";
+import { GeneralMenu } from "./GeneralMenu/GeneralMenu";
+import NavigationItem from "./NavigationItem";
+import { SalesMenu } from "./SalesMenu/SalesMenu";
+import { StoresMenu } from "./StoresMenu/StoresMenu";
 
 interface Props {}
 
@@ -96,6 +97,23 @@ const Navigation: React.FC<Props> = ({}) => {
         </div>
 
         <div className="flex justify-end items-center lg:w-5/12 mb-0">
+          <Tooltip title={t("sales.createSaleBtnCamelCase")}>
+            <Link href={Urls.SALES_CREATE}>
+              <div
+                className="
+                mx-3 w-11 h-11 rounded-full flex items-center justify-center cursor-pointer
+                bg-gradient-to-br from-green-400 via-green-500 to-emerald-600
+                hover:from-green-300 hover:via-green-400 hover:to-emerald-500
+                shadow-lg shadow-green-500/40 hover:shadow-green-400/60
+                transition-all duration-200 hover:scale-110
+                text-white
+              "
+              >
+                <ShoppingCartOutlined className="text-lg" />
+              </div>
+            </Link>
+          </Tooltip>
+
           <EmployeeProfileButton />
 
           <NavigationItem

@@ -426,6 +426,7 @@
     "enterSaleNumberManual": "Enter sale number manual",
     "saveSale": "SAVE SALE",
     "createSaleBtn": "CREATE SALE",
+    "createSaleBtnCamelCase": "Create Sale",
     "removeAllProductsByStore": "Remove all products by store",
     "markProductAsCompleted": "Mark product as completed",
     "markProductAsValid": "Mark product as valid",

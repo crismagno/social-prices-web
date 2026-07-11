@@ -426,6 +426,7 @@
     "enterSaleNumberManual": "Digite o número manual da venda",
     "saveSale": "SALVAR VENDA",
     "createSaleBtn": "CRIAR VENDA",
+    "createSaleBtnCamelCase": "Criar Venda",
     "removeAllProductsByStore": "Remover todos os produtos da loja",
     "markProductAsCompleted": "Marcar produto como concluído",
     "markProductAsValid": "Marcar produto como válido",
