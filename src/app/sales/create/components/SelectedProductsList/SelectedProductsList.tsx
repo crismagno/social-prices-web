@@ -1,20 +1,7 @@
-import {
-  Button,
-  Card,
-  Col,
-  Empty,
-  Image,
-  Row,
-  Space,
-  Tooltip,
-} from 'antd';
-import TextArea from 'antd/es/input/TextArea';
-import { find } from 'lodash';
-import {
-  Control,
-  UseFormSetValue,
-  UseFormWatch,
-} from 'react-hook-form';
+import { Button, Card, Col, Empty, Image, Row, Space, Tooltip } from "antd";
+import TextArea from "antd/es/input/TextArea";
+import { find } from "lodash";
+import { Control, UseFormSetValue, UseFormWatch } from "react-hook-form";
 
 import {
   CheckCircleTwoTone,
@@ -24,37 +11,29 @@ import {
   EditOutlined,
   ProfileOutlined,
   QuestionCircleTwoTone,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import ButtonCommon
-  from '../../../../../components/common/ButtonCommon/ButtonCommon';
-import { IconTrash } from '../../../../../components/common/icons/icons';
-import {
-  CheckboxCustomAntd,
-} from '../../../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd';
-import {
-  InputNumberCustomAntd,
-} from '../../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd';
-import {
-  TextareaCustomAntd,
-} from '../../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd';
-import useLanguageData
-  from '../../../../../data/context/language/useLanguageData';
-import SalesEnum from '../../../../../shared/business/sales/sales.enum';
-import { IStore } from '../../../../../shared/business/stores/stores.interface';
-import { getImageUrl } from '../../../../../shared/utils/images/images-url';
-import ImagesEnum from '../../../../../shared/utils/images/images.enum';
+import ButtonCommon from "../../../../../components/common/ButtonCommon/ButtonCommon";
+import { IconTrash } from "../../../../../components/common/icons/icons";
+import { CheckboxCustomAntd } from "../../../../../components/custom/antd/CheckboxCustomAntd/CheckboxCustomAntd";
+import { InputNumberCustomAntd } from "../../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
+import { TextareaCustomAntd } from "../../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
+import useLanguageData from "../../../../../data/context/language/useLanguageData";
+import SalesEnum from "../../../../../shared/business/sales/sales.enum";
+import { IStore } from "../../../../../shared/business/stores/stores.interface";
+import { getImageUrl } from "../../../../../shared/utils/images/images-url";
+import ImagesEnum from "../../../../../shared/utils/images/images.enum";
 import {
   formatterMoney,
   formatToMoneyDecimal,
   parserMoney,
-} from '../../../../../shared/utils/strings/string';
+} from "../../../../../shared/utils/strings/string";
 import {
   TFormSchema,
   TSaleStoreFormSchema,
   TSaleStoreProductFormSchema,
-} from '../../page';
-import { EditSelectedProductNoteButton } from './EditSelectedProductNoteButton';
+} from "../../page";
+import { EditSelectedProductNoteButton } from "./EditSelectedProductNoteButton";
 
 interface Props {
   stores: IStore[];
@@ -106,7 +85,9 @@ export const SelectedProductsList: React.FC<Props> = ({
               className={`flex items-center border-b-2 border-slate-100 mb-1 w-full`}
             >
               <label className="my-2 text-lg font-semibold mr-2">
-                <Tooltip title={t("stores.storeName")}>{store?.name ?? ""}</Tooltip>
+                <Tooltip title={t("stores.storeName")}>
+                  {store?.name ?? ""}
+                </Tooltip>
               </label>
 
               {saleStore.products.length > 1 ? (
@@ -156,7 +137,7 @@ export const SelectedProductsList: React.FC<Props> = ({
             {saleStore.products?.map(
               (
                 saleStoreProduct: TSaleStoreProductFormSchema,
-                indexSaleStoreProduct: number
+                indexSaleStoreProduct: number,
               ) => {
                 const fileUrl: string = saleStoreProduct.fileUrl
                   ? getImageUrl(saleStoreProduct.fileUrl)
@@ -280,7 +261,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                           onClick={() =>
                             handleRemoveProduct(
                               saleStore.storeId,
-                              indexSaleStoreProduct
+                              indexSaleStoreProduct,
                             )
                           }
                           color="transparent"
@@ -292,23 +273,23 @@ export const SelectedProductsList: React.FC<Props> = ({
 
                       <EditSelectedProductNoteButton
                         saleStoreProduct={watch(
-                          `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}`
+                          `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}`,
                         )}
                         onConfirmNote={(note: string | null) => {
                           setValue(
                             `saleStores.${indexSaleStore}.products.${indexSaleStoreProduct}.note`,
-                            note
+                            note,
                           );
                         }}
                       />
                     </Col>
                   </Row>
                 );
-              }
+              },
             )}
           </div>
         );
-      }
+      },
     );
 
     return storesProductsElements;
@@ -319,7 +300,7 @@ export const SelectedProductsList: React.FC<Props> = ({
       title={
         <div className="flex items-center gap-2">
           <ProfileOutlined className="text-amber-500" />
-          <span className="font-semibold">{t("sales.selectedProducts")}</span>
+          <span className="font-semibold">{t("sales.cart")}</span>
           <Tooltip title={t("sales.selectedProductsTooltip")}>
             <QuestionCircleTwoTone />
           </Tooltip>
@@ -358,7 +339,9 @@ export const SelectedProductsList: React.FC<Props> = ({
         {/* Discount */}
         <Row className="border-b px-4 border-slate-100 p-2">
           <Col xs={4}>
-            <label className="font-semibold mr-2">{t("common.discount")}:</label>
+            <label className="font-semibold mr-2">
+              {t("common.discount")}:
+            </label>
             {!watch("discount.show") ? (
               <Tooltip title={t("sales.editDiscount")}>
                 <Button
@@ -450,7 +433,9 @@ export const SelectedProductsList: React.FC<Props> = ({
         {deliveryType === SalesEnum.DeliveryType.DELIVERY && (
           <Row className="border-b px-4 border-slate-100 p-2">
             <Col xs={4}>
-              <label className="font-semibold mr-2">{t("common.shipping")}:</label>
+              <label className="font-semibold mr-2">
+                {t("common.shipping")}:
+              </label>
 
               {!watch("shipping.show") ? (
                 <Tooltip title={t("sales.editShipping")}>

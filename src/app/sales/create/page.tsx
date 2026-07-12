@@ -1536,7 +1536,9 @@ export default function CreateSalePage() {
             <div className="flex items-center gap-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg px-5 py-3 mb-4">
               <div className="flex items-center gap-2 text-green-600 dark:text-green-400 whitespace-nowrap">
                 <CarOutlined className="text-lg" />
-                <span className="font-semibold text-sm">{t("sales.deliveryType")}</span>
+                <span className="font-semibold text-sm">
+                  {t("sales.deliveryType")}
+                </span>
               </div>
               <div className="w-52">
                 <SelectCustomAntd
@@ -1547,7 +1549,11 @@ export default function CreateSalePage() {
                 >
                   {Object.keys(SalesEnum.DeliveryType).map((type: string) => (
                     <Select.Option key={type} value={type}>
-                      {t(SalesEnum.DeliveryTypeLabels[type as SalesEnum.DeliveryType])}
+                      {t(
+                        SalesEnum.DeliveryTypeLabels[
+                          type as SalesEnum.DeliveryType
+                        ],
+                      )}
                     </Select.Option>
                   ))}
                 </SelectCustomAntd>
@@ -1685,9 +1691,7 @@ export default function CreateSalePage() {
             title={
               <div className="flex items-center gap-2">
                 <ShoppingCartOutlined className="text-orange-400" />
-                <span className="font-semibold">
-                  {t("sales.selectProducts")}
-                </span>
+                <span className="font-semibold">{t("sales.products")}</span>
                 <Tooltip title={t("sales.selectProductsTooltip")}>
                   <QuestionCircleTwoTone />
                 </Tooltip>
@@ -1978,7 +1982,7 @@ export default function CreateSalePage() {
                 <Button
                   type="success"
                   disabled={!isEnableCreateSale}
-                  className="w-full text-center mt-4 h-14 font-bold text-xl bg-green-600 hover:bg-green-700 rounded-lg shadow-lg shadow-green-500/30"
+                  className="w-full text-center mt-4 h-14 font-bold text-xl bg-green-600 hover:bg-green-700 rounded-lg shadow-lg "
                   onClick={() => callHandleSubmit(true)}
                   loading={isSubmitting}
                   icon={<CheckCircleOutlined />}
