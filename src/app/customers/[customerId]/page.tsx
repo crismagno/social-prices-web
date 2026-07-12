@@ -6,7 +6,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useParams, useRouter } from "next/navigation";
 
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, UsergroupAddOutlined } from "@ant-design/icons";
 
 import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
 import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
@@ -95,15 +95,26 @@ export default function CustomerPage() {
             <ContainerTitle
               title={t("profile.information")}
               extraHeader={
-                <Tooltip title={t("customers.editCustomer")}>
-                  <Button
-                    type="success"
-                    icon={<EditOutlined />}
-                    onClick={handleEditCustomer}
-                  >
-                    {t("common.edit")}
-                  </Button>
-                </Tooltip>
+                <div className="flex gap-2">
+                  <Tooltip title={t("customers.goToCustomers")}>
+                    <Button
+                      type="primary"
+                      icon={<UsergroupAddOutlined />}
+                      onClick={() => router.push(Urls.CUSTOMERS)}
+                    >
+                      {t("customers.title")}
+                    </Button>
+                  </Tooltip>
+                  <Tooltip title={t("customers.editCustomer")}>
+                    <Button
+                      type="success"
+                      icon={<EditOutlined />}
+                      onClick={handleEditCustomer}
+                    >
+                      {t("common.edit")}
+                    </Button>
+                  </Tooltip>
+                </div>
               }
             >
               <Row gutter={[16, 16]}>

@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import {
   AppstoreOutlined,
   HomeOutlined,
-  ShoppingOutlined,
+  InboxOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
 
@@ -60,7 +60,7 @@ export const StoresMenu: React.FC<Props> = ({}) => {
             getItem(
               t("navigation.productItems"),
               Urls.PRODUCT_ITEMS,
-              <ShoppingOutlined />,
+              <InboxOutlined />,
             ),
           ],
           "group",

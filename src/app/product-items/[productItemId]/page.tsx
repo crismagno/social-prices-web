@@ -19,7 +19,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useParams, useRouter } from "next/navigation";
 
-import { EditOutlined, EyeOutlined } from "@ant-design/icons";
+import { EditOutlined, EyeOutlined, InboxOutlined } from "@ant-design/icons";
 
 import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
 import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
@@ -144,15 +144,26 @@ export default function ProductItemPage() {
             <ContainerTitle
               title={t("stores.information")}
               extraHeader={
-                <Tooltip title={t("productItems.editProductItem")}>
-                  <Button
-                    type="success"
-                    icon={<EditOutlined />}
-                    onClick={handleEditProductItem}
-                  >
-                    {t("common.edit")}
-                  </Button>
-                </Tooltip>
+                <div className="flex gap-2">
+                  <Tooltip title={t("products.goToProductItems")}>
+                    <Button
+                      type="primary"
+                      icon={<InboxOutlined />}
+                      onClick={() => router.push(Urls.PRODUCT_ITEMS)}
+                    >
+                      {t("productItems.title")}
+                    </Button>
+                  </Tooltip>
+                  <Tooltip title={t("productItems.editProductItem")}>
+                    <Button
+                      type="success"
+                      icon={<EditOutlined />}
+                      onClick={handleEditProductItem}
+                    >
+                      {t("common.edit")}
+                    </Button>
+                  </Tooltip>
+                </div>
               }
             >
               <Row gutter={[16, 16]}>
