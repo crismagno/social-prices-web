@@ -1,31 +1,19 @@
-import './styles.scss';
+import "./styles.scss";
 
-import {
-  Menu,
-  MenuProps,
-} from 'antd';
-import { ItemType } from 'antd/es/menu/interface';
-import {
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useRouter } from 'next/navigation';
+import { Menu, MenuProps } from "antd";
+import { ItemType } from "antd/es/menu/interface";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
 
-import {
-  TagOutlined,
-  TeamOutlined,
-} from '@ant-design/icons';
+import { BlockOutlined, TagOutlined, TeamOutlined } from "@ant-design/icons";
 
-import useAuthData from '../../../../data/context/auth/useAuthData';
-import useLanguageData from '../../../../data/context/language/useLanguageData';
-import EmployeesEnum
-  from '../../../../shared/business/employees/employees.enum';
-import Urls from '../../../../shared/common/routes-app/routes-app';
-import { IconQuestion } from '../../../common/icons/icons';
-import {
-  getItem,
-  MenuItem,
-} from '../../../utils/navigation/navigation.util';
-import NavigationItem from '../NavigationItem';
+import useAuthData from "../../../../data/context/auth/useAuthData";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
+import EmployeesEnum from "../../../../shared/business/employees/employees.enum";
+import Urls from "../../../../shared/common/routes-app/routes-app";
+import { IconQuestion } from "../../../common/icons/icons";
+import { getItem, MenuItem } from "../../../utils/navigation/navigation.util";
+import NavigationItem from "../NavigationItem";
 
 interface Props {}
 
@@ -41,8 +29,11 @@ export const GeneralMenu: React.FC<Props> = ({}) => {
       t("navigation.general"),
       null,
       null,
-      [getItem(t("navigation.tags"), Urls.TAGS, <TagOutlined />)],
-      "group"
+      [
+        getItem(t("navigation.tags"), Urls.TAGS, <TagOutlined />),
+        getItem(t("navigation.categories"), Urls.CATEGORIES, <BlockOutlined />),
+      ],
+      "group",
     ),
   ];
 
@@ -53,8 +44,8 @@ export const GeneralMenu: React.FC<Props> = ({}) => {
         null,
         null,
         [getItem(t("navigation.employees"), Urls.EMPLOYEES, <TeamOutlined />)],
-        "group"
-      )
+        "group",
+      ),
     );
   }
 
@@ -63,11 +54,11 @@ export const GeneralMenu: React.FC<Props> = ({}) => {
       <NavigationItem
         icon={IconQuestion()}
         text={t("navigation.general")}
-        url={Urls.TAGS}
+        url={Urls.EMPLOYEES}
       />,
       "sub1",
       null,
-      itemsSub1
+      itemsSub1,
     ),
   ];
 

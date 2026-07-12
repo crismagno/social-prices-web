@@ -1,30 +1,21 @@
-import './styles.scss';
+import "./styles.scss";
 
-import {
-  Menu,
-  MenuProps,
-} from 'antd';
-import {
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useRouter } from 'next/navigation';
+import { Menu, MenuProps } from "antd";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
 
 import {
   AppstoreOutlined,
-  BlockOutlined,
   HomeOutlined,
   ShoppingOutlined,
   TeamOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import useLanguageData from '../../../../data/context/language/useLanguageData';
-import Urls from '../../../../shared/common/routes-app/routes-app';
-import { IconBuildingStoreFront } from '../../../common/icons/icons';
-import {
-  getItem,
-  MenuItem,
-} from '../../../utils/navigation/navigation.util';
-import NavigationItem from '../NavigationItem';
+import useLanguageData from "../../../../data/context/language/useLanguageData";
+import Urls from "../../../../shared/common/routes-app/routes-app";
+import { IconBuildingStoreFront } from "../../../common/icons/icons";
+import { getItem, MenuItem } from "../../../utils/navigation/navigation.util";
+import NavigationItem from "../NavigationItem";
 
 interface Props {}
 
@@ -51,15 +42,10 @@ export const StoresMenu: React.FC<Props> = ({}) => {
             getItem(
               t("navigation.customers"),
               Urls.CUSTOMERS,
-              <TeamOutlined />
-            ),
-            getItem(
-              t("navigation.categories"),
-              Urls.CATEGORIES,
-              <BlockOutlined />
+              <TeamOutlined />,
             ),
           ],
-          "group"
+          "group",
         ),
         getItem(
           t("navigation.products"),
@@ -69,17 +55,17 @@ export const StoresMenu: React.FC<Props> = ({}) => {
             getItem(
               t("navigation.products"),
               Urls.PRODUCTS,
-              <AppstoreOutlined />
+              <AppstoreOutlined />,
             ),
             getItem(
               t("navigation.productItems"),
               Urls.PRODUCT_ITEMS,
-              <ShoppingOutlined />
+              <ShoppingOutlined />,
             ),
           ],
-          "group"
+          "group",
         ),
-      ]
+      ],
     ),
   ];
 
