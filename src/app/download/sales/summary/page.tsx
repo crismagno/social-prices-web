@@ -10,6 +10,7 @@ import {
 } from "next/dist/client/components/navigation";
 
 import Avatar from "../../../../components/common/Avatar/Avatar";
+import { DownloadSalesSummaryButton } from "../../../../components/common/DownloadSalesSummaryButton/DownloadSalesSummaryButton";
 import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
 import { Logo1 } from "../../../../components/common/Logo/Logo1";
@@ -40,7 +41,7 @@ export default function DownloadSalesSummaryPage() {
 
           const response: ISale =
             await serviceMethodsInstance.salesServiceMethods.getSaleBySaleSummaryLinkToken(
-              token
+              token,
             );
 
           setSale(response);
@@ -115,10 +116,10 @@ export default function DownloadSalesSummaryPage() {
 
           <Divider type="horizontal" dashed />
 
-          {/* <DownloadSalesSummaryButton
+          <DownloadSalesSummaryButton
             sale={sale}
             buttonText="Download Sale Summary"
-          /> */}
+          />
         </div>
       </div>
 
