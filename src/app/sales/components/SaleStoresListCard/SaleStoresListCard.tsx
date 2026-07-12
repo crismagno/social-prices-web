@@ -3,11 +3,12 @@
 import React from "react";
 
 import { Card } from "antd";
-
-import useLanguageData from "../../../../data/context/language/useLanguageData";
 import { find } from "lodash";
 
+import { HomeOutlined } from "@ant-design/icons";
+
 import { TagStoreCustomAntd } from "../../../../components/common/TagStoreCustomAntd/TagStoreCustomAntd";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import {
   ISale,
   ISaleStore,
@@ -23,7 +24,15 @@ export const SaleStoresListCard: React.FC<Props> = ({ sale, stores }) => {
   const { t } = useLanguageData();
 
   return (
-    <Card title={t("sales.storesCard")}>
+    <Card
+      title={
+        <div className="flex items-center gap-2">
+          <HomeOutlined className="text-slate-500" />
+          <span className="font-semibold">{t("sales.storesCard")}</span>
+        </div>
+      }
+      className="flex-1 border-l-4 border-l-slate-500"
+    >
       {sale?.stores?.map((saleStore: ISaleStore) => {
         const storeId: string =
           typeof saleStore.storeId === "object"

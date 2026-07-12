@@ -9,11 +9,11 @@ import {
   Row,
   Select,
   Tag,
+  Tooltip,
 } from "antd";
 
-import useLanguageData from "../../../../data/context/language/useLanguageData";
-
 import ContainerTitle from "../../../../components/common/ContainerTitle/ContainerTitle";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import {
   ISale,
   ISalePayment,
@@ -29,9 +29,14 @@ import SalesMissingPaymentLabel from "../SalesTable/SalesMissingPaymentLabel";
 interface Props {
   sale: ISale;
   title?: any;
+  className?: string;
 }
 
-export const SalePaymentsReadOnly: React.FC<Props> = ({ sale, title }) => {
+export const SalePaymentsReadOnly: React.FC<Props> = ({
+  sale,
+  title,
+  className,
+}) => {
   const { t } = useLanguageData();
 
   const totalFinal: number = sale.totals.totalFinalAmount;
@@ -42,6 +47,7 @@ export const SalePaymentsReadOnly: React.FC<Props> = ({ sale, title }) => {
 
   return (
     <Card
+      className={className}
       title={
         title ? (
           title
@@ -64,7 +70,7 @@ export const SalePaymentsReadOnly: React.FC<Props> = ({ sale, title }) => {
         {sale.payments.map((salePayment: ISalePayment, index: number) => {
           return (
             <Row gutter={[8, 8]} key={index} className="mt-2">
-              <Col xs={10}>
+              <Col xs={6}>
                 <Select className="w-full" value={salePayment.type}>
                   <Select.Option
                     key={salePayment.type}
@@ -77,11 +83,16 @@ export const SalePaymentsReadOnly: React.FC<Props> = ({ sale, title }) => {
                 </Select>
               </Col>
 
-              <Col xs={9}>
+              <Col xs={6}>
                 <Input
                   readOnly
                   value={formatToMoneyDecimal(salePayment.amount)}
                 />
+              </Col>
+              <Col xs={12}>
+                <Tooltip title={salePayment?.note ?? ""} placement="topLeft">
+                  <Input readOnly value={salePayment?.note ?? ""} />
+                </Tooltip>
               </Col>
             </Row>
           );

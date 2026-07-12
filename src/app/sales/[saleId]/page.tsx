@@ -10,6 +10,7 @@ import {
   Drawer,
   Modal,
   Row,
+  Space,
   Tag,
   Tooltip,
 } from "antd";
@@ -20,10 +21,16 @@ import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useParams, useRouter } from "next/navigation";
 
 import {
+  CarOutlined,
+  CheckSquareOutlined,
+  DollarCircleOutlined,
   EditOutlined,
+  EnvironmentOutlined,
   EyeOutlined,
   QuestionCircleTwoTone,
+  ShoppingCartOutlined,
   TableOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 
 import { DeliveryAddressMapButton } from "../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton";
@@ -33,27 +40,26 @@ import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { SaleSummary } from "../../../components/common/SaleSummary/SaleSummary";
 import Layout from "../../../components/template/Layout/Layout";
 import useLanguageData from "../../../data/context/language/useLanguageData";
+import CategoriesEnum from "../../../shared/business/categories/categories.enum";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import { ISaleBuyer } from "../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../shared/business/sales/sales.enum";
 import { IAddress } from "../../../shared/business/shared/address/address.interface";
 import PersonEnum from "../../../shared/business/shared/person/person.enum";
-import CategoriesEnum from "../../../shared/business/categories/categories.enum";
-import { ICategory } from "../../../shared/business/categories/categories.interface";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { addressTypesToString } from "../../../shared/utils/strings/string";
-import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
+import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
+import { SaleCategoriesList } from "../components/SaleCategoriesList/SaleCategoriesList";
 import { SaleExtraInfo } from "../components/SaleExtraInfo/SaleExtraInfo";
 import { SaleFilesList } from "../components/SaleFilesList/SaleFilesList";
 import { SalePaymentsReadOnly } from "../components/SalePaymentsReadOnly/SalePaymentsReadOnly";
 import { SaleSelectedProducts } from "../components/SaleSelectedProducts/SaleSelectedProducts";
 import SalesTable from "../components/SalesTable/SalesTable";
 import { SaleStoresListCard } from "../components/SaleStoresListCard/SaleStoresListCard";
-import { SaleCategoriesList } from "../components/SaleCategoriesList/SaleCategoriesList";
 import { SaleTagsList } from "../components/SaleTagsList/SaleTagsList";
 import { useFindSaleFilledByIdOrFail } from "../useFindSaleFilledByIdOrFail";
 
@@ -82,7 +88,13 @@ export default function SalePage() {
 
   const { t } = useLanguageData();
 
-  if (isLoading || !sale || isLoadingTags || isLoadingStores || isLoadingCategories) {
+  if (
+    isLoading ||
+    !sale ||
+    isLoadingTags ||
+    isLoadingStores ||
+    isLoadingCategories
+  ) {
     return <LoadingFull />;
   }
 
@@ -98,27 +110,33 @@ export default function SalePage() {
       title={t("sales.sale")}
       hasBackButton
     >
-      <Row gutter={[16, 16]} className="mt-5" justify={"end"}>
+      <Row gutter={[16, 16]} className="mt-5">
         <Col xs={24}>
-          <div className="bg-white w-full py-3 px-5 rounded-md">
-            <div className="flex justify-between w-full">
-              <div>
-                <span className="text-lg mr-2">
+          <Card
+            size="small"
+            className="w-full bg-white dark:bg-gray-800 border-l-4 border-l-indigo-500 shadow-sm"
+          >
+            <div className="flex justify-between w-full items-center">
+              <div className="flex items-center gap-3">
+                <ShoppingCartOutlined className="text-indigo-500 text-xl" />
+                <span className="text-base font-medium text-gray-500 dark:text-gray-400">
                   {t("sales.saleNumberLabel")}
                 </span>
                 {sale?.number ? (
-                  <label className="font-bold text-lg">{sale?.number}</label>
+                  <span className="bg-indigo-500 text-white font-bold text-lg px-4 py-0.5 rounded-full shadow-sm">
+                    #{sale?.number}
+                  </span>
                 ) : null}
               </div>
 
-              <div>
+              <Space>
                 <Tooltip title={t("sales.editSaleInfo")}>
                   <Button
                     type="success"
                     onClick={() =>
                       router.push(Urls.SALES_EDIT.replace(":saleId", sale._id!))
                     }
-                    className="px-3 shadow-lg mr-2"
+                    className="px-3 shadow-lg"
                     icon={<EditOutlined />}
                   >
                     {t("sales.editSale")}
@@ -128,7 +146,6 @@ export default function SalePage() {
                 <Tooltip title={t("sales.seeSummaryTooltip")}>
                   <Button
                     type="primary"
-                    className="mr-2"
                     onClick={() => setIsOpenSaleSummaryModal(true)}
                     icon={<EyeOutlined />}
                   >
@@ -141,7 +158,6 @@ export default function SalePage() {
                     type="primary"
                     onClick={() => setIsOpenSalesTable(true)}
                     icon={<TableOutlined />}
-                    className="mr-2"
                   >
                     {t("sales.openSales")}
                   </Button>
@@ -156,7 +172,7 @@ export default function SalePage() {
                     {t("sales.goToSales")}
                   </Button>
                 </Tooltip>
-              </div>
+              </Space>
             </div>
 
             <Divider className="my-2" />
@@ -167,25 +183,28 @@ export default function SalePage() {
               onActivateSale={() => fetchFindSaleById()}
               onRemoveSale={() => fetchFindSaleById()}
             />
-          </div>
+          </Card>
         </Col>
       </Row>
 
-      <Row gutter={[8, 8]} className="mt-2">
+      <Row gutter={[16, 16]} className="mt-4">
         {/* Customer Info */}
-        <Col xs={24} md={12}>
+        <Col xs={24} md={12} className="flex flex-col">
           <Card
             title={
-              <div className="flex">
-                <label className="mr-2">{t("sales.customer")} </label>
+              <div className="flex items-center gap-2">
+                <UserOutlined className="text-blue-500" />
+                <span className="font-semibold">{t("sales.customer")}</span>
               </div>
             }
-            className="h-min-80"
+            className="flex-1 border-l-4 border-l-blue-500"
           >
             <Row gutter={[8, 8]}>
-              <Col xs={24} md={4}>
+              <Col xs={24} md={4} className="flex flex-col items-center pt-1">
                 <Tooltip title={t("profile.seeAvatar")}>
-                  <ImageOrDefault width={110} src={customer?.avatar} />
+                  <div className="w-24 h-24 rounded-full border-4 border-blue-100 dark:border-blue-900 overflow-hidden shadow-md">
+                    <ImageOrDefault width={96} src={customer?.avatar} />
+                  </div>
                 </Tooltip>
               </Col>
 
@@ -262,31 +281,34 @@ export default function SalePage() {
         </Col>
 
         {/* Customer Address */}
-        <Col xs={24} md={12}>
+        <Col xs={24} md={12} className="flex flex-col">
           <Card
             title={
-              <div className="flex justify-between">
-                <div className="flex">
-                  <label className="mr-2">
-                    <span className="mr-2">{t("address.shippingAddress")}</span>
-
-                    {buyerAddress && (
-                      <DeliveryAddressMapButton address={buyerAddress} />
-                    )}
-                  </label>
-                </div>
-
-                <div className="flex items-baseline">
-                  <label className="mr-2">{t("sales.deliveryType")}</label>
-
-                  <Tag>
-                    {t(SalesEnum.DeliveryTypeLabels[sale.header.deliveryType])}
-                  </Tag>
-                </div>
+              <div className="flex items-center gap-2">
+                <EnvironmentOutlined className="text-green-500" />
+                <span className="font-semibold">
+                  {t("address.shippingAddress")}
+                </span>
+                {buyerAddress && (
+                  <DeliveryAddressMapButton address={buyerAddress} />
+                )}
               </div>
             }
-            className="h-min-80"
+            className="flex-1 border-l-4 border-l-green-500"
           >
+            {/* Delivery Type banner */}
+            <div className="flex items-center gap-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg px-5 py-3 mb-4">
+              <div className="flex items-center gap-2 text-green-600 dark:text-green-400 whitespace-nowrap">
+                <CarOutlined className="text-lg" />
+                <span className="font-semibold text-sm">
+                  {t("sales.deliveryType")}
+                </span>
+              </div>
+              <Tag className="font-medium">
+                {t(SalesEnum.DeliveryTypeLabels[sale.header.deliveryType])}
+              </Tag>
+            </div>
+
             <Row gutter={[8, 8]} className="pb-2">
               <Col xs={24} md={8}>
                 <Description
@@ -348,28 +370,32 @@ export default function SalePage() {
         </Col>
       </Row>
 
-      <Row gutter={[8, 8]} className="mt-2">
+      <Row gutter={[16, 16]} className="mt-4">
         {/* Stores */}
         <Col xs={24} md={24}>
           <SaleStoresListCard sale={sale} stores={stores} />
         </Col>
       </Row>
 
-      <Row gutter={[8, 8]} className="mt-2">
+      <Row gutter={[16, 16]} className="mt-4">
         {/* Selected Products */}
         <Col xs={24} md={24}>
           <SaleSelectedProducts sale={sale} />
         </Col>
       </Row>
 
-      <Row gutter={[8, 8]} className="mt-2">
+      <Row gutter={[16, 16]} className="mt-4">
         {/* Payment */}
-        <Col xs={24} md={12}>
+        <Col xs={24} md={12} className="flex flex-col">
           <SalePaymentsReadOnly
             sale={sale}
+            className="flex-1 border-l-4 border-l-teal-500"
             title={
-              <div className="flex">
-                <label className="mr-2">{t("sales.paymentConfirmation")}</label>
+              <div className="flex items-center gap-2">
+                <DollarCircleOutlined className="text-teal-500" />
+                <span className="font-semibold">
+                  {t("sales.paymentConfirmation")}
+                </span>
                 <Tooltip title={t("sales.salePaymentsInfoTooltip")}>
                   <QuestionCircleTwoTone />
                 </Tooltip>
@@ -379,19 +405,25 @@ export default function SalePage() {
         </Col>
 
         {/* Confirmation */}
-        <Col xs={24} md={12}>
+        <Col xs={24} md={12} className="flex flex-col">
           <Card
             title={
-              <div className="flex justify-between">
-                <span>{t("sales.confirmation")}</span>
+              <div className="flex items-center gap-2">
+                <CheckSquareOutlined className="text-purple-500" />
+                <span className="font-semibold">{t("sales.confirmation")}</span>
               </div>
             }
+            className="flex-1 border-l-4 border-l-purple-500"
           >
             <Row>
               <Col xs={24}>
                 <SaleFilesList sale={sale} />
               </Col>
             </Row>
+
+            <Divider orientation="left" className="my-2">
+              {t("common.note")}
+            </Divider>
 
             <Row>
               <Col xs={24}>
@@ -415,6 +447,10 @@ export default function SalePage() {
               </Col>
             </Row>
 
+            <Divider orientation="left" className="my-2">
+              {t("sales.tagsAndCategories")}
+            </Divider>
+
             <Row>
               <Col xs={24}>
                 <Description
@@ -437,8 +473,12 @@ export default function SalePage() {
               </Col>
             </Row>
 
+            <Divider orientation="left" className="my-2">
+              {t("common.status")}
+            </Divider>
+
             <Row>
-              <Col xs={24} md={8}>
+              <Col xs={24} md={12}>
                 <Description
                   label={t("sales.status")}
                   description={
@@ -464,7 +504,7 @@ export default function SalePage() {
                 />
               </Col>
 
-              <Col xs={24} md={8}>
+              <Col xs={24} md={12}>
                 <Description
                   label={t("sales.paymentStatus")}
                   description={
@@ -479,7 +519,11 @@ export default function SalePage() {
               </Col>
             </Row>
 
-            <Row className="mt-3">
+            <Divider orientation="left" className="my-2">
+              {t("common.details")}
+            </Divider>
+
+            <Row>
               <Col xs={24} md={8} className="pr-5">
                 <Description
                   label={t("sales.deliveryDate")}
@@ -542,7 +586,12 @@ export default function SalePage() {
         onCancel={() => setIsOpenSaleSummaryModal(false)}
         width={700}
       >
-        <SaleSummary sale={sale} stores={stores} tags={tags} categories={categories} />
+        <SaleSummary
+          sale={sale}
+          stores={stores}
+          tags={tags}
+          categories={categories}
+        />
       </Modal>
 
       <Drawer
