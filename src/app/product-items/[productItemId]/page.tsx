@@ -145,7 +145,7 @@ export default function ProductItemPage() {
               title={t("stores.information")}
               extraHeader={
                 <div className="flex gap-2">
-                  <Tooltip title={t("products.goToProductItems")}>
+                  <Tooltip title={t("productItems.goToProductItems")}>
                     <Button
                       type="primary"
                       icon={<InboxOutlined />}
