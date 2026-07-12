@@ -102,9 +102,9 @@ const Navigation: React.FC<Props> = ({}) => {
               <div
                 className="
                 mx-3 w-11 h-11 rounded-full flex items-center justify-center cursor-pointer
-                bg-gradient-to-br from-green-400 via-green-500 to-emerald-600
-                hover:from-green-300 hover:via-green-400 hover:to-emerald-500
-                shadow-lg shadow-green-500/40 hover:shadow-green-400/60
+                bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600
+                hover:from-blue-300 hover:via-blue-400 hover:to-blue-500
+                shadow-lg shadow-blue-500/40 hover:shadow-blue-400/60
                 transition-all duration-200 hover:scale-110
                 text-white
               "
