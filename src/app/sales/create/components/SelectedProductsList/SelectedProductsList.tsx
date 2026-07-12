@@ -22,6 +22,7 @@ import {
   CloseCircleTwoTone,
   CloseOutlined,
   EditOutlined,
+  ProfileOutlined,
   QuestionCircleTwoTone,
 } from '@ant-design/icons';
 
@@ -316,28 +317,28 @@ export const SelectedProductsList: React.FC<Props> = ({
   return (
     <Card
       title={
-        <div className="flex justify-between">
-          <div className="flex items-center">
-            <label className="mr-2">{t("sales.selectedProducts")}</label>
-
-            <Tooltip title={t("sales.selectedProductsTooltip")}>
-              <QuestionCircleTwoTone />
-            </Tooltip>
-          </div>
-
-          {saleStores?.length > 1 ? (
-            <Tooltip title={t("sales.removeAllProducts")}>
-              <ButtonCommon
-                onClick={handleRemoveAllProduct}
-                color="transparent"
-                className="rounded-r-full rounded-l-full shadow-none"
-              >
-                {IconTrash("w-3 h-3 text-red-500 hover:text-red-600")}
-              </ButtonCommon>
-            </Tooltip>
-          ) : null}
+        <div className="flex items-center gap-2">
+          <ProfileOutlined className="text-amber-500" />
+          <span className="font-semibold">{t("sales.selectedProducts")}</span>
+          <Tooltip title={t("sales.selectedProductsTooltip")}>
+            <QuestionCircleTwoTone />
+          </Tooltip>
         </div>
       }
+      extra={
+        saleStores?.length > 1 ? (
+          <Tooltip title={t("sales.removeAllProducts")}>
+            <ButtonCommon
+              onClick={handleRemoveAllProduct}
+              color="transparent"
+              className="rounded-r-full rounded-l-full shadow-none"
+            >
+              {IconTrash("w-3 h-3 text-red-500 hover:text-red-600")}
+            </ButtonCommon>
+          </Tooltip>
+        ) : null
+      }
+      className="border-l-4 border-l-amber-500"
     >
       <div style={{ maxHeight: 878 }}>{renderStoresProducts()}</div>
 

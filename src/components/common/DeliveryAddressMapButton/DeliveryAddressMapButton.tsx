@@ -49,14 +49,14 @@ export const DeliveryAddressMapButton: React.FC<Props> = ({ address }) => {
         const { latitude, longitude } = pos.coords;
         window.open(
           `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${encoded}`,
-          "_blank"
+          "_blank",
         );
       },
       (err) => {
         console.warn("Erro ao obter localização:", err);
         window.open(url, "_blank");
       },
-      { enableHighAccuracy: true }
+      { enableHighAccuracy: true },
     );
   };
 

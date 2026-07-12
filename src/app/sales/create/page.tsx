@@ -13,6 +13,7 @@ import {
   Modal,
   Row,
   Select,
+  Space,
   Tooltip,
   UploadFile,
 } from "antd";
@@ -38,12 +39,16 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import {
+  CarOutlined,
   CheckCircleOutlined,
+  CheckSquareOutlined,
   EnterOutlined,
+  EnvironmentOutlined,
   EyeOutlined,
   QuestionCircleTwoTone,
   ShoppingCartOutlined,
   TableOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -79,6 +84,8 @@ import CreateSaleDto, {
 import UpdateSaleDto from "../../../services/social-prices-api/sales/dto/updateSale.dto";
 import UpdateSaleFilesDto from "../../../services/social-prices-api/sales/dto/updateSaleFiles.dto";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
+import CategoriesEnum from "../../../shared/business/categories/categories.enum";
+import { ICategory } from "../../../shared/business/categories/categories.interface";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import { IProductItem } from "../../../shared/business/product-items/product-items.interface";
 import { IProduct } from "../../../shared/business/products/products.interface";
@@ -94,8 +101,6 @@ import { CreateAddressDto } from "../../../shared/business/shared/address/Create
 import PersonEnum from "../../../shared/business/shared/person/person.enum";
 import PhoneNumberEnum from "../../../shared/business/shared/phone/phone-number.enum";
 import { IStore } from "../../../shared/business/stores/stores.interface";
-import CategoriesEnum from "../../../shared/business/categories/categories.enum";
-import { ICategory } from "../../../shared/business/categories/categories.interface";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../shared/business/tags/tags.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
@@ -111,8 +116,8 @@ import {
   getValueByPercentage,
 } from "../../../shared/utils/numbers/numbers";
 import { createAddressName } from "../../../shared/utils/strings/string";
-import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
+import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { SaleExtraInfo } from "../components/SaleExtraInfo/SaleExtraInfo";
 import SalesTable from "../components/SalesTable/SalesTable";
@@ -565,10 +570,14 @@ export default function CreateSalePage() {
           tagsIds: saleById?.tagsIds ?? [],
           categoriesIds: saleById?.categoriesIds ?? [],
           deliveryAt: saleById?.deliveryAt
-            ? moment(saleById.deliveryAt).format(DatesEnum.Format.YYYYMMDD_DASHED)
+            ? moment(saleById.deliveryAt).format(
+                DatesEnum.Format.YYYYMMDD_DASHED,
+              )
             : null,
           createdDate: saleById?.createdDate
-            ? moment(saleById.createdDate).format(DatesEnum.Format.YYYYMMDD_DASHED)
+            ? moment(saleById.createdDate).format(
+                DatesEnum.Format.YYYYMMDD_DASHED,
+              )
             : null,
           numberManual: saleById?.numberManual ?? null,
           noteToCustomer: saleById?.noteToCustomer ?? null,
@@ -1309,26 +1318,33 @@ export default function CreateSalePage() {
 
       <Row gutter={[16, 16]} className="mt-5" justify={"end"}>
         <Col xs={24}>
-          <div className="bg-white w-full py-3 px-5 rounded-md">
-            <div className="flex justify-between w-full">
-              <div>
-                <span className="text-lg mr-2">
+          <Card
+            size="small"
+            className="w-full bg-white dark:bg-gray-800 border-l-4 border-l-indigo-500 shadow-sm"
+          >
+            <div className="flex justify-between w-full items-center">
+              <div className="flex items-center gap-3">
+                <ShoppingCartOutlined className="text-indigo-500 text-xl" />
+                <span className="text-base font-medium text-gray-500 dark:text-gray-400">
                   {t("sales.saleNumberLabel")}
                 </span>
                 {saleById?.number ? (
-                  <label className="font-bold text-lg">
-                    {saleById?.number}
-                  </label>
-                ) : null}
+                  <span className="bg-indigo-500 text-white font-bold text-lg px-4 py-0.5 rounded-full shadow-sm">
+                    #{saleById?.number}
+                  </span>
+                ) : (
+                  <span className="bg-white dark:bg-gray-700 text-gray-400 dark:text-gray-500 font-medium text-sm px-3 py-0.5 rounded-full border border-dashed border-gray-300 dark:border-gray-600">
+                    {isEditMode ? "—" : t("sales.newSale")}
+                  </span>
+                )}
               </div>
 
-              <div>
+              <Space>
                 {renderGoToSaleButton()}
 
                 <Tooltip title={t("sales.seeSummaryTooltip")}>
                   <Button
                     type="primary"
-                    className="ml-2"
                     onClick={() => setIsOpenSaleSummaryModal(true)}
                     icon={<EyeOutlined />}
                   >
@@ -1342,7 +1358,6 @@ export default function CreateSalePage() {
                     href={Urls.SALES_CREATE}
                     target="_blank"
                     icon={<ShoppingCartOutlined />}
-                    className="mx-2"
                   >
                     {t("sales.createSale")}
                   </Button>
@@ -1353,7 +1368,6 @@ export default function CreateSalePage() {
                     type="primary"
                     onClick={() => setIsOpenSalesTable(true)}
                     icon={<TableOutlined />}
-                    className="mr-2"
                   >
                     {t("sales.openSales")}
                   </Button>
@@ -1368,7 +1382,7 @@ export default function CreateSalePage() {
                     {t("sales.goToSales")}
                   </Button>
                 </Tooltip>
-              </div>
+              </Space>
             </div>
 
             {saleById && (
@@ -1378,28 +1392,33 @@ export default function CreateSalePage() {
                 <SaleExtraInfo sale={saleById} />
               </>
             )}
-          </div>
+          </Card>
         </Col>
       </Row>
 
-      <Row gutter={[8, 8]} className="mt-2">
+      <Row gutter={[16, 16]} className="mt-4">
         {/* Customer Info */}
         <Col xs={24} md={12}>
           <Card
             title={
-              <div className="flex">
-                <label className="mr-2">{t("sales.customer") + " "}</label>
-                {!isEditMode && (
-                  <SelectCustomer onSelectCustomer={handleSelectCustomer} />
-                )}
+              <div className="flex items-center gap-2">
+                <UserOutlined className="text-blue-500" />
+                <span className="font-semibold">{t("sales.customer")}</span>
               </div>
             }
-            className="h-min-80"
+            extra={
+              !isEditMode && (
+                <SelectCustomer onSelectCustomer={handleSelectCustomer} />
+              )
+            }
+            className="h-min-80 border-l-4 border-l-blue-500"
           >
             <Row gutter={[8, 8]}>
-              <Col xs={24} md={4}>
+              <Col xs={24} md={4} className="flex flex-col items-center pt-1">
                 <Tooltip title={t("profile.seeAvatar")}>
-                  <ImageOrDefault width={110} src={selectedCustomer?.avatar} />
+                  <div className="w-24 h-24 rounded-full border-4 border-blue-100 dark:border-blue-900 overflow-hidden shadow-md">
+                    <ImageOrDefault width={96} src={selectedCustomer?.avatar} />
+                  </div>
                 </Tooltip>
               </Col>
 
@@ -1465,81 +1484,76 @@ export default function CreateSalePage() {
         <Col xs={24} md={12}>
           <Card
             title={
-              <div className="flex justify-between">
-                <div className="flex">
-                  <label className="mr-2">
-                    <span className="mr-2">{t("address.shippingAddress")}</span>
-
-                    {customerAddress && (
-                      <DeliveryAddressMapButton
-                        address={{
-                          ...customerAddress,
-                          country: {
-                            code: customerAddress.countryCode,
-                            name: customerAddress.countryCode,
-                          },
-                          state: {
-                            code: customerAddress.stateCode,
-                            name: customerAddress.stateCode,
-                          },
-                          types: customerAddress.types as AddressEnum.Type[],
-                        }}
-                      />
-                    )}
-                  </label>
-
-                  {selectedCustomer && !isEditMode && (
-                    <Select
-                      style={{ width: 250 }}
-                      onChange={handleSelectAddress}
-                      defaultValue={null}
-                      value={selectedAddressUid}
-                    >
-                      <Select.Option key={"NEW_ADDRESS"} value={null}>
-                        {t("address.newAddress")}
-                      </Select.Option>
-
-                      {selectedCustomer?.addresses.map((address: IAddress) => (
-                        <Select.Option key={address.uid} value={address.uid}>
-                          <Tooltip title={createAddressName(address, t)}>
-                            {createAddressName(address, t)}
-                          </Tooltip>
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  )}
-                </div>
-
-                <div className="flex">
-                  <label className="mr-2">{t("sales.deliveryType")}</label>
-
-                  <SelectCustomAntd
-                    controller={{
-                      control,
-                      name: `deliveryType`,
+              <div className="flex items-center gap-2">
+                <EnvironmentOutlined className="text-green-500" />
+                <span className="font-semibold">
+                  {t("address.shippingAddress")}
+                </span>
+                {customerAddress && (
+                  <DeliveryAddressMapButton
+                    address={{
+                      ...customerAddress,
+                      country: {
+                        code: customerAddress.countryCode,
+                        name: customerAddress.countryCode,
+                      },
+                      state: {
+                        code: customerAddress.stateCode,
+                        name: customerAddress.stateCode,
+                      },
+                      types: customerAddress.types as AddressEnum.Type[],
                     }}
-                    divClassName="mt-0"
-                    errorMessage={errors?.deliveryType?.message}
-                    placeholder={t("sales.selectDeliveryType")}
-                    style={{ width: 150 }}
-                  >
-                    {Object.keys(SalesEnum.DeliveryType).map((type: string) => (
-                      <Select.Option key={type} value={type}>
-                        <Tooltip title={createAddressName(type, t)}>
-                          {t(
-                            SalesEnum.DeliveryTypeLabels[
-                              type as SalesEnum.DeliveryType
-                            ],
-                          )}
-                        </Tooltip>
-                      </Select.Option>
-                    ))}
-                  </SelectCustomAntd>
-                </div>
+                  />
+                )}
               </div>
             }
-            className="h-min-80"
+            extra={
+              selectedCustomer &&
+              !isEditMode && (
+                <Select
+                  style={{ width: 250 }}
+                  onChange={handleSelectAddress}
+                  defaultValue={null}
+                  value={selectedAddressUid}
+                >
+                  <Select.Option key={"NEW_ADDRESS"} value={null}>
+                    {t("address.newAddress")}
+                  </Select.Option>
+
+                  {selectedCustomer?.addresses.map((address: IAddress) => (
+                    <Select.Option key={address.uid} value={address.uid}>
+                      <Tooltip title={createAddressName(address, t)}>
+                        {createAddressName(address, t)}
+                      </Tooltip>
+                    </Select.Option>
+                  ))}
+                </Select>
+              )
+            }
+            className="h-min-80 border-l-4 border-l-green-500"
           >
+            {/* Delivery Type banner */}
+            <div className="flex items-center gap-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg px-5 py-3 mb-4">
+              <div className="flex items-center gap-2 text-green-600 dark:text-green-400 whitespace-nowrap">
+                <CarOutlined className="text-lg" />
+                <span className="font-semibold text-sm">{t("sales.deliveryType")}</span>
+              </div>
+              <div className="w-52">
+                <SelectCustomAntd
+                  controller={{ control, name: `deliveryType` }}
+                  divClassName="mt-0"
+                  errorMessage={errors?.deliveryType?.message}
+                  placeholder={t("sales.selectDeliveryType")}
+                >
+                  {Object.keys(SalesEnum.DeliveryType).map((type: string) => (
+                    <Select.Option key={type} value={type}>
+                      {t(SalesEnum.DeliveryTypeLabels[type as SalesEnum.DeliveryType])}
+                    </Select.Option>
+                  ))}
+                </SelectCustomAntd>
+              </div>
+            </div>
+
             <Row gutter={[8, 8]}>
               <Col xs={24} md={8}>
                 <SelectCustomAntd
@@ -1664,44 +1678,48 @@ export default function CreateSalePage() {
         </Col>
       </Row>
 
-      <Row gutter={[8, 8]} className="mt-2">
+      <Row gutter={[16, 16]} className="mt-4">
         {/* Select Products */}
         <Col xs={24} md={12}>
           <Card
             title={
-              <div className="flex justify-between">
-                <div className="flex items-center">
-                  <label className="mr-2">{t("sales.selectProducts")}</label>
-
-                  <Tooltip title={t("sales.selectProductsTooltip")}>
-                    <QuestionCircleTwoTone />
-                  </Tooltip>
-                </div>
-
-                <span className="flex">
-                  <label className="mr-2">{t("stores.selectStores")}</label>
-                  <SelectCustomAntd
-                    allowClear
-                    controller={{ control, name: "selectedStoreIds" }}
-                    errorMessage={errors.selectedStoreIds?.message}
-                    placeholder={t("sales.selectStores")}
-                    onClear={handleRemoveAllProduct}
-                    onDeselect={(value: any) =>
-                      handleRemoveAllProductByStore(value as string)
-                    }
-                    mode="multiple"
-                    divClassName="mt-0"
-                    style={{ width: 300 }}
-                  >
-                    {stores.map((store: IStore) => (
-                      <Select.Option key={store._id} value={store._id}>
-                        <StoreNameStatus store={store} />
-                      </Select.Option>
-                    ))}
-                  </SelectCustomAntd>
+              <div className="flex items-center gap-2">
+                <ShoppingCartOutlined className="text-orange-400" />
+                <span className="font-semibold">
+                  {t("sales.selectProducts")}
                 </span>
+                <Tooltip title={t("sales.selectProductsTooltip")}>
+                  <QuestionCircleTwoTone />
+                </Tooltip>
               </div>
             }
+            extra={
+              <div className="flex items-center">
+                <label className="mr-2 text-gray-600 dark:text-gray-300 font-normal">
+                  {t("stores.selectStores")}
+                </label>
+                <SelectCustomAntd
+                  allowClear
+                  controller={{ control, name: "selectedStoreIds" }}
+                  errorMessage={errors.selectedStoreIds?.message}
+                  placeholder={t("sales.selectStores")}
+                  onClear={handleRemoveAllProduct}
+                  onDeselect={(value: any) =>
+                    handleRemoveAllProductByStore(value as string)
+                  }
+                  mode="multiple"
+                  divClassName="mt-0"
+                  style={{ width: 300 }}
+                >
+                  {stores.map((store: IStore) => (
+                    <Select.Option key={store._id} value={store._id}>
+                      <StoreNameStatus store={store} />
+                    </Select.Option>
+                  ))}
+                </SelectCustomAntd>
+              </div>
+            }
+            className="border-l-4 border-l-orange-400"
           >
             <AddProductsTable
               selectedStoreIds={watch("selectedStoreIds")}
@@ -1729,7 +1747,7 @@ export default function CreateSalePage() {
         </Col>
       </Row>
 
-      <Row gutter={[8, 8]} className="mt-2">
+      <Row gutter={[16, 16]} className="mt-4">
         {/* Payment */}
         <Col xs={24} md={12}>
           <SalePayments
@@ -1745,16 +1763,22 @@ export default function CreateSalePage() {
         <Col xs={24} md={12}>
           <Card
             title={
-              <div className="flex justify-between">
-                <span>{t("sales.confirmation")}</span>
+              <div className="flex items-center gap-2">
+                <CheckSquareOutlined className="text-purple-500" />
+                <span className="font-semibold">{t("sales.confirmation")}</span>
               </div>
             }
+            className="border-l-4 border-l-purple-500"
           >
             <Row>
               <Col xs={24}>
                 <AddSaleFiles sale={saleById} onSetFileList={setFileList} />
               </Col>
             </Row>
+
+            <Divider orientation="left" className="my-2">
+              {t("common.note")}
+            </Divider>
 
             <Row className="mt-2">
               <Col xs={24}>
@@ -1782,12 +1806,16 @@ export default function CreateSalePage() {
               </Col>
             </Row>
 
+            <Divider orientation="left" className="my-2">
+              {t("sales.tagsAndCategories")}
+            </Divider>
+
             <Row>
               <Col xs={24}>
                 <SelectCustomAntd<ICustomer>
                   controller={{ control, name: "tagsIds" }}
                   label={t("sales.tags")}
-                  divClassName="mt-3"
+                  divClassName="mt-0"
                   errorMessage={errors.tagsIds?.message}
                   placeholder={t("sales.selectTags")}
                   mode="multiple"
@@ -1806,7 +1834,7 @@ export default function CreateSalePage() {
                 <SelectCustomAntd<ICategory>
                   controller={{ control, name: "categoriesIds" }}
                   label={t("sales.categories")}
-                  divClassName="mt-3"
+                  divClassName="mt-1"
                   errorMessage={errors.categoriesIds?.message}
                   placeholder={t("sales.selectCategories")}
                   mode="multiple"
@@ -1814,15 +1842,22 @@ export default function CreateSalePage() {
                 >
                   {sortArray(categories, "name").map((category: ICategory) => (
                     <Select.Option key={category._id} value={category._id}>
-                      <TagCategoryCustomAntd category={category} useTag={false} />
+                      <TagCategoryCustomAntd
+                        category={category}
+                        useTag={false}
+                      />
                     </Select.Option>
                   ))}
                 </SelectCustomAntd>
               </Col>
             </Row>
 
+            <Divider orientation="left" className="my-2">
+              {t("common.status")}
+            </Divider>
+
             <Row>
-              <Col xs={24} md={8}>
+              <Col xs={24} md={12}>
                 <SelectCustomAntd
                   controller={{
                     control,
@@ -1858,7 +1893,7 @@ export default function CreateSalePage() {
                 )}
               </Col>
 
-              <Col xs={24} md={8}>
+              <Col xs={24} md={12}>
                 <SelectCustomAntd
                   controller={{
                     control,
@@ -1889,16 +1924,11 @@ export default function CreateSalePage() {
                   )}
                 </SelectCustomAntd>
               </Col>
-
-              {!isEditMode && false && (
-                <Col xs={24} md={8}>
-                  <CheckboxCustomAntd
-                    controller={{ control, name: "isCreateQuote" }}
-                    label={t("sales.createQuote")}
-                  />
-                </Col>
-              )}
             </Row>
+
+            <Divider orientation="left" className="my-2">
+              {t("common.details")}
+            </Divider>
 
             <Row className="mt-3">
               <Col xs={24} md={8} className="pr-5">
@@ -1948,9 +1978,10 @@ export default function CreateSalePage() {
                 <Button
                   type="success"
                   disabled={!isEnableCreateSale}
-                  className="w-full text-center mt-5 h-10 font-bold text-lg bg-green-600 hover:bg-green-700"
+                  className="w-full text-center mt-4 h-14 font-bold text-xl bg-green-600 hover:bg-green-700 rounded-lg shadow-lg shadow-green-500/30"
                   onClick={() => callHandleSubmit(true)}
                   loading={isSubmitting}
+                  icon={<CheckCircleOutlined />}
                 >
                   {isEditMode ? t("sales.saveSale") : t("sales.createSaleBtn")}
                 </Button>

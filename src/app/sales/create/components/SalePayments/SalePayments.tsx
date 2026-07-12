@@ -13,7 +13,7 @@ import {
 import { Control, FieldErrors, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 
-import { QuestionCircleTwoTone } from "@ant-design/icons";
+import { DollarCircleOutlined, QuestionCircleTwoTone } from "@ant-design/icons";
 
 import ButtonCommon from "../../../../../components/common/ButtonCommon/ButtonCommon";
 import ContainerTitle from "../../../../../components/common/ContainerTitle/ContainerTitle";
@@ -88,13 +88,15 @@ export const SalePayments: React.FC<Props> = ({
   return (
     <Card
       title={
-        <div className="flex">
-          <label className="mr-2">{t("sales.payment")}</label>
+        <div className="flex items-center gap-2">
+          <DollarCircleOutlined className="text-teal-500" />
+          <span className="font-semibold">{t("sales.payment")}</span>
           <Tooltip title={t("sales.paymentsTooltip")}>
             <QuestionCircleTwoTone />
           </Tooltip>
         </div>
       }
+      className="border-l-4 border-l-teal-500"
     >
       <ContainerTitle
         title={
