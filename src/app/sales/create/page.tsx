@@ -1978,6 +1978,7 @@ export default function CreateSalePage() {
             </Row>
 
             <Row>
+              <Divider style={{ marginTop: 15, marginBottom: 5 }} />
               <Col xs={24}>
                 <Button
                   type="success"
