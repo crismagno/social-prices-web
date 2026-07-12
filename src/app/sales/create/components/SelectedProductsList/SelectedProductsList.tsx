@@ -338,7 +338,7 @@ export const SelectedProductsList: React.FC<Props> = ({
           </Tooltip>
         ) : null
       }
-      className="border-l-4 border-l-amber-500"
+      className="flex-1 border-l-4 border-l-amber-500"
     >
       <div style={{ maxHeight: 878 }}>{renderStoresProducts()}</div>
 

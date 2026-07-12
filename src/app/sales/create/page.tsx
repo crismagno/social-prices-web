@@ -1398,7 +1398,7 @@ export default function CreateSalePage() {
 
       <Row gutter={[16, 16]} className="mt-4">
         {/* Customer Info */}
-        <Col xs={24} md={12}>
+        <Col xs={24} md={12} className="flex flex-col">
           <Card
             title={
               <div className="flex items-center gap-2">
@@ -1411,7 +1411,7 @@ export default function CreateSalePage() {
                 <SelectCustomer onSelectCustomer={handleSelectCustomer} />
               )
             }
-            className="h-min-80 border-l-4 border-l-blue-500"
+            className="flex-1 border-l-4 border-l-blue-500"
           >
             <Row gutter={[8, 8]}>
               <Col xs={24} md={4} className="flex flex-col items-center pt-1">
@@ -1481,7 +1481,7 @@ export default function CreateSalePage() {
         </Col>
 
         {/* Customer Address */}
-        <Col xs={24} md={12}>
+        <Col xs={24} md={12} className="flex flex-col">
           <Card
             title={
               <div className="flex items-center gap-2">
@@ -1530,7 +1530,7 @@ export default function CreateSalePage() {
                 </Select>
               )
             }
-            className="h-min-80 border-l-4 border-l-green-500"
+            className="flex-1 border-l-4 border-l-green-500"
           >
             {/* Delivery Type banner */}
             <div className="flex items-center gap-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg px-5 py-3 mb-4">
@@ -1680,7 +1680,7 @@ export default function CreateSalePage() {
 
       <Row gutter={[16, 16]} className="mt-4">
         {/* Select Products */}
-        <Col xs={24} md={12}>
+        <Col xs={24} md={12} className="flex flex-col">
           <Card
             title={
               <div className="flex items-center gap-2">
@@ -1719,7 +1719,7 @@ export default function CreateSalePage() {
                 </SelectCustomAntd>
               </div>
             }
-            className="border-l-4 border-l-orange-400"
+            className="flex-1 border-l-4 border-l-orange-400"
           >
             <AddProductsTable
               selectedStoreIds={watch("selectedStoreIds")}
@@ -1730,7 +1730,7 @@ export default function CreateSalePage() {
         </Col>
 
         {/* Selected Products */}
-        <Col xs={24} md={12}>
+        <Col xs={24} md={12} className="flex flex-col">
           <SelectedProductsList
             stores={stores}
             control={control}
