@@ -44,8 +44,6 @@ export const AddProductButton: React.FC<Props> = ({
       </Tooltip>
 
       <Drawer
-        closable={false}
-        maskClosable={false}
         open={isOpen}
         title={t("products.addProductDrawerTitle")}
         onClose={() => {
