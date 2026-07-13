@@ -309,6 +309,10 @@ export default function CreateSalePage() {
     searchParams.get("said"),
   );
 
+  useEffect(() => {
+    setSaleIdByParam(searchParams.get("said"));
+  }, [searchParams]);
+
   const customerIdByParam: string | null = searchParams.get("cid");
 
   const storeIdByParam: string | null = searchParams.get("sid");
@@ -2070,7 +2074,12 @@ export default function CreateSalePage() {
         placement="right"
         width={"90%"}
       >
-        <SalesTable />
+        <SalesTable
+          onEdit={(sale) => {
+            setIsOpenSalesTable(false);
+            router.push(Urls.SALES_EDIT.replace(":saleId", sale._id));
+          }}
+        />
       </Drawer>
     </Layout>
   );

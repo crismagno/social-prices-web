@@ -93,6 +93,7 @@ interface Props {
   productId?: string;
   productItemId?: string;
   employeeId?: string;
+  onEdit?: (sale: ISale) => void;
 }
 
 const SalesTable: React.FC<Props> = ({
@@ -101,6 +102,7 @@ const SalesTable: React.FC<Props> = ({
   productId,
   productItemId,
   employeeId,
+  onEdit,
 }) => {
   const { user } = useAuthData();
   const { t } = useLanguageData();
@@ -205,7 +207,11 @@ const SalesTable: React.FC<Props> = ({
   const categoriesSort: ICategory[] = sortArray(categories, "name") ?? [];
 
   const handleEditSale = (sale: ISale) => {
-    router.push(Urls.SALES_EDIT.replace(":saleId", sale._id));
+    if (onEdit) {
+      onEdit(sale);
+    } else {
+      router.push(Urls.SALES_EDIT.replace(":saleId", sale._id));
+    }
   };
 
   const handleDeleteSale = async (sale: ISale) => {
