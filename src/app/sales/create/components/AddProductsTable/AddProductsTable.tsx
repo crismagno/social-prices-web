@@ -115,6 +115,8 @@ export const AddProductsTable: React.FC<Props> = ({
     TagsEnum.Type.SALE,
   );
 
+  const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
+
   const [isSelectProductItemModalOpen, setIsSelectProductItemModalOpen] =
     useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
@@ -132,6 +134,7 @@ export const AddProductsTable: React.FC<Props> = ({
         }),
       ),
     });
+    setExpandedRowKeys(map(products, "_id"));
   }, [products]);
 
   useEffect(() => {
@@ -453,13 +456,13 @@ export const AddProductsTable: React.FC<Props> = ({
               );
             },
           },
-          {
-            title: t("sales.addProductByStore"),
-            dataIndex: "storeIds",
-            key: "storeIds",
-            align: "center",
-            render: (storeIds: string[], product: IProduct) => {
-              return storeIds.map((storeId: string) => {
+        ]}
+        expandable={{
+          showExpandColumn: false,
+          expandedRowKeys,
+          expandedRowRender: (product: IProduct) => (
+            <div className="flex justify-end flex-wrap gap-2 py-0 px-2">
+              {product.storeIds.map((storeId: string) => {
                 const store: IStore | undefined = getStore(storeId);
 
                 const isSelectedStore: boolean = includes(
@@ -478,7 +481,6 @@ export const AddProductsTable: React.FC<Props> = ({
                   >
                     <Button
                       size="middle"
-                      className="mr-1 mt-1"
                       type="primary"
                       onClick={() =>
                         handleAddProductToSale(product._id, storeId)
@@ -489,10 +491,11 @@ export const AddProductsTable: React.FC<Props> = ({
                     </Button>
                   </Tooltip>
                 );
-              });
-            },
-          },
-        ]}
+              })}
+            </div>
+          ),
+          rowExpandable: () => true,
+        }}
         search={{ placeholder: t("products.searchProducts") }}
         loading={isLoading || isLoadingCategories || isLoadingTags}
         total={total}
