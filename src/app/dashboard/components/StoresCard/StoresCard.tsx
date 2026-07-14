@@ -1,24 +1,15 @@
 "use client";
 
-import {
-  Card,
-  Tooltip,
-} from 'antd';
-import Meta from 'antd/es/card/Meta';
-import {
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useRouter } from 'next/navigation';
+import { Card, Tooltip } from "antd";
+import Meta from "antd/es/card/Meta";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
 
-import {
-  HomeOutlined,
-  PlusOutlined,
-  TabletOutlined,
-} from '@ant-design/icons';
+import { PlusOutlined, ShopOutlined, TabletOutlined } from "@ant-design/icons";
 
-import useLanguageData from '../../../../data/context/language/useLanguageData';
-import Urls from '../../../../shared/common/routes-app/routes-app';
-import { useFindStoresByUser } from '../../../stores/useFindStoresByUser';
+import useLanguageData from "../../../../data/context/language/useLanguageData";
+import Urls from "../../../../shared/common/routes-app/routes-app";
+import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
 
 export const StoresCard: React.FC = () => {
   const router: AppRouterInstance = useRouter();
@@ -41,7 +32,7 @@ export const StoresCard: React.FC = () => {
         bg-gradient-to-tr from-gray-700 to-yellow-600 hover:to-gray-800 hover:to-yellow-700 text-white"
         >
           <div className="flex flex-col justify-center items-center w-full h-full">
-            <HomeOutlined style={{ fontSize: 50 }} />
+            <ShopOutlined style={{ fontSize: 50 }} />
           </div>
         </div>
       }
@@ -55,7 +46,7 @@ export const StoresCard: React.FC = () => {
       ]}
     >
       <Meta
-        avatar={<HomeOutlined style={{ fontSize: 25 }} />}
+        avatar={<ShopOutlined style={{ fontSize: 25 }} />}
         title={t("dashboard.stores")}
         description={`${t("dashboard.totalStores")}: ${stores.length}`}
       />

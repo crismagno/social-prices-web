@@ -5,7 +5,7 @@ import React from "react";
 import { Card } from "antd";
 import { find } from "lodash";
 
-import { HomeOutlined } from "@ant-design/icons";
+import { ShopOutlined } from "@ant-design/icons";
 
 import { TagStoreCustomAntd } from "../../../../components/common/TagStoreCustomAntd/TagStoreCustomAntd";
 import useLanguageData from "../../../../data/context/language/useLanguageData";
@@ -27,7 +27,7 @@ export const SaleStoresListCard: React.FC<Props> = ({ sale, stores }) => {
     <Card
       title={
         <div className="flex items-center gap-2">
-          <HomeOutlined className="text-slate-500" />
+          <ShopOutlined className="text-slate-500" />
           <span className="font-semibold">{t("sales.storesCard")}</span>
         </div>
       }
