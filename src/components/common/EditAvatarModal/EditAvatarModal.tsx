@@ -2,7 +2,7 @@ import "./styles.scss";
 
 import React, { useEffect, useState } from "react";
 
-import { Button, message, Modal, Upload } from "antd";
+import { App, Button, Modal, Upload } from "antd";
 import ImgCrop from "antd-img-crop";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
@@ -28,6 +28,7 @@ interface Props {
 }
 
 const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
+  const { message } = App.useApp();
   const { updateUserSession, user } = useAuthData();
   const { t } = useLanguageData();
 

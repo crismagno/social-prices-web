@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { Button, Divider, List, message, Tooltip } from "antd";
+import { App, Button, Divider, List, Tooltip } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -23,6 +23,7 @@ import Urls from "../../shared/common/routes-app/routes-app";
 export default function LoginPage() {
   useForceRedirect(Urls.LOGIN_EMPLOYEE);
 
+  const { message } = App.useApp();
   const { loginEmployee } = useAuthData();
 
   const { t } = useLanguageData();
@@ -40,6 +41,14 @@ export default function LoginPage() {
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+  const userInputRef = useRef<any>(null);
+
+  const passwordInputRef = useRef<any>(null);
+
+  useEffect(() => {
+    userInputRef?.current?.focus();
+  }, []);
+
   const handleSearchEmployee = async (event: any) => {
     event?.preventDefault();
 
@@ -49,21 +58,27 @@ export default function LoginPage() {
       setSearchEmployees([]);
 
       if (!emailOrUsername) {
+        userInputRef?.current?.focus();
         throw new Error(t("auth.pleaseEnterEmailOrUsername"));
       }
 
       const response: ISearchEmployee[] =
         await serviceMethodsInstance.authServiceMethods.searchEmployees(
-          emailOrUsername
+          emailOrUsername,
         );
 
       if (response?.length === 0) {
+        userInputRef?.current?.focus();
         message.error(t("auth.pleaseEnterCorrectCredential"));
       }
 
       if (response.length === 1) {
         setSelectedSearchEmployee(response[0]);
       }
+
+      setTimeout(() => {
+        passwordInputRef?.current?.focus();
+      }, 100);
 
       setSearchEmployees(response);
     } catch (error: any) {
@@ -80,10 +95,12 @@ export default function LoginPage() {
       setIsSubmitting(true);
 
       if (!selectedSearchEmployee?.employeeUsername) {
+        userInputRef?.current?.focus();
         throw new Error(t("auth.selectedEmployeeInvalid"));
       }
 
       if (!password) {
+        passwordInputRef?.current?.focus();
         throw new Error(t("auth.pleaseEnterPassword"));
       }
 
@@ -118,11 +135,14 @@ export default function LoginPage() {
           <Logo1 />
         </div>
 
-        <h1 className="text-xl font-bold text-center">{t("auth.enterAsEmployee")}</h1>
+        <h1 className="text-xl font-bold text-center">
+          {t("auth.enterAsEmployee")}
+        </h1>
 
         {!selectedSearchEmployee && (
           <>
             <AuthInput
+              ref={userInputRef}
               value={emailOrUsername}
               onChange={setEmailOrUsername}
               label={t("auth.user")}
@@ -168,7 +188,13 @@ export default function LoginPage() {
                     <Tooltip title={t("auth.selectEmployee")}>
                       <Button
                         icon={<RightOutlined />}
-                        onClick={() => setSelectedSearchEmployee(item)}
+                        onClick={() => {
+                          setSelectedSearchEmployee(item);
+
+                          setTimeout(() => {
+                            passwordInputRef?.current?.focus();
+                          }, 100);
+                        }}
                         type="primary"
                       />
                     </Tooltip>
@@ -223,6 +249,7 @@ export default function LoginPage() {
             </div>
 
             <AuthInput
+              ref={passwordInputRef}
               value={password}
               onChange={setPassword}
               label={t("auth.password")}

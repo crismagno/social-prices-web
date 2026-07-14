@@ -1,7 +1,5 @@
 "use client";
 
-import { message } from "antd";
-
 import AuthEnum from "../../../shared/business/auth/auth.enum";
 import {
   IAuthLogin,
@@ -75,9 +73,7 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
         return false;
       }
 
-      message.error("Please reload page!");
-
-      return true;
+      throw error;
     }
   }
 

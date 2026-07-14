@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { message } from "antd";
+import { App } from "antd";
 import { useRouter } from "next/navigation";
 
 import AuthInput from "../../components/common/AuthInput/AuthInput";
@@ -20,6 +20,7 @@ export default function RecoverPasswordPage() {
 
   const { t } = useLanguageData();
 
+  const { message } = App.useApp();
   const router = useRouter();
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);

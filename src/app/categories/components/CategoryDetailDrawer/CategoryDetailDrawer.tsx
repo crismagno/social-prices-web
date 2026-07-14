@@ -4,10 +4,10 @@ import {
 } from 'react';
 
 import {
+  App,
   Button,
   Col,
   Drawer,
-  message,
   Row,
   Select,
 } from 'antd';
@@ -79,6 +79,7 @@ export const CategoryDetailDrawer: React.FC<Props> = ({
   onOk,
   categoryId,
 }) => {
+  const { message } = App.useApp();
   const { user } = useAuthData();
   const { t } = useLanguageData()!;
 

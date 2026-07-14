@@ -1,7 +1,7 @@
 "use client";
 import { memo, useState } from "react";
 
-import { Button, message, Modal, Select, Tag, Tooltip } from "antd";
+import { App, Button, Modal, Select, Tag, Tooltip } from "antd";
 import { map } from "lodash";
 
 import {
@@ -45,6 +45,7 @@ const SelectSalesPaymentStatus: React.FC<Props> = ({
   sale,
   onUpdatePaymentStatusManual,
 }) => {
+  const { message } = App.useApp();
   const { t } = useLanguageData();
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);

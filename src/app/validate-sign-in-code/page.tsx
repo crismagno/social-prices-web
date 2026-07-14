@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { message } from "antd";
+import { App } from "antd";
 import { useRouter } from "next/navigation";
 
 import Avatar from "../../components/common/Avatar/Avatar";
@@ -20,6 +20,7 @@ export default function ValidateSignInCodePage() {
 
   const { user, validateSignInCode, setUser } = useAuthData();
 
+  const { message } = App.useApp();
   const { t } = useLanguageData();
 
   const router = useRouter();
@@ -27,6 +28,12 @@ export default function ValidateSignInCodePage() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [codeValue, setCodeValue] = useState<string>("");
+
+  const inputRef = useRef<any>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const handleValidateSignInCode = async (event: any) => {
     event.preventDefault();
@@ -50,6 +57,7 @@ export default function ValidateSignInCodePage() {
       handleClientError(error);
     } finally {
       setIsSubmitting(false);
+      inputRef.current?.focus();
     }
   };
 
@@ -72,9 +80,12 @@ export default function ValidateSignInCodePage() {
 
           <span className="text-xs text-center mt-1">{user?.email}</span>
 
-          <span className="text-lg text-center mt-4">{t("auth.signInCode")}</span>
+          <span className="text-lg text-center mt-4">
+            {t("auth.signInCode")}
+          </span>
 
           <input
+            ref={inputRef}
             value={codeValue}
             onChange={(e) => setCodeValue(e.target.value)}
             placeholder={t("auth.typeYourCodeHere")}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Button, Col, Drawer, message, Row, Select } from "antd";
+import { App, Button, Col, Drawer, Row, Select } from "antd";
 import { sortBy } from "lodash";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -53,6 +53,7 @@ export const TagDetailDrawer: React.FC<Props> = ({
   onOk,
   tagId,
 }) => {
+  const { message } = App.useApp();
   const { t } = useLanguageData();
 
   const { user } = useAuthData();

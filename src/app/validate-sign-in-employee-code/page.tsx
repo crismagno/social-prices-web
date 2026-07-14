@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { message } from "antd";
+import { App } from "antd";
 import { useRouter } from "next/navigation";
 
 import Avatar from "../../components/common/Avatar/Avatar";
@@ -20,6 +20,7 @@ export default function ValidateSignInEmployeeCodePage() {
 
   const { employee, validateSignInEmployeeCode, setUser } = useAuthData();
 
+  const { message } = App.useApp();
   const { t } = useLanguageData();
 
   const router = useRouter();
@@ -27,6 +28,12 @@ export default function ValidateSignInEmployeeCodePage() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [codeValue, setCodeValue] = useState<string>("");
+
+  const inputRef = useRef<any>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const handleValidateSignInCode = async (event: any) => {
     event.preventDefault();
@@ -42,9 +49,8 @@ export default function ValidateSignInEmployeeCodePage() {
         return;
       }
 
-      const isCodeValueValid: boolean = await validateSignInEmployeeCode(
-        codeValue
-      );
+      const isCodeValueValid: boolean =
+        await validateSignInEmployeeCode(codeValue);
 
       if (!isCodeValueValid) {
         message.error(t("auth.codeInvalid"));
@@ -53,6 +59,7 @@ export default function ValidateSignInEmployeeCodePage() {
       handleClientError(error);
     } finally {
       setIsSubmitting(false);
+      inputRef.current?.focus();
     }
   };
 
@@ -75,9 +82,12 @@ export default function ValidateSignInEmployeeCodePage() {
 
           <span className="text-xs text-center mt-1">{employee?.email}</span>
 
-          <span className="text-lg text-center mt-4">{t("auth.signInCode")}</span>
+          <span className="text-lg text-center mt-4">
+            {t("auth.signInCode")}
+          </span>
 
           <input
+            ref={inputRef}
             value={codeValue}
             onChange={(e) => setCodeValue(e.target.value)}
             placeholder={t("auth.typeYourCodeHere")}

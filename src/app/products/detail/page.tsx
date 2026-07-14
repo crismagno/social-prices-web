@@ -7,7 +7,6 @@ import {
   Card,
   Col,
   Divider,
-  message,
   Row,
   Tooltip,
 } from "antd";
@@ -27,7 +26,7 @@ import { ProductDetail } from "../components/ProductDetail/ProductDetail";
 import { useFindProductById } from "./useFindProductById";
 
 export default function ProductDetailPage() {
-  const { modal } = App.useApp();
+  const { modal, message } = App.useApp();
   const { t } = useLanguageData();
 
   const router: AppRouterInstance = useRouter();

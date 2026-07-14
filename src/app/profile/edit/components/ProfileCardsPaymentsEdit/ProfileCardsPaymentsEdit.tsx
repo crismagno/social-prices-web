@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { message, Tooltip } from "antd";
+import { App, Tooltip } from "antd";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -57,6 +57,7 @@ const generateNewPhoneNumber = (
 });
 
 const ProfileCardsPaymentsEdit: React.FC<Props> = ({ className = "" }) => {
+  const { message } = App.useApp();
   const { user, updateUserSession } = useAuthData();
   const { t } = useLanguageData()!;
 

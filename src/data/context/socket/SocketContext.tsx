@@ -2,7 +2,7 @@
 
 import { createContext, useEffect, useState } from "react";
 
-import { message } from "antd";
+import { App } from "antd";
 import { Manager, Socket } from "socket.io-client";
 
 import { ICustomerFileUploadTemplateRow } from "../../../shared/business/customers/customers.type";
@@ -22,6 +22,7 @@ const SocketContext = createContext<ISocketContext>({
 });
 
 export const SocketProvider = ({ children }: { children?: any }) => {
+  const { message } = App.useApp();
   const { employee, isLogged } = useAuthData();
 
   const [socket, setSocket] = useState<Socket | null>(null);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -35,6 +35,13 @@ export default function LoginPage() {
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+  const userInputRef = useRef<any>(null);
+  const passwordInputRef = useRef<any>(null);
+
+  useEffect(() => {
+    userInputRef.current?.focus();
+  }, [mode]);
+
   const handleLoginOrCreate = async (event: any) => {
     event.preventDefault();
 
@@ -42,10 +49,12 @@ export default function LoginPage() {
       setIsSubmitting(true);
 
       if (!emailOrUsername || !password) {
+        userInputRef?.current?.focus();
         throw new Error(t("auth.pleaseEnterCredentials"));
       }
 
       if (mode === LoginEnum.Mode.CREATE && password !== confirmPassword) {
+        passwordInputRef?.current?.focus();
         throw new Error(t("auth.pleaseCheckConfirmPassword"));
       }
 
@@ -107,6 +116,7 @@ export default function LoginPage() {
         </h1>
 
         <AuthInput
+          ref={userInputRef}
           value={emailOrUsername}
           onChange={setEmailOrUsername}
           label={t("auth.user")}
@@ -119,6 +129,7 @@ export default function LoginPage() {
         />
 
         <AuthInput
+          ref={passwordInputRef}
           value={password}
           onChange={setPassword}
           label={t("auth.password")}
@@ -190,7 +201,7 @@ export default function LoginPage() {
               setMode(
                 mode === LoginEnum.Mode.LOGIN
                   ? LoginEnum.Mode.CREATE
-                  : LoginEnum.Mode.LOGIN
+                  : LoginEnum.Mode.LOGIN,
               )
             }
           >

@@ -3,12 +3,12 @@
 import { RefObject, useEffect, useRef, useState } from "react";
 
 import {
+  App,
   Badge,
   Button,
   Card,
   Col,
   Divider,
-  message,
   Modal,
   Row,
   Space,
@@ -104,6 +104,7 @@ const SalesTable: React.FC<Props> = ({
   employeeId,
   onEdit,
 }) => {
+  const { message } = App.useApp();
   const { user } = useAuthData();
   const { t } = useLanguageData();
 

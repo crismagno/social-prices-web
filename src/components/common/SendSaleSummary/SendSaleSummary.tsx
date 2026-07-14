@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Button, Divider, Input, message, Tooltip } from "antd";
+import { App, Button, Divider, Input, Tooltip } from "antd";
 
 import { SendOutlined } from "@ant-design/icons";
 
@@ -32,6 +32,7 @@ export const SendSaleSummary: React.FC<Props> = ({ sale }) => {
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+  const { message } = App.useApp();
   const { t } = useLanguageData();
 
   if (!sale || !customer || !buyer) {

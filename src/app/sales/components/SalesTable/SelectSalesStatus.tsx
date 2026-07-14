@@ -1,7 +1,7 @@
 "use client";
 import { memo, useState } from "react";
 
-import { Alert, App, Button, message, Select, Tag, Tooltip } from "antd";
+import { Alert, App, Button, Select, Tag, Tooltip } from "antd";
 
 import {
   CheckOutlined,
@@ -24,7 +24,7 @@ export interface Props {
 }
 
 const SelectSalesStatus: React.FC<Props> = ({ sale, onUpdateStatusManual }) => {
-  const { modal } = App.useApp();
+  const { modal, message } = App.useApp();
   const { t } = useLanguageData();
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);

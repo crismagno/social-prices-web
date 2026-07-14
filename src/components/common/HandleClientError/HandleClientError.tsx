@@ -1,11 +1,18 @@
 "use client";
 
-import { message } from "antd";
+import { message as staticMessage } from "antd";
+import { MessageInstance } from "antd/es/message/interface";
+
+let _messageApi: MessageInstance | null = null;
+
+export const setHandleClientErrorMessageApi = (api: MessageInstance): void => {
+  _messageApi = api;
+};
 
 const handleClientError = (
   error: any,
   duration: number = 2,
-  onClose?: VoidFunction | undefined
+  onClose?: VoidFunction | undefined,
 ): string => {
   let messageError: string = error?.message ?? "Error!";
 
@@ -21,7 +28,8 @@ const handleClientError = (
     messageError = error;
   }
 
-  message.error(messageError, duration, onClose);
+  const api = _messageApi ?? staticMessage;
+  api.error(messageError, duration, onClose);
 
   return messageError;
 };

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 
 import {
+  App,
   Button,
   Col,
   Divider,
   Empty,
   Image,
-  message,
   Row,
   Select,
   Tooltip,
@@ -87,6 +87,7 @@ export const AddProductsTable: React.FC<Props> = ({
   stores,
   onAddProductToSale,
 }) => {
+  const { message } = App.useApp();
   const { t } = useLanguageData();
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<IProduct> | undefined

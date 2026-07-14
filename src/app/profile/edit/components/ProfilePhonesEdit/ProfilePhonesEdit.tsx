@@ -3,8 +3,8 @@
 import { useState } from 'react';
 
 import {
+  App,
   Button,
-  message,
 } from 'antd';
 import {
   SubmitHandler,
@@ -44,6 +44,7 @@ interface Props {
 }
 
 const ProfilePhonesEdit: React.FC<Props> = ({ className = "" }) => {
+  const { message } = App.useApp();
   const { user, updateUserSession } = useAuthData();
   const { t } = useLanguageData()!;
 

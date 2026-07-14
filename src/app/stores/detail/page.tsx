@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 
 import {
+  App,
   Badge,
   Button,
   Card,
   Col,
   Divider,
-  message,
   Row,
   Select,
   Tooltip,
@@ -91,6 +91,7 @@ const formSchema = z.object({
 type TFormSchema = z.infer<typeof formSchema>;
 
 export default function StoreDetailPage() {
+  const { message } = App.useApp();
   const router: AppRouterInstance = useRouter();
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
   const { t } = useLanguageData();

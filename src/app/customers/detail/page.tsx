@@ -6,11 +6,11 @@ import {
 } from 'react';
 
 import {
+  App,
   Button,
   Card,
   Col,
   Divider,
-  message,
   Row,
   Select,
   Tooltip,
@@ -111,6 +111,7 @@ const formSchema = z.object({
 type TFormSchema = z.infer<typeof formSchema>;
 
 export default function CustomerDetailPage() {
+  const { message } = App.useApp();
   const { t } = useLanguageData()!;
   const router: AppRouterInstance = useRouter();
 

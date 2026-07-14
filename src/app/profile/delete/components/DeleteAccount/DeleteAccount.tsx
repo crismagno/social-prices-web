@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 
-import { Alert, Button, message } from "antd";
+import { Alert, App, Button } from "antd";
 import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 
@@ -28,6 +28,7 @@ const _baseFormSchema = z.object({
 type TFormSchema = z.infer<typeof _baseFormSchema>;
 
 const DeleteAccount: React.FC = () => {
+  const { message } = App.useApp();
   const { logout, user } = useAuthData();
   const { t } = useLanguageData()!;
 

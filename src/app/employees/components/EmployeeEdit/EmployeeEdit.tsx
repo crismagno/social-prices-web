@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from "react";
 
 import {
+  App,
   Button,
   Col,
   Divider,
-  message,
   Row,
   Select,
   Tag,
@@ -97,6 +97,7 @@ export const EmployeeEdit: React.FC<Props> = ({
   onCancel,
   isFromProfile = false,
 }) => {
+  const { message } = App.useApp();
   const { t } = useLanguageData()!;
   const router: AppRouterInstance = useRouter();
 

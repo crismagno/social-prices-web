@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 
-import { Button, Col, message, Row, Select } from "antd";
+import { App, Button, Col, Row, Select } from "antd";
 import moment from "moment";
 import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
@@ -36,6 +36,7 @@ const _baseFormSchema = z.object({
 type TFormSchema = z.infer<typeof _baseFormSchema>;
 
 const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
+  const { message } = App.useApp();
   const { user, updateUserSession } = useAuthData();
   const { t } = useLanguageData()!;
 
