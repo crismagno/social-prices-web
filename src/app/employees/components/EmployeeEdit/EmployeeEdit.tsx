@@ -107,7 +107,7 @@ export const EmployeeEdit: React.FC<Props> = ({
     useFindEmployeeById(employeeId);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    TagsEnum.Type.EMPLOYEE
+    TagsEnum.Type.EMPLOYEE,
   );
 
   const [formValues, setFormValues] = useState<TFormSchema>();
@@ -160,7 +160,7 @@ export const EmployeeEdit: React.FC<Props> = ({
             (phoneNumber: IPhoneNumber, index: number) => ({
               ...phoneNumber,
               isCollapsed: index === 0,
-            })
+            }),
           )
         : [generateNewPhoneNumber(false)],
       gender: employeeToEdit?.gender ?? PersonEnum.Gender.OTHER,
@@ -219,7 +219,7 @@ export const EmployeeEdit: React.FC<Props> = ({
               "",
           },
           types: address.types as AddressEnum.Type[],
-        })
+        }),
       );
 
       const createEmployeeDto: CreateEmployeeDto = {
@@ -290,7 +290,7 @@ export const EmployeeEdit: React.FC<Props> = ({
               "",
           },
           types: address.types as AddressEnum.Type[],
-        })
+        }),
       );
 
       const updateEmployeeDto: UpdateEmployeeDto = {
@@ -376,23 +376,27 @@ export const EmployeeEdit: React.FC<Props> = ({
         </div>
       </div>
 
-      <Row gutter={24} justify={"end"}>
-        <Col>
-          <Tooltip title={t("employees.goToEmployee")}>
-            <Button
-              type="primary"
-              onClick={() =>
-                router.push(Urls.EMPLOYEE.replace(":employeeId", employee!._id))
-              }
-              icon={<EnterOutlined />}
-            >
-              {t("employees.employee")}
-            </Button>
-          </Tooltip>
-        </Col>
-      </Row>
+      {employeeToEdit && (
+        <Row gutter={24} justify={"end"}>
+          <Col>
+            <Tooltip title={t("employees.goToEmployee")}>
+              <Button
+                type="primary"
+                onClick={() =>
+                  router.push(
+                    Urls.EMPLOYEE.replace(":employeeId", employeeToEdit!._id),
+                  )
+                }
+                icon={<EnterOutlined />}
+              >
+                {t("employees.employee")}
+              </Button>
+            </Tooltip>
+          </Col>
+        </Row>
+      )}
 
-      <Divider className="mt-2" />
+      <Divider className="mt-6" />
 
       <Row className="mt-10">
         <Col xs={24} md={8}>
@@ -514,7 +518,9 @@ export const EmployeeEdit: React.FC<Props> = ({
                     EmployeesEnum.StatusColors[status as EmployeesEnum.Status]
                   }
                 >
-                  {t(EmployeesEnum.StatusLabels[status as EmployeesEnum.Status])}
+                  {t(
+                    EmployeesEnum.StatusLabels[status as EmployeesEnum.Status],
+                  )}
                 </Tag>
               </Select.Option>
             ))}
