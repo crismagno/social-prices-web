@@ -30,6 +30,7 @@ import Urls from '../../../../shared/common/routes-app/routes-app';
 import {
   IChartDataProductItem,
 } from '../../../../shared/utils/charts/charts-types';
+import ImagesEnum from '../../../../shared/utils/images/images.enum';
 import { formatToMoneyDecimal } from '../../../../shared/utils/strings/string';
 
 interface Props {
@@ -83,7 +84,12 @@ export const SalesChartListProducts: React.FC<Props> = ({ salesAnalytics }) => {
         renderItem={(item, index) => (
           <List.Item>
             <List.Item.Meta
-              avatar={<ImageOrDefault src={item.mainUrl} />}
+              avatar={
+                <ImageOrDefault
+                  src={item.mainUrl}
+                  defaultImage={ImagesEnum.FilesNames.DefaultProductImage}
+                />
+              }
               title={
                 <a href={Urls.PRODUCT.replace(":productId", item.productId)}>
                   {item.name}

@@ -69,6 +69,7 @@ import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getFileUrl } from "../../../shared/utils/images/images-helper";
 import { getImageUrl } from "../../../shared/utils/images/images-url";
+import ImagesEnum from "../../../shared/utils/images/images.enum";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindStoreById } from "./useFindStoreById";
@@ -356,6 +357,7 @@ export default function StoreDetailPage() {
                   className="shadow-lg border-none"
                   onClick={() => setIsVisibleAvatarModal(true)}
                   noUseAwsS3
+                  defaultImage={ImagesEnum.FilesNames.DefaultStoreImage}
                 />
 
                 <ImageModal

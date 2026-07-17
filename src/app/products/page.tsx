@@ -186,7 +186,7 @@ export default function ProductsPage() {
                     <Image
                       width={50}
                       height={50}
-                      src={ImagesEnum.FilesNames.DefaultAvatarImage}
+                      src={ImagesEnum.FilesNames.DefaultProductImage}
                       alt="mainUrl"
                       className="rounded-full"
                     />

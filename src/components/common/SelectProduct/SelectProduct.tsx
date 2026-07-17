@@ -113,7 +113,7 @@ const SelectProduct: React.FC<Props> = ({
                 src={
                   product.mainUrl
                     ? getImageUrl(product.mainUrl)
-                    : ImagesEnum.FilesNames.DefaultAvatarImage
+                    : ImagesEnum.FilesNames.DefaultProductImage
                 }
                 size={"small"}
                 className="mr-2"

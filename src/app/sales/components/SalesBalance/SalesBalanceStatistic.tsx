@@ -27,6 +27,7 @@ import {
   IGetSalesProductBalanceResponse,
 } from '../../../../shared/business/sales/sales.type';
 import Urls from '../../../../shared/common/routes-app/routes-app';
+import ImagesEnum from '../../../../shared/utils/images/images.enum';
 import { formatToMoneyDecimal } from '../../../../shared/utils/strings/string';
 
 interface Props {
@@ -78,6 +79,7 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
                 <AvatarDescription
                   key={index}
                   src={mainUrl}
+                  defaultImage={ImagesEnum.FilesNames.DefaultProductImage}
                   buttonIcon={<ShoppingCartOutlined />}
                   buttonTooltip={t("sales.createSaleByProduct")}
                   onClickButton={() => {
@@ -148,6 +150,7 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
     return (
       <AvatarDescription
         src={mainUrl}
+        defaultImage={ImagesEnum.FilesNames.DefaultProductImage}
         buttonIcon={<ShoppingCartOutlined />}
         buttonTooltip={t("sales.createSaleByProduct")}
         onClickButton={

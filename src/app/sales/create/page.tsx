@@ -1420,9 +1420,7 @@ export default function CreateSalePage() {
             <Row gutter={[8, 8]}>
               <Col xs={24} md={4} className="flex flex-col items-center pt-1">
                 <Tooltip title={t("profile.seeAvatar")}>
-                  <div className="w-24 h-24 rounded-full border-4 border-blue-100 dark:border-blue-900 overflow-hidden shadow-md">
-                    <ImageOrDefault width={96} src={selectedCustomer?.avatar} />
-                  </div>
+                  <ImageOrDefault width={96} src={selectedCustomer?.avatar} />
                 </Tooltip>
               </Col>
 

@@ -6,7 +6,11 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useParams, useRouter } from "next/navigation";
 
-import { EditOutlined, UsergroupAddOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  ShoppingCartOutlined,
+  UsergroupAddOutlined,
+} from "@ant-design/icons";
 
 import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
 import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
@@ -96,6 +100,22 @@ export default function CustomerPage() {
               title={t("profile.information")}
               extraHeader={
                 <div className="flex gap-2">
+                  <Tooltip title={t("customers.goToCreateSaleTooltip")}>
+                    <Button
+                      type="primary"
+                      icon={<ShoppingCartOutlined />}
+                      onClick={() =>
+                        router.push(
+                          Urls.SALES_CREATE_BY_CUSTOMER.replace(
+                            ":customerId",
+                            customerId,
+                          ),
+                        )
+                      }
+                    >
+                      {t("customers.goToCreateSale")}
+                    </Button>
+                  </Tooltip>
                   <Tooltip title={t("customers.goToCustomers")}>
                     <Button
                       type="primary"

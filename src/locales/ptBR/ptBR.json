@@ -526,7 +526,9 @@
     "customerProfileSubtitle": "Perfil do cliente",
     "customerEmailTooltip": "E-mail do cliente, clique para enviar um e-mail",
     "uniqueUsername": "Nome de usuário único",
-    "uploadFilename": "Nome do Arquivo de Upload"
+    "uploadFilename": "Nome do Arquivo de Upload",
+    "goToCreateSale": "Criar venda",
+    "goToCreateSaleTooltip": "Ir para criar venda para este cliente"
   },
   "stores": {
     "title": "Lojas",
@@ -576,7 +578,9 @@
     "typeOnline": "Online",
     "typePhysical": "Físico",
     "typeHybrid": "Híbrido",
-    "typeOther": "Outro"
+    "typeOther": "Outro",
+    "goToCreateSale": "Criar venda",
+    "goToCreateSaleTooltip": "Ir para criar venda para esta loja"
   },
   "products": {
     "title": "Produtos",
@@ -658,7 +662,9 @@
     "productSubtitle": "Aqui podemos ver sobre o produto",
     "seeImage": "Ver imagem",
     "productBarcode": "Código de barras do produto",
-    "productHistoricPrices": "Históricos de Preços do Produto"
+    "productHistoricPrices": "Históricos de Preços do Produto",
+    "goToCreateSale": "Criar venda",
+    "goToCreateSaleTooltip": "Ir para criar venda para este produto"
   },
   "productItems": {
     "title": "Itens de Produto",

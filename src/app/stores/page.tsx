@@ -28,6 +28,7 @@ import { IStore } from "../../shared/business/stores/stores.interface";
 import TagsEnum from "../../shared/business/tags/tags.enum";
 import { ITag } from "../../shared/business/tags/tags.interface";
 import Urls from "../../shared/common/routes-app/routes-app";
+import ImagesEnum from "../../shared/utils/images/images.enum";
 import { sortArray } from "../../shared/utils/array/array-functions";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { createTableState } from "../../shared/utils/table/table-state";
@@ -109,7 +110,11 @@ export default function StoresPage() {
               key: "logo",
               align: "center",
               render: (logo: string) => (
-                <ImageOrDefault src={logo} width={50} />
+                <ImageOrDefault
+                  src={logo}
+                  width={50}
+                  defaultImage={ImagesEnum.FilesNames.DefaultStoreImage}
+                />
               ),
             },
             {

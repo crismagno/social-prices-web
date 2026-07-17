@@ -290,7 +290,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
                     <Image
                       width={50}
                       height={50}
-                      src={ImagesEnum.FilesNames.DefaultAvatarImage}
+                      src={ImagesEnum.FilesNames.DefaultProductImage}
                       alt="mainUrl"
                       className="rounded-full"
                     />

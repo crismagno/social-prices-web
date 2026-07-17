@@ -523,7 +523,9 @@
     "customerProfileSubtitle": "Customer profile of",
     "customerEmailTooltip": "Customer email, click to send an email",
     "uniqueUsername": "Unique username",
-    "uploadFilename": "Upload Filename"
+    "uploadFilename": "Upload Filename",
+    "goToCreateSale": "Create sale",
+    "goToCreateSaleTooltip": "Go to create sale for this customer"
   },
   "stores": {
     "title": "Stores",
@@ -573,7 +575,9 @@
     "typeOnline": "Online",
     "typePhysical": "Physical",
     "typeHybrid": "Hybrid",
-    "typeOther": "Other"
+    "typeOther": "Other",
+    "goToCreateSale": "Create sale",
+    "goToCreateSaleTooltip": "Go to create sale for this store"
   },
   "products": {
     "title": "Products",
@@ -655,7 +659,9 @@
     "productSubtitle": "Here we can see about product",
     "seeImage": "See image",
     "productBarcode": "Product Barcode",
-    "productHistoricPrices": "Product Historic Prices"
+    "productHistoricPrices": "Product Historic Prices",
+    "goToCreateSale": "Create sale",
+    "goToCreateSaleTooltip": "Go to create sale for this product"
   },
   "productItems": {
     "title": "Product Items",

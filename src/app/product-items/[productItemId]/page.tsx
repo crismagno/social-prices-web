@@ -19,7 +19,12 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useParams, useRouter } from "next/navigation";
 
-import { EditOutlined, EyeOutlined, InboxOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  EyeOutlined,
+  InboxOutlined,
+  ShoppingCartOutlined,
+} from "@ant-design/icons";
 
 import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
 import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
@@ -36,6 +41,7 @@ import TagsEnum from "../../../shared/business/tags/tags.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getImageUrl } from "../../../shared/utils/images/images-url";
+import ImagesEnum from "../../../shared/utils/images/images.enum";
 import { formatToMoneyDecimal } from "../../../shared/utils/strings/string";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
 import { useFindProductsByUser } from "../../products/useFindProductsByUser";
@@ -104,7 +110,11 @@ export default function ProductItemPage() {
             md={5}
             className="flex flex-col justify-start items-center"
           >
-            <ImageOrDefault src={productItem.mainUrl} width={240} />
+            <ImageOrDefault
+              src={productItem.mainUrl}
+              width={240}
+              defaultImage={ImagesEnum.FilesNames.DefaultProductImage}
+            />
 
             <div className="mt-2">
               <AvatarAntd.Group
@@ -145,6 +155,22 @@ export default function ProductItemPage() {
               title={t("stores.information")}
               extraHeader={
                 <div className="flex gap-2">
+                  <Tooltip title={t("products.goToCreateSale")}>
+                    <Button
+                      type="primary"
+                      icon={<ShoppingCartOutlined />}
+                      onClick={() =>
+                        router.push(
+                          Urls.SALES_CREATE_BY_PRODUCT_ITEM.replace(
+                            ":productItemId",
+                            productItemId,
+                          ),
+                        )
+                      }
+                    >
+                      {t("products.goToCreateSale")}
+                    </Button>
+                  </Tooltip>
                   <Tooltip title={t("productItems.goToProductItems")}>
                     <Button
                       type="primary"
