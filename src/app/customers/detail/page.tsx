@@ -78,7 +78,10 @@ const formSchema = z.object({
   birthDate: z.string().nullable(),
   gender: z.string().nullable(),
   tagsIds: z.array(z.string()),
-  uniqName: z.string().trim().nullable(),
+  uniqName: z
+    .string()
+    .transform((value) => value.replace(/\s+/g, ""))
+    .nullable(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;

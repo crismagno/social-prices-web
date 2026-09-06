@@ -488,7 +488,7 @@ export const EmployeeEdit: React.FC<Props> = ({
             controller={{ control, name: "level" }}
             label={t("employees.level")}
             errorMessage={errors.level?.message}
-            disabled={isFromProfile}
+            disabled={isFromProfile || employeeToEdit?._id === employee?._id}
           >
             {employeeLevels.map((level: string) => (
               <Select.Option key={level} value={level}>
