@@ -945,5 +945,22 @@
   "users": {
     "typeCommon": "Common",
     "typeCompany": "Company"
+  },
+  "dynamicFields": {
+    "title": "Dynamic Fields",
+    "name": "Name",
+    "type": "Type",
+    "value": "Value",
+    "empty": "No dynamic fields yet. Use the + button to add one.",
+    "duplicatedName": "Field names must be unique",
+    "requiredName": "Name is required",
+    "true": "True",
+    "false": "False",
+    "types": {
+      "BOOLEAN": "True/False",
+      "STRING": "Characters",
+      "INT": "Integer",
+      "DECIMAL": "Decimal"
+    }
   }
 }

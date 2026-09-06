@@ -1,3 +1,4 @@
+import { IDynamicField } from "../shared/dynamic-field/dynamic-field.interface";
 import { IProduct } from '../products/products.interface';
 import { ICreatedAtEntity } from '../shared/global/created-at.interface';
 import { IUpdatedAtEntity } from '../shared/global/updated-at.interface';
@@ -25,6 +26,7 @@ export interface IProductItem extends ICreatedAtEntity, IUpdatedAtEntity {
   expirationDate: Date | null;
   dimensions: IProductItemDimensions | null;
   colors: string[] | null;
+  dynamicFields: IDynamicField[];
   isDefault: boolean;
   details: string | null;
   QRCode: string | null;

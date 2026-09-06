@@ -30,6 +30,7 @@ import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { ProductHistoricPricesButton } from "../../../components/common/ProductHistoricPricesButton/ProductHistoricPricesButton";
 import { TagCategoriesCustomAntd } from "../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
 import { TagStoresCustomAntd } from "../../../components/common/TagStoresCustomAntd/TagStoresCustomAntd";
+import { DynamicFieldsView } from "../../../components/common/DynamicFields/DynamicFieldsView";
 import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import YesNo from "../../../components/common/YesNo/YesNo";
 import Layout from "../../../components/template/Layout/Layout";
@@ -436,6 +437,13 @@ export default function ProductPage() {
                     </Descriptions>
                   </Col>
                 )}
+
+                {/* Dynamic Fields */}
+                <Col xs={24}>
+                  <DynamicFieldsView
+                    dynamicFields={product.dynamicFields}
+                  />
+                </Col>
               </Row>
             </ContainerTitle>
           </Col>

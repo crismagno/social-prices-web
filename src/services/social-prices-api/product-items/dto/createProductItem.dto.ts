@@ -1,3 +1,5 @@
+import { IDynamicField } from "../../../../shared/business/shared/dynamic-field/dynamic-field.interface";
+
 export class ProductItemDimensionsDto {
   size: string | null = null;
   height: number | null = null;
@@ -27,5 +29,7 @@ export default class CreateProductItemDto {
   expirationDate: string | null = null;
   dimensions: ProductItemDimensionsDto | null = null;
   colors: string[] = [];
+
+  dynamicFields: IDynamicField[] = [];
   [key: string]: any;
 }

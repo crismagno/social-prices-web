@@ -35,6 +35,11 @@ import {
   colorSchema,
   MultiColors,
 } from "../../../../components/common/MultiColors/MultiColors";
+import {
+  DynamicFields,
+  dynamicFieldSchema,
+  hasUniqueDynamicFieldNames,
+} from "../../../../components/common/DynamicFields/DynamicFields";
 import { ProductHistoricPricesButton } from "../../../../components/common/ProductHistoricPricesButton/ProductHistoricPricesButton";
 import { ProductPreviousBarcodesPopover } from "../../../../components/common/ProductPreviousBarcodesPopover/ProductPreviousBarcodesPopover";
 import { StoreNameStatus } from "../../../../components/common/StoreNameStatus/StoreNameStatus";
@@ -99,6 +104,10 @@ const _baseFormSchema = z.object({
   expirationDate: z.any().nullable().optional(),
   dimensions: dimensionsFormSchema.optional(),
   colors: z.array(colorSchema).optional(),
+  dynamicFields: z
+    .array(dynamicFieldSchema)
+    .optional()
+    .refine(hasUniqueDynamicFieldNames),
 });
 
 type TFormSchema = z.infer<typeof _baseFormSchema>;
@@ -149,6 +158,12 @@ export const ProductDetail: React.FC<Props> = ({
         expirationDate: z.any().nullable().optional(),
         dimensions: dimensionsFormSchema.optional(),
         colors: z.array(colorSchema).optional(),
+        dynamicFields: z
+          .array(dynamicFieldSchema)
+          .optional()
+          .refine(hasUniqueDynamicFieldNames, {
+            message: t("dynamicFields.duplicatedName"),
+          }),
       }),
     [t],
   );
@@ -162,6 +177,7 @@ export const ProductDetail: React.FC<Props> = ({
     formState: { errors },
     control,
     reset,
+    setValue,
   } = useForm<TFormSchema>({
     values: formValues,
     resolver: zodResolver(formSchema),
@@ -213,6 +229,7 @@ export const ProductDetail: React.FC<Props> = ({
             .utc()
             .format(DatesEnum.Format.YYYYMMDD_DASHED)
         : null,
+      dynamicFields: product?.dynamicFields ?? [],
       colors: map(product?.colors ?? [], (color: string) => ({ value: color })),
       dimensions: {
         size: product?.dimensions?.size ?? "",
@@ -259,6 +276,7 @@ export const ProductDetail: React.FC<Props> = ({
       releaseDate: null,
       expirationDate: null,
       colors: [],
+      dynamicFields: [],
       dimensions: {
         size: "",
         height: 0,
@@ -335,6 +353,11 @@ export const ProductDetail: React.FC<Props> = ({
               .utc(data.expirationDate)
               .format(DatesEnum.Format.YYYYMMDD_DASHED)
           : null,
+        dynamicFields: (data.dynamicFields ?? []).map((field) => ({
+          name: field.name,
+          type: field.type,
+          value: field.value ?? null,
+        })),
         colors: data.colors?.length
           ? map(
               filter(
@@ -422,6 +445,11 @@ export const ProductDetail: React.FC<Props> = ({
               .utc(data.expirationDate)
               .format(DatesEnum.Format.YYYYMMDD_DASHED)
           : null,
+        dynamicFields: (data.dynamicFields ?? []).map((field) => ({
+          name: field.name,
+          type: field.type,
+          value: field.value ?? null,
+        })),
         colors: data.colors?.length
           ? map(
               filter(
@@ -790,6 +818,12 @@ export const ProductDetail: React.FC<Props> = ({
         </ContainerTitle>
 
         <MultiColors control={control} errors={errors} />
+
+        <DynamicFields
+          control={control}
+          errors={errors}
+          setValue={setValue}
+        />
 
         <HrCustom className="my-7" />
 

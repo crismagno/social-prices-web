@@ -35,6 +35,11 @@ import {
   colorSchema,
   MultiColors,
 } from "../../../../components/common/MultiColors/MultiColors";
+import {
+  DynamicFields,
+  dynamicFieldSchema,
+  hasUniqueDynamicFieldNames,
+} from "../../../../components/common/DynamicFields/DynamicFields";
 import { ProductPreviousBarcodesPopover } from "../../../../components/common/ProductPreviousBarcodesPopover/ProductPreviousBarcodesPopover";
 import SelectProduct from "../../../../components/common/SelectProduct/SelectProduct";
 import { TagCategoryCustomAntd } from "../../../../components/common/TagCategoryCustomAntd/TagCategoryCustomAntd";
@@ -99,6 +104,10 @@ const formSchema = z.object({
   expirationDate: z.any().nullable().optional(),
   dimensions: dimensionsFormSchema.optional(),
   colors: z.array(colorSchema).optional(),
+  dynamicFields: z
+    .array(dynamicFieldSchema)
+    .optional()
+    .refine(hasUniqueDynamicFieldNames),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -192,6 +201,7 @@ export const ProductItemDetail: React.FC<Props> = ({
             .utc()
             .format(DatesEnum.Format.YYYYMMDD_DASHED)
         : null,
+      dynamicFields: productItem?.dynamicFields ?? [],
       colors: map(productItem?.colors ?? [], (color: string) => ({
         value: color,
       })),
@@ -238,6 +248,7 @@ export const ProductItemDetail: React.FC<Props> = ({
       releaseDate: null,
       expirationDate: null,
       colors: [],
+      dynamicFields: [],
       dimensions: {
         size: "",
         height: 0,
@@ -310,6 +321,11 @@ export const ProductItemDetail: React.FC<Props> = ({
               .utc(data.expirationDate)
               .format(DatesEnum.Format.YYYYMMDD_DASHED)
           : null,
+        dynamicFields: (data.dynamicFields ?? []).map((field) => ({
+          name: field.name,
+          type: field.type,
+          value: field.value ?? null,
+        })),
         colors: data.colors?.length
           ? map(
               filter(
@@ -395,6 +411,11 @@ export const ProductItemDetail: React.FC<Props> = ({
               .utc(data.expirationDate)
               .format(DatesEnum.Format.YYYYMMDD_DASHED)
           : null,
+        dynamicFields: (data.dynamicFields ?? []).map((field) => ({
+          name: field.name,
+          type: field.type,
+          value: field.value ?? null,
+        })),
         colors: data.colors?.length
           ? map(
               filter(
@@ -804,6 +825,12 @@ export const ProductItemDetail: React.FC<Props> = ({
         </ContainerTitle>
 
         <MultiColors control={control} errors={errors} disabled={isReadonly} />
+
+        <DynamicFields
+          control={control}
+          errors={errors}
+          setValue={setValue} disabled={isReadonly}
+        />
 
         <HrCustom className="my-7" />
 
