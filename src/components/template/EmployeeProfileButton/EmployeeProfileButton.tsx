@@ -12,7 +12,11 @@ import EmployeesEnum from "../../../shared/business/employees/employees.enum";
 import { getImageUrl } from "../../../shared/utils/images/images-url";
 import ImagesEnum from "../../../shared/utils/images/images.enum";
 
-export const EmployeeProfileButton: React.FC = () => {
+interface Props {
+  isCollapsed?: boolean;
+}
+
+export const EmployeeProfileButton: React.FC<Props> = ({ isCollapsed }) => {
   const { employee, updateEmployeeSession } = useAuthData();
   const { t } = useLanguageData();
 
@@ -32,29 +36,35 @@ export const EmployeeProfileButton: React.FC = () => {
   return (
     <>
       <div
-        className="flex items-center py-1 pl-1 pr-5 rounded-full border shadow-sm
-        bg-gradient-to-tr from-white to-slate-100  text-slate-950 hover:from-slate-100 hover:to-slate-200 w-48 
-        cursor-pointer
-    "
+        className={`flex items-center rounded-full border shadow-sm cursor-pointer
+        bg-gradient-to-tr from-white to-slate-100 text-slate-950
+        hover:from-slate-100 hover:to-slate-200
+        ${isCollapsed ? "justify-center p-1" : "py-1 pl-1 pr-5 w-full"}`}
         onClick={() => setIsEmployeeEditDrawerOpen(true)}
       >
-        <Avatar
-          src={avatar}
-          onError={() =>
-            setAvatar(ImagesEnum.FilesNames.DefaultAvatarImage) as any
-          }
-          size="large"
-        />
+        <Tooltip title={isCollapsed ? employee.name : undefined}>
+          <Avatar
+            src={avatar}
+            onError={() =>
+              setAvatar(ImagesEnum.FilesNames.DefaultAvatarImage) as any
+            }
+            size={isCollapsed ? "default" : "large"}
+          />
+        </Tooltip>
 
-        <div className="flex flex-col items-start justify-start ml-3 text-sm">
-          <Tooltip title={employee.name} className="cursor-pointer">
-            <label className="w-28  truncate">{employee.name}</label>
-          </Tooltip>
+        {!isCollapsed && (
+          <div className="flex flex-col items-start justify-start ml-3 text-sm overflow-hidden">
+            <Tooltip title={employee.name} className="cursor-pointer">
+              <label className="w-28 truncate cursor-pointer">
+                {employee.name}
+              </label>
+            </Tooltip>
 
-          <Tag color={EmployeesEnum.LevelColors[employee.level]}>
-            {t(EmployeesEnum.LevelLabels[employee.level])}
-          </Tag>
-        </div>
+            <Tag color={EmployeesEnum.LevelColors[employee.level]}>
+              {t(EmployeesEnum.LevelLabels[employee.level])}
+            </Tag>
+          </div>
+        )}
       </div>
 
       <EmployeeEditDrawer

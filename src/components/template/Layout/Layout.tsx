@@ -6,7 +6,7 @@ import useAppData from "../../../data/context/app/useAppData";
 import ForceAuth from "../../auth/ForceAuth/ForceAuth";
 import Content from "../Content/Content";
 import Header from "../Header/Header";
-import Navigation from "../Navigation/Navigation";
+import Sidebar from "../Sidebar/Sidebar";
 
 interface Props {
   title: string | ReactElement;
@@ -27,16 +27,17 @@ const Layout: React.FC<Props> = ({
 
   return (
     <ForceAuth>
-      <div className={`${theme} relative flex flex-col h-screen`}>
-        <div className="p-7 bg-gray-100 dark:bg-slate-800 flex-grow pb-32">
+      <div className={`${theme} relative flex flex-row min-h-screen`}>
+        <Sidebar />
+
+        <main className="p-7 bg-gray-100 dark:bg-slate-800 flex-grow min-w-0 overflow-x-auto">
           <Header
             subtitle={subtitle}
             title={title}
             hasBackButton={hasBackButton}
           />
           <Content>{children}</Content>
-        </div>
-        <Navigation />
+        </main>
       </div>
     </ForceAuth>
   );

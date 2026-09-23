@@ -6,6 +6,7 @@ namespace LocalStorageEnum {
     AUTH_TOKEN = "AUTH_TOKEN",
     MANAGER = "MANAGER",
     MANAGER_AUTH_TOKEN = "MANAGER_AUTH_TOKEN",
+    SIDEBAR_COLLAPSED = "SIDEBAR_COLLAPSED",
   }
 }
 
