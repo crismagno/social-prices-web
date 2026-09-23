@@ -40,4 +40,29 @@ export default abstract class ServiceMethodsBase {
 
     return authToken;
   };
+
+  public formatManagerAuthorizationWithToken(): string {
+    const token: string | null = this.getManagerAuthTokenOrFail();
+
+    if (!token) {
+      throw new Error(
+        "Unauthorized manager! Please contact the support. Code: UNM"
+      );
+    }
+
+    return this.formatAuthorization(token);
+  }
+
+  public getManagerAuthTokenOrFail = (): string => {
+    const managerAuthToken: string | null =
+      localStorageMethodsInstance.localStorageManagerAuthTokenMethods.getManagerAuthToken();
+
+    if (!managerAuthToken) {
+      throw new Error(
+        "Manager token not found! Please contact the support. Code: MTNF"
+      );
+    }
+
+    return managerAuthToken;
+  };
 }

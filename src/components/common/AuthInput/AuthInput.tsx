@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 
 import { IconEye, IconEyeSlash } from "../icons/icons";
 
@@ -11,49 +11,61 @@ interface Props {
   inputClassName?: string;
   divClassName?: string;
   useShowPassword?: boolean;
+  placeholder?: string;
+  disabled?: boolean;
 }
 
-const AuthInput: React.FC<Props> = ({
-  label,
-  type,
-  value,
-  onChange,
-  required,
-  inputClassName,
-  divClassName,
-  useShowPassword,
-  ...props
-}) => {
-  const [inputType, setInputType] = useState(type);
+const AuthInput = forwardRef<HTMLInputElement, Props>(
+  (
+    {
+      label,
+      type,
+      value,
+      onChange,
+      required,
+      inputClassName,
+      divClassName,
+      useShowPassword,
+      ...props
+    },
+    ref
+  ) => {
+    const [inputType, setInputType] = useState(type);
 
-  return (
-    <div className={`flex flex-col mt-4  ${divClassName} relative`}>
-      <label>{label}</label>
+    return (
+      <div className={`flex flex-col mt-4  ${divClassName} relative`}>
+        <label>{label}</label>
 
-      <input
-        className={`
+        <input
+          ref={ref}
+          className={`
 					px-4 py-3 bg-gray-100 rounded-lg mt-2
 					 focus:bg-white focus:border-blue-100
 					 transition-all ${inputClassName}`}
-        value={value}
-        type={inputType}
-        onChange={(e) => onChange(e.target.value)}
-        required={required}
-        {...props}
-      />
+          value={value}
+          type={inputType}
+          onChange={(e) => onChange(e.target.value)}
+          required={required}
+          {...props}
+        />
 
-      {useShowPassword && type === "password" && (
-        <div
-          className="absolute right-3 bottom-3 cursor-pointer"
-          onClick={() =>
-            setInputType(inputType === "password" ? "text" : "password")
-          }
-        >
-          {inputType === "password" ? IconEyeSlash("w-5/6") : IconEye("w-5/6")}
-        </div>
-      )}
-    </div>
-  );
-};
+        {useShowPassword && type === "password" && (
+          <div
+            className="absolute right-3 bottom-3 cursor-pointer"
+            onClick={() =>
+              setInputType(inputType === "password" ? "text" : "password")
+            }
+          >
+            {inputType === "password"
+              ? IconEyeSlash("w-5/6")
+              : IconEye("w-5/6")}
+          </div>
+        )}
+      </div>
+    );
+  }
+);
+
+AuthInput.displayName = "AuthInput";
 
 export default AuthInput;

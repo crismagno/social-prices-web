@@ -67,6 +67,15 @@ const Urls = {
   EDIT_EMPLOYEE: "/employees/detail?empid=:employeeId",
   EMPLOYEE: "/employees/:employeeId",
 
+  // manager panel
+  MANAGER_LOGIN: "/manager/login",
+  MANAGER_VALIDATE_SIGN_IN_CODE: "/manager/validate-sign-in-code",
+  MANAGER_RECOVER_PASSWORD: "/manager/recover-password",
+  MANAGER_MANAGERS: "/manager/managers",
+  MANAGER_NEW_MANAGER: "/manager/managers/detail",
+  MANAGER_EDIT_MANAGER: "/manager/managers/detail?mid=:managerId",
+  MANAGER_USERS: "/manager/users",
+
   // download
   DOWNLOAD_SALE_SUMMARY: "/download/sales/summary?i=:tokenId",
 };

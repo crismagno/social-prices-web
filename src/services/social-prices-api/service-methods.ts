@@ -4,6 +4,9 @@ import CustomersServiceMethods from "./customers/customers-service.methods";
 import EmployeesServiceMethods from "./employees/employees-service.methods";
 import FilesUploadsServiceMethods from "./files-uploads/files-uploads-service.methods";
 import FilesServiceMethods from "./files/files-service.methods";
+import ManagerAuthServiceMethods from "./manager-auth/manager-auth-service.methods";
+import ManagerUsersServiceMethods from "./manager-users/manager-users-service.methods";
+import ManagersServiceMethods from "./managers/managers-service.methods";
 import NotificationsServiceMethods from "./notifications/notifications-service.methods";
 import ProductItemsServiceMethods from "./product-items/product-items-service.methods";
 import ProductsServiceMethods from "./products/products-service.methods";
@@ -26,6 +29,9 @@ export default class ServiceMethods {
   public employeesServiceMethods: EmployeesServiceMethods;
   public filesServiceMethods: FilesServiceMethods;
   public filesUploadsServiceMethods: FilesUploadsServiceMethods;
+  public managerAuthServiceMethods: ManagerAuthServiceMethods;
+  public managersServiceMethods: ManagersServiceMethods;
+  public managerUsersServiceMethods: ManagerUsersServiceMethods;
 
   constructor() {
     this.authServiceMethods = new AuthServiceMethods();
@@ -41,6 +47,9 @@ export default class ServiceMethods {
     this.employeesServiceMethods = new EmployeesServiceMethods();
     this.filesServiceMethods = new FilesServiceMethods();
     this.filesUploadsServiceMethods = new FilesUploadsServiceMethods();
+    this.managerAuthServiceMethods = new ManagerAuthServiceMethods();
+    this.managersServiceMethods = new ManagersServiceMethods();
+    this.managerUsersServiceMethods = new ManagerUsersServiceMethods();
   }
 }
 

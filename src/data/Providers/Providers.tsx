@@ -14,6 +14,7 @@ import { antdThemeConfig } from '../../lib-antd/theme';
 import { AppProvider } from '../context/app/AppContext';
 import { AuthProvider } from '../context/auth/AuthContext';
 import { LanguageProvider } from '../context/language/LanguageContext';
+import { ManagerAuthProvider } from '../context/managerAuth/ManagerAuthContext';
 import { SocketProvider } from '../context/socket/SocketContext';
 
 const MessageApiSetter: React.FC = () => {
@@ -30,11 +31,13 @@ export function Providers({ children }: any) {
       <AntdApp>
         <MessageApiSetter />
         <LanguageProvider>
-          <AuthProvider>
-            <AppProvider>
-              <SocketProvider>{children}</SocketProvider>
-            </AppProvider>
-          </AuthProvider>
+          <ManagerAuthProvider>
+            <AuthProvider>
+              <AppProvider>
+                <SocketProvider>{children}</SocketProvider>
+              </AppProvider>
+            </AuthProvider>
+          </ManagerAuthProvider>
         </LanguageProvider>
       </AntdApp>
     </ConfigProvider>
