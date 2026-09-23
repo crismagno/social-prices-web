@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import AuthInput from "../../../components/common/AuthInput/AuthInput";
 import ButtonCommon from "../../../components/common/ButtonCommon/ButtonCommon";
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
+import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { Logo1 } from "../../../components/common/Logo/Logo1";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import useManagerAuthData from "../../../data/context/managerAuth/useManagerAuthData";
@@ -18,7 +19,7 @@ export default function ManagerLoginPage() {
 
   const { message } = App.useApp();
 
-  const { login, manager } = useManagerAuthData();
+  const { login, isLogged, isLoading } = useManagerAuthData();
 
   const router = useRouter();
 
@@ -33,6 +34,16 @@ export default function ManagerLoginPage() {
   useEffect(() => {
     emailInputRef?.current?.focus();
   }, []);
+
+  // A manager with a redeemed session has no business on the sign in page.
+  // Gate on isLogged, not on `manager`: between the password step and the
+  // emailed code the manager is set but the session is not, and that person
+  // must still be able to come back here.
+  useEffect(() => {
+    if (!isLoading && isLogged) {
+      router.push(Urls.MANAGER_MANAGERS);
+    }
+  }, [isLoading, isLogged, router]);
 
   const handleLogin = async (event: any) => {
     event?.preventDefault();
@@ -59,6 +70,14 @@ export default function ManagerLoginPage() {
       setIsSubmitting(false);
     }
   };
+
+  if (isLoading) {
+    return <LoadingFull />;
+  }
+
+  if (isLogged) {
+    return null;
+  }
 
   return (
     <form
