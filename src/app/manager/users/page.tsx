@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
-import { Card, Tag } from "antd";
+import { Card, Tag, Tooltip } from "antd";
 import moment from "moment";
 
 import TableCustomAntd2 from "../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
@@ -41,6 +41,34 @@ export default function ManagerUsersPage() {
               key: "name",
               align: "center",
               sorter: true,
+              render: (name: string | null, user: IUser) => {
+                const identifiers = [
+                  { label: t("common.cpf"), value: user.cpf },
+                  { label: t("common.cnpj"), value: user.cnpj },
+                  { label: t("common.idNumber"), value: user.idNumber },
+                ].filter((identifier) => !!identifier.value?.trim());
+
+                return (
+                  <div className="flex flex-col items-center">
+                    <span>{name || "-"}</span>
+
+                    {identifiers.length > 0 && (
+                      <span className="text-[11px] leading-tight italic text-gray-400 dark:text-gray-500">
+                        {identifiers.map((identifier, index) => (
+                          <Fragment key={identifier.label}>
+                            {index > 0 && " | "}
+                            <Tooltip title={identifier.label}>
+                              <span className="cursor-help">
+                                {identifier.value}
+                              </span>
+                            </Tooltip>
+                          </Fragment>
+                        ))}
+                      </span>
+                    )}
+                  </div>
+                );
+              },
             },
             {
               title: t("manager.username"),
@@ -55,27 +83,6 @@ export default function ManagerUsersPage() {
               key: "email",
               align: "center",
               sorter: true,
-            },
-            {
-              title: t("common.idNumber"),
-              dataIndex: "idNumber",
-              key: "idNumber",
-              align: "center",
-              render: (idNumber: string | null) => idNumber || "-",
-            },
-            {
-              title: t("common.cpf"),
-              dataIndex: "cpf",
-              key: "cpf",
-              align: "center",
-              render: (cpf: string | null) => cpf || "-",
-            },
-            {
-              title: t("common.cnpj"),
-              dataIndex: "cnpj",
-              key: "cnpj",
-              align: "center",
-              render: (cnpj: string | null) => cnpj || "-",
             },
             {
               title: t("manager.status"),

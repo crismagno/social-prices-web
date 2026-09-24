@@ -1028,7 +1028,7 @@
     "managerRestored": "Manager restored",
     "users": "Users",
     "usersSubtitle": "Everyone using the system",
-    "searchUsers": "Search users",
+    "searchUsers": "Search by name, username, email, ID number, CPF or CNPJ...",
     "username": "Username",
     "status": "Status",
     "type": "Type",
