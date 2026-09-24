@@ -5,4 +5,7 @@ export default class UpdateUserDto {
   birthDate: Date = new Date();
   gender: PersonEnum.Gender | null = null;
   about: string | null = null;
+  idNumber: string | null = null;
+  cpf: string | null = null;
+  cnpj: string | null = null;
 }

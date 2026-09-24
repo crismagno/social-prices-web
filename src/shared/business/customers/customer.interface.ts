@@ -15,6 +15,9 @@ export interface ICustomer extends ICreatedAtEntity, IUpdatedAtEntity {
   addresses: IAddress[];
   gender: PersonEnum.Gender | null;
   about: string | null;
+  idNumber: string | null;
+  cpf: string | null;
+  cnpj: string | null;
   phoneNumbers: IPhoneNumber[];
   tagsIds: string[];
   uniqName: string | null;

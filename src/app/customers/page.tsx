@@ -1,9 +1,8 @@
 "use client";
 
-import { RefObject, useEffect, useRef, useState } from "react";
+import { Fragment, RefObject, useEffect, useRef, useState } from "react";
 
 import { Button, Card, Space, Tag, Tooltip } from "antd";
-import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter } from "next/navigation";
 
@@ -36,7 +35,6 @@ import TagsEnum from "../../shared/business/tags/tags.enum";
 import { ITag } from "../../shared/business/tags/tags.interface";
 import Urls from "../../shared/common/routes-app/routes-app";
 import { sortArray } from "../../shared/utils/array/array-functions";
-import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import {
@@ -163,6 +161,34 @@ export default function CustomersPage() {
               key: "name",
               align: "center",
               sorter: true,
+              render: (name: string | null, customer: ICustomer) => {
+                const identifiers = [
+                  { label: t("common.cpf"), value: customer.cpf },
+                  { label: t("common.cnpj"), value: customer.cnpj },
+                  { label: t("common.idNumber"), value: customer.idNumber },
+                ].filter((identifier) => !!identifier.value?.trim());
+
+                return (
+                  <div className="flex flex-col items-center">
+                    <span>{name || "-"}</span>
+
+                    {identifiers.length > 0 && (
+                      <span className="text-[11px] leading-tight italic text-gray-400 dark:text-gray-500">
+                        {identifiers.map((identifier, index) => (
+                          <Fragment key={identifier.label}>
+                            {index > 0 && " | "}
+                            <Tooltip title={identifier.label}>
+                              <span className="cursor-help">
+                                {identifier.value}
+                              </span>
+                            </Tooltip>
+                          </Fragment>
+                        ))}
+                      </span>
+                    )}
+                  </div>
+                );
+              },
             },
             {
               title: t("customers.uniqName"),
@@ -207,18 +233,11 @@ export default function CustomersPage() {
                     PersonEnum.GenderColors[gender ?? PersonEnum.Gender.OTHER]
                   }
                 >
-                  {t(PersonEnum.GenderLabels[gender ?? PersonEnum.Gender.OTHER])}
+                  {t(
+                    PersonEnum.GenderLabels[gender ?? PersonEnum.Gender.OTHER],
+                  )}
                 </Tag>
               ),
-            },
-            {
-              title: t("customers.birthDate"),
-              dataIndex: "birthDate",
-              key: "birthDate",
-              align: "center",
-              sorter: true,
-              render: (birthDate: Date) =>
-                moment(birthDate).format(DatesEnum.Format.DDMMYYY),
             },
             {
               title: t("tags.title"),

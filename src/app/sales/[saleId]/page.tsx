@@ -242,6 +242,11 @@ export default function SalePage() {
                     </a>
                   }
                 />
+
+                <Description
+                  label={t("common.cpf")}
+                  description={buyer?.cpf || "-"}
+                />
               </Col>
 
               <Col xs={24} md={10}>
@@ -274,6 +279,16 @@ export default function SalePage() {
                       )}
                     </Tag>
                   }
+                />
+
+                <Description
+                  label={t("common.idNumber")}
+                  description={buyer?.idNumber || "-"}
+                />
+
+                <Description
+                  label={t("common.cnpj")}
+                  description={buyer?.cnpj || "-"}
                 />
               </Col>
             </Row>

@@ -128,7 +128,9 @@
     "socialPrices": "Social Prices",
     "birthDate": "Data de Nascimento",
     "editImage": "Editar Imagem",
-    "inactive": "Inativo"
+    "idNumber": "Número de identificação",
+    "cpf": "CPF",
+    "cnpj": "CNPJ"
   },
   "navigation": {
     "home": "Início",
@@ -511,7 +513,7 @@
     "goToCustomers": "Ir para Clientes",
     "customer": "Cliente",
     "uniqName": "Nome Único",
-    "searchCustomers": "Buscar clientes...",
+    "searchCustomers": "Buscar por nome, email, número de identificação, CPF ou CNPJ...",
     "uploadCustomers": "Enviar Clientes",
     "downloadCustomers": "Baixar Clientes",
     "sortField": "Campo de Ordenação",
@@ -913,7 +915,10 @@
     "enterUsername": "Digite um nome de usuário",
     "enterBirthDate": "Digite a data de nascimento",
     "selectGender": "Selecione o gênero",
-    "enterAbout": "Digite sobre você"
+    "enterAbout": "Digite sobre você",
+    "enterIdNumber": "Digite o número de identificação",
+    "enterCpf": "Digite o CPF",
+    "enterCnpj": "Digite o CNPJ"
   },
   "upload": {
     "selectProductBeforeUpload": "Por favor, selecione um produto antes de carregar arquivos!",

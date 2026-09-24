@@ -23,5 +23,8 @@ export default interface IUser extends ICreatedAtEntity, IUpdatedAtEntity {
   gender: PersonEnum.Gender | null;
   loggedByAuthProvider: UsersEnum.Provider;
   about: string | null;
+  idNumber: string | null;
+  cpf: string | null;
+  cnpj: string | null;
   type: UsersEnum.Type;
 }

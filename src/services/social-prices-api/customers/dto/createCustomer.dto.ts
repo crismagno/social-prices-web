@@ -6,6 +6,9 @@ export default class CreateCustomerDto {
   birthDate: Date | null = null;
   gender: PersonEnum.Gender | null = null;
   about: string | null = null;
+  idNumber: string | null = null;
+  cpf: string | null = null;
+  cnpj: string | null = null;
   addresses: any[] = [];
   phoneNumbers: any[] = [];
   tagsIds: string[] = [];

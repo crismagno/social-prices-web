@@ -31,6 +31,9 @@ const _baseFormSchema = z.object({
   birthDate: z.string(),
   gender: z.string().nullable(),
   about: z.string().trim().nullable(),
+  idNumber: z.string().trim(),
+  cpf: z.string().trim(),
+  cnpj: z.string().trim(),
 });
 
 type TFormSchema = z.infer<typeof _baseFormSchema>;
@@ -47,6 +50,9 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
         birthDate: z.string().nonempty(t("errors.birthDateRequired")),
         gender: z.string().nullable(),
         about: z.string().trim().nullable(),
+        idNumber: z.string().trim(),
+        cpf: z.string().trim(),
+        cnpj: z.string().trim(),
       }),
     [t],
   );
@@ -58,6 +64,9 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
       .format(DatesEnum.Format.YYYYMMDD_DASHED),
     gender: user?.gender ?? PersonEnum.Gender.OTHER,
     about: user?.about ?? null,
+    idNumber: user?.idNumber ?? "",
+    cpf: user?.cpf ?? "",
+    cnpj: user?.cnpj ?? "",
   };
 
   const {
@@ -81,6 +90,9 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
           name: data.name,
           gender: data.gender as PersonEnum.Gender,
           about: data.about,
+          idNumber: data.idNumber || null,
+          cpf: data.cpf || null,
+          cnpj: data.cnpj || null,
         });
 
       message.success(t("profile.basicInfoUpdated"));
@@ -143,6 +155,38 @@ const ProfileEdit: React.FC<Props> = ({ className = "" }) => {
                 </Select.Option>
               ))}
             </SelectCustomAntd>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col xs={24} md={8}>
+            <InputCustomAntd
+              controller={{ control, name: "idNumber" }}
+              label={t("common.idNumber")}
+              errorMessage={errors.idNumber?.message}
+              maxLength={50}
+              placeholder={t("placeholders.enterIdNumber")}
+            />
+          </Col>
+
+          <Col xs={24} md={8}>
+            <InputCustomAntd
+              controller={{ control, name: "cpf" }}
+              label={t("common.cpf")}
+              errorMessage={errors.cpf?.message}
+              maxLength={20}
+              placeholder={t("placeholders.enterCpf")}
+            />
+          </Col>
+
+          <Col xs={24} md={8}>
+            <InputCustomAntd
+              controller={{ control, name: "cnpj" }}
+              label={t("common.cnpj")}
+              errorMessage={errors.cnpj?.message}
+              maxLength={20}
+              placeholder={t("placeholders.enterCnpj")}
+            />
           </Col>
         </Row>
 

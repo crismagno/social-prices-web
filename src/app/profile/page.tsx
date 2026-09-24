@@ -216,6 +216,18 @@ export default function ProfilePage() {
                         )}
                       </Tag>
                     </Descriptions.Item>
+
+                    <Descriptions.Item label={t("common.idNumber")}>
+                      {user.idNumber || "-"}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label={t("common.cpf")}>
+                      {user.cpf || "-"}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label={t("common.cnpj")}>
+                      {user.cnpj || "-"}
+                    </Descriptions.Item>
                   </Descriptions>
                 </Col>
 

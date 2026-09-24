@@ -160,14 +160,19 @@ export const useSidebarMenuItems = (
     : null;
 
   const [openKeys, setOpenKeys] = useState<string[]>(
-    openSubmenuKey ? [openSubmenuKey] : []
+    openSubmenuKey && !isCollapsed ? [openSubmenuKey] : []
   );
 
-  // The submenu holding the current page is always open, on every navigation
-  // and whenever the sidebar is expanded again, without closing the ones the
-  // user opened by hand. While collapsed antd drives openKeys to show the
-  // flyouts, so it can drop the one the current route needs.
+  // While the sidebar is expanded, the submenu holding the current page is
+  // opened on every navigation, without closing the ones the user opened by
+  // hand. While collapsed nothing is forced open, so no flyout covers the page;
+  // the current page shows only through antd's selected state (blue).
   useEffect(() => {
+    if (isCollapsed) {
+      setOpenKeys([]);
+      return;
+    }
+
     if (!openSubmenuKey) {
       return;
     }

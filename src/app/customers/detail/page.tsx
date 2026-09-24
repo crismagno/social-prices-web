@@ -75,6 +75,9 @@ const formSchema = z.object({
   addresses: z.array(addressFormSchema),
   phoneNumbers: z.array(phoneNumberFormSchema),
   about: z.string().trim().nullable(),
+  idNumber: z.string().trim(),
+  cpf: z.string().trim(),
+  cnpj: z.string().trim(),
   birthDate: z.string().nullable(),
   gender: z.string().nullable(),
   tagsIds: z.array(z.string()),
@@ -132,6 +135,9 @@ export default function CustomerDetailPage() {
 
     const values: TFormSchema = {
       about: customer?.about ?? null,
+      idNumber: customer?.idNumber ?? "",
+      cpf: customer?.cpf ?? "",
+      cnpj: customer?.cnpj ?? "",
       name: customer?.name ?? "",
       email: customer?.email ?? "",
       birthDate: moment(customer?.birthDate)
@@ -204,6 +210,9 @@ export default function CustomerDetailPage() {
 
       const createCustomerDto: CreateCustomerDto = {
         about: data.about ?? "",
+        idNumber: data.idNumber,
+        cpf: data.cpf,
+        cnpj: data.cnpj,
         addresses,
         birthDate: moment(data.birthDate).toDate(),
         email: data.email,
@@ -272,6 +281,9 @@ export default function CustomerDetailPage() {
 
       const updateCustomerDto: UpdateCustomerDto = {
         about: data.about ?? "",
+        idNumber: data.idNumber,
+        cpf: data.cpf,
+        cnpj: data.cnpj,
         addresses,
         birthDate: moment(data.birthDate).toDate(),
         email: data.email,
@@ -449,6 +461,36 @@ export default function CustomerDetailPage() {
                   </Select.Option>
                 ))}
               </SelectCustomAntd>
+            </Col>
+
+            <Col xs={24} md={8}>
+              <InputCustomAntd
+                controller={{ control, name: "idNumber" }}
+                label={t("common.idNumber")}
+                placeholder={t("placeholders.enterIdNumber")}
+                errorMessage={errors.idNumber?.message}
+                maxLength={50}
+              />
+            </Col>
+
+            <Col xs={24} md={8}>
+              <InputCustomAntd
+                controller={{ control, name: "cpf" }}
+                label={t("common.cpf")}
+                placeholder={t("placeholders.enterCpf")}
+                errorMessage={errors.cpf?.message}
+                maxLength={20}
+              />
+            </Col>
+
+            <Col xs={24} md={8}>
+              <InputCustomAntd
+                controller={{ control, name: "cnpj" }}
+                label={t("common.cnpj")}
+                placeholder={t("placeholders.enterCnpj")}
+                errorMessage={errors.cnpj?.message}
+                maxLength={20}
+              />
             </Col>
           </Row>
 

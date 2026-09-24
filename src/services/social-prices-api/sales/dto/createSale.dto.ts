@@ -79,6 +79,9 @@ export class SaleBuyerDto {
   gender: PersonEnum.Gender | null = null;
   phoneNumber: CreatePhoneNumberDto | null = null;
   address: CreateAddressDto | null = null;
+  idNumber: string | null = null;
+  cpf: string | null = null;
+  cnpj: string | null = null;
 }
 
 export class SaleStoreDto {

@@ -128,7 +128,9 @@
     "socialPrices": "Social Prices",
     "birthDate": "Birth Date",
     "editImage": "Edit Image",
-    "inactive": "Inactive"
+    "idNumber": "ID Number",
+    "cpf": "CPF",
+    "cnpj": "CNPJ"
   },
   "navigation": {
     "home": "Home",
@@ -508,7 +510,7 @@
     "goToCustomers": "Go to Customers",
     "customer": "Customer",
     "uniqName": "Unique Name",
-    "searchCustomers": "Search customers...",
+    "searchCustomers": "Search by name, email, ID number, CPF or CNPJ...",
     "uploadCustomers": "Upload Customers",
     "downloadCustomers": "Download Customers",
     "sortField": "Sort Field",
@@ -910,7 +912,10 @@
     "enterUsername": "Enter a username",
     "enterBirthDate": "Enter birth date",
     "selectGender": "Select gender",
-    "enterAbout": "Enter about"
+    "enterAbout": "Enter about",
+    "enterIdNumber": "Enter the ID number",
+    "enterCpf": "Enter the CPF",
+    "enterCnpj": "Enter the CNPJ"
   },
   "upload": {
     "selectProductBeforeUpload": "Please select a product before upload files!",

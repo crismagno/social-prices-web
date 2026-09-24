@@ -151,6 +151,9 @@ const customerFormSchema = z.object({
   about: z.string().trim().nullable(),
   birthDate: z.string().nullable(),
   gender: z.string().nullable(),
+  idNumber: z.string().trim(),
+  cpf: z.string().trim(),
+  cnpj: z.string().trim(),
 });
 
 export type TCustomerFormSchema = z.infer<typeof customerFormSchema>;
@@ -224,6 +227,9 @@ const generateFormSchemaDefault = (): TFormSchema => {
   return {
     customer: {
       about: null,
+      idNumber: "",
+      cpf: "",
+      cnpj: "",
       address: generateNewAddress(),
       birthDate: null,
       customerId: null,
@@ -271,6 +277,9 @@ export default function CreateSalePage() {
         about: z.string().trim().nullable(),
         birthDate: z.string().nullable(),
         gender: z.string().nullable(),
+        idNumber: z.string().trim(),
+        cpf: z.string().trim(),
+        cnpj: z.string().trim(),
       }),
     [t],
   );
@@ -401,6 +410,9 @@ export default function CreateSalePage() {
     setValue("customer", {
       customerId: customer?._id ?? null,
       about: null,
+      idNumber: customer?.idNumber ?? "",
+      cpf: customer?.cpf ?? "",
+      cnpj: customer?.cnpj ?? "",
       address,
       birthDate: customer?.birthDate
         ? moment(customer?.birthDate)
@@ -508,6 +520,9 @@ export default function CreateSalePage() {
         setFormValues({
           customer: {
             about: null,
+            idNumber: saleById?.buyer?.idNumber ?? "",
+            cpf: saleById?.buyer?.cpf ?? "",
+            cnpj: saleById?.buyer?.cnpj ?? "",
             address: saleById?.buyer?.address
               ? {
                   address1: saleById.buyer.address.address1,
@@ -1100,6 +1115,9 @@ export default function CreateSalePage() {
             uid: `${Date.now()}`,
           },
           userId: selectedCustomer?.userId ?? null,
+          idNumber: data.customer.idNumber || null,
+          cpf: data.customer.cpf || null,
+          cnpj: data.customer.cnpj || null,
         },
         createdByUserId: user?._id!,
         createdByEmployeeId: employee?._id!,
@@ -1452,6 +1470,15 @@ export default function CreateSalePage() {
                   errorMessage={errors?.customer?.phoneNumber?.message}
                   maxLength={200}
                 />
+
+                <InputCustomAntd
+                  controller={{ control, name: "customer.cpf" }}
+                  label={t("common.cpf")}
+                  divClassName="mt-1"
+                  placeholder={t("placeholders.enterCpf")}
+                  errorMessage={errors?.customer?.cpf?.message}
+                  maxLength={20}
+                />
               </Col>
 
               <Col xs={24} md={10}>
@@ -1477,6 +1504,24 @@ export default function CreateSalePage() {
                     </Select.Option>
                   ))}
                 </SelectCustomAntd>
+
+                <InputCustomAntd
+                  controller={{ control, name: "customer.idNumber" }}
+                  label={t("common.idNumber")}
+                  divClassName="mt-1"
+                  placeholder={t("placeholders.enterIdNumber")}
+                  errorMessage={errors?.customer?.idNumber?.message}
+                  maxLength={50}
+                />
+
+                <InputCustomAntd
+                  controller={{ control, name: "customer.cnpj" }}
+                  label={t("common.cnpj")}
+                  divClassName="mt-1"
+                  placeholder={t("placeholders.enterCnpj")}
+                  errorMessage={errors?.customer?.cnpj?.message}
+                  maxLength={20}
+                />
               </Col>
             </Row>
           </Card>

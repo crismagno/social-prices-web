@@ -57,6 +57,27 @@ export default function ManagerUsersPage() {
               sorter: true,
             },
             {
+              title: t("common.idNumber"),
+              dataIndex: "idNumber",
+              key: "idNumber",
+              align: "center",
+              render: (idNumber: string | null) => idNumber || "-",
+            },
+            {
+              title: t("common.cpf"),
+              dataIndex: "cpf",
+              key: "cpf",
+              align: "center",
+              render: (cpf: string | null) => cpf || "-",
+            },
+            {
+              title: t("common.cnpj"),
+              dataIndex: "cnpj",
+              key: "cnpj",
+              align: "center",
+              render: (cnpj: string | null) => cnpj || "-",
+            },
+            {
               title: t("manager.status"),
               dataIndex: "status",
               key: "status",

@@ -185,6 +185,18 @@ export default function CustomerPage() {
                         )}
                       </Tag>
                     </Descriptions.Item>
+
+                    <Descriptions.Item label={t("common.idNumber")}>
+                      {customer.idNumber || "-"}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label={t("common.cpf")}>
+                      {customer.cpf || "-"}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label={t("common.cnpj")}>
+                      {customer.cnpj || "-"}
+                    </Descriptions.Item>
                   </Descriptions>
                 </Col>
 
