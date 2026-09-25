@@ -66,6 +66,22 @@ export default class FetchAxios {
     return response;
   }
 
+  public async patch<T = any, D = any>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig<D>
+  ): Promise<AxiosResponse<T, D>> {
+    config = this._getConfig<D>(config);
+
+    const response: AxiosResponse<T, D> = await axios.patch<T>(
+      url,
+      data,
+      config
+    );
+
+    return response;
+  }
+
   public async delete<T = any, D = any>(
     url: string,
     config?: AxiosRequestConfig<D>

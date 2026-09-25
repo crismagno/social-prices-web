@@ -9,6 +9,15 @@ export const setHandleClientErrorMessageApi = (api: MessageInstance): void => {
   _messageApi = api;
 };
 
+let _limitMessageBuilder: ((feature: string, limit: number) => string) | null =
+  null;
+
+export const setHandleClientErrorLimitMessageBuilder = (
+  builder: (feature: string, limit: number) => string,
+): void => {
+  _limitMessageBuilder = builder;
+};
+
 const handleClientError = (
   error: any,
   duration: number = 2,
@@ -20,7 +29,16 @@ const handleClientError = (
 
   const errorResponseDataError = errorResponseData?.error;
 
-  if (errorResponseDataError?.message) {
+  const limitBody =
+    errorResponseData?.code === "FEATURE_LIMIT_REACHED"
+      ? errorResponseData
+      : errorResponseDataError?.code === "FEATURE_LIMIT_REACHED"
+        ? errorResponseDataError
+        : null;
+
+  if (limitBody && _limitMessageBuilder) {
+    messageError = _limitMessageBuilder(limitBody.feature, limitBody.limit);
+  } else if (errorResponseDataError?.message) {
     messageError = errorResponseDataError?.message;
   } else if (errorResponseDataError?.error) {
     messageError = errorResponseDataError?.error;

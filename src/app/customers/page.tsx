@@ -22,6 +22,11 @@ import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/Tag
 import { UploadFilesDrawer } from "../../components/common/UploadFilesDrawer/UploadFilesDrawer";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
+import { FeatureUsageBadge } from "../../components/common/FeatureUsageBadge/FeatureUsageBadge";
+import {
+  isFeatureLimitReached,
+  useFeaturesUsage,
+} from "../../components/common/FeatureUsageBadge/useFeaturesUsage";
 import useAuthData from "../../data/context/auth/useAuthData";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import useSocketData from "../../data/context/socket/useSocketData";
@@ -48,6 +53,8 @@ import { useFindCustomersByOwnerOfUserTableState } from "./useFindCustomersByOwn
 export default function CustomersPage() {
   const { user } = useAuthData();
   const { t } = useLanguageData()!;
+
+  const { usage } = useFeaturesUsage();
 
   const { socket } = useSocketData();
 
@@ -114,6 +121,11 @@ export default function CustomersPage() {
         className="h-min-80 mt-5"
         extra={
           <>
+            <FeatureUsageBadge
+              feature="customers"
+              usage={usage?.["customers"]}
+            />
+
             <Button
               type="primary"
               onClick={() => setIsDownloadCustomersDrawerOpen(true)}
@@ -135,6 +147,7 @@ export default function CustomersPage() {
             <Button
               type="primary"
               onClick={() => router.push(Urls.NEW_CUSTOMER)}
+              disabled={isFeatureLimitReached(usage, "customers")}
               icon={<PlusOutlined />}
             >
               {t("customers.newCustomer")}

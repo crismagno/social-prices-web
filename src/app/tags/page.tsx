@@ -9,6 +9,11 @@ import { EditOutlined, PlusOutlined, TagFilled } from "@ant-design/icons";
 
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
+import { FeatureUsageBadge } from "../../components/common/FeatureUsageBadge/FeatureUsageBadge";
+import {
+  isFeatureLimitReached,
+  useFeaturesUsage,
+} from "../../components/common/FeatureUsageBadge/useFeaturesUsage";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import TagsEnum from "../../shared/business/tags/tags.enum";
 import { ITag } from "../../shared/business/tags/tags.interface";
@@ -20,6 +25,8 @@ import { useFindTagsByUserTableState } from "./useFindTagsByUserTableState";
 
 export default function TagsPage() {
   const { t } = useLanguageData();
+
+  const { usage, refetch: refetchUsage } = useFeaturesUsage();
 
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<ITag> | undefined
@@ -39,16 +46,21 @@ export default function TagsPage() {
         title={t("tags.title")}
         className="h-min-80 mt-5"
         extra={
-          <Button
-            type="primary"
-            onClick={() => {
-              setTagId(undefined);
-              setIsTagDetailDrawerOpen(true);
-            }}
-            icon={<PlusOutlined />}
-          >
-            {t("tags.newTag")}
-          </Button>
+          <>
+            <FeatureUsageBadge feature="tags" usage={usage?.["tags"]} />
+
+            <Button
+              type="primary"
+              onClick={() => {
+                setTagId(undefined);
+                setIsTagDetailDrawerOpen(true);
+              }}
+              icon={<PlusOutlined />}
+              disabled={isFeatureLimitReached(usage, "tags")}
+            >
+              {t("tags.newTag")}
+            </Button>
+          </>
         }
       >
         <TableCustomAntd2<ITag>
@@ -152,6 +164,7 @@ export default function TagsPage() {
             setTagId(undefined);
             setIsTagDetailDrawerOpen(false);
             fetchFindTagsByUserTableState();
+            refetchUsage();
           }}
         />
       </Card>

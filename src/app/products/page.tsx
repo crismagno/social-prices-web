@@ -28,6 +28,11 @@ import { UploadFilesDrawer } from "../../components/common/UploadFilesDrawer/Upl
 import YesNo from "../../components/common/YesNo/YesNo";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
+import { FeatureUsageBadge } from "../../components/common/FeatureUsageBadge/FeatureUsageBadge";
+import {
+  isFeatureLimitReached,
+  useFeaturesUsage,
+} from "../../components/common/FeatureUsageBadge/useFeaturesUsage";
 import useAuthData from "../../data/context/auth/useAuthData";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import useSocketData from "../../data/context/socket/useSocketData";
@@ -61,6 +66,8 @@ import { useFindProductsByUserTableState } from "./useFindProductsByUserTableSta
 
 export default function ProductsPage() {
   const { t } = useLanguageData();
+
+  const { usage } = useFeaturesUsage();
   const { user } = useAuthData();
 
   const { socket } = useSocketData();
@@ -131,6 +138,8 @@ export default function ProductsPage() {
         className="h-min-80 mt-5"
         extra={
           <>
+            <FeatureUsageBadge feature="products" usage={usage?.["products"]} />
+
             <Button
               type="primary"
               onClick={() => router.push(Urls.PRODUCT_ITEMS)}
@@ -161,6 +170,7 @@ export default function ProductsPage() {
             <Button
               type="primary"
               onClick={() => router.push(Urls.NEW_PRODUCT)}
+              disabled={isFeatureLimitReached(usage, "products")}
               icon={<PlusOutlined />}
             >
               {t("products.newProduct")}

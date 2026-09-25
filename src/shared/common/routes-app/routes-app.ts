@@ -75,6 +75,7 @@ const Urls = {
   MANAGER_NEW_MANAGER: "/manager/managers/detail",
   MANAGER_EDIT_MANAGER: "/manager/managers/detail?mid=:managerId",
   MANAGER_USERS: "/manager/users",
+  MANAGER_EDIT_USER: "/manager/users/detail?uid=:userId",
 
   // download
   DOWNLOAD_SALE_SUMMARY: "/download/sales/summary?i=:tokenId",

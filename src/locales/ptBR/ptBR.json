@@ -973,7 +973,30 @@
       "DECIMAL": "Decimal"
     }
   },
+  "limits": {
+    "reached": "Você atingiu o limite de {limit} {feature}.",
+    "usage": "{used}/{limit}",
+    "unlimited": "Ilimitado",
+    "title": "Limites",
+    "used": "Usado",
+    "save": "Salvar limites",
+    "saved": "Limites atualizados.",
+    "features": {
+      "products": "produtos",
+      "product-items": "itens de produto",
+      "customers": "clientes",
+      "employees": "funcionários",
+      "stores": "lojas",
+      "categories": "categorias",
+      "tags": "tags"
+    }
+  },
   "manager": {
+    "userData": "Dados do usuário",
+    "editUser": "Editar usuário",
+    "userSaved": "Usuário atualizado.",
+    "readOnly": "Você tem acesso somente leitura.",
+    "about": "Sobre",
     "panel": "Painel do Manager",
     "signIn": "Entrar no painel do manager",
     "email": "E-mail",

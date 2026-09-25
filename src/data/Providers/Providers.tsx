@@ -9,11 +9,15 @@ import {
   ConfigProvider,
 } from 'antd';
 
-import { setHandleClientErrorMessageApi } from '../../components/common/HandleClientError/HandleClientError';
+import {
+  setHandleClientErrorLimitMessageBuilder,
+  setHandleClientErrorMessageApi,
+} from '../../components/common/HandleClientError/HandleClientError';
 import { antdThemeConfig } from '../../lib-antd/theme';
 import { AppProvider } from '../context/app/AppContext';
 import { AuthProvider } from '../context/auth/AuthContext';
 import { LanguageProvider } from '../context/language/LanguageContext';
+import useLanguageData from '../context/language/useLanguageData';
 import { ManagerAuthProvider } from '../context/managerAuth/ManagerAuthContext';
 import { SocketProvider } from '../context/socket/SocketContext';
 
@@ -25,12 +29,25 @@ const MessageApiSetter: React.FC = () => {
   return null;
 };
 
+const LimitMessageSetter: React.FC = () => {
+  const { t } = useLanguageData();
+  useEffect(() => {
+    setHandleClientErrorLimitMessageBuilder((feature: string, limit: number) =>
+      t('limits.reached')
+        .replace('{limit}', String(limit))
+        .replace('{feature}', t(`limits.features.${feature}`)),
+    );
+  }, [t]);
+  return null;
+};
+
 export function Providers({ children }: any) {
   return (
     <ConfigProvider theme={antdThemeConfig}>
       <AntdApp>
         <MessageApiSetter />
         <LanguageProvider>
+          <LimitMessageSetter />
           <ManagerAuthProvider>
             <AuthProvider>
               <AppProvider>

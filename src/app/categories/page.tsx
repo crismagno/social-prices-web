@@ -9,6 +9,11 @@ import { BlockOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
+import { FeatureUsageBadge } from "../../components/common/FeatureUsageBadge/FeatureUsageBadge";
+import {
+  isFeatureLimitReached,
+  useFeaturesUsage,
+} from "../../components/common/FeatureUsageBadge/useFeaturesUsage";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import CategoriesEnum from "../../shared/business/categories/categories.enum";
 import { ICategory } from "../../shared/business/categories/categories.interface";
@@ -21,6 +26,8 @@ import { useFindCategoriesByUserTableState } from "./useFindCategoriesByUserTabl
 
 export default function CategoriesPage() {
   const { t } = useLanguageData()!;
+
+  const { usage, refetch: refetchUsage } = useFeaturesUsage();
 
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<ICategory> | undefined
@@ -44,16 +51,24 @@ export default function CategoriesPage() {
         title={t("categories.title")}
         className="h-min-80 mt-5"
         extra={
-          <Button
-            type="primary"
-            onClick={() => {
-              setCategoryId(undefined);
-              setIsCategoryDetailDrawerOpen(true);
-            }}
-            icon={<PlusOutlined />}
-          >
-            {t("categories.newCategory")}
-          </Button>
+          <>
+            <FeatureUsageBadge
+              feature="categories"
+              usage={usage?.["categories"]}
+            />
+
+            <Button
+              type="primary"
+              onClick={() => {
+                setCategoryId(undefined);
+                setIsCategoryDetailDrawerOpen(true);
+              }}
+              icon={<PlusOutlined />}
+              disabled={isFeatureLimitReached(usage, "categories")}
+            >
+              {t("categories.newCategory")}
+            </Button>
+          </>
         }
       >
         <TableCustomAntd2<ICategory>
@@ -157,6 +172,7 @@ export default function CategoriesPage() {
             setCategoryId(undefined);
             setIsCategoryDetailDrawerOpen(false);
             fetchFindCategoriesByUserTableState();
+            refetchUsage();
           }}
         />
       </Card>

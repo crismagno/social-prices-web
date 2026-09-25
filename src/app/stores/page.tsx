@@ -20,6 +20,11 @@ import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCu
 import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
+import { FeatureUsageBadge } from "../../components/common/FeatureUsageBadge/FeatureUsageBadge";
+import {
+  isFeatureLimitReached,
+  useFeaturesUsage,
+} from "../../components/common/FeatureUsageBadge/useFeaturesUsage";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import CategoriesEnum from "../../shared/business/categories/categories.enum";
 import { ICategory } from "../../shared/business/categories/categories.interface";
@@ -40,6 +45,8 @@ import { useFindStoresByUserTableState } from "./useFindStoresByUserTableState";
 export default function StoresPage() {
   const router: AppRouterInstance = useRouter();
   const { t } = useLanguageData();
+
+  const { usage } = useFeaturesUsage();
 
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<IStore> | undefined
@@ -85,17 +92,20 @@ export default function StoresPage() {
         title={t("stores.title")}
         className="h-min-80 mt-5"
         extra={
-          !stores.length && (
-            <>
+          <>
+            <FeatureUsageBadge feature="stores" usage={usage?.["stores"]} />
+
+            {!stores.length && (
               <Button
                 type="primary"
                 onClick={handleNewStore}
+                disabled={isFeatureLimitReached(usage, "stores")}
                 icon={<PlusOutlined />}
               >
                 {t("stores.newStore")}
               </Button>
-            </>
-          )
+            )}
+          </>
         }
       >
         <TableCustomAntd2<IStore>

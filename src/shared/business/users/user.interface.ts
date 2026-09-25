@@ -3,6 +3,7 @@ import { ICreatedAtEntity } from "../shared/global/created-at.interface";
 import { IUpdatedAtEntity } from "../shared/global/updated-at.interface";
 import PersonEnum from "../shared/person/person.enum";
 import { IPhoneNumber } from "../shared/phone/phone-number.interface";
+import { IUserLimits } from "./user-limits.interface";
 import UsersEnum from "./users.enum";
 
 export default interface IUser extends ICreatedAtEntity, IUpdatedAtEntity {
@@ -27,4 +28,5 @@ export default interface IUser extends ICreatedAtEntity, IUpdatedAtEntity {
   cpf: string | null;
   cnpj: string | null;
   type: UsersEnum.Type;
+  limits?: IUserLimits | null;
 }

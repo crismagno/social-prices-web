@@ -22,6 +22,11 @@ import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/Tag
 import { UploadFilesDrawer } from "../../components/common/UploadFilesDrawer/UploadFilesDrawer";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
+import { FeatureUsageBadge } from "../../components/common/FeatureUsageBadge/FeatureUsageBadge";
+import {
+  isFeatureLimitReached,
+  useFeaturesUsage,
+} from "../../components/common/FeatureUsageBadge/useFeaturesUsage";
 import useAuthData from "../../data/context/auth/useAuthData";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import useSocketData from "../../data/context/socket/useSocketData";
@@ -50,6 +55,8 @@ import { useFindEmployeesByUserTableState } from "./useFindEmployeesByUserTableS
 export default function EmployeesPage() {
   const { employee, user } = useAuthData();
   const { t } = useLanguageData()!;
+
+  const { usage } = useFeaturesUsage();
 
   const { socket } = useSocketData();
 
@@ -113,6 +120,11 @@ export default function EmployeesPage() {
         extra={
           employee?.level !== EmployeesEnum.Level.EMPLOYEE && (
             <>
+              <FeatureUsageBadge
+                feature="employees"
+                usage={usage?.["employees"]}
+              />
+
               <Button
                 type="primary"
                 onClick={() => setIsDownloadEmployeesDrawerOpen(true)}
@@ -134,6 +146,7 @@ export default function EmployeesPage() {
               <Button
                 type="primary"
                 onClick={() => router.push(Urls.NEW_EMPLOYEE)}
+                disabled={isFeatureLimitReached(usage, "employees")}
                 icon={<PlusOutlined />}
               >
                 {t("employees.newEmployee")}

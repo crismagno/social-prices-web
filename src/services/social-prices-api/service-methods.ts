@@ -1,3 +1,4 @@
+import AccountServiceMethods from "./account/account-service.methods";
 import AuthServiceMethods from "./auth/auth-service.methods";
 import CategoriesServiceMethods from "./categories/categories-service.methods";
 import CustomersServiceMethods from "./customers/customers-service.methods";
@@ -16,6 +17,7 @@ import TagsServiceMethods from "./tags/tags-service.methods";
 import UsersServiceMethods from "./users/users-service.methods";
 
 export default class ServiceMethods {
+  public accountServiceMethods: AccountServiceMethods;
   public authServiceMethods: AuthServiceMethods;
   public usersServiceMethods: UsersServiceMethods;
   public storesServiceMethods: StoresServiceMethods;
@@ -34,6 +36,7 @@ export default class ServiceMethods {
   public managerUsersServiceMethods: ManagerUsersServiceMethods;
 
   constructor() {
+    this.accountServiceMethods = new AccountServiceMethods();
     this.authServiceMethods = new AuthServiceMethods();
     this.usersServiceMethods = new UsersServiceMethods();
     this.storesServiceMethods = new StoresServiceMethods();

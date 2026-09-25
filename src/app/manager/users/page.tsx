@@ -2,14 +2,17 @@
 
 import { Fragment, useState } from "react";
 
-import { Card, Tag, Tooltip } from "antd";
+import { EditOutlined } from "@ant-design/icons";
+import { Button, Card, Tag, Tooltip } from "antd";
 import moment from "moment";
+import Link from "next/link";
 
 import TableCustomAntd2 from "../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import ManagerLayout from "../../../components/template/ManagerLayout/ManagerLayout";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import IUser from "../../../shared/business/users/user.interface";
 import UsersEnum from "../../../shared/business/users/users.enum";
+import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { createTableState } from "../../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../../shared/utils/table/table-state.interface";
@@ -50,7 +53,11 @@ export default function ManagerUsersPage() {
 
                 return (
                   <div className="flex flex-col items-center">
-                    <span>{name || "-"}</span>
+                    <Link
+                      href={Urls.MANAGER_EDIT_USER.replace(":userId", user._id)}
+                    >
+                      {name || "-"}
+                    </Link>
 
                     {identifiers.length > 0 && (
                       <span className="text-[11px] leading-tight italic text-gray-400 dark:text-gray-500">
@@ -120,6 +127,23 @@ export default function ManagerUsersPage() {
               sorter: true,
               render: (createdAt: Date) =>
                 moment(createdAt).format(DatesEnum.Format.DDMMYYYYhhmmss),
+            },
+            {
+              title: t("common.actions"),
+              key: "actions",
+              align: "center",
+              render: (_: unknown, user: IUser) => (
+                <Link
+                  href={Urls.MANAGER_EDIT_USER.replace(":userId", user._id)}
+                >
+                  <Button
+                    type="primary"
+                    shape="circle"
+                    icon={<EditOutlined />}
+                    aria-label={t("common.edit")}
+                  />
+                </Link>
+              ),
             },
           ]}
           search={{ placeholder: t("manager.searchUsers") }}
