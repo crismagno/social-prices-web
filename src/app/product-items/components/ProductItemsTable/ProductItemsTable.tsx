@@ -182,6 +182,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
             <Button
               type="primary"
               onClick={() => setIsUploadFilesDrawerOpen(true)}
+              disabled={isFeatureLimitReached(usage, "product-items")}
               className="mr-2"
               icon={<UploadOutlined />}
             >

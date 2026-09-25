@@ -49,3 +49,12 @@ export const isFeatureLimitReached = (
     featureUsage.used >= featureUsage.limit
   );
 };
+
+export const formatFeatureLimitReached = (
+  t: (key: string) => string,
+  feature: FeatureKey,
+  usage: IFeaturesUsage | null
+): string =>
+  t("limits.reached")
+    .replace("{limit}", String(usage?.[feature]?.limit ?? ""))
+    .replace("{feature}", t(`limits.features.${feature}`));

@@ -16,6 +16,11 @@ import {
   TeamOutlined,
 } from '@ant-design/icons';
 
+import {
+  formatFeatureLimitReached,
+  isFeatureLimitReached,
+  useFeaturesUsage,
+} from '../../../../components/common/FeatureUsageBadge/useFeaturesUsage';
 import useLanguageData from '../../../../data/context/language/useLanguageData';
 import Urls from '../../../../shared/common/routes-app/routes-app';
 import {
@@ -25,6 +30,10 @@ import {
 export const CustomersCard: React.FC = () => {
   const router: AppRouterInstance = useRouter();
   const { t } = useLanguageData();
+
+  const { usage } = useFeaturesUsage();
+
+  const isLimitReached: boolean = isFeatureLimitReached(usage, 'customers');
 
   const { isLoading, count } = useCountCustomersByUser();
 
@@ -52,8 +61,22 @@ export const CustomersCard: React.FC = () => {
         <Tooltip key="table" title={t("dashboard.seeCustomers")}>
           <TabletOutlined onClick={handleGoToCustomers} />
         </Tooltip>,
-        <Tooltip key="plus" title={t("dashboard.createNewCustomer")}>
-          <PlusOutlined onClick={() => router.push(Urls.NEW_CUSTOMER)} />
+        <Tooltip
+          key="plus"
+          title={
+            isLimitReached
+              ? formatFeatureLimitReached(t, 'customers', usage)
+              : t("dashboard.createNewCustomer")
+          }
+        >
+          <PlusOutlined
+            style={
+              isLimitReached ? { opacity: 0.4, cursor: 'not-allowed' } : undefined
+            }
+            onClick={
+              isLimitReached ? undefined : () => router.push(Urls.NEW_CUSTOMER)
+            }
+          />
         </Tooltip>,
       ]}
     >

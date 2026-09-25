@@ -7,6 +7,11 @@ import { useRouter } from "next/navigation";
 
 import { PlusOutlined, ShopOutlined, TabletOutlined } from "@ant-design/icons";
 
+import {
+  formatFeatureLimitReached,
+  isFeatureLimitReached,
+  useFeaturesUsage,
+} from '../../../../components/common/FeatureUsageBadge/useFeaturesUsage';
 import useLanguageData from "../../../../data/context/language/useLanguageData";
 import Urls from "../../../../shared/common/routes-app/routes-app";
 import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
@@ -14,6 +19,10 @@ import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
 export const StoresCard: React.FC = () => {
   const router: AppRouterInstance = useRouter();
   const { t } = useLanguageData();
+
+  const { usage } = useFeaturesUsage();
+
+  const isLimitReached: boolean = isFeatureLimitReached(usage, 'stores');
 
   const { isLoading, stores } = useFindStoresByUser();
 
@@ -40,8 +49,22 @@ export const StoresCard: React.FC = () => {
         <Tooltip key="table" title={t("dashboard.seeStores")}>
           <TabletOutlined onClick={handleGoToStores} />
         </Tooltip>,
-        <Tooltip key="plus" title={t("dashboard.createNewStore")}>
-          <PlusOutlined onClick={() => router.push(Urls.NEW_STORE)} />
+        <Tooltip
+          key="plus"
+          title={
+            isLimitReached
+              ? formatFeatureLimitReached(t, 'stores', usage)
+              : t("dashboard.createNewStore")
+          }
+        >
+          <PlusOutlined
+            style={
+              isLimitReached ? { opacity: 0.4, cursor: 'not-allowed' } : undefined
+            }
+            onClick={
+              isLimitReached ? undefined : () => router.push(Urls.NEW_STORE)
+            }
+          />
         </Tooltip>,
       ]}
     >

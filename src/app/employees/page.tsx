@@ -132,6 +132,7 @@ export default function EmployeesPage() {
               <Button
                 type="primary"
                 onClick={() => setIsUploadFilesDrawerOpen(true)}
+                disabled={isFeatureLimitReached(usage, "employees")}
                 className="mr-2"
                 icon={<UploadOutlined />}
               >
@@ -173,13 +174,17 @@ export default function EmployeesPage() {
               key: "name",
               align: "center",
               sorter: true,
-            },
-            {
-              title: t("employees.username"),
-              dataIndex: "username",
-              key: "username",
-              align: "center",
-              sorter: true,
+              render: (name: string, employee: IEmployee) => (
+                <div className="flex flex-col items-center">
+                  <span>{name}</span>
+
+                  {employee.username && (
+                    <small className="italic text-gray-400 dark:text-gray-500">
+                      {employee.username}
+                    </small>
+                  )}
+                </div>
+              ),
             },
             {
               title: t("common.email"),

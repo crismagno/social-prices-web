@@ -133,6 +133,7 @@ export default function CustomersPage() {
             <Button
               type="primary"
               onClick={() => setIsUploadFilesDrawerOpen(true)}
+              disabled={isFeatureLimitReached(usage, "customers")}
               className="mr-2"
               icon={<UploadOutlined />}
             >

@@ -159,6 +159,7 @@ export default function ProductsPage() {
             <Button
               type="primary"
               onClick={() => setIsUploadFilesDrawerOpen(true)}
+              disabled={isFeatureLimitReached(usage, "products")}
               className="mr-2"
               icon={<UploadOutlined />}
             >
