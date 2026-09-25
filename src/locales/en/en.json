@@ -976,16 +976,16 @@
     "unlimited": "Unlimited",
     "title": "Limits",
     "used": "Used",
-    "save": "Save limits",
+    "save": "Save",
     "saved": "Limits updated.",
     "features": {
-      "products": "products",
-      "product-items": "product items",
-      "customers": "customers",
-      "employees": "employees",
-      "stores": "stores",
-      "categories": "categories",
-      "tags": "tags"
+      "products": "Products",
+      "product-items": "Product Items",
+      "customers": "Customers",
+      "employees": "Employees",
+      "stores": "Stores",
+      "categories": "Categories",
+      "tags": "Tags"
     }
   },
   "manager": {
