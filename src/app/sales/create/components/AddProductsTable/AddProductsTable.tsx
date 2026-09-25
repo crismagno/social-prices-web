@@ -366,7 +366,7 @@ export const AddProductsTable: React.FC<Props> = ({
             render: (filesUrl: string[], product: IProduct) => {
               const fileUrl: string = filesUrl?.length
                 ? getImageUrl(filesUrl[0])
-                : ImagesEnum.FilesNames.DefaultAvatarImage;
+                : ImagesEnum.FilesNames.DefaultProductImage;
 
               return (
                 <div className="flex items-center">
@@ -380,7 +380,7 @@ export const AddProductsTable: React.FC<Props> = ({
                         <Image
                           width={50}
                           height={50}
-                          src={ImagesEnum.FilesNames.DefaultAvatarImage}
+                          src={ImagesEnum.FilesNames.DefaultProductImage}
                           alt="mainUrl"
                           className="rounded-full"
                         />
