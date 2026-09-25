@@ -3,7 +3,6 @@ import { Checkbox, Col, Empty, Image, Row, Tooltip } from "antd";
 import { CheckCircleTwoTone, CloseCircleTwoTone } from "@ant-design/icons";
 
 import useLanguageData from "../../../../data/context/language/useLanguageData";
-
 import {
   ISale,
   ISaleStore,
@@ -83,7 +82,7 @@ export const SaleStoresProducts: React.FC<Props> = ({ sale }) => {
         {saleStore.products?.map(
           (
             saleStoreProduct: ISaleStoreProduct,
-            indexSaleStoreProduct: number
+            indexSaleStoreProduct: number,
           ) => {
             const productItem = saleStoreProduct.productItem;
             const product = saleStoreProduct.product;
@@ -93,7 +92,7 @@ export const SaleStoresProducts: React.FC<Props> = ({ sale }) => {
 
             const fileUrl: string = mainUrl
               ? getImageUrl(mainUrl)
-              : ImagesEnum.FilesNames.DefaultAvatarImage;
+              : ImagesEnum.FilesNames.DefaultProductImage;
 
             const quantity: number =
               saleStores[indexSaleStore].products[indexSaleStoreProduct]
@@ -142,7 +141,7 @@ export const SaleStoresProducts: React.FC<Props> = ({ sale }) => {
                           <Image
                             width={30}
                             height={30}
-                            src={ImagesEnum.FilesNames.DefaultAvatarImage}
+                            src={ImagesEnum.FilesNames.DefaultProductImage}
                             alt="mainUrl"
                             className="rounded-full"
                           />
@@ -186,7 +185,7 @@ export const SaleStoresProducts: React.FC<Props> = ({ sale }) => {
                 </Col>
               </Row>
             );
-          }
+          },
         )}
       </div>
     );

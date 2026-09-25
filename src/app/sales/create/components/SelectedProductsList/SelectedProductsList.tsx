@@ -141,7 +141,7 @@ export const SelectedProductsList: React.FC<Props> = ({
               ) => {
                 const fileUrl: string = saleStoreProduct.fileUrl
                   ? getImageUrl(saleStoreProduct.fileUrl)
-                  : ImagesEnum.FilesNames.DefaultAvatarImage;
+                  : ImagesEnum.FilesNames.DefaultProductImage;
 
                 const quantity: number =
                   saleStores[indexSaleStore].products[indexSaleStoreProduct]
@@ -201,7 +201,7 @@ export const SelectedProductsList: React.FC<Props> = ({
                               <Image
                                 width={30}
                                 height={30}
-                                src={ImagesEnum.FilesNames.DefaultAvatarImage}
+                                src={ImagesEnum.FilesNames.DefaultProductImage}
                                 alt="mainUrl"
                                 className="rounded-full"
                               />

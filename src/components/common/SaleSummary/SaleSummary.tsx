@@ -3,6 +3,7 @@ import { find } from "lodash";
 import moment from "moment";
 
 import useLanguageData from "../../../data/context/language/useLanguageData";
+import { ICategory } from "../../../shared/business/categories/categories.interface";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import {
   ISale,
@@ -20,7 +21,6 @@ import {
 } from "../../../shared/business/sales/sales.utils";
 import PersonEnum from "../../../shared/business/shared/person/person.enum";
 import { IStore } from "../../../shared/business/stores/stores.interface";
-import { ICategory } from "../../../shared/business/categories/categories.interface";
 import { ITag } from "../../../shared/business/tags/tags.interface";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getImageUrl } from "../../../shared/utils/images/images-url";
@@ -42,7 +42,12 @@ interface Props {
   categories?: ICategory[];
 }
 
-export const SaleSummary: React.FC<Props> = ({ sale, stores, tags, categories = [] }) => {
+export const SaleSummary: React.FC<Props> = ({
+  sale,
+  stores,
+  tags,
+  categories = [],
+}) => {
   const { t } = useLanguageData();
 
   const saleStores: ISaleStore[] = sale?.stores ?? [];
@@ -99,7 +104,7 @@ export const SaleSummary: React.FC<Props> = ({ sale, stores, tags, categories = 
 
                 const fileUrl: string = mainUrl
                   ? getImageUrl(mainUrl)
-                  : ImagesEnum.FilesNames.DefaultAvatarImage;
+                  : ImagesEnum.FilesNames.DefaultProductImage;
 
                 const quantity: number =
                   saleStores[indexSaleStore].products[indexSaleStoreProduct]
@@ -136,7 +141,7 @@ export const SaleSummary: React.FC<Props> = ({ sale, stores, tags, categories = 
                               <Image
                                 width={30}
                                 height={30}
-                                src={ImagesEnum.FilesNames.DefaultAvatarImage}
+                                src={ImagesEnum.FilesNames.DefaultProductImage}
                                 alt="mainUrl"
                                 className="rounded-full"
                               />
