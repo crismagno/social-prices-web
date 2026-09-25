@@ -120,11 +120,6 @@ export default function EmployeesPage() {
         extra={
           employee?.level !== EmployeesEnum.Level.EMPLOYEE && (
             <>
-              <FeatureUsageBadge
-                feature="employees"
-                usage={usage?.["employees"]}
-              />
-
               <Button
                 type="primary"
                 onClick={() => setIsDownloadEmployeesDrawerOpen(true)}
@@ -155,6 +150,10 @@ export default function EmployeesPage() {
           )
         }
       >
+        <div className="flex justify-end mb-2">
+          <FeatureUsageBadge feature="employees" usage={usage?.["employees"]} />
+        </div>
+
         <TableCustomAntd2<IEmployee>
           rowKey={"_id"}
           dataSource={employees}

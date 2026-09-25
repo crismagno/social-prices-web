@@ -46,23 +46,23 @@ export default function TagsPage() {
         title={t("tags.title")}
         className="h-min-80 mt-5"
         extra={
-          <>
-            <FeatureUsageBadge feature="tags" usage={usage?.["tags"]} />
-
-            <Button
-              type="primary"
-              onClick={() => {
-                setTagId(undefined);
-                setIsTagDetailDrawerOpen(true);
-              }}
-              icon={<PlusOutlined />}
-              disabled={isFeatureLimitReached(usage, "tags")}
-            >
-              {t("tags.newTag")}
-            </Button>
-          </>
+          <Button
+            type="primary"
+            onClick={() => {
+              setTagId(undefined);
+              setIsTagDetailDrawerOpen(true);
+            }}
+            icon={<PlusOutlined />}
+            disabled={isFeatureLimitReached(usage, "tags")}
+          >
+            {t("tags.newTag")}
+          </Button>
         }
       >
+        <div className="flex justify-end mb-2">
+          <FeatureUsageBadge feature="tags" usage={usage?.["tags"]} />
+        </div>
+
         <TableCustomAntd2<ITag>
           rowKey={"_id"}
           dataSource={tags}

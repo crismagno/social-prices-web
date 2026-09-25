@@ -138,8 +138,6 @@ export default function ProductsPage() {
         className="h-min-80 mt-5"
         extra={
           <>
-            <FeatureUsageBadge feature="products" usage={usage?.["products"]} />
-
             <Button
               type="primary"
               onClick={() => router.push(Urls.PRODUCT_ITEMS)}
@@ -178,6 +176,10 @@ export default function ProductsPage() {
           </>
         }
       >
+        <div className="flex justify-end mb-2">
+          <FeatureUsageBadge feature="products" usage={usage?.["products"]} />
+        </div>
+
         <TableCustomAntd2<IProduct>
           rowKey={"_id"}
           tableStateRequest={tableStateRequest}

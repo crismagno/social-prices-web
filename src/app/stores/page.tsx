@@ -92,22 +92,22 @@ export default function StoresPage() {
         title={t("stores.title")}
         className="h-min-80 mt-5"
         extra={
-          <>
-            <FeatureUsageBadge feature="stores" usage={usage?.["stores"]} />
-
-            {!stores.length && (
-              <Button
-                type="primary"
-                onClick={handleNewStore}
-                disabled={isFeatureLimitReached(usage, "stores")}
-                icon={<PlusOutlined />}
-              >
-                {t("stores.newStore")}
-              </Button>
-            )}
-          </>
+          !stores.length && (
+            <Button
+              type="primary"
+              onClick={handleNewStore}
+              disabled={isFeatureLimitReached(usage, "stores")}
+              icon={<PlusOutlined />}
+            >
+              {t("stores.newStore")}
+            </Button>
+          )
         }
       >
+        <div className="flex justify-end mb-2">
+          <FeatureUsageBadge feature="stores" usage={usage?.["stores"]} />
+        </div>
+
         <TableCustomAntd2<IStore>
           rowKey={"_id"}
           tableStateRequest={tableStateRequest}

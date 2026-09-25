@@ -121,11 +121,6 @@ export default function CustomersPage() {
         className="h-min-80 mt-5"
         extra={
           <>
-            <FeatureUsageBadge
-              feature="customers"
-              usage={usage?.["customers"]}
-            />
-
             <Button
               type="primary"
               onClick={() => setIsDownloadCustomersDrawerOpen(true)}
@@ -155,6 +150,10 @@ export default function CustomersPage() {
           </>
         }
       >
+        <div className="flex justify-end mb-2">
+          <FeatureUsageBadge feature="customers" usage={usage?.["customers"]} />
+        </div>
+
         <TableCustomAntd2<ICustomer>
           rowKey={"_id"}
           dataSource={customers}

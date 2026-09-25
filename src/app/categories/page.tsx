@@ -51,26 +51,26 @@ export default function CategoriesPage() {
         title={t("categories.title")}
         className="h-min-80 mt-5"
         extra={
-          <>
-            <FeatureUsageBadge
-              feature="categories"
-              usage={usage?.["categories"]}
-            />
-
-            <Button
-              type="primary"
-              onClick={() => {
-                setCategoryId(undefined);
-                setIsCategoryDetailDrawerOpen(true);
-              }}
-              icon={<PlusOutlined />}
-              disabled={isFeatureLimitReached(usage, "categories")}
-            >
-              {t("categories.newCategory")}
-            </Button>
-          </>
+          <Button
+            type="primary"
+            onClick={() => {
+              setCategoryId(undefined);
+              setIsCategoryDetailDrawerOpen(true);
+            }}
+            icon={<PlusOutlined />}
+            disabled={isFeatureLimitReached(usage, "categories")}
+          >
+            {t("categories.newCategory")}
+          </Button>
         }
       >
+        <div className="flex justify-end mb-2">
+          <FeatureUsageBadge
+            feature="categories"
+            usage={usage?.["categories"]}
+          />
+        </div>
+
         <TableCustomAntd2<ICategory>
           rowKey={"_id"}
           dataSource={categories}

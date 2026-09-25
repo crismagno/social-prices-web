@@ -28,6 +28,11 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 
+import { FeatureUsageBadge } from "../../../../components/common/FeatureUsageBadge/FeatureUsageBadge";
+import {
+  isFeatureLimitReached,
+  useFeaturesUsage,
+} from "../../../../components/common/FeatureUsageBadge/useFeaturesUsage";
 import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
 import SelectProducts from "../../../../components/common/SelectProducts/SelectProducts";
@@ -77,6 +82,8 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
   const { user } = useAuthData();
   const { socket } = useSocketData();
   const { t } = useLanguageData();
+
+  const { usage } = useFeaturesUsage();
   const router: AppRouterInstance = useRouter();
 
   const [tableStateRequest, setTableStateRequest] = useState<
@@ -184,6 +191,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
             <Button
               type="primary"
               onClick={() => router.push(Urls.NEW_PRODUCT_ITEM)}
+              disabled={isFeatureLimitReached(usage, "product-items")}
               icon={<PlusOutlined />}
             >
               {t("productItems.newProductItem")}
@@ -191,6 +199,13 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
           </>
         }
       >
+        <div className="flex justify-end mb-2">
+          <FeatureUsageBadge
+            feature="product-items"
+            usage={usage?.["product-items"]}
+          />
+        </div>
+
         <Row gutter={[16, 16]}>
           <Col md={8} className="flex items-end">
             <CustomRangeDatePicker
