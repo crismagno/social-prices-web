@@ -38,7 +38,8 @@ const Sidebar: React.FC<Props> = ({}) => {
 
   const router = useRouter();
 
-  const { isCollapsed, toggleIsCollapsed } = useSidebarCollapsed();
+  const { isCollapsed, isTransitionEnabled, toggleIsCollapsed } =
+    useSidebarCollapsed();
 
   const { items, selectedKeys, openKeys, setOpenKeys } =
     useSidebarMenuItems(isCollapsed);
@@ -58,7 +59,8 @@ const Sidebar: React.FC<Props> = ({}) => {
       <aside
         className={`${isCollapsed ? "w-20" : "w-64"} shrink-0 sticky top-0
           h-screen overflow-y-auto overflow-x-hidden z-40
-          flex flex-col justify-between transition-all duration-200
+          flex flex-col justify-between
+          ${isTransitionEnabled ? "transition-all duration-200" : ""}
           shadow-lg shadow-slate-300 dark:shadow-slate-900
           bg-white dark:bg-gray-800 dark:text-white`}
       >
