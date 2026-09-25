@@ -153,7 +153,7 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
                   const fileUploadId: string = fileUpload._id;
 
                   return (
-                    <Space.Compact>
+                    <Space>
                       <Tooltip title={t("filesUploads.downloadErrors")}>
                         <Button
                           type="primary"
@@ -170,7 +170,7 @@ export const FilesUploadsTable = forwardRef<IFilesUploadsTableRefProps, Props>(
                           icon={<DownloadOutlined />}
                         />
                       </Tooltip>
-                    </Space.Compact>
+                    </Space>
                   );
                 }
 

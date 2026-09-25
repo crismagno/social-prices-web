@@ -290,7 +290,7 @@ export default function EmployeesPage() {
               align: "center",
               render: (_: any, employee: IEmployee) => {
                 return (
-                  <Space.Compact>
+                  <Space>
                     <Tooltip title={t("employees.editEmployee")}>
                       <Button
                         type="success"
@@ -317,7 +317,7 @@ export default function EmployeesPage() {
                         icon={<EnterOutlined />}
                       />
                     </Tooltip>
-                  </Space.Compact>
+                  </Space>
                 );
               },
             },

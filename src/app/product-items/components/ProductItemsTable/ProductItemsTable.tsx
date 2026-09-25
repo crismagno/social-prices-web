@@ -535,7 +535,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               align: "center",
               fixed: "right",
               render: (_: any, productItem: IProductItem) => (
-                <Space.Compact>
+                <Space>
                   <Tooltip title={t("productItems.editProductItemTooltip")}>
                     <Button
                       type="success"
@@ -580,7 +580,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
                       icon={<ShoppingCartOutlined />}
                     />
                   </Tooltip>
-                </Space.Compact>
+                </Space>
               ),
             },
           ]}

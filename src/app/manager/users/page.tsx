@@ -2,10 +2,11 @@
 
 import { Fragment, useState } from "react";
 
-import { EditOutlined } from "@ant-design/icons";
 import { Button, Card, Tag, Tooltip } from "antd";
 import moment from "moment";
 import Link from "next/link";
+
+import { EditOutlined } from "@ant-design/icons";
 
 import TableCustomAntd2 from "../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import ManagerLayout from "../../../components/template/ManagerLayout/ManagerLayout";
@@ -138,7 +139,6 @@ export default function ManagerUsersPage() {
                 >
                   <Button
                     type="primary"
-                    shape="circle"
                     icon={<EditOutlined />}
                     aria-label={t("common.edit")}
                   />

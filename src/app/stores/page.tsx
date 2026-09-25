@@ -208,7 +208,7 @@ export default function StoresPage() {
               align: "center",
               render: (_: any, store: IStore) => {
                 return (
-                  <Space.Compact>
+                  <Space>
                     <Tooltip title={t("stores.editStore")}>
                       <Button
                         type="success"
@@ -237,7 +237,7 @@ export default function StoresPage() {
                         icon={<ShoppingCartOutlined />}
                       />
                     </Tooltip>
-                  </Space.Compact>
+                  </Space>
                 );
               },
             },

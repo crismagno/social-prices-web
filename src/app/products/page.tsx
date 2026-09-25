@@ -418,7 +418,7 @@ export default function ProductsPage() {
               align: "center",
               fixed: "right",
               render: (_: any, product: IProduct) => (
-                <Space.Compact>
+                <Space>
                   <Tooltip title={t("products.editProduct")}>
                     <Button
                       type="success"
@@ -457,7 +457,7 @@ export default function ProductsPage() {
                       icon={<ShoppingCartOutlined />}
                     />
                   </Tooltip>
-                </Space.Compact>
+                </Space>
               ),
             },
           ]}

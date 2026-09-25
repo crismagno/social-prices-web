@@ -849,7 +849,7 @@ const SalesTable: React.FC<Props> = ({
                 const isSaleDeleted: boolean = !!sale.softDelete;
 
                 return (
-                  <Space.Compact>
+                  <Space>
                     {!isSaleDeleted && (
                       <Tooltip title={t("sales.editSale")}>
                         <Button
@@ -912,7 +912,7 @@ const SalesTable: React.FC<Props> = ({
                         />
                       </Tooltip>
                     )}
-                  </Space.Compact>
+                  </Space>
                 );
               },
             },

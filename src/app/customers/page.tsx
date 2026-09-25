@@ -271,7 +271,7 @@ export default function CustomersPage() {
               align: "center",
               render: (_: any, customer: ICustomer) => {
                 return (
-                  <Space.Compact>
+                  <Space>
                     <Tooltip title={t("customers.editCustomer")}>
                       <Button
                         type="success"
@@ -313,7 +313,7 @@ export default function CustomersPage() {
                         icon={<ShoppingCartOutlined />}
                       />
                     </Tooltip>
-                  </Space.Compact>
+                  </Space>
                 );
               },
             },
