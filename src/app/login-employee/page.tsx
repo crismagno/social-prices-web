@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 
 import { App, Button, Divider, List, Tooltip } from "antd";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { RightOutlined, ShopOutlined } from "@ant-design/icons";
@@ -11,6 +10,7 @@ import { RightOutlined, ShopOutlined } from "@ant-design/icons";
 import AuthInput from "../../components/common/AuthInput/AuthInput";
 import Avatar from "../../components/common/Avatar/Avatar";
 import handleClientError from "../../components/common/HandleClientError/HandleClientError";
+import { LoginSideImage } from "../../components/common/LoginSideImage/LoginSideImage";
 import Loading from "../../components/common/Loading/Loading";
 import { Logo1 } from "../../components/common/Logo/Logo1";
 import useAuthData from "../../data/context/auth/useAuthData";
@@ -114,15 +114,7 @@ export default function LoginPage() {
 
   return (
     <div className="relative flex flex-row h-screen">
-      <div className="hidden md:block md:w-2-1/2 lg:w-2/3">
-        <Image
-          src="/assets/images-random/social-prices-logo-test.webp"
-          alt="Images on side"
-          width={1000}
-          height={1000}
-          className="h-screen w-full object-cover"
-        />
-      </div>
+      <LoginSideImage />
 
       {isSubmitting && (
         <div className="h-full w-full absolute flex justify-center items-center bg-gray-500/30 top-0 z-50">
