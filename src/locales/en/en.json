@@ -307,6 +307,8 @@
     "customer": "Customer",
     "customerName": "Customer Name",
     "deliveryType": "Delivery Type",
+    "trackingNumber": "Tracking number",
+    "trackingNumberPlaceholder": "Code or tracking link",
     "paymentStatus": "Payment Status",
     "saleStatus": "Sale Status",
     "selectProducts": "Select Products",

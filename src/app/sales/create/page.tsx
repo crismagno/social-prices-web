@@ -194,6 +194,7 @@ export type TShowValueNoteFormSchema = z.infer<typeof showValueNoteFormSchema>;
 const formSchema = z.object({
   customer: customerFormSchema,
   deliveryType: z.string().nonempty(),
+  trackingNumber: z.string().max(300).nullable(),
   selectedStoreIds: z.array(z.string()),
   saleStores: z.array(saleStoreFormSchema),
   discount: showValueNoteFormSchema,
@@ -239,6 +240,7 @@ const generateFormSchemaDefault = (): TFormSchema => {
       phoneNumber: null,
     },
     deliveryType: SalesEnum.DeliveryType.DELIVERY,
+    trackingNumber: null,
     selectedStoreIds: [],
     saleStores: [],
     discount: showValueNote,
@@ -289,6 +291,7 @@ export default function CreateSalePage() {
       z.object({
         customer: validatedCustomerSchema,
         deliveryType: z.string().nonempty(t("errors.deliveryTypeRequired")),
+        trackingNumber: z.string().max(300).nullable(),
         selectedStoreIds: z.array(z.string()),
         saleStores: z.array(saleStoreFormSchema),
         discount: showValueNoteFormSchema,
@@ -552,6 +555,7 @@ export default function CreateSalePage() {
           },
           deliveryType:
             saleById?.header?.deliveryType ?? SalesEnum.DeliveryType.DELIVERY,
+          trackingNumber: saleById?.header?.shipping?.trackingNumber ?? null,
           selectedStoreIds: saleById
             ? saleByIdStoreIds
             : stores.length > 1
@@ -1124,6 +1128,10 @@ export default function CreateSalePage() {
         header: {
           shipping: {
             address,
+            trackingNumber:
+              data.deliveryType === SalesEnum.DeliveryType.DELIVERY
+                ? data.trackingNumber?.trim() || null
+                : null,
           },
           billing: {
             address,
@@ -1605,6 +1613,18 @@ export default function CreateSalePage() {
                   ))}
                 </SelectCustomAntd>
               </div>
+
+              {deliveryType === SalesEnum.DeliveryType.DELIVERY && (
+                <div className="flex-1 min-w-52">
+                  <InputCustomAntd
+                    controller={{ control, name: "trackingNumber" }}
+                    divClassName="mt-0"
+                    placeholder={t("sales.trackingNumberPlaceholder")}
+                    errorMessage={errors?.trackingNumber?.message}
+                    maxLength={300}
+                  />
+                </div>
+              )}
             </div>
 
             <Row gutter={[8, 8]}>

@@ -116,6 +116,7 @@ export interface ISaleHeaderBilling {
 
 export interface ISaleHeaderShipping {
   address: IAddress | null;
+  trackingNumber: string | null;
 }
 
 export interface ISaleBuyer {

@@ -39,6 +39,7 @@ import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageO
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { SaleSummary } from "../../../components/common/SaleSummary/SaleSummary";
 import Layout from "../../../components/template/Layout/Layout";
+import { TrackingNumberLine } from "../../../components/common/TrackingNumberLine/TrackingNumberLine";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import CategoriesEnum from "../../../shared/business/categories/categories.enum";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
@@ -323,6 +324,11 @@ export default function SalePage() {
                 {t(SalesEnum.DeliveryTypeLabels[sale.header.deliveryType])}
               </Tag>
             </div>
+
+            <TrackingNumberLine
+              value={sale.header?.shipping?.trackingNumber}
+              className="mb-4"
+            />
 
             <Row gutter={[8, 8]} className="pb-2">
               <Col xs={24} md={8}>

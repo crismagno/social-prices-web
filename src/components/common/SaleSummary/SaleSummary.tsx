@@ -2,6 +2,7 @@ import { Col, Divider, Empty, Image, Row } from "antd";
 import { find } from "lodash";
 import moment from "moment";
 
+import { TrackingNumberLine } from "../TrackingNumberLine/TrackingNumberLine";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import { ICategory } from "../../../shared/business/categories/categories.interface";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
@@ -215,6 +216,8 @@ export const SaleSummary: React.FC<Props> = ({
 
           <DeliveryAddressMapButton address={buyer.address} />
         </div>
+
+        <TrackingNumberLine value={sale.header?.shipping?.trackingNumber} />
       </div>
 
       <Divider />

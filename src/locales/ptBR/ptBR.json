@@ -308,6 +308,8 @@
     "customer": "Cliente",
     "customerName": "Nome do Cliente",
     "deliveryType": "Tipo de Entrega",
+    "trackingNumber": "Código de rastreio",
+    "trackingNumberPlaceholder": "Código ou link de rastreio",
     "paymentStatus": "Status do Pagamento",
     "saleStatus": "Status da Venda",
     "selectProducts": "Selecionar Produtos",

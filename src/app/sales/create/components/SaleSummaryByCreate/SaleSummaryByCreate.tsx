@@ -7,6 +7,7 @@ import moment from "moment";
 import { DeliveryAddressMapButton } from "../../../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton";
 import { ImageOrDefault } from "../../../../../components/common/ImageOrDefault/ImageOrDefault";
 import { TagTagsCustomAntd } from "../../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
+import { TrackingNumberLine } from "../../../../../components/common/TrackingNumberLine/TrackingNumberLine";
 import useLanguageData from "../../../../../data/context/language/useLanguageData";
 import { ICustomer } from "../../../../../shared/business/customers/customer.interface";
 import SalesEnum from "../../../../../shared/business/sales/sales.enum";
@@ -215,6 +216,14 @@ export const SaleSummaryByCreate: React.FC<Props> = ({
             }}
           />
         </div>
+
+        <TrackingNumberLine
+          value={
+            formSchema.deliveryType === SalesEnum.DeliveryType.DELIVERY
+              ? formSchema.trackingNumber
+              : null
+          }
+        />
       </div>
 
       <Divider />

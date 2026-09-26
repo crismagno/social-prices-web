@@ -63,6 +63,7 @@ export class SaleHeaderBillingDto {
 
 export class SaleHeaderShippingDto {
   address: CreateAddressDto | null = null;
+  trackingNumber: string | null = null;
 }
 
 export class SaleHeaderDto {
