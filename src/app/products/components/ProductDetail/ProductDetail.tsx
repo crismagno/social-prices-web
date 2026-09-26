@@ -100,6 +100,7 @@ const _baseFormSchema = z.object({
   categoriesIds: z.array(z.string()),
   tagsIds: z.array(z.string()),
   brand: z.string().trim().optional(),
+  location: z.string().trim().optional(),
   releaseDate: z.any().nullable().optional(),
   expirationDate: z.any().nullable().optional(),
   dimensions: dimensionsFormSchema.optional(),
@@ -154,6 +155,7 @@ export const ProductDetail: React.FC<Props> = ({
         categoriesIds: z.array(z.string()),
         tagsIds: z.array(z.string()),
         brand: z.string().trim().optional(),
+        location: z.string().trim().optional(),
         releaseDate: z.any().nullable().optional(),
         expirationDate: z.any().nullable().optional(),
         dimensions: dimensionsFormSchema.optional(),
@@ -219,6 +221,7 @@ export const ProductDetail: React.FC<Props> = ({
       categoriesIds: product?.categoriesIds ?? [],
       tagsIds: product?.tagsIds ?? [],
       brand: product?.brand ?? "",
+      location: product?.location ?? "",
       releaseDate: product?.releaseDate
         ? moment(product?.releaseDate)
             .utc()
@@ -273,6 +276,7 @@ export const ProductDetail: React.FC<Props> = ({
       categoriesIds: [],
       tagsIds: [],
       brand: "",
+      location: "",
       releaseDate: null,
       expirationDate: null,
       colors: [],
@@ -343,6 +347,7 @@ export const ProductDetail: React.FC<Props> = ({
         categoriesIds: data.categoriesIds ?? [],
         tagsIds: data.tagsIds ?? [],
         brand: data.brand ?? null,
+        location: data.location ?? "",
         releaseDate: data.releaseDate
           ? moment
               .utc(data.releaseDate)
@@ -435,6 +440,7 @@ export const ProductDetail: React.FC<Props> = ({
         categoriesIds: data.categoriesIds ?? [],
         tagsIds: data.tagsIds ?? [],
         brand: data.brand ?? null,
+        location: data.location ?? "",
         releaseDate: data.releaseDate
           ? moment
               .utc(data.releaseDate)
@@ -612,6 +618,16 @@ export const ProductDetail: React.FC<Props> = ({
               label={t("products.brand")}
               placeholder={t("products.enterBrand")}
               errorMessage={errors.brand?.message}
+            />
+          </Col>
+
+          <Col xs={24} md={8} sm={12} lg={8}>
+            <InputCustomAntd
+              controller={{ control, name: "location" }}
+              label={t("products.location")}
+              placeholder={t("products.enterLocation")}
+              errorMessage={errors.location?.message}
+              maxLength={200}
             />
           </Col>
 

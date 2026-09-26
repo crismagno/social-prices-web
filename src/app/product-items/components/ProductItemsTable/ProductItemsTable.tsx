@@ -41,6 +41,7 @@ import { TagStoresCustomAntd } from "../../../../components/common/TagStoresCust
 import { TagTagsCustomAntd } from "../../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import { UploadFilesDrawer } from "../../../../components/common/UploadFilesDrawer/UploadFilesDrawer";
 import YesNo from "../../../../components/common/YesNo/YesNo";
+import { getColumnTextSearchProps } from "../../../../components/custom/antd/ColumnTextSearch/columnTextSearch";
 import TableCustomAntd2 from "../../../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import useAuthData from "../../../../data/context/auth/useAuthData";
 import useLanguageData from "../../../../data/context/language/useLanguageData";
@@ -375,6 +376,14 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
               key: "sku",
               align: "center",
               render: (sku: string) => sku || "-",
+            },
+            {
+              title: t("products.location"),
+              dataIndex: "location",
+              key: "location",
+              align: "center",
+              render: (location: string | null) => location || "-",
+              ...getColumnTextSearchProps<IProductItem>(t, t("products.enterLocation")),
             },
             {
               title: t("productItems.quantity"),

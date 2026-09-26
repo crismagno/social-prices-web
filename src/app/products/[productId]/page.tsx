@@ -199,6 +199,9 @@ export default function ProductPage() {
                     <Descriptions.Item label={t("products.brand")}>
                       {product.brand || "-"}
                     </Descriptions.Item>
+                    <Descriptions.Item label={t("products.location")}>
+                      {product.location || "-"}
+                    </Descriptions.Item>
 
                     <Descriptions.Item label={t("common.price")}>
                       <div className="flex items-center gap-2">

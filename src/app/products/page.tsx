@@ -26,6 +26,7 @@ import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCu
 import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import { UploadFilesDrawer } from "../../components/common/UploadFilesDrawer/UploadFilesDrawer";
 import YesNo from "../../components/common/YesNo/YesNo";
+import { getColumnTextSearchProps } from "../../components/custom/antd/ColumnTextSearch/columnTextSearch";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
 import { FeatureUsageBadge } from "../../components/common/FeatureUsageBadge/FeatureUsageBadge";
@@ -258,6 +259,14 @@ export default function ProductsPage() {
               sorter: true,
               align: "center",
               render: (sku: string) => sku || "-",
+            },
+            {
+              title: t("products.location"),
+              dataIndex: "location",
+              key: "location",
+              align: "center",
+              render: (location: string | null) => location || "-",
+              ...getColumnTextSearchProps<IProduct>(t, t("products.enterLocation")),
             },
             {
               title: t("common.quantity"),

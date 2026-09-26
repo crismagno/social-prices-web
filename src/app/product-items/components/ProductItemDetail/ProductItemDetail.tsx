@@ -100,6 +100,7 @@ const formSchema = z.object({
   categoriesIds: z.array(z.string()),
   tagsIds: z.array(z.string()),
   brand: z.string().trim().optional(),
+  location: z.string().trim().optional(),
   releaseDate: z.any().nullable().optional(),
   expirationDate: z.any().nullable().optional(),
   dimensions: dimensionsFormSchema.optional(),
@@ -191,6 +192,7 @@ export const ProductItemDetail: React.FC<Props> = ({
       categoriesIds: productItem?.categoriesIds ?? [],
       tagsIds: productItem?.tagsIds ?? [],
       brand: productItem?.brand ?? "",
+      location: productItem?.location ?? "",
       releaseDate: productItem?.releaseDate
         ? moment(productItem?.releaseDate)
             .utc()
@@ -245,6 +247,7 @@ export const ProductItemDetail: React.FC<Props> = ({
       categoriesIds: [],
       tagsIds: [],
       brand: "",
+      location: "",
       releaseDate: null,
       expirationDate: null,
       colors: [],
@@ -309,6 +312,7 @@ export const ProductItemDetail: React.FC<Props> = ({
         QRCode: data.QRCode ?? null,
         productId: data.productId,
         brand: data.brand ?? null,
+        location: data.location ?? "",
         categoriesIds: data.categoriesIds ?? [],
         tagsIds: data.tagsIds ?? [],
         releaseDate: data.releaseDate
@@ -398,6 +402,7 @@ export const ProductItemDetail: React.FC<Props> = ({
         QRCode: data.QRCode ?? null,
         productId: productItem!.productId,
         brand: data.brand ?? null,
+        location: data.location ?? "",
         categoriesIds: data.categoriesIds ?? [],
         tagsIds: data.tagsIds ?? [],
         deletedFilesUrl,
@@ -593,6 +598,16 @@ export const ProductItemDetail: React.FC<Props> = ({
               placeholder={t("products.enterBrand")}
               errorMessage={errors.brand?.message}
               disabled={isReadonly}
+            />
+          </Col>
+
+          <Col xs={24} md={8} sm={12} lg={8}>
+            <InputCustomAntd
+              controller={{ control, name: "location" }}
+              label={t("products.location")}
+              placeholder={t("products.enterLocation")}
+              errorMessage={errors.location?.message}
+              maxLength={200}
             />
           </Col>
 

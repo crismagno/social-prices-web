@@ -25,6 +25,7 @@ export default class CreateProductDto {
   categoriesIds: string[] = [];
   tagsIds: string[] = [];
   brand: string | null = null;
+  location: string | null = null;
   releaseDate: string | null = null;
   expirationDate: string | null = null;
   dimensions: ProductDimensionsDto | null = null;

@@ -636,6 +636,8 @@
     "enterSku": "Enter sku",
     "brand": "Brand",
     "enterBrand": "Enter brand",
+    "location": "Location",
+    "enterLocation": "Enter location",
     "height": "Height(m)",
     "width": "Width(m)",
     "length": "Length(m)",

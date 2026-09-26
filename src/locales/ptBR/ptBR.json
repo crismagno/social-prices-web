@@ -639,6 +639,8 @@
     "enterSku": "Digite o SKU",
     "brand": "Marca",
     "enterBrand": "Digite a marca",
+    "location": "Localização",
+    "enterLocation": "Digite a localização",
     "height": "Altura(m)",
     "width": "Largura(m)",
     "length": "Comprimento(m)",

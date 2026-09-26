@@ -22,6 +22,7 @@ export interface IProductItem extends ICreatedAtEntity, IUpdatedAtEntity {
   storeIds: string[];
   tagsIds: string[];
   brand: string | null;
+  location: string | null;
   releaseDate: Date | null;
   expirationDate: Date | null;
   dimensions: IProductItemDimensions | null;
