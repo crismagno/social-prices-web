@@ -332,9 +332,8 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
         saleId
       )}`,
       {
-        headers: {
-          Authorization: this.formatAuthorizationWithToken(),
-        },
+        // Public route: the customer opening the summary link has no session.
+        headers: this.formatOptionalAuthorization(),
         responseType: "blob",
       }
     );

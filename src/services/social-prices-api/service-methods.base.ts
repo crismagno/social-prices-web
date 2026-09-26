@@ -28,6 +28,15 @@ export default abstract class ServiceMethodsBase {
     return this.formatAuthorization(token);
   }
 
+  // For public routes that also work for a logged in user: the header is sent
+  // when there is a session and omitted (instead of throwing) when there is not.
+  public formatOptionalAuthorization(): Record<string, string> {
+    const token: string | null =
+      localStorageMethodsInstance.localStorageAuthTokenMethods.getAuthToken();
+
+    return token ? { Authorization: this.formatAuthorization(token) } : {};
+  }
+
   public getAuthTokenOrFail = (): string => {
     const authToken: string | null =
       localStorageMethodsInstance.localStorageAuthTokenMethods.getAuthToken();
