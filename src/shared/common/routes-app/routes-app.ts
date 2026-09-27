@@ -6,6 +6,7 @@ const Urls = {
   LOGOUT: "/logout",
   SETTINGS: "/settings",
   NOTIFICATIONS: "/notifications",
+  SUPPORT: "/support",
   VALIDATE_SIGN_IN_CODE: "/validate-sign-in-code",
   VALIDATE_SIGN_IN_EMPLOYEE_CODE: "/validate-sign-in-employee-code",
   RECOVER_PASSWORD: "/recover-password",
@@ -76,6 +77,7 @@ const Urls = {
   MANAGER_EDIT_MANAGER: "/manager/managers/detail?mid=:managerId",
   MANAGER_USERS: "/manager/users",
   MANAGER_EDIT_USER: "/manager/users/detail?uid=:userId",
+  MANAGER_FEEDBACKS: "/manager/feedbacks",
 
   // download
   DOWNLOAD_SALE_SUMMARY: "/download/sales/summary?i=:tokenId",

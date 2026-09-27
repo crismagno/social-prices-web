@@ -148,6 +148,7 @@
     "employees": "Employees",
     "tags": "Tags",
     "productItems": "Product Items",
+    "support": "Support",
     "expandMenu": "Expand menu",
     "collapseMenu": "Collapse menu"
   },
@@ -992,6 +993,36 @@
       "tags": "Tags"
     }
   },
+  "support": {
+    "title": "Support",
+    "subtitle": "We are here to help",
+    "contactTitle": "Contact",
+    "email": "Email",
+    "phone": "Phone",
+    "socialTitle": "Follow us",
+    "instagram": "Instagram",
+    "feedbackTitle": "Send us your feedback",
+    "feedbackDescription": "Tell us what you liked, what can be better or any problem you found. Every message is read by our team.",
+    "feedbackPlaceholder": "Write your feedback here...",
+    "sendFeedback": "Send feedback",
+    "feedbackSent": "Thank you! Your feedback was sent."
+  },
+  "feedbacks": {
+    "statusNew": "New",
+    "statusSeen": "Seen",
+    "statusCompleted": "Completed",
+    "statusRejected": "Rejected",
+    "markSeen": "Mark as seen",
+    "markCompleted": "Mark as completed",
+    "markRejected": "Mark as rejected",
+    "view": "View feedback",
+    "sender": "Sender",
+    "message": "Message",
+    "employee": "Employee",
+    "statusUpdated": "Feedback status updated.",
+    "receivedAt": "Received at",
+    "statusUpdatedAt": "Status updated at"
+  },
   "manager": {
     "userData": "User data",
     "editUser": "Edit user",
@@ -1056,6 +1087,9 @@
     "users": "Users",
     "usersSubtitle": "Everyone using the system",
     "searchUsers": "Search by name, username, email, ID number, CPF or CNPJ...",
+    "feedbacks": "Feedbacks",
+    "feedbacksSubtitle": "What users are telling us",
+    "searchFeedbacks": "Search by message, name or email...",
     "username": "Username",
     "status": "Status",
     "type": "Type",

@@ -6,7 +6,12 @@ import { Modal, Tag } from "antd";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { LogoutOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  LogoutOutlined,
+  MessageOutlined,
+  TeamOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 
 import useLanguageData from "../../../../data/context/language/useLanguageData";
 import useManagerAuthData from "../../../../data/context/managerAuth/useManagerAuthData";
@@ -37,6 +42,11 @@ const ManagerSidebar: React.FC = () => {
       url: Urls.MANAGER_USERS,
       label: t("manager.users"),
       icon: <UserOutlined />,
+    },
+    {
+      url: Urls.MANAGER_FEEDBACKS,
+      label: t("manager.feedbacks"),
+      icon: <MessageOutlined />,
     },
   ];
 

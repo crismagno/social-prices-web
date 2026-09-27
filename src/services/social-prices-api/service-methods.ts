@@ -3,9 +3,11 @@ import AuthServiceMethods from "./auth/auth-service.methods";
 import CategoriesServiceMethods from "./categories/categories-service.methods";
 import CustomersServiceMethods from "./customers/customers-service.methods";
 import EmployeesServiceMethods from "./employees/employees-service.methods";
+import FeedbacksServiceMethods from "./feedbacks/feedbacks-service.methods";
 import FilesUploadsServiceMethods from "./files-uploads/files-uploads-service.methods";
 import FilesServiceMethods from "./files/files-service.methods";
 import ManagerAuthServiceMethods from "./manager-auth/manager-auth-service.methods";
+import ManagerFeedbacksServiceMethods from "./manager-feedbacks/manager-feedbacks-service.methods";
 import ManagerUsersServiceMethods from "./manager-users/manager-users-service.methods";
 import ManagersServiceMethods from "./managers/managers-service.methods";
 import NotificationsServiceMethods from "./notifications/notifications-service.methods";
@@ -34,6 +36,8 @@ export default class ServiceMethods {
   public managerAuthServiceMethods: ManagerAuthServiceMethods;
   public managersServiceMethods: ManagersServiceMethods;
   public managerUsersServiceMethods: ManagerUsersServiceMethods;
+  public feedbacksServiceMethods: FeedbacksServiceMethods;
+  public managerFeedbacksServiceMethods: ManagerFeedbacksServiceMethods;
 
   constructor() {
     this.accountServiceMethods = new AccountServiceMethods();
@@ -53,6 +57,8 @@ export default class ServiceMethods {
     this.managerAuthServiceMethods = new ManagerAuthServiceMethods();
     this.managersServiceMethods = new ManagersServiceMethods();
     this.managerUsersServiceMethods = new ManagerUsersServiceMethods();
+    this.feedbacksServiceMethods = new FeedbacksServiceMethods();
+    this.managerFeedbacksServiceMethods = new ManagerFeedbacksServiceMethods();
   }
 }
 

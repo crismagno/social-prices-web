@@ -148,6 +148,7 @@
     "employees": "Funcionários",
     "tags": "Etiquetas",
     "productItems": "Itens de Produto",
+    "support": "Suporte",
     "expandMenu": "Expandir menu",
     "collapseMenu": "Recolher menu"
   },
@@ -995,6 +996,36 @@
       "tags": "Tags"
     }
   },
+  "support": {
+    "title": "Suporte",
+    "subtitle": "Estamos aqui para ajudar",
+    "contactTitle": "Contato",
+    "email": "Email",
+    "phone": "Telefone",
+    "socialTitle": "Siga a gente",
+    "instagram": "Instagram",
+    "feedbackTitle": "Envie seu feedback",
+    "feedbackDescription": "Conte o que você gostou, o que pode melhorar ou qualquer problema que encontrou. Toda mensagem é lida pela nossa equipe.",
+    "feedbackPlaceholder": "Escreva seu feedback aqui...",
+    "sendFeedback": "Enviar feedback",
+    "feedbackSent": "Obrigado! Seu feedback foi enviado."
+  },
+  "feedbacks": {
+    "statusNew": "Novo",
+    "statusSeen": "Visto",
+    "statusCompleted": "Concluído",
+    "statusRejected": "Rejeitado",
+    "markSeen": "Marcar como visto",
+    "markCompleted": "Marcar como concluído",
+    "markRejected": "Marcar como rejeitado",
+    "view": "Ver feedback",
+    "sender": "Remetente",
+    "message": "Mensagem",
+    "employee": "Funcionário",
+    "statusUpdated": "Status do feedback atualizado.",
+    "receivedAt": "Recebido em",
+    "statusUpdatedAt": "Status atualizado em"
+  },
   "manager": {
     "userData": "Dados do usuário",
     "editUser": "Editar usuário",
@@ -1059,6 +1090,9 @@
     "users": "Usuários",
     "usersSubtitle": "Todos que usam o sistema",
     "searchUsers": "Buscar por nome, usuário, email, número de identificação, CPF ou CNPJ...",
+    "feedbacks": "Feedbacks",
+    "feedbacksSubtitle": "O que os usuários estão nos dizendo",
+    "searchFeedbacks": "Buscar por mensagem, nome ou email...",
     "username": "Nome de usuário",
     "status": "Status",
     "type": "Tipo",

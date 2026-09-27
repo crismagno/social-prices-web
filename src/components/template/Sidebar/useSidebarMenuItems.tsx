@@ -7,6 +7,7 @@ import {
   AppstoreOutlined,
   BellOutlined,
   BlockOutlined,
+  CustomerServiceOutlined,
   HomeOutlined,
   InboxOutlined,
   SettingOutlined,
@@ -147,6 +148,7 @@ export const useSidebarMenuItems = (
       <BlockOutlined />,
       generalChildren,
     ),
+    getItem(t("navigation.support"), Urls.SUPPORT, <CustomerServiceOutlined />),
   ];
 
   // The longest matching route wins, so /sales/create selects "create sale"
@@ -155,6 +157,7 @@ export const useSidebarMenuItems = (
     Urls.DASHBOARD,
     Urls.NOTIFICATIONS,
     Urls.SETTINGS,
+    Urls.SUPPORT,
     Urls.STORES,
     Urls.CUSTOMERS,
     Urls.PRODUCTS,
