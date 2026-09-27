@@ -71,6 +71,7 @@ const Urls = {
 
   // manager panel
   MANAGER_LOGIN: "/manager/login",
+  MANAGER_LOGOUT: "/manager/logout",
   MANAGER_VALIDATE_SIGN_IN_CODE: "/manager/validate-sign-in-code",
   MANAGER_RECOVER_PASSWORD: "/manager/recover-password",
   MANAGER_MANAGERS: "/manager/managers",

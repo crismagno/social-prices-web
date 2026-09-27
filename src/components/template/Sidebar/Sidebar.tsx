@@ -30,7 +30,9 @@ interface Props {}
 const Sidebar: React.FC<Props> = ({}) => {
   const { t } = useLanguageData();
 
-  const { user, logout } = useAuthData();
+  const { user } = useAuthData();
+
+  const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
 
   const {
     theme: { theme },
@@ -43,8 +45,6 @@ const Sidebar: React.FC<Props> = ({}) => {
 
   const { items, selectedKeys, openKeys, setOpenKeys } =
     useSidebarMenuItems(isCollapsed);
-
-  const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
 
   if (!user) {
     return null;
@@ -205,10 +205,7 @@ const Sidebar: React.FC<Props> = ({}) => {
         title={t("navigation.logout")}
         destroyOnHidden
         onCancel={() => setShowLogoutModal(false)}
-        onOk={async () => {
-          await logout();
-          setShowLogoutModal(false);
-        }}
+        onOk={() => router.push(Urls.LOGOUT)}
         okText={t("common.yes")}
         cancelText={t("common.no")}
       >

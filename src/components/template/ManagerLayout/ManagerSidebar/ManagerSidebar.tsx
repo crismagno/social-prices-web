@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { Modal, Tag } from "antd";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import {
   LogoutOutlined,
@@ -22,11 +22,13 @@ import { Logo1 } from "../../../common/Logo/Logo1";
 const ManagerSidebar: React.FC = () => {
   const { t } = useLanguageData();
 
-  const { manager, logout } = useManagerAuthData();
+  const { manager } = useManagerAuthData();
+
+  const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
 
   const pathname: string = usePathname();
 
-  const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
+  const router = useRouter();
 
   if (!manager) {
     return null;
@@ -125,10 +127,7 @@ const ManagerSidebar: React.FC = () => {
         title={t("manager.logout")}
         destroyOnHidden
         onCancel={() => setShowLogoutModal(false)}
-        onOk={async () => {
-          await logout();
-          setShowLogoutModal(false);
-        }}
+        onOk={() => router.push(Urls.MANAGER_LOGOUT)}
         okText={t("manager.yes")}
         cancelText={t("manager.no")}
       >
