@@ -14,17 +14,17 @@ import {
   ShoppingCartOutlined,
 } from "@ant-design/icons";
 
+import { FeatureUsageBadge } from "../../components/common/FeatureUsageBadge/FeatureUsageBadge";
+import {
+  isFeatureLimitReached,
+  useFeaturesUsage,
+} from "../../components/common/FeatureUsageBadge/useFeaturesUsage";
 import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
 import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
-import { FeatureUsageBadge } from "../../components/common/FeatureUsageBadge/FeatureUsageBadge";
-import {
-  isFeatureLimitReached,
-  useFeaturesUsage,
-} from "../../components/common/FeatureUsageBadge/useFeaturesUsage";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import CategoriesEnum from "../../shared/business/categories/categories.enum";
 import { ICategory } from "../../shared/business/categories/categories.interface";
@@ -33,9 +33,9 @@ import { IStore } from "../../shared/business/stores/stores.interface";
 import TagsEnum from "../../shared/business/tags/tags.enum";
 import { ITag } from "../../shared/business/tags/tags.interface";
 import Urls from "../../shared/common/routes-app/routes-app";
-import ImagesEnum from "../../shared/utils/images/images.enum";
 import { sortArray } from "../../shared/utils/array/array-functions";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
+import ImagesEnum from "../../shared/utils/images/images.enum";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
 import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";
@@ -59,7 +59,7 @@ export default function StoresPage() {
     useFindCategoriesByType(CategoriesEnum.Type.STORE);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    TagsEnum.Type.STORE
+    TagsEnum.Type.STORE,
   );
 
   const handleNewStore = () => {
@@ -92,16 +92,14 @@ export default function StoresPage() {
         title={t("stores.title")}
         className="h-min-80 mt-5"
         extra={
-          !stores.length && (
-            <Button
-              type="primary"
-              onClick={handleNewStore}
-              disabled={isFeatureLimitReached(usage, "stores")}
-              icon={<PlusOutlined />}
-            >
-              {t("stores.newStore")}
-            </Button>
-          )
+          <Button
+            type="primary"
+            onClick={handleNewStore}
+            disabled={isFeatureLimitReached(usage, "stores")}
+            icon={<PlusOutlined />}
+          >
+            {t("stores.newStore")}
+          </Button>
         }
       >
         <div className="flex justify-end mb-2">
@@ -230,8 +228,8 @@ export default function StoresPage() {
                           router.push(
                             Urls.SALES_CREATE_BY_STORE.replace(
                               ":storeId",
-                              store._id
-                            )
+                              store._id,
+                            ),
                           )
                         }
                         icon={<ShoppingCartOutlined />}
