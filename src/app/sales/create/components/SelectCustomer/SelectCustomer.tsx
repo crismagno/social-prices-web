@@ -19,6 +19,12 @@ interface Props {
     className?: string;
   };
   style?: any;
+  // Multi-select mode: pick several customers instead of one (e.g. linking a
+  // note to more than one customer). "New customer" makes no sense here, so
+  // it never shows, regardless of `showNewCustomerOption`.
+  mode?: "multiple";
+  value?: string[] | null;
+  onSelectCustomerIds?: (customerIds: string[]) => void;
 }
 
 export const SelectCustomer: React.FC<Props> = ({
@@ -26,8 +32,12 @@ export const SelectCustomer: React.FC<Props> = ({
   showNewCustomerOption = true,
   selectProps,
   style,
+  mode,
+  value,
+  onSelectCustomerIds,
 }) => {
   const { t } = useLanguageData();
+  const isMultiple: boolean = mode === "multiple";
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<ICustomer> | undefined
   >(
@@ -40,10 +50,10 @@ export const SelectCustomer: React.FC<Props> = ({
   const { customers } =
     useFindCustomersByOwnerOfUserTableState(tableStateRequest);
 
-  const onSearch = (value: string) => {
+  const onSearch = (searchValue: string) => {
     setTableStateRequest({
       ...tableStateRequest,
-      search: value?.trim(),
+      search: searchValue?.trim(),
       pagination: {
         total: 0,
         current: undefined,
@@ -77,19 +87,31 @@ export const SelectCustomer: React.FC<Props> = ({
 
   return (
     <Select
+      mode={mode}
+      value={isMultiple ? (value ?? []) : undefined}
       onPopupScroll={onPopupScroll}
       onSearch={onSearch}
       showSearch
-      onSelect={(customerId) => {
-        const selectedCustomer: ICustomer | undefined | null = customerId
-          ? customers.find(
-              (customer: ICustomer) => customer._id === (customerId as any),
-            )
-          : null;
+      onChange={
+        isMultiple
+          ? (customerIds) => onSelectCustomerIds?.(customerIds as string[])
+          : undefined
+      }
+      onSelect={
+        isMultiple
+          ? undefined
+          : (customerId) => {
+              const selectedCustomer: ICustomer | undefined | null = customerId
+                ? customers.find(
+                    (customer: ICustomer) =>
+                      customer._id === (customerId as any),
+                  )
+                : null;
 
-        onSelectCustomer?.(selectedCustomer ?? null);
-      }}
-      defaultValue={null}
+              onSelectCustomer?.(selectedCustomer ?? null);
+            }
+      }
+      defaultValue={isMultiple ? undefined : null}
       styles={{ popup: { root: { maxHeight: containerHeight } } }}
       listHeight={containerHeight}
       filterOption={false}
@@ -97,7 +119,7 @@ export const SelectCustomer: React.FC<Props> = ({
       style={style ?? { width: 250 }}
       className={selectProps?.className}
     >
-      {showNewCustomerOption && (
+      {showNewCustomerOption && !isMultiple && (
         <Select.Option key={"NEW_CUSTOMER"} value={null}>
           <div className="flex items-center">
             <Avatar

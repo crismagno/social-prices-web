@@ -153,6 +153,7 @@ export const TransactionDetailDrawer: React.FC<Props> = ({
       onClose={onClose}
       open={isOpen}
       destroyOnHidden
+      width={700}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <Row gutter={[16, 16]} className="mt-2">

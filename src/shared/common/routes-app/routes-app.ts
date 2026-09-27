@@ -8,6 +8,7 @@ const Urls = {
   NOTIFICATIONS: "/notifications",
   SUPPORT: "/support",
   TRANSACTIONS: "/transactions",
+  NOTES: "/notes",
   VALIDATE_SIGN_IN_CODE: "/validate-sign-in-code",
   VALIDATE_SIGN_IN_EMPLOYEE_CODE: "/validate-sign-in-employee-code",
   RECOVER_PASSWORD: "/recover-password",

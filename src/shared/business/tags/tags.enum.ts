@@ -7,6 +7,7 @@ namespace TagsEnum {
     CUSTOMER = "CUSTOMER",
     EMPLOYEE = "EMPLOYEE",
     TRANSACTION = "TRANSACTION",
+    NOTE = "NOTE",
   }
 
   export const TypeLabels = {
@@ -17,6 +18,7 @@ namespace TagsEnum {
     [Type.CUSTOMER]: "customers.customer",
     [Type.EMPLOYEE]: "employees.employee",
     [Type.TRANSACTION]: "transactions.transaction",
+    [Type.NOTE]: "notes.note",
   };
 
   export const defaultTagColor: string = "black";

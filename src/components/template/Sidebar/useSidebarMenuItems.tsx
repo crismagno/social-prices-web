@@ -7,6 +7,7 @@ import {
   AppstoreOutlined,
   BellOutlined,
   BlockOutlined,
+  CalendarOutlined,
   CustomerServiceOutlined,
   DollarOutlined,
   HomeOutlined,
@@ -132,6 +133,7 @@ export const useSidebarMenuItems = (
     getItem(t("navigation.home"), Urls.DASHBOARD, <HomeOutlined />),
     getItem(notificationsLabel, Urls.NOTIFICATIONS, notificationsIcon),
     getItem(t("navigation.settings"), Urls.SETTINGS, <SettingOutlined />),
+    getItem(t("navigation.notes"), Urls.NOTES, <CalendarOutlined />),
     getItem(t("navigation.stores"), SidebarMenuKeys.STORES, <ShopOutlined />, [
       getItem(t("navigation.stores"), Urls.STORES, <ShopOutlined />),
       getItem(t("navigation.customers"), Urls.CUSTOMERS, <TeamOutlined />),
@@ -173,6 +175,7 @@ export const useSidebarMenuItems = (
     Urls.SETTINGS,
     Urls.SUPPORT,
     Urls.TRANSACTIONS,
+    Urls.NOTES,
     Urls.STORES,
     Urls.CUSTOMERS,
     Urls.PRODUCTS,

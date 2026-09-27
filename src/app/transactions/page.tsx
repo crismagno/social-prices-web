@@ -120,6 +120,16 @@ export default function TransactionsPage() {
     [categories],
   );
 
+  const storesById: Record<string, string> = useMemo(
+    () => Object.fromEntries(stores.map((store) => [store._id, store.name])),
+    [stores],
+  );
+
+  const tagsById: Record<string, string> = useMemo(
+    () => Object.fromEntries(tags.map((tag) => [tag._id, tag.name])),
+    [tags],
+  );
+
   const refreshAll = async (): Promise<void> => {
     await Promise.all([refetchGrid(), refetchSummary()]);
   };
@@ -280,6 +290,24 @@ export default function TransactionsPage() {
                   : "-",
             },
             {
+              title: t("transactions.tags"),
+              dataIndex: "tagsIds",
+              key: "tagsIds",
+              render: (ids: string[]) =>
+                ids?.length
+                  ? ids.map((id) => <Tag key={id}>{tagsById[id] ?? id}</Tag>)
+                  : "-",
+            },
+            {
+              title: t("transactions.stores"),
+              dataIndex: "storeIds",
+              key: "storeIds",
+              render: (ids: string[]) =>
+                ids?.length
+                  ? ids.map((id) => <Tag key={id}>{storesById[id] ?? id}</Tag>)
+                  : "-",
+            },
+            {
               title: t("common.actions"),
               key: "actions",
               align: "center",
@@ -288,7 +316,6 @@ export default function TransactionsPage() {
                   <Tooltip title={t("common.edit")}>
                     <Button
                       type="primary"
-                      shape="circle"
                       icon={<EditOutlined />}
                       aria-label={t("common.edit")}
                       onClick={() => setDrawer({ isOpen: true, transaction })}
@@ -306,7 +333,6 @@ export default function TransactionsPage() {
                     <Button
                       danger
                       type="primary"
-                      shape="circle"
                       icon={<DeleteOutlined />}
                       aria-label={t("common.delete")}
                     />
