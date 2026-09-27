@@ -813,6 +813,7 @@
     "myNotifications": "My Notifications",
     "markAsRead": "Mark as Read",
     "markAllAsRead": "Mark All as Read",
+    "allMarkedAsRead": "All notifications marked as read.",
     "noNotifications": "No notifications",
     "type": "Type",
     "sort": "Sort",

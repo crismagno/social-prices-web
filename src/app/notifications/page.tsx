@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from "react";
 
-import { Card, Col, List, Row, Select, Tag } from "antd";
+import { App, Button, Card, Col, List, Row, Select, Tag } from "antd";
 import moment from "moment";
 
+import { CheckOutlined } from "@ant-design/icons";
+
+import handleClientError from "../../components/common/HandleClientError/HandleClientError";
 import { IconBellAlert } from "../../components/common/icons/icons";
 import ListCustomAntd from "../../components/custom/antd/ListCustomAntd/ListCustomAntd";
 import Layout from "../../components/template/Layout/Layout";
@@ -21,10 +24,17 @@ import { useFindNotificationsByUserTableState } from "./useFindNotificationsByUs
 
 export default function NotificationsPage() {
   const {
-    notifications: { fetchCountNotSeenNotificationsByUser },
+    notifications: {
+      fetchCountNotSeenNotificationsByUser,
+      countNotificationNotSeen,
+    },
   } = useAppData();
 
   const { t } = useLanguageData();
+
+  const { message } = App.useApp();
+
+  const [isMarkingAllAsSeen, setIsMarkingAllAsSeen] = useState<boolean>(false);
 
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<INotification> | undefined
@@ -55,6 +65,30 @@ export default function NotificationsPage() {
       updateNotificationsToSeen();
     }
   }, [notifications]);
+
+  const handleMarkAllAsSeen = async (): Promise<void> => {
+    try {
+      setIsMarkingAllAsSeen(true);
+
+      await serviceMethodsInstance.notificationsServiceMethods.updateAllToSeen();
+
+      await fetchCountNotSeenNotificationsByUser();
+
+      message.success(t("notifications.allMarkedAsRead"));
+
+      // Reload from the first page so the list shows every item as seen,
+      // including the ones that were not loaded yet.
+      setTableStateRequest({
+        ...tableStateRequest,
+        pagination: { total: 0, current: undefined, pageSize: 10, skip: 0 },
+        useConcat: false,
+      });
+    } catch (error: any) {
+      handleClientError(error);
+    } finally {
+      setIsMarkingAllAsSeen(false);
+    }
+  };
 
   const handleScrollList = () => {
     setTableStateRequest({
@@ -161,7 +195,21 @@ export default function NotificationsPage() {
       title={t("notifications.title")}
       hasBackButton
     >
-      <Card title={t("notifications.title")} className="h-min-80 mt-5">
+      <Card
+        title={t("notifications.title")}
+        className="h-min-80 mt-5"
+        extra={
+          <Button
+            type="primary"
+            icon={<CheckOutlined />}
+            loading={isMarkingAllAsSeen}
+            disabled={countNotificationNotSeen === 0}
+            onClick={handleMarkAllAsSeen}
+          >
+            {t("notifications.markAllAsRead")}
+          </Button>
+        }
+      >
         <Row gutter={[8, 8]}>
           <Col lg={5} md={8} sm={12} xs={24}>
             <label className="font-bold mr-2">{t("notifications.type")}:</label>

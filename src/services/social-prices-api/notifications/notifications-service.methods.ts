@@ -75,4 +75,17 @@ export default class NotificationsServiceMethods extends ServiceMethodsBase {
       }
     );
   }
+
+  public async updateAllToSeen(): Promise<void> {
+    await this._fetchAxios.post<void>(
+      `${this._socialPricesApiV1}${NotificationServiceEnum.Methods.UPDATE_ALL_TO_SEEN}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      }
+    );
+  }
 }
