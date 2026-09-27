@@ -6,9 +6,17 @@ import { App, Button, Card, Popconfirm, Tag, Tooltip } from "antd";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 
 import handleClientError from "../../components/common/HandleClientError/HandleClientError";
+import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
+import { TagStoresCustomAntd } from "../../components/common/TagStoresCustomAntd/TagStoresCustomAntd";
+import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
 import useAuthData from "../../data/context/auth/useAuthData";
@@ -33,6 +41,7 @@ import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";
 import { useFindStoresByUser } from "../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../tags/useFindTagsByType";
 import { TransactionDetailDrawer } from "./components/TransactionDetailDrawer/TransactionDetailDrawer";
+import { TransactionViewDrawer } from "./components/TransactionViewDrawer/TransactionViewDrawer";
 import { TransactionsCharts } from "./components/TransactionsCharts/TransactionsCharts";
 import { TransactionsFilters } from "./components/TransactionsFilters/TransactionsFilters";
 import { TransactionsSummaryCards } from "./components/TransactionsSummaryCards/TransactionsSummaryCards";
@@ -112,22 +121,15 @@ export default function TransactionsPage() {
     transaction: ITransaction | null;
   }>({ isOpen: false, transaction: null });
 
+  const [viewedTransaction, setViewedTransaction] =
+    useState<ITransaction | null>(null);
+
   const categoriesById: Record<string, string> = useMemo(
     () =>
       Object.fromEntries(
         categories.map((category) => [category._id, category.name]),
       ),
     [categories],
-  );
-
-  const storesById: Record<string, string> = useMemo(
-    () => Object.fromEntries(stores.map((store) => [store._id, store.name])),
-    [stores],
-  );
-
-  const tagsById: Record<string, string> = useMemo(
-    () => Object.fromEntries(tags.map((tag) => [tag._id, tag.name])),
-    [tags],
   );
 
   const refreshAll = async (): Promise<void> => {
@@ -282,30 +284,37 @@ export default function TransactionsPage() {
               title: t("transactions.categories"),
               dataIndex: "categoriesIds",
               key: "categoriesIds",
-              render: (ids: string[]) =>
-                ids?.length
-                  ? ids.map((id) => (
-                      <Tag key={id}>{categoriesById[id] ?? id}</Tag>
-                    ))
-                  : "-",
+              render: (categoriesIds: string[]) =>
+                categoriesIds?.length ? (
+                  <TagCategoriesCustomAntd
+                    categories={categories}
+                    categoriesIds={categoriesIds}
+                  />
+                ) : (
+                  "-"
+                ),
             },
             {
               title: t("transactions.tags"),
               dataIndex: "tagsIds",
               key: "tagsIds",
-              render: (ids: string[]) =>
-                ids?.length
-                  ? ids.map((id) => <Tag key={id}>{tagsById[id] ?? id}</Tag>)
-                  : "-",
+              render: (tagsIds: string[]) =>
+                tagsIds?.length ? (
+                  <TagTagsCustomAntd tags={tags} tagsIds={tagsIds} />
+                ) : (
+                  "-"
+                ),
             },
             {
               title: t("transactions.stores"),
               dataIndex: "storeIds",
               key: "storeIds",
-              render: (ids: string[]) =>
-                ids?.length
-                  ? ids.map((id) => <Tag key={id}>{storesById[id] ?? id}</Tag>)
-                  : "-",
+              render: (storeIds: string[]) =>
+                storeIds?.length ? (
+                  <TagStoresCustomAntd stores={stores} storeIds={storeIds} />
+                ) : (
+                  "-"
+                ),
             },
             {
               title: t("common.actions"),
@@ -313,6 +322,14 @@ export default function TransactionsPage() {
               align: "center",
               render: (_: unknown, transaction: ITransaction) => (
                 <div className="flex items-center justify-center gap-2">
+                  <Tooltip title={t("transactions.view")}>
+                    <Button
+                      icon={<EyeOutlined />}
+                      aria-label={t("transactions.view")}
+                      onClick={() => setViewedTransaction(transaction)}
+                    />
+                  </Tooltip>
+
                   <Tooltip title={t("common.edit")}>
                     <Button
                       type="primary"
@@ -361,6 +378,14 @@ export default function TransactionsPage() {
 
           await refreshAll();
         }}
+      />
+
+      <TransactionViewDrawer
+        transaction={viewedTransaction}
+        categories={categories}
+        tags={tags}
+        stores={stores}
+        onClose={() => setViewedTransaction(null)}
       />
     </Layout>
   );

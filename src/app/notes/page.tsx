@@ -14,14 +14,18 @@ import {
 } from "@ant-design/icons";
 
 import handleClientError from "../../components/common/HandleClientError/HandleClientError";
+import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
+import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
+import { ICategory } from "../../shared/business/categories/categories.interface";
 import CategoriesEnum from "../../shared/business/categories/categories.enum";
 import { INote } from "../../shared/business/notes/note.interface";
 import NotesEnum from "../../shared/business/notes/notes.enum";
 import { INoteFilters } from "../../shared/business/notes/notes.types";
+import { ITag } from "../../shared/business/tags/tags.interface";
 import TagsEnum from "../../shared/business/tags/tags.enum";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { createTableState } from "../../shared/utils/table/table-state";
@@ -56,7 +60,12 @@ export default function NotesPage() {
 
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
 
-  const gridRequest = useMemo(() => {
+  // The grid's own column headers (Tags/Categories) let the table filter
+  // itself via TableCustomAntd2, which lands in `tableStateRequest.filters`
+  // separately from the top filter bar's `filters` state. Both are merged
+  // here — a column header selection wins over the bar for the same field —
+  // so neither source silently loses to the other.
+  const combinedFilters: INoteFilters = useMemo(() => {
     const dayFilter: INoteFilters = selectedDate
       ? {
           rangeDate: {
@@ -67,19 +76,25 @@ export default function NotesPage() {
       : {};
 
     return {
-      ...tableStateRequest,
-      filters: { ...filters, ...dayFilter },
+      ...filters,
+      ...(tableStateRequest?.filters as INoteFilters | undefined),
+      ...dayFilter,
     };
-  }, [tableStateRequest, filters, selectedDate]);
+  }, [filters, tableStateRequest?.filters, selectedDate]);
+
+  const gridRequest = useMemo(
+    () => ({ ...tableStateRequest, filters: combinedFilters }),
+    [tableStateRequest, combinedFilters],
+  );
 
   const calendarRequest = useMemo(
     () => ({
       search: tableStateRequest?.search,
-      filters,
+      filters: combinedFilters,
       monthStart: calendarMonth.startOf("month").toISOString(),
       monthEnd: calendarMonth.endOf("month").toISOString(),
     }),
-    [tableStateRequest?.search, filters, calendarMonth],
+    [tableStateRequest?.search, combinedFilters, calendarMonth],
   );
 
   const {
@@ -273,6 +288,35 @@ export default function NotesPage() {
                 <Tag color={NotesEnum.StatusColors[status]}>
                   {t(NotesEnum.StatusLabels[status])}
                 </Tag>
+              ),
+            },
+            {
+              title: t("notes.tags"),
+              dataIndex: "tagsIds",
+              key: "tagsIds",
+              filters: tags?.map((tag: ITag) => ({
+                text: tag.name,
+                value: tag._id,
+              })),
+              align: "center",
+              render: (tagsIds: string[]) => (
+                <TagTagsCustomAntd tags={tags} tagsIds={tagsIds} />
+              ),
+            },
+            {
+              title: t("notes.categories"),
+              dataIndex: "categoriesIds",
+              key: "categoriesIds",
+              filters: categories?.map((category: ICategory) => ({
+                text: category.name,
+                value: category._id,
+              })),
+              align: "center",
+              render: (categoriesIds: string[]) => (
+                <TagCategoriesCustomAntd
+                  categories={categories}
+                  categoriesIds={categoriesIds}
+                />
               ),
             },
             {

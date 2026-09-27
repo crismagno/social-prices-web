@@ -1027,6 +1027,8 @@
     "statusUpdatedAt": "Status updated at"
   },
   "transactions": {
+    "view": "View transaction",
+    "createdAt": "Created at",
     "title": "Income and Expenses",
     "subtitle": "Track what comes in and what goes out",
     "transaction": "Transaction",

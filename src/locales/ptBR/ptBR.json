@@ -1030,6 +1030,8 @@
     "statusUpdatedAt": "Status atualizado em"
   },
   "transactions": {
+    "view": "Ver movimentação",
+    "createdAt": "Criado em",
     "title": "Receitas e Despesas",
     "subtitle": "Acompanhe o que entra e o que sai",
     "transaction": "Movimentação",
