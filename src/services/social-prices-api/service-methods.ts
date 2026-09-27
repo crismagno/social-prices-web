@@ -16,6 +16,7 @@ import ProductsServiceMethods from "./products/products-service.methods";
 import SalesServiceMethods from "./sales/sales-service.methods";
 import StoresServiceMethods from "./stores/stores-service.methods";
 import TagsServiceMethods from "./tags/tags-service.methods";
+import TransactionsServiceMethods from "./transactions/transactions-service.methods";
 import UsersServiceMethods from "./users/users-service.methods";
 
 export default class ServiceMethods {
@@ -37,6 +38,7 @@ export default class ServiceMethods {
   public managersServiceMethods: ManagersServiceMethods;
   public managerUsersServiceMethods: ManagerUsersServiceMethods;
   public feedbacksServiceMethods: FeedbacksServiceMethods;
+  public transactionsServiceMethods: TransactionsServiceMethods;
   public managerFeedbacksServiceMethods: ManagerFeedbacksServiceMethods;
 
   constructor() {
@@ -58,6 +60,7 @@ export default class ServiceMethods {
     this.managersServiceMethods = new ManagersServiceMethods();
     this.managerUsersServiceMethods = new ManagerUsersServiceMethods();
     this.feedbacksServiceMethods = new FeedbacksServiceMethods();
+    this.transactionsServiceMethods = new TransactionsServiceMethods();
     this.managerFeedbacksServiceMethods = new ManagerFeedbacksServiceMethods();
   }
 }

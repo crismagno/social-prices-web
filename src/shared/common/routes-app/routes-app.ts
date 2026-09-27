@@ -7,6 +7,7 @@ const Urls = {
   SETTINGS: "/settings",
   NOTIFICATIONS: "/notifications",
   SUPPORT: "/support",
+  TRANSACTIONS: "/transactions",
   VALIDATE_SIGN_IN_CODE: "/validate-sign-in-code",
   VALIDATE_SIGN_IN_EMPLOYEE_CODE: "/validate-sign-in-employee-code",
   RECOVER_PASSWORD: "/recover-password",

@@ -8,6 +8,7 @@ import {
   BellOutlined,
   BlockOutlined,
   CustomerServiceOutlined,
+  DollarOutlined,
   HomeOutlined,
   InboxOutlined,
   SettingOutlined,
@@ -115,6 +116,18 @@ export const useSidebarMenuItems = (
     );
   }
 
+  // Finances are hidden for the lowest employee level (the API refuses it too).
+  const transactionsItems: MenuItem[] =
+    employee?.level !== EmployeesEnum.Level.EMPLOYEE
+      ? [
+          getItem(
+            t("navigation.transactions"),
+            Urls.TRANSACTIONS,
+            <DollarOutlined />,
+          ),
+        ]
+      : [];
+
   const items: MenuItem[] = [
     getItem(t("navigation.home"), Urls.DASHBOARD, <HomeOutlined />),
     getItem(notificationsLabel, Urls.NOTIFICATIONS, notificationsIcon),
@@ -142,6 +155,7 @@ export const useSidebarMenuItems = (
         ),
       ],
     ),
+    ...transactionsItems,
     getItem(
       t("navigation.general"),
       SidebarMenuKeys.GENERAL,
@@ -158,6 +172,7 @@ export const useSidebarMenuItems = (
     Urls.NOTIFICATIONS,
     Urls.SETTINGS,
     Urls.SUPPORT,
+    Urls.TRANSACTIONS,
     Urls.STORES,
     Urls.CUSTOMERS,
     Urls.PRODUCTS,
