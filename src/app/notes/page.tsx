@@ -30,9 +30,9 @@ import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";
 import { useFindStoresByUser } from "../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../tags/useFindTagsByType";
 import { NoteDetailDrawer } from "./components/NoteDetailDrawer/NoteDetailDrawer";
-import { NoteViewDrawer } from "./components/NoteViewDrawer/NoteViewDrawer";
 import { NotesCalendar } from "./components/NotesCalendar/NotesCalendar";
 import { NotesFilters } from "./components/NotesFilters/NotesFilters";
+import { NoteViewDrawer } from "./components/NoteViewDrawer/NoteViewDrawer";
 import { useCustomersByIds } from "./useCustomersByIds";
 import { useFindNotesByUserTableState } from "./useFindNotesByUserTableState";
 import { useNotesCalendarMarkers } from "./useNotesCalendarMarkers";
@@ -174,13 +174,15 @@ export default function NotesPage() {
       subtitle={t("notes.subtitle")}
       hasBackButton
     >
-      <NotesCalendar
-        markers={markers}
-        isLoading={isLoadingCalendar}
-        selectedDate={selectedDate}
-        onSelectDate={setSelectedDate}
-        onPanelChange={setCalendarMonth}
-      />
+      <div className="mt-4">
+        <NotesCalendar
+          markers={markers}
+          isLoading={isLoadingCalendar}
+          selectedDate={selectedDate}
+          onSelectDate={setSelectedDate}
+          onPanelChange={setCalendarMonth}
+        />
+      </div>
 
       <Card
         title={t("notes.title")}
