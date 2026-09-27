@@ -33,7 +33,7 @@ export const FeedbackDetailDrawer: React.FC<Props> = ({
     <Drawer
       open={!!feedback}
       onClose={onClose}
-      width={520}
+      width={600}
       title={t("feedbacks.view")}
       destroyOnHidden
       footer={
