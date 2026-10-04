@@ -1,45 +1,77 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import {
+  useMemo,
+  useState,
+} from 'react';
 
-import { App, Button, Card, Checkbox, Popconfirm, Tag, Tooltip } from "antd";
-import dayjs, { Dayjs } from "dayjs";
-import moment from "moment";
+import {
+  App,
+  Button,
+  Card,
+  Checkbox,
+  Popconfirm,
+  Tag,
+  Tooltip,
+} from 'antd';
+import dayjs, { Dayjs } from 'dayjs';
+import moment from 'moment';
 
 import {
   DeleteOutlined,
   EditOutlined,
   EyeOutlined,
   PlusOutlined,
-} from "@ant-design/icons";
+  SearchOutlined,
+} from '@ant-design/icons';
 
-import handleClientError from "../../components/common/HandleClientError/HandleClientError";
-import { TagCategoriesCustomAntd } from "../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
-import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
-import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
-import Layout from "../../components/template/Layout/Layout";
-import useLanguageData from "../../data/context/language/useLanguageData";
-import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
-import { ICategory } from "../../shared/business/categories/categories.interface";
-import CategoriesEnum from "../../shared/business/categories/categories.enum";
-import { INote } from "../../shared/business/notes/note.interface";
-import NotesEnum from "../../shared/business/notes/notes.enum";
-import { INoteFilters } from "../../shared/business/notes/notes.types";
-import { ITag } from "../../shared/business/tags/tags.interface";
-import TagsEnum from "../../shared/business/tags/tags.enum";
-import DatesEnum from "../../shared/utils/dates/dates.enum";
-import { createTableState } from "../../shared/utils/table/table-state";
-import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
-import { useFindCategoriesByType } from "../categories/useFindCategoriesByType";
-import { useFindStoresByUser } from "../stores/useFindStoresByUser";
-import { useFindTagsByType } from "../tags/useFindTagsByType";
-import { NoteDetailDrawer } from "./components/NoteDetailDrawer/NoteDetailDrawer";
-import { NotesCalendar } from "./components/NotesCalendar/NotesCalendar";
-import { NotesFilters } from "./components/NotesFilters/NotesFilters";
-import { NoteViewDrawer } from "./components/NoteViewDrawer/NoteViewDrawer";
-import { useCustomersByIds } from "./useCustomersByIds";
-import { useFindNotesByUserTableState } from "./useFindNotesByUserTableState";
-import { useNotesCalendarMarkers } from "./useNotesCalendarMarkers";
+import handleClientError
+  from '../../components/common/HandleClientError/HandleClientError';
+import {
+  TagCategoriesCustomAntd,
+} from '../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd';
+import {
+  TagStoresCustomAntd,
+} from '../../components/common/TagStoresCustomAntd/TagStoresCustomAntd';
+import {
+  TagTagsCustomAntd,
+} from '../../components/common/TagTagsCustomAntd/TagTagsCustomAntd';
+import TableCustomAntd2
+  from '../../components/custom/antd/TableCustomAntd2/TableCustomAntd2';
+import Layout from '../../components/template/Layout/Layout';
+import useLanguageData from '../../data/context/language/useLanguageData';
+import {
+  serviceMethodsInstance,
+} from '../../services/social-prices-api/service-methods';
+import CategoriesEnum from '../../shared/business/categories/categories.enum';
+import {
+  ICategory,
+} from '../../shared/business/categories/categories.interface';
+import { INote } from '../../shared/business/notes/note.interface';
+import NotesEnum from '../../shared/business/notes/notes.enum';
+import { INoteFilters } from '../../shared/business/notes/notes.types';
+import { IStore } from '../../shared/business/stores/stores.interface';
+import TagsEnum from '../../shared/business/tags/tags.enum';
+import { ITag } from '../../shared/business/tags/tags.interface';
+import DatesEnum from '../../shared/utils/dates/dates.enum';
+import { createTableState } from '../../shared/utils/table/table-state';
+import {
+  ITableStateRequest,
+} from '../../shared/utils/table/table-state.interface';
+import { useFindCategoriesByType } from '../categories/useFindCategoriesByType';
+import {
+  SelectCustomer,
+} from '../sales/create/components/SelectCustomer/SelectCustomer';
+import { useFindStoresByUser } from '../stores/useFindStoresByUser';
+import { useFindTagsByType } from '../tags/useFindTagsByType';
+import {
+  NoteDetailDrawer,
+} from './components/NoteDetailDrawer/NoteDetailDrawer';
+import { NotesCalendar } from './components/NotesCalendar/NotesCalendar';
+import { NoteViewDrawer } from './components/NoteViewDrawer/NoteViewDrawer';
+import { useCustomersByIds } from './useCustomersByIds';
+import { useFindNotesByUserTableState } from './useFindNotesByUserTableState';
+import { useNotesCalendarMarkers } from './useNotesCalendarMarkers';
 
 export default function NotesPage() {
   const { t } = useLanguageData();
@@ -54,17 +86,13 @@ export default function NotesPage() {
     ITableStateRequest<INote> | undefined
   >(createTableState({ sort: { field: "date", order: "descend" } }));
 
-  const [filters, setFilters] = useState<INoteFilters>({});
-
   const [calendarMonth, setCalendarMonth] = useState<Dayjs>(dayjs());
 
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
 
-  // The grid's own column headers (Tags/Categories) let the table filter
-  // itself via TableCustomAntd2, which lands in `tableStateRequest.filters`
-  // separately from the top filter bar's `filters` state. Both are merged
-  // here — a column header selection wins over the bar for the same field —
-  // so neither source silently loses to the other.
+  // Every filter lives in the grid's column headers (TableCustomAntd2), which
+  // land in `tableStateRequest.filters`; cleared columns arrive as `null` and
+  // are dropped. The calendar day selection is layered on top.
   const combinedFilters: INoteFilters = useMemo(() => {
     const dayFilter: INoteFilters = selectedDate
       ? {
@@ -75,12 +103,14 @@ export default function NotesPage() {
         }
       : {};
 
-    return {
-      ...filters,
-      ...(tableStateRequest?.filters as INoteFilters | undefined),
-      ...dayFilter,
-    };
-  }, [filters, tableStateRequest?.filters, selectedDate]);
+    const columnFilters = Object.fromEntries(
+      Object.entries(tableStateRequest?.filters ?? {}).filter(
+        ([, value]) => value != null,
+      ),
+    ) as INoteFilters;
+
+    return { ...columnFilters, ...dayFilter };
+  }, [tableStateRequest?.filters, selectedDate]);
 
   const gridRequest = useMemo(
     () => ({ ...tableStateRequest, filters: combinedFilters }),
@@ -140,10 +170,10 @@ export default function NotesPage() {
   const visibleCustomerIds: string[] = useMemo(
     () => [
       ...notes.flatMap((note) => note.customerIds),
-      ...(filters.customerIds ?? []),
+      ...(combinedFilters.customerIds ?? []),
       ...(viewedNote?.customerIds ?? []),
     ],
-    [notes, filters.customerIds, viewedNote],
+    [notes, combinedFilters.customerIds, viewedNote],
   );
 
   const customersById: Record<string, string> =
@@ -212,14 +242,6 @@ export default function NotesPage() {
           </Button>
         }
       >
-        <NotesFilters
-          filters={filters}
-          onChange={setFilters}
-          tags={tags}
-          categories={categories}
-          stores={stores}
-        />
-
         {selectedDate && (
           <div className="mb-4">
             <Tag closable onClose={() => setSelectedDate(null)} color="blue">
@@ -284,6 +306,10 @@ export default function NotesPage() {
               dataIndex: "status",
               key: "status",
               align: "center",
+              filters: Object.values(NotesEnum.Status).map((status) => ({
+                text: t(NotesEnum.StatusLabels[status]),
+                value: status,
+              })),
               render: (status: NotesEnum.Status) => (
                 <Tag color={NotesEnum.StatusColors[status]}>
                   {t(NotesEnum.StatusLabels[status])}
@@ -320,13 +346,48 @@ export default function NotesPage() {
               ),
             },
             {
+              title: t("notes.stores"),
+              dataIndex: "storeIds",
+              key: "storeIds",
+              align: "center",
+              filterSearch: true,
+              filters: stores?.map((store: IStore) => ({
+                text: store.name,
+                value: store._id,
+              })),
+              render: (storeIds: string[]) =>
+                storeIds?.length ? (
+                  <TagStoresCustomAntd stores={stores} storeIds={storeIds} />
+                ) : (
+                  "-"
+                ),
+            },
+            {
               title: t("notes.customers"),
               dataIndex: "customerIds",
               key: "customerIds",
+              filterDropdown: ({ selectedKeys, setSelectedKeys, confirm }) => (
+                <div className="p-2 w-64">
+                  <SelectCustomer
+                    mode="multiple"
+                    value={selectedKeys as string[]}
+                    onSelectCustomerIds={(ids) => {
+                      setSelectedKeys(ids);
+                      confirm({ closeDropdown: false });
+                    }}
+                    style={{ width: "100%" }}
+                  />
+                </div>
+              ),
+              filterIcon: (filtered: boolean) => (
+                <SearchOutlined
+                  style={{ color: filtered ? "#1677ff" : undefined }}
+                />
+              ),
               render: (ids: string[]) =>
                 ids?.length
                   ? ids.map((id) => (
-                      <Tag key={id}>{customersById[id] ?? id}</Tag>
+                      <span key={id}>{customersById[id] ?? id}</span>
                     ))
                   : "-",
             },

@@ -500,6 +500,9 @@
     "paymentNote": "Nota sobre o pagamento"
   },
   "customers": {
+    "filterName": "Filtrar por nome",
+    "filterUniqName": "Filtrar por nome único",
+    "filterEmail": "Filtrar por e-mail",
     "title": "Clientes",
     "manageMyCustomers": "Gerenciar Meus Clientes",
     "customerName": "Nome do Cliente",

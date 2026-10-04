@@ -20,6 +20,7 @@ import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import { PhoneNumbersTag } from "../../components/common/PhoneNumbersTag/PhoneNumbersTag";
 import { TagTagsCustomAntd } from "../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import { UploadFilesDrawer } from "../../components/common/UploadFilesDrawer/UploadFilesDrawer";
+import { getColumnTextSearchProps } from "../../components/custom/antd/ColumnTextSearch/columnTextSearch";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
 import { FeatureUsageBadge } from "../../components/common/FeatureUsageBadge/FeatureUsageBadge";
@@ -174,6 +175,7 @@ export default function CustomersPage() {
               key: "name",
               align: "center",
               sorter: true,
+              ...getColumnTextSearchProps<ICustomer>(t, t("customers.filterName")),
               render: (name: string | null, customer: ICustomer) => {
                 const identifiers = [
                   { label: t("common.cpf"), value: customer.cpf },
@@ -209,6 +211,10 @@ export default function CustomersPage() {
               key: "uniqName",
               sorter: true,
               align: "center",
+              ...getColumnTextSearchProps<ICustomer>(
+                t,
+                t("customers.filterUniqName"),
+              ),
             },
             {
               title: t("common.email"),
@@ -216,6 +222,10 @@ export default function CustomersPage() {
               key: "email",
               sorter: true,
               align: "center",
+              ...getColumnTextSearchProps<ICustomer>(
+                t,
+                t("customers.filterEmail"),
+              ),
               render: (email: string) => (
                 <a href={`mailto:${email}`} className="text-blue-500">
                   {email}
