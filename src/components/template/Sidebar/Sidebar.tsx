@@ -58,13 +58,13 @@ const Sidebar: React.FC<Props> = ({}) => {
     <>
       <aside
         className={`${isCollapsed ? "w-20" : "w-64"} shrink-0 sticky top-0
-          h-screen overflow-y-auto overflow-x-hidden z-40
-          flex flex-col justify-between
+          h-screen overflow-hidden z-40
+          flex flex-col
           ${isTransitionEnabled ? "transition-all duration-200" : ""}
           shadow-lg shadow-slate-300 dark:shadow-slate-900
           bg-white dark:bg-gray-800 dark:text-white`}
       >
-        <div>
+        <div className="shrink-0">
           <div
             className={`relative flex items-center justify-center px-2 py-3 ${
               isCollapsed ? "flex-col gap-2" : "flex-row"
@@ -135,7 +135,9 @@ const Sidebar: React.FC<Props> = ({}) => {
               )}
             </Link>
           </div>
+        </div>
 
+        <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
           <Menu
             mode="inline"
             theme={isDark ? "dark" : "light"}
@@ -152,7 +154,7 @@ const Sidebar: React.FC<Props> = ({}) => {
         </div>
 
         <div
-          className="flex flex-col items-center gap-3 p-3
+          className="shrink-0 flex flex-col items-center gap-3 p-3
             border-t border-gray-100 dark:border-gray-700"
         >
           <Tooltip title={t("sales.createSaleBtnCamelCase")}>
