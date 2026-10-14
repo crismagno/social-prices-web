@@ -2048,9 +2048,11 @@ export default function CreateSalePage() {
               <Divider style={{ marginTop: 15, marginBottom: 5 }} />
               <Col xs={24}>
                 <Button
-                  type="success"
+                  type="primary"
+                  size="large"
                   disabled={!isEnableCreateSale}
-                  className="w-full text-center mt-4 h-14 font-bold text-xl bg-green-600 hover:bg-green-700 rounded-lg shadow-lg "
+                  className="font-bold shadow-lg !bg-green-600 hover:!bg-green-700
+                    disabled:!bg-gray-200 disabled:!text-gray-400 disabled:!shadow-none w-full mt-2"
                   onClick={() => callHandleSubmit(true)}
                   loading={isSubmitting}
                   icon={<CheckCircleOutlined />}

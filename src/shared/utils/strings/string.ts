@@ -30,6 +30,10 @@ export const createAddressName = (
   address: IAddress | any,
   t: (key: string) => string,
 ): string => {
+  if (!address) {
+    return "";
+  }
+
   let addressName: string = "";
 
   if (address.countryCode || address.country) {

@@ -10,6 +10,7 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   ShoppingCartOutlined,
+  ThunderboltOutlined,
 } from "@ant-design/icons";
 
 import useAppData from "../../../data/context/app/useAppData";
@@ -19,6 +20,7 @@ import ThemeEnum from "../../../shared/common/enums/theme.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import { getUserName } from "../../../shared/utils/strings/string";
 import Avatar from "../../common/Avatar/Avatar";
+import { FastSaleDrawer } from "../../common/FastSaleDrawer/FastSaleDrawer";
 import { IconLogout } from "../../common/icons/icons";
 import { Logo1 } from "../../common/Logo/Logo1";
 import { EmployeeProfileButton } from "../EmployeeProfileButton/EmployeeProfileButton";
@@ -33,6 +35,8 @@ const Sidebar: React.FC<Props> = ({}) => {
   const { user } = useAuthData();
 
   const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
+
+  const [showFastSale, setShowFastSale] = useState<boolean>(false);
 
   const {
     theme: { theme },
@@ -157,6 +161,28 @@ const Sidebar: React.FC<Props> = ({}) => {
           className="shrink-0 flex flex-col items-center gap-3 p-3
             border-t border-gray-100 dark:border-gray-700"
         >
+          <Tooltip title={t("sales.fastSale")}>
+            <button
+              type="button"
+              onClick={() => setShowFastSale(true)}
+              className={`flex items-center justify-center gap-2 cursor-pointer
+                text-white transition-all duration-200 hover:scale-105
+                bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500
+                shadow-lg shadow-amber-500/40
+                ${
+                  isCollapsed
+                    ? "w-11 h-11 rounded-full"
+                    : "w-full h-11 rounded-lg px-3"
+                }`}
+            >
+              <ThunderboltOutlined className="text-lg" />
+
+              {!isCollapsed && (
+                <span className="text-sm truncate">{t("sales.fastSale")}</span>
+              )}
+            </button>
+          </Tooltip>
+
           <Tooltip title={t("sales.createSaleBtnCamelCase")}>
             <Link
               href={Urls.SALES_CREATE}
@@ -201,6 +227,11 @@ const Sidebar: React.FC<Props> = ({}) => {
           </button>
         </div>
       </aside>
+
+      <FastSaleDrawer
+        open={showFastSale}
+        onClose={() => setShowFastSale(false)}
+      />
 
       <Modal
         open={showLogoutModal}
