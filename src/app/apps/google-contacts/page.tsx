@@ -1,8 +1,10 @@
 "use client";
 
-import { Key, useMemo, useState } from "react";
-
-import { useSearchParams } from "next/navigation";
+import {
+  Key,
+  useMemo,
+  useState,
+} from 'react';
 
 import {
   Alert,
@@ -16,27 +18,35 @@ import {
   Spin,
   Table,
   Tag,
-} from "antd";
-import type { ColumnsType } from "antd/es/table";
-import dayjs from "dayjs";
+} from 'antd';
+import type { ColumnsType } from 'antd/es/table';
+import dayjs from 'dayjs';
+import { useSearchParams } from 'next/navigation';
 
-import { SaveOutlined, SyncOutlined } from "@ant-design/icons";
+import {
+  SaveOutlined,
+  SyncOutlined,
+} from '@ant-design/icons';
 
-import GoogleColorIcon from "../../../components/common/GoogleColorIcon/GoogleColorIcon";
-import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
-import Layout from "../../../components/template/Layout/Layout";
-import useAppData from "../../../data/context/app/useAppData";
-import useAuthData from "../../../data/context/auth/useAuthData";
-import useLanguageData from "../../../data/context/language/useLanguageData";
-import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
-import AppsEnum from "../../../shared/business/apps/apps.enum";
+import GoogleColorIcon
+  from '../../../components/common/GoogleColorIcon/GoogleColorIcon';
+import handleClientError
+  from '../../../components/common/HandleClientError/HandleClientError';
+import Layout from '../../../components/template/Layout/Layout';
+import useAppData from '../../../data/context/app/useAppData';
+import useAuthData from '../../../data/context/auth/useAuthData';
+import useLanguageData from '../../../data/context/language/useLanguageData';
+import {
+  serviceMethodsInstance,
+} from '../../../services/social-prices-api/service-methods';
+import AppsEnum from '../../../shared/business/apps/apps.enum';
 import {
   IAppCatalogItem,
   IAppContactRow,
   IAppImportResult,
   IAppSyncPreview,
-} from "../../../shared/business/apps/apps.types";
-import EmployeesEnum from "../../../shared/business/employees/employees.enum";
+} from '../../../shared/business/apps/apps.types';
+import EmployeesEnum from '../../../shared/business/employees/employees.enum';
 
 type Busy = "connect" | "sync" | "save" | "disconnect" | null;
 
@@ -439,7 +449,7 @@ export default function GoogleContactsAppPage() {
 
   return (
     <Layout title={t("apps.google.title")} hasBackButton>
-      {renderBody()}
+      <div className="mt-4">{renderBody()}</div>
     </Layout>
   );
 }
