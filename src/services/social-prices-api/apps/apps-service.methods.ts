@@ -3,7 +3,7 @@
 import AppsEnum from "../../../shared/business/apps/apps.enum";
 import {
   IAppCatalogItem,
-  IAppImportResult,
+  IAppImportResponse,
   IAppSyncPreview,
 } from "../../../shared/business/apps/apps.types";
 import ServiceMethodsBase from "../service-methods.base";
@@ -58,8 +58,8 @@ export default class AppsServiceMethods extends ServiceMethodsBase {
   public async importContacts(
     appId: AppsEnum.App,
     externalIds: string[]
-  ): Promise<IAppImportResult> {
-    const response = await this._fetchAxios.post<IAppImportResult>(
+  ): Promise<IAppImportResponse> {
+    const response = await this._fetchAxios.post<IAppImportResponse>(
       `${this._socialPricesApiV1}${AppsServiceEnum.Methods.IMPORT.replace(":appId", appId)}`,
       { externalIds },
       {

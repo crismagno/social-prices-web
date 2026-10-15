@@ -1144,7 +1144,9 @@
         "existing": "Já é cliente - será vinculado",
         "linked": "Já vinculado",
         "selectAll": "Selecionar todos"
-      }
+      },
+      "fetchedAt": "Contatos carregados em {time}",
+      "cooldown": "Você poderá sincronizar novamente em {time}."
     },
     "errors": {
       "access_denied": "Você cancelou o login com o Google.",

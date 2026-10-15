@@ -2,6 +2,7 @@
 
 import {
   Key,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -47,6 +48,13 @@ import {
   IAppSyncPreview,
 } from '../../../shared/business/apps/apps.types';
 import EmployeesEnum from '../../../shared/business/employees/employees.enum';
+import {
+  clearCachedContacts,
+  formatCountdown,
+  getCooldownRemainingMs,
+  readCachedContacts,
+  writeCachedContacts,
+} from '../../../shared/utils/apps-contacts-cache/apps-contacts-cache';
 
 type Busy = "connect" | "sync" | "save" | "disconnect" | null;
 
@@ -57,7 +65,7 @@ export default function GoogleContactsAppPage() {
 
   const { message } = App.useApp();
 
-  const { employee } = useAuthData();
+  const { employee, user } = useAuthData();
 
   const {
     apps: { catalog, isLoadingApps, fetchApps },
@@ -74,6 +82,56 @@ export default function GoogleContactsAppPage() {
   const [search, setSearch] = useState<string>("");
 
   const [lastResult, setLastResult] = useState<IAppImportResult | null>(null);
+
+  // When the list came from the provider; the same list is reused from the
+  // browser until 10 minutes pass.
+  const [fetchedAt, setFetchedAt] = useState<number | null>(null);
+
+  const [now, setNow] = useState<number>(() => Date.now());
+
+  const userId: string | undefined = user?._id;
+
+  const cooldownRemainingMs: number = getCooldownRemainingMs(fetchedAt, now);
+
+  // Show the saved list right away instead of asking the provider again.
+  useEffect(() => {
+    if (!userId) {
+      return;
+    }
+
+    let isCancelled: boolean = false;
+
+    readCachedContacts(userId, APP_ID).then((cached) => {
+      if (cached && !isCancelled) {
+        setPreview(cached.preview);
+        setFetchedAt(cached.fetchedAt);
+        setNow(Date.now());
+      }
+    });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [userId]);
+
+  // Ticks only while the button is locked, to count down and then release it.
+  useEffect(() => {
+    if (fetchedAt === null || getCooldownRemainingMs(fetchedAt, Date.now()) === 0) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      const current: number = Date.now();
+
+      setNow(current);
+
+      if (getCooldownRemainingMs(fetchedAt, current) === 0) {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [fetchedAt]);
 
   const item: IAppCatalogItem | undefined = catalog.find(
     (app: IAppCatalogItem) => app.id === APP_ID,
@@ -112,7 +170,18 @@ export default function GoogleContactsAppPage() {
     const response =
       await serviceMethodsInstance.appsServiceMethods.sync(APP_ID);
 
+    const fetchedNow: number = Date.now();
+
     setPreview(response);
+    setFetchedAt(fetchedNow);
+    setNow(fetchedNow);
+
+    if (userId) {
+      await writeCachedContacts(userId, APP_ID, {
+        preview: response,
+        fetchedAt: fetchedNow,
+      });
+    }
   };
 
   const handleConnect = async (): Promise<void> => {
@@ -130,6 +199,10 @@ export default function GoogleContactsAppPage() {
   };
 
   const handleSync = async (): Promise<void> => {
+    if (cooldownRemainingMs > 0) {
+      return;
+    }
+
     try {
       setBusy("sync");
 
@@ -161,8 +234,29 @@ export default function GoogleContactsAppPage() {
 
       message.success(`${t("apps.google.grid.saved")} ${formatResult(result)}`);
 
-      // What was just saved is now "already a customer".
-      await loadContacts();
+      // What was just saved is now linked. The cached list is updated in place:
+      // asking Google again is not allowed until the 10 minutes pass.
+      if (preview) {
+        const saved: Set<string> = new Set(result.savedExternalIds);
+
+        const updated: IAppSyncPreview = {
+          ...preview,
+          contacts: preview.contacts.map((contact: IAppContactRow) =>
+            saved.has(contact.externalId)
+              ? { ...contact, status: AppsEnum.ContactStatus.LINKED }
+              : contact,
+          ),
+        };
+
+        setPreview(updated);
+
+        if (userId && fetchedAt !== null) {
+          await writeCachedContacts(userId, APP_ID, {
+            preview: updated,
+            fetchedAt,
+          });
+        }
+      }
 
       await fetchApps();
     } catch (error: any) {
@@ -182,7 +276,13 @@ export default function GoogleContactsAppPage() {
 
       setPreview(null);
 
+      setFetchedAt(null);
+
       setSelectedKeys([]);
+
+      if (userId) {
+        await clearCachedContacts(userId, APP_ID);
+      }
 
       message.success(t("apps.google.disconnected"));
 
@@ -392,12 +492,34 @@ export default function GoogleContactsAppPage() {
                 />
               )}
 
+              {fetchedAt !== null && (
+                <Space direction="vertical" size={0}>
+                  <span>
+                    {t("apps.google.fetchedAt").replace(
+                      "{time}",
+                      dayjs(fetchedAt).format("DD/MM/YYYY HH:mm"),
+                    )}
+                  </span>
+
+                  {cooldownRemainingMs > 0 && (
+                    <span className="opacity-70">
+                      {t("apps.google.cooldown").replace(
+                        "{time}",
+                        formatCountdown(cooldownRemainingMs),
+                      )}
+                    </span>
+                  )}
+                </Space>
+              )}
+
               <Space>
                 <Button
                   type="primary"
                   icon={<SyncOutlined />}
                   loading={busy === "sync"}
-                  disabled={!canManage || busy !== null}
+                  disabled={
+                    !canManage || busy !== null || cooldownRemainingMs > 0
+                  }
                   onClick={handleSync}
                 >
                   {t("apps.google.sync")}

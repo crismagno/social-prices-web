@@ -1141,7 +1141,9 @@
         "existing": "Customer - will be linked",
         "linked": "Already linked",
         "selectAll": "Select all"
-      }
+      },
+      "fetchedAt": "Contacts loaded on {time}",
+      "cooldown": "You can sync again in {time}."
     },
     "errors": {
       "access_denied": "You cancelled the Google sign-in.",

@@ -39,6 +39,7 @@ import CookiesEnum from '../../../shared/common/cookies/cookies.enum';
 import {
   localStorageMethodsInstance,
 } from '../../../shared/common/local-storage/local-storage-methods';
+import { clearAllCachedContacts } from "../../../shared/utils/apps-contacts-cache/apps-contacts-cache";
 import Urls from '../../../shared/common/routes-app/routes-app';
 import {
   makeRandomCode,
@@ -439,6 +440,9 @@ export const AuthProvider = ({ children }: { children?: any }) => {
       }
 
       _settingSession();
+
+      // Contacts kept in the browser belong to the person who just left.
+      await clearAllCachedContacts();
 
       router.push(Urls.LOGIN);
     } catch (error: any) {

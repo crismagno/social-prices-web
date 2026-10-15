@@ -22,6 +22,12 @@ export interface IAppImportResult {
   finishedAt: string;
 }
 
+// What saving answers: the summary plus which contacts were saved (created or
+// linked), so a cached list can be updated without asking the provider again.
+export interface IAppImportResponse extends IAppImportResult {
+  savedExternalIds: string[];
+}
+
 export interface IAppCatalogItem {
   id: AppsEnum.App;
   enabled: boolean;
