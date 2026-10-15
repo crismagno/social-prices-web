@@ -542,6 +542,7 @@
     "customerCreatedSuccessfully": "Seu cliente foi criado com sucesso!",
     "customerUpdatedSuccessfully": "Seu cliente foi atualizado com sucesso!",
     "customerNotFoundToUpdate": "Cliente não encontrado para atualizar!",
+    "sourceApps": "Apps de origem",
     "customerProfile": "Perfil do Cliente",
     "customerProfileSubtitle": "Perfil do cliente",
     "customerEmailTooltip": "E-mail do cliente, clique para enviar um e-mail",
@@ -1143,10 +1144,16 @@
         "saved": "Contatos salvos.",
         "existing": "Já é cliente - será vinculado",
         "linked": "Já vinculado",
-        "selectAll": "Selecionar todos"
+        "selectAll": "Selecionar todos",
+        "range": "{from}-{to} de {total} itens"
       },
       "fetchedAt": "Contatos carregados em {time}",
-      "cooldown": "Você poderá sincronizar novamente em {time}."
+      "cooldown": "Você poderá sincronizar novamente em {time}.",
+      "limit": {
+        "remaining": "Você ainda pode adicionar {count} clientes novos.",
+        "reached": "O limite de clientes foi atingido, então não é possível adicionar contatos novos. Contatos que já casam com um cliente ainda podem ser vinculados.",
+        "capped": "Só cabem {count} clientes novos no seu limite, então a seleção foi reduzida."
+      }
     },
     "errors": {
       "access_denied": "Você cancelou o login com o Google.",

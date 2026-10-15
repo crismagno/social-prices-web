@@ -13,6 +13,7 @@ import {
 } from "@ant-design/icons";
 
 import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
+import AppIcon from "../../../components/common/AppIcon/AppIcon";
 import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
@@ -196,6 +197,27 @@ export default function CustomerPage() {
 
                     <Descriptions.Item label={t("common.cnpj")}>
                       {customer.cnpj || "-"}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item
+                      label={t("customers.sourceApps")}
+                      span={3}
+                    >
+                      {customer.externalSources?.length ? (
+                        <div className="flex flex-wrap gap-2">
+                          {customer.externalSources.map((source) => (
+                            <Tag
+                              key={source.appId}
+                              className="flex items-center gap-1"
+                            >
+                              <AppIcon app={source.appId} />
+                              {t(`apps.names.${source.appId}`)}
+                            </Tag>
+                          ))}
+                        </div>
+                      ) : (
+                        "-"
+                      )}
                     </Descriptions.Item>
                   </Descriptions>
                 </Col>

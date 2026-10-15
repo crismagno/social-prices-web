@@ -1,17 +1,13 @@
 "use client";
 
-import {
-  Key,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { Key, useEffect, useMemo, useState } from "react";
 
 import {
   Alert,
   App,
   Button,
   Card,
+  Divider,
   Empty,
   Input,
   Popconfirm,
@@ -19,42 +15,41 @@ import {
   Spin,
   Table,
   Tag,
-} from 'antd';
-import type { ColumnsType } from 'antd/es/table';
-import dayjs from 'dayjs';
-import { useSearchParams } from 'next/navigation';
+} from "antd";
+import type { ColumnsType } from "antd/es/table";
+import dayjs from "dayjs";
+import { useSearchParams } from "next/navigation";
 
-import {
-  SaveOutlined,
-  SyncOutlined,
-} from '@ant-design/icons';
+import { SaveOutlined, SyncOutlined } from "@ant-design/icons";
 
-import GoogleColorIcon
-  from '../../../components/common/GoogleColorIcon/GoogleColorIcon';
-import handleClientError
-  from '../../../components/common/HandleClientError/HandleClientError';
-import Layout from '../../../components/template/Layout/Layout';
-import useAppData from '../../../data/context/app/useAppData';
-import useAuthData from '../../../data/context/auth/useAuthData';
-import useLanguageData from '../../../data/context/language/useLanguageData';
-import {
-  serviceMethodsInstance,
-} from '../../../services/social-prices-api/service-methods';
-import AppsEnum from '../../../shared/business/apps/apps.enum';
+import { FeatureUsageBadge } from "../../../components/common/FeatureUsageBadge/FeatureUsageBadge";
+import { useFeaturesUsage } from "../../../components/common/FeatureUsageBadge/useFeaturesUsage";
+import GoogleColorIcon from "../../../components/common/GoogleColorIcon/GoogleColorIcon";
+import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
+import Layout from "../../../components/template/Layout/Layout";
+import useAppData from "../../../data/context/app/useAppData";
+import useAuthData from "../../../data/context/auth/useAuthData";
+import useLanguageData from "../../../data/context/language/useLanguageData";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
+import AppsEnum from "../../../shared/business/apps/apps.enum";
 import {
   IAppCatalogItem,
   IAppContactRow,
   IAppImportResult,
   IAppSyncPreview,
-} from '../../../shared/business/apps/apps.types';
-import EmployeesEnum from '../../../shared/business/employees/employees.enum';
+} from "../../../shared/business/apps/apps.types";
+import EmployeesEnum from "../../../shared/business/employees/employees.enum";
+import {
+  capSelectionToCapacity,
+  countNewSelected,
+} from "../../../shared/utils/apps-contacts-cache/apps-contacts-selection";
 import {
   clearCachedContacts,
   formatCountdown,
   getCooldownRemainingMs,
   readCachedContacts,
   writeCachedContacts,
-} from '../../../shared/utils/apps-contacts-cache/apps-contacts-cache';
+} from "../../../shared/utils/apps-contacts-cache/apps-contacts-cache";
 
 type Busy = "connect" | "sync" | "save" | "disconnect" | null;
 
@@ -79,12 +74,14 @@ export default function GoogleContactsAppPage() {
 
   const [selectedKeys, setSelectedKeys] = useState<Key[]>([]);
 
+  const { usage, refetch: refetchUsage } = useFeaturesUsage();
+
   const [search, setSearch] = useState<string>("");
 
   const [lastResult, setLastResult] = useState<IAppImportResult | null>(null);
 
   // When the list came from the provider; the same list is reused from the
-  // browser until 10 minutes pass.
+  // browser until 20 minutes pass.
   const [fetchedAt, setFetchedAt] = useState<number | null>(null);
 
   const [now, setNow] = useState<number>(() => Date.now());
@@ -116,7 +113,10 @@ export default function GoogleContactsAppPage() {
 
   // Ticks only while the button is locked, to count down and then release it.
   useEffect(() => {
-    if (fetchedAt === null || getCooldownRemainingMs(fetchedAt, Date.now()) === 0) {
+    if (
+      fetchedAt === null ||
+      getCooldownRemainingMs(fetchedAt, Date.now()) === 0
+    ) {
       return;
     }
 
@@ -158,6 +158,47 @@ export default function GoogleContactsAppPage() {
       ),
     );
   }, [preview, search]);
+
+  // How many new customers the plan still allows (null: unlimited or unknown;
+  // the API checks it again on save either way). Linking never uses any.
+  const customersUsage = usage?.customers;
+
+  const remaining: number | null =
+    customersUsage && customersUsage.limit !== null
+      ? Math.max(0, customersUsage.limit - customersUsage.used)
+      : null;
+
+  const allContacts: IAppContactRow[] = preview?.contacts ?? [];
+
+  const newSelectedCount: number = countNewSelected(
+    selectedKeys.map(String),
+    allContacts,
+  );
+
+  const hasNewContacts: boolean = allContacts.some(
+    (contact: IAppContactRow) => contact.status === AppsEnum.ContactStatus.NEW,
+  );
+
+  const exceedsLimit: boolean =
+    remaining !== null && newSelectedCount > remaining;
+
+  // Every way of selecting goes through here, so the limit cannot be passed.
+  const applySelection = (next: Key[]): void => {
+    const capped: string[] = capSelectionToCapacity(
+      selectedKeys.map(String),
+      next.map(String),
+      allContacts,
+      remaining ?? Infinity,
+    );
+
+    if (capped.length < next.length) {
+      message.info(
+        t("apps.google.limit.capped").replace("{count}", String(remaining)),
+      );
+    }
+
+    setSelectedKeys(capped);
+  };
 
   const formatResult = (result: IAppImportResult): string =>
     t("apps.google.importResult")
@@ -235,7 +276,7 @@ export default function GoogleContactsAppPage() {
       message.success(`${t("apps.google.grid.saved")} ${formatResult(result)}`);
 
       // What was just saved is now linked. The cached list is updated in place:
-      // asking Google again is not allowed until the 10 minutes pass.
+      // asking Google again is not allowed until the 20 minutes pass.
       if (preview) {
         const saved: Set<string> = new Set(result.savedExternalIds);
 
@@ -262,6 +303,7 @@ export default function GoogleContactsAppPage() {
     } catch (error: any) {
       handleClientError(error);
     } finally {
+      await refetchUsage();
       setBusy(null);
     }
   };
@@ -358,13 +400,37 @@ export default function GoogleContactsAppPage() {
             />
           )}
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <FeatureUsageBadge feature="customers" usage={customersUsage} />
+
+            {remaining !== null && remaining > 0 && (
+              <span>
+                {t("apps.google.limit.remaining").replace(
+                  "{count}",
+                  String(remaining),
+                )}
+              </span>
+            )}
+          </div>
+
+          {remaining === 0 && hasNewContacts && (
+            <Alert
+              type="warning"
+              showIcon
+              message={t("apps.google.limit.reached")}
+            />
+          )}
+
+          <div className="flex flex-wrap items-center justify-end gap-2">
             <Button
               type="primary"
               icon={<SaveOutlined />}
               loading={busy === "save"}
               disabled={
-                !canManage || busy !== null || selectedKeys.length === 0
+                !canManage ||
+                busy !== null ||
+                selectedKeys.length === 0 ||
+                exceedsLimit
               }
               onClick={handleSave}
             >
@@ -381,7 +447,7 @@ export default function GoogleContactsAppPage() {
             <Button
               disabled={busy !== null}
               onClick={() =>
-                setSelectedKeys(
+                applySelection(
                   filteredContacts
                     .filter(
                       (contact: IAppContactRow) =>
@@ -412,20 +478,32 @@ export default function GoogleContactsAppPage() {
 
           <Table<IAppContactRow>
             rowKey="externalId"
-            size="middle"
             columns={columns}
             dataSource={filteredContacts}
             rowSelection={{
               selectedRowKeys: selectedKeys,
               preserveSelectedRowKeys: true,
-              onChange: (keys: Key[]) => setSelectedKeys(keys),
+              onChange: (keys: Key[]) => applySelection(keys),
               getCheckboxProps: (contact: IAppContactRow) => ({
                 disabled:
                   !canManage ||
-                  contact.status === AppsEnum.ContactStatus.LINKED,
+                  contact.status === AppsEnum.ContactStatus.LINKED ||
+                  // no room left for another new customer
+                  (contact.status === AppsEnum.ContactStatus.NEW &&
+                    remaining !== null &&
+                    newSelectedCount >= remaining &&
+                    !selectedKeys.includes(contact.externalId)),
               }),
             }}
-            pagination={{ defaultPageSize: 20, showSizeChanger: true }}
+            pagination={{
+              defaultPageSize: 20,
+              showSizeChanger: true,
+              showTotal: (total: number, range: [number, number]) =>
+                t("apps.google.grid.range")
+                  .replace("{from}", String(range[0]))
+                  .replace("{to}", String(range[1]))
+                  .replace("{total}", String(total)),
+            }}
             scroll={{ x: "max-content" }}
           />
         </Space>
@@ -458,20 +536,41 @@ export default function GoogleContactsAppPage() {
 
         <Card>
           {item.connected ? (
-            <Space direction="vertical" size="middle">
-              <Space>
-                <Tag color="green">{t("apps.status.connected")}</Tag>
+            <Space direction="vertical" size="middle" className="w-full">
+              {/* Connection: who is connected, and the way out */}
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <Space>
+                  <Tag color="green">{t("apps.status.connected")}</Tag>
 
-                {item.accountLabel && (
-                  <span>
-                    {t("apps.google.connectedAs").replace(
-                      "{account}",
-                      item.accountLabel,
-                    )}
-                  </span>
-                )}
-              </Space>
+                  {item.accountLabel && (
+                    <span>
+                      {t("apps.google.connectedAs").replace(
+                        "{account}",
+                        item.accountLabel,
+                      )}
+                    </span>
+                  )}
+                </Space>
 
+                <Popconfirm
+                  title={t("apps.google.disconnectConfirm")}
+                  onConfirm={handleDisconnect}
+                  disabled={!canManage}
+                >
+                  <Button
+                    type="primary"
+                    danger
+                    loading={busy === "disconnect"}
+                    disabled={!canManage || busy !== null}
+                  >
+                    {t("apps.google.disconnect")}
+                  </Button>
+                </Popconfirm>
+              </div>
+
+              <Divider className="my-0" />
+
+              {/* Sync: last run, what the list holds, and the button */}
               <span>
                 {t("apps.google.lastSync")}:{" "}
                 {item.lastSyncAt
@@ -492,27 +591,29 @@ export default function GoogleContactsAppPage() {
                 />
               )}
 
-              {fetchedAt !== null && (
-                <Space direction="vertical" size={0}>
-                  <span>
-                    {t("apps.google.fetchedAt").replace(
-                      "{time}",
-                      dayjs(fetchedAt).format("DD/MM/YYYY HH:mm"),
-                    )}
-                  </span>
+              <div className="flex flex-wrap items-end justify-between gap-2">
+                <div>
+                  {fetchedAt !== null && (
+                    <Space direction="vertical" size={0}>
+                      <span>
+                        {t("apps.google.fetchedAt").replace(
+                          "{time}",
+                          dayjs(fetchedAt).format("DD/MM/YYYY HH:mm"),
+                        )}
+                      </span>
 
-                  {cooldownRemainingMs > 0 && (
-                    <span className="opacity-70">
-                      {t("apps.google.cooldown").replace(
-                        "{time}",
-                        formatCountdown(cooldownRemainingMs),
+                      {cooldownRemainingMs > 0 && (
+                        <span className="opacity-70">
+                          {t("apps.google.cooldown").replace(
+                            "{time}",
+                            formatCountdown(cooldownRemainingMs),
+                          )}
+                        </span>
                       )}
-                    </span>
+                    </Space>
                   )}
-                </Space>
-              )}
+                </div>
 
-              <Space>
                 <Button
                   type="primary"
                   icon={<SyncOutlined />}
@@ -524,22 +625,7 @@ export default function GoogleContactsAppPage() {
                 >
                   {t("apps.google.sync")}
                 </Button>
-
-                <Popconfirm
-                  title={t("apps.google.disconnectConfirm")}
-                  onConfirm={handleDisconnect}
-                  disabled={!canManage}
-                >
-                  <Button
-                    type="primary"
-                    danger
-                    loading={busy === "disconnect"}
-                    disabled={!canManage || busy !== null}
-                  >
-                    {t("apps.google.disconnect")}
-                  </Button>
-                </Popconfirm>
-              </Space>
+              </div>
             </Space>
           ) : (
             <Space direction="vertical" size="middle">

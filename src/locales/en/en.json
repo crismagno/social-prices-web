@@ -539,6 +539,7 @@
     "customerCreatedSuccessfully": "Your customer has been created successfully!",
     "customerUpdatedSuccessfully": "Your customer has been updated successfully!",
     "customerNotFoundToUpdate": "Customer not found to update!",
+    "sourceApps": "Source apps",
     "customerProfile": "Customer Profile",
     "customerProfileSubtitle": "Customer profile of",
     "customerEmailTooltip": "Customer email, click to send an email",
@@ -1140,10 +1141,16 @@
         "saved": "Contacts saved.",
         "existing": "Customer - will be linked",
         "linked": "Already linked",
-        "selectAll": "Select all"
+        "selectAll": "Select all",
+        "range": "{from}-{to} of {total} items"
       },
       "fetchedAt": "Contacts loaded on {time}",
-      "cooldown": "You can sync again in {time}."
+      "cooldown": "You can sync again in {time}.",
+      "limit": {
+        "remaining": "You can still add {count} new customers.",
+        "reached": "Your customers limit was reached, so new contacts cannot be added. Contacts that already match a customer can still be linked.",
+        "capped": "Only {count} new customers fit in your limit, so the selection was trimmed."
+      }
     },
     "errors": {
       "access_denied": "You cancelled the Google sign-in.",

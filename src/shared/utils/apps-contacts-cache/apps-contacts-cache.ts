@@ -7,12 +7,12 @@ import {
 } from "../../business/apps/apps.types";
 
 // How long the user must wait before asking the provider for the list again.
-export const CONTACTS_SYNC_COOLDOWN_MS: number = 10 * 60 * 1000;
+export const CONTACTS_SYNC_COOLDOWN_MS: number = 20 * 60 * 1000;
 
 export interface ICachedContacts {
   preview: IAppSyncPreview;
   // When the list was fetched from the provider (epoch ms). Saving customers
-  // changes the rows but never this, so the 10 minutes keep counting.
+  // changes the rows but never this, so the 20 minutes keep counting.
   fetchedAt: number;
 }
 
