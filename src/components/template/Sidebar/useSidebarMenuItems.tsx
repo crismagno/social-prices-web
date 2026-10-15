@@ -4,6 +4,7 @@ import { Badge } from "antd";
 import { usePathname } from "next/navigation";
 
 import {
+  ApiOutlined,
   AppstoreOutlined,
   BellOutlined,
   BlockOutlined,
@@ -70,6 +71,7 @@ export const useSidebarMenuItems = (
       countNotificationNotSeen,
       isLoadingCountNotificationNotSeen,
     },
+    apps: { hasEnabledApps },
   } = useAppData();
 
   const pathname: string = usePathname() ?? "";
@@ -129,11 +131,17 @@ export const useSidebarMenuItems = (
         ]
       : [];
 
+  // Apps is invisible until the manager enables at least one app for the user.
+  const appsItems: MenuItem[] = hasEnabledApps
+    ? [getItem(t("navigation.apps"), Urls.APPS, <ApiOutlined />)]
+    : [];
+
   const items: MenuItem[] = [
     getItem(t("navigation.home"), Urls.DASHBOARD, <HomeOutlined />),
     getItem(notificationsLabel, Urls.NOTIFICATIONS, notificationsIcon),
     getItem(t("navigation.settings"), Urls.SETTINGS, <SettingOutlined />),
     getItem(t("navigation.notes"), Urls.NOTES, <CalendarOutlined />),
+    ...appsItems,
     getItem(t("navigation.stores"), SidebarMenuKeys.STORES, <ShopOutlined />, [
       getItem(t("navigation.stores"), Urls.STORES, <ShopOutlined />),
       getItem(t("navigation.customers"), Urls.CUSTOMERS, <TeamOutlined />),
@@ -176,6 +184,7 @@ export const useSidebarMenuItems = (
     Urls.SUPPORT,
     Urls.TRANSACTIONS,
     Urls.NOTES,
+    Urls.APPS,
     Urls.STORES,
     Urls.CUSTOMERS,
     Urls.PRODUCTS,

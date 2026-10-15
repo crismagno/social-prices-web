@@ -1,5 +1,6 @@
 "use client";
 
+import AppsEnum from "../../../shared/business/apps/apps.enum";
 import { IUserLimits } from "../../../shared/business/users/user-limits.interface";
 import IUser from "../../../shared/business/users/user.interface";
 import {
@@ -63,6 +64,24 @@ export default class ManagerUsersServiceMethods extends ServiceMethodsBase {
     const response = await this._fetchAxios.patch<IUser>(
       `${this._socialPricesApiV1}${ManagerUsersServiceEnum.Methods.UPDATE_LIMITS.replace(":id", userId)}`,
       limits,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatManagerAuthorizationWithToken(),
+        },
+      }
+    );
+
+    return response.data;
+  }
+
+  public async updateApps(
+    userId: string,
+    enabledApps: AppsEnum.App[]
+  ): Promise<IUser> {
+    const response = await this._fetchAxios.patch<IUser>(
+      `${this._socialPricesApiV1}${ManagerUsersServiceEnum.Methods.UPDATE_APPS.replace(":id", userId)}`,
+      { enabledApps },
       {
         headers: {
           "Content-Type": "application/json",

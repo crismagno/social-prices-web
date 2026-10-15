@@ -4,6 +4,7 @@ namespace ManagerUsersServiceEnum {
     FIND_BY_ID = "/manager-users/:id",
     UPDATE = "/manager-users/:id",
     UPDATE_LIMITS = "/manager-users/:id/limits",
+    UPDATE_APPS = "/manager-users/:id/apps",
   }
 }
 

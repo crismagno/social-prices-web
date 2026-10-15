@@ -6,6 +6,7 @@ import {
   App,
   Button,
   Card,
+  Checkbox,
   Form,
   Input,
   InputNumber,
@@ -20,6 +21,7 @@ import ManagerLayout from "../../../../components/template/ManagerLayout/Manager
 import useLanguageData from "../../../../data/context/language/useLanguageData";
 import useManagerAuthData from "../../../../data/context/managerAuth/useManagerAuthData";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
+import AppsEnum from "../../../../shared/business/apps/apps.enum";
 import ManagersEnum from "../../../../shared/business/managers/managers.enum";
 import {
   FEATURE_KEYS,
@@ -45,6 +47,8 @@ export default function ManagerUserDetailPage() {
 
   const limitsValues = Form.useWatch([], limitsForm);
 
+  const [enabledApps, setEnabledApps] = useState<AppsEnum.App[]>([]);
+
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const canEdit: boolean =
@@ -68,6 +72,8 @@ export default function ManagerUserDetailPage() {
     });
 
     limitsForm.setFieldsValue(user.limits?.features ?? {});
+
+    setEnabledApps(user.enabledApps ?? []);
   }, [user, userForm, limitsForm]);
 
   const saveUser = async (values: any): Promise<void> => {
@@ -85,6 +91,29 @@ export default function ManagerUserDetailPage() {
       });
 
       message.success(t("manager.userSaved"));
+
+      await refetch();
+    } catch (error: any) {
+      handleClientError(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const saveApps = async (): Promise<void> => {
+    if (!userId) {
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+
+      await serviceMethodsInstance.managerUsersServiceMethods.updateApps(
+        userId,
+        enabledApps,
+      );
+
+      message.success(t("apps.manager.saved"));
 
       await refetch();
     } catch (error: any) {
@@ -270,6 +299,40 @@ export default function ManagerUserDetailPage() {
                       </Button>
                     )}
                   </Form>
+                </>
+              ),
+            },
+            {
+              key: "apps",
+              label: t("apps.manager.title"),
+              children: (
+                <>
+                  <p className="mb-4">{t("apps.manager.hint")}</p>
+
+                  <Checkbox.Group
+                    value={enabledApps}
+                    disabled={!canEdit}
+                    onChange={(values) =>
+                      setEnabledApps(values as AppsEnum.App[])
+                    }
+                    options={Object.values(AppsEnum.App).map(
+                      (app: AppsEnum.App) => ({
+                        value: app,
+                        label: t(`apps.names.${app}`),
+                      }),
+                    )}
+                    className="flex flex-col gap-2 mb-4"
+                  />
+
+                  {canEdit && (
+                    <Button
+                      type="primary"
+                      loading={isSubmitting}
+                      onClick={saveApps}
+                    >
+                      {t("apps.manager.save")}
+                    </Button>
+                  )}
                 </>
               ),
             },

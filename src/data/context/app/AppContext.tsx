@@ -3,6 +3,11 @@
 import { createContext } from "react";
 
 import {
+  IAppContextApps,
+  useApps,
+  useAppsDefaultValue,
+} from "./hooks/apps/useApps";
+import {
   IAppContextNotifications,
   useCountNotSeenNotificationsByUser,
   useCountNotSeenNotificationsByUserDefaultValue,
@@ -16,11 +21,13 @@ import {
 interface IAppContext {
   theme: IAppContextTheme;
   notifications: IAppContextNotifications;
+  apps: IAppContextApps;
 }
 
 const AppContext = createContext<IAppContext>({
   theme: useThemeDefaultValue,
   notifications: useCountNotSeenNotificationsByUserDefaultValue,
+  apps: useAppsDefaultValue,
 });
 
 export function AppProvider({ children }: any) {
@@ -29,6 +36,7 @@ export function AppProvider({ children }: any) {
       value={{
         theme: useTheme(),
         notifications: useCountNotSeenNotificationsByUser(),
+        apps: useApps(),
       }}
     >
       {children}

@@ -133,6 +133,7 @@
     "cnpj": "CNPJ"
   },
   "navigation": {
+    "apps": "Apps",
     "home": "Home",
     "dashboard": "Dashboard",
     "profile": "Profile",
@@ -1085,6 +1086,78 @@
       "nameRequired": "Name is required",
       "valueRequired": "Value is required",
       "valuePositive": "Value must be greater than zero"
+    }
+  },
+  "apps": {
+    "title": "Apps",
+    "subtitle": "Connect your other apps",
+    "noneEnabled": "No apps are available for your account yet.",
+    "notEnabled": "This app is not available for your account.",
+    "comingSoon": "Coming soon",
+    "open": "Open",
+    "status": {
+      "connected": "Connected",
+      "expired": "Connection expired",
+      "revoked": "Disconnected",
+      "notConnected": "Not connected"
+    },
+    "names": {
+      "GOOGLE_CONTACTS": "Google Contacts",
+      "INSTAGRAM": "Instagram",
+      "FACEBOOK": "Facebook",
+      "WHATSAPP": "WhatsApp",
+      "TELEGRAM": "Telegram"
+    },
+    "google": {
+      "title": "Google Contacts",
+      "intro": "Sign in with Google to import your contacts as customers. Nothing in Google is changed.",
+      "signIn": "Sign in with Google",
+      "reconnect": "Sign in again",
+      "connectedAs": "Connected as {account}",
+      "disconnect": "Disconnect",
+      "disconnectConfirm": "Disconnect Google Contacts? Imported customers are kept.",
+      "disconnected": "Google Contacts disconnected.",
+      "expiredHint": "Your Google connection expired. Sign in again to keep syncing.",
+      "lastSync": "Last sync",
+      "never": "Never",
+      "managersOnly": "Only admin or master employees can manage this app.",
+      "sync": "Sync now",
+      "importResult": "{created} created, {linked} linked, {skipped} skipped, {failed} failed.",
+      "hasMore": "Showing the first {count} contacts. Some contacts are not listed.",
+      "limitReached": "Your customers limit was reached, so some contacts were not saved.",
+      "listHint": "Pick the contacts to save. New contacts become customers; contacts that already match a customer by e-mail are only linked to it, and nothing else on that customer is changed.",
+      "grid": {
+        "name": "Name",
+        "email": "E-mail",
+        "phone": "Phone",
+        "status": "Status",
+        "new": "New",
+        "search": "Search by name, e-mail or phone",
+        "selected": "{count} selected",
+        "clear": "Clear selection",
+        "save": "Save",
+        "empty": "No contacts found in your Google account.",
+        "saved": "Contacts saved.",
+        "existing": "Customer - will be linked",
+        "linked": "Already linked",
+        "selectAll": "Select all"
+      }
+    },
+    "errors": {
+      "access_denied": "You cancelled the Google sign-in.",
+      "oauth_error": "Google reported a problem. Try again.",
+      "invalid_state": "The sign-in link expired. Try again.",
+      "missing_code": "Google did not return a sign-in code. Try again.",
+      "not_enabled": "This app is not available for your account.",
+      "missing_scope": "Google contacts permission was not granted. Sign in again and keep every permission checked.",
+      "no_refresh_token": "Google did not grant offline access. Try again and accept all permissions.",
+      "connection_failed": "Could not complete the connection. Try again."
+    },
+    "manager": {
+      "title": "Apps",
+      "hint": "Apps this user can see and connect.",
+      "save": "Save apps",
+      "saved": "Apps updated."
     }
   },
   "notes": {

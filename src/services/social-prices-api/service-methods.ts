@@ -1,6 +1,7 @@
 import AccountServiceMethods from "./account/account-service.methods";
 import AuthServiceMethods from "./auth/auth-service.methods";
 import CategoriesServiceMethods from "./categories/categories-service.methods";
+import AppsServiceMethods from "./apps/apps-service.methods";
 import CustomersServiceMethods from "./customers/customers-service.methods";
 import EmployeesServiceMethods from "./employees/employees-service.methods";
 import FeedbacksServiceMethods from "./feedbacks/feedbacks-service.methods";
@@ -28,6 +29,7 @@ export default class ServiceMethods {
   public productsServiceMethods: ProductsServiceMethods;
   public productItemsServiceMethods: ProductItemsServiceMethods;
   public categoriesServiceMethods: CategoriesServiceMethods;
+  public appsServiceMethods: AppsServiceMethods;
   public customersServiceMethods: CustomersServiceMethods;
   public notificationsServiceMethods: NotificationsServiceMethods;
   public salesServiceMethods: SalesServiceMethods;
@@ -51,6 +53,7 @@ export default class ServiceMethods {
     this.productsServiceMethods = new ProductsServiceMethods();
     this.productItemsServiceMethods = new ProductItemsServiceMethods();
     this.categoriesServiceMethods = new CategoriesServiceMethods();
+    this.appsServiceMethods = new AppsServiceMethods();
     this.customersServiceMethods = new CustomersServiceMethods();
     this.notificationsServiceMethods = new NotificationsServiceMethods();
     this.salesServiceMethods = new SalesServiceMethods();

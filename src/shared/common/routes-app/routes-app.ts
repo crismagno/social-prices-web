@@ -9,6 +9,8 @@ const Urls = {
   SUPPORT: "/support",
   TRANSACTIONS: "/transactions",
   NOTES: "/notes",
+  APPS: "/apps",
+  APPS_GOOGLE_CONTACTS: "/apps/google-contacts",
   VALIDATE_SIGN_IN_CODE: "/validate-sign-in-code",
   VALIDATE_SIGN_IN_EMPLOYEE_CODE: "/validate-sign-in-employee-code",
   RECOVER_PASSWORD: "/recover-password",

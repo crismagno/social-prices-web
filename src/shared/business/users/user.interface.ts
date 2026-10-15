@@ -1,3 +1,4 @@
+import AppsEnum from "../apps/apps.enum";
 import { IAddress } from "../shared/address/address.interface";
 import { ICreatedAtEntity } from "../shared/global/created-at.interface";
 import { IUpdatedAtEntity } from "../shared/global/updated-at.interface";
@@ -29,4 +30,5 @@ export default interface IUser extends ICreatedAtEntity, IUpdatedAtEntity {
   cnpj: string | null;
   type: UsersEnum.Type;
   limits?: IUserLimits | null;
+  enabledApps?: AppsEnum.App[];
 }

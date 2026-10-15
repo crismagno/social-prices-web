@@ -133,6 +133,7 @@
     "cnpj": "CNPJ"
   },
   "navigation": {
+    "apps": "Apps",
     "home": "Início",
     "dashboard": "Painel",
     "profile": "Perfil",
@@ -1088,6 +1089,78 @@
       "nameRequired": "O nome é obrigatório",
       "valueRequired": "O valor é obrigatório",
       "valuePositive": "O valor deve ser maior que zero"
+    }
+  },
+  "apps": {
+    "title": "Apps",
+    "subtitle": "Conecte seus outros aplicativos",
+    "noneEnabled": "Ainda não há apps disponíveis para a sua conta.",
+    "notEnabled": "Este app não está disponível para a sua conta.",
+    "comingSoon": "Em breve",
+    "open": "Abrir",
+    "status": {
+      "connected": "Conectado",
+      "expired": "Conexão expirada",
+      "revoked": "Desconectado",
+      "notConnected": "Não conectado"
+    },
+    "names": {
+      "GOOGLE_CONTACTS": "Google Contatos",
+      "INSTAGRAM": "Instagram",
+      "FACEBOOK": "Facebook",
+      "WHATSAPP": "WhatsApp",
+      "TELEGRAM": "Telegram"
+    },
+    "google": {
+      "title": "Google Contatos",
+      "intro": "Entre com o Google para importar seus contatos como clientes. Nada é alterado no Google.",
+      "signIn": "Entrar com o Google",
+      "reconnect": "Entrar novamente",
+      "connectedAs": "Conectado como {account}",
+      "disconnect": "Desconectar",
+      "disconnectConfirm": "Desconectar o Google Contatos? Os clientes importados são mantidos.",
+      "disconnected": "Google Contatos desconectado.",
+      "expiredHint": "Sua conexão com o Google expirou. Entre novamente para continuar sincronizando.",
+      "lastSync": "Última sincronização",
+      "never": "Nunca",
+      "managersOnly": "Somente funcionários admin ou master podem gerenciar este app.",
+      "sync": "Sincronizar agora",
+      "importResult": "{created} criados, {linked} vinculados, {skipped} ignorados, {failed} com falha.",
+      "hasMore": "Mostrando os primeiros {count} contatos. Alguns contatos não estão listados.",
+      "limitReached": "O limite de clientes foi atingido, então alguns contatos não foram salvos.",
+      "listHint": "Escolha os contatos a salvar. Contatos novos viram clientes; contatos que já casam com um cliente pelo e-mail apenas são vinculados a ele, e nada mais nesse cliente é alterado.",
+      "grid": {
+        "name": "Nome",
+        "email": "E-mail",
+        "phone": "Telefone",
+        "status": "Situação",
+        "new": "Novo",
+        "search": "Buscar por nome, e-mail ou telefone",
+        "selected": "{count} selecionados",
+        "clear": "Limpar seleção",
+        "save": "Salvar",
+        "empty": "Nenhum contato encontrado na sua conta do Google.",
+        "saved": "Contatos salvos.",
+        "existing": "Já é cliente - será vinculado",
+        "linked": "Já vinculado",
+        "selectAll": "Selecionar todos"
+      }
+    },
+    "errors": {
+      "access_denied": "Você cancelou o login com o Google.",
+      "oauth_error": "O Google informou um problema. Tente novamente.",
+      "invalid_state": "O link de login expirou. Tente novamente.",
+      "missing_code": "O Google não retornou o código de login. Tente novamente.",
+      "not_enabled": "Este app não está disponível para a sua conta.",
+      "missing_scope": "A permissão de contatos do Google não foi concedida. Entre novamente e mantenha todas as permissões marcadas.",
+      "no_refresh_token": "O Google não concedeu acesso offline. Tente novamente e aceite todas as permissões.",
+      "connection_failed": "Não foi possível concluir a conexão. Tente novamente."
+    },
+    "manager": {
+      "title": "Apps",
+      "hint": "Apps que este usuário pode ver e conectar.",
+      "save": "Salvar apps",
+      "saved": "Apps atualizados."
     }
   },
   "notes": {
