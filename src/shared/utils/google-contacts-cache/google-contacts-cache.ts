@@ -2,15 +2,15 @@ import localforage from "localforage";
 
 import AppsEnum from "../../business/apps/apps.enum";
 import {
-  IAppContactRow,
-  IAppSyncPreview,
-} from "../../business/apps/apps.types";
+  IGoogleContactRow,
+  IGoogleContactsPreview,
+} from "../../business/apps/google-contacts/google-contacts.types";
 
 // How long the user must wait before asking the provider for the list again.
 export const CONTACTS_SYNC_COOLDOWN_MS: number = 20 * 60 * 1000;
 
 export interface ICachedContacts {
-  preview: IAppSyncPreview;
+  preview: IGoogleContactsPreview;
   // When the list was fetched from the provider (epoch ms). Saving customers
   // changes the rows but never this, so the 20 minutes keep counting.
   fetchedAt: number;
@@ -70,7 +70,7 @@ const isCachedContacts = (value: unknown): value is ICachedContacts => {
     typeof cached?.fetchedAt === "number" &&
     Array.isArray(cached?.preview?.contacts) &&
     cached.preview.contacts.every(
-      (contact: IAppContactRow) => typeof contact?.externalId === "string",
+      (contact: IGoogleContactRow) => typeof contact?.externalId === "string",
     )
   );
 };

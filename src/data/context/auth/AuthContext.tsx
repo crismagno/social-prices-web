@@ -39,7 +39,7 @@ import CookiesEnum from '../../../shared/common/cookies/cookies.enum';
 import {
   localStorageMethodsInstance,
 } from '../../../shared/common/local-storage/local-storage-methods';
-import { clearAllCachedContacts } from "../../../shared/utils/apps-contacts-cache/apps-contacts-cache";
+import { clearAllCachedContacts } from "../../../shared/utils/google-contacts-cache/google-contacts-cache";
 import Urls from '../../../shared/common/routes-app/routes-app';
 import {
   makeRandomCode,

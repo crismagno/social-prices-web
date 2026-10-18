@@ -1,5 +1,5 @@
-import AppsEnum from "../../business/apps/apps.enum";
-import { IAppContactRow } from "../../business/apps/apps.types";
+import GoogleContactsEnum from "../../business/apps/google-contacts/google-contacts.enum";
+import { IGoogleContactRow } from "../../business/apps/google-contacts/google-contacts.types";
 
 // Keeps the selection inside what the customers limit still allows. Only NEW
 // contacts become customers, so only they use up room; contacts that already
@@ -10,11 +10,11 @@ import { IAppContactRow } from "../../business/apps/apps.types";
 export const capSelectionToCapacity = (
   previous: string[],
   next: string[],
-  contacts: IAppContactRow[],
+  contacts: IGoogleContactRow[],
   remaining: number,
 ): string[] => {
-  const statusByKey = new Map<string, AppsEnum.ContactStatus>(
-    contacts.map((contact: IAppContactRow) => [
+  const statusByKey = new Map<string, GoogleContactsEnum.ContactStatus>(
+    contacts.map((contact: IGoogleContactRow) => [
       contact.externalId,
       contact.status,
     ]),
@@ -30,7 +30,7 @@ export const capSelectionToCapacity = (
   let room: number = Math.max(0, remaining);
 
   return ordered.filter((key: string) => {
-    if (statusByKey.get(key) !== AppsEnum.ContactStatus.NEW) {
+    if (statusByKey.get(key) !== GoogleContactsEnum.ContactStatus.NEW) {
       return true;
     }
 
@@ -45,15 +45,15 @@ export const capSelectionToCapacity = (
 
 export const countNewSelected = (
   selected: string[],
-  contacts: IAppContactRow[],
+  contacts: IGoogleContactRow[],
 ): number => {
   const newKeys: Set<string> = new Set(
     contacts
       .filter(
-        (contact: IAppContactRow) =>
-          contact.status === AppsEnum.ContactStatus.NEW,
+        (contact: IGoogleContactRow) =>
+          contact.status === GoogleContactsEnum.ContactStatus.NEW,
       )
-      .map((contact: IAppContactRow) => contact.externalId),
+      .map((contact: IGoogleContactRow) => contact.externalId),
   );
 
   return selected.filter((key: string) => newKeys.has(key)).length;

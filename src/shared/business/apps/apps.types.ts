@@ -1,33 +1,7 @@
 import AppsEnum from "./apps.enum";
 
-export interface IAppContactRow {
-  externalId: string;
-  name: string;
-  email: string | null;
-  phone: string | null;
-  status: AppsEnum.ContactStatus;
-}
-
-export interface IAppSyncPreview {
-  contacts: IAppContactRow[];
-  hasMore: boolean;
-}
-
-export interface IAppImportResult {
-  created: number;
-  linked: number;
-  skipped: number;
-  failed: number;
-  limitReached: boolean;
-  finishedAt: string;
-}
-
-// What saving answers: the summary plus which contacts were saved (created or
-// linked), so a cached list can be updated without asking the provider again.
-export interface IAppImportResponse extends IAppImportResult {
-  savedExternalIds: string[];
-}
-
+// One card of the apps catalog: the same few facts for every app. What an app
+// knows beyond this comes from that app's own endpoints.
 export interface IAppCatalogItem {
   id: AppsEnum.App;
   enabled: boolean;
@@ -35,6 +9,4 @@ export interface IAppCatalogItem {
   connected: boolean;
   status: AppsEnum.ConnectionStatus | null;
   accountLabel: string | null;
-  lastSyncAt: string | null;
-  lastSyncSummary: IAppImportResult | null;
 }

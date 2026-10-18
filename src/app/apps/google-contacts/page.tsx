@@ -32,24 +32,26 @@ import useAuthData from "../../../data/context/auth/useAuthData";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import AppsEnum from "../../../shared/business/apps/apps.enum";
+import { IAppCatalogItem } from "../../../shared/business/apps/apps.types";
+import GoogleContactsEnum from "../../../shared/business/apps/google-contacts/google-contacts.enum";
 import {
-  IAppCatalogItem,
-  IAppContactRow,
-  IAppImportResult,
-  IAppSyncPreview,
-} from "../../../shared/business/apps/apps.types";
+  IGoogleContactRow,
+  IGoogleContactsImportResult,
+  IGoogleContactsPreview,
+} from "../../../shared/business/apps/google-contacts/google-contacts.types";
 import EmployeesEnum from "../../../shared/business/employees/employees.enum";
 import {
   capSelectionToCapacity,
   countNewSelected,
-} from "../../../shared/utils/apps-contacts-cache/apps-contacts-selection";
+} from "../../../shared/utils/google-contacts-cache/google-contacts-selection";
 import {
   clearCachedContacts,
   formatCountdown,
   getCooldownRemainingMs,
   readCachedContacts,
   writeCachedContacts,
-} from "../../../shared/utils/apps-contacts-cache/apps-contacts-cache";
+} from "../../../shared/utils/google-contacts-cache/google-contacts-cache";
+import { useGoogleContactsConnection } from "./useGoogleContactsConnection";
 
 type Busy = "connect" | "sync" | "save" | "disconnect" | null;
 
@@ -70,7 +72,7 @@ export default function GoogleContactsAppPage() {
 
   const [busy, setBusy] = useState<Busy>(null);
 
-  const [preview, setPreview] = useState<IAppSyncPreview | null>(null);
+  const [preview, setPreview] = useState<IGoogleContactsPreview | null>(null);
 
   const [selectedKeys, setSelectedKeys] = useState<Key[]>([]);
 
@@ -78,7 +80,8 @@ export default function GoogleContactsAppPage() {
 
   const [search, setSearch] = useState<string>("");
 
-  const [lastResult, setLastResult] = useState<IAppImportResult | null>(null);
+  const [lastResult, setLastResult] =
+    useState<IGoogleContactsImportResult | null>(null);
 
   // When the list came from the provider; the same list is reused from the
   // browser until 20 minutes pass.
@@ -137,22 +140,26 @@ export default function GoogleContactsAppPage() {
     (app: IAppCatalogItem) => app.id === APP_ID,
   );
 
+  const { connection, isLoadingConnection, refetchConnection } =
+    useGoogleContactsConnection(!!item?.enabled);
+
   // The API enforces this too; the buttons are disabled so nobody hits a 403.
   const canManage: boolean = employee?.level !== EmployeesEnum.Level.EMPLOYEE;
 
-  const isExpired: boolean = item?.status === AppsEnum.ConnectionStatus.EXPIRED;
+  const isExpired: boolean =
+    connection?.status === AppsEnum.ConnectionStatus.EXPIRED;
 
-  const summary: IAppImportResult | null =
-    lastResult ?? item?.lastSyncSummary ?? null;
+  const summary: IGoogleContactsImportResult | null =
+    lastResult ?? connection?.lastImport ?? null;
 
-  const filteredContacts: IAppContactRow[] = useMemo(() => {
+  const filteredContacts: IGoogleContactRow[] = useMemo(() => {
     const term: string = search.trim().toLowerCase();
 
     if (!preview || !term) {
       return preview?.contacts ?? [];
     }
 
-    return preview.contacts.filter((contact: IAppContactRow) =>
+    return preview.contacts.filter((contact: IGoogleContactRow) =>
       [contact.name, contact.email, contact.phone].some((value) =>
         value?.toLowerCase().includes(term),
       ),
@@ -168,7 +175,7 @@ export default function GoogleContactsAppPage() {
       ? Math.max(0, customersUsage.limit - customersUsage.used)
       : null;
 
-  const allContacts: IAppContactRow[] = preview?.contacts ?? [];
+  const allContacts: IGoogleContactRow[] = preview?.contacts ?? [];
 
   const newSelectedCount: number = countNewSelected(
     selectedKeys.map(String),
@@ -176,7 +183,8 @@ export default function GoogleContactsAppPage() {
   );
 
   const hasNewContacts: boolean = allContacts.some(
-    (contact: IAppContactRow) => contact.status === AppsEnum.ContactStatus.NEW,
+    (contact: IGoogleContactRow) =>
+      contact.status === GoogleContactsEnum.ContactStatus.NEW,
   );
 
   const exceedsLimit: boolean =
@@ -200,7 +208,7 @@ export default function GoogleContactsAppPage() {
     setSelectedKeys(capped);
   };
 
-  const formatResult = (result: IAppImportResult): string =>
+  const formatResult = (result: IGoogleContactsImportResult): string =>
     t("apps.google.importResult")
       .replace("{created}", String(result.created))
       .replace("{linked}", String(result.linked))
@@ -209,7 +217,7 @@ export default function GoogleContactsAppPage() {
 
   const loadContacts = async (): Promise<void> => {
     const response =
-      await serviceMethodsInstance.appsServiceMethods.sync(APP_ID);
+      await serviceMethodsInstance.googleContactsServiceMethods.listContacts();
 
     const fetchedNow: number = Date.now();
 
@@ -230,7 +238,7 @@ export default function GoogleContactsAppPage() {
       setBusy("connect");
 
       const { url } =
-        await serviceMethodsInstance.appsServiceMethods.connect(APP_ID);
+        await serviceMethodsInstance.googleContactsServiceMethods.connect();
 
       window.location.href = url;
     } catch (error: any) {
@@ -254,7 +262,7 @@ export default function GoogleContactsAppPage() {
       handleClientError(error);
     } finally {
       // Also refreshes the status after an APP_CONNECTION_EXPIRED answer.
-      await fetchApps();
+      await Promise.all([fetchApps(), refetchConnection()]);
       setBusy(null);
     }
   };
@@ -264,8 +272,7 @@ export default function GoogleContactsAppPage() {
       setBusy("save");
 
       const result =
-        await serviceMethodsInstance.appsServiceMethods.importContacts(
-          APP_ID,
+        await serviceMethodsInstance.googleContactsServiceMethods.importContacts(
           selectedKeys.map(String),
         );
 
@@ -280,11 +287,11 @@ export default function GoogleContactsAppPage() {
       if (preview) {
         const saved: Set<string> = new Set(result.savedExternalIds);
 
-        const updated: IAppSyncPreview = {
+        const updated: IGoogleContactsPreview = {
           ...preview,
-          contacts: preview.contacts.map((contact: IAppContactRow) =>
+          contacts: preview.contacts.map((contact: IGoogleContactRow) =>
             saved.has(contact.externalId)
-              ? { ...contact, status: AppsEnum.ContactStatus.LINKED }
+              ? { ...contact, status: GoogleContactsEnum.ContactStatus.LINKED }
               : contact,
           ),
         };
@@ -299,7 +306,7 @@ export default function GoogleContactsAppPage() {
         }
       }
 
-      await fetchApps();
+      await Promise.all([fetchApps(), refetchConnection()]);
     } catch (error: any) {
       handleClientError(error);
     } finally {
@@ -312,7 +319,7 @@ export default function GoogleContactsAppPage() {
     try {
       setBusy("disconnect");
 
-      await serviceMethodsInstance.appsServiceMethods.disconnect(APP_ID);
+      await serviceMethodsInstance.googleContactsServiceMethods.disconnect();
 
       setLastResult(null);
 
@@ -328,7 +335,7 @@ export default function GoogleContactsAppPage() {
 
       message.success(t("apps.google.disconnected"));
 
-      await fetchApps();
+      await Promise.all([fetchApps(), refetchConnection()]);
     } catch (error: any) {
       handleClientError(error);
     } finally {
@@ -336,11 +343,11 @@ export default function GoogleContactsAppPage() {
     }
   };
 
-  const columns: ColumnsType<IAppContactRow> = [
+  const columns: ColumnsType<IGoogleContactRow> = [
     {
       title: t("apps.google.grid.name"),
       dataIndex: "name",
-      sorter: (a: IAppContactRow, b: IAppContactRow) =>
+      sorter: (a: IGoogleContactRow, b: IGoogleContactRow) =>
         a.name.localeCompare(b.name),
     },
     {
@@ -357,12 +364,12 @@ export default function GoogleContactsAppPage() {
       title: t("apps.google.grid.status"),
       dataIndex: "status",
       width: 180,
-      render: (status: AppsEnum.ContactStatus) => {
-        if (status === AppsEnum.ContactStatus.NEW) {
+      render: (status: GoogleContactsEnum.ContactStatus) => {
+        if (status === GoogleContactsEnum.ContactStatus.NEW) {
           return <Tag color="green">{t("apps.google.grid.new")}</Tag>;
         }
 
-        if (status === AppsEnum.ContactStatus.EXISTING) {
+        if (status === GoogleContactsEnum.ContactStatus.EXISTING) {
           return <Tag color="blue">{t("apps.google.grid.existing")}</Tag>;
         }
 
@@ -450,10 +457,11 @@ export default function GoogleContactsAppPage() {
                 applySelection(
                   filteredContacts
                     .filter(
-                      (contact: IAppContactRow) =>
-                        contact.status !== AppsEnum.ContactStatus.LINKED,
+                      (contact: IGoogleContactRow) =>
+                        contact.status !==
+                        GoogleContactsEnum.ContactStatus.LINKED,
                     )
-                    .map((contact: IAppContactRow) => contact.externalId),
+                    .map((contact: IGoogleContactRow) => contact.externalId),
                 )
               }
             >
@@ -476,7 +484,7 @@ export default function GoogleContactsAppPage() {
             />
           </div>
 
-          <Table<IAppContactRow>
+          <Table<IGoogleContactRow>
             rowKey="externalId"
             columns={columns}
             dataSource={filteredContacts}
@@ -484,12 +492,12 @@ export default function GoogleContactsAppPage() {
               selectedRowKeys: selectedKeys,
               preserveSelectedRowKeys: true,
               onChange: (keys: Key[]) => applySelection(keys),
-              getCheckboxProps: (contact: IAppContactRow) => ({
+              getCheckboxProps: (contact: IGoogleContactRow) => ({
                 disabled:
                   !canManage ||
-                  contact.status === AppsEnum.ContactStatus.LINKED ||
+                  contact.status === GoogleContactsEnum.ContactStatus.LINKED ||
                   // no room left for another new customer
-                  (contact.status === AppsEnum.ContactStatus.NEW &&
+                  (contact.status === GoogleContactsEnum.ContactStatus.NEW &&
                     remaining !== null &&
                     newSelectedCount >= remaining &&
                     !selectedKeys.includes(contact.externalId)),
@@ -512,7 +520,7 @@ export default function GoogleContactsAppPage() {
   };
 
   const renderBody = () => {
-    if (isLoadingApps && !item) {
+    if ((isLoadingApps && !item) || (isLoadingConnection && !connection)) {
       return <Spin />;
     }
 
@@ -535,18 +543,18 @@ export default function GoogleContactsAppPage() {
         )}
 
         <Card>
-          {item.connected ? (
+          {connection?.connected ? (
             <Space direction="vertical" size="middle" className="w-full">
               {/* Connection: who is connected, and the way out */}
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <Space>
                   <Tag color="green">{t("apps.status.connected")}</Tag>
 
-                  {item.accountLabel && (
+                  {connection.googleEmail && (
                     <span>
                       {t("apps.google.connectedAs").replace(
                         "{account}",
-                        item.accountLabel,
+                        connection.googleEmail,
                       )}
                     </span>
                   )}
@@ -573,8 +581,8 @@ export default function GoogleContactsAppPage() {
               {/* Sync: last run, what the list holds, and the button */}
               <span>
                 {t("apps.google.lastSync")}:{" "}
-                {item.lastSyncAt
-                  ? dayjs(item.lastSyncAt).format("DD/MM/YYYY HH:mm")
+                {connection.lastImportAt
+                  ? dayjs(connection.lastImportAt).format("DD/MM/YYYY HH:mm")
                   : t("apps.google.never")}
               </span>
 
@@ -650,7 +658,7 @@ export default function GoogleContactsAppPage() {
           )}
         </Card>
 
-        {item.connected && renderContacts()}
+        {connection?.connected && renderContacts()}
       </Space>
     );
   };

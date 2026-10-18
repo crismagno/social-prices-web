@@ -7,12 +7,6 @@ namespace AppsEnum {
     TELEGRAM = "TELEGRAM",
   }
 
-  export enum ContactStatus {
-    NEW = "NEW",
-    EXISTING = "EXISTING",
-    LINKED = "LINKED",
-  }
-
   export enum ConnectionStatus {
     CONNECTED = "CONNECTED",
     EXPIRED = "EXPIRED",
