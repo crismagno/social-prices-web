@@ -3,6 +3,7 @@ import AuthServiceMethods from "./auth/auth-service.methods";
 import CategoriesServiceMethods from "./categories/categories-service.methods";
 import AppsServiceMethods from "./apps/apps-service.methods";
 import GoogleContactsServiceMethods from "./apps/google-contacts/google-contacts-service.methods";
+import TelegramServiceMethods from "./apps/telegram/telegram-service.methods";
 import CustomersServiceMethods from "./customers/customers-service.methods";
 import EmployeesServiceMethods from "./employees/employees-service.methods";
 import FeedbacksServiceMethods from "./feedbacks/feedbacks-service.methods";
@@ -32,6 +33,7 @@ export default class ServiceMethods {
   public categoriesServiceMethods: CategoriesServiceMethods;
   public appsServiceMethods: AppsServiceMethods;
   public googleContactsServiceMethods: GoogleContactsServiceMethods;
+  public telegramServiceMethods: TelegramServiceMethods;
   public customersServiceMethods: CustomersServiceMethods;
   public notificationsServiceMethods: NotificationsServiceMethods;
   public salesServiceMethods: SalesServiceMethods;
@@ -57,6 +59,7 @@ export default class ServiceMethods {
     this.categoriesServiceMethods = new CategoriesServiceMethods();
     this.appsServiceMethods = new AppsServiceMethods();
     this.googleContactsServiceMethods = new GoogleContactsServiceMethods();
+    this.telegramServiceMethods = new TelegramServiceMethods();
     this.customersServiceMethods = new CustomersServiceMethods();
     this.notificationsServiceMethods = new NotificationsServiceMethods();
     this.salesServiceMethods = new SalesServiceMethods();

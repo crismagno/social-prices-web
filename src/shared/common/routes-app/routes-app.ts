@@ -11,6 +11,7 @@ const Urls = {
   NOTES: "/notes",
   APPS: "/apps",
   APPS_GOOGLE_CONTACTS: "/apps/google-contacts",
+  APPS_TELEGRAM: "/apps/telegram",
   VALIDATE_SIGN_IN_CODE: "/validate-sign-in-code",
   VALIDATE_SIGN_IN_EMPLOYEE_CODE: "/validate-sign-in-employee-code",
   RECOVER_PASSWORD: "/recover-password",

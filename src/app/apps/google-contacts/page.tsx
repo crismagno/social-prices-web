@@ -7,24 +7,20 @@ import {
   App,
   Button,
   Card,
-  Divider,
   Empty,
   Input,
-  Popconfirm,
   Space,
   Spin,
   Table,
   Tag,
 } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import dayjs from "dayjs";
 import { useSearchParams } from "next/navigation";
 
-import { SaveOutlined, SyncOutlined } from "@ant-design/icons";
+import { SaveOutlined } from "@ant-design/icons";
 
 import { FeatureUsageBadge } from "../../../components/common/FeatureUsageBadge/FeatureUsageBadge";
 import { useFeaturesUsage } from "../../../components/common/FeatureUsageBadge/useFeaturesUsage";
-import GoogleColorIcon from "../../../components/common/GoogleColorIcon/GoogleColorIcon";
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
 import Layout from "../../../components/template/Layout/Layout";
 import useAppData from "../../../data/context/app/useAppData";
@@ -46,11 +42,12 @@ import {
 } from "../../../shared/utils/google-contacts-cache/google-contacts-selection";
 import {
   clearCachedContacts,
-  formatCountdown,
   getCooldownRemainingMs,
   readCachedContacts,
   writeCachedContacts,
 } from "../../../shared/utils/google-contacts-cache/google-contacts-cache";
+import GoogleContactsConnectCard from "./GoogleContactsConnectCard";
+import GoogleContactsConnectedCard from "./GoogleContactsConnectedCard";
 import { useGoogleContactsConnection } from "./useGoogleContactsConnection";
 
 type Busy = "connect" | "sync" | "save" | "disconnect" | null;
@@ -383,6 +380,11 @@ export default function GoogleContactsAppPage() {
       return null;
     }
 
+    const countByStatus = (status: GoogleContactsEnum.ContactStatus): number =>
+      preview.contacts.filter(
+        (contact: IGoogleContactRow) => contact.status === status,
+      ).length;
+
     if (preview.contacts.length === 0) {
       return (
         <Card>
@@ -394,6 +396,36 @@ export default function GoogleContactsAppPage() {
     return (
       <Card>
         <Space direction="vertical" size="middle" className="w-full">
+          <Space wrap size={[8, 8]}>
+            {(
+              [
+                ["total", "default", preview.contacts.length],
+                [
+                  "new",
+                  "green",
+                  countByStatus(GoogleContactsEnum.ContactStatus.NEW),
+                ],
+                [
+                  "existing",
+                  "blue",
+                  countByStatus(GoogleContactsEnum.ContactStatus.EXISTING),
+                ],
+                [
+                  "linked",
+                  "default",
+                  countByStatus(GoogleContactsEnum.ContactStatus.LINKED),
+                ],
+              ] as const
+            ).map(([key, color, count]) => (
+              <Tag key={key} color={color} className="m-0">
+                {t(`apps.google.counts.${key}`).replace(
+                  "{count}",
+                  String(count),
+                )}
+              </Tag>
+            ))}
+          </Space>
+
           <span>{t("apps.google.listHint")}</span>
 
           {preview.hasMore && (
@@ -542,121 +574,28 @@ export default function GoogleContactsAppPage() {
           <Alert type="info" showIcon message={t("apps.google.managersOnly")} />
         )}
 
-        <Card>
-          {connection?.connected ? (
-            <Space direction="vertical" size="middle" className="w-full">
-              {/* Connection: who is connected, and the way out */}
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <Space>
-                  <Tag color="green">{t("apps.status.connected")}</Tag>
-
-                  {connection.googleEmail && (
-                    <span>
-                      {t("apps.google.connectedAs").replace(
-                        "{account}",
-                        connection.googleEmail,
-                      )}
-                    </span>
-                  )}
-                </Space>
-
-                <Popconfirm
-                  title={t("apps.google.disconnectConfirm")}
-                  onConfirm={handleDisconnect}
-                  disabled={!canManage}
-                >
-                  <Button
-                    type="primary"
-                    danger
-                    loading={busy === "disconnect"}
-                    disabled={!canManage || busy !== null}
-                  >
-                    {t("apps.google.disconnect")}
-                  </Button>
-                </Popconfirm>
-              </div>
-
-              <Divider className="my-0" />
-
-              {/* Sync: last run, what the list holds, and the button */}
-              <span>
-                {t("apps.google.lastSync")}:{" "}
-                {connection.lastImportAt
-                  ? dayjs(connection.lastImportAt).format("DD/MM/YYYY HH:mm")
-                  : t("apps.google.never")}
-              </span>
-
-              {summary && (
-                <Alert
-                  type={summary.failed > 0 ? "warning" : "success"}
-                  showIcon
-                  message={formatResult(summary)}
-                  description={
-                    summary.limitReached ? (
-                      <div>{t("apps.google.limitReached")}</div>
-                    ) : undefined
-                  }
-                />
-              )}
-
-              <div className="flex flex-wrap items-end justify-between gap-2">
-                <div>
-                  {fetchedAt !== null && (
-                    <Space direction="vertical" size={0}>
-                      <span>
-                        {t("apps.google.fetchedAt").replace(
-                          "{time}",
-                          dayjs(fetchedAt).format("DD/MM/YYYY HH:mm"),
-                        )}
-                      </span>
-
-                      {cooldownRemainingMs > 0 && (
-                        <span className="opacity-70">
-                          {t("apps.google.cooldown").replace(
-                            "{time}",
-                            formatCountdown(cooldownRemainingMs),
-                          )}
-                        </span>
-                      )}
-                    </Space>
-                  )}
-                </div>
-
-                <Button
-                  type="primary"
-                  icon={<SyncOutlined />}
-                  loading={busy === "sync"}
-                  disabled={
-                    !canManage || busy !== null || cooldownRemainingMs > 0
-                  }
-                  onClick={handleSync}
-                >
-                  {t("apps.google.sync")}
-                </Button>
-              </div>
-            </Space>
-          ) : (
-            <Space direction="vertical" size="middle">
-              <span>
-                {isExpired
-                  ? t("apps.google.expiredHint")
-                  : t("apps.google.intro")}
-              </span>
-
-              <Button
-                type="primary"
-                icon={<GoogleColorIcon />}
-                loading={busy === "connect"}
-                disabled={!canManage || busy !== null}
-                onClick={handleConnect}
-              >
-                {isExpired
-                  ? t("apps.google.reconnect")
-                  : t("apps.google.signIn")}
-              </Button>
-            </Space>
-          )}
-        </Card>
+        {connection?.connected ? (
+          <GoogleContactsConnectedCard
+            connection={connection}
+            summary={summary}
+            fetchedAt={fetchedAt}
+            cooldownRemainingMs={cooldownRemainingMs}
+            canManage={canManage}
+            isSyncing={busy === "sync"}
+            isDisconnecting={busy === "disconnect"}
+            isBusy={busy !== null}
+            onSync={handleSync}
+            onDisconnect={handleDisconnect}
+          />
+        ) : (
+          <GoogleContactsConnectCard
+            isExpired={isExpired}
+            canManage={canManage}
+            isConnecting={busy === "connect"}
+            isBusy={busy !== null}
+            onConnect={handleConnect}
+          />
+        )}
 
         {connection?.connected && renderContacts()}
       </Space>

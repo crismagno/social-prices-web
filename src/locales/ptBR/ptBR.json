@@ -1114,7 +1114,6 @@
     },
     "google": {
       "title": "Google Contatos",
-      "intro": "Entre com o Google para importar seus contatos como clientes. Nada é alterado no Google.",
       "signIn": "Entrar com o Google",
       "reconnect": "Entrar novamente",
       "connectedAs": "Conectado como {account}",
@@ -1153,6 +1152,34 @@
         "remaining": "Você ainda pode adicionar {count} clientes novos.",
         "reached": "O limite de clientes foi atingido, então não é possível adicionar contatos novos. Contatos que já casam com um cliente ainda podem ser vinculados.",
         "capped": "Só cabem {count} clientes novos no seu limite, então a seleção foi reduzida."
+      },
+      "connectTitle": "Conecte o Google Contatos",
+      "connectSubtitle": "Traga os seus contatos do Google para o sistema como clientes. Nada na sua conta do Google é alterado.",
+      "steps": {
+        "signIn": {
+          "title": "Entre com o Google",
+          "text": "Use a conta do Google que tem os contatos que você quer."
+        },
+        "allow": {
+          "title": "Permita o acesso aos contatos",
+          "text": "O sistema só lê os contatos. Nunca edita nem apaga nada no Google."
+        },
+        "choose": {
+          "title": "Escolha quem vira cliente",
+          "text": "Veja a lista, marque os contatos que quer e salve. Quem já é cliente só é vinculado."
+        }
+      },
+      "result": {
+        "created": "criados",
+        "linked": "vinculados",
+        "skipped": "ignorados",
+        "failed": "com falha"
+      },
+      "counts": {
+        "total": "{count} contatos",
+        "new": "{count} novos",
+        "existing": "{count} a vincular",
+        "linked": "{count} já vinculados"
       }
     },
     "errors": {
@@ -1170,6 +1197,101 @@
       "hint": "Apps que este usuário pode ver e conectar.",
       "save": "Salvar apps",
       "saved": "Apps atualizados."
+    },
+    "telegram": {
+      "title": "Telegram",
+      "steps": {
+        "createBot": {
+          "title": "Crie o bot no Telegram",
+          "text": "Abra o @BotFather e envie /newbot.",
+          "action": "Abrir o @BotFather"
+        },
+        "copyToken": {
+          "title": "Copie o token",
+          "text": "Escolha um nome e um username que termine em \"bot\". O BotFather responde com um token."
+        },
+        "paste": {
+          "title": "Cole aqui",
+          "text": "O token é guardado criptografado e nunca mais é mostrado."
+        }
+      },
+      "tokenLabel": "Token do bot",
+      "tokenPlaceholder": "123456789:AA...",
+      "connect": "Conectar bot",
+      "connectedToast": "Bot conectado.",
+      "managersOnly": "Somente funcionários admin ou master podem conectar, alterar ou desconectar o bot.",
+      "botLabel": "Bot @{username}",
+      "lastMessage": "Última mensagem",
+      "noMessagesYet": "Nenhuma mensagem ainda",
+      "disconnect": "Desconectar",
+      "disconnectConfirm": "Desconectar o bot? As conversas já recebidas são mantidas.",
+      "disconnected": "Telegram desconectado.",
+      "unnamed": "Usuário do Telegram",
+      "webhook": {
+        "ok": "O Telegram está entregando as mensagens para este sistema.",
+        "pending": "{count} mensagens aguardando entrega.",
+        "urlChanged": "O endereço público deste sistema mudou, então o Telegram ainda envia para o antigo. Registre o webhook novamente.",
+        "refresh": "Registrar webhook novamente",
+        "refreshed": "Webhook registrado novamente.",
+        "lastError": "Último erro de entrega ({date}): {error}",
+        "check": "Verificar entrega",
+        "delivering": "Recebendo mensagens"
+      },
+      "inbox": {
+        "search": "Buscar conversas",
+        "empty": "Nenhuma conversa ainda. Quando um cliente escrever para o seu bot, ela aparece aqui.",
+        "pick": "Escolha uma conversa para ler e responder.",
+        "you": "Você: ",
+        "loadOlder": "Carregar mensagens mais antigas",
+        "noMessages": "Nenhuma mensagem nesta conversa.",
+        "reply": "Escreva uma resposta...",
+        "send": "Enviar",
+        "sendHint": "Enter envia, Shift+Enter quebra a linha",
+        "back": "Conversas",
+        "tooLong": "Uma mensagem pode ter no máximo {max} caracteres.",
+        "emptyState": {
+          "title": "Nenhuma conversa ainda",
+          "text": "Mande uma mensagem para @{username} pelo Telegram e ela aparece aqui.",
+          "action": "Abrir @{username}"
+        },
+        "today": "Hoje",
+        "yesterday": "Ontem"
+      },
+      "customer": {
+        "none": "Sem cliente vinculado",
+        "create": "Criar cliente",
+        "link": "Vincular cliente",
+        "unlink": "Desvincular",
+        "unlinkConfirm": "Desvincular este cliente? O cliente é mantido, só sem o contato do Telegram.",
+        "linkTitle": "Vincular a um cliente",
+        "linkSearch": "Buscar clientes por nome ou e-mail",
+        "linkEmpty": "Nenhum cliente encontrado.",
+        "created": "Cliente criado.",
+        "linked": "Cliente vinculado.",
+        "unlinked": "Cliente desvinculado.",
+        "open": "Abrir cliente"
+      },
+      "content": {
+        "TEXT": "Mensagem",
+        "PHOTO": "Foto",
+        "DOCUMENT": "Documento",
+        "VOICE": "Mensagem de voz",
+        "AUDIO": "Áudio",
+        "VIDEO": "Vídeo",
+        "VIDEO_NOTE": "Mensagem em vídeo",
+        "STICKER": "Figurinha",
+        "LOCATION": "Localização",
+        "CONTACT": "Contato",
+        "OTHER": "Mensagem"
+      },
+      "errors": {
+        "TELEGRAM_INVALID_TOKEN": "O Telegram não aceitou este token. Copie-o novamente do @BotFather.",
+        "TELEGRAM_BOT_ALREADY_CONNECTED": "Este bot já está conectado a outra conta."
+      },
+      "connectTitle": "Conecte o seu bot do Telegram",
+      "connectSubtitle": "Responda aqui os clientes que escrevem para o seu bot, sem sair do sistema.",
+      "tokenInvalid": "Isso não parece um token de bot. Ele tem números, dois pontos, e depois letras e dígitos.",
+      "openBot": "Abrir no Telegram"
     }
   },
   "notes": {

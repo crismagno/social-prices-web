@@ -15,6 +15,7 @@ import Urls from "../../shared/common/routes-app/routes-app";
 // Only apps with an integration page are listed here; the rest are "coming soon".
 const APP_URLS: Partial<Record<AppsEnum.App, string>> = {
   [AppsEnum.App.GOOGLE_CONTACTS]: Urls.APPS_GOOGLE_CONTACTS,
+  [AppsEnum.App.TELEGRAM]: Urls.APPS_TELEGRAM,
 };
 
 export default function AppsPage() {
@@ -26,9 +27,14 @@ export default function AppsPage() {
     apps: { catalog, isLoadingApps },
   } = useAppData();
 
-  const enabledApps: IAppCatalogItem[] = catalog.filter(
-    (app: IAppCatalogItem) => app.enabled,
-  );
+  // The apps that already work come first, the "coming soon" ones after them.
+  // Within each group the order stays the catalog's (the sort is stable).
+  const enabledApps: IAppCatalogItem[] = catalog
+    .filter((app: IAppCatalogItem) => app.enabled)
+    .sort(
+      (a: IAppCatalogItem, b: IAppCatalogItem) =>
+        Number(b.integrated) - Number(a.integrated),
+    );
 
   return (
     <Layout title={t("apps.title")} subtitle={t("apps.subtitle")}>

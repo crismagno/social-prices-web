@@ -1111,7 +1111,6 @@
     },
     "google": {
       "title": "Google Contacts",
-      "intro": "Sign in with Google to import your contacts as customers. Nothing in Google is changed.",
       "signIn": "Sign in with Google",
       "reconnect": "Sign in again",
       "connectedAs": "Connected as {account}",
@@ -1150,6 +1149,34 @@
         "remaining": "You can still add {count} new customers.",
         "reached": "Your customers limit was reached, so new contacts cannot be added. Contacts that already match a customer can still be linked.",
         "capped": "Only {count} new customers fit in your limit, so the selection was trimmed."
+      },
+      "connectTitle": "Connect Google Contacts",
+      "connectSubtitle": "Bring your Google contacts into the system as customers. Nothing in your Google account is changed.",
+      "steps": {
+        "signIn": {
+          "title": "Sign in with Google",
+          "text": "Use the Google account that has the contacts you want."
+        },
+        "allow": {
+          "title": "Allow access to your contacts",
+          "text": "The system only reads them. It never edits or deletes anything in Google."
+        },
+        "choose": {
+          "title": "Choose who becomes a customer",
+          "text": "Review the list, pick the contacts you want and save. People who already are customers are only linked."
+        }
+      },
+      "result": {
+        "created": "created",
+        "linked": "linked",
+        "skipped": "skipped",
+        "failed": "failed"
+      },
+      "counts": {
+        "total": "{count} contacts",
+        "new": "{count} new",
+        "existing": "{count} to link",
+        "linked": "{count} already linked"
       }
     },
     "errors": {
@@ -1167,6 +1194,101 @@
       "hint": "Apps this user can see and connect.",
       "save": "Save apps",
       "saved": "Apps updated."
+    },
+    "telegram": {
+      "title": "Telegram",
+      "steps": {
+        "createBot": {
+          "title": "Create the bot in Telegram",
+          "text": "Open @BotFather and send /newbot.",
+          "action": "Open @BotFather"
+        },
+        "copyToken": {
+          "title": "Copy the token",
+          "text": "Pick a name and a username that ends in \"bot\". BotFather replies with a token."
+        },
+        "paste": {
+          "title": "Paste it here",
+          "text": "The token is stored encrypted and never shown again."
+        }
+      },
+      "tokenLabel": "Bot token",
+      "tokenPlaceholder": "123456789:AA...",
+      "connect": "Connect bot",
+      "connectedToast": "Bot connected.",
+      "managersOnly": "Only admin or master employees can connect, change or disconnect the bot.",
+      "botLabel": "Bot @{username}",
+      "lastMessage": "Last message",
+      "noMessagesYet": "No messages yet",
+      "disconnect": "Disconnect",
+      "disconnectConfirm": "Disconnect the bot? The conversations already received are kept.",
+      "disconnected": "Telegram disconnected.",
+      "unnamed": "Telegram user",
+      "webhook": {
+        "ok": "Telegram is delivering messages to this system.",
+        "pending": "{count} messages are waiting to be delivered.",
+        "urlChanged": "The public address of this system changed, so Telegram is still sending to the old one. Register the webhook again.",
+        "refresh": "Register webhook again",
+        "refreshed": "Webhook registered again.",
+        "lastError": "Last delivery error ({date}): {error}",
+        "check": "Check delivery",
+        "delivering": "Receiving messages"
+      },
+      "inbox": {
+        "search": "Search conversations",
+        "empty": "No conversations yet. When a customer writes to your bot, it shows up here.",
+        "pick": "Pick a conversation to read and answer.",
+        "you": "You: ",
+        "loadOlder": "Load older messages",
+        "noMessages": "No messages in this conversation.",
+        "reply": "Write a reply...",
+        "send": "Send",
+        "sendHint": "Enter sends, Shift+Enter breaks the line",
+        "back": "Conversations",
+        "tooLong": "A message can have at most {max} characters.",
+        "emptyState": {
+          "title": "No conversations yet",
+          "text": "Send a message to @{username} from Telegram and it shows up here.",
+          "action": "Open @{username}"
+        },
+        "today": "Today",
+        "yesterday": "Yesterday"
+      },
+      "customer": {
+        "none": "Not linked to a customer",
+        "create": "Create customer",
+        "link": "Link customer",
+        "unlink": "Unlink",
+        "unlinkConfirm": "Unlink this customer? The customer is kept, only without the Telegram contact.",
+        "linkTitle": "Link to a customer",
+        "linkSearch": "Search customers by name or e-mail",
+        "linkEmpty": "No customers found.",
+        "created": "Customer created.",
+        "linked": "Customer linked.",
+        "unlinked": "Customer unlinked.",
+        "open": "Open customer"
+      },
+      "content": {
+        "TEXT": "Message",
+        "PHOTO": "Photo",
+        "DOCUMENT": "Document",
+        "VOICE": "Voice message",
+        "AUDIO": "Audio",
+        "VIDEO": "Video",
+        "VIDEO_NOTE": "Video message",
+        "STICKER": "Sticker",
+        "LOCATION": "Location",
+        "CONTACT": "Contact",
+        "OTHER": "Message"
+      },
+      "errors": {
+        "TELEGRAM_INVALID_TOKEN": "Telegram did not accept this token. Copy it again from @BotFather.",
+        "TELEGRAM_BOT_ALREADY_CONNECTED": "This bot is already connected to another account."
+      },
+      "connectTitle": "Connect your Telegram bot",
+      "connectSubtitle": "Answer the customers who write to your bot without leaving the system.",
+      "tokenInvalid": "This does not look like a bot token. It is numbers, a colon, then letters and digits.",
+      "openBot": "Open in Telegram"
     }
   },
   "notes": {
