@@ -20,11 +20,17 @@ import { useTelegramChats } from "./useTelegramChats";
 interface Props {
   isEnabled: boolean;
   botUsername: string | null;
+  // Deleting removes the message for the customer too, so it is for managers.
+  canDelete: boolean;
 }
 
 // The conversations on the left and the open one on the right. On a narrow
 // screen only one of them shows at a time.
-export default function TelegramInbox({ isEnabled, botUsername }: Props) {
+export default function TelegramInbox({
+  isEnabled,
+  botUsername,
+  canDelete,
+}: Props) {
   const { t } = useLanguageData();
 
   const { token } = theme.useToken();
@@ -122,6 +128,7 @@ export default function TelegramInbox({ isEnabled, botUsername }: Props) {
     <TelegramThread
       key={selectedChat.chatId}
       chat={selectedChat}
+      canDelete={canDelete}
       onChatChanged={() => refetchChats(true)}
       onBack={isNarrow ? () => setSelectedChatId(null) : undefined}
     />

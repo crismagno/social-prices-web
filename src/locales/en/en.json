@@ -1245,6 +1245,9 @@
         "send": "Send",
         "sendHint": "Enter sends, Shift+Enter breaks the line",
         "back": "Conversations",
+        "delete": "Delete",
+        "deleteConfirm": "Delete this message? It is also removed for the customer in Telegram.",
+        "deleted": "Message deleted",
         "tooLong": "A message can have at most {max} characters.",
         "emptyState": {
           "title": "No conversations yet",
@@ -1267,6 +1270,18 @@
         "linked": "Customer linked.",
         "unlinked": "Customer unlinked.",
         "open": "Open customer"
+      },
+      "media": {
+        "record": "Record a voice message",
+        "cancelRecording": "Discard the recording",
+        "microphoneDenied": "The microphone is not available. Allow it in the browser and try again.",
+        "attach": "Attach a file",
+        "remove": "Remove the file",
+        "captionPlaceholder": "Add a caption (optional)...",
+        "tooLarge": "The file can be at most 20 MB.",
+        "play": "Play",
+        "download": "Download",
+        "retry": "Try again"
       },
       "content": {
         "TEXT": "Message",

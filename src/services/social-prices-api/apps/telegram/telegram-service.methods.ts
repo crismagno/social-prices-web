@@ -104,6 +104,64 @@ export default class TelegramServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
+  // Removes it for the customer too; Telegram only allows that for 48 hours.
+  public async deleteMessage(chatId: number, messageId: string): Promise<void> {
+    await this._fetchAxios.delete(
+      this._url(
+        TelegramServiceEnum.Methods.CHAT_MESSAGE.replace(
+          ":messageId",
+          messageId,
+        ),
+        chatId,
+      ),
+      { headers: this._headers() },
+    );
+  }
+
+  // The file is the message's attachment; the text, when there is one, its caption.
+  public async sendMedia(
+    chatId: number,
+    file: File,
+    caption: string,
+    asVoice: boolean = false,
+  ): Promise<ITelegramMessage> {
+    const formData: FormData = new FormData();
+
+    formData.append("file", file);
+
+    if (asVoice) {
+      formData.append("voice", "true");
+    }
+
+    if (caption.trim()) {
+      formData.append("caption", caption);
+    }
+
+    const response = await this._fetchAxios.post<ITelegramMessage>(
+      this._url(TelegramServiceEnum.Methods.CHAT_MEDIA, chatId),
+      formData,
+      { headers: { Authorization: this.formatAuthorizationWithToken() } },
+    );
+
+    return response.data;
+  }
+
+  // The bytes of a message's file. An <img> cannot send the token, hence a blob.
+  public async getMedia(chatId: number, messageId: string): Promise<Blob> {
+    const response = await this._fetchAxios.get<Blob>(
+      this._url(
+        TelegramServiceEnum.Methods.CHAT_MESSAGE_MEDIA.replace(
+          ":messageId",
+          messageId,
+        ),
+        chatId,
+      ),
+      { headers: this._headers(), responseType: "blob" },
+    );
+
+    return response.data;
+  }
+
   public async markRead(chatId: number): Promise<void> {
     await this._fetchAxios.post(
       this._url(TelegramServiceEnum.Methods.CHAT_READ, chatId),

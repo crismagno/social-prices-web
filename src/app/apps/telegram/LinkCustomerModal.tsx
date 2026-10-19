@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { Empty, Input, List, Modal, Spin } from "antd";
 
+import Avatar from "../../../components/common/Avatar/Avatar";
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
@@ -104,8 +105,20 @@ export default function LinkCustomerModal({ open, onClose, onPick }: Props) {
                 onClick={() => onPick(customer)}
               >
                 <List.Item.Meta
+                  avatar={
+                    <Avatar
+                      src={customer.avatar}
+                      alt={customer.name ?? undefined}
+                      width={40}
+                    />
+                  }
                   title={customer.name}
-                  description={customer.email}
+                  description={[
+                    customer.email,
+                    customer.phoneNumbers?.[0]?.number,
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")}
                 />
               </List.Item>
             )}

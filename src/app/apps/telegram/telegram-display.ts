@@ -66,3 +66,28 @@ export const relativeDay = (
 
   return days === 0 ? "today" : days === 1 ? "yesterday" : "other";
 };
+
+export type MediaKind = "image" | "video" | "audio" | "file";
+
+// How a file is shown. A sticker that is animated (.tgs) is not a picture a browser
+// can draw, so it ends up as a file like any other.
+export const mediaKind = (mimeType: string | null): MediaKind => {
+  if (mimeType?.startsWith("image/")) {
+    return mimeType === "image/svg+xml" ? "file" : "image";
+  }
+
+  if (mimeType?.startsWith("video/")) {
+    return "video";
+  }
+
+  if (mimeType?.startsWith("audio/")) {
+    return "audio";
+  }
+
+  return "file";
+};
+
+export const formatFileSize = (bytes: number): string =>
+  bytes < 1024 * 1024
+    ? `${Math.max(1, Math.round(bytes / 1024))} KB`
+    : `${(bytes / (1024 * 1024)).toFixed(1)} MB`;

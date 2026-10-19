@@ -21,6 +21,7 @@ export const useTelegramMessages = (
   isLoadingOlder: boolean;
   loadOlder: () => Promise<void>;
   addMessage: (message: ITelegramMessage) => void;
+  removeMessage: (messageId: string) => void;
 } => {
   const [messages, setMessages] = useState<ITelegramMessage[]>([]);
 
@@ -124,6 +125,12 @@ export const useTelegramMessages = (
     setMessages((current) => mergeMessages(current, [message]));
   }, []);
 
+  const removeMessage = useCallback((messageId: string): void => {
+    setMessages((current) =>
+      current.filter((message) => message._id !== messageId),
+    );
+  }, []);
+
   return {
     messages,
     hasOlder,
@@ -131,5 +138,6 @@ export const useTelegramMessages = (
     isLoadingOlder,
     loadOlder,
     addMessage,
+    removeMessage,
   };
 };

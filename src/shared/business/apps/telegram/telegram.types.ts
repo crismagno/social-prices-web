@@ -39,6 +39,17 @@ export interface ITelegramChat {
   unreadCount: number;
 }
 
+// The file of a photo, document, voice note, etc. Its bytes stay at Telegram.
+export interface ITelegramMedia {
+  fileId: string;
+  fileName: string | null;
+  mimeType: string | null;
+  size: number | null;
+  width: number | null;
+  height: number | null;
+  duration: number | null;
+}
+
 export interface ITelegramMessage {
   _id: string;
   direction: TelegramEnum.Direction;
@@ -46,6 +57,7 @@ export interface ITelegramMessage {
   messageId: number;
   contentType: TelegramEnum.ContentType;
   text: string | null;
+  media?: ITelegramMedia;
   sentAt: string;
   sentByEmployeeId?: string | null;
 }

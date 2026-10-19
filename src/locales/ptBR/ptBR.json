@@ -1248,6 +1248,9 @@
         "send": "Enviar",
         "sendHint": "Enter envia, Shift+Enter quebra a linha",
         "back": "Conversas",
+        "delete": "Excluir",
+        "deleteConfirm": "Excluir esta mensagem? Ela também some para o cliente no Telegram.",
+        "deleted": "Mensagem excluída",
         "tooLong": "Uma mensagem pode ter no máximo {max} caracteres.",
         "emptyState": {
           "title": "Nenhuma conversa ainda",
@@ -1270,6 +1273,18 @@
         "linked": "Cliente vinculado.",
         "unlinked": "Cliente desvinculado.",
         "open": "Abrir cliente"
+      },
+      "media": {
+        "record": "Gravar uma mensagem de voz",
+        "cancelRecording": "Descartar a gravação",
+        "microphoneDenied": "O microfone não está disponível. Permita o acesso no navegador e tente de novo.",
+        "attach": "Anexar um arquivo",
+        "remove": "Remover o arquivo",
+        "captionPlaceholder": "Adicione uma legenda (opcional)...",
+        "tooLarge": "O arquivo pode ter no máximo 20 MB.",
+        "play": "Reproduzir",
+        "download": "Baixar",
+        "retry": "Tentar de novo"
       },
       "content": {
         "TEXT": "Mensagem",

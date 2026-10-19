@@ -68,7 +68,11 @@ export default function TelegramAppPage() {
             }}
           />
 
-          <TelegramInbox isEnabled botUsername={connection.botUsername} />
+          <TelegramInbox
+            isEnabled
+            botUsername={connection.botUsername}
+            canDelete={canManage}
+          />
         </Space>
       </ConfigProvider>
     );

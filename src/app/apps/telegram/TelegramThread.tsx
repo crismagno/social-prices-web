@@ -12,12 +12,17 @@ import {
   Spin,
   theme,
 } from "antd";
+import type { TextAreaRef } from "antd/es/input/TextArea";
 import dayjs from "dayjs";
 import Link from "next/link";
 
 import {
   ArrowLeftOutlined,
+  AudioOutlined,
+  CloseOutlined,
+  DeleteOutlined,
   LinkOutlined,
+  PaperClipOutlined,
   SendOutlined,
   UserAddOutlined,
   UserOutlined,
@@ -34,20 +39,39 @@ import {
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import LinkCustomerModal from "./LinkCustomerModal";
-import { chatDisplayName, chatInitial, relativeDay } from "./telegram-display";
+import {
+  chatDisplayName,
+  chatInitial,
+  formatFileSize,
+  relativeDay,
+} from "./telegram-display";
+import TelegramMedia from "./TelegramMedia";
 import { avatarColor } from "./telegram-theme";
 import { useTelegramMessages } from "./useTelegramMessages";
+import { MAX_RECORDING_SECONDS, useVoiceRecorder } from "./useVoiceRecorder";
 
 // Telegram refuses anything longer than this in a single message.
 const MAX_LENGTH: number = 4096;
+
+// A file's text is its caption, which Telegram limits more tightly.
+const MAX_CAPTION_LENGTH: number = 1024;
+
+// The most the bot can fetch back from Telegram, so the most worth sending.
+const MAX_FILE_BYTES: number = 20 * 1024 * 1024;
 
 interface Props {
   chat: ITelegramChat;
   onChatChanged: () => void;
   onBack?: () => void;
+  canDelete: boolean;
 }
 
-export default function TelegramThread({ chat, onChatChanged, onBack }: Props) {
+export default function TelegramThread({
+  chat,
+  onChatChanged,
+  onBack,
+  canDelete,
+}: Props) {
   const { t } = useLanguageData();
 
   const { message } = App.useApp();
@@ -61,6 +85,7 @@ export default function TelegramThread({ chat, onChatChanged, onBack }: Props) {
     isLoadingOlder,
     loadOlder,
     addMessage,
+    removeMessage,
   } = useTelegramMessages(chat.chatId);
 
   const [text, setText] = useState<string>("");
@@ -73,6 +98,12 @@ export default function TelegramThread({ chat, onChatChanged, onBack }: Props) {
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
+  const inputRef = useRef<TextAreaRef | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const [file, setFile] = useState<File | null>(null);
+
   const name: string = chatDisplayName(chat, t("apps.telegram.unnamed"));
 
   const lastMessageId: string | undefined = messages[messages.length - 1]?._id;
@@ -82,7 +113,89 @@ export default function TelegramThread({ chat, onChatChanged, onBack }: Props) {
     bottomRef.current?.scrollIntoView({ block: "end" });
   }, [lastMessageId, chat.chatId]);
 
-  const canSend: boolean = text.trim().length > 0 && !isSending;
+  const recorder = useVoiceRecorder((error: unknown) => {
+    // Most often the microphone was refused; the browser's own words say how to fix it.
+    message.error(t("apps.telegram.media.microphoneDenied"));
+    console.error(error);
+  });
+
+  // Another conversation, or leaving: a half-made recording is not sent anywhere.
+  useEffect(() => recorder.cancel, [chat.chatId]);
+
+  const isRecording: boolean = recorder.state !== "idle";
+
+  const canSend: boolean = (text.trim().length > 0 || !!file) && !isSending;
+
+  const pickFile = (picked: File | undefined): void => {
+    if (!picked) {
+      return;
+    }
+
+    if (picked.size > MAX_FILE_BYTES) {
+      message.error(t("apps.telegram.media.tooLarge"));
+
+      return;
+    }
+
+    setFile(picked);
+    inputRef.current?.focus();
+  };
+
+  const deleteMessage = async (item: ITelegramMessage): Promise<void> => {
+    try {
+      await serviceMethodsInstance.telegramServiceMethods.deleteMessage(
+        chat.chatId,
+        item._id,
+      );
+
+      removeMessage(item._id);
+
+      message.success(t("apps.telegram.inbox.deleted"));
+
+      onChatChanged();
+    } catch (error: any) {
+      // Telegram's own reason (older than 48 hours, say) comes with the error.
+      handleClientError(error);
+    }
+  };
+
+  const sendVoice = async (): Promise<void> => {
+    const recording: File | null = await recorder.finish();
+
+    if (!recording) {
+      return;
+    }
+
+    try {
+      setIsSending(true);
+
+      addMessage(
+        await serviceMethodsInstance.telegramServiceMethods.sendMedia(
+          chat.chatId,
+          recording,
+          "",
+          true,
+        ),
+      );
+
+      onChatChanged();
+    } catch (error: any) {
+      handleClientError(error);
+    } finally {
+      setIsSending(false);
+      inputRef.current?.focus();
+    }
+  };
+
+  // Two minutes is the longest a recording runs; then it goes as it is.
+  useEffect(() => {
+    if (
+      recorder.state === "recording" &&
+      recorder.seconds >= MAX_RECORDING_SECONDS
+    ) {
+      sendVoice();
+    }
+  }, [recorder.seconds, recorder.state]);
 
   const handleSend = async (): Promise<void> => {
     if (!canSend) {
@@ -92,21 +205,30 @@ export default function TelegramThread({ chat, onChatChanged, onBack }: Props) {
     try {
       setIsSending(true);
 
-      const sent =
-        await serviceMethodsInstance.telegramServiceMethods.sendMessage(
-          chat.chatId,
-          text,
-        );
+      const sent = file
+        ? await serviceMethodsInstance.telegramServiceMethods.sendMedia(
+            chat.chatId,
+            file,
+            text,
+          )
+        : await serviceMethodsInstance.telegramServiceMethods.sendMessage(
+            chat.chatId,
+            text,
+          );
 
       addMessage(sent);
 
       setText("");
+      setFile(null);
 
       onChatChanged();
     } catch (error: any) {
       handleClientError(error);
     } finally {
       setIsSending(false);
+
+      // Ready for the next reply, whether it was sent with Enter or the button.
+      inputRef.current?.focus();
     }
   };
 
@@ -131,8 +253,9 @@ export default function TelegramThread({ chat, onChatChanged, onBack }: Props) {
     }
   };
 
+  // A message with its file shows the file and only the caption as text.
   const contentLabel = (item: ITelegramMessage): string =>
-    item.contentType === TelegramEnum.ContentType.TEXT
+    item.contentType === TelegramEnum.ContentType.TEXT || item.media
       ? (item.text ?? "")
       : [`[${t(`apps.telegram.content.${item.contentType}`)}]`, item.text]
           .filter(Boolean)
@@ -308,7 +431,7 @@ export default function TelegramThread({ chat, onChatChanged, onBack }: Props) {
                 )}
 
                 <div
-                  className={`flex ${isOut ? "justify-end" : "justify-start"}`}
+                  className={`group flex w-full items-center gap-1 ${isOut ? "flex-row-reverse justify-start" : "justify-start"}`}
                 >
                   <div
                     className={`max-w-[80%] rounded-2xl px-3 py-2 shadow-sm ${isOut ? "rounded-br-md" : "rounded-bl-md"}`}
@@ -321,14 +444,27 @@ export default function TelegramThread({ chat, onChatChanged, onBack }: Props) {
                         : token.colorText,
                     }}
                   >
-                    <div
-                      style={{
-                        whiteSpace: "pre-wrap",
-                        wordBreak: "break-word",
-                      }}
-                    >
-                      {contentLabel(item)}
-                    </div>
+                    {item.media && (
+                      <div className={contentLabel(item) ? "mb-1" : ""}>
+                        <TelegramMedia
+                          chatId={chat.chatId}
+                          message={item}
+                          media={item.media}
+                          isOut={isOut}
+                        />
+                      </div>
+                    )}
+
+                    {contentLabel(item) && (
+                      <div
+                        style={{
+                          whiteSpace: "pre-wrap",
+                          wordBreak: "break-word",
+                        }}
+                      >
+                        {contentLabel(item)}
+                      </div>
+                    )}
 
                     <div
                       className="mt-0.5 text-right text-[11px]"
@@ -337,6 +473,23 @@ export default function TelegramThread({ chat, onChatChanged, onBack }: Props) {
                       {dayjs(item.sentAt).format("HH:mm")}
                     </div>
                   </div>
+
+                  {canDelete && (
+                    <Popconfirm
+                      title={t("apps.telegram.inbox.deleteConfirm")}
+                      okText={t("apps.telegram.inbox.delete")}
+                      okButtonProps={{ danger: true }}
+                      onConfirm={() => deleteMessage(item)}
+                    >
+                      <Button
+                        type="text"
+                        size="small"
+                        icon={<DeleteOutlined />}
+                        className="opacity-60 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100"
+                        aria-label={t("apps.telegram.inbox.delete")}
+                      />
+                    </Popconfirm>
+                  )}
                 </div>
               </Fragment>
             );
@@ -350,40 +503,143 @@ export default function TelegramThread({ chat, onChatChanged, onBack }: Props) {
         className="px-4 py-3"
         style={{ borderTop: `1px solid ${token.colorBorderSecondary}` }}
       >
+        {file && (
+          <div
+            className="mb-2 flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm"
+            style={{ background: token.colorFillSecondary }}
+          >
+            <PaperClipOutlined />
+
+            <span className="min-w-0 flex-1 truncate">{file.name}</span>
+
+            <span
+              className="text-xs"
+              style={{ color: token.colorTextSecondary }}
+            >
+              {formatFileSize(file.size)}
+            </span>
+
+            <Button
+              type="text"
+              size="small"
+              icon={<CloseOutlined />}
+              disabled={isSending}
+              onClick={() => setFile(null)}
+              aria-label={t("apps.telegram.media.remove")}
+            />
+          </div>
+        )}
+
         <div
-          className="flex items-end gap-2 rounded-3xl py-1 pl-4 pr-1"
+          className="flex items-end gap-2 rounded-3xl py-1 pl-1 pr-1"
           style={{
             border: `1px solid ${token.colorBorder}`,
             background: token.colorBgContainer,
           }}
         >
-          <Input.TextArea
-            variant="borderless"
-            autoSize={{ minRows: 1, maxRows: 5 }}
-            maxLength={MAX_LENGTH}
-            placeholder={t("apps.telegram.inbox.reply")}
-            value={text}
-            disabled={isSending}
-            onChange={(event) => setText(event.target.value)}
-            onPressEnter={(event) => {
-              // Enter sends; Shift+Enter keeps the line break.
-              if (!event.shiftKey) {
-                event.preventDefault();
-                handleSend();
-              }
-            }}
-          />
+          {isRecording ? (
+            <>
+              <Button
+                type="text"
+                shape="circle"
+                size="large"
+                danger
+                icon={<DeleteOutlined />}
+                disabled={recorder.state === "encoding"}
+                onClick={recorder.cancel}
+                aria-label={t("apps.telegram.media.cancelRecording")}
+              />
 
-          <Button
-            type="primary"
-            shape="circle"
-            size="large"
-            icon={<SendOutlined />}
-            loading={isSending}
-            disabled={!canSend}
-            onClick={handleSend}
-            aria-label={t("apps.telegram.inbox.send")}
-          />
+              <div className="flex flex-1 items-center gap-2 self-center">
+                <span
+                  className="inline-block h-2.5 w-2.5 animate-pulse rounded-full"
+                  style={{ background: token.colorError }}
+                />
+
+                <span className="tabular-nums">
+                  {Math.floor(recorder.seconds / 60)}:
+                  {String(recorder.seconds % 60).padStart(2, "0")}
+                </span>
+              </div>
+
+              <Button
+                type="primary"
+                shape="circle"
+                size="large"
+                icon={<SendOutlined />}
+                loading={recorder.state === "encoding" || isSending}
+                onClick={sendVoice}
+                aria-label={t("apps.telegram.inbox.send")}
+              />
+            </>
+          ) : (
+            <>
+              <input
+                ref={fileInputRef}
+                type="file"
+                hidden
+                onChange={(event) => {
+                  pickFile(event.target.files?.[0]);
+                  // The same file can be picked again after it was removed.
+                  event.target.value = "";
+                }}
+              />
+
+              <Button
+                type="text"
+                shape="circle"
+                size="large"
+                icon={<PaperClipOutlined />}
+                disabled={isSending}
+                onClick={() => fileInputRef.current?.click()}
+                aria-label={t("apps.telegram.media.attach")}
+              />
+
+              <Input.TextArea
+                ref={inputRef}
+                variant="borderless"
+                autoSize={{ minRows: 1, maxRows: 5 }}
+                maxLength={file ? MAX_CAPTION_LENGTH : MAX_LENGTH}
+                placeholder={t(
+                  file
+                    ? "apps.telegram.media.captionPlaceholder"
+                    : "apps.telegram.inbox.reply",
+                )}
+                value={text}
+                readOnly={isSending}
+                onChange={(event) => setText(event.target.value)}
+                onPressEnter={(event) => {
+                  // Enter sends; Shift+Enter keeps the line break.
+                  if (!event.shiftKey) {
+                    event.preventDefault();
+                    handleSend();
+                  }
+                }}
+              />
+
+              {canSend || isSending ? (
+                <Button
+                  type="primary"
+                  shape="circle"
+                  size="large"
+                  icon={<SendOutlined />}
+                  loading={isSending}
+                  disabled={!canSend}
+                  onClick={handleSend}
+                  aria-label={t("apps.telegram.inbox.send")}
+                />
+              ) : (
+                <Button
+                  type="primary"
+                  shape="circle"
+                  size="large"
+                  icon={<AudioOutlined />}
+                  onClick={recorder.start}
+                  aria-label={t("apps.telegram.media.record")}
+                />
+              )}
+            </>
+          )}
         </div>
 
         <div
