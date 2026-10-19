@@ -18,6 +18,7 @@ import {
   ITelegramMedia,
   ITelegramMessage,
 } from "../../../shared/business/apps/telegram/telegram.types";
+import AnimatedSticker from "./AnimatedSticker";
 import { formatFileSize, mediaKind, MediaKind } from "./telegram-display";
 
 interface Props {
@@ -40,6 +41,15 @@ export default function TelegramMedia({
   const { token } = theme.useToken();
 
   const kind: MediaKind = mediaKind(media.mimeType);
+
+  const isSticker: boolean =
+    message.contentType === TelegramEnum.ContentType.STICKER;
+
+  // Stickers and pictures show by themselves; the rest waits for a click.
+  const autoLoads: boolean =
+    kind === "image" ||
+    kind === "animated-sticker" ||
+    (isSticker && kind === "video");
 
   const [url, setUrl] = useState<string | null>(null);
 
@@ -74,7 +84,7 @@ export default function TelegramMedia({
   };
 
   useEffect(() => {
-    if (kind === "image") {
+    if (autoLoads) {
       load();
     }
   }, [message._id]);
@@ -109,6 +119,32 @@ export default function TelegramMedia({
       {t("apps.telegram.media.retry")}
     </Button>
   );
+
+  if (kind === "animated-sticker" || (isSticker && kind === "video")) {
+    if (!url) {
+      return (
+        <div
+          className="flex h-40 w-40 items-center justify-center"
+          style={{ color: token.colorTextTertiary }}
+        >
+          {hasFailed ? retry : <Spin />}
+        </div>
+      );
+    }
+
+    return kind === "video" ? (
+      <video
+        src={url}
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{ width: 160, height: 160 }}
+      />
+    ) : (
+      <AnimatedSticker url={url} />
+    );
+  }
 
   if (kind === "image") {
     if (url) {

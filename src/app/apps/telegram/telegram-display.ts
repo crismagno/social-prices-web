@@ -67,11 +67,17 @@ export const relativeDay = (
   return days === 0 ? "today" : days === 1 ? "yesterday" : "other";
 };
 
-export type MediaKind = "image" | "video" | "audio" | "file";
+export type MediaKind =
+  "image" | "video" | "audio" | "file" | "animated-sticker";
 
 // How a file is shown. A sticker that is animated (.tgs) is not a picture a browser
 // can draw, so it ends up as a file like any other.
 export const mediaKind = (mimeType: string | null): MediaKind => {
+  // Telegram's animated stickers: a gzipped Lottie animation.
+  if (mimeType === "application/x-tgsticker") {
+    return "animated-sticker";
+  }
+
   if (mimeType?.startsWith("image/")) {
     return mimeType === "image/svg+xml" ? "file" : "image";
   }
