@@ -47,6 +47,12 @@ const sourceAppUrl = (source: ICustomerExternalSource): string | null => {
     case AppsEnum.App.TELEGRAM:
       return Urls.APPS_TELEGRAM_CHAT.replace(":chatId", source.externalId);
 
+    case AppsEnum.App.FACEBOOK:
+      return Urls.APPS_MESSENGER_CHAT.replace(
+        ":psid",
+        encodeURIComponent(source.externalId),
+      );
+
     case AppsEnum.App.GOOGLE_CONTACTS:
       return Urls.APPS_GOOGLE_CONTACTS_CONTACT.replace(
         ":contactId",

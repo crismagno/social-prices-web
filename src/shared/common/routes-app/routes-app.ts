@@ -12,6 +12,9 @@ const Urls = {
   APPS: "/apps",
   APPS_GOOGLE_CONTACTS: "/apps/google-contacts",
   APPS_TELEGRAM: "/apps/telegram",
+  APPS_MESSENGER: "/apps/messenger",
+  // Opens the conversation of one person (their Page-scoped id).
+  APPS_MESSENGER_CHAT: "/apps/messenger?chat=:psid",
   // Opens the conversation of one person (a private chat has the person's id).
   APPS_TELEGRAM_CHAT: "/apps/telegram?chat=:chatId",
   // Shows only that contact in the list of the app.

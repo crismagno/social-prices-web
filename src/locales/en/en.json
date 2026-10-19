@@ -1106,7 +1106,7 @@
     "names": {
       "GOOGLE_CONTACTS": "Google Contacts",
       "INSTAGRAM": "Instagram",
-      "FACEBOOK": "Facebook",
+      "FACEBOOK": "Messenger",
       "WHATSAPP": "WhatsApp",
       "TELEGRAM": "Telegram"
     },
@@ -1200,6 +1200,98 @@
       "hint": "Apps this user can see and connect.",
       "save": "Save apps",
       "saved": "Apps updated."
+    },
+    "messenger": {
+      "title": "Messenger",
+      "unnamed": "Unnamed contact",
+      "connectTitle": "Connect your Facebook Page",
+      "connectSubtitle": "Answer your customers' Messenger messages without leaving this system.",
+      "managersOnly": "Only the owner, admins and masters can connect or disconnect the Page.",
+      "connect": "Connect with Facebook",
+      "connectedToast": "Page connected",
+      "disconnected": "Page disconnected",
+      "steps": {
+        "page": {
+          "title": "Have a Facebook Page",
+          "text": "Messenger works with Pages, not personal profiles. You need to be an admin of the Page.",
+          "action": "Create a Page"
+        },
+        "login": {
+          "title": "Log in with Facebook",
+          "text": "Facebook asks you to allow this system to read your Pages and answer their messages. You do not copy any key."
+        },
+        "choose": {
+          "title": "Choose the Page",
+          "text": "You manage more than one Page. Pick the one to connect.",
+          "action": "Connect this Page"
+        }
+      },
+      "errors": {
+        "access_denied": "You did not allow access on Facebook. Connect again and accept the permissions.",
+        "oauth_error": "Facebook could not complete the login. Try again.",
+        "invalid_state": "The login took too long or was altered. Connect again.",
+        "missing_code": "Facebook did not send back the login code. Try again.",
+        "not_enabled": "Messenger is not enabled for your account.",
+        "no_pages": "No Page came back. On the Facebook screen, tick the Page you want to connect (use Edit settings if you do not see it), and make sure you are an admin of it.",
+        "missing_permission": "Facebook did not give this system all the permissions it needs. Connect again and keep every permission ticked.",
+        "page_in_use": "This Page is already connected to another account.",
+        "subscribe_failed": "Facebook did not let this system receive the Page messages. Check the permissions you accepted.",
+        "connection_failed": "Could not connect the Page. Try again.",
+        "MESSENGER_PAGE_ALREADY_CONNECTED": "This Page is already connected to another account.",
+        "MESSENGER_PAGE_NOT_AVAILABLE": "This Page is not available any more. Connect with Facebook again.",
+        "MESSENGER_PAGE_SUBSCRIBE_FAILED": "Facebook did not let this system receive the Page messages. Check the permissions you accepted."
+      },
+      "page": {
+        "connected": "Connected",
+        "lastMessage": "Last message:",
+        "none": "none yet",
+        "open": "Open Page",
+        "disconnect": "Disconnect",
+        "disconnectConfirm": "Disconnect this Page? Conversations already received stay here."
+      },
+      "inbox": {
+        "search": "Search conversations",
+        "you": "You: ",
+        "loadOlder": "Load older messages",
+        "noMessages": "No messages in this conversation.",
+        "reply": "Write a reply...",
+        "send": "Send",
+        "sendHint": "Enter sends, Shift+Enter breaks the line",
+        "back": "Conversations",
+        "pick": "Pick a conversation to read and answer.",
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "emptyState": {
+          "title": "No conversations yet",
+          "text": "When someone messages your Page on Facebook or Messenger, the conversation shows up here."
+        }
+      },
+      "window": {
+        "open": "You can answer until {time}",
+        "closed": "The 24-hour answer window closed",
+        "closedHint": "Facebook only allows answering for 24 hours after the person last wrote. You can answer again when they write to the Page."
+      },
+      "customer": {
+        "open": "Open customer",
+        "create": "Create customer",
+        "link": "Link customer",
+        "unlink": "Unlink",
+        "unlinkConfirm": "Unlink this customer? The customer is kept, only without the Messenger contact.",
+        "created": "Customer created",
+        "linked": "Customer linked",
+        "unlinked": "Customer unlinked"
+      },
+      "content": {
+        "image": "Photo",
+        "video": "Video",
+        "audio": "Audio",
+        "file": "File"
+      },
+      "media": {
+        "retry": "Try again",
+        "play": "Play",
+        "download": "Download"
+      }
     },
     "telegram": {
       "title": "Telegram",

@@ -1109,7 +1109,7 @@
     "names": {
       "GOOGLE_CONTACTS": "Google Contatos",
       "INSTAGRAM": "Instagram",
-      "FACEBOOK": "Facebook",
+      "FACEBOOK": "Messenger",
       "WHATSAPP": "WhatsApp",
       "TELEGRAM": "Telegram"
     },
@@ -1203,6 +1203,98 @@
       "hint": "Apps que este usuário pode ver e conectar.",
       "save": "Salvar apps",
       "saved": "Apps atualizados."
+    },
+    "messenger": {
+      "title": "Messenger",
+      "unnamed": "Contato sem nome",
+      "connectTitle": "Conecte sua Página do Facebook",
+      "connectSubtitle": "Responda as mensagens do Messenger dos seus clientes sem sair deste sistema.",
+      "managersOnly": "Só o dono, administradores e masters podem conectar ou desconectar a Página.",
+      "connect": "Conectar com o Facebook",
+      "connectedToast": "Página conectada",
+      "disconnected": "Página desconectada",
+      "steps": {
+        "page": {
+          "title": "Tenha uma Página do Facebook",
+          "text": "O Messenger funciona com Páginas, não com perfis pessoais. Você precisa ser administrador da Página.",
+          "action": "Criar uma Página"
+        },
+        "login": {
+          "title": "Entre com o Facebook",
+          "text": "O Facebook pede que você permita a este sistema ler suas Páginas e responder as mensagens delas. Você não copia nenhuma chave."
+        },
+        "choose": {
+          "title": "Escolha a Página",
+          "text": "Você administra mais de uma Página. Escolha a que será conectada.",
+          "action": "Conectar esta Página"
+        }
+      },
+      "errors": {
+        "access_denied": "Você não permitiu o acesso no Facebook. Conecte de novo e aceite as permissões.",
+        "oauth_error": "O Facebook não conseguiu concluir o login. Tente de novo.",
+        "invalid_state": "O login demorou demais ou foi alterado. Conecte de novo.",
+        "missing_code": "O Facebook não devolveu o código do login. Tente de novo.",
+        "not_enabled": "O Messenger não está liberado para a sua conta.",
+        "no_pages": "Nenhuma Página voltou. Na tela do Facebook, marque a Página que você quer conectar (use Editar configurações se ela não aparecer) e confirme que você é administrador dela.",
+        "missing_permission": "O Facebook não deu a este sistema todas as permissões necessárias. Conecte de novo e mantenha todas as permissões marcadas.",
+        "page_in_use": "Esta Página já está conectada a outra conta.",
+        "subscribe_failed": "O Facebook não deixou este sistema receber as mensagens da Página. Confira as permissões que você aceitou.",
+        "connection_failed": "Não foi possível conectar a Página. Tente de novo.",
+        "MESSENGER_PAGE_ALREADY_CONNECTED": "Esta Página já está conectada a outra conta.",
+        "MESSENGER_PAGE_NOT_AVAILABLE": "Esta Página não está mais disponível. Conecte com o Facebook de novo.",
+        "MESSENGER_PAGE_SUBSCRIBE_FAILED": "O Facebook não deixou este sistema receber as mensagens da Página. Confira as permissões que você aceitou."
+      },
+      "page": {
+        "connected": "Conectada",
+        "lastMessage": "Última mensagem:",
+        "none": "nenhuma ainda",
+        "open": "Abrir Página",
+        "disconnect": "Desconectar",
+        "disconnectConfirm": "Desconectar esta Página? As conversas já recebidas continuam aqui."
+      },
+      "inbox": {
+        "search": "Buscar conversas",
+        "you": "Você: ",
+        "loadOlder": "Carregar mensagens anteriores",
+        "noMessages": "Nenhuma mensagem nesta conversa.",
+        "reply": "Escreva uma resposta...",
+        "send": "Enviar",
+        "sendHint": "Enter envia, Shift+Enter quebra a linha",
+        "back": "Conversas",
+        "pick": "Escolha uma conversa para ler e responder.",
+        "today": "Hoje",
+        "yesterday": "Ontem",
+        "emptyState": {
+          "title": "Nenhuma conversa ainda",
+          "text": "Quando alguém mandar mensagem para a sua Página no Facebook ou no Messenger, a conversa aparece aqui."
+        }
+      },
+      "window": {
+        "open": "Você pode responder até {time}",
+        "closed": "A janela de 24 horas para responder fechou",
+        "closedHint": "O Facebook só permite responder por 24 horas depois da última mensagem da pessoa. Você poderá responder de novo quando ela escrever para a Página."
+      },
+      "customer": {
+        "open": "Abrir cliente",
+        "create": "Criar cliente",
+        "link": "Vincular cliente",
+        "unlink": "Desvincular",
+        "unlinkConfirm": "Desvincular este cliente? O cliente é mantido, só sem o contato do Messenger.",
+        "created": "Cliente criado",
+        "linked": "Cliente vinculado",
+        "unlinked": "Cliente desvinculado"
+      },
+      "content": {
+        "image": "Foto",
+        "video": "Vídeo",
+        "audio": "Áudio",
+        "file": "Arquivo"
+      },
+      "media": {
+        "retry": "Tentar de novo",
+        "play": "Reproduzir",
+        "download": "Baixar"
+      }
     },
     "telegram": {
       "title": "Telegram",

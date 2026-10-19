@@ -16,6 +16,7 @@ import Urls from "../../shared/common/routes-app/routes-app";
 const APP_URLS: Partial<Record<AppsEnum.App, string>> = {
   [AppsEnum.App.GOOGLE_CONTACTS]: Urls.APPS_GOOGLE_CONTACTS,
   [AppsEnum.App.TELEGRAM]: Urls.APPS_TELEGRAM,
+  [AppsEnum.App.FACEBOOK]: Urls.APPS_MESSENGER,
 };
 
 export default function AppsPage() {
