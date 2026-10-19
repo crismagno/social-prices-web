@@ -65,7 +65,18 @@ export default function GoogleContactsAppPage() {
     apps: { catalog, isLoadingApps, fetchApps },
   } = useAppData();
 
-  const errorCode: string | null = useSearchParams().get("error");
+  const searchParams = useSearchParams();
+
+  const errorCode: string | null = searchParams.get("error");
+
+  // A link from a customer shows only that contact, until "show all" is pressed.
+  const requestedContactId: string | null = searchParams.get("contact");
+
+  const [isShowingAll, setIsShowingAll] = useState<boolean>(false);
+
+  const focusedContactId: string | null = isShowingAll
+    ? null
+    : requestedContactId;
 
   const [busy, setBusy] = useState<Busy>(null);
 
@@ -152,16 +163,21 @@ export default function GoogleContactsAppPage() {
   const filteredContacts: IGoogleContactRow[] = useMemo(() => {
     const term: string = search.trim().toLowerCase();
 
-    if (!preview || !term) {
-      return preview?.contacts ?? [];
+    const contacts: IGoogleContactRow[] = (preview?.contacts ?? []).filter(
+      (contact: IGoogleContactRow) =>
+        !focusedContactId || contact.externalId === focusedContactId,
+    );
+
+    if (!term) {
+      return contacts;
     }
 
-    return preview.contacts.filter((contact: IGoogleContactRow) =>
+    return contacts.filter((contact: IGoogleContactRow) =>
       [contact.name, contact.email, contact.phone].some((value) =>
         value?.toLowerCase().includes(term),
       ),
     );
-  }, [preview, search]);
+  }, [preview, search, focusedContactId]);
 
   // How many new customers the plan still allows (null: unlimited or unknown;
   // the API checks it again on save either way). Linking never uses any.
@@ -427,6 +443,23 @@ export default function GoogleContactsAppPage() {
           </Space>
 
           <span>{t("apps.google.listHint")}</span>
+
+          {focusedContactId && (
+            <Alert
+              type={filteredContacts.length ? "info" : "warning"}
+              showIcon
+              message={t(
+                filteredContacts.length
+                  ? "apps.google.focus.showing"
+                  : "apps.google.focus.notFound",
+              )}
+              action={
+                <Button size="small" onClick={() => setIsShowingAll(true)}>
+                  {t("apps.google.focus.showAll")}
+                </Button>
+              }
+            />
+          )}
 
           {preview.hasMore && (
             <Alert

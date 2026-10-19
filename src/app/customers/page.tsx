@@ -12,9 +12,11 @@ import {
   EnterOutlined,
   PlusOutlined,
   ShoppingCartOutlined,
+  ThunderboltOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
 
+import { FastSaleDrawer } from "../../components/common/FastSaleDrawer/FastSaleDrawer";
 import { ImageOrDefault } from "../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../components/common/LoadingFull/LoadingFull";
 import { PhoneNumbersTag } from "../../components/common/PhoneNumbersTag/PhoneNumbersTag";
@@ -60,6 +62,11 @@ export default function CustomersPage() {
   const { socket } = useSocketData();
 
   const router: AppRouterInstance = useRouter();
+
+  // The customer a fast sale is being made for; one drawer serves every row.
+  const [fastSaleCustomer, setFastSaleCustomer] = useState<ICustomer | null>(
+    null,
+  );
 
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<ICustomer> | undefined
@@ -175,7 +182,10 @@ export default function CustomersPage() {
               key: "name",
               align: "center",
               sorter: true,
-              ...getColumnTextSearchProps<ICustomer>(t, t("customers.filterName")),
+              ...getColumnTextSearchProps<ICustomer>(
+                t,
+                t("customers.filterName"),
+              ),
               render: (name: string | null, customer: ICustomer) => {
                 const identifiers = [
                   { label: t("common.cpf"), value: customer.cpf },
@@ -310,6 +320,14 @@ export default function CustomersPage() {
                       />
                     </Tooltip>
 
+                    <Tooltip title={t("sales.fastSale")}>
+                      <Button
+                        className="!border-amber-500 !bg-amber-500 !text-white hover:!bg-amber-400"
+                        onClick={() => setFastSaleCustomer(customer)}
+                        icon={<ThunderboltOutlined />}
+                      />
+                    </Tooltip>
+
                     <Tooltip title={t("sales.createSale")}>
                       <Button
                         type="primary"
@@ -363,6 +381,12 @@ export default function CustomersPage() {
         onClose={() => setIsDownloadCustomersDrawerOpen(false)}
         title={t("customers.downloadCustomers")}
         tags={tagsSort}
+      />
+      <FastSaleDrawer
+        key={fastSaleCustomer?._id ?? "none"}
+        open={!!fastSaleCustomer}
+        onClose={() => setFastSaleCustomer(null)}
+        initialCustomer={fastSaleCustomer}
       />
     </Layout>
   );

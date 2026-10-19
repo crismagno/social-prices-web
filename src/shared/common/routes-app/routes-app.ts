@@ -12,6 +12,10 @@ const Urls = {
   APPS: "/apps",
   APPS_GOOGLE_CONTACTS: "/apps/google-contacts",
   APPS_TELEGRAM: "/apps/telegram",
+  // Opens the conversation of one person (a private chat has the person's id).
+  APPS_TELEGRAM_CHAT: "/apps/telegram?chat=:chatId",
+  // Shows only that contact in the list of the app.
+  APPS_GOOGLE_CONTACTS_CONTACT: "/apps/google-contacts?contact=:contactId",
   VALIDATE_SIGN_IN_CODE: "/validate-sign-in-code",
   VALIDATE_SIGN_IN_EMPLOYEE_CODE: "/validate-sign-in-employee-code",
   RECOVER_PASSWORD: "/recover-password",

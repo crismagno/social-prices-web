@@ -542,6 +542,7 @@
     "customerCreatedSuccessfully": "Seu cliente foi criado com sucesso!",
     "customerUpdatedSuccessfully": "Seu cliente foi atualizado com sucesso!",
     "customerNotFoundToUpdate": "Cliente não encontrado para atualizar!",
+    "openInApp": "Abrir no {app}",
     "sourceApps": "Apps de origem",
     "customerProfile": "Perfil do Cliente",
     "customerProfileSubtitle": "Perfil do cliente",
@@ -1128,6 +1129,11 @@
       "importResult": "{created} criados, {linked} vinculados, {skipped} ignorados, {failed} com falha.",
       "hasMore": "Mostrando os primeiros {count} contatos. Alguns contatos não estão listados.",
       "limitReached": "O limite de clientes foi atingido, então alguns contatos não foram salvos.",
+      "focus": {
+        "showing": "Mostrando só o contato vinculado a este customer.",
+        "notFound": "Este contato não está na lista carregada. Sincronize de novo para trazê-lo do Google.",
+        "showAll": "Mostrar todos os contatos"
+      },
       "listHint": "Escolha os contatos a salvar. Contatos novos viram clientes; contatos que já casam com um cliente pelo e-mail apenas são vinculados a ele, e nada mais nesse cliente é alterado.",
       "grid": {
         "name": "Nome",

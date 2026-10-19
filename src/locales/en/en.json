@@ -539,6 +539,7 @@
     "customerCreatedSuccessfully": "Your customer has been created successfully!",
     "customerUpdatedSuccessfully": "Your customer has been updated successfully!",
     "customerNotFoundToUpdate": "Customer not found to update!",
+    "openInApp": "Open in {app}",
     "sourceApps": "Source apps",
     "customerProfile": "Customer Profile",
     "customerProfileSubtitle": "Customer profile of",
@@ -1125,6 +1126,11 @@
       "importResult": "{created} created, {linked} linked, {skipped} skipped, {failed} failed.",
       "hasMore": "Showing the first {count} contacts. Some contacts are not listed.",
       "limitReached": "Your customers limit was reached, so some contacts were not saved.",
+      "focus": {
+        "showing": "Showing only the contact linked to this customer.",
+        "notFound": "This contact is not in the loaded list. Sync again to bring it from Google.",
+        "showAll": "Show all contacts"
+      },
       "listHint": "Pick the contacts to save. New contacts become customers; contacts that already match a customer by e-mail are only linked to it, and nothing else on that customer is changed.",
       "grid": {
         "name": "Name",

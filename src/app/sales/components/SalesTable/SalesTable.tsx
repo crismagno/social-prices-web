@@ -28,8 +28,10 @@ import {
   EnterOutlined,
   EyeOutlined,
   UploadOutlined,
+  ThunderboltOutlined,
 } from "@ant-design/icons";
 
+import { FastSaleDrawer } from "../../../../components/common/FastSaleDrawer/FastSaleDrawer";
 import { ButtonCreateSale } from "../../../../components/common/ButtonCreateSale/ButtonCreateSale";
 import { CustomRangeDatePicker } from "../../../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
 import { DeliveryAddressMapButton } from "../../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton";
@@ -155,6 +157,8 @@ const SalesTable: React.FC<Props> = ({
 
   const [isDownloadSalesDrawerOpen, setIsDownloadSalesDrawerOpen] =
     useState<boolean>(false);
+
+  const [isFastSaleOpen, setIsFastSaleOpen] = useState<boolean>(false);
 
   const [selectedSaleIds, setSelectedSaleIds] = useState<string[]>([]);
 
@@ -327,6 +331,14 @@ const SalesTable: React.FC<Props> = ({
               icon={<UploadOutlined />}
             >
               {t("sales.upload")}
+            </Button>
+
+            <Button
+              className="mr-2 !border-amber-500 !bg-amber-500 !text-white hover:!bg-amber-400"
+              onClick={() => setIsFastSaleOpen(true)}
+              icon={<ThunderboltOutlined />}
+            >
+              {t("sales.fastSale")}
             </Button>
 
             <ButtonCreateSale
@@ -1064,6 +1076,16 @@ const SalesTable: React.FC<Props> = ({
         {t("sales.areYouSureActivateSale")}{" "}
         <strong>{saleToActivate?.number ?? ""}</strong>
       </Modal>
+
+      <FastSaleDrawer
+        open={isFastSaleOpen}
+        onClose={() => {
+          setIsFastSaleOpen(false);
+
+          // A sale may have just been made: list it.
+          setTableStateRequest({ ...tableStateRequest });
+        }}
+      />
     </>
   );
 };

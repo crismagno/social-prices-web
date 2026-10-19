@@ -25,6 +25,8 @@ interface Props {
   mode?: "multiple";
   value?: string[] | null;
   onSelectCustomerIds?: (customerIds: string[]) => void;
+  // Single mode: starts with this customer picked, instead of "New customer".
+  initialCustomer?: ICustomer | null;
 }
 
 export const SelectCustomer: React.FC<Props> = ({
@@ -35,6 +37,7 @@ export const SelectCustomer: React.FC<Props> = ({
   mode,
   value,
   onSelectCustomerIds,
+  initialCustomer,
 }) => {
   const { t } = useLanguageData();
   const isMultiple: boolean = mode === "multiple";
@@ -111,7 +114,9 @@ export const SelectCustomer: React.FC<Props> = ({
               onSelectCustomer?.(selectedCustomer ?? null);
             }
       }
-      defaultValue={isMultiple ? undefined : null}
+      defaultValue={
+        isMultiple ? undefined : ((initialCustomer?._id ?? null) as any)
+      }
       styles={{ popup: { root: { maxHeight: containerHeight } } }}
       listHeight={containerHeight}
       filterOption={false}
@@ -131,6 +136,25 @@ export const SelectCustomer: React.FC<Props> = ({
           </div>
         </Select.Option>
       )}
+
+      {/* The search may not list the customer that came pre-selected. */}
+      {initialCustomer &&
+        !customers?.some((c: ICustomer) => c._id === initialCustomer._id) && (
+          <Select.Option key={initialCustomer._id} value={initialCustomer._id}>
+            <div className="flex items-center">
+              <Avatar
+                src={
+                  initialCustomer.avatar
+                    ? getImageUrl(initialCustomer.avatar)
+                    : ImagesEnum.FilesNames.DefaultAvatarImage
+                }
+                size={"small"}
+                className="mr-2"
+              />
+              <span>{initialCustomer.name}</span>
+            </div>
+          </Select.Option>
+        )}
 
       {customers?.map((customer: ICustomer) => (
         <Select.Option key={customer._id} value={customer._id}>

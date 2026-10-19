@@ -94,6 +94,8 @@ import { FastSaleSummaryModal } from './FastSaleSummaryModal';
 interface Props {
   open: boolean;
   onClose: () => void;
+  // Opens with this customer already picked (from a customer's page or row).
+  initialCustomer?: ICustomer | null;
 }
 
 const parseAddress = (
@@ -161,7 +163,11 @@ const Section: React.FC<{
 
 const emptyNewCustomer: INewCustomer = { name: "", email: "", phone: "" };
 
-export const FastSaleDrawer: React.FC<Props> = ({ open, onClose }) => {
+export const FastSaleDrawer: React.FC<Props> = ({
+  open,
+  onClose,
+  initialCustomer = null,
+}) => {
   const { message } = App.useApp();
   const { t } = useLanguageData();
   const { user, employee } = useAuthData();
@@ -173,9 +179,10 @@ export const FastSaleDrawer: React.FC<Props> = ({ open, onClose }) => {
   const storeId: string | null = selectedStoreId ?? stores[0]?._id ?? null;
 
   const [items, setItems] = useState<IFastSaleItem[]>([]);
-  const [customer, setCustomer] = useState<ICustomer | null>(null);
-  // "New customer" is the Select's initial option, so it starts active.
-  const [isNewCustomer, setIsNewCustomer] = useState<boolean>(true);
+  const [customer, setCustomer] = useState<ICustomer | null>(initialCustomer);
+  // "New customer" is the Select's initial option, so it starts active,
+  // unless the drawer came with a customer.
+  const [isNewCustomer, setIsNewCustomer] = useState<boolean>(!initialCustomer);
   const [newCustomer, setNewCustomer] =
     useState<INewCustomer>(emptyNewCustomer);
   const [deliveryType, setDeliveryType] = useState<SalesEnum.DeliveryType>(
@@ -258,8 +265,8 @@ export const FastSaleDrawer: React.FC<Props> = ({ open, onClose }) => {
   const resetForm = () => {
     setItems([]);
     setSelectedStoreId(null);
-    setCustomer(null);
-    setIsNewCustomer(true);
+    setCustomer(initialCustomer);
+    setIsNewCustomer(!initialCustomer);
     setNewCustomer(emptyNewCustomer);
     setDeliveryType(SalesEnum.DeliveryType.PICKUP);
     setIsDeliveryOpen(false);
@@ -643,6 +650,7 @@ export const FastSaleDrawer: React.FC<Props> = ({ open, onClose }) => {
           <div className="w-3/5">
             <SelectCustomer
               key={formKey}
+              initialCustomer={initialCustomer}
               onSelectCustomer={(selected) => {
                 // The component emits null only for its "New customer" option.
                 setCustomer(selected);

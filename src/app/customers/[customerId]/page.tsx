@@ -1,17 +1,23 @@
 "use client";
 
+import { useState } from "react";
+
 import { Button, Card, Col, Descriptions, Row, Tabs, Tag, Tooltip } from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
 import {
   EditOutlined,
+  ExportOutlined,
+  ThunderboltOutlined,
   ShoppingCartOutlined,
   UsergroupAddOutlined,
 } from "@ant-design/icons";
 
+import { FastSaleDrawer } from "../../../components/common/FastSaleDrawer/FastSaleDrawer";
 import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
 import AppIcon from "../../../components/common/AppIcon/AppIcon";
 import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
@@ -19,6 +25,8 @@ import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
 import useLanguageData from "../../../data/context/language/useLanguageData";
+import AppsEnum from "../../../shared/business/apps/apps.enum";
+import { ICustomerExternalSource } from "../../../shared/business/customers/customer.interface";
 import AddressEnum from "../../../shared/business/shared/address/address.enum";
 import { IAddress } from "../../../shared/business/shared/address/address.interface";
 import PersonEnum from "../../../shared/business/shared/person/person.enum";
@@ -33,9 +41,28 @@ import SalesTable from "../../sales/components/SalesTable/SalesTable";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindCustomerById } from "../detail/useFindCustomerById";
 
+// Where the customer lives inside the app they came from, if that app shows them.
+const sourceAppUrl = (source: ICustomerExternalSource): string | null => {
+  switch (source.appId) {
+    case AppsEnum.App.TELEGRAM:
+      return Urls.APPS_TELEGRAM_CHAT.replace(":chatId", source.externalId);
+
+    case AppsEnum.App.GOOGLE_CONTACTS:
+      return Urls.APPS_GOOGLE_CONTACTS_CONTACT.replace(
+        ":contactId",
+        encodeURIComponent(source.externalId),
+      );
+
+    default:
+      return null;
+  }
+};
+
 export default function CustomerPage() {
   const { t } = useLanguageData()!;
   const router: AppRouterInstance = useRouter();
+
+  const [isFastSaleOpen, setIsFastSaleOpen] = useState<boolean>(false);
 
   const params: Params = useParams();
 
@@ -101,6 +128,15 @@ export default function CustomerPage() {
               title={t("profile.information")}
               extraHeader={
                 <div className="flex gap-2">
+                  <Tooltip title={t("sales.fastSale")}>
+                    <Button
+                      className="!border-amber-500 !bg-amber-500 !text-white hover:!bg-amber-400"
+                      icon={<ThunderboltOutlined />}
+                      onClick={() => setIsFastSaleOpen(true)}
+                    >
+                      {t("sales.fastSale")}
+                    </Button>
+                  </Tooltip>
                   <Tooltip title={t("customers.goToCreateSaleTooltip")}>
                     <Button
                       type="primary"
@@ -205,15 +241,39 @@ export default function CustomerPage() {
                     >
                       {customer.externalSources?.length ? (
                         <div className="flex flex-wrap gap-2">
-                          {customer.externalSources.map((source) => (
-                            <Tag
-                              key={source.appId}
-                              className="flex items-center gap-1"
-                            >
-                              <AppIcon app={source.appId} />
-                              {t(`apps.names.${source.appId}`)}
-                            </Tag>
-                          ))}
+                          {customer.externalSources.map((source) => {
+                            const appUrl: string | null = sourceAppUrl(source);
+
+                            const appName: string = t(
+                              `apps.names.${source.appId}`,
+                            );
+
+                            // An app the customer can be opened in is a button
+                            // that goes there; any other is a plain tag.
+                            return appUrl ? (
+                              <Link key={source.appId} href={appUrl}>
+                                <Button
+                                  size="small"
+                                  title={t("customers.openInApp").replace(
+                                    "{app}",
+                                    appName,
+                                  )}
+                                >
+                                  <AppIcon app={source.appId} />
+                                  {appName}
+                                  <ExportOutlined />
+                                </Button>
+                              </Link>
+                            ) : (
+                              <Tag
+                                key={source.appId}
+                                className="m-0 flex items-center gap-1"
+                              >
+                                <AppIcon app={source.appId} />
+                                {appName}
+                              </Tag>
+                            );
+                          })}
                         </div>
                       ) : (
                         "-"
@@ -419,6 +479,11 @@ export default function CustomerPage() {
           ]}
         />
       </Card>
+      <FastSaleDrawer
+        open={isFastSaleOpen}
+        onClose={() => setIsFastSaleOpen(false)}
+        initialCustomer={customer}
+      />
     </Layout>
   );
 }

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { Button, Card, Grid, theme } from "antd";
+import { useSearchParams } from "next/navigation";
 
 import { ExportOutlined } from "@ant-design/icons";
 
@@ -39,7 +40,14 @@ export default function TelegramInbox({
 
   const { chats, isLoadingChats, refetchChats } = useTelegramChats(isEnabled);
 
-  const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
+  // A link from a customer opens that person's conversation straight away.
+  const requestedChat: number = Number(useSearchParams().get("chat"));
+
+  const [selectedChatId, setSelectedChatId] = useState<number | null>(
+    Number.isInteger(requestedChat) && requestedChat !== 0
+      ? requestedChat
+      : null,
+  );
 
   const isNarrow: boolean = screens.md === false;
 
