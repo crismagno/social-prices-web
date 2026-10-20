@@ -210,15 +210,12 @@ export default function ChatsList({
                               app={InboxEnum.ChannelApp[conversation.channel]}
                             />
 
-                            {/* The row is already named after the person when no customer is tied. */}
-                            {contact !== name && (
-                              <span
-                                className="truncate"
-                                style={{ color: token.colorTextSecondary }}
-                              >
-                                {contact}
-                              </span>
-                            )}
+                            <span
+                              className="truncate"
+                              style={{ color: token.colorTextSecondary }}
+                            >
+                              {contact}
+                            </span>
                           </span>
                         );
                       },
