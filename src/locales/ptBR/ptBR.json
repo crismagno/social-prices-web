@@ -154,7 +154,8 @@
     "transactions": "Receitas e Despesas",
     "notes": "Notas",
     "expandMenu": "Expandir menu",
-    "collapseMenu": "Recolher menu"
+    "collapseMenu": "Recolher menu",
+    "chats": "Chats"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -551,7 +552,9 @@
     "uniqueUsername": "Nome de usuário único",
     "uploadFilename": "Nome do Arquivo de Upload",
     "goToCreateSale": "Criar venda",
-    "goToCreateSaleTooltip": "Ir para criar venda para este cliente"
+    "goToCreateSaleTooltip": "Ir para criar venda para este cliente",
+    "openChat": "Abrir chat",
+    "chatChannels": "Chats"
   },
   "stores": {
     "title": "Lojas",
@@ -1837,5 +1840,76 @@
     "type": "Tipo",
     "yes": "Sim",
     "no": "Não"
+  },
+  "chats": {
+    "title": "Chats",
+    "subtitle": "Todas as conversas de todos os canais, por cliente",
+    "search": "Buscar clientes ou mensagens",
+    "you": "Você: ",
+    "noCustomer": "Sem cliente",
+    "pick": "Escolha uma conversa",
+    "empty": {
+      "title": "Nenhuma conversa ainda",
+      "text": "As mensagens do Telegram, Messenger e Instagram aparecem aqui, agrupadas por cliente."
+    },
+    "filter": {
+      "all": "Todos os canais"
+    },
+    "loadOlder": "Carregar mensagens anteriores",
+    "noMessages": "Nenhuma mensagem ainda",
+    "unnamed": "Sem nome",
+    "from": "via {channel}",
+    "unsupported": "Mensagem não suportada pelo canal",
+    "content": {
+      "image": "Foto",
+      "video": "Vídeo",
+      "audio": "Áudio",
+      "voice": "Mensagem de voz",
+      "file": "Arquivo",
+      "sticker": "Figurinha",
+      "location": "Localização",
+      "contact": "Contato",
+      "share": "Conteúdo compartilhado",
+      "unsupported": "Mensagem não suportada",
+      "other": "Mensagem"
+    },
+    "media": {
+      "retry": "Tentar de novo",
+      "play": "Reproduzir",
+      "download": "Baixar"
+    },
+    "channels": {
+      "TELEGRAM": "Telegram",
+      "MESSENGER": "Messenger",
+      "INSTAGRAM": "Instagram"
+    },
+    "conversations": {
+      "title": "Conversas deste cliente"
+    },
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "back": "Voltar",
+    "openCustomer": "Abrir cliente",
+    "reply": {
+      "placeholder": "Escreva uma resposta...",
+      "send": "Enviar",
+      "via": "Enviar por",
+      "sendHint": "Enter envia, Shift+Enter quebra a linha",
+      "windowOpen": "Você pode responder até {time}",
+      "windowClosed": "A janela de resposta deste canal fechou",
+      "windowClosedHint": "Este canal só permite responder por 24 horas depois que a pessoa escreveu. Escolha outro canal ou espere ela escrever de novo."
+    },
+    "customer": {
+      "manage": "Conversas",
+      "modalTitle": "Conversas e clientes",
+      "change": "Trocar cliente",
+      "link": "Vincular a um cliente",
+      "unlink": "Remover cliente",
+      "unlinkConfirm": "Remover o cliente desta conversa? O histórico continua com a conversa.",
+      "linked": "Conversa vinculada",
+      "unlinked": "Cliente removido",
+      "none": "Sem cliente",
+      "hint": "Cada conversa pode ser vinculada a um cliente, ou movida para outro; todo o histórico vai junto."
+    }
   }
 }

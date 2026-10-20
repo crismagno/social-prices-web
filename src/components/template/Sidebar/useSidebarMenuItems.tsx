@@ -13,6 +13,7 @@ import {
   DollarOutlined,
   HomeOutlined,
   InboxOutlined,
+  MessageOutlined,
   SettingOutlined,
   ShopOutlined,
   ShoppingCartOutlined,
@@ -149,6 +150,29 @@ export const useSidebarMenuItems = (
       app.enabled && app.integrated && app.connected && !!APP_URLS[app.id],
   );
 
+  // The central chat reads the apps that carry conversations, so it shows once
+  // one of them is connected, with their unread messages.
+  const chatApps: IAppCatalogItem[] = connectedApps.filter(
+    (app: IAppCatalogItem) =>
+      app.id === AppsEnum.App.TELEGRAM ||
+      app.id === AppsEnum.App.FACEBOOK ||
+      app.id === AppsEnum.App.INSTAGRAM,
+  );
+
+  const unreadInChats: number = chatApps.reduce(
+    (sum: number, app: IAppCatalogItem) => sum + app.unreadCount,
+    0,
+  );
+
+  const chatsIcon: React.ReactNode =
+    unreadInChats > 0 && isCollapsed ? (
+      <Badge dot offset={[-3, 3]}>
+        <MessageOutlined />
+      </Badge>
+    ) : (
+      <MessageOutlined />
+    );
+
   const unreadInApps: number = connectedApps.reduce(
     (sum: number, app: IAppCatalogItem) => sum + app.unreadCount,
     0,
@@ -175,6 +199,16 @@ export const useSidebarMenuItems = (
     ) : (
       label
     );
+
+  const chatsItems: MenuItem[] = chatApps.length
+    ? [
+        getItem(
+          labelWithCount(t("navigation.chats"), unreadInChats),
+          Urls.CHATS,
+          chatsIcon,
+        ),
+      ]
+    : [];
 
   // Collapsed there is no label, so a dot is kept on the icon.
   const appsIcon: React.ReactNode =
@@ -225,6 +259,7 @@ export const useSidebarMenuItems = (
     getItem(notificationsLabel, Urls.NOTIFICATIONS, notificationsIcon),
     getItem(t("navigation.settings"), Urls.SETTINGS, <SettingOutlined />),
     getItem(t("navigation.notes"), Urls.NOTES, <CalendarOutlined />),
+    ...chatsItems,
     ...appsItems,
     getItem(t("navigation.stores"), SidebarMenuKeys.STORES, <ShopOutlined />, [
       getItem(t("navigation.stores"), Urls.STORES, <ShopOutlined />),
@@ -268,6 +303,7 @@ export const useSidebarMenuItems = (
     Urls.SUPPORT,
     Urls.TRANSACTIONS,
     Urls.NOTES,
+    Urls.CHATS,
     Urls.APPS,
     Urls.APPS_GOOGLE_CONTACTS,
     Urls.APPS_TELEGRAM,

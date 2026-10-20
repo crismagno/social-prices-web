@@ -12,6 +12,7 @@ import { useParams, useRouter } from "next/navigation";
 import {
   EditOutlined,
   ExportOutlined,
+  MessageOutlined,
   ThunderboltOutlined,
   ShoppingCartOutlined,
   UsergroupAddOutlined,
@@ -40,6 +41,8 @@ import { SalesChart } from "../../sales/components/SalesChart/SalesChart";
 import SalesTable from "../../sales/components/SalesTable/SalesTable";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindCustomerById } from "../detail/useFindCustomerById";
+import InboxEnum from "../../../shared/business/inbox/inbox.enum";
+import { useCustomerChats } from "./useCustomerChats";
 
 // Where the customer lives inside the app they came from, if that app shows them.
 const sourceAppUrl = (source: ICustomerExternalSource): string | null => {
@@ -81,6 +84,8 @@ export default function CustomerPage() {
   const paramsCustomerId: string = params?.customerId;
 
   const { isLoading, customer } = useFindCustomerById(paramsCustomerId);
+
+  const chatChannels: InboxEnum.Channel[] = useCustomerChats(paramsCustomerId);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
     TagsEnum.Type.CUSTOMER,
@@ -140,6 +145,23 @@ export default function CustomerPage() {
               title={t("profile.information")}
               extraHeader={
                 <div className="flex gap-2">
+                  {chatChannels.length > 0 && (
+                    <Tooltip title={t("customers.openChat")}>
+                      <Button
+                        icon={<MessageOutlined />}
+                        onClick={() =>
+                          router.push(
+                            Urls.CHATS_CUSTOMER.replace(
+                              ":customerId",
+                              customerId,
+                            ),
+                          )
+                        }
+                      >
+                        {t("customers.openChat")}
+                      </Button>
+                    </Tooltip>
+                  )}
                   <Tooltip title={t("sales.fastSale")}>
                     <Button
                       className="!border-amber-500 !bg-amber-500 !text-white hover:!bg-amber-400"
@@ -251,9 +273,32 @@ export default function CustomerPage() {
                       label={t("customers.sourceApps")}
                       span={3}
                     >
-                      {customer.externalSources?.length ? (
+                      {customer.externalSources?.length ||
+                      chatChannels.length ? (
                         <div className="flex flex-wrap gap-2">
-                          {customer.externalSources.map((source) => {
+                          {chatChannels.map((channel: InboxEnum.Channel) => (
+                            <Link
+                              key={channel}
+                              href={Urls.CHATS_CUSTOMER.replace(
+                                ":customerId",
+                                customerId,
+                              )}
+                            >
+                              <Button
+                                size="small"
+                                title={t("customers.openInApp").replace(
+                                  "{app}",
+                                  t(`chats.channels.${channel}`),
+                                )}
+                              >
+                                <AppIcon app={InboxEnum.ChannelApp[channel]} />
+                                {t(`chats.channels.${channel}`)}
+                                <ExportOutlined />
+                              </Button>
+                            </Link>
+                          ))}
+
+                          {customer.externalSources?.map((source) => {
                             const appUrl: string | null = sourceAppUrl(source);
 
                             const appName: string = t(

@@ -9,6 +9,10 @@ const Urls = {
   SUPPORT: "/support",
   TRANSACTIONS: "/transactions",
   NOTES: "/notes",
+  // The central chat: every channel together, by customer.
+  CHATS: "/chats",
+  // Opens the central chat of one customer.
+  CHATS_CUSTOMER: "/chats?customer=:customerId",
   APPS: "/apps",
   APPS_GOOGLE_CONTACTS: "/apps/google-contacts",
   APPS_TELEGRAM: "/apps/telegram",

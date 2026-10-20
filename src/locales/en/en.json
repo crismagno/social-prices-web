@@ -154,7 +154,8 @@
     "transactions": "Income and Expenses",
     "notes": "Notes",
     "expandMenu": "Expand menu",
-    "collapseMenu": "Collapse menu"
+    "collapseMenu": "Collapse menu",
+    "chats": "Chats"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -548,7 +549,9 @@
     "uniqueUsername": "Unique username",
     "uploadFilename": "Upload Filename",
     "goToCreateSale": "Create sale",
-    "goToCreateSaleTooltip": "Go to create sale for this customer"
+    "goToCreateSaleTooltip": "Go to create sale for this customer",
+    "openChat": "Open chat",
+    "chatChannels": "Chats"
   },
   "stores": {
     "title": "Stores",
@@ -1834,5 +1837,76 @@
     "type": "Type",
     "yes": "Yes",
     "no": "No"
+  },
+  "chats": {
+    "title": "Chats",
+    "subtitle": "Every conversation of every channel, by customer",
+    "search": "Search customers or messages",
+    "you": "You: ",
+    "noCustomer": "No customer",
+    "pick": "Pick a conversation",
+    "empty": {
+      "title": "No conversations yet",
+      "text": "Messages from Telegram, Messenger and Instagram show up here, grouped by customer."
+    },
+    "filter": {
+      "all": "All channels"
+    },
+    "loadOlder": "Load older messages",
+    "noMessages": "No messages yet",
+    "unnamed": "Unnamed",
+    "from": "via {channel}",
+    "unsupported": "Message not supported by the channel",
+    "content": {
+      "image": "Photo",
+      "video": "Video",
+      "audio": "Audio",
+      "voice": "Voice message",
+      "file": "File",
+      "sticker": "Sticker",
+      "location": "Location",
+      "contact": "Contact",
+      "share": "Shared content",
+      "unsupported": "Unsupported message",
+      "other": "Message"
+    },
+    "media": {
+      "retry": "Try again",
+      "play": "Play",
+      "download": "Download"
+    },
+    "channels": {
+      "TELEGRAM": "Telegram",
+      "MESSENGER": "Messenger",
+      "INSTAGRAM": "Instagram"
+    },
+    "conversations": {
+      "title": "Conversations of this customer"
+    },
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "back": "Back",
+    "openCustomer": "Open customer",
+    "reply": {
+      "placeholder": "Write a reply...",
+      "send": "Send",
+      "via": "Send via",
+      "sendHint": "Enter sends, Shift+Enter breaks the line",
+      "windowOpen": "You can answer until {time}",
+      "windowClosed": "The answer window of this channel is closed",
+      "windowClosedHint": "This channel only allows answering for 24 hours after the person last wrote. Pick another channel, or wait for them to write again."
+    },
+    "customer": {
+      "manage": "Conversations",
+      "modalTitle": "Conversations and customers",
+      "change": "Change customer",
+      "link": "Link to customer",
+      "unlink": "Remove customer",
+      "unlinkConfirm": "Remove the customer from this conversation? The history stays with the conversation.",
+      "linked": "Conversation linked",
+      "unlinked": "Customer removed",
+      "none": "No customer",
+      "hint": "Each conversation can be tied to a customer, or moved to another one; its whole history goes with it."
+    }
   }
 }

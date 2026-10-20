@@ -4,6 +4,7 @@ import CategoriesServiceMethods from "./categories/categories-service.methods";
 import AppsServiceMethods from "./apps/apps-service.methods";
 import GoogleContactsServiceMethods from "./apps/google-contacts/google-contacts-service.methods";
 import InstagramServiceMethods from "./apps/instagram/instagram-service.methods";
+import InboxServiceMethods from "./inbox/inbox-service.methods";
 import MessengerServiceMethods from "./apps/messenger/messenger-service.methods";
 import TelegramServiceMethods from "./apps/telegram/telegram-service.methods";
 import CustomersServiceMethods from "./customers/customers-service.methods";
@@ -38,6 +39,7 @@ export default class ServiceMethods {
   public telegramServiceMethods: TelegramServiceMethods;
   public messengerServiceMethods: MessengerServiceMethods;
   public instagramServiceMethods: InstagramServiceMethods;
+  public inboxServiceMethods: InboxServiceMethods;
   public customersServiceMethods: CustomersServiceMethods;
   public notificationsServiceMethods: NotificationsServiceMethods;
   public salesServiceMethods: SalesServiceMethods;
@@ -66,6 +68,7 @@ export default class ServiceMethods {
     this.telegramServiceMethods = new TelegramServiceMethods();
     this.messengerServiceMethods = new MessengerServiceMethods();
     this.instagramServiceMethods = new InstagramServiceMethods();
+    this.inboxServiceMethods = new InboxServiceMethods();
     this.customersServiceMethods = new CustomersServiceMethods();
     this.notificationsServiceMethods = new NotificationsServiceMethods();
     this.salesServiceMethods = new SalesServiceMethods();
