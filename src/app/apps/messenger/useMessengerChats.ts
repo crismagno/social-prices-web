@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useState } from "react";
 
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
+import { useInboxRealtime } from "../../../data/context/socket/useInboxRealtime";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
+import AppsEnum from "../../../shared/business/apps/apps.enum";
 import { IMessengerChat } from "../../../shared/business/apps/messenger/messenger.types";
 
 const POLL_MS: number = 8000;
@@ -59,6 +61,11 @@ export const useMessengerChats = (
 
     return () => clearInterval(interval);
   }, [refetchChats]);
+
+  // A message arrives, is read or is sent elsewhere: the list follows at once.
+  useInboxRealtime(AppsEnum.App.FACEBOOK, () => {
+    refetchChats(true);
+  });
 
   return { chats, isLoadingChats, refetchChats };
 };

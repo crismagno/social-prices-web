@@ -19,7 +19,12 @@ import Link from "next/link";
 
 import {
   ArrowLeftOutlined,
+  AudioOutlined,
+  CloseOutlined,
+  DeleteOutlined,
+  FileOutlined,
   LinkOutlined,
+  PaperClipOutlined,
   SendOutlined,
   UserAddOutlined,
   UserOutlined,
@@ -42,9 +47,21 @@ import MessengerAttachment from "./MessengerAttachment";
 import { seedOf } from "./MessengerChatList";
 import { chatDisplayName, chatInitial } from "./messenger-display";
 import { useMessengerMessages } from "./useMessengerMessages";
+import {
+  MAX_RECORDING_SECONDS,
+  useVoiceRecorder,
+} from "../telegram/useVoiceRecorder";
 
 // Messenger refuses anything longer than this in a single message.
 const MAX_LENGTH: number = 2000;
+
+// The most Facebook takes as an attachment.
+const MAX_FILE_BYTES: number = 25 * 1024 * 1024;
+
+const formatFileSize = (bytes: number): string =>
+  bytes < 1024 * 1024
+    ? `${Math.max(1, Math.round(bytes / 1024))} KB`
+    : `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 
 interface Props {
   chat: IMessengerChat;
@@ -84,6 +101,21 @@ export default function MessengerThread({
 
   const inputRef = useRef<TextAreaRef | null>(null);
 
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const [file, setFile] = useState<File | null>(null);
+
+  // A recording goes as WAV: it is what Messenger plays.
+  const recorder = useVoiceRecorder((error: unknown) => {
+    message.error(t("apps.messenger.media.microphoneDenied"));
+    console.error(error);
+  }, "wav");
+
+  // Another conversation, or leaving: a half-made recording is not sent anywhere.
+  useEffect(() => recorder.cancel, [chat.psid]);
+
+  const isRecording: boolean = recorder.state !== "idle";
+
   const name: string = chatDisplayName(chat, t("apps.messenger.unnamed"));
 
   const lastMessageId: string | undefined = messages[messages.length - 1]?._id;
@@ -94,7 +126,22 @@ export default function MessengerThread({
   }, [lastMessageId, chat.psid]);
 
   const canSend: boolean =
-    chat.canReply && text.trim().length > 0 && !isSending;
+    chat.canReply && (text.trim().length > 0 || !!file) && !isSending;
+
+  const pickFile = (picked: File | undefined): void => {
+    if (!picked) {
+      return;
+    }
+
+    if (picked.size > MAX_FILE_BYTES) {
+      message.error(t("apps.messenger.media.tooLarge"));
+
+      return;
+    }
+
+    setFile(picked);
+    inputRef.current?.focus();
+  };
 
   const handleSend = async (): Promise<void> => {
     if (!canSend) {
@@ -104,18 +151,32 @@ export default function MessengerThread({
     try {
       setIsSending(true);
 
-      addMessage(
-        await serviceMethodsInstance.messengerServiceMethods.sendMessage(
-          chat.psid,
-          text,
-        ),
-      );
+      // A file carries no caption, so the text goes as a message right after it.
+      if (file) {
+        addMessage(
+          await serviceMethodsInstance.messengerServiceMethods.sendAttachment(
+            chat.psid,
+            file,
+          ),
+        );
 
-      setText("");
+        setFile(null);
+      }
+
+      if (text.trim()) {
+        addMessage(
+          await serviceMethodsInstance.messengerServiceMethods.sendMessage(
+            chat.psid,
+            text,
+          ),
+        );
+
+        setText("");
+      }
 
       onChatChanged();
     } catch (error: any) {
-      // The server's words say what is wrong (window closed, person unreachable...).
+      // The server's words say what is wrong (window closed, file refused...).
       handleClientError(error);
 
       // A window that closed while the page was open: show it as closed.
@@ -126,6 +187,43 @@ export default function MessengerThread({
       inputRef.current?.focus();
     }
   };
+
+  const sendVoice = async (): Promise<void> => {
+    const recording: File | null = await recorder.finish();
+
+    if (!recording) {
+      return;
+    }
+
+    try {
+      setIsSending(true);
+
+      addMessage(
+        await serviceMethodsInstance.messengerServiceMethods.sendAttachment(
+          chat.psid,
+          recording,
+        ),
+      );
+
+      onChatChanged();
+    } catch (error: any) {
+      handleClientError(error);
+      onChatChanged();
+    } finally {
+      setIsSending(false);
+      inputRef.current?.focus();
+    }
+  };
+
+  // Two minutes is the longest a recording runs; then it goes as it is.
+  useEffect(() => {
+    if (
+      recorder.state === "recording" &&
+      recorder.seconds >= MAX_RECORDING_SECONDS
+    ) {
+      sendVoice();
+    }
+  }, [recorder.seconds, recorder.state]);
 
   // Every customer action ends the same way: say what happened, refresh the inbox.
   const runCustomerAction = async (
@@ -335,6 +433,27 @@ export default function MessengerThread({
                       </div>
                     ))}
 
+                    {item.localAttachment && !item.attachments?.length && (
+                      <div className="flex items-center gap-3">
+                        <span
+                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-lg"
+                          style={{ background: "rgba(255,255,255,0.2)" }}
+                        >
+                          <FileOutlined />
+                        </span>
+
+                        <div className="flex min-w-0 flex-col">
+                          <span className="truncate font-medium">
+                            {item.localAttachment.fileName}
+                          </span>
+
+                          <span className="text-xs" style={{ opacity: 0.7 }}>
+                            {formatFileSize(item.localAttachment.size)}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
                     {item.text && (
                       <div
                         style={{
@@ -376,42 +495,141 @@ export default function MessengerThread({
           />
         )}
 
+        {file && (
+          <div
+            className="mb-2 flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm"
+            style={{ background: token.colorFillSecondary }}
+          >
+            <PaperClipOutlined />
+
+            <span className="min-w-0 flex-1 truncate">{file.name}</span>
+
+            <span
+              className="text-xs"
+              style={{ color: token.colorTextSecondary }}
+            >
+              {formatFileSize(file.size)}
+            </span>
+
+            <Button
+              type="text"
+              size="small"
+              icon={<CloseOutlined />}
+              disabled={isSending}
+              onClick={() => setFile(null)}
+              aria-label={t("apps.messenger.media.remove")}
+            />
+          </div>
+        )}
+
         <div
-          className="flex items-end gap-2 rounded-3xl py-1 pl-4 pr-1"
+          className="flex items-end gap-2 rounded-3xl py-1 pl-1 pr-1"
           style={{
             border: `1px solid ${token.colorBorder}`,
             background: token.colorBgContainer,
           }}
         >
-          <Input.TextArea
-            ref={inputRef}
-            variant="borderless"
-            autoSize={{ minRows: 1, maxRows: 5 }}
-            maxLength={MAX_LENGTH}
-            placeholder={t("apps.messenger.inbox.reply")}
-            value={text}
-            disabled={!chat.canReply}
-            readOnly={isSending}
-            onChange={(event) => setText(event.target.value)}
-            onPressEnter={(event) => {
-              // Enter sends; Shift+Enter keeps the line break.
-              if (!event.shiftKey) {
-                event.preventDefault();
-                handleSend();
-              }
-            }}
-          />
+          {isRecording ? (
+            <>
+              <Button
+                type="text"
+                shape="circle"
+                size="large"
+                danger
+                icon={<DeleteOutlined />}
+                disabled={recorder.state === "encoding"}
+                onClick={recorder.cancel}
+                aria-label={t("apps.messenger.media.cancelRecording")}
+              />
 
-          <Button
-            type="primary"
-            shape="circle"
-            size="large"
-            icon={<SendOutlined />}
-            loading={isSending}
-            disabled={!canSend}
-            onClick={handleSend}
-            aria-label={t("apps.messenger.inbox.send")}
-          />
+              <div className="flex flex-1 items-center gap-2 self-center">
+                <span
+                  className="inline-block h-2.5 w-2.5 animate-pulse rounded-full"
+                  style={{ background: token.colorError }}
+                />
+
+                <span className="tabular-nums">
+                  {Math.floor(recorder.seconds / 60)}:
+                  {String(recorder.seconds % 60).padStart(2, "0")}
+                </span>
+              </div>
+
+              <Button
+                type="primary"
+                shape="circle"
+                size="large"
+                icon={<SendOutlined />}
+                loading={recorder.state === "encoding" || isSending}
+                onClick={sendVoice}
+                aria-label={t("apps.messenger.inbox.send")}
+              />
+            </>
+          ) : (
+            <>
+              <input
+                ref={fileInputRef}
+                type="file"
+                hidden
+                onChange={(event) => {
+                  pickFile(event.target.files?.[0]);
+                  // The same file can be picked again after it was removed.
+                  event.target.value = "";
+                }}
+              />
+
+              <Button
+                type="text"
+                shape="circle"
+                size="large"
+                icon={<PaperClipOutlined />}
+                disabled={isSending || !chat.canReply}
+                onClick={() => fileInputRef.current?.click()}
+                aria-label={t("apps.messenger.media.attach")}
+              />
+
+              <Input.TextArea
+                ref={inputRef}
+                variant="borderless"
+                autoSize={{ minRows: 1, maxRows: 5 }}
+                maxLength={MAX_LENGTH}
+                placeholder={t("apps.messenger.inbox.reply")}
+                value={text}
+                disabled={!chat.canReply}
+                readOnly={isSending}
+                onChange={(event) => setText(event.target.value)}
+                onPressEnter={(event) => {
+                  // Enter sends; Shift+Enter keeps the line break.
+                  if (!event.shiftKey) {
+                    event.preventDefault();
+                    handleSend();
+                  }
+                }}
+              />
+
+              {canSend || isSending ? (
+                <Button
+                  type="primary"
+                  shape="circle"
+                  size="large"
+                  icon={<SendOutlined />}
+                  loading={isSending}
+                  disabled={!canSend}
+                  onClick={handleSend}
+                  aria-label={t("apps.messenger.inbox.send")}
+                />
+              ) : (
+                <Button
+                  type="primary"
+                  shape="circle"
+                  size="large"
+                  icon={<AudioOutlined />}
+                  disabled={!chat.canReply}
+                  onClick={recorder.start}
+                  aria-label={t("apps.messenger.media.record")}
+                />
+              )}
+            </>
+          )}
         </div>
 
         <div

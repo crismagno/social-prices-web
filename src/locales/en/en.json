@@ -133,6 +133,7 @@
     "cnpj": "CNPJ"
   },
   "navigation": {
+    "allApps": "All apps",
     "apps": "Apps",
     "home": "Home",
     "dashboard": "Dashboard",
@@ -1093,6 +1094,9 @@
   "apps": {
     "title": "Apps",
     "subtitle": "Connect your other apps",
+    "unread": "{count} unread",
+    "notEnabledTag": "Not enabled",
+    "notEnabledHint": "Ask your manager to enable this app for your account.",
     "noneEnabled": "No apps are available for your account yet.",
     "notEnabled": "This app is not available for your account.",
     "comingSoon": "Coming soon",
@@ -1147,7 +1151,11 @@
         "existing": "Customer - will be linked",
         "linked": "Already linked",
         "selectAll": "Select all",
-        "range": "{from}-{to} of {total} items"
+        "range": "{from}-{to} of {total} items",
+        "goToCustomer": "Go to customer",
+        "linkToCustomer": "Link to a customer",
+        "linkedTo": "Linked to {name}",
+        "customerNotFound": "The customer of this contact was not found. Sync again to refresh the list."
       },
       "fetchedAt": "Contacts loaded on {time}",
       "cooldown": "You can sync again in {time}.",
@@ -1165,7 +1173,12 @@
         },
         "allow": {
           "title": "Allow access to your contacts",
-          "text": "The system only reads them. It never edits or deletes anything in Google."
+          "text": "The system only reads them. It never edits or deletes anything in Google.",
+          "detail": {
+            "1": "Google shows a screen asking to \"see and download your contacts\".",
+            "2": "Keep that box ticked. Without it the system cannot list your contacts.",
+            "3": "The access is read-only: nothing in your Google account is edited, created or deleted."
+          }
         },
         "choose": {
           "title": "Choose who becomes a customer",
@@ -1183,6 +1196,49 @@
         "new": "{count} new",
         "existing": "{count} to link",
         "linked": "{count} already linked"
+      },
+      "info": {
+        "needTitle": "Before you start",
+        "need": {
+          "1": "A Google account where your contacts are saved, the same one your phone syncs to.",
+          "2": "Contacts saved in Google Contacts (contacts.google.com). Those kept only on the phone or the SIM are not included.",
+          "3": "Room in your plan for new customers: the page shows how many you can still add."
+        },
+        "worksTitle": "What you get",
+        "works": {
+          "1": "The list of your Google contacts, to look through before saving anything.",
+          "2": "You pick the ones that become customers. Nothing is saved without your choice.",
+          "3": "Contacts that already match a customer by e-mail are only linked to it, and nothing on that customer changes."
+        },
+        "limitsTitle": "Good to know",
+        "limits": {
+          "1": "The access is read-only: the system never edits, creates or deletes anything in Google.",
+          "2": "Up to 2,000 contacts are listed at a time, and the list is refreshed at most every 20 minutes.",
+          "3": "Each account connects one Google account, and you can switch to another by disconnecting."
+        },
+        "faqTitle": "Common questions",
+        "faq": {
+          "1": {
+            "q": "Which Google account should I use?",
+            "a": "The one that has the contacts you want as customers. It can be your personal account or the company's."
+          },
+          "2": {
+            "q": "Some of my contacts are missing.",
+            "a": "Only contacts saved in your Google account are listed (\"My contacts\"). Contacts stored only on the phone or the SIM, and the ones Google suggests as \"Other contacts\", are not included."
+          },
+          "3": {
+            "q": "Will this change my Google contacts?",
+            "a": "No. The permission is read-only. The system only reads, and your Google account stays exactly as it is."
+          },
+          "4": {
+            "q": "Google warns that the app is not verified.",
+            "a": "While the app is under review, Google may show a warning. Choose Advanced and continue to the app. If you are unsure, contact support first."
+          },
+          "5": {
+            "q": "How do I switch accounts or stop the access?",
+            "a": "Use Disconnect on this page and connect again with another account. You can also remove the access in your Google account, under Security."
+          }
+        }
       }
     },
     "errors": {
@@ -1214,11 +1270,21 @@
         "page": {
           "title": "Have a Facebook Page",
           "text": "Messenger works with Pages, not personal profiles. You need to be an admin of the Page.",
-          "action": "Create a Page"
+          "action": "Create a Page",
+          "detail": {
+            "1": "No Page yet? Create one for free, it takes about two minutes.",
+            "2": "You must be an admin of the Page (full control, or at least permission to manage messages).",
+            "3": "If the Page is in a Meta Business portfolio (Business Suite), you need access to it there too."
+          }
         },
         "login": {
           "title": "Log in with Facebook",
-          "text": "Facebook asks you to allow this system to read your Pages and answer their messages. You do not copy any key."
+          "text": "Facebook asks you to allow this system to read your Pages and answer their messages. You do not copy any key.",
+          "detail": {
+            "1": "Log in with the Facebook profile that manages the Page.",
+            "2": "On Facebook's screen, tick the Page you want to connect (use \"Edit settings\" if it is not listed).",
+            "3": "Keep every permission on: they are what lets the system read the Page's messages and answer them."
+          }
         },
         "choose": {
           "title": "Choose the Page",
@@ -1288,9 +1354,60 @@
         "file": "File"
       },
       "media": {
+        "attach": "Attach a file",
+        "remove": "Remove the file",
+        "tooLarge": "The file can be at most 25 MB.",
+        "record": "Record a voice message",
+        "cancelRecording": "Discard the recording",
+        "microphoneDenied": "The microphone is not available. Allow it in the browser and try again.",
         "retry": "Try again",
         "play": "Play",
         "download": "Download"
+      },
+      "info": {
+        "needTitle": "Before you start",
+        "need": {
+          "1": "A Facebook account (your personal profile, only to log in).",
+          "2": "A Facebook Page for your business, where you are an admin. This is the one customers write to.",
+          "3": "Messenger turned on for the Page, which is the default for new Pages.",
+          "4": "A Meta Business account is optional: it helps if the Page is managed in Business Suite."
+        },
+        "worksTitle": "What you get",
+        "works": {
+          "1": "Messages that customers send to the Page show up here in real time.",
+          "2": "You answer from this system with text, photos, files and voice messages.",
+          "3": "What you or your team send from Messenger or Business Suite also shows here.",
+          "4": "Each person can be linked to a customer, or become one with a click."
+        },
+        "limitsTitle": "Good to know",
+        "limits": {
+          "1": "Facebook only allows answering within 24 hours after the customer's last message. After that, wait for the next one.",
+          "2": "Each account connects one Page, and a Page can belong to only one account.",
+          "3": "The system never posts, never reads your personal chats and never sees your password."
+        },
+        "faqTitle": "Common questions",
+        "faq": {
+          "1": {
+            "q": "Why do I log in with Facebook?",
+            "a": "Facebook is how you authorize this system to read and answer your Page's messages. The login is on Facebook's own screen and you can remove the access at any time in Facebook's settings, under Business integrations."
+          },
+          "2": {
+            "q": "My Page does not show up in the list.",
+            "a": "You need to be an admin of the Page. If it belongs to a Meta Business portfolio, ask for access to it with permission to manage messages. Then connect again and tick it on Facebook's screen."
+          },
+          "3": {
+            "q": "I connected, but a customer's message did not arrive.",
+            "a": "Only messages sent after the connection are received. Messages that Facebook keeps in \"Message requests\" arrive after the Page accepts them. If it still does not show up, contact support."
+          },
+          "4": {
+            "q": "Does it work with Instagram?",
+            "a": "Not yet. This connection is only for Facebook Messenger."
+          },
+          "5": {
+            "q": "How do I disconnect?",
+            "a": "Use the Disconnect button on this page. Conversations already received stay here, and nothing changes on your Page."
+          }
+        }
       }
     },
     "telegram": {
@@ -1299,11 +1416,18 @@
         "createBot": {
           "title": "Create the bot in Telegram",
           "text": "Open @BotFather and send /newbot.",
-          "action": "Open @BotFather"
+          "action": "Open @BotFather",
+          "detail": {
+            "1": "Open the chat with @BotFather, Telegram's official bot for creating bots.",
+            "2": "Send the message /newbot.",
+            "3": "Name: what your customers see, like \"Ana's Store\".",
+            "4": "Username: unique and ending in \"bot\", like ana_store_bot.",
+            "5": "BotFather answers with a token (123456789:AAH...). Copy all of it."
+          }
         },
         "copyToken": {
           "title": "Copy the token",
-          "text": "Pick a name and a username that ends in \"bot\". BotFather replies with a token."
+          "text": "BotFather's answer holds a long token. Select all of it and copy, you paste it in the next step."
         },
         "paste": {
           "title": "Paste it here",
@@ -1401,7 +1525,204 @@
       "connectTitle": "Connect your Telegram bot",
       "connectSubtitle": "Answer the customers who write to your bot without leaving the system.",
       "tokenInvalid": "This does not look like a bot token. It is numbers, a colon, then letters and digits.",
-      "openBot": "Open in Telegram"
+      "openBot": "Open in Telegram",
+      "info": {
+        "needTitle": "Before you start",
+        "need": {
+          "1": "A Telegram account, on your phone or on the computer.",
+          "2": "About two minutes to create the bot, which is free.",
+          "3": "No Telegram Business account is needed: a bot is enough."
+        },
+        "worksTitle": "What you get",
+        "works": {
+          "1": "Everyone who writes to your bot shows up in the inbox here, in real time.",
+          "2": "You answer from this system with text, photos, files and voice messages.",
+          "3": "Each person can be linked to a customer, or become one with a click."
+        },
+        "limitsTitle": "Good to know",
+        "limits": {
+          "1": "A bot cannot start a conversation: the customer writes first, by opening your bot's link.",
+          "2": "Each account has one bot, and a bot can belong to only one account.",
+          "3": "The token is the bot's password. Anyone who has it controls the bot, so never share it."
+        },
+        "faqTitle": "Common questions",
+        "faq": {
+          "1": {
+            "q": "Where do customers find the bot?",
+            "a": "Send them the link t.me/your_bot_username. After connecting, the button \"Open in Telegram\" shows it."
+          },
+          "2": {
+            "q": "Can I use my personal Telegram account instead of a bot?",
+            "a": "No. Telegram only lets systems talk to customers through bots. The bot is a separate identity, and your personal account is never touched."
+          },
+          "3": {
+            "q": "I lost the token. What now?",
+            "a": "Open @BotFather, send /mybots, pick your bot and choose API Token. You can also revoke it there and paste the new one here."
+          },
+          "4": {
+            "q": "Is the token safe here?",
+            "a": "It is stored encrypted and never shown again. Disconnecting the bot here removes it."
+          },
+          "5": {
+            "q": "I pasted the token and it was refused.",
+            "a": "Copy the whole token, with the number, the colon and the letters, and no spaces. If you revoked it in BotFather, paste the new one."
+          }
+        }
+      }
+    },
+    "instagram": {
+      "title": "Instagram",
+      "unnamed": "Unnamed contact",
+      "connectTitle": "Connect your Instagram account",
+      "connectSubtitle": "Answer the direct messages of your Instagram without leaving this system.",
+      "expiredHint": "The connection expired. Instagram's access lasts 60 days and renews while you use it. Connect again to keep receiving messages.",
+      "managersOnly": "Only the owner, admins and masters can connect or disconnect the account.",
+      "connect": "Connect with Instagram",
+      "reconnect": "Connect again",
+      "disconnected": "Account disconnected",
+      "steps": {
+        "professional": {
+          "title": "Use a professional account",
+          "text": "Instagram only lets systems read and answer messages of professional accounts, which are free.",
+          "detail": {
+            "1": "Business or Creator: both work.",
+            "2": "To switch: in the Instagram app, go to Settings and privacy, then Account type and tools, then Switch to professional account.",
+            "3": "No Facebook Page is needed."
+          }
+        },
+        "access": {
+          "title": "Allow access to messages",
+          "text": "A setting in Instagram itself decides if messages can reach other tools. Without it nothing arrives here.",
+          "detail": {
+            "1": "In the Instagram app, open Settings.",
+            "2": "Go to Messages and story replies, then Message controls.",
+            "3": "Open Connected tools.",
+            "4": "Turn on Allow access to messages."
+          }
+        },
+        "login": {
+          "title": "Log in with Instagram",
+          "text": "You will be taken to Instagram's own screen. You do not copy any key.",
+          "detail": {
+            "1": "Log in with the account you want to connect.",
+            "2": "Keep every permission on: they are what lets the system read your messages and answer them.",
+            "3": "You come back here already connected."
+          }
+        }
+      },
+      "errors": {
+        "access_denied": "You did not allow access on Instagram. Connect again and accept the permissions.",
+        "oauth_error": "Instagram could not complete the login. Try again.",
+        "invalid_state": "The login took too long or was altered. Connect again.",
+        "missing_code": "Instagram did not send back the login code. Try again.",
+        "not_enabled": "Instagram is not enabled for your account.",
+        "missing_permission": "Instagram did not give this system the permission to read and answer messages. Connect again and keep every permission on.",
+        "not_professional": "This account is a personal one. Switch it to a Business or Creator account in the Instagram app and connect again.",
+        "account_in_use": "This Instagram account is already connected to another user.",
+        "subscribe_failed": "Instagram did not let this system receive the account's messages. Check that message access is on for connected tools, then try again.",
+        "connection_failed": "Could not connect the account. Try again."
+      },
+      "account": {
+        "connected": "Connected",
+        "lastMessage": "Last message:",
+        "none": "none yet",
+        "open": "Open Instagram",
+        "disconnect": "Disconnect",
+        "disconnectConfirm": "Disconnect this account? Conversations already received stay here."
+      },
+      "info": {
+        "needTitle": "Before you start",
+        "need": {
+          "1": "An Instagram account, the one customers write to.",
+          "2": "A professional account (Business or Creator). Switching is free and takes a minute.",
+          "3": "Message access turned on for connected tools, in Instagram's settings.",
+          "4": "Nothing else: you do not need a Facebook Page."
+        },
+        "worksTitle": "What you get",
+        "works": {
+          "1": "The direct messages your account receives show up here in real time.",
+          "2": "You answer from this system, within the 24 hours Instagram allows.",
+          "3": "What you or your team send from the Instagram app also shows here.",
+          "4": "Each person can be linked to a customer, or become one with a click."
+        },
+        "limitsTitle": "Good to know",
+        "limits": {
+          "1": "Instagram only allows answering within 24 hours after the customer's last message. After that, wait for the next one.",
+          "2": "For now you answer with text. Photos, videos and audio that customers send are shown here.",
+          "3": "Likes, shared posts and other things Instagram does not carry show as \"not supported\".",
+          "4": "Each user connects one account, and an account can belong to only one user."
+        },
+        "faqTitle": "Common questions",
+        "faq": {
+          "1": {
+            "q": "How do I switch to a professional account?",
+            "a": "In the Instagram app, open Settings and privacy, go to Account type and tools and choose Switch to professional account. Pick Business or Creator. It is free, and you can switch back."
+          },
+          "2": {
+            "q": "Do I need a Facebook Page?",
+            "a": "No. This connection uses only your Instagram account."
+          },
+          "3": {
+            "q": "I connected, but a message did not arrive.",
+            "a": "Check that Allow access to messages is on, under Messages and story replies, Message controls, Connected tools. Only messages sent after the connection are received, and the ones Instagram keeps in \"Message requests\" arrive after you accept them. If it still does not show up, contact support."
+          },
+          "4": {
+            "q": "Why does it say the connection expired?",
+            "a": "Instagram's access lasts 60 days and renews while you use the system. If it stays unused for long, it runs out. Connect again and everything comes back; the conversations you already have stay."
+          },
+          "5": {
+            "q": "Can I send photos or audio?",
+            "a": "Not yet. You can read and see the ones customers send, and answer with text."
+          }
+        }
+      },
+      "inbox": {
+        "search": "Search conversations",
+        "you": "You: ",
+        "loadOlder": "Load older messages",
+        "noMessages": "No messages in this conversation.",
+        "reply": "Write a reply...",
+        "send": "Send",
+        "sendHint": "Enter sends, Shift+Enter breaks the line",
+        "back": "Conversations",
+        "pick": "Pick a conversation to read and answer.",
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "emptyState": {
+          "title": "No conversations yet",
+          "text": "When someone sends a direct message to your Instagram, the conversation shows up here."
+        }
+      },
+      "window": {
+        "open": "You can answer until {time}",
+        "closed": "The 24-hour answer window closed",
+        "closedHint": "Instagram only allows answering for 24 hours after the person last wrote. You can answer again when they write to your account."
+      },
+      "customer": {
+        "open": "Open customer",
+        "create": "Create customer",
+        "link": "Link customer",
+        "unlink": "Unlink",
+        "unlinkConfirm": "Unlink this customer? The customer is kept, only without the Instagram contact.",
+        "created": "Customer created",
+        "linked": "Customer linked",
+        "unlinked": "Customer unlinked"
+      },
+      "content": {
+        "image": "Photo",
+        "video": "Video",
+        "audio": "Audio",
+        "file": "File",
+        "unsupported": "Message not supported",
+        "share": "Shared post",
+        "story_mention": "Story mention",
+        "ig_reel": "Reel"
+      },
+      "media": {
+        "retry": "Try again",
+        "play": "Play",
+        "download": "Download"
+      }
     }
   },
   "notes": {

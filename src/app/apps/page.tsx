@@ -2,7 +2,9 @@
 
 import { useRouter } from "next/navigation";
 
-import { Card, Empty, Spin, Tag } from "antd";
+import { Badge, Card, Empty, Spin, Tag, Tooltip } from "antd";
+
+import { LockOutlined } from "@ant-design/icons";
 
 import AppIcon from "../../components/common/AppIcon/AppIcon";
 import Layout from "../../components/template/Layout/Layout";
@@ -10,14 +12,7 @@ import useAppData from "../../data/context/app/useAppData";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import AppsEnum from "../../shared/business/apps/apps.enum";
 import { IAppCatalogItem } from "../../shared/business/apps/apps.types";
-import Urls from "../../shared/common/routes-app/routes-app";
-
-// Only apps with an integration page are listed here; the rest are "coming soon".
-const APP_URLS: Partial<Record<AppsEnum.App, string>> = {
-  [AppsEnum.App.GOOGLE_CONTACTS]: Urls.APPS_GOOGLE_CONTACTS,
-  [AppsEnum.App.TELEGRAM]: Urls.APPS_TELEGRAM,
-  [AppsEnum.App.FACEBOOK]: Urls.APPS_MESSENGER,
-};
+import { APP_URLS } from "../../shared/common/routes-app/apps-urls";
 
 export default function AppsPage() {
   const { t } = useLanguageData();
@@ -28,59 +23,91 @@ export default function AppsPage() {
     apps: { catalog, isLoadingApps },
   } = useAppData();
 
-  // The apps that already work come first, the "coming soon" ones after them.
-  // Within each group the order stays the catalog's (the sort is stable).
-  const enabledApps: IAppCatalogItem[] = catalog
-    .filter((app: IAppCatalogItem) => app.enabled)
-    .sort(
-      (a: IAppCatalogItem, b: IAppCatalogItem) =>
-        Number(b.integrated) - Number(a.integrated),
-    );
+  // Every app is listed. The ones the manager enabled come first, those that
+  // already work before the "coming soon" ones; the ones not enabled come last,
+  // locked. Within each group the order stays the catalog's (the sort is stable).
+  const rank = (app: IAppCatalogItem): number =>
+    !app.enabled ? 2 : app.integrated ? 0 : 1;
+
+  const apps: IAppCatalogItem[] = [...catalog].sort(
+    (a: IAppCatalogItem, b: IAppCatalogItem) => rank(a) - rank(b),
+  );
 
   return (
     <Layout title={t("apps.title")} subtitle={t("apps.subtitle")}>
       {isLoadingApps ? (
         <Spin />
-      ) : enabledApps.length === 0 ? (
+      ) : apps.length === 0 ? (
         <Empty description={t("apps.noneEnabled")} />
       ) : (
         <div className="flex flex-col gap-4">
-          {enabledApps.map((app: IAppCatalogItem) => {
-            const url: string | undefined = app.integrated
-              ? APP_URLS[app.id]
-              : undefined;
+          {apps.map((app: IAppCatalogItem) => {
+            // Only an app the manager enabled can be opened.
+            const url: string | undefined =
+              app.enabled && app.integrated ? APP_URLS[app.id] : undefined;
 
             return (
-              <Card
+              <Tooltip
                 key={app.id}
-                hoverable={!!url}
-                onClick={() => url && router.push(url)}
-                className={url ? "cursor-pointer" : "opacity-70"}
+                title={app.enabled ? undefined : t("apps.notEnabledHint")}
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-3xl">
-                    <AppIcon app={app.id} />
-                  </span>
+                <div>
+                  <Card
+                    hoverable={!!url}
+                    onClick={() => url && router.push(url)}
+                    className={
+                      url
+                        ? "cursor-pointer"
+                        : app.enabled
+                          ? "opacity-70"
+                          : "cursor-not-allowed opacity-50"
+                    }
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-3xl">
+                        <AppIcon app={app.id} />
+                      </span>
 
-                  <div className="flex flex-col items-start gap-1">
-                    <span className="font-semibold">
-                      {t(`apps.names.${app.id}`)}
-                    </span>
+                      <div className="flex flex-col items-start gap-1">
+                        <span className="font-semibold">
+                          {t(`apps.names.${app.id}`)}
+                        </span>
 
-                    {url ? (
-                      <Tag color={app.connected ? "green" : "default"}>
-                        {app.connected
-                          ? t("apps.status.connected")
-                          : app.status === AppsEnum.ConnectionStatus.EXPIRED
-                            ? t("apps.status.expired")
-                            : t("apps.status.notConnected")}
-                      </Tag>
-                    ) : (
-                      <Tag>{t("apps.comingSoon")}</Tag>
-                    )}
-                  </div>
+                        {!app.enabled ? (
+                          <Tag className="m-0" icon={<LockOutlined />}>
+                            {t("apps.notEnabledTag")}
+                          </Tag>
+                        ) : url ? (
+                          <Tag
+                            color={app.connected ? "green" : "default"}
+                            className="m-0"
+                          >
+                            {app.connected
+                              ? t("apps.status.connected")
+                              : app.status === AppsEnum.ConnectionStatus.EXPIRED
+                                ? t("apps.status.expired")
+                                : t("apps.status.notConnected")}
+                          </Tag>
+                        ) : (
+                          <Tag>{t("apps.comingSoon")}</Tag>
+                        )}
+                      </div>
+
+                      {app.enabled && app.unreadCount > 0 && (
+                        <Badge
+                          className="ml-auto"
+                          count={app.unreadCount}
+                          overflowCount={99}
+                          title={t("apps.unread").replace(
+                            "{count}",
+                            String(app.unreadCount),
+                          )}
+                        />
+                      )}
+                    </div>
+                  </Card>
                 </div>
-              </Card>
+              </Tooltip>
             );
           })}
         </div>

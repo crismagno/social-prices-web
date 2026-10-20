@@ -58,6 +58,38 @@ export default class GoogleContactsServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
+  // By hand: ties one contact to a customer the user picked.
+  public async linkContact(
+    externalId: string,
+    customerId: string,
+  ): Promise<{ customerId: string; customerName: string | null }> {
+    const response = await this._fetchAxios.post<{
+      customerId: string;
+      customerName: string | null;
+    }>(
+      `${this._socialPricesApiV1}${GoogleContactsServiceEnum.Methods.LINK}`,
+      { externalId, customerId },
+      { headers: this._headers() },
+    );
+
+    return response.data;
+  }
+
+  // Which customer holds a contact: for a list cached before that was known.
+  public async findCustomer(
+    externalId: string,
+  ): Promise<{ customerId: string | null }> {
+    const response = await this._fetchAxios.post<{
+      customerId: string | null;
+    }>(
+      `${this._socialPricesApiV1}${GoogleContactsServiceEnum.Methods.FIND_CUSTOMER}`,
+      { externalId },
+      { headers: this._headers() },
+    );
+
+    return response.data;
+  }
+
   public async disconnect(): Promise<void> {
     await this._fetchAxios.delete(
       `${this._socialPricesApiV1}${GoogleContactsServiceEnum.Methods.DISCONNECT}`,

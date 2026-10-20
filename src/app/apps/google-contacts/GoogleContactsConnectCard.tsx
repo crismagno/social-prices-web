@@ -3,8 +3,14 @@
 import { Alert, Button, Card, ConfigProvider } from "antd";
 
 import {
+  ConnectInfoAfter,
+  ConnectInfoBefore,
+  stepDetailKeys,
+} from "../../../components/common/ConnectSteps/ConnectInfoSections";
+import {
   ConnectHero,
   ConnectStep,
+  ConnectStepDetail,
   ConnectStepText,
   ConnectSteps,
 } from "../../../components/common/ConnectSteps/ConnectSteps";
@@ -62,6 +68,12 @@ export default function GoogleContactsConnectCard({
             />
           )}
 
+          <ConnectInfoBefore
+            prefix="apps.google.info"
+            accentColor={GOOGLE_BLUE}
+            need={3}
+          />
+
           <ConnectSteps>
             <ConnectStep
               position={1}
@@ -95,6 +107,10 @@ export default function GoogleContactsConnectCard({
               <ConnectStepText>
                 {t("apps.google.steps.allow.text")}
               </ConnectStepText>
+
+              <ConnectStepDetail
+                items={stepDetailKeys(t, "apps.google.steps.allow.detail", 3)}
+              />
             </ConnectStep>
 
             <ConnectStep
@@ -108,6 +124,14 @@ export default function GoogleContactsConnectCard({
               </ConnectStepText>
             </ConnectStep>
           </ConnectSteps>
+
+          <ConnectInfoAfter
+            prefix="apps.google.info"
+            accentColor={GOOGLE_BLUE}
+            works={3}
+            limits={3}
+            faq={5}
+          />
         </div>
       </Card>
     </ConfigProvider>

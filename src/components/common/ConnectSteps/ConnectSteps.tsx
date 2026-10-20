@@ -2,7 +2,13 @@
 
 import { ReactNode } from "react";
 
-import { theme } from "antd";
+import { Collapse, theme } from "antd";
+
+import {
+  CheckCircleFilled,
+  InfoCircleFilled,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 
 // The first screen of an app: who it is, and the way in as a sequence of steps.
 // Each app brings its own accent color (its brand) and its own steps.
@@ -120,5 +126,103 @@ export function ConnectStepText({ children }: { children: ReactNode }) {
     <p className="m-0 mb-3" style={{ color: token.colorTextSecondary }}>
       {children}
     </p>
+  );
+}
+
+// A short list that tells the user what to have, or what to expect, before and
+// while connecting. `kind` picks the marker: a check for what is needed or what
+// the app does, an info mark for what is good to know.
+export function ConnectChecklist({
+  title,
+  items,
+  accentColor,
+  kind = "check",
+}: {
+  title: string;
+  items: string[];
+  accentColor: string;
+  kind?: "check" | "info";
+}) {
+  const { token } = theme.useToken();
+
+  return (
+    <section
+      className="mt-6 rounded-xl p-4"
+      style={{
+        background: `color-mix(in srgb, ${accentColor} 7%, transparent)`,
+        border: `1px solid color-mix(in srgb, ${accentColor} 22%, transparent)`,
+      }}
+    >
+      <h3 className="m-0 mb-2 text-sm font-semibold">{title}</h3>
+
+      <ul className="m-0 flex list-none flex-col gap-2 p-0">
+        {items.map((item: string, index: number) => (
+          <li key={index} className="flex items-start gap-2">
+            <span
+              className="mt-[3px] shrink-0"
+              style={{ color: accentColor }}
+              aria-hidden="true"
+            >
+              {kind === "check" ? <CheckCircleFilled /> : <InfoCircleFilled />}
+            </span>
+
+            <span style={{ color: token.colorTextSecondary }}>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+// The questions a person asks before trusting an app with their account.
+export function ConnectFaq({
+  title,
+  items,
+}: {
+  title: string;
+  items: { question: string; answer: string }[];
+}) {
+  const { token } = theme.useToken();
+
+  return (
+    <section className="mt-8">
+      <h3 className="m-0 mb-1 flex items-center gap-2 text-sm font-semibold">
+        <QuestionCircleOutlined />
+
+        {title}
+      </h3>
+
+      <Collapse
+        ghost
+        size="small"
+        items={items.map((item, index: number) => ({
+          key: String(index),
+          label: <span className="font-medium">{item.question}</span>,
+          children: (
+            <p className="m-0" style={{ color: token.colorTextSecondary }}>
+              {item.answer}
+            </p>
+          ),
+        }))}
+      />
+    </section>
+  );
+}
+
+// A few short lines under a step: how to do it, exactly.
+export function ConnectStepDetail({ items }: { items: string[] }) {
+  const { token } = theme.useToken();
+
+  return (
+    <ol
+      className="m-0 mb-3 list-decimal pl-5"
+      style={{ color: token.colorTextSecondary }}
+    >
+      {items.map((item: string, index: number) => (
+        <li key={index} className="pl-1">
+          {item}
+        </li>
+      ))}
+    </ol>
   );
 }

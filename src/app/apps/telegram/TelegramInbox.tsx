@@ -9,6 +9,7 @@ import { ExportOutlined } from "@ant-design/icons";
 
 import AppIcon from "../../../components/common/AppIcon/AppIcon";
 import { AppTile } from "../../../components/common/ConnectSteps/ConnectSteps";
+import useAppData from "../../../data/context/app/useAppData";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import AppsEnum from "../../../shared/business/apps/apps.enum";
@@ -37,6 +38,10 @@ export default function TelegramInbox({
   const { token } = theme.useToken();
 
   const screens = Grid.useBreakpoint();
+
+  const {
+    apps: { fetchApps },
+  } = useAppData();
 
   const { chats, isLoadingChats, refetchChats } = useTelegramChats(isEnabled);
 
@@ -75,9 +80,14 @@ export default function TelegramInbox({
 
     serviceMethodsInstance.telegramServiceMethods
       .markRead(selectedChat.chatId)
-      .then(() => refetchChats(true))
+      .then(() => {
+        refetchChats(true);
+
+        // The count in the menu drops as soon as the conversation is read.
+        fetchApps(true);
+      })
       .catch(() => undefined);
-  }, [selectedChat, refetchChats]);
+  }, [selectedChat, refetchChats, fetchApps]);
 
   const list = (
     <TelegramChatList

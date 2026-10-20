@@ -53,6 +53,12 @@ const sourceAppUrl = (source: ICustomerExternalSource): string | null => {
         encodeURIComponent(source.externalId),
       );
 
+    case AppsEnum.App.INSTAGRAM:
+      return Urls.APPS_INSTAGRAM_CHAT.replace(
+        ":igsid",
+        encodeURIComponent(source.externalId),
+      );
+
     case AppsEnum.App.GOOGLE_CONTACTS:
       return Urls.APPS_GOOGLE_CONTACTS_CONTACT.replace(
         ":contactId",

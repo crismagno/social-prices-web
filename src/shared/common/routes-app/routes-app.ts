@@ -13,6 +13,9 @@ const Urls = {
   APPS_GOOGLE_CONTACTS: "/apps/google-contacts",
   APPS_TELEGRAM: "/apps/telegram",
   APPS_MESSENGER: "/apps/messenger",
+  APPS_INSTAGRAM: "/apps/instagram",
+  // Opens the conversation of one person (their account-scoped id).
+  APPS_INSTAGRAM_CHAT: "/apps/instagram?chat=:igsid",
   // Opens the conversation of one person (their Page-scoped id).
   APPS_MESSENGER_CHAT: "/apps/messenger?chat=:psid",
   // Opens the conversation of one person (a private chat has the person's id).

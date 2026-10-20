@@ -133,6 +133,7 @@
     "cnpj": "CNPJ"
   },
   "navigation": {
+    "allApps": "Todos os apps",
     "apps": "Apps",
     "home": "Início",
     "dashboard": "Painel",
@@ -1096,6 +1097,9 @@
   "apps": {
     "title": "Apps",
     "subtitle": "Conecte seus outros aplicativos",
+    "unread": "{count} não lidas",
+    "notEnabledTag": "Não habilitado",
+    "notEnabledHint": "Peça ao seu gerente para habilitar este app na sua conta.",
     "noneEnabled": "Ainda não há apps disponíveis para a sua conta.",
     "notEnabled": "Este app não está disponível para a sua conta.",
     "comingSoon": "Em breve",
@@ -1150,7 +1154,11 @@
         "existing": "Já é cliente - será vinculado",
         "linked": "Já vinculado",
         "selectAll": "Selecionar todos",
-        "range": "{from}-{to} de {total} itens"
+        "range": "{from}-{to} de {total} itens",
+        "goToCustomer": "Ir para o cliente",
+        "linkToCustomer": "Vincular a um cliente",
+        "linkedTo": "Vinculado a {name}",
+        "customerNotFound": "O cliente deste contato não foi encontrado. Sincronize de novo para atualizar a lista."
       },
       "fetchedAt": "Contatos carregados em {time}",
       "cooldown": "Você poderá sincronizar novamente em {time}.",
@@ -1168,7 +1176,12 @@
         },
         "allow": {
           "title": "Permita o acesso aos contatos",
-          "text": "O sistema só lê os contatos. Nunca edita nem apaga nada no Google."
+          "text": "O sistema só lê os contatos. Nunca edita nem apaga nada no Google.",
+          "detail": {
+            "1": "O Google mostra uma tela pedindo para \"ver e baixar seus contatos\".",
+            "2": "Mantenha essa caixa marcada. Sem ela o sistema não consegue listar seus contatos.",
+            "3": "O acesso é só de leitura: nada na sua conta Google é editado, criado ou apagado."
+          }
         },
         "choose": {
           "title": "Escolha quem vira cliente",
@@ -1186,6 +1199,49 @@
         "new": "{count} novos",
         "existing": "{count} a vincular",
         "linked": "{count} já vinculados"
+      },
+      "info": {
+        "needTitle": "Antes de começar",
+        "need": {
+          "1": "Uma conta Google onde seus contatos estejam salvos, a mesma com que o seu celular sincroniza.",
+          "2": "Contatos salvos no Google Contatos (contacts.google.com). Os guardados só no celular ou no chip não entram.",
+          "3": "Espaço no seu plano para novos clientes: a página mostra quantos você ainda pode adicionar."
+        },
+        "worksTitle": "O que você ganha",
+        "works": {
+          "1": "A lista dos seus contatos do Google, para você olhar antes de salvar qualquer coisa.",
+          "2": "Você escolhe quais viram clientes. Nada é salvo sem a sua escolha.",
+          "3": "Contatos que já casam com um cliente pelo e-mail só são vinculados a ele, e nada nesse cliente é alterado."
+        },
+        "limitsTitle": "Bom saber",
+        "limits": {
+          "1": "O acesso é só de leitura: o sistema nunca edita, cria nem apaga nada no Google.",
+          "2": "São listados até 2.000 contatos por vez, e a lista é atualizada no máximo a cada 20 minutos.",
+          "3": "Cada conta conecta uma conta Google, e dá para trocar por outra desconectando."
+        },
+        "faqTitle": "Perguntas frequentes",
+        "faq": {
+          "1": {
+            "q": "Qual conta Google devo usar?",
+            "a": "A que tem os contatos que você quer como clientes. Pode ser a sua conta pessoal ou a da empresa."
+          },
+          "2": {
+            "q": "Faltam alguns dos meus contatos.",
+            "a": "Só os contatos salvos na sua conta Google são listados (\"Meus contatos\"). Os guardados só no celular ou no chip, e os que o Google sugere como \"Outros contatos\", não entram."
+          },
+          "3": {
+            "q": "Isso vai mudar meus contatos do Google?",
+            "a": "Não. A permissão é só de leitura. O sistema apenas lê, e a sua conta Google fica exatamente como está."
+          },
+          "4": {
+            "q": "O Google avisa que o app não foi verificado.",
+            "a": "Enquanto o app está em análise, o Google pode mostrar um aviso. Escolha Avançado e continue para o app. Se tiver dúvida, fale com o suporte antes."
+          },
+          "5": {
+            "q": "Como troco de conta ou paro o acesso?",
+            "a": "Use Desconectar nesta página e conecte de novo com outra conta. Você também pode remover o acesso na sua conta Google, em Segurança."
+          }
+        }
       }
     },
     "errors": {
@@ -1217,11 +1273,21 @@
         "page": {
           "title": "Tenha uma Página do Facebook",
           "text": "O Messenger funciona com Páginas, não com perfis pessoais. Você precisa ser administrador da Página.",
-          "action": "Criar uma Página"
+          "action": "Criar uma Página",
+          "detail": {
+            "1": "Ainda não tem uma Página? Crie uma de graça, leva uns dois minutos.",
+            "2": "Você precisa ser administrador da Página (controle total, ou pelo menos permissão para gerenciar mensagens).",
+            "3": "Se a Página está num portfólio empresarial da Meta (Business Suite), você também precisa ter acesso a ela por lá."
+          }
         },
         "login": {
           "title": "Entre com o Facebook",
-          "text": "O Facebook pede que você permita a este sistema ler suas Páginas e responder as mensagens delas. Você não copia nenhuma chave."
+          "text": "O Facebook pede que você permita a este sistema ler suas Páginas e responder as mensagens delas. Você não copia nenhuma chave.",
+          "detail": {
+            "1": "Entre com o perfil do Facebook que administra a Página.",
+            "2": "Na tela do Facebook, marque a Página que você quer conectar (use \"Editar configurações\" se ela não aparecer).",
+            "3": "Mantenha todas as permissões ligadas: são elas que deixam o sistema ler as mensagens da Página e respondê-las."
+          }
         },
         "choose": {
           "title": "Escolha a Página",
@@ -1291,9 +1357,60 @@
         "file": "Arquivo"
       },
       "media": {
+        "attach": "Anexar um arquivo",
+        "remove": "Remover o arquivo",
+        "tooLarge": "O arquivo pode ter no máximo 25 MB.",
+        "record": "Gravar uma mensagem de voz",
+        "cancelRecording": "Descartar a gravação",
+        "microphoneDenied": "O microfone não está disponível. Permita o acesso no navegador e tente de novo.",
         "retry": "Tentar de novo",
         "play": "Reproduzir",
         "download": "Baixar"
+      },
+      "info": {
+        "needTitle": "Antes de começar",
+        "need": {
+          "1": "Uma conta do Facebook (o seu perfil pessoal, só para entrar).",
+          "2": "Uma Página do Facebook do seu negócio, da qual você seja administrador. É nela que os clientes escrevem.",
+          "3": "O Messenger ligado na Página, que já vem ligado nas Páginas novas.",
+          "4": "Uma conta Meta Business é opcional: ajuda se a Página for gerenciada no Business Suite."
+        },
+        "worksTitle": "O que você ganha",
+        "works": {
+          "1": "As mensagens que os clientes mandam para a Página aparecem aqui em tempo real.",
+          "2": "Você responde por este sistema com texto, fotos, arquivos e mensagens de voz.",
+          "3": "O que você ou sua equipe enviarem pelo Messenger ou pelo Business Suite também aparece aqui.",
+          "4": "Cada pessoa pode ser vinculada a um cliente, ou virar cliente com um clique."
+        },
+        "limitsTitle": "Bom saber",
+        "limits": {
+          "1": "O Facebook só permite responder em até 24 horas depois da última mensagem do cliente. Depois disso, espere a próxima.",
+          "2": "Cada conta conecta uma Página, e uma Página só pode pertencer a uma conta.",
+          "3": "O sistema nunca publica, nunca lê as suas conversas pessoais e nunca vê a sua senha."
+        },
+        "faqTitle": "Perguntas frequentes",
+        "faq": {
+          "1": {
+            "q": "Por que preciso entrar com o Facebook?",
+            "a": "É assim que você autoriza este sistema a ler e responder as mensagens da sua Página. O login acontece na tela do próprio Facebook, e você pode remover o acesso quando quiser, nas configurações do Facebook, em Integrações empresariais."
+          },
+          "2": {
+            "q": "Minha Página não aparece na lista.",
+            "a": "Você precisa ser administrador da Página. Se ela pertence a um portfólio empresarial da Meta, peça acesso a ela com permissão para gerenciar mensagens. Depois conecte de novo e marque a Página na tela do Facebook."
+          },
+          "3": {
+            "q": "Conectei, mas a mensagem de um cliente não chegou.",
+            "a": "Só chegam as mensagens enviadas depois da conexão. As que o Facebook guarda em \"Solicitações de mensagem\" chegam depois que a Página as aceita. Se ainda assim não aparecer, fale com o suporte."
+          },
+          "4": {
+            "q": "Funciona com o Instagram?",
+            "a": "Ainda não. Esta conexão é só para o Facebook Messenger."
+          },
+          "5": {
+            "q": "Como desconecto?",
+            "a": "Use o botão Desconectar desta página. As conversas já recebidas continuam aqui, e nada muda na sua Página."
+          }
+        }
       }
     },
     "telegram": {
@@ -1302,11 +1419,18 @@
         "createBot": {
           "title": "Crie o bot no Telegram",
           "text": "Abra o @BotFather e envie /newbot.",
-          "action": "Abrir o @BotFather"
+          "action": "Abrir o @BotFather",
+          "detail": {
+            "1": "Abra a conversa com o @BotFather, o bot oficial do Telegram para criar bots.",
+            "2": "Envie a mensagem /newbot.",
+            "3": "Nome: o que seus clientes veem, como \"Loja da Ana\".",
+            "4": "Usuário (username): único e terminando em \"bot\", como loja_ana_bot.",
+            "5": "O BotFather responde com um token (123456789:AAH...). Copie o token inteiro."
+          }
         },
         "copyToken": {
           "title": "Copie o token",
-          "text": "Escolha um nome e um username que termine em \"bot\". O BotFather responde com um token."
+          "text": "A resposta do BotFather traz um token longo. Selecione tudo e copie, você vai colá-lo no próximo passo."
         },
         "paste": {
           "title": "Cole aqui",
@@ -1404,7 +1528,204 @@
       "connectTitle": "Conecte o seu bot do Telegram",
       "connectSubtitle": "Responda aqui os clientes que escrevem para o seu bot, sem sair do sistema.",
       "tokenInvalid": "Isso não parece um token de bot. Ele tem números, dois pontos, e depois letras e dígitos.",
-      "openBot": "Abrir no Telegram"
+      "openBot": "Abrir no Telegram",
+      "info": {
+        "needTitle": "Antes de começar",
+        "need": {
+          "1": "Uma conta no Telegram, no celular ou no computador.",
+          "2": "Uns dois minutos para criar o bot, que é grátis.",
+          "3": "Não precisa de conta Telegram Business: o bot é suficiente."
+        },
+        "worksTitle": "O que você ganha",
+        "works": {
+          "1": "Quem escrever para o seu bot aparece na caixa de entrada daqui, em tempo real.",
+          "2": "Você responde por este sistema com texto, fotos, arquivos e mensagens de voz.",
+          "3": "Cada pessoa pode ser vinculada a um cliente, ou virar cliente com um clique."
+        },
+        "limitsTitle": "Bom saber",
+        "limits": {
+          "1": "Um bot não pode começar a conversa: o cliente escreve primeiro, abrindo o link do seu bot.",
+          "2": "Cada conta tem um bot, e um bot só pode pertencer a uma conta.",
+          "3": "O token é a senha do bot. Quem tem o token controla o bot, então nunca o compartilhe."
+        },
+        "faqTitle": "Perguntas frequentes",
+        "faq": {
+          "1": {
+            "q": "Onde os clientes encontram o bot?",
+            "a": "Mande para eles o link t.me/usuario_do_seu_bot. Depois de conectar, o botão \"Abrir no Telegram\" mostra esse link."
+          },
+          "2": {
+            "q": "Posso usar minha conta pessoal do Telegram em vez de um bot?",
+            "a": "Não. O Telegram só permite que sistemas conversem com clientes por meio de bots. O bot é uma identidade separada, e a sua conta pessoal nunca é tocada."
+          },
+          "3": {
+            "q": "Perdi o token. E agora?",
+            "a": "Abra o @BotFather, envie /mybots, escolha o seu bot e toque em API Token. Lá você também pode revogar o token e colar o novo aqui."
+          },
+          "4": {
+            "q": "O token fica seguro aqui?",
+            "a": "Ele é guardado criptografado e nunca é mostrado de novo. Desconectar o bot aqui o remove."
+          },
+          "5": {
+            "q": "Colei o token e ele foi recusado.",
+            "a": "Copie o token inteiro, com o número, os dois pontos e as letras, sem espaços. Se você o revogou no BotFather, cole o novo."
+          }
+        }
+      }
+    },
+    "instagram": {
+      "title": "Instagram",
+      "unnamed": "Contato sem nome",
+      "connectTitle": "Conecte sua conta do Instagram",
+      "connectSubtitle": "Responda as mensagens diretas do seu Instagram sem sair deste sistema.",
+      "expiredHint": "A conexão expirou. O acesso do Instagram dura 60 dias e se renova enquanto você usa. Conecte de novo para continuar recebendo mensagens.",
+      "managersOnly": "Só o dono, administradores e masters podem conectar ou desconectar a conta.",
+      "connect": "Conectar com o Instagram",
+      "reconnect": "Conectar de novo",
+      "disconnected": "Conta desconectada",
+      "steps": {
+        "professional": {
+          "title": "Use uma conta profissional",
+          "text": "O Instagram só deixa sistemas lerem e responderem mensagens de contas profissionais, que são grátis.",
+          "detail": {
+            "1": "Comercial (Business) ou Criador de conteúdo: as duas servem.",
+            "2": "Para trocar: no app do Instagram, vá em Configurações e privacidade, depois Tipo de conta e ferramentas, depois Mudar para conta profissional.",
+            "3": "Não precisa de Página do Facebook."
+          }
+        },
+        "access": {
+          "title": "Permita o acesso às mensagens",
+          "text": "Uma configuração do próprio Instagram decide se as mensagens podem chegar a outras ferramentas. Sem ela nada chega aqui.",
+          "detail": {
+            "1": "No app do Instagram, abra Configurações.",
+            "2": "Vá em Mensagens e respostas a stories, depois Controles de mensagens.",
+            "3": "Abra Ferramentas conectadas.",
+            "4": "Ligue Permitir acesso às mensagens."
+          }
+        },
+        "login": {
+          "title": "Entre com o Instagram",
+          "text": "Você vai para a tela do próprio Instagram. Não precisa copiar nenhuma chave.",
+          "detail": {
+            "1": "Entre com a conta que você quer conectar.",
+            "2": "Mantenha todas as permissões ligadas: são elas que deixam o sistema ler suas mensagens e respondê-las.",
+            "3": "Você volta para cá já conectado."
+          }
+        }
+      },
+      "errors": {
+        "access_denied": "Você não permitiu o acesso no Instagram. Conecte de novo e aceite as permissões.",
+        "oauth_error": "O Instagram não conseguiu concluir o login. Tente de novo.",
+        "invalid_state": "O login demorou demais ou foi alterado. Conecte de novo.",
+        "missing_code": "O Instagram não devolveu o código do login. Tente de novo.",
+        "not_enabled": "O Instagram não está liberado para a sua conta.",
+        "missing_permission": "O Instagram não deu a este sistema a permissão de ler e responder mensagens. Conecte de novo e mantenha todas as permissões ligadas.",
+        "not_professional": "Esta conta é pessoal. Mude para uma conta Comercial ou de Criador no app do Instagram e conecte de novo.",
+        "account_in_use": "Esta conta do Instagram já está conectada a outro usuário.",
+        "subscribe_failed": "O Instagram não deixou este sistema receber as mensagens da conta. Confira se o acesso às mensagens está ligado em Ferramentas conectadas e tente de novo.",
+        "connection_failed": "Não foi possível conectar a conta. Tente de novo."
+      },
+      "account": {
+        "connected": "Conectada",
+        "lastMessage": "Última mensagem:",
+        "none": "nenhuma ainda",
+        "open": "Abrir Instagram",
+        "disconnect": "Desconectar",
+        "disconnectConfirm": "Desconectar esta conta? As conversas já recebidas continuam aqui."
+      },
+      "info": {
+        "needTitle": "Antes de começar",
+        "need": {
+          "1": "Uma conta do Instagram, a que os clientes escrevem.",
+          "2": "Uma conta profissional (Comercial ou Criador). Trocar é grátis e leva um minuto.",
+          "3": "O acesso às mensagens ligado em Ferramentas conectadas, nas configurações do Instagram.",
+          "4": "Nada além disso: não precisa de Página do Facebook."
+        },
+        "worksTitle": "O que você ganha",
+        "works": {
+          "1": "As mensagens diretas que a sua conta recebe aparecem aqui em tempo real.",
+          "2": "Você responde por este sistema, dentro das 24 horas que o Instagram permite.",
+          "3": "O que você ou sua equipe enviarem pelo app do Instagram também aparece aqui.",
+          "4": "Cada pessoa pode ser vinculada a um cliente, ou virar cliente com um clique."
+        },
+        "limitsTitle": "Bom saber",
+        "limits": {
+          "1": "O Instagram só permite responder em até 24 horas depois da última mensagem do cliente. Depois disso, espere a próxima.",
+          "2": "Por enquanto você responde com texto. Fotos, vídeos e áudios que os clientes enviam são mostrados aqui.",
+          "3": "Curtidas, posts compartilhados e outras coisas que o Instagram não repassa aparecem como \"não suportado\".",
+          "4": "Cada usuário conecta uma conta, e uma conta só pode pertencer a um usuário."
+        },
+        "faqTitle": "Perguntas frequentes",
+        "faq": {
+          "1": {
+            "q": "Como mudo para uma conta profissional?",
+            "a": "No app do Instagram, abra Configurações e privacidade, vá em Tipo de conta e ferramentas e escolha Mudar para conta profissional. Escolha Comercial ou Criador. É grátis, e você pode voltar atrás."
+          },
+          "2": {
+            "q": "Preciso de uma Página do Facebook?",
+            "a": "Não. Esta conexão usa só a sua conta do Instagram."
+          },
+          "3": {
+            "q": "Conectei, mas uma mensagem não chegou.",
+            "a": "Confira se Permitir acesso às mensagens está ligado, em Mensagens e respostas a stories, Controles de mensagens, Ferramentas conectadas. Só chegam as mensagens enviadas depois da conexão, e as que o Instagram guarda em \"Solicitações de mensagem\" chegam depois que você as aceita. Se ainda assim não aparecer, fale com o suporte."
+          },
+          "4": {
+            "q": "Por que diz que a conexão expirou?",
+            "a": "O acesso do Instagram dura 60 dias e se renova enquanto você usa o sistema. Se ficar muito tempo sem uso, ele acaba. Conecte de novo e tudo volta; as conversas que você já tem continuam."
+          },
+          "5": {
+            "q": "Posso enviar fotos ou áudio?",
+            "a": "Ainda não. Você lê e vê os que os clientes enviam, e responde com texto."
+          }
+        }
+      },
+      "inbox": {
+        "search": "Buscar conversas",
+        "you": "Você: ",
+        "loadOlder": "Carregar mensagens anteriores",
+        "noMessages": "Nenhuma mensagem nesta conversa.",
+        "reply": "Escreva uma resposta...",
+        "send": "Enviar",
+        "sendHint": "Enter envia, Shift+Enter quebra a linha",
+        "back": "Conversas",
+        "pick": "Escolha uma conversa para ler e responder.",
+        "today": "Hoje",
+        "yesterday": "Ontem",
+        "emptyState": {
+          "title": "Nenhuma conversa ainda",
+          "text": "Quando alguém mandar uma mensagem direta para o seu Instagram, a conversa aparece aqui."
+        }
+      },
+      "window": {
+        "open": "Você pode responder até {time}",
+        "closed": "A janela de 24 horas para responder fechou",
+        "closedHint": "O Instagram só permite responder por 24 horas depois da última mensagem da pessoa. Você poderá responder de novo quando ela escrever para a sua conta."
+      },
+      "customer": {
+        "open": "Abrir cliente",
+        "create": "Criar cliente",
+        "link": "Vincular cliente",
+        "unlink": "Desvincular",
+        "unlinkConfirm": "Desvincular este cliente? O cliente é mantido, só sem o contato do Instagram.",
+        "created": "Cliente criado",
+        "linked": "Cliente vinculado",
+        "unlinked": "Cliente desvinculado"
+      },
+      "content": {
+        "image": "Foto",
+        "video": "Vídeo",
+        "audio": "Áudio",
+        "file": "Arquivo",
+        "unsupported": "Mensagem não suportada",
+        "share": "Post compartilhado",
+        "story_mention": "Menção em story",
+        "ig_reel": "Reel"
+      },
+      "media": {
+        "retry": "Tentar de novo",
+        "play": "Reproduzir",
+        "download": "Baixar"
+      }
     }
   },
   "notes": {

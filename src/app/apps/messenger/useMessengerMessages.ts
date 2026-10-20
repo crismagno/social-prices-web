@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
+import { useInboxRealtime } from "../../../data/context/socket/useInboxRealtime";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
+import AppsEnum from "../../../shared/business/apps/apps.enum";
 import { IMessengerMessage } from "../../../shared/business/apps/messenger/messenger.types";
 import { mergeMessages } from "./messenger-display";
 
@@ -92,6 +94,14 @@ export const useMessengerMessages = (
 
     return () => clearInterval(interval);
   }, [psid, fetchLatest]);
+
+  // A message of the open conversation arrives (or the tab comes back): it
+  // shows at once. Other conversations are the list's business.
+  useInboxRealtime(AppsEnum.App.FACEBOOK, (key) => {
+    if (psid !== null && (key === null || key === psid)) {
+      fetchLatest(true);
+    }
+  });
 
   const loadOlder = useCallback(async (): Promise<void> => {
     if (psid === null || messages.length === 0) {

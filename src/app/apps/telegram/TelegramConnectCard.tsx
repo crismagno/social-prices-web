@@ -7,9 +7,14 @@ import { Alert, App, Button, Card, ConfigProvider, Input, theme } from "antd";
 import { ExportOutlined, LockOutlined, SendOutlined } from "@ant-design/icons";
 
 import {
+  ConnectInfoAfter,
+  ConnectInfoBefore,
+  stepDetailKeys,
+} from "../../../components/common/ConnectSteps/ConnectInfoSections";
+import {
   ConnectHero,
   ConnectStep,
-  ConnectStepText,
+  ConnectStepDetail,
   ConnectSteps,
 } from "../../../components/common/ConnectSteps/ConnectSteps";
 import AppIcon from "../../../components/common/AppIcon/AppIcon";
@@ -88,18 +93,25 @@ export default function TelegramConnectCard({ canManage, onConnected }: Props) {
             subtitle={t("apps.telegram.connectSubtitle")}
           />
 
+          <ConnectInfoBefore
+            prefix="apps.telegram.info"
+            accentColor={TELEGRAM_BLUE}
+            need={3}
+          />
+
           <ConnectSteps>
             <ConnectStep
               accentColor={TELEGRAM_BLUE}
               position={1}
               title={t("apps.telegram.steps.createBot.title")}
             >
-              <p
-                className="m-0 mb-3"
-                style={{ color: themeToken.colorTextSecondary }}
-              >
-                {t("apps.telegram.steps.createBot.text")}
-              </p>
+              <ConnectStepDetail
+                items={stepDetailKeys(
+                  t,
+                  "apps.telegram.steps.createBot.detail",
+                  5,
+                )}
+              />
 
               <Button
                 href="https://t.me/BotFather"
@@ -190,6 +202,14 @@ export default function TelegramConnectCard({ canManage, onConnected }: Props) {
               )}
             </ConnectStep>
           </ConnectSteps>
+
+          <ConnectInfoAfter
+            prefix="apps.telegram.info"
+            accentColor={TELEGRAM_BLUE}
+            works={3}
+            limits={3}
+            faq={5}
+          />
         </div>
       </Card>
     </ConfigProvider>

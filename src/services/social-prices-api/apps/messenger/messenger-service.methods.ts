@@ -95,6 +95,25 @@ export default class MessengerServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
+  // A file or a recording. Facebook takes up to 25 MB, and a file carries no
+  // caption: any text goes as a message of its own.
+  public async sendAttachment(
+    psid: string,
+    file: File,
+  ): Promise<IMessengerMessage> {
+    const formData: FormData = new FormData();
+
+    formData.append("file", file);
+
+    const response = await this._fetchAxios.post<IMessengerMessage>(
+      this._url(MessengerServiceEnum.Methods.CHAT_MEDIA, psid),
+      formData,
+      { headers: { Authorization: this.formatAuthorizationWithToken() } },
+    );
+
+    return response.data;
+  }
+
   public async markRead(psid: string): Promise<void> {
     await this._fetchAxios.post(
       this._url(MessengerServiceEnum.Methods.CHAT_READ, psid),

@@ -8,8 +8,14 @@ import { ExportOutlined, FacebookFilled } from "@ant-design/icons";
 
 import AppIcon from "../../../components/common/AppIcon/AppIcon";
 import {
+  ConnectInfoAfter,
+  ConnectInfoBefore,
+  stepDetailKeys,
+} from "../../../components/common/ConnectSteps/ConnectInfoSections";
+import {
   ConnectHero,
   ConnectStep,
+  ConnectStepDetail,
   ConnectSteps,
 } from "../../../components/common/ConnectSteps/ConnectSteps";
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
@@ -128,6 +134,12 @@ export default function MessengerConnectCard({
             />
           )}
 
+          <ConnectInfoBefore
+            prefix="apps.messenger.info"
+            accentColor={MESSENGER_BLUE}
+            need={4}
+          />
+
           <ConnectSteps>
             <ConnectStep
               accentColor={MESSENGER_BLUE}
@@ -140,6 +152,10 @@ export default function MessengerConnectCard({
               >
                 {t("apps.messenger.steps.page.text")}
               </p>
+
+              <ConnectStepDetail
+                items={stepDetailKeys(t, "apps.messenger.steps.page.detail", 3)}
+              />
 
               <Button
                 href="https://www.facebook.com/pages/create"
@@ -164,6 +180,14 @@ export default function MessengerConnectCard({
               >
                 {t("apps.messenger.steps.login.text")}
               </p>
+
+              <ConnectStepDetail
+                items={stepDetailKeys(
+                  t,
+                  "apps.messenger.steps.login.detail",
+                  3,
+                )}
+              />
 
               <Button
                 type="primary"
@@ -215,6 +239,14 @@ export default function MessengerConnectCard({
               </ConnectStep>
             )}
           </ConnectSteps>
+
+          <ConnectInfoAfter
+            prefix="apps.messenger.info"
+            accentColor={MESSENGER_BLUE}
+            works={4}
+            limits={3}
+            faq={5}
+          />
         </div>
       </Card>
     </ConfigProvider>

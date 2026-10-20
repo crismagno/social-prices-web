@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { encodeMp3 } from "../../../shared/utils/audio/encode-mp3";
+import { encodeWav } from "../../../shared/utils/audio/encode-wav";
 
 // Telegram shows a voice message with its length; a minute is plenty for a reply.
 export const MAX_RECORDING_SECONDS: number = 120;
@@ -18,9 +19,13 @@ interface IVoiceRecorder {
   cancel: () => void;
 }
 
-// Records the microphone and hands the result back as an MP3 file.
+export type RecordingFormat = "mp3" | "wav";
+
+// Records the microphone and hands the result back as a file of the format the
+// app that sends it accepts: Telegram takes MP3, Messenger plays WAV.
 export function useVoiceRecorder(
   onError: (error: unknown) => void,
+  format: RecordingFormat = "mp3",
 ): IVoiceRecorder {
   const [state, setState] = useState<RecorderState>("idle");
 
@@ -118,9 +123,15 @@ export function useVoiceRecorder(
         return null;
       }
 
-      const mp3: Blob = await encodeMp3(recording);
+      if (format === "wav") {
+        return new File([await encodeWav(recording)], "voice.wav", {
+          type: "audio/wav",
+        });
+      }
 
-      return new File([mp3], "voice.mp3", { type: "audio/mpeg" });
+      return new File([await encodeMp3(recording)], "voice.mp3", {
+        type: "audio/mpeg",
+      });
     } catch (error: unknown) {
       onError(error);
 
@@ -129,7 +140,7 @@ export function useVoiceRecorder(
       release();
       setState("idle");
     }
-  }, [onError, release]);
+  }, [onError, release, format]);
 
   return { state, seconds, start, finish, cancel };
 }

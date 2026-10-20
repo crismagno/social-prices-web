@@ -39,6 +39,12 @@ export interface IMessengerAttachment {
   url: string;
 }
 
+export interface IMessengerLocalAttachment {
+  type: string;
+  fileName: string;
+  size: number;
+}
+
 export interface IMessengerMessage {
   _id: string;
   direction: MessengerEnum.Direction;
@@ -46,6 +52,8 @@ export interface IMessengerMessage {
   mid: string;
   text: string | null;
   attachments: IMessengerAttachment[];
+  // A file sent from here, until Facebook gives it an address a moment later.
+  localAttachment?: IMessengerLocalAttachment;
   sentAt: string;
   sentByEmployeeId?: string | null;
 }

@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
+import { useInboxRealtime } from "../../../data/context/socket/useInboxRealtime";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
+import AppsEnum from "../../../shared/business/apps/apps.enum";
 import { ITelegramMessage } from "../../../shared/business/apps/telegram/telegram.types";
 import { mergeMessages } from "./telegram-display";
 
@@ -93,6 +95,14 @@ export const useTelegramMessages = (
 
     return () => clearInterval(interval);
   }, [chatId, fetchLatest]);
+
+  // A message of the open conversation arrives (or the tab comes back): it
+  // shows at once. Other conversations are the list's business.
+  useInboxRealtime(AppsEnum.App.TELEGRAM, (key) => {
+    if (chatId !== null && (key === null || key === String(chatId))) {
+      fetchLatest(true);
+    }
+  });
 
   const loadOlder = useCallback(async (): Promise<void> => {
     if (chatId === null || messages.length === 0) {

@@ -11,6 +11,9 @@ import { IFileUploadTemplateError } from "../../../shared/business/files-uploads
 import { IProductFileUploadTemplateRow } from "../../../shared/business/products/products.type";
 import { ISaleFileUploadTemplateRow } from "../../../shared/business/sales/sales.type";
 import SocketsEnum from "../../../shared/business/sockets/sockets.enum";
+import { AppsRealtimeEvents } from "../../../shared/business/apps/apps-realtime.events";
+import { localStorageMethodsInstance } from "../../../shared/common/local-storage/local-storage-methods";
+import useAppData from "../app/useAppData";
 import useAuthData from "../auth/useAuthData";
 
 export interface ISocketContext {
@@ -24,6 +27,10 @@ const SocketContext = createContext<ISocketContext>({
 export const SocketProvider = ({ children }: { children?: any }) => {
   const { message } = App.useApp();
   const { employee, isLogged } = useAuthData();
+
+  const {
+    apps: { fetchApps },
+  } = useAppData();
 
   const [socket, setSocket] = useState<Socket | null>(null);
 
@@ -59,7 +66,7 @@ export const SocketProvider = ({ children }: { children?: any }) => {
       });
 
       const socketInstance: Socket = manager.socket(
-        process.env.NEXT_PUBLIC_MANAGER_SOCKET_IO_PATH!
+        process.env.NEXT_PUBLIC_MANAGER_SOCKET_IO_PATH!,
       );
 
       setSocket(socketInstance);
@@ -87,49 +94,49 @@ export const SocketProvider = ({ children }: { children?: any }) => {
       // Customers
       socket.on(
         SocketsEnum.EventNames.UPLOAD_CUSTOMERS_RESPONSE_TO_EMPLOYEE(
-          employee._id
+          employee._id,
         ),
         (data: IFileUploadTemplateError<ICustomerFileUploadTemplateRow>[]) => {
           if (data.length > 0) {
             message.warning(
-              "Upload Customers has completed but there are error on some file, please check on customers upload table!"
+              "Upload Customers has completed but there are error on some file, please check on customers upload table!",
             );
           } else {
             message.success("Upload Customers Completed!");
           }
-        }
+        },
       );
 
       // Products
       socket.on(
         SocketsEnum.EventNames.UPLOAD_PRODUCTS_RESPONSE_TO_EMPLOYEE(
-          employee._id
+          employee._id,
         ),
         (data: IFileUploadTemplateError<IProductFileUploadTemplateRow>[]) => {
           if (data.length > 0) {
             message.warning(
-              "Upload Products has completed but there are error on some file, please check on products upload table!"
+              "Upload Products has completed but there are error on some file, please check on products upload table!",
             );
           } else {
             message.success("Upload Products Completed!");
           }
-        }
+        },
       );
 
       // Employees
       socket.on(
         SocketsEnum.EventNames.UPLOAD_EMPLOYEES_RESPONSE_TO_EMPLOYEE(
-          employee._id
+          employee._id,
         ),
         (data: IFileUploadTemplateError<IEmployeeFileUploadTemplateRow>[]) => {
           if (data.length > 0) {
             message.warning(
-              "Upload Employees has completed but there are error on some file, please check on employees upload table!"
+              "Upload Employees has completed but there are error on some file, please check on employees upload table!",
             );
           } else {
             message.success("Upload Employees Completed!");
           }
-        }
+        },
       );
 
       // Sales
@@ -138,15 +145,66 @@ export const SocketProvider = ({ children }: { children?: any }) => {
         (data: IFileUploadTemplateError<ISaleFileUploadTemplateRow>[]) => {
           if (data.length > 0) {
             message.warning(
-              "Upload Sales has completed but there are error on some file, please check on sales upload table!"
+              "Upload Sales has completed but there are error on some file, please check on sales upload table!",
             );
           } else {
             message.success("Upload Sales Completed!");
           }
-        }
+        },
       );
     }
   }, [socket, employee?._id, isLogged]);
+
+  // The apps' inboxes are pushed through a room that only a valid login joins.
+  // The server forgets the room when the user logs out, so the next account in
+  // this browser hears nothing of the last. A reconnection joins it again.
+  useEffect(() => {
+    if (!socket) {
+      return;
+    }
+
+    if (!isLogged) {
+      socket.emit(AppsRealtimeEvents.UNSUBSCRIBE);
+
+      return;
+    }
+
+    const subscribe = (): void => {
+      const token: string | null =
+        localStorageMethodsInstance.localStorageAuthTokenMethods.getAuthToken();
+
+      if (token) {
+        socket.emit(AppsRealtimeEvents.SUBSCRIBE, { token });
+      }
+    };
+
+    socket.on("connect", subscribe);
+
+    if (socket.connected) {
+      subscribe();
+    }
+
+    return () => {
+      socket.off("connect", subscribe);
+    };
+  }, [socket, isLogged]);
+
+  // The counts in the menu follow every change, wherever the user is.
+  useEffect(() => {
+    if (!socket || !isLogged) {
+      return;
+    }
+
+    const refresh = (): void => {
+      fetchApps(true);
+    };
+
+    socket.on(AppsRealtimeEvents.INBOX_UPDATED, refresh);
+
+    return () => {
+      socket.off(AppsRealtimeEvents.INBOX_UPDATED, refresh);
+    };
+  }, [socket, isLogged, fetchApps]);
 
   return (
     <SocketContext.Provider

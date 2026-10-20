@@ -25,12 +25,17 @@ import useAuthData from "../../../data/context/auth/useAuthData";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import EmployeesEnum from "../../../shared/business/employees/employees.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
+import AppsEnum from "../../../shared/business/apps/apps.enum";
+import { IAppCatalogItem } from "../../../shared/business/apps/apps.types";
+import { APP_URLS } from "../../../shared/common/routes-app/apps-urls";
+import AppIcon from "../../common/AppIcon/AppIcon";
 import { getItem, MenuItem } from "../../utils/navigation/navigation.util";
 
 export namespace SidebarMenuKeys {
   export const STORES = "stores";
   export const SALES = "sales";
   export const GENERAL = "general";
+  export const APPS = "apps";
 }
 
 export interface IUseSidebarMenuItems {
@@ -52,6 +57,13 @@ const submenuKeyByUrl = (url: string): string | null => {
     ],
     [SidebarMenuKeys.SALES]: [Urls.SALES, Urls.SALES_CREATE],
     [SidebarMenuKeys.GENERAL]: [Urls.TAGS, Urls.CATEGORIES, Urls.EMPLOYEES],
+    [SidebarMenuKeys.APPS]: [
+      Urls.APPS,
+      Urls.APPS_GOOGLE_CONTACTS,
+      Urls.APPS_TELEGRAM,
+      Urls.APPS_MESSENGER,
+      Urls.APPS_INSTAGRAM,
+    ],
   };
 
   const entry = Object.entries(submenus).find(([, urls]) => urls.includes(url));
@@ -71,7 +83,7 @@ export const useSidebarMenuItems = (
       countNotificationNotSeen,
       isLoadingCountNotificationNotSeen,
     },
-    apps: { hasEnabledApps },
+    apps: { catalog },
   } = useAppData();
 
   const pathname: string = usePathname() ?? "";
@@ -131,10 +143,82 @@ export const useSidebarMenuItems = (
         ]
       : [];
 
-  // Apps is invisible until the manager enables at least one app for the user.
-  const appsItems: MenuItem[] = hasEnabledApps
-    ? [getItem(t("navigation.apps"), Urls.APPS, <ApiOutlined />)]
-    : [];
+  // An app that is connected, has a page of its own, and has the manager's okay.
+  const connectedApps: IAppCatalogItem[] = catalog.filter(
+    (app: IAppCatalogItem) =>
+      app.enabled && app.integrated && app.connected && !!APP_URLS[app.id],
+  );
+
+  const unreadInApps: number = connectedApps.reduce(
+    (sum: number, app: IAppCatalogItem) => sum + app.unreadCount,
+    0,
+  );
+
+  // A label with the count of unread messages at its right end.
+  // `hasArrow`: a submenu has its arrow at the right end, so the count keeps clear of it.
+  const labelWithCount = (
+    label: string,
+    count: number,
+    hasArrow: boolean = false,
+  ): React.ReactNode =>
+    count > 0 ? (
+      <span className="flex items-center justify-between w-full">
+        <span>{label}</span>
+
+        <Badge
+          count={count}
+          size="small"
+          overflowCount={99}
+          style={hasArrow ? { marginRight: 22 } : undefined}
+        />
+      </span>
+    ) : (
+      label
+    );
+
+  // Collapsed there is no label, so a dot is kept on the icon.
+  const appsIcon: React.ReactNode =
+    unreadInApps > 0 && isCollapsed ? (
+      <Badge dot offset={[-3, 3]}>
+        <ApiOutlined />
+      </Badge>
+    ) : (
+      <ApiOutlined />
+    );
+
+  // Apps is always in the menu: the page lists every app, and only the ones the
+  // manager enabled can be used. Once an app is connected it becomes a submenu:
+  // the list of apps, then one entry per connected app, each with its unread
+  // messages.
+  const appsItems: MenuItem[] =
+    connectedApps.length === 0
+      ? [getItem(t("navigation.apps"), Urls.APPS, <ApiOutlined />)]
+      : [
+          getItem(
+            labelWithCount(t("navigation.apps"), unreadInApps, true),
+            SidebarMenuKeys.APPS,
+            appsIcon,
+            [
+              getItem(t("navigation.allApps"), Urls.APPS, <AppstoreOutlined />),
+              // Collapsed, an item with a badge inside loses its name in the flyout
+              // (antd does not paint it), so there the count is part of the text.
+              ...connectedApps.map((app: IAppCatalogItem) =>
+                getItem(
+                  isCollapsed
+                    ? app.unreadCount > 0
+                      ? `${t(`apps.names.${app.id}`)} (${app.unreadCount})`
+                      : t(`apps.names.${app.id}`)
+                    : labelWithCount(
+                        t(`apps.names.${app.id}`),
+                        app.unreadCount,
+                      ),
+                  APP_URLS[app.id],
+                  <AppIcon app={app.id as AppsEnum.App} />,
+                ),
+              ),
+            ],
+          ),
+        ];
 
   const items: MenuItem[] = [
     getItem(t("navigation.home"), Urls.DASHBOARD, <HomeOutlined />),
@@ -185,6 +269,10 @@ export const useSidebarMenuItems = (
     Urls.TRANSACTIONS,
     Urls.NOTES,
     Urls.APPS,
+    Urls.APPS_GOOGLE_CONTACTS,
+    Urls.APPS_TELEGRAM,
+    Urls.APPS_MESSENGER,
+    Urls.APPS_INSTAGRAM,
     Urls.STORES,
     Urls.CUSTOMERS,
     Urls.PRODUCTS,
