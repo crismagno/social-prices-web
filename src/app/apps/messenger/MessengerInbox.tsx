@@ -19,11 +19,13 @@ import { useMessengerChats } from "./useMessengerChats";
 
 interface Props {
   isEnabled: boolean;
+  // Removing a message needs an admin or master employee (the API enforces it too).
+  canDelete: boolean;
 }
 
 // The conversations on the left and the open one on the right. On a narrow
 // screen only one of them shows at a time.
-export default function MessengerInbox({ isEnabled }: Props) {
+export default function MessengerInbox({ isEnabled, canDelete }: Props) {
   const { t } = useLanguageData();
 
   const { token } = theme.useToken();
@@ -119,6 +121,7 @@ export default function MessengerInbox({ isEnabled }: Props) {
     <MessengerThread
       key={selectedChat.psid}
       chat={selectedChat}
+      canDelete={canDelete}
       onChatChanged={() => refetchChats(true)}
       onBack={isNarrow ? () => setSelectedPsid(null) : undefined}
     />

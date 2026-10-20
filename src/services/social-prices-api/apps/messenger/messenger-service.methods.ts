@@ -114,6 +114,20 @@ export default class MessengerServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
+  // Removes it from the inbox only: Facebook has no way to delete a message.
+  public async deleteMessage(psid: string, messageId: string): Promise<void> {
+    await this._fetchAxios.delete(
+      this._url(
+        MessengerServiceEnum.Methods.CHAT_MESSAGE.replace(
+          ":messageId",
+          messageId,
+        ),
+        psid,
+      ),
+      { headers: this._headers() },
+    );
+  }
+
   public async markRead(psid: string): Promise<void> {
     await this._fetchAxios.post(
       this._url(MessengerServiceEnum.Methods.CHAT_READ, psid),

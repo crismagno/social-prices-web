@@ -73,7 +73,7 @@ export default function MessengerAppPage() {
             }}
           />
 
-          <MessengerInbox isEnabled />
+          <MessengerInbox isEnabled canDelete={canManage} />
         </Space>
       </ConfigProvider>
     );

@@ -43,6 +43,17 @@ export default class InboxServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
+  // Removes it through its channel: Telegram deletes it for the customer too, the
+  // others only take it out of the inbox.
+  public async deleteMessage(messageId: string): Promise<void> {
+    await this._fetchAxios.delete(
+      this._url(
+        InboxServiceEnum.Methods.MESSAGE.replace(":messageId", messageId),
+      ),
+      { headers: this._headers() },
+    );
+  }
+
   public async markRead(scope: IInboxScope): Promise<void> {
     await this._fetchAxios.post(
       this._url(InboxServiceEnum.Methods.READ),
@@ -65,6 +76,22 @@ export default class InboxServiceMethods extends ServiceMethodsBase {
         ),
       ),
       { customerId },
+      { headers: this._headers() },
+    );
+
+    return response.data;
+  }
+
+  // Makes a customer out of the person of a conversation and ties it to them.
+  public async createCustomer(conversationId: string): Promise<IInboxChat> {
+    const response = await this._fetchAxios.post<IInboxChat>(
+      this._url(
+        InboxServiceEnum.Methods.CONVERSATION_CUSTOMER_CREATE.replace(
+          ":conversationId",
+          conversationId,
+        ),
+      ),
+      {},
       { headers: this._headers() },
     );
 

@@ -23,6 +23,7 @@ export const useInstagramMessages = (
   isLoadingOlder: boolean;
   loadOlder: () => Promise<void>;
   addMessage: (message: IInstagramMessage) => void;
+  removeMessage: (messageId: string) => void;
 } => {
   const [messages, setMessages] = useState<IInstagramMessage[]>([]);
 
@@ -134,6 +135,12 @@ export const useInstagramMessages = (
     setMessages((current) => mergeMessages(current, [message]));
   }, []);
 
+  const removeMessage = useCallback((messageId: string): void => {
+    setMessages((current) =>
+      current.filter((message) => message._id !== messageId),
+    );
+  }, []);
+
   return {
     messages,
     hasOlder,
@@ -141,5 +148,6 @@ export const useInstagramMessages = (
     isLoadingOlder,
     loadOlder,
     addMessage,
+    removeMessage,
   };
 };

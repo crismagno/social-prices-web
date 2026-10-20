@@ -69,7 +69,7 @@ export default function InstagramAppPage() {
             }}
           />
 
-          <InstagramInbox isEnabled />
+          <InstagramInbox isEnabled canDelete={canManage} />
         </Space>
       </ConfigProvider>
     );

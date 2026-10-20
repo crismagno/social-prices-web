@@ -1333,7 +1333,10 @@
         "emptyState": {
           "title": "No conversations yet",
           "text": "When someone messages your Page on Facebook or Messenger, the conversation shows up here."
-        }
+        },
+        "delete": "Delete",
+        "deleteConfirm": "Remove this message from the inbox? Facebook cannot delete messages, so it stays in Messenger for the customer.",
+        "deleted": "Message removed"
       },
       "window": {
         "open": "You can answer until {time}",
@@ -1694,7 +1697,10 @@
         "emptyState": {
           "title": "No conversations yet",
           "text": "When someone sends a direct message to your Instagram, the conversation shows up here."
-        }
+        },
+        "delete": "Delete",
+        "deleteConfirm": "Remove this message from the inbox? Instagram cannot delete messages, so it stays in Instagram for the customer.",
+        "deleted": "Message removed"
       },
       "window": {
         "open": "You can answer until {time}",
@@ -1850,7 +1856,7 @@
       "text": "Messages from Telegram, Messenger and Instagram show up here, grouped by customer."
     },
     "filter": {
-      "all": "All channels"
+      "all": "All"
     },
     "loadOlder": "Load older messages",
     "noMessages": "No messages yet",
@@ -1906,7 +1912,15 @@
       "linked": "Conversation linked",
       "unlinked": "Customer removed",
       "none": "No customer",
-      "hint": "Each conversation can be tied to a customer, or moved to another one; its whole history goes with it."
+      "hint": "Each conversation can be tied to a customer, or moved to another one; its whole history goes with it.",
+      "create": "Create customer",
+      "created": "Customer created and linked"
+    },
+    "delete": {
+      "ok": "Delete",
+      "done": "Message removed",
+      "confirmTelegram": "Delete this message? It is also deleted for the customer in Telegram.",
+      "confirmLocal": "Remove this message from the inbox? The channel cannot delete messages, so it stays there for the customer."
     }
   }
 }

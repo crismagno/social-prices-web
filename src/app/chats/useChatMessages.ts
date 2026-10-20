@@ -27,6 +27,7 @@ export const useChatMessages = (
   isLoadingOlder: boolean;
   loadOlder: () => Promise<void>;
   addMessage: (message: IInboxMessage) => void;
+  removeMessage: (messageId: string) => void;
 } => {
   const [messages, setMessages] = useState<IInboxMessage[]>([]);
 
@@ -146,6 +147,12 @@ export const useChatMessages = (
     setMessages((current) => mergeMessages(current, [message]));
   }, []);
 
+  const removeMessage = useCallback((messageId: string): void => {
+    setMessages((current) =>
+      current.filter((message) => message._id !== messageId),
+    );
+  }, []);
+
   return {
     messages,
     hasOlder,
@@ -153,5 +160,6 @@ export const useChatMessages = (
     isLoadingOlder,
     loadOlder,
     addMessage,
+    removeMessage,
   };
 };

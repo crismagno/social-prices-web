@@ -7,6 +7,8 @@ import { useSearchParams } from "next/navigation";
 
 import { MessageOutlined } from "@ant-design/icons";
 
+import useAuthData from "../../data/context/auth/useAuthData";
+import EmployeesEnum from "../../shared/business/employees/employees.enum";
 import useAppData from "../../data/context/app/useAppData";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
@@ -19,6 +21,8 @@ import { useChats } from "./useChats";
 // one of them shows at a time.
 export default function ChatsInbox() {
   const { t } = useLanguageData();
+
+  const { employee } = useAuthData();
 
   const { token } = theme.useToken();
 
@@ -109,6 +113,7 @@ export default function ChatsInbox() {
     <ChatsThread
       key={selectedChat.key}
       chat={selectedChat}
+      canDelete={employee?.level !== EmployeesEnum.Level.EMPLOYEE}
       onBack={isNarrow ? () => setSelectedKey(null) : undefined}
       onSent={() => refetchChats(true)}
       onChanged={(row?: IInboxChat) => {

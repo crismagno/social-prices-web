@@ -4,6 +4,8 @@ import { useState } from "react";
 
 import { App, Button, List, Modal, Popconfirm } from "antd";
 
+import { UserAddOutlined } from "@ant-design/icons";
+
 import AppIcon from "../../components/common/AppIcon/AppIcon";
 import handleClientError from "../../components/common/HandleClientError/HandleClientError";
 import useLanguageData from "../../data/context/language/useLanguageData";
@@ -41,22 +43,18 @@ export default function ChatsConversationsModal({
 
   const [linking, setLinking] = useState<IInboxConversation | null>(null);
 
-  const assign = async (
+  // Every customer action ends the same way: say what happened, follow the row.
+  const run = async (
     conversation: IInboxConversation,
-    customerId: string | null,
+    action: () => Promise<IInboxChat>,
+    successKey: string,
   ): Promise<void> => {
     try {
       setBusyId(conversation._id);
 
-      const row =
-        await serviceMethodsInstance.inboxServiceMethods.assignCustomer(
-          conversation._id,
-          customerId,
-        );
+      const row = await action();
 
-      message.success(
-        t(customerId ? "chats.customer.linked" : "chats.customer.unlinked"),
-      );
+      message.success(t(successKey));
 
       onChanged(row);
     } catch (error: any) {
@@ -65,6 +63,30 @@ export default function ChatsConversationsModal({
       setBusyId(null);
     }
   };
+
+  const assign = (
+    conversation: IInboxConversation,
+    customerId: string | null,
+  ): Promise<void> =>
+    run(
+      conversation,
+      () =>
+        serviceMethodsInstance.inboxServiceMethods.assignCustomer(
+          conversation._id,
+          customerId,
+        ),
+      customerId ? "chats.customer.linked" : "chats.customer.unlinked",
+    );
+
+  const create = (conversation: IInboxConversation): Promise<void> =>
+    run(
+      conversation,
+      () =>
+        serviceMethodsInstance.inboxServiceMethods.createCustomer(
+          conversation._id,
+        ),
+      "chats.customer.created",
+    );
 
   return (
     <>
@@ -93,6 +115,19 @@ export default function ChatsConversationsModal({
                       : "chats.customer.link",
                   )}
                 </Button>,
+                !chat.customerId ? (
+                  <Button
+                    key="create"
+                    size="small"
+                    type="primary"
+                    ghost
+                    icon={<UserAddOutlined />}
+                    loading={busyId === conversation._id}
+                    onClick={() => create(conversation)}
+                  >
+                    {t("chats.customer.create")}
+                  </Button>
+                ) : null,
                 chat.customerId ? (
                   <Popconfirm
                     key="unlink"

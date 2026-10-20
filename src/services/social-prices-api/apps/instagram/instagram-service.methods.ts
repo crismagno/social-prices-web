@@ -84,6 +84,20 @@ export default class InstagramServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
+  // Removes it from the inbox only: Instagram has no way to delete a message.
+  public async deleteMessage(igsid: string, messageId: string): Promise<void> {
+    await this._fetchAxios.delete(
+      this._url(
+        InstagramServiceEnum.Methods.CHAT_MESSAGE.replace(
+          ":messageId",
+          messageId,
+        ),
+        igsid,
+      ),
+      { headers: this._headers() },
+    );
+  }
+
   public async markRead(igsid: string): Promise<void> {
     await this._fetchAxios.post(
       this._url(InstagramServiceEnum.Methods.CHAT_READ, igsid),

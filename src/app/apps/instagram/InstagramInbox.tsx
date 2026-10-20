@@ -19,11 +19,13 @@ import { useInstagramChats } from "./useInstagramChats";
 
 interface Props {
   isEnabled: boolean;
+  // Removing a message needs an admin or master employee (the API enforces it too).
+  canDelete: boolean;
 }
 
 // The conversations on the left and the open one on the right. On a narrow
 // screen only one of them shows at a time.
-export default function InstagramInbox({ isEnabled }: Props) {
+export default function InstagramInbox({ isEnabled, canDelete }: Props) {
   const { t } = useLanguageData();
 
   const { token } = theme.useToken();
@@ -119,6 +121,7 @@ export default function InstagramInbox({ isEnabled }: Props) {
     <InstagramThread
       key={selectedChat.igsid}
       chat={selectedChat}
+      canDelete={canDelete}
       onChatChanged={() => refetchChats(true)}
       onBack={isNarrow ? () => setSelectedIgsid(null) : undefined}
     />

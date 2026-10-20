@@ -1336,7 +1336,10 @@
         "emptyState": {
           "title": "Nenhuma conversa ainda",
           "text": "Quando alguém mandar mensagem para a sua Página no Facebook ou no Messenger, a conversa aparece aqui."
-        }
+        },
+        "delete": "Excluir",
+        "deleteConfirm": "Remover esta mensagem da caixa de entrada? O Facebook não permite apagar mensagens, então ela continua no Messenger para o cliente.",
+        "deleted": "Mensagem removida"
       },
       "window": {
         "open": "Você pode responder até {time}",
@@ -1697,7 +1700,10 @@
         "emptyState": {
           "title": "Nenhuma conversa ainda",
           "text": "Quando alguém mandar uma mensagem direta para o seu Instagram, a conversa aparece aqui."
-        }
+        },
+        "delete": "Excluir",
+        "deleteConfirm": "Remover esta mensagem da caixa de entrada? O Instagram não permite apagar mensagens, então ela continua no Instagram para o cliente.",
+        "deleted": "Mensagem removida"
       },
       "window": {
         "open": "Você pode responder até {time}",
@@ -1853,7 +1859,7 @@
       "text": "As mensagens do Telegram, Messenger e Instagram aparecem aqui, agrupadas por cliente."
     },
     "filter": {
-      "all": "Todos os canais"
+      "all": "Todos"
     },
     "loadOlder": "Carregar mensagens anteriores",
     "noMessages": "Nenhuma mensagem ainda",
@@ -1909,7 +1915,15 @@
       "linked": "Conversa vinculada",
       "unlinked": "Cliente removido",
       "none": "Sem cliente",
-      "hint": "Cada conversa pode ser vinculada a um cliente, ou movida para outro; todo o histórico vai junto."
+      "hint": "Cada conversa pode ser vinculada a um cliente, ou movida para outro; todo o histórico vai junto.",
+      "create": "Criar cliente",
+      "created": "Cliente criado e vinculado"
+    },
+    "delete": {
+      "ok": "Excluir",
+      "done": "Mensagem removida",
+      "confirmTelegram": "Excluir esta mensagem? Ela também é apagada para o cliente no Telegram.",
+      "confirmLocal": "Remover esta mensagem da caixa de entrada? O canal não permite apagar mensagens, então ela continua lá para o cliente."
     }
   }
 }

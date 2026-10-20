@@ -56,6 +56,8 @@ export interface IInboxMessage {
   isUnsupported: boolean;
   sentAt: string;
   sentByEmployeeId: string | null;
+  // Whether the message's channel lets it be removed.
+  canDelete: boolean;
 }
 
 // Which conversations a call is about: a customer's, or just one.

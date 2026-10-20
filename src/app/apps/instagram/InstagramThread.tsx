@@ -19,6 +19,7 @@ import Link from "next/link";
 
 import {
   ArrowLeftOutlined,
+  DeleteOutlined,
   LinkOutlined,
   SendOutlined,
   UserAddOutlined,
@@ -50,9 +51,11 @@ interface Props {
   chat: IInstagramChat;
   onChatChanged: () => void;
   onBack?: () => void;
+  canDelete: boolean;
 }
 
 export default function InstagramThread({
+  canDelete,
   chat,
   onChatChanged,
   onBack,
@@ -70,6 +73,7 @@ export default function InstagramThread({
     isLoadingOlder,
     loadOlder,
     addMessage,
+    removeMessage,
   } = useInstagramMessages(chat.igsid);
 
   const [text, setText] = useState<string>("");
@@ -124,6 +128,23 @@ export default function InstagramThread({
       setIsSending(false);
 
       inputRef.current?.focus();
+    }
+  };
+
+  const deleteMessage = async (item: IInstagramMessage): Promise<void> => {
+    try {
+      await serviceMethodsInstance.instagramServiceMethods.deleteMessage(
+        chat.igsid,
+        item._id,
+      );
+
+      removeMessage(item._id);
+
+      message.success(t("apps.instagram.inbox.deleted"));
+
+      onChatChanged();
+    } catch (error: any) {
+      handleClientError(error);
     }
   };
 
@@ -318,7 +339,7 @@ export default function InstagramThread({
                 )}
 
                 <div
-                  className={`flex ${isOut ? "justify-end" : "justify-start"}`}
+                  className={`group flex w-full items-center gap-1 ${isOut ? "flex-row-reverse justify-start" : "justify-start"}`}
                 >
                   <div
                     className={`max-w-[80%] rounded-2xl px-3 py-2 shadow-sm ${isOut ? "rounded-br-md" : "rounded-bl-md"}`}
@@ -370,6 +391,23 @@ export default function InstagramThread({
                       {dayjs(item.sentAt).format("HH:mm")}
                     </div>
                   </div>
+
+                  {canDelete && (
+                    <Popconfirm
+                      title={t("apps.instagram.inbox.deleteConfirm")}
+                      okText={t("apps.instagram.inbox.delete")}
+                      okButtonProps={{ danger: true }}
+                      onConfirm={() => deleteMessage(item)}
+                    >
+                      <Button
+                        type="text"
+                        size="small"
+                        icon={<DeleteOutlined />}
+                        className="opacity-60 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100"
+                        aria-label={t("apps.instagram.inbox.delete")}
+                      />
+                    </Popconfirm>
+                  )}
                 </div>
               </Fragment>
             );

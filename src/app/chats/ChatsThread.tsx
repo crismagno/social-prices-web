@@ -2,18 +2,21 @@
 
 import { Fragment, useEffect, useRef, useState } from "react";
 
-import { Avatar, Button, Spin, theme } from "antd";
+import { App, Avatar, Button, Popconfirm, Spin, theme } from "antd";
 import dayjs from "dayjs";
 import Link from "next/link";
 
 import {
   ArrowLeftOutlined,
+  DeleteOutlined,
   TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 
+import handleClientError from "../../components/common/HandleClientError/HandleClientError";
 import AppIcon from "../../components/common/AppIcon/AppIcon";
 import useLanguageData from "../../data/context/language/useLanguageData";
+import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import InboxEnum from "../../shared/business/inbox/inbox.enum";
 import {
   IInboxChat,
@@ -43,6 +46,8 @@ interface Props {
   onChanged: (row?: IInboxChat) => void;
   // An answer was sent from here.
   onSent: () => void;
+  // Removing a message needs an admin or master employee (the API enforces it too).
+  canDelete: boolean;
 }
 
 // One customer (or one person): the messages of every channel together, each
@@ -52,8 +57,11 @@ export default function ChatsThread({
   onBack,
   onChanged,
   onSent,
+  canDelete,
 }: Props) {
   const { t } = useLanguageData();
+
+  const { message } = App.useApp();
 
   const { token } = theme.useToken();
 
@@ -64,6 +72,7 @@ export default function ChatsThread({
     isLoadingOlder,
     loadOlder,
     addMessage,
+    removeMessage,
   } = useChatMessages(
     chat.customerId
       ? { customerId: chat.customerId }
@@ -90,6 +99,21 @@ export default function ChatsThread({
       (conversation: IInboxConversation) =>
         conversation._id === message.conversationId,
     );
+
+  const deleteMessage = async (item: IInboxMessage): Promise<void> => {
+    try {
+      await serviceMethodsInstance.inboxServiceMethods.deleteMessage(item._id);
+
+      removeMessage(item._id);
+
+      message.success(t("chats.delete.done"));
+
+      onSent();
+    } catch (error: any) {
+      // The channel's own reason (Telegram: older than 48 hours, say) comes with the error.
+      handleClientError(error);
+    }
+  };
 
   // With several contacts on the same channel, the caption also says which one.
   const hasSeveralContacts: boolean = chat.conversations.length > 1;
@@ -231,7 +255,7 @@ export default function ChatsThread({
                 )}
 
                 <div
-                  className={`flex ${isOut ? "justify-end" : "justify-start"}`}
+                  className={`group flex w-full items-center gap-1 ${isOut ? "flex-row-reverse justify-start" : "justify-start"}`}
                 >
                   <div
                     className={`max-w-[80%] rounded-2xl px-3 py-2 shadow-sm ${isOut ? "rounded-br-md" : "rounded-bl-md"}`}
@@ -292,6 +316,27 @@ export default function ChatsThread({
                       <span>{dayjs(item.sentAt).format("HH:mm")}</span>
                     </div>
                   </div>
+
+                  {canDelete && item.canDelete && (
+                    <Popconfirm
+                      title={t(
+                        item.channel === InboxEnum.Channel.TELEGRAM
+                          ? "chats.delete.confirmTelegram"
+                          : "chats.delete.confirmLocal",
+                      )}
+                      okText={t("chats.delete.ok")}
+                      okButtonProps={{ danger: true }}
+                      onConfirm={() => deleteMessage(item)}
+                    >
+                      <Button
+                        type="text"
+                        size="small"
+                        icon={<DeleteOutlined />}
+                        className="opacity-60 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100"
+                        aria-label={t("chats.delete.ok")}
+                      />
+                    </Popconfirm>
+                  )}
                 </div>
               </Fragment>
             );

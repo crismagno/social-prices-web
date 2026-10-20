@@ -67,9 +67,11 @@ interface Props {
   chat: IMessengerChat;
   onChatChanged: () => void;
   onBack?: () => void;
+  canDelete: boolean;
 }
 
 export default function MessengerThread({
+  canDelete,
   chat,
   onChatChanged,
   onBack,
@@ -87,6 +89,7 @@ export default function MessengerThread({
     isLoadingOlder,
     loadOlder,
     addMessage,
+    removeMessage,
   } = useMessengerMessages(chat.psid);
 
   const [text, setText] = useState<string>("");
@@ -224,6 +227,23 @@ export default function MessengerThread({
       sendVoice();
     }
   }, [recorder.seconds, recorder.state]);
+
+  const deleteMessage = async (item: IMessengerMessage): Promise<void> => {
+    try {
+      await serviceMethodsInstance.messengerServiceMethods.deleteMessage(
+        chat.psid,
+        item._id,
+      );
+
+      removeMessage(item._id);
+
+      message.success(t("apps.messenger.inbox.deleted"));
+
+      onChatChanged();
+    } catch (error: any) {
+      handleClientError(error);
+    }
+  };
 
   // Every customer action ends the same way: say what happened, refresh the inbox.
   const runCustomerAction = async (
@@ -405,7 +425,7 @@ export default function MessengerThread({
                 )}
 
                 <div
-                  className={`flex ${isOut ? "justify-end" : "justify-start"}`}
+                  className={`group flex w-full items-center gap-1 ${isOut ? "flex-row-reverse justify-start" : "justify-start"}`}
                 >
                   <div
                     className={`max-w-[80%] rounded-2xl px-3 py-2 shadow-sm ${isOut ? "rounded-br-md" : "rounded-bl-md"}`}
@@ -472,6 +492,23 @@ export default function MessengerThread({
                       {dayjs(item.sentAt).format("HH:mm")}
                     </div>
                   </div>
+
+                  {canDelete && (
+                    <Popconfirm
+                      title={t("apps.messenger.inbox.deleteConfirm")}
+                      okText={t("apps.messenger.inbox.delete")}
+                      okButtonProps={{ danger: true }}
+                      onConfirm={() => deleteMessage(item)}
+                    >
+                      <Button
+                        type="text"
+                        size="small"
+                        icon={<DeleteOutlined />}
+                        className="opacity-60 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100"
+                        aria-label={t("apps.messenger.inbox.delete")}
+                      />
+                    </Popconfirm>
+                  )}
                 </div>
               </Fragment>
             );
