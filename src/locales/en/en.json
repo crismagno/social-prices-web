@@ -1921,6 +1921,7 @@
       "done": "Message removed",
       "confirmTelegram": "Delete this message? It is also deleted for the customer in Telegram.",
       "confirmLocal": "Remove this message from the inbox? The channel cannot delete messages, so it stays there for the customer."
-    }
+    },
+    "pickHint": "Telegram, Messenger and Instagram, together by customer."
   }
 }

@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { Card, Grid, theme } from "antd";
 import { useSearchParams } from "next/navigation";
-
-import { MessageOutlined } from "@ant-design/icons";
 
 import useAuthData from "../../data/context/auth/useAuthData";
 import EmployeesEnum from "../../shared/business/employees/employees.enum";
@@ -13,9 +11,14 @@ import useAppData from "../../data/context/app/useAppData";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import { IInboxChat } from "../../shared/business/inbox/inbox.types";
+import ChatsEmptyState from "./ChatsEmptyState";
 import ChatsList from "./ChatsList";
 import ChatsThread from "./ChatsThread";
 import { useChats } from "./useChats";
+
+// The page's own padding under the card (the main area has 1.75rem all around).
+const PAGE_BOTTOM_PADDING: number = 28;
+const MIN_HEIGHT: number = 440;
 
 // The rows on the left and the open one on the right. On a narrow screen only
 // one of them shows at a time.
@@ -42,6 +45,28 @@ export default function ChatsInbox() {
   );
 
   const isNarrow: boolean = screens.md === false;
+
+  // The chat takes the rest of the screen, down to the bottom: its height is what
+  // is left under where it starts, and follows the window being resized.
+  const cardRef = useRef<HTMLDivElement | null>(null);
+
+  const [height, setHeight] = useState<number>(MIN_HEIGHT);
+
+  useLayoutEffect(() => {
+    const fit = (): void => {
+      const top: number = cardRef.current?.getBoundingClientRect().top ?? 0;
+
+      setHeight(
+        Math.max(MIN_HEIGHT, window.innerHeight - top - PAGE_BOTTOM_PADDING),
+      );
+    };
+
+    fit();
+
+    window.addEventListener("resize", fit);
+
+    return () => window.removeEventListener("resize", fit);
+  }, []);
 
   // Always the freshest copy: the list refreshes in the background.
   const selectedChat: IInboxChat | undefined = chats.find(
@@ -89,25 +114,7 @@ export default function ChatsInbox() {
     />
   );
 
-  const emptyThread = (
-    <div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center">
-      <MessageOutlined
-        style={{ fontSize: 48, color: token.colorTextQuaternary }}
-      />
-
-      {chats.length === 0 ? (
-        <>
-          <div className="text-lg font-semibold">{t("chats.empty.title")}</div>
-
-          <div className="max-w-sm" style={{ color: token.colorTextSecondary }}>
-            {t("chats.empty.text")}
-          </div>
-        </>
-      ) : (
-        <div style={{ color: token.colorTextSecondary }}>{t("chats.pick")}</div>
-      )}
-    </div>
-  );
+  const emptyThread = <ChatsEmptyState isEmpty={chats.length === 0} />;
 
   const thread = selectedChat ? (
     <ChatsThread
@@ -130,8 +137,12 @@ export default function ChatsInbox() {
   );
 
   return (
-    <Card styles={{ body: { padding: 0 } }} style={{ overflow: "hidden" }}>
-      <div className="flex" style={{ height: "70vh", minHeight: 440 }}>
+    <Card
+      ref={cardRef}
+      styles={{ body: { padding: 0 } }}
+      style={{ overflow: "hidden" }}
+    >
+      <div className="flex" style={{ height }}>
         {isNarrow ? (
           <div className="w-full">{selectedChat ? thread : list}</div>
         ) : (

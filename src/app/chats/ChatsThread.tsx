@@ -115,9 +115,6 @@ export default function ChatsThread({
     }
   };
 
-  // With several contacts on the same channel, the caption also says which one.
-  const hasSeveralContacts: boolean = chat.conversations.length > 1;
-
   // "Today", "Yesterday", or the date: the label of the separator above a day.
   const dayLabel = (at: string): string => {
     const day = relativeDay(at);
@@ -168,8 +165,7 @@ export default function ChatsThread({
                 >
                   <AppIcon app={InboxEnum.ChannelApp[conversation.channel]} />
 
-                  {hasSeveralContacts &&
-                    conversationName(conversation, t("chats.unnamed"))}
+                  {conversationName(conversation, t("chats.unnamed"))}
                 </span>
               ))}
             </span>
@@ -308,7 +304,7 @@ export default function ChatsThread({
                       >
                         <AppIcon app={InboxEnum.ChannelApp[item.channel]} />
 
-                        {hasSeveralContacts && conversation
+                        {conversation
                           ? conversationName(conversation, t("chats.unnamed"))
                           : null}
                       </span>

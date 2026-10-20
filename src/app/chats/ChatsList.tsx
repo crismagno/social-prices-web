@@ -9,13 +9,17 @@ import { SearchOutlined } from "@ant-design/icons";
 import AppIcon from "../../components/common/AppIcon/AppIcon";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import InboxEnum from "../../shared/business/inbox/inbox.enum";
-import { IInboxChat } from "../../shared/business/inbox/inbox.types";
+import {
+  IInboxChat,
+  IInboxConversation,
+} from "../../shared/business/inbox/inbox.types";
 import { avatarColor } from "../apps/telegram/telegram-theme";
 import {
   chatInitial,
   chatMatches,
   chatName,
   contentKey,
+  conversationName,
   formatWhen,
   seedOf,
 } from "./chats-display";
@@ -189,11 +193,36 @@ export default function ChatsList({
                   </div>
 
                   <div className="mt-0.5 flex items-center gap-1 text-xs">
-                    {chat.channels.map((value: InboxEnum.Channel) => (
-                      <span key={value} title={t(`chats.channels.${value}`)}>
-                        <AppIcon app={InboxEnum.ChannelApp[value]} />
-                      </span>
-                    ))}
+                    {chat.conversations.map(
+                      (conversation: IInboxConversation) => {
+                        const contact: string = conversationName(
+                          conversation,
+                          unnamed,
+                        );
+
+                        return (
+                          <span
+                            key={conversation._id}
+                            className="flex min-w-0 items-center gap-1"
+                            title={t(`chats.channels.${conversation.channel}`)}
+                          >
+                            <AppIcon
+                              app={InboxEnum.ChannelApp[conversation.channel]}
+                            />
+
+                            {/* The row is already named after the person when no customer is tied. */}
+                            {contact !== name && (
+                              <span
+                                className="truncate"
+                                style={{ color: token.colorTextSecondary }}
+                              >
+                                {contact}
+                              </span>
+                            )}
+                          </span>
+                        );
+                      },
+                    )}
 
                     {!chat.customerId && (
                       <span style={{ color: token.colorTextTertiary }}>

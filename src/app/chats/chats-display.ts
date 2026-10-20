@@ -93,7 +93,12 @@ export const contentKey = (kind: InboxEnum.MessageKind): string =>
 export const attachmentShape = (
   kind: InboxEnum.MessageKind,
   mimeType: string | null,
-): "image" | "video" | "audio" | "file" => {
+): "image" | "video" | "audio" | "file" | "animated-sticker" => {
+  // Telegram's animated stickers: a gzipped Lottie animation, not a picture.
+  if (mimeType === "application/x-tgsticker") {
+    return "animated-sticker";
+  }
+
   if (mimeType?.startsWith("image/")) {
     return mimeType === "image/svg+xml" ? "file" : "image";
   }

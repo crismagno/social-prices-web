@@ -1924,6 +1924,7 @@
       "done": "Mensagem removida",
       "confirmTelegram": "Excluir esta mensagem? Ela também é apagada para o cliente no Telegram.",
       "confirmLocal": "Remover esta mensagem da caixa de entrada? O canal não permite apagar mensagens, então ela continua lá para o cliente."
-    }
+    },
+    "pickHint": "Telegram, Messenger e Instagram, juntos por cliente."
   }
 }

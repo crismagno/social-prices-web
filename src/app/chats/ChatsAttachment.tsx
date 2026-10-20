@@ -17,6 +17,8 @@ import {
   IInboxAttachment,
   IInboxMessage,
 } from "../../shared/business/inbox/inbox.types";
+import InboxEnum from "../../shared/business/inbox/inbox.enum";
+import AnimatedSticker from "../apps/telegram/AnimatedSticker";
 import { attachmentShape, contentKey } from "./chats-display";
 
 interface Props {
@@ -34,6 +36,12 @@ export default function ChatsAttachment({ message, attachment, isOut }: Props) {
   const { token } = theme.useToken();
 
   const shape = attachmentShape(attachment.kind, attachment.mimeType);
+
+  const isSticker: boolean = message.kind === InboxEnum.MessageKind.STICKER;
+
+  // Pictures and stickers show by themselves; the rest waits for a click.
+  const autoLoads: boolean =
+    shape === "image" || shape === "animated-sticker" || isSticker;
 
   const [url, setUrl] = useState<string | null>(null);
 
@@ -68,7 +76,7 @@ export default function ChatsAttachment({ message, attachment, isOut }: Props) {
   };
 
   useEffect(() => {
-    if (shape === "image") {
+    if (autoLoads) {
       load();
     }
   }, [message._id]);
@@ -103,6 +111,40 @@ export default function ChatsAttachment({ message, attachment, isOut }: Props) {
       {t("chats.media.retry")}
     </Button>
   );
+
+  // A sticker is a drawing, not a picture: no frame, and it moves when it can.
+  if (shape === "animated-sticker" || (isSticker && shape !== "file")) {
+    if (!url) {
+      return (
+        <div
+          className="flex h-40 w-40 items-center justify-center"
+          style={{ color: token.colorTextTertiary }}
+        >
+          {hasFailed ? retry : <Spin />}
+        </div>
+      );
+    }
+
+    return shape === "animated-sticker" ? (
+      <AnimatedSticker url={url} />
+    ) : shape === "video" ? (
+      <video
+        src={url}
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{ width: 160, height: 160 }}
+      />
+    ) : (
+      <img
+        src={url}
+        alt={label}
+        className="object-contain"
+        style={{ maxWidth: 160, maxHeight: 160 }}
+      />
+    );
+  }
 
   if (shape === "image") {
     return url ? (
