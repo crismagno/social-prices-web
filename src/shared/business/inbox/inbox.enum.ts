@@ -6,6 +6,7 @@ namespace InboxEnum {
     TELEGRAM = "TELEGRAM",
     MESSENGER = "MESSENGER",
     INSTAGRAM = "INSTAGRAM",
+    WHATSAPP = "WHATSAPP",
   }
 
   export enum Direction {
@@ -33,6 +34,7 @@ namespace InboxEnum {
     [Channel.TELEGRAM]: AppsEnum.App.TELEGRAM,
     [Channel.MESSENGER]: AppsEnum.App.FACEBOOK,
     [Channel.INSTAGRAM]: AppsEnum.App.INSTAGRAM,
+    [Channel.WHATSAPP]: AppsEnum.App.WHATSAPP,
   };
 }
 

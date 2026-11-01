@@ -64,6 +64,7 @@ const submenuKeyByUrl = (url: string): string | null => {
       Urls.APPS_TELEGRAM,
       Urls.APPS_MESSENGER,
       Urls.APPS_INSTAGRAM,
+      Urls.APPS_WHATSAPP,
     ],
   };
 
@@ -156,7 +157,8 @@ export const useSidebarMenuItems = (
     (app: IAppCatalogItem) =>
       app.id === AppsEnum.App.TELEGRAM ||
       app.id === AppsEnum.App.FACEBOOK ||
-      app.id === AppsEnum.App.INSTAGRAM,
+      app.id === AppsEnum.App.INSTAGRAM ||
+      app.id === AppsEnum.App.WHATSAPP,
   );
 
   const unreadInChats: number = chatApps.reduce(
@@ -309,6 +311,7 @@ export const useSidebarMenuItems = (
     Urls.APPS_TELEGRAM,
     Urls.APPS_MESSENGER,
     Urls.APPS_INSTAGRAM,
+    Urls.APPS_WHATSAPP,
     Urls.STORES,
     Urls.CUSTOMERS,
     Urls.PRODUCTS,

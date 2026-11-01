@@ -15,21 +15,21 @@ export default class NotificationsServiceMethods extends ServiceMethodsBase {
         this._socialPricesApiV1
       }${NotificationServiceEnum.Methods.FIND_BY_ID.replace(
         ":notificationId",
-        notificationId
+        notificationId,
       )}`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async findByUserTableState(
-    tableState?: ITableStateRequest<INotification>
+    tableState?: ITableStateRequest<INotification>,
   ): Promise<ITableStateResponse<INotification[]>> {
     const response = await this._fetchAxios.post<
       ITableStateResponse<INotification[]>
@@ -41,7 +41,7 @@ export default class NotificationsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -55,7 +55,7 @@ export default class NotificationsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -72,7 +72,7 @@ export default class NotificationsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
   }
 
@@ -85,7 +85,7 @@ export default class NotificationsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
   }
 }

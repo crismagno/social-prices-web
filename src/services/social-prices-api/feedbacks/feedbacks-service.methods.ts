@@ -13,7 +13,7 @@ export default class FeedbacksServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
   }
 }

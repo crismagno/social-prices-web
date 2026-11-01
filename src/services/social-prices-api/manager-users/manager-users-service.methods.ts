@@ -12,7 +12,7 @@ import ManagerUsersServiceEnum from "./manager-users-service.enum";
 
 export default class ManagerUsersServiceMethods extends ServiceMethodsBase {
   public async findByTableState(
-    tableState?: ITableStateRequest<IUser>
+    tableState?: ITableStateRequest<IUser>,
   ): Promise<ITableStateResponse<IUser[]>> {
     const response = await this._fetchAxios.post<ITableStateResponse<IUser[]>>(
       `${this._socialPricesApiV1}${ManagerUsersServiceEnum.Methods.FIND_BY_TABLE_STATE}`,
@@ -22,7 +22,7 @@ export default class ManagerUsersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatManagerAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -36,7 +36,7 @@ export default class ManagerUsersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatManagerAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -51,7 +51,7 @@ export default class ManagerUsersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatManagerAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -59,7 +59,7 @@ export default class ManagerUsersServiceMethods extends ServiceMethodsBase {
 
   public async updateLimits(
     userId: string,
-    limits: IUserLimits
+    limits: IUserLimits,
   ): Promise<IUser> {
     const response = await this._fetchAxios.patch<IUser>(
       `${this._socialPricesApiV1}${ManagerUsersServiceEnum.Methods.UPDATE_LIMITS.replace(":id", userId)}`,
@@ -69,7 +69,7 @@ export default class ManagerUsersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatManagerAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -77,7 +77,7 @@ export default class ManagerUsersServiceMethods extends ServiceMethodsBase {
 
   public async updateApps(
     userId: string,
-    enabledApps: AppsEnum.App[]
+    enabledApps: AppsEnum.App[],
   ): Promise<IUser> {
     const response = await this._fetchAxios.patch<IUser>(
       `${this._socialPricesApiV1}${ManagerUsersServiceEnum.Methods.UPDATE_APPS.replace(":id", userId)}`,
@@ -87,7 +87,7 @@ export default class ManagerUsersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatManagerAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;

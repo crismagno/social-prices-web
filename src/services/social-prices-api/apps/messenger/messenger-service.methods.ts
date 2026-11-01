@@ -128,6 +128,15 @@ export default class MessengerServiceMethods extends ServiceMethodsBase {
     );
   }
 
+  // Lets the person see "typing…" while the user writes. Best effort.
+  public async sendTyping(psid: string): Promise<void> {
+    await this._fetchAxios.post(
+      this._url(MessengerServiceEnum.Methods.CHAT_TYPING, psid),
+      {},
+      { headers: this._headers() },
+    );
+  }
+
   public async markRead(psid: string): Promise<void> {
     await this._fetchAxios.post(
       this._url(MessengerServiceEnum.Methods.CHAT_READ, psid),

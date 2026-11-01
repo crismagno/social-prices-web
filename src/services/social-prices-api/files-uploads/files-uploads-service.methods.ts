@@ -15,21 +15,21 @@ export default class FilesUploadsServiceMethods extends ServiceMethodsBase {
         this._socialPricesApiV1
       }${FilesUploadsServiceEnum.Methods.FIND_BY_ID.replace(
         ":fileUploadId",
-        fileUploadId
+        fileUploadId,
       )}`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async findByUserTableState(
-    tableState?: ITableStateRequest<IFileUpload>
+    tableState?: ITableStateRequest<IFileUpload>,
   ): Promise<ITableStateResponse<IFileUpload[]>> {
     const response = await this._fetchAxios.post<
       ITableStateResponse<IFileUpload[]>
@@ -41,7 +41,7 @@ export default class FilesUploadsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -53,14 +53,14 @@ export default class FilesUploadsServiceMethods extends ServiceMethodsBase {
         this._socialPricesApiV1
       }${FilesUploadsServiceEnum.Methods.DOWNLOAD_ERRORS.replace(
         ":fileUploadId",
-        fileUploadId
+        fileUploadId,
       )}`,
       {
         headers: {
           Authorization: this.formatAuthorizationWithToken(),
         },
         responseType: "blob",
-      }
+      },
     );
 
     return response.data;

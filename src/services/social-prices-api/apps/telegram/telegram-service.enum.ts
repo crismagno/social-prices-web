@@ -9,6 +9,7 @@ namespace TelegramServiceEnum {
     CHAT_MESSAGE = "/apps/telegram/chats/:chatId/messages/:messageId",
     CHAT_MEDIA = "/apps/telegram/chats/:chatId/media",
     CHAT_MESSAGE_MEDIA = "/apps/telegram/chats/:chatId/messages/:messageId/media",
+    CHAT_TYPING = "/apps/telegram/chats/:chatId/typing",
     CHAT_READ = "/apps/telegram/chats/:chatId/read",
     CHAT_CUSTOMER = "/apps/telegram/chats/:chatId/customer",
     CHAT_CUSTOMER_CREATE = "/apps/telegram/chats/:chatId/customer/create",

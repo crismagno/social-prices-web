@@ -9,11 +9,15 @@ import Link from "next/link";
 import {
   ArrowLeftOutlined,
   DeleteOutlined,
+  ExportOutlined,
+  EditOutlined,
+  ThunderboltOutlined,
   TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 
 import handleClientError from "../../components/common/HandleClientError/HandleClientError";
+import EditCustomerDrawer from "../../components/common/EditCustomerDrawer/EditCustomerDrawer";
 import AppIcon from "../../components/common/AppIcon/AppIcon";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
@@ -28,7 +32,9 @@ import { avatarColor } from "../apps/telegram/telegram-theme";
 import { relativeDay } from "../apps/telegram/telegram-display";
 import ChatsAttachment from "./ChatsAttachment";
 import ChatsConversationsModal from "./ChatsConversationsModal";
+import ChatsFastSale from "./ChatsFastSale";
 import ChatsReplyBox from "./ChatsReplyBox";
+import { conversationAppUrl } from "./chats-links";
 import {
   CHANNEL_COLOR,
   chatInitial,
@@ -46,6 +52,8 @@ interface Props {
   onChanged: (row?: IInboxChat) => void;
   // An answer was sent from here.
   onSent: () => void;
+  // An app's own page shows only that channel's messages of the customer.
+  channel?: InboxEnum.Channel;
   // Removing a message needs an admin or master employee (the API enforces it too).
   canDelete: boolean;
 }
@@ -58,6 +66,7 @@ export default function ChatsThread({
   onChanged,
   onSent,
   canDelete,
+  channel,
 }: Props) {
   const { t } = useLanguageData();
 
@@ -75,11 +84,15 @@ export default function ChatsThread({
     removeMessage,
   } = useChatMessages(
     chat.customerId
-      ? { customerId: chat.customerId }
+      ? { customerId: chat.customerId, channel }
       : { conversationId: chat.conversations[0]?._id },
   );
 
   const [isManageOpen, setIsManageOpen] = useState<boolean>(false);
+
+  const [isFastSaleOpen, setIsFastSaleOpen] = useState<boolean>(false);
+
+  const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
@@ -156,23 +169,54 @@ export default function ChatsThread({
           <div className="flex min-w-0 flex-col">
             <span className="truncate font-semibold">{name}</span>
 
-            <span className="flex items-center gap-1 text-xs">
+            <span className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs">
               {chat.conversations.map((conversation: IInboxConversation) => (
-                <span
+                // The person on that channel: a click goes to the app, with this conversation open.
+                <Link
                   key={conversation._id}
-                  className="flex items-center gap-1"
+                  href={conversationAppUrl(conversation)}
+                  className="flex items-center gap-1 hover:underline"
                   style={{ color: token.colorTextSecondary }}
+                  title={t("chats.openInApp").replace(
+                    "{app}",
+                    t(`chats.channels.${conversation.channel}`),
+                  )}
                 >
                   <AppIcon app={InboxEnum.ChannelApp[conversation.channel]} />
 
                   {conversationName(conversation, t("chats.unnamed"))}
-                </span>
+
+                  <ExportOutlined style={{ fontSize: 10, opacity: 0.6 }} />
+                </Link>
               ))}
             </span>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Keeping the customer's data up to date while the conversation goes on. */}
+          {chat.customerId && (
+            <Button
+              size="small"
+              icon={<EditOutlined />}
+              onClick={() => setIsEditOpen(true)}
+            >
+              {t("customers.editCustomer")}
+            </Button>
+          )}
+
+          {/* A sale needs a customer, so only a customer tied to this chat can have one. */}
+          {chat.customerId && (
+            <Button
+              size="small"
+              className="!border-amber-500 !bg-amber-500 !text-white hover:!bg-amber-400"
+              icon={<ThunderboltOutlined />}
+              onClick={() => setIsFastSaleOpen(true)}
+            >
+              {t("sales.fastSale")}
+            </Button>
+          )}
+
           <Button
             size="small"
             icon={<TeamOutlined />}
@@ -349,6 +393,21 @@ export default function ChatsThread({
           onSent();
         }}
       />
+
+      {isEditOpen && chat.customerId && (
+        <EditCustomerDrawer
+          customerId={chat.customerId}
+          onClose={() => setIsEditOpen(false)}
+          onSaved={() => onChanged()}
+        />
+      )}
+
+      {isFastSaleOpen && chat.customerId && (
+        <ChatsFastSale
+          customerId={chat.customerId}
+          onClose={() => setIsFastSaleOpen(false)}
+        />
+      )}
 
       <ChatsConversationsModal
         open={isManageOpen}

@@ -38,7 +38,7 @@ export const useChatMessages = (
   const [isLoadingOlder, setIsLoadingOlder] = useState<boolean>(false);
 
   const scopeKey: string | null = scope
-    ? `${scope.customerId ?? ""}|${scope.conversationId ?? ""}`
+    ? `${scope.customerId ?? ""}|${scope.conversationId ?? ""}|${scope.channel ?? ""}`
     : null;
 
   // Answers that arrive after the user moved to another row are dropped.
@@ -114,6 +114,7 @@ export const useChatMessages = (
   useInboxRealtime(AppsEnum.App.TELEGRAM, () => fetchLatest(true));
   useInboxRealtime(AppsEnum.App.FACEBOOK, () => fetchLatest(true));
   useInboxRealtime(AppsEnum.App.INSTAGRAM, () => fetchLatest(true));
+  useInboxRealtime(AppsEnum.App.WHATSAPP, () => fetchLatest(true));
 
   const loadOlder = useCallback(async (): Promise<void> => {
     const wanted: IInboxScope | null = scopeRef.current;

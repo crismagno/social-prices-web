@@ -1161,7 +1161,9 @@
         "goToCustomer": "Ir para o cliente",
         "linkToCustomer": "Vincular a um cliente",
         "linkedTo": "Vinculado a {name}",
-        "customerNotFound": "O cliente deste contato não foi encontrado. Sincronize de novo para atualizar a lista."
+        "customerNotFound": "O cliente deste contato não foi encontrado. Sincronize de novo para atualizar a lista.",
+        "customer": "Cliente",
+        "changeCustomer": "Trocar o cliente vinculado"
       },
       "fetchedAt": "Contatos carregados em {time}",
       "cooldown": "Você poderá sincronizar novamente em {time}.",
@@ -1735,6 +1737,101 @@
         "play": "Reproduzir",
         "download": "Baixar"
       }
+    },
+    "whatsapp": {
+      "title": "WhatsApp",
+      "connectTitle": "Conecte seu número do WhatsApp Business",
+      "connectSubtitle": "Receba e responda as mensagens de WhatsApp dos seus clientes sem sair deste sistema.",
+      "revokedHint": "O WhatsApp não aceita mais esta conexão, geralmente porque o app foi removido do seu negócio. Conecte de novo para continuar recebendo mensagens.",
+      "managersOnly": "Somente o dono, admins e masters podem conectar ou desconectar o número.",
+      "connect": "Conectar com o Facebook",
+      "reconnect": "Conectar de novo",
+      "disconnected": "Número desconectado",
+      "cancelled": "A conexão foi cancelada. Conecte de novo quando quiser.",
+      "steps": {
+        "business": {
+          "title": "Tenha seu negócio na Meta",
+          "text": "O WhatsApp Business fica ligado a uma conta de negócios da Meta. Se você não tem uma, pode criá-la durante a conexão.",
+          "detail": {
+            "1": "Você entra com a conta do Facebook que administra o negócio.",
+            "2": "Se ainda não existe um negócio, o Facebook guia você para criá-lo.",
+            "3": "A Meta pode pedir dados do negócio (nome, site) para verificá-lo."
+          }
+        },
+        "number": {
+          "title": "Escolha o número",
+          "text": "O número para o qual seus clientes vão escrever. Ele passa a ser um número do WhatsApp Business.",
+          "detail": {
+            "1": "Ele não pode estar em uso no WhatsApp comum, ou você pode migrá-lo durante a conexão.",
+            "2": "Você vai receber um código por SMS ou ligação nesse número para confirmar que é seu.",
+            "3": "Você pode continuar usando o app WhatsApp Business no mesmo número, se a Meta oferecer."
+          }
+        },
+        "login": {
+          "title": "Conecte com o Facebook",
+          "text": "Uma janela do Facebook abre. Siga os passos dela e, no fim, volte para cá.",
+          "detail": {
+            "1": "Entre e escolha ou crie seu negócio.",
+            "2": "Adicione ou escolha o número do WhatsApp e confirme o código.",
+            "3": "Permita que este sistema receba e envie mensagens."
+          }
+        }
+      },
+      "info": {
+        "needTitle": "Antes de começar",
+        "need": {
+          "1": "Uma conta do Facebook que administre seu negócio (Meta Business).",
+          "2": "Um número de telefone para o WhatsApp Business, que receba SMS ou ligação.",
+          "3": "O número não está em uso em uma conta comum do WhatsApp, ou você está pronto para migrá-lo.",
+          "4": "Os dados do seu negócio, caso a Meta peça para verificá-los."
+        },
+        "worksTitle": "O que você ganha",
+        "works": {
+          "1": "As mensagens que seu número recebe aparecem aqui em tempo real, junto com os outros canais.",
+          "2": "Você responde por este sistema, com texto, arquivos e mensagens de voz.",
+          "3": "Cada pessoa pode ser vinculada a um cliente, ou virar um com um clique.",
+          "4": "A conversa de um cliente mostra todos os canais juntos em Chats."
+        },
+        "limitsTitle": "Bom saber",
+        "limits": {
+          "1": "O WhatsApp só permite respostas gratuitas em até 24 horas depois da última mensagem do cliente. Depois disso, espere a próxima.",
+          "2": "Iniciar uma conversa, ou responder depois de 24 horas, exige um modelo de mensagem aprovado pela Meta, que ainda não está disponível aqui.",
+          "3": "Mensagens não podem ser apagadas pela API do WhatsApp: remover uma aqui não é possível.",
+          "4": "Cada usuário conecta um número, e um número pode pertencer a um só usuário."
+        },
+        "faqTitle": "Dúvidas comuns",
+        "faq": {
+          "1": {
+            "q": "Perco meu WhatsApp no celular?",
+            "a": "Um número levado para a plataforma do WhatsApp Business deixa de funcionar no WhatsApp comum. Durante a conexão a Meta pode oferecer continuar usando o app WhatsApp Business no mesmo número. Leia o que a janela do Facebook oferece antes de aceitar."
+          },
+          "2": {
+            "q": "Tem algum custo?",
+            "a": "Conectar é grátis aqui. A Meta cobra por algumas mensagens, principalmente as que você inicia fora da janela de 24 horas. Respostas dentro da janela costumam ser grátis."
+          },
+          "3": {
+            "q": "Por que a janela do Facebook não abre?",
+            "a": "Permita pop-ups para este site no navegador e tente de novo."
+          },
+          "4": {
+            "q": "Posso conectar mais de um número?",
+            "a": "Por enquanto não: cada usuário tem um número de WhatsApp."
+          },
+          "5": {
+            "q": "E se eu quiser parar?",
+            "a": "Desconecte o número aqui. As conversas já recebidas continuam no sistema."
+          }
+        }
+      },
+      "account": {
+        "connected": "Conectado",
+        "number": "Número",
+        "verifiedName": "Nome do negócio",
+        "lastMessage": "Última mensagem:",
+        "none": "nenhuma ainda",
+        "disconnect": "Desconectar",
+        "disconnectConfirm": "Desconectar este número? As conversas já recebidas continuam aqui."
+      }
     }
   },
   "notes": {
@@ -1859,7 +1956,8 @@
       "text": "As mensagens do Telegram, Messenger e Instagram aparecem aqui, agrupadas por cliente."
     },
     "filter": {
-      "all": "Todos"
+      "all": "Todos",
+      "unlinked": "Só sem cliente"
     },
     "loadOlder": "Carregar mensagens anteriores",
     "noMessages": "Nenhuma mensagem ainda",
@@ -1882,12 +1980,20 @@
     "media": {
       "retry": "Tentar de novo",
       "play": "Reproduzir",
-      "download": "Baixar"
+      "download": "Baixar",
+      "attach": "Anexar um arquivo",
+      "removeFile": "Remover o arquivo",
+      "tooLarge": "O arquivo pode ter no máximo {size}.",
+      "noMedia": "Este canal aceita só texto.",
+      "record": "Gravar uma mensagem de voz",
+      "cancelRecording": "Descartar a gravação",
+      "microphoneDenied": "O microfone não está disponível. Permita o acesso no navegador e tente de novo."
     },
     "channels": {
       "TELEGRAM": "Telegram",
       "MESSENGER": "Messenger",
-      "INSTAGRAM": "Instagram"
+      "INSTAGRAM": "Instagram",
+      "WHATSAPP": "WhatsApp"
     },
     "conversations": {
       "title": "Conversas deste cliente"
@@ -1925,6 +2031,7 @@
       "confirmTelegram": "Excluir esta mensagem? Ela também é apagada para o cliente no Telegram.",
       "confirmLocal": "Remover esta mensagem da caixa de entrada? O canal não permite apagar mensagens, então ela continua lá para o cliente."
     },
-    "pickHint": "Telegram, Messenger e Instagram, juntos por cliente."
+    "pickHint": "Telegram, Messenger e Instagram, juntos por cliente.",
+    "openInApp": "Abrir no {app}"
   }
 }

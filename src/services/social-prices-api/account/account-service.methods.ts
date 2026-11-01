@@ -13,7 +13,7 @@ export default class AccountServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;

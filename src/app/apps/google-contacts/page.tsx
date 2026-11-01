@@ -1,6 +1,6 @@
 "use client";
 
-import { Key, useEffect, useMemo, useState } from "react";
+import { Key, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   Alert,
@@ -18,7 +18,12 @@ import {
 import type { ColumnsType } from "antd/es/table";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { EnterOutlined, LinkOutlined, SaveOutlined } from "@ant-design/icons";
+import {
+  ExportOutlined,
+  LinkOutlined,
+  SaveOutlined,
+  UserSwitchOutlined,
+} from "@ant-design/icons";
 
 import { FeatureUsageBadge } from "../../../components/common/FeatureUsageBadge/FeatureUsageBadge";
 import { useFeaturesUsage } from "../../../components/common/FeatureUsageBadge/useFeaturesUsage";
@@ -293,15 +298,17 @@ export default function GoogleContactsAppPage() {
   // Contacts that now belong to a customer: the list shown and the cached one
   // change in place, so nothing has to be asked of Google again.
   const markLinked = async (
-    links: { externalId: string; customerId: string | null }[],
+    links: {
+      externalId: string;
+      customerId: string | null;
+      customerName?: string | null;
+    }[],
   ): Promise<void> => {
     if (!preview) {
       return;
     }
 
-    const byContact = new Map<string, string | null>(
-      links.map((link) => [link.externalId, link.customerId]),
-    );
+    const byContact = new Map(links.map((link) => [link.externalId, link]));
 
     const updated: IGoogleContactsPreview = {
       ...preview,
@@ -310,7 +317,9 @@ export default function GoogleContactsAppPage() {
           ? {
               ...contact,
               status: GoogleContactsEnum.ContactStatus.LINKED,
-              customerId: byContact.get(contact.externalId) ?? null,
+              customerId: byContact.get(contact.externalId)?.customerId ?? null,
+              customerName:
+                byContact.get(contact.externalId)?.customerName ?? null,
             }
           : contact,
       ),
@@ -325,6 +334,67 @@ export default function GoogleContactsAppPage() {
       });
     }
   };
+
+  // A list kept from before customers' names were shown has linked contacts
+  // without a name: they are asked once, in one call, and the list is updated in
+  // place (Google is not asked again).
+  const askedForNames = useRef<boolean>(false);
+
+  useEffect(() => {
+    if (!preview || askedForNames.current) {
+      return;
+    }
+
+    const missing: string[] = preview.contacts
+      .filter(
+        (contact: IGoogleContactRow) =>
+          contact.status === GoogleContactsEnum.ContactStatus.LINKED &&
+          !contact.customerName,
+      )
+      .map((contact: IGoogleContactRow) => contact.externalId);
+
+    if (!missing.length) {
+      return;
+    }
+
+    askedForNames.current = true;
+
+    serviceMethodsInstance.googleContactsServiceMethods
+      .findCustomers(missing)
+      .then(async (found) => {
+        if (!found.length) {
+          return;
+        }
+
+        const byContact = new Map(found.map((item) => [item.externalId, item]));
+
+        const updated: IGoogleContactsPreview = {
+          ...preview,
+          contacts: preview.contacts.map((contact: IGoogleContactRow) => {
+            const match = byContact.get(contact.externalId);
+
+            return match
+              ? {
+                  ...contact,
+                  customerId: match.customerId,
+                  customerName: match.customerName,
+                }
+              : contact;
+          }),
+        };
+
+        setPreview(updated);
+
+        if (userId && fetchedAt !== null) {
+          await writeCachedContacts(userId, APP_ID, {
+            preview: updated,
+            fetchedAt,
+          });
+        }
+      })
+      .catch(() => undefined);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [preview]);
 
   // Goes to the customer of a linked contact. A list cached before customers were
   // known is asked once.
@@ -362,17 +432,30 @@ export default function GoogleContactsAppPage() {
     try {
       setBusy("save");
 
-      await serviceMethodsInstance.googleContactsServiceMethods.linkContact(
-        contact.externalId,
-        customer._id,
-      );
+      // A contact that already is on a customer moves to the one picked.
+      const isMoving: boolean =
+        contact.status === GoogleContactsEnum.ContactStatus.LINKED;
+
+      await (isMoving
+        ? serviceMethodsInstance.googleContactsServiceMethods.relinkContact(
+            contact.externalId,
+            customer._id,
+          )
+        : serviceMethodsInstance.googleContactsServiceMethods.linkContact(
+            contact.externalId,
+            customer._id,
+          ));
 
       setSelectedKeys((keys: Key[]) =>
         keys.filter((key: Key) => key !== contact.externalId),
       );
 
       await markLinked([
-        { externalId: contact.externalId, customerId: customer._id },
+        {
+          externalId: contact.externalId,
+          customerId: customer._id,
+          customerName: customer.name,
+        },
       ]);
 
       message.success(
@@ -454,6 +537,24 @@ export default function GoogleContactsAppPage() {
       dataIndex: "name",
       sorter: (a: IGoogleContactRow, b: IGoogleContactRow) =>
         a.name.localeCompare(b.name),
+      // Under the name, who the contact is linked to: the whole label is a link.
+      render: (name: string, contact: IGoogleContactRow) => (
+        <div className="flex flex-col">
+          <span>{name}</span>
+
+          {contact.customerId && contact.customerName && (
+            <a
+              className="flex w-fit items-center gap-1 text-xs !text-blue-600 hover:!text-blue-500"
+              title={t("apps.google.grid.goToCustomer")}
+              onClick={() => openCustomer(contact)}
+            >
+              <span className="truncate">{contact.customerName}</span>
+
+              <ExportOutlined />
+            </a>
+          )}
+        </div>
+      ),
     },
     {
       title: t("apps.google.grid.email"),
@@ -486,11 +587,12 @@ export default function GoogleContactsAppPage() {
       width: 90,
       render: (_: unknown, contact: IGoogleContactRow) =>
         contact.status === GoogleContactsEnum.ContactStatus.LINKED ? (
-          <Tooltip title={t("apps.google.grid.goToCustomer")}>
+          <Tooltip title={t("apps.google.grid.changeCustomer")}>
             <Button
-              icon={<EnterOutlined />}
-              onClick={() => openCustomer(contact)}
-              aria-label={t("apps.google.grid.goToCustomer")}
+              icon={<UserSwitchOutlined />}
+              disabled={!canManage || busy !== null}
+              onClick={() => setLinkingContact(contact)}
+              aria-label={t("apps.google.grid.changeCustomer")}
             />
           </Tooltip>
         ) : (

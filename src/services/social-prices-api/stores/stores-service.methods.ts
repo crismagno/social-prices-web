@@ -18,7 +18,7 @@ export default class StoresServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -33,7 +33,7 @@ export default class StoresServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -43,14 +43,14 @@ export default class StoresServiceMethods extends ServiceMethodsBase {
     const response = await this._fetchAxios.get<IStore | null>(
       `${this._socialPricesApiV1}${StoresServiceEnum.Methods.FIND_BY_ID.replace(
         ":storeId",
-        storeId
+        storeId,
       )}`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -64,14 +64,14 @@ export default class StoresServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async findByUserTableState(
-    tableState?: ITableStateRequest<IStore>
+    tableState?: ITableStateRequest<IStore>,
   ): Promise<ITableStateResponse<IStore[]>> {
     const response = await this._fetchAxios.post<ITableStateResponse<IStore[]>>(
       `${this._socialPricesApiV1}${StoresServiceEnum.Methods.FIND_BY_USER_TABLE_STATE}`,
@@ -81,7 +81,7 @@ export default class StoresServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;

@@ -21,7 +21,7 @@ export default abstract class ServiceMethodsBase {
 
     if (!token) {
       throw new Error(
-        "Unauthorized user! Please contact the support. Code: UNT"
+        "Unauthorized user! Please contact the support. Code: UNT",
       );
     }
 
@@ -43,7 +43,7 @@ export default abstract class ServiceMethodsBase {
 
     if (!authToken) {
       throw new Error(
-        "Token not found[1]! Please contact the support. Code: TNF"
+        "Token not found[1]! Please contact the support. Code: TNF",
       );
     }
 
@@ -55,7 +55,7 @@ export default abstract class ServiceMethodsBase {
 
     if (!token) {
       throw new Error(
-        "Unauthorized manager! Please contact the support. Code: UNM"
+        "Unauthorized manager! Please contact the support. Code: UNM",
       );
     }
 
@@ -68,7 +68,7 @@ export default abstract class ServiceMethodsBase {
 
     if (!managerAuthToken) {
       throw new Error(
-        "Manager token not found! Please contact the support. Code: MTNF"
+        "Manager token not found! Please contact the support. Code: MTNF",
       );
     }
 

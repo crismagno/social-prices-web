@@ -23,7 +23,7 @@ export default class CategoriesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -35,21 +35,21 @@ export default class CategoriesServiceMethods extends ServiceMethodsBase {
         this._socialPricesApiV1
       }${CategoriesServiceEnum.Methods.FIND_BY_ID.replace(
         ":categoryId",
-        categoryId
+        categoryId,
       )}`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async findByUserTableState(
-    tableState?: ITableStateRequest<ICategory>
+    tableState?: ITableStateRequest<ICategory>,
   ): Promise<ITableStateResponse<ICategory[]>> {
     const response = await this._fetchAxios.post<
       ITableStateResponse<ICategory[]>
@@ -61,14 +61,14 @@ export default class CategoriesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async create(
-    createCategoryDto: CreateCategoryDto
+    createCategoryDto: CreateCategoryDto,
   ): Promise<ICategory> {
     const response = await this._fetchAxios.post<ICategory>(
       `${this._socialPricesApiV1}${CategoriesServiceEnum.Methods.CREATE}`,
@@ -78,14 +78,14 @@ export default class CategoriesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async update(
-    updateCategoryDto: UpdateCategoryDto
+    updateCategoryDto: UpdateCategoryDto,
   ): Promise<ICategory> {
     const response = await this._fetchAxios.put<ICategory>(
       `${this._socialPricesApiV1}${CategoriesServiceEnum.Methods.UPDATE}`,
@@ -95,14 +95,14 @@ export default class CategoriesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async createMulti(
-    createCategoryMultiDto: CreateCategoryMultiDto
+    createCategoryMultiDto: CreateCategoryMultiDto,
   ): Promise<ICategory> {
     const response = await this._fetchAxios.post<ICategory>(
       `${this._socialPricesApiV1}${CategoriesServiceEnum.Methods.CREATE_MULTI}`,
@@ -112,7 +112,7 @@ export default class CategoriesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -126,7 +126,7 @@ export default class CategoriesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;

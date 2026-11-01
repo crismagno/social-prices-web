@@ -162,6 +162,15 @@ export default class TelegramServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
+  // Lets the person see "typing…" while the user writes. Best effort.
+  public async sendTyping(chatId: number): Promise<void> {
+    await this._fetchAxios.post(
+      this._url(TelegramServiceEnum.Methods.CHAT_TYPING, chatId),
+      {},
+      { headers: this._headers() },
+    );
+  }
+
   public async markRead(chatId: number): Promise<void> {
     await this._fetchAxios.post(
       this._url(TelegramServiceEnum.Methods.CHAT_READ, chatId),

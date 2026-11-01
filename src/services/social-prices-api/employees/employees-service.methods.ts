@@ -19,7 +19,7 @@ export default class EmployeesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -34,7 +34,7 @@ export default class EmployeesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -46,21 +46,21 @@ export default class EmployeesServiceMethods extends ServiceMethodsBase {
         this._socialPricesApiV1
       }${EmployeesServiceEnum.Methods.FIND_BY_ID.replace(
         ":employeeId",
-        employeeId
+        employeeId,
       )}`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async findByUserTableState(
-    tableState?: ITableStateRequest<IEmployee>
+    tableState?: ITableStateRequest<IEmployee>,
   ): Promise<ITableStateResponse<IEmployee[]>> {
     const response = await this._fetchAxios.post<
       ITableStateResponse<IEmployee[]>
@@ -72,7 +72,7 @@ export default class EmployeesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -86,7 +86,7 @@ export default class EmployeesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -100,7 +100,7 @@ export default class EmployeesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -115,14 +115,14 @@ export default class EmployeesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async downloadEmployees(
-    filters: IFiltersDownloadEmployees
+    filters: IFiltersDownloadEmployees,
   ): Promise<Buffer> {
     const response = await this._fetchAxios.post<Buffer>(
       `${this._socialPricesApiV1}${EmployeesServiceEnum.Methods.DOWNLOAD_EMPLOYEES}`,
@@ -132,7 +132,7 @@ export default class EmployeesServiceMethods extends ServiceMethodsBase {
           Authorization: this.formatAuthorizationWithToken(),
         },
         responseType: "blob",
-      }
+      },
     );
 
     return response.data;

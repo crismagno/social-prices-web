@@ -19,7 +19,7 @@ export default class ProductsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -34,7 +34,7 @@ export default class ProductsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -46,14 +46,14 @@ export default class ProductsServiceMethods extends ServiceMethodsBase {
         this._socialPricesApiV1
       }${ProductsServiceEnum.Methods.FIND_BY_ID.replace(
         ":productId",
-        productId
+        productId,
       )}`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -68,7 +68,7 @@ export default class ProductsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -82,14 +82,14 @@ export default class ProductsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async findByUserTableState(
-    tableState?: ITableStateRequest<IProduct>
+    tableState?: ITableStateRequest<IProduct>,
   ): Promise<ITableStateResponse<IProduct[]>> {
     const response = await this._fetchAxios.post<
       ITableStateResponse<IProduct[]>
@@ -101,7 +101,7 @@ export default class ProductsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -115,7 +115,7 @@ export default class ProductsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -130,14 +130,14 @@ export default class ProductsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async downloadProducts(
-    filters: IFiltersDownloadProducts
+    filters: IFiltersDownloadProducts,
   ): Promise<Buffer> {
     const response = await this._fetchAxios.post<Buffer>(
       `${this._socialPricesApiV1}${ProductsServiceEnum.Methods.DOWNLOAD_PRODUCTS}`,
@@ -147,7 +147,7 @@ export default class ProductsServiceMethods extends ServiceMethodsBase {
           Authorization: this.formatAuthorizationWithToken(),
         },
         responseType: "blob",
-      }
+      },
     );
 
     return response.data;

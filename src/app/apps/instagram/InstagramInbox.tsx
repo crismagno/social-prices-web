@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 
 import AppIcon from "../../../components/common/AppIcon/AppIcon";
 import { AppTile } from "../../../components/common/ConnectSteps/ConnectSteps";
+import { useFillViewportHeight } from "../../../shared/hooks/useFillViewportHeight";
 import useAppData from "../../../data/context/app/useAppData";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
@@ -16,6 +17,8 @@ import InstagramChatList from "./InstagramChatList";
 import InstagramThread from "./InstagramThread";
 import { INSTAGRAM_PINK } from "./instagram-display";
 import { useInstagramChats } from "./useInstagramChats";
+
+const MIN_HEIGHT: number = 440;
 
 interface Props {
   isEnabled: boolean;
@@ -46,6 +49,9 @@ export default function InstagramInbox({ isEnabled, canDelete }: Props) {
   );
 
   const isNarrow: boolean = screens.md === false;
+
+  // The chat takes the rest of the screen, down to the bottom.
+  const { ref: cardRef, height } = useFillViewportHeight(MIN_HEIGHT);
 
   // Always the freshest copy: the list refreshes in the background.
   const selectedChat: IInstagramChat | undefined = chats.find(
@@ -130,8 +136,12 @@ export default function InstagramInbox({ isEnabled, canDelete }: Props) {
   );
 
   return (
-    <Card styles={{ body: { padding: 0 } }} style={{ overflow: "hidden" }}>
-      <div className="flex" style={{ height: "70vh", minHeight: 440 }}>
+    <Card
+      ref={cardRef}
+      styles={{ body: { padding: 0 } }}
+      style={{ overflow: "hidden" }}
+    >
+      <div className="flex" style={{ height }}>
         {isNarrow ? (
           <div className="w-full">{selectedChat ? thread : list}</div>
         ) : (

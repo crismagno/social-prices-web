@@ -18,7 +18,7 @@ export default class ProductItemsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -33,7 +33,7 @@ export default class ProductItemsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -45,14 +45,14 @@ export default class ProductItemsServiceMethods extends ServiceMethodsBase {
         this._socialPricesApiV1
       }${ProductItemsServiceEnum.Methods.FIND_BY_ID.replace(
         ":productItemId",
-        productItemId
+        productItemId,
       )}`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -64,14 +64,14 @@ export default class ProductItemsServiceMethods extends ServiceMethodsBase {
         this._socialPricesApiV1
       }${ProductItemsServiceEnum.Methods.FIND_BY_PRODUCT.replace(
         ":productId",
-        productId
+        productId,
       )}`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -85,14 +85,14 @@ export default class ProductItemsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async findByUserTableState(
-    tableState?: ITableStateRequest<IProductItem>
+    tableState?: ITableStateRequest<IProductItem>,
   ): Promise<ITableStateResponse<IProductItem[]>> {
     const response = await this._fetchAxios.post<
       ITableStateResponse<IProductItem[]>
@@ -104,7 +104,7 @@ export default class ProductItemsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -119,7 +119,7 @@ export default class ProductItemsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
   }
 
@@ -133,7 +133,7 @@ export default class ProductItemsServiceMethods extends ServiceMethodsBase {
           Authorization: this.formatAuthorizationWithToken(),
         },
         responseType: "arraybuffer",
-      }
+      },
     );
 
     return response.data;
@@ -148,7 +148,7 @@ export default class ProductItemsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;

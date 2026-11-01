@@ -33,7 +33,7 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -48,7 +48,7 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -58,14 +58,14 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
     const response = await this._fetchAxios.get<ISale | null>(
       `${this._socialPricesApiV1}${SalesServiceEnum.Methods.FIND_BY_ID.replace(
         ":saleId",
-        saleId
+        saleId,
       )}`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -77,21 +77,21 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
         this._socialPricesApiV1
       }${SalesServiceEnum.Methods.FIND_FILLED_BY_ID_OR_FAIL.replace(
         ":saleId",
-        saleId
+        saleId,
       )}`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async findByUserTableState(
-    tableState?: ITableStateRequest<ISale>
+    tableState?: ITableStateRequest<ISale>,
   ): Promise<ITableStateResponse<ISale[]>> {
     const response = await this._fetchAxios.post<ITableStateResponse<ISale[]>>(
       `${this._socialPricesApiV1}${SalesServiceEnum.Methods.FIND_BY_USER_TABLE_STATE}`,
@@ -101,14 +101,14 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async getSalesSummaryByUserTableState(
-    tableState?: ITableStateRequest<ISale>
+    tableState?: ITableStateRequest<ISale>,
   ): Promise<IGetSalesSummaryByUserTableStateResponse> {
     const response =
       await this._fetchAxios.post<IGetSalesSummaryByUserTableStateResponse>(
@@ -119,7 +119,7 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
             "Content-Type": "application/json",
             Authorization: this.formatAuthorizationWithToken(),
           },
-        }
+        },
       );
 
     return response.data;
@@ -133,7 +133,7 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -149,7 +149,7 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -166,14 +166,14 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async getSalesAnalytics(
-    params: IGetSalesAnalyticsParams
+    params: IGetSalesAnalyticsParams,
   ): Promise<IGetSalesAnalyticsResponse> {
     const response = await this._fetchAxios.post<IGetSalesAnalyticsResponse>(
       `${this._socialPricesApiV1}${SalesServiceEnum.Methods.GET_SALES_ANALYTICS}`,
@@ -183,14 +183,14 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async getSalesBalance(
-    params: IGetSalesBalanceParams
+    params: IGetSalesBalanceParams,
   ): Promise<IGetSalesBalanceResponse> {
     const response = await this._fetchAxios.post<IGetSalesBalanceResponse>(
       `${this._socialPricesApiV1}${SalesServiceEnum.Methods.GET_SALES_BALANCE}`,
@@ -200,7 +200,7 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -215,7 +215,7 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -230,7 +230,7 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
           Authorization: this.formatAuthorizationWithToken(),
         },
         responseType: "blob",
-      }
+      },
     );
 
     return response.data;
@@ -238,7 +238,7 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
 
   public async updateStatusManual(
     saleId: string,
-    newStatus: SalesEnum.Status
+    newStatus: SalesEnum.Status,
   ): Promise<ISale> {
     const response = await this._fetchAxios.put<ISale>(
       `${this._socialPricesApiV1}${SalesServiceEnum.Methods.UPDATE_STATUS_MANUAL}`,
@@ -251,14 +251,14 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async completeMultipleSalesManual(
-    completeMultipleSalesManualDto: CompleteMultipleSalesManualDto
+    completeMultipleSalesManualDto: CompleteMultipleSalesManualDto,
   ): Promise<void> {
     const response = await this._fetchAxios.post<void>(
       `${this._socialPricesApiV1}${SalesServiceEnum.Methods.COMPLETE_MULTIPLE_SALES_MANUAL}`,
@@ -268,14 +268,14 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async updatePaymentStatusManual(
-    updateSalePaymentStatusManualDto: UpdateSalePaymentStatusManualDto
+    updateSalePaymentStatusManualDto: UpdateSalePaymentStatusManualDto,
   ): Promise<ISale> {
     const response = await this._fetchAxios.put<ISale>(
       `${this._socialPricesApiV1}${SalesServiceEnum.Methods.UPDATE_PAYMENT_STATUS_MANUAL}`,
@@ -285,14 +285,14 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async updateSaleCustomerManual(
-    updateSaleCustomerManualDto: UpdateSaleCustomerManualDto
+    updateSaleCustomerManualDto: UpdateSaleCustomerManualDto,
   ): Promise<ISale> {
     const response = await this._fetchAxios.put<ISale>(
       `${this._socialPricesApiV1}${SalesServiceEnum.Methods.UPDATE_SALE_CUSTOMER_MANUAL}`,
@@ -302,7 +302,7 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -317,7 +317,7 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -329,20 +329,20 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
         this._socialPricesApiV1
       }${SalesServiceEnum.Methods.DOWNLOAD_SALE_SUMMARY_PDF.replace(
         ":saleId",
-        saleId
+        saleId,
       )}`,
       {
         // Public route: the customer opening the summary link has no session.
         headers: this.formatOptionalAuthorization(),
         responseType: "blob",
-      }
+      },
     );
 
     return response.data;
   }
 
   public async sendSaleSummaryLink(
-    sendSaleSummaryLinkRequest: ISendSaleSummaryLinkRequest
+    sendSaleSummaryLinkRequest: ISendSaleSummaryLinkRequest,
   ): Promise<void> {
     const response = await this._fetchAxios.post<void>(
       `${this._socialPricesApiV1}${SalesServiceEnum.Methods.SEND_SALE_SUMMARY_LINK}`,
@@ -352,7 +352,7 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -364,13 +364,13 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
         this._socialPricesApiV1
       }${SalesServiceEnum.Methods.GET_SALE_BY_SALE_SUMMARY_LINK_TOKEN.replace(
         ":token",
-        token
+        token,
       )}`,
       {
         headers: {
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     return response.data;

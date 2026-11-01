@@ -98,6 +98,15 @@ export default class InstagramServiceMethods extends ServiceMethodsBase {
     );
   }
 
+  // Lets the person see "typing…" while the user writes. Best effort.
+  public async sendTyping(igsid: string): Promise<void> {
+    await this._fetchAxios.post(
+      this._url(InstagramServiceEnum.Methods.CHAT_TYPING, igsid),
+      {},
+      { headers: this._headers() },
+    );
+  }
+
   public async markRead(igsid: string): Promise<void> {
     await this._fetchAxios.post(
       this._url(InstagramServiceEnum.Methods.CHAT_READ, igsid),

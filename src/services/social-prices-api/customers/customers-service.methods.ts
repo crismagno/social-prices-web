@@ -19,7 +19,7 @@ export default class CustomersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -34,7 +34,7 @@ export default class CustomersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -46,21 +46,21 @@ export default class CustomersServiceMethods extends ServiceMethodsBase {
         this._socialPricesApiV1
       }${CustomersServiceEnum.Methods.FIND_BY_ID.replace(
         ":customerId",
-        customerId
+        customerId,
       )}`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async findByOwnerUserTableState(
-    tableState?: ITableStateRequest<ICustomer>
+    tableState?: ITableStateRequest<ICustomer>,
   ): Promise<ITableStateResponse<ICustomer[]>> {
     const response = await this._fetchAxios.post<
       ITableStateResponse<ICustomer[]>
@@ -72,7 +72,7 @@ export default class CustomersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -86,7 +86,7 @@ export default class CustomersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -101,14 +101,14 @@ export default class CustomersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async downloadCustomers(
-    filters: IFiltersDownloadCustomers
+    filters: IFiltersDownloadCustomers,
   ): Promise<Buffer> {
     const response = await this._fetchAxios.post<Buffer>(
       `${this._socialPricesApiV1}${CustomersServiceEnum.Methods.DOWNLOAD_CUSTOMERS}`,
@@ -118,7 +118,7 @@ export default class CustomersServiceMethods extends ServiceMethodsBase {
           Authorization: this.formatAuthorizationWithToken(),
         },
         responseType: "blob",
-      }
+      },
     );
 
     return response.data;

@@ -23,11 +23,14 @@ import {
   LinkOutlined,
   SendOutlined,
   UserAddOutlined,
+  EditOutlined,
+  ThunderboltOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
 import useLanguageData from "../../../data/context/language/useLanguageData";
+import { useTypingSignal } from "../../../shared/hooks/useTypingSignal";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import InstagramEnum from "../../../shared/business/apps/instagram/instagram.enum";
 import {
@@ -36,6 +39,8 @@ import {
 } from "../../../shared/business/apps/instagram/instagram.types";
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
+import EditCustomerDrawer from "../../../components/common/EditCustomerDrawer/EditCustomerDrawer";
+import ChatsFastSale from "../../chats/ChatsFastSale";
 import LinkCustomerModal from "../telegram/LinkCustomerModal";
 import { relativeDay } from "../telegram/telegram-display";
 import { avatarColor } from "../telegram/telegram-theme";
@@ -80,9 +85,18 @@ export default function InstagramThread({
 
   const [isSending, setIsSending] = useState<boolean>(false);
 
+  // While the user writes, the person sees "typing…".
+  useTypingSignal(text, chat.canReply, () =>
+    serviceMethodsInstance.instagramServiceMethods.sendTyping(chat.igsid),
+  );
+
   const [isCustomerBusy, setIsCustomerBusy] = useState<boolean>(false);
 
   const [isLinkOpen, setIsLinkOpen] = useState<boolean>(false);
+
+  const [isFastSaleOpen, setIsFastSaleOpen] = useState<boolean>(false);
+
+  const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
@@ -182,6 +196,24 @@ export default function InstagramThread({
   const renderCustomer = () =>
     chat.customerId ? (
       <Space size={4}>
+        <Button
+          size="small"
+          icon={<EditOutlined />}
+          onClick={() => setIsEditOpen(true)}
+        >
+          {t("customers.editCustomer")}
+        </Button>
+
+        {/* A sale needs a customer, so only a linked person can have one. */}
+        <Button
+          size="small"
+          className="!border-amber-500 !bg-amber-500 !text-white hover:!bg-amber-400"
+          icon={<ThunderboltOutlined />}
+          onClick={() => setIsFastSaleOpen(true)}
+        >
+          {t("sales.fastSale")}
+        </Button>
+
         <Link href={Urls.CUSTOMER.replace(":customerId", chat.customerId)}>
           <Button
             size="small"
@@ -481,6 +513,21 @@ export default function InstagramThread({
             : t("apps.instagram.inbox.sendHint")}
         </div>
       </div>
+
+      {isEditOpen && chat.customerId && (
+        <EditCustomerDrawer
+          customerId={chat.customerId}
+          onClose={() => setIsEditOpen(false)}
+          onSaved={() => onChatChanged()}
+        />
+      )}
+
+      {isFastSaleOpen && chat.customerId && (
+        <ChatsFastSale
+          customerId={chat.customerId}
+          onClose={() => setIsFastSaleOpen(false)}
+        />
+      )}
 
       <LinkCustomerModal
         open={isLinkOpen}

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 
-import { Avatar, Badge, Input, Segmented, Spin, theme } from "antd";
+import { Avatar, Badge, Checkbox, Input, Segmented, Spin, theme } from "antd";
 
 import { SearchOutlined } from "@ant-design/icons";
 
@@ -29,6 +29,8 @@ interface Props {
   isLoading: boolean;
   selectedKey: string | null;
   onSelect: (chat: IInboxChat) => void;
+  // An app's own list has one channel, so the channel filter has nothing to pick.
+  isScopedToChannel?: boolean;
 }
 
 // The customers (and the people not tied to one yet), most recent first, each
@@ -38,6 +40,7 @@ export default function ChatsList({
   isLoading,
   selectedKey,
   onSelect,
+  isScopedToChannel = false,
 }: Props) {
   const { t } = useLanguageData();
 
@@ -47,16 +50,25 @@ export default function ChatsList({
 
   const [channel, setChannel] = useState<InboxEnum.Channel | "ALL">("ALL");
 
+  // Only the people nobody has tied to a customer yet, to go through them.
+  const [onlyUnlinked, setOnlyUnlinked] = useState<boolean>(false);
+
+  const unlinkedCount: number = useMemo(
+    () => chats.filter((chat: IInboxChat) => !chat.customerId).length,
+    [chats],
+  );
+
   const unnamed: string = t("chats.unnamed");
 
   const visible: IInboxChat[] = useMemo(
     () =>
       chats.filter(
         (chat: IInboxChat) =>
+          (!onlyUnlinked || !chat.customerId) &&
           (channel === "ALL" || chat.channels.includes(channel)) &&
           chatMatches(chat, chatName(chat, unnamed), search),
       ),
-    [chats, channel, search, unnamed],
+    [chats, channel, onlyUnlinked, search, unnamed],
   );
 
   // A message with a file and no text shows what the file is, in the user's language.
@@ -86,23 +98,34 @@ export default function ChatsList({
           onChange={(event) => setSearch(event.target.value)}
         />
 
-        <Segmented
-          block
-          size="small"
-          value={channel}
-          onChange={(value) => setChannel(value as InboxEnum.Channel | "ALL")}
-          options={[
-            { value: "ALL", label: t("chats.filter.all") },
-            ...Object.values(InboxEnum.Channel).map((value) => ({
-              value,
-              label: (
-                <span title={t(`chats.channels.${value}`)}>
-                  <AppIcon app={InboxEnum.ChannelApp[value]} />
-                </span>
-              ),
-            })),
-          ]}
-        />
+        {!isScopedToChannel && (
+          <Segmented
+            block
+            size="small"
+            value={channel}
+            onChange={(value) => setChannel(value as InboxEnum.Channel | "ALL")}
+            options={[
+              { value: "ALL", label: t("chats.filter.all") },
+              ...Object.values(InboxEnum.Channel).map((value) => ({
+                value,
+                label: (
+                  <span title={t(`chats.channels.${value}`)}>
+                    <AppIcon app={InboxEnum.ChannelApp[value]} />
+                  </span>
+                ),
+              })),
+            ]}
+          />
+        )}
+
+        <Checkbox
+          checked={onlyUnlinked}
+          onChange={(event) => setOnlyUnlinked(event.target.checked)}
+        >
+          <span className="text-xs">
+            {t("chats.filter.unlinked")} ({unlinkedCount})
+          </span>
+        </Checkbox>
       </div>
 
       <div className="flex-1 overflow-y-auto">

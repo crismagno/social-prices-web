@@ -75,6 +75,45 @@ export default class GoogleContactsServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
+  // By hand: moves a contact from the customer it is on to another one.
+  public async relinkContact(
+    externalId: string,
+    customerId: string,
+  ): Promise<{ customerId: string; customerName: string | null }> {
+    const response = await this._fetchAxios.post<{
+      customerId: string;
+      customerName: string | null;
+    }>(
+      `${this._socialPricesApiV1}${GoogleContactsServiceEnum.Methods.RELINK}`,
+      { externalId, customerId },
+      { headers: this._headers() },
+    );
+
+    return response.data;
+  }
+
+  // The customer (and its name) of each of these contacts, for a list kept from
+  // before the names were known. Contacts with no customer are left out.
+  public async findCustomers(
+    externalIds: string[],
+  ): Promise<
+    { externalId: string; customerId: string; customerName: string | null }[]
+  > {
+    const response = await this._fetchAxios.post<
+      {
+        externalId: string;
+        customerId: string;
+        customerName: string | null;
+      }[]
+    >(
+      `${this._socialPricesApiV1}${GoogleContactsServiceEnum.Methods.FIND_CUSTOMERS}`,
+      { externalIds },
+      { headers: this._headers() },
+    );
+
+    return response.data;
+  }
+
   // Which customer holds a contact: for a list cached before that was known.
   public async findCustomer(
     externalId: string,

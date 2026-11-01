@@ -42,6 +42,8 @@ import SalesTable from "../../sales/components/SalesTable/SalesTable";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindCustomerById } from "../detail/useFindCustomerById";
 import InboxEnum from "../../../shared/business/inbox/inbox.enum";
+import { IInboxConversation } from "../../../shared/business/inbox/inbox.types";
+import { conversationAppUrl } from "../../chats/chats-links";
 import { useCustomerChats } from "./useCustomerChats";
 
 // Where the customer lives inside the app they came from, if that app shows them.
@@ -85,7 +87,8 @@ export default function CustomerPage() {
 
   const { isLoading, customer } = useFindCustomerById(paramsCustomerId);
 
-  const chatChannels: InboxEnum.Channel[] = useCustomerChats(paramsCustomerId);
+  const chatConversations: IInboxConversation[] =
+    useCustomerChats(paramsCustomerId);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
     TagsEnum.Type.CUSTOMER,
@@ -145,7 +148,7 @@ export default function CustomerPage() {
               title={t("profile.information")}
               extraHeader={
                 <div className="flex gap-2">
-                  {chatChannels.length > 0 && (
+                  {chatConversations.length > 0 && (
                     <Tooltip title={t("customers.openChat")}>
                       <Button
                         icon={<MessageOutlined />}
@@ -274,29 +277,41 @@ export default function CustomerPage() {
                       span={3}
                     >
                       {customer.externalSources?.length ||
-                      chatChannels.length ? (
+                      chatConversations.length ? (
                         <div className="flex flex-wrap gap-2">
-                          {chatChannels.map((channel: InboxEnum.Channel) => (
-                            <Link
-                              key={channel}
-                              href={Urls.CHATS_CUSTOMER.replace(
-                                ":customerId",
-                                customerId,
-                              )}
-                            >
-                              <Button
-                                size="small"
-                                title={t("customers.openInApp").replace(
-                                  "{app}",
-                                  t(`chats.channels.${channel}`),
-                                )}
-                              >
-                                <AppIcon app={InboxEnum.ChannelApp[channel]} />
-                                {t(`chats.channels.${channel}`)}
-                                <ExportOutlined />
-                              </Button>
-                            </Link>
-                          ))}
+                          {chatConversations.map(
+                            (conversation: IInboxConversation) => {
+                              const appName: string = t(
+                                `chats.channels.${conversation.channel}`,
+                              );
+
+                              // The app of that channel, with this person's conversation open.
+                              return (
+                                <Link
+                                  key={conversation._id}
+                                  href={conversationAppUrl(conversation)}
+                                >
+                                  <Button
+                                    size="small"
+                                    title={t("customers.openInApp").replace(
+                                      "{app}",
+                                      appName,
+                                    )}
+                                  >
+                                    <AppIcon
+                                      app={
+                                        InboxEnum.ChannelApp[
+                                          conversation.channel
+                                        ]
+                                      }
+                                    />
+                                    {appName}
+                                    <ExportOutlined />
+                                  </Button>
+                                </Link>
+                              );
+                            },
+                          )}
 
                           {customer.externalSources?.map((source) => {
                             const appUrl: string | null = sourceAppUrl(source);

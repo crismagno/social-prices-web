@@ -8,14 +8,14 @@ export default class FilesServiceMethods extends ServiceMethodsBase {
     const response = await this._fetchAxios.get<Buffer>(
       `${this._socialPricesApiV1}${FilesServiceEnum.Methods.DOWNLOAD.replace(
         ":filename",
-        filename
+        filename,
       )}`,
       {
         headers: {
           Authorization: this.formatAuthorizationWithToken(),
         },
         responseType: "blob",
-      }
+      },
     );
 
     return response.data;

@@ -11,7 +11,7 @@ import ManagerFeedbacksServiceEnum from "./manager-feedbacks-service.enum";
 
 export default class ManagerFeedbacksServiceMethods extends ServiceMethodsBase {
   public async findByTableState(
-    tableState?: ITableStateRequest<IFeedback>
+    tableState?: ITableStateRequest<IFeedback>,
   ): Promise<ITableStateResponse<IFeedback[]>> {
     const response = await this._fetchAxios.post<
       ITableStateResponse<IFeedback[]>
@@ -23,7 +23,7 @@ export default class ManagerFeedbacksServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatManagerAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -31,7 +31,7 @@ export default class ManagerFeedbacksServiceMethods extends ServiceMethodsBase {
 
   public async updateStatus(
     feedbackId: string,
-    status: FeedbacksEnum.Status
+    status: FeedbacksEnum.Status,
   ): Promise<IFeedback> {
     const response = await this._fetchAxios.patch<IFeedback>(
       `${this._socialPricesApiV1}${ManagerFeedbacksServiceEnum.Methods.UPDATE_STATUS.replace(":id", feedbackId)}`,
@@ -41,7 +41,7 @@ export default class ManagerFeedbacksServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatManagerAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;

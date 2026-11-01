@@ -12,7 +12,7 @@ import ManagersServiceEnum from "./managers-service.enum";
 
 export default class ManagersServiceMethods extends ServiceMethodsBase {
   public async findByTableState(
-    tableState?: ITableStateRequest<IManager>
+    tableState?: ITableStateRequest<IManager>,
   ): Promise<ITableStateResponse<IManager[]>> {
     const response = await this._fetchAxios.post<
       ITableStateResponse<IManager[]>
@@ -24,7 +24,7 @@ export default class ManagersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatManagerAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -36,14 +36,14 @@ export default class ManagersServiceMethods extends ServiceMethodsBase {
         this._socialPricesApiV1
       }${ManagersServiceEnum.Methods.FIND_BY_ID.replace(
         ":managerId",
-        managerId
+        managerId,
       )}`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: this.formatManagerAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -58,7 +58,7 @@ export default class ManagersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatManagerAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -73,7 +73,7 @@ export default class ManagersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatManagerAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -81,14 +81,14 @@ export default class ManagersServiceMethods extends ServiceMethodsBase {
 
   public async deleteManual(
     managerId: string,
-    reason: string | null
+    reason: string | null,
   ): Promise<IManager> {
     const response = await this._fetchAxios.delete<IManager>(
       `${
         this._socialPricesApiV1
       }${ManagersServiceEnum.Methods.DELETE_MANUAL.replace(
         ":managerId",
-        managerId
+        managerId,
       )}`,
       {
         headers: {
@@ -96,7 +96,7 @@ export default class ManagersServiceMethods extends ServiceMethodsBase {
           Authorization: this.formatManagerAuthorizationWithToken(),
         },
         data: { reason },
-      }
+      },
     );
 
     return response.data;
@@ -108,7 +108,7 @@ export default class ManagersServiceMethods extends ServiceMethodsBase {
         this._socialPricesApiV1
       }${ManagersServiceEnum.Methods.ACTIVATE_MANUAL.replace(
         ":managerId",
-        managerId
+        managerId,
       )}`,
       {},
       {
@@ -116,7 +116,7 @@ export default class ManagersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatManagerAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;

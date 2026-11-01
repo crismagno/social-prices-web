@@ -30,6 +30,8 @@ export interface IGoogleContactRow {
   // The customer it is linked to (or matches by e-mail); null when none, and
   // missing in a list cached before this was known.
   customerId?: string | null;
+  // That customer's name, so the grid shows who it is.
+  customerName?: string | null;
 }
 
 export interface IGoogleContactsPreview {
@@ -42,5 +44,9 @@ export interface IGoogleContactsPreview {
 export interface IGoogleContactsImportResponse extends IGoogleContactsImportResult {
   savedExternalIds: string[];
   // The customer each saved contact ended up on.
-  savedLinks?: { externalId: string; customerId: string }[];
+  savedLinks?: {
+    externalId: string;
+    customerId: string;
+    customerName?: string | null;
+  }[];
 }

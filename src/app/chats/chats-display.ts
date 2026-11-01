@@ -8,6 +8,7 @@ import {
 } from "../../shared/business/inbox/inbox.types";
 import { INSTAGRAM_PINK } from "../apps/instagram/instagram-display";
 import { MESSENGER_BLUE } from "../apps/messenger/messenger-display";
+import { WHATSAPP_GREEN } from "../apps/whatsapp/whatsapp-display";
 import { TELEGRAM_BLUE } from "../apps/telegram/telegram-theme";
 
 // Each channel keeps its brand color wherever it shows in the central chat.
@@ -15,6 +16,7 @@ export const CHANNEL_COLOR: Record<InboxEnum.Channel, string> = {
   [InboxEnum.Channel.TELEGRAM]: TELEGRAM_BLUE,
   [InboxEnum.Channel.MESSENGER]: MESSENGER_BLUE,
   [InboxEnum.Channel.INSTAGRAM]: INSTAGRAM_PINK,
+  [InboxEnum.Channel.WHATSAPP]: WHATSAPP_GREEN,
 };
 
 export const chatInitial = (name: string): string =>

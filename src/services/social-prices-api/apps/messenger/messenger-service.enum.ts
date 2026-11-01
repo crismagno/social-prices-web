@@ -7,6 +7,7 @@ namespace MessengerServiceEnum {
     CHAT_MESSAGES = "/apps/messenger/chats/:psid/messages",
     CHAT_MESSAGE = "/apps/messenger/chats/:psid/messages/:messageId",
     CHAT_MEDIA = "/apps/messenger/chats/:psid/media",
+    CHAT_TYPING = "/apps/messenger/chats/:psid/typing",
     CHAT_READ = "/apps/messenger/chats/:psid/read",
     CHAT_CUSTOMER = "/apps/messenger/chats/:psid/customer",
     CHAT_CUSTOMER_CREATE = "/apps/messenger/chats/:psid/customer/create",

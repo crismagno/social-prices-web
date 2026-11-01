@@ -1,5 +1,6 @@
 "use client";
 
+import InboxEnum from "../../../shared/business/inbox/inbox.enum";
 import {
   IInboxChat,
   IInboxConversation,
@@ -21,10 +22,11 @@ export default class InboxServiceMethods extends ServiceMethodsBase {
     return `${this._socialPricesApiV1}${path}`;
   }
 
-  public async listChats(): Promise<IInboxChat[]> {
+  // `channel` limits the rows to that channel's conversations: an app's own page.
+  public async listChats(channel?: InboxEnum.Channel): Promise<IInboxChat[]> {
     const response = await this._fetchAxios.get<IInboxChat[]>(
       this._url(InboxServiceEnum.Methods.CHATS),
-      { headers: this._headers() },
+      { headers: this._headers(), params: channel ? { channel } : undefined },
     );
 
     return response.data;
@@ -77,6 +79,55 @@ export default class InboxServiceMethods extends ServiceMethodsBase {
       ),
       { customerId },
       { headers: this._headers() },
+    );
+
+    return response.data;
+  }
+
+  // Lets the person see "typing…" while the user writes. Best effort.
+  public async sendTyping(conversationId: string): Promise<void> {
+    await this._fetchAxios.post(
+      this._url(
+        InboxServiceEnum.Methods.CONVERSATION_TYPING.replace(
+          ":conversationId",
+          conversationId,
+        ),
+      ),
+      {},
+      { headers: this._headers() },
+    );
+  }
+
+  // A file or a recording through the channel of that conversation. The text,
+  // when there is one, is its caption (or a message of its own where the channel
+  // has no captions).
+  public async sendMedia(
+    conversationId: string,
+    file: File,
+    caption: string,
+    asVoice: boolean = false,
+  ): Promise<IInboxMessage> {
+    const formData: FormData = new FormData();
+
+    formData.append("file", file);
+
+    if (asVoice) {
+      formData.append("voice", "true");
+    }
+
+    if (caption.trim()) {
+      formData.append("caption", caption);
+    }
+
+    const response = await this._fetchAxios.post<IInboxMessage>(
+      this._url(
+        InboxServiceEnum.Methods.CONVERSATION_MEDIA.replace(
+          ":conversationId",
+          conversationId,
+        ),
+      ),
+      formData,
+      { headers: { Authorization: this.formatAuthorizationWithToken() } },
     );
 
     return response.data;

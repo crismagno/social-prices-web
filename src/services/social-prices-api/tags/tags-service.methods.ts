@@ -17,14 +17,14 @@ export default class TagsServiceMethods extends ServiceMethodsBase {
     const response = await this._fetchAxios.get<ITag[]>(
       `${this._socialPricesApiV1}${TagsServiceEnum.Methods.FIND_BY_TYPE.replace(
         ":type",
-        type
+        type,
       )}`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -34,21 +34,21 @@ export default class TagsServiceMethods extends ServiceMethodsBase {
     const response = await this._fetchAxios.get<ITag | null>(
       `${this._socialPricesApiV1}${TagsServiceEnum.Methods.FIND_BY_ID.replace(
         ":tagId",
-        tagId
+        tagId,
       )}`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async findByUserTableState(
-    tableState?: ITableStateRequest<ITag>
+    tableState?: ITableStateRequest<ITag>,
   ): Promise<ITableStateResponse<ITag[]>> {
     const response = await this._fetchAxios.post<ITableStateResponse<ITag[]>>(
       `${this._socialPricesApiV1}${TagsServiceEnum.Methods.FIND_BY_USER_TABLE_STATE}`,
@@ -58,7 +58,7 @@ export default class TagsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -73,7 +73,7 @@ export default class TagsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -88,14 +88,14 @@ export default class TagsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async createMulti(
-    createTagMultiDto: CreateTagMultiDto
+    createTagMultiDto: CreateTagMultiDto,
   ): Promise<void> {
     const response = await this._fetchAxios.post<void>(
       `${this._socialPricesApiV1}${TagsServiceEnum.Methods.CREATE_MULTI}`,
@@ -105,7 +105,7 @@ export default class TagsServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;

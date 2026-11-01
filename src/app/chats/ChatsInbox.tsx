@@ -1,28 +1,33 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Card, Grid, theme } from "antd";
 import { useSearchParams } from "next/navigation";
 
 import useAuthData from "../../data/context/auth/useAuthData";
 import EmployeesEnum from "../../shared/business/employees/employees.enum";
+import { useFillViewportHeight } from "../../shared/hooks/useFillViewportHeight";
 import useAppData from "../../data/context/app/useAppData";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
+import InboxEnum from "../../shared/business/inbox/inbox.enum";
 import { IInboxChat } from "../../shared/business/inbox/inbox.types";
 import ChatsEmptyState from "./ChatsEmptyState";
 import ChatsList from "./ChatsList";
 import ChatsThread from "./ChatsThread";
 import { useChats } from "./useChats";
 
-// The page's own padding under the card (the main area has 1.75rem all around).
-const PAGE_BOTTOM_PADDING: number = 28;
 const MIN_HEIGHT: number = 440;
+
+interface Props {
+  // Only this channel: an app's own page. Without it, every channel together.
+  channel?: InboxEnum.Channel;
+}
 
 // The rows on the left and the open one on the right. On a narrow screen only
 // one of them shows at a time.
-export default function ChatsInbox() {
+export default function ChatsInbox({ channel }: Props) {
   const { t } = useLanguageData();
 
   const { employee } = useAuthData();
@@ -35,7 +40,7 @@ export default function ChatsInbox() {
     apps: { fetchApps },
   } = useAppData();
 
-  const { chats, isLoadingChats, refetchChats } = useChats();
+  const { chats, isLoadingChats, refetchChats } = useChats(channel);
 
   // A link from a customer opens that customer's chat straight away.
   const requestedCustomer: string | null = useSearchParams().get("customer");
@@ -44,29 +49,33 @@ export default function ChatsInbox() {
     requestedCustomer,
   );
 
+  // A link to one person's conversation (the app pages use their contact id).
+  const requestedChat: string | null = useSearchParams().get("chat");
+
+  useEffect(() => {
+    if (!requestedChat) {
+      return;
+    }
+
+    const found: IInboxChat | undefined = chats.find((chat: IInboxChat) =>
+      chat.conversations.some(
+        (conversation) =>
+          conversation.contactKey === requestedChat &&
+          (!channel || conversation.channel === channel),
+      ),
+    );
+
+    if (found) {
+      setSelectedKey(found.key);
+    }
+    // Only once the list arrives: after that the user picks.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [requestedChat, chats.length > 0]);
+
   const isNarrow: boolean = screens.md === false;
 
-  // The chat takes the rest of the screen, down to the bottom: its height is what
-  // is left under where it starts, and follows the window being resized.
-  const cardRef = useRef<HTMLDivElement | null>(null);
-
-  const [height, setHeight] = useState<number>(MIN_HEIGHT);
-
-  useLayoutEffect(() => {
-    const fit = (): void => {
-      const top: number = cardRef.current?.getBoundingClientRect().top ?? 0;
-
-      setHeight(
-        Math.max(MIN_HEIGHT, window.innerHeight - top - PAGE_BOTTOM_PADDING),
-      );
-    };
-
-    fit();
-
-    window.addEventListener("resize", fit);
-
-    return () => window.removeEventListener("resize", fit);
-  }, []);
+  // The chat takes the rest of the screen, down to the bottom.
+  const { ref: cardRef, height } = useFillViewportHeight(MIN_HEIGHT);
 
   // Always the freshest copy: the list refreshes in the background.
   const selectedChat: IInboxChat | undefined = chats.find(
@@ -93,7 +102,7 @@ export default function ChatsInbox() {
     serviceMethodsInstance.inboxServiceMethods
       .markRead(
         selectedChat.customerId
-          ? { customerId: selectedChat.customerId }
+          ? { customerId: selectedChat.customerId, channel }
           : { conversationId: selectedChat.conversations[0]._id },
       )
       .then(() => {
@@ -111,6 +120,7 @@ export default function ChatsInbox() {
       isLoading={isLoadingChats}
       selectedKey={selectedKey}
       onSelect={(chat: IInboxChat) => setSelectedKey(chat.key)}
+      isScopedToChannel={!!channel}
     />
   );
 
@@ -120,6 +130,7 @@ export default function ChatsInbox() {
     <ChatsThread
       key={selectedChat.key}
       chat={selectedChat}
+      channel={channel}
       canDelete={employee?.level !== EmployeesEnum.Level.EMPLOYEE}
       onBack={isNarrow ? () => setSelectedKey(null) : undefined}
       onSent={() => refetchChats(true)}

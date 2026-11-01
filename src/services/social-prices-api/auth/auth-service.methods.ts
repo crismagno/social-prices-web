@@ -13,29 +13,29 @@ import CreateUserDto from "./dto/createUser.dto";
 export default class AuthServiceMethods extends ServiceMethodsBase {
   public async signIn(
     emailOrUsername: string,
-    password: string
+    password: string,
   ): Promise<IAuthLogin> {
     const response = await this._fetchAxios.post<IAuthLogin>(
       `${this._socialPricesApiV1}${AuthServiceEnum.Methods.SIGN_IN}`,
       {
         emailOrUsername,
         password,
-      }
+      },
     );
 
     return response.data;
   }
 
   public async searchEmployees(
-    emailOrUsername: string
+    emailOrUsername: string,
   ): Promise<ISearchEmployee[]> {
     const response = await this._fetchAxios.get<ISearchEmployee[]>(
       `${
         this._socialPricesApiV1
       }${AuthServiceEnum.Methods.SEARCH_EMPLOYEES.replace(
         ":emailOrUsername",
-        emailOrUsername
-      )}`
+        emailOrUsername,
+      )}`,
     );
 
     return response.data;
@@ -44,7 +44,7 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
   public async signUp(createUserDto: CreateUserDto): Promise<IAuthLogin> {
     const response = await this._fetchAxios.post<IAuthLogin>(
       `${this._socialPricesApiV1}${AuthServiceEnum.Methods.SIGN_UP}`,
-      createUserDto
+      createUserDto,
     );
 
     return response.data;
@@ -59,7 +59,7 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
             "Content-Type": "application/json",
             Authorization: this.formatAuthorization(token),
           },
-        }
+        },
       );
 
       return response.data;
@@ -79,7 +79,7 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
 
   public async validateSignInCode(
     token: string,
-    codeValue: string
+    codeValue: string,
   ): Promise<boolean> {
     try {
       const response = await this._fetchAxios.get<boolean>(
@@ -87,14 +87,14 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
           this._socialPricesApiV1
         }${AuthServiceEnum.Methods.VALIDATE_SIGN_IN_CODE.replace(
           ":codeValue",
-          codeValue
+          codeValue,
         )}`,
         {
           headers: {
             "Content-Type": "application/json",
             Authorization: this.formatAuthorization(token),
           },
-        }
+        },
       );
 
       return response.data;
@@ -105,14 +105,14 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
 
   public async signInEmployee(
     username: string,
-    password: string
+    password: string,
   ): Promise<IAuthLogin> {
     const response = await this._fetchAxios.post<IAuthLogin>(
       `${this._socialPricesApiV1}${AuthServiceEnum.Methods.SIGN_IN_EMPLOYEE}`,
       {
         username,
         password,
-      }
+      },
     );
 
     return response.data;
@@ -120,7 +120,7 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
 
   public async validateSignInEmployeeCode(
     token: string,
-    codeValue: string
+    codeValue: string,
   ): Promise<boolean> {
     try {
       const response = await this._fetchAxios.get<boolean>(
@@ -128,14 +128,14 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
           this._socialPricesApiV1
         }${AuthServiceEnum.Methods.VALIDATE_SIGN_IN_EMPLOYEE_CODE.replace(
           ":codeValue",
-          codeValue
+          codeValue,
         )}`,
         {
           headers: {
             "Content-Type": "application/json",
             Authorization: this.formatAuthorization(token),
           },
-        }
+        },
       );
 
       return response.data;
@@ -152,7 +152,7 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -166,7 +166,7 @@ export default class AuthServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorization(authToken),
         },
-      }
+      },
     );
 
     return response.data;

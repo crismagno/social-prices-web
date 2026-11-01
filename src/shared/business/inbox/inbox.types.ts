@@ -13,6 +13,10 @@ export interface IInboxConversation {
   // Whether an answer is allowed now on this channel, and until when.
   canReply: boolean;
   replyWindowEndsAt: string | null;
+  // What the channel takes besides text: files, recordings, and the size limit.
+  canSendMedia: boolean;
+  canSendVoice: boolean;
+  maxUploadBytes: number | null;
 }
 
 // A row of the list: a customer with all their conversations, or one person
@@ -64,4 +68,6 @@ export interface IInboxMessage {
 export interface IInboxScope {
   customerId?: string;
   conversationId?: string;
+  // Only this channel's conversations: what an app's own page shows.
+  channel?: InboxEnum.Channel;
 }

@@ -16,19 +16,19 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
         this._socialPricesApiV1
       }${UsersServiceEnum.Methods.SEND_RECOVER_PASSWORD_CODE.replace(
         ":email",
-        email
-      )}`
+        email,
+      )}`,
     );
 
     return response.data;
   }
 
   public async recoverPassword(
-    recoverPasswordDto: RecoverPasswordDto
+    recoverPasswordDto: RecoverPasswordDto,
   ): Promise<IUser> {
     const response = await this._fetchAxios.post<IUser>(
       `${this._socialPricesApiV1}${UsersServiceEnum.Methods.RECOVER_PASSWORD}`,
-      recoverPasswordDto
+      recoverPasswordDto,
     );
 
     return response.data;
@@ -43,14 +43,14 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async updateUserPhoneNumbers(
-    updateUserPhoneNumbersDto: UpdateUserPhoneNumbersDto
+    updateUserPhoneNumbersDto: UpdateUserPhoneNumbersDto,
   ): Promise<IUser> {
     const response = await this._fetchAxios.post<IUser>(
       `${this._socialPricesApiV1}${UsersServiceEnum.Methods.UPDATE_USER_PHONE_NUMBERS}`,
@@ -60,14 +60,14 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
   }
 
   public async updateUserAddresses(
-    updateUserAddressesDto: UpdateUserAddressesDto
+    updateUserAddressesDto: UpdateUserAddressesDto,
   ): Promise<IUser> {
     const response = await this._fetchAxios.post<IUser>(
       `${this._socialPricesApiV1}${UsersServiceEnum.Methods.UPDATE_USER_ADDRESSES}`,
@@ -77,7 +77,7 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -92,7 +92,7 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "multipart/form-data",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -106,7 +106,7 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -119,7 +119,7 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
         headers: {
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -131,14 +131,14 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
         this._socialPricesApiV1
       }${UsersServiceEnum.Methods.SEND_UPDATE_EMAIL_CODE.replace(
         ":email",
-        email
+        email,
       )}`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -153,7 +153,7 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
           "Content-Type": "application/json",
           Authorization: this.formatAuthorizationWithToken(),
         },
-      }
+      },
     );
 
     return response.data;
@@ -168,7 +168,7 @@ export default class UsersServiceMethods extends ServiceMethodsBase {
           Authorization: this.formatAuthorizationWithToken(),
         },
         data: { reason },
-      }
+      },
     );
   }
 }

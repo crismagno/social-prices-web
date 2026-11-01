@@ -6,6 +6,8 @@ namespace InboxServiceEnum {
     READ = "/inbox/read",
     CONVERSATION_CUSTOMER = "/inbox/conversations/:conversationId/customer",
     CONVERSATION_CUSTOMER_CREATE = "/inbox/conversations/:conversationId/customer/create",
+    CONVERSATION_TYPING = "/inbox/conversations/:conversationId/typing",
+    CONVERSATION_MEDIA = "/inbox/conversations/:conversationId/media",
     CONVERSATION_MESSAGES = "/inbox/conversations/:conversationId/messages",
     CUSTOMER_SUMMARY = "/inbox/customers/:customerId/summary",
     ATTACHMENT = "/inbox/messages/:messageId/attachments/:index",
