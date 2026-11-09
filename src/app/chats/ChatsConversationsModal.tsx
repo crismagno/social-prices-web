@@ -134,7 +134,7 @@ export default function ChatsConversationsModal({
                     title={t("chats.customer.unlinkConfirm")}
                     onConfirm={() => assign(conversation, null)}
                   >
-                    <Button size="small" type="text">
+                    <Button size="small">
                       {t("chats.customer.unlink")}
                     </Button>
                   </Popconfirm>
