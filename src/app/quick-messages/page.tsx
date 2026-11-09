@@ -173,6 +173,7 @@ export default function QuickMessagesPage() {
                     <Space size={4}>
                       <Tooltip title={t("common.edit")}>
                         <Button
+                          type="primary"
                           icon={<EditOutlined />}
                           disabled={isDeleted}
                           onClick={() =>
@@ -196,6 +197,7 @@ export default function QuickMessagesPage() {
                         cancelText={t("common.no")}
                       >
                         <Button
+                          type={isDeleted ? "default" : "primary"}
                           danger={!isDeleted}
                           icon={
                             isDeleted ? <UndoOutlined /> : <DeleteOutlined />
