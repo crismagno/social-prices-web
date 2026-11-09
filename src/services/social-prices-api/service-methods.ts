@@ -6,6 +6,7 @@ import GoogleContactsServiceMethods from "./apps/google-contacts/google-contacts
 import InstagramServiceMethods from "./apps/instagram/instagram-service.methods";
 import WhatsappServiceMethods from "./apps/whatsapp/whatsapp-service.methods";
 import InboxServiceMethods from "./inbox/inbox-service.methods";
+import QuickMessagesServiceMethods from "./quick-messages/quick-messages-service.methods";
 import MessengerServiceMethods from "./apps/messenger/messenger-service.methods";
 import TelegramServiceMethods from "./apps/telegram/telegram-service.methods";
 import CustomersServiceMethods from "./customers/customers-service.methods";
@@ -42,6 +43,8 @@ export default class ServiceMethods {
   public instagramServiceMethods: InstagramServiceMethods;
   public whatsappServiceMethods: WhatsappServiceMethods;
   public inboxServiceMethods: InboxServiceMethods;
+
+  public quickMessagesServiceMethods: QuickMessagesServiceMethods;
   public customersServiceMethods: CustomersServiceMethods;
   public notificationsServiceMethods: NotificationsServiceMethods;
   public salesServiceMethods: SalesServiceMethods;
@@ -72,6 +75,7 @@ export default class ServiceMethods {
     this.instagramServiceMethods = new InstagramServiceMethods();
     this.whatsappServiceMethods = new WhatsappServiceMethods();
     this.inboxServiceMethods = new InboxServiceMethods();
+    this.quickMessagesServiceMethods = new QuickMessagesServiceMethods();
     this.customersServiceMethods = new CustomersServiceMethods();
     this.notificationsServiceMethods = new NotificationsServiceMethods();
     this.salesServiceMethods = new SalesServiceMethods();

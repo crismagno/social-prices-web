@@ -155,7 +155,8 @@
     "notes": "Notes",
     "expandMenu": "Expand menu",
     "collapseMenu": "Collapse menu",
-    "chats": "Chats"
+    "chats": "Chats",
+    "quickMessages": "Quick messages"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -2030,5 +2031,74 @@
     },
     "pickHint": "Telegram, Messenger and Instagram, together by customer.",
     "openInApp": "Open in {app}"
+  },
+  "quickMessages": {
+    "title": "Quick messages",
+    "subtitle": "Ready answers to send in the chat with one click",
+    "new": "New quick message",
+    "edit": "Edit quick message",
+    "search": "Search by name or text",
+    "name": "Name",
+    "namePlaceholder": "E.g.: Price list",
+    "blocks": "Blocks",
+    "blocksHelp": "Blocks are sent one by one, in this order.",
+    "blockText": "Text",
+    "blockMedia": "File",
+    "addText": "Add text",
+    "addMedia": "Add file",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "removeBlock": "Remove block",
+    "textPlaceholder": "Write the message. Use \"Insert field\" for customer or employee data.",
+    "captionPlaceholder": "Caption (optional)",
+    "pickFile": "Choose file",
+    "changeFile": "Change file",
+    "fileTooLarge": "The file is over the {size} limit.",
+    "insertField": "Insert field",
+    "whoCanUse": "Who can use it",
+    "allEmployees": "All employees",
+    "someEmployees": "{count} employee(s)",
+    "pickEmployees": "Choose the employees",
+    "texts": "text(s)",
+    "usageCount": "Uses",
+    "lastUsedAt": "Last used",
+    "confirmDelete": "Deactivate this quick message?",
+    "confirmActivate": "Reactivate this quick message?",
+    "saved": "Quick message saved",
+    "forbidden": "Only the owner and ADMIN or MASTER employees manage quick messages.",
+    "partial": "Sent {sent} of {total} blocks. The channel refused the next one.",
+    "errors": {
+      "name": "Give the message a name.",
+      "incompleteBlock": "Fill in the text or choose the file of every block."
+    },
+    "unavailable": {
+      "windowClosed": "The answer window of this conversation is closed.",
+      "noMedia": "This channel does not take files.",
+      "tooLarge": "A file is over this channel's limit."
+    },
+    "fieldGroups": {
+      "cliente": "Customer",
+      "funcionario": "Employee"
+    },
+    "fields": {
+      "cliente_nome": "Name",
+      "cliente_email": "Email",
+      "cliente_telefone": "Phone",
+      "cliente_cpf": "CPF",
+      "cliente_cnpj": "CNPJ",
+      "cliente_documento": "ID number",
+      "cliente_nascimento": "Birth date",
+      "cliente_sobre": "About",
+      "cliente_endereco_rua": "Street",
+      "cliente_endereco_complemento": "Address line 2",
+      "cliente_endereco_bairro": "District",
+      "cliente_endereco_cidade": "City",
+      "cliente_endereco_estado": "State",
+      "cliente_endereco_cep": "ZIP code",
+      "funcionario_nome": "Name",
+      "funcionario_usuario": "Username",
+      "funcionario_email": "Email",
+      "funcionario_telefone": "Phone"
+    }
   }
 }

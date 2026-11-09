@@ -155,7 +155,8 @@
     "notes": "Notas",
     "expandMenu": "Expandir menu",
     "collapseMenu": "Recolher menu",
-    "chats": "Chats"
+    "chats": "Chats",
+    "quickMessages": "Mensagens rápidas"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -2033,5 +2034,74 @@
     },
     "pickHint": "Telegram, Messenger e Instagram, juntos por cliente.",
     "openInApp": "Abrir no {app}"
+  },
+  "quickMessages": {
+    "title": "Mensagens rápidas",
+    "subtitle": "Respostas prontas para enviar no chat com um clique",
+    "new": "Nova mensagem rápida",
+    "edit": "Editar mensagem rápida",
+    "search": "Buscar por nome ou texto",
+    "name": "Nome",
+    "namePlaceholder": "Ex.: Tabela de preços",
+    "blocks": "Blocos",
+    "blocksHelp": "Os blocos são enviados um a um, nesta ordem.",
+    "blockText": "Texto",
+    "blockMedia": "Arquivo",
+    "addText": "Adicionar texto",
+    "addMedia": "Adicionar arquivo",
+    "moveUp": "Subir",
+    "moveDown": "Descer",
+    "removeBlock": "Remover bloco",
+    "textPlaceholder": "Escreva a mensagem. Use \"Inserir campo\" para dados do cliente ou do funcionário.",
+    "captionPlaceholder": "Legenda (opcional)",
+    "pickFile": "Escolher arquivo",
+    "changeFile": "Trocar arquivo",
+    "fileTooLarge": "O arquivo passa do limite de {size}.",
+    "insertField": "Inserir campo",
+    "whoCanUse": "Quem pode usar",
+    "allEmployees": "Todos os funcionários",
+    "someEmployees": "{count} funcionário(s)",
+    "pickEmployees": "Escolha os funcionários",
+    "texts": "texto(s)",
+    "usageCount": "Usos",
+    "lastUsedAt": "Último uso",
+    "confirmDelete": "Desativar esta mensagem rápida?",
+    "confirmActivate": "Reativar esta mensagem rápida?",
+    "saved": "Mensagem rápida salva",
+    "forbidden": "Só o dono e funcionários ADMIN ou MASTER gerenciam mensagens rápidas.",
+    "partial": "Enviados {sent} de {total} blocos. O canal recusou o próximo.",
+    "errors": {
+      "name": "Dê um nome à mensagem.",
+      "incompleteBlock": "Preencha o texto ou escolha o arquivo de todos os blocos."
+    },
+    "unavailable": {
+      "windowClosed": "A janela de resposta desta conversa está fechada.",
+      "noMedia": "Este canal não aceita arquivos.",
+      "tooLarge": "Um arquivo passa do limite deste canal."
+    },
+    "fieldGroups": {
+      "cliente": "Cliente",
+      "funcionario": "Funcionário"
+    },
+    "fields": {
+      "cliente_nome": "Nome",
+      "cliente_email": "E-mail",
+      "cliente_telefone": "Telefone",
+      "cliente_cpf": "CPF",
+      "cliente_cnpj": "CNPJ",
+      "cliente_documento": "Documento",
+      "cliente_nascimento": "Data de nascimento",
+      "cliente_sobre": "Sobre",
+      "cliente_endereco_rua": "Endereço",
+      "cliente_endereco_complemento": "Complemento",
+      "cliente_endereco_bairro": "Bairro",
+      "cliente_endereco_cidade": "Cidade",
+      "cliente_endereco_estado": "Estado",
+      "cliente_endereco_cep": "CEP",
+      "funcionario_nome": "Nome",
+      "funcionario_usuario": "Usuário",
+      "funcionario_email": "E-mail",
+      "funcionario_telefone": "Telefone"
+    }
   }
 }

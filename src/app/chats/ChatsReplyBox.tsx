@@ -19,6 +19,11 @@ import handleClientError from "../../components/common/HandleClientError/HandleC
 import useLanguageData from "../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import InboxEnum from "../../shared/business/inbox/inbox.enum";
+import QuickMessagesEnum from "../../shared/business/quick-messages/quick-messages.enum";
+import {
+  IQuickMessageAvailable,
+  IQuickMessageSendResult,
+} from "../../shared/business/quick-messages/quick-messages.types";
 import {
   IInboxChat,
   IInboxConversation,
@@ -31,6 +36,8 @@ import {
   useVoiceRecorder,
 } from "../apps/telegram/useVoiceRecorder";
 import { conversationName } from "./chats-display";
+import ChatsQuickMessages from "./ChatsQuickMessages";
+import { useQuickMessages } from "./useQuickMessages";
 
 // Instagram and Messenger refuse anything longer than this in one message.
 const MAX_LENGTH: number = 1000;
@@ -63,6 +70,11 @@ export default function ChatsReplyBox({ chat, onSent }: Props) {
   const inputRef = useRef<TextAreaRef | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const quickMessages = useQuickMessages();
+
+  // Set at once on click: two quick clicks must not send the message twice.
+  const isSendingQuickRef = useRef<boolean>(false);
 
   const target: IInboxConversation | undefined =
     chat.conversations.find(
@@ -169,6 +181,55 @@ export default function ChatsReplyBox({ chat, onSent }: Props) {
     }
   };
 
+  // A quick message replaces what was typed (it was only there to find it).
+  const sendQuickMessage = async (
+    quickMessage: IQuickMessageAvailable,
+  ): Promise<void> => {
+    if (isSending || isSendingQuickRef.current) {
+      return;
+    }
+
+    isSendingQuickRef.current = true;
+
+    try {
+      setIsSending(true);
+
+      const result: IQuickMessageSendResult =
+        await serviceMethodsInstance.quickMessagesServiceMethods.send(
+          quickMessage._id,
+          target._id,
+        );
+
+      result.messages.forEach(onSent);
+
+      setText("");
+      setFile(null);
+    } catch (error: any) {
+      const data = error?.response?.data;
+
+      if (data?.code === QuickMessagesEnum.ErrorCode.PARTIAL_SEND) {
+        (data.messages ?? []).forEach(onSent);
+
+        message.error(
+          t("quickMessages.partial")
+            .replace("{sent}", String(data.sentCount))
+            .replace("{total}", String(data.totalCount)),
+        );
+      } else {
+        handleClientError(error);
+      }
+
+      // Someone may have changed who can use it, or removed it.
+      quickMessages.reload();
+    } finally {
+      isSendingQuickRef.current = false;
+
+      setIsSending(false);
+
+      inputRef.current?.focus();
+    }
+  };
+
   async function sendVoice(): Promise<void> {
     const recording: File | null = await recorder.finish();
 
@@ -232,6 +293,16 @@ export default function ChatsReplyBox({ chat, onSent }: Props) {
           showIcon
           message={t("chats.reply.windowClosed")}
           description={t("chats.reply.windowClosedHint")}
+        />
+      )}
+
+      {!isRecording && (
+        <ChatsQuickMessages
+          list={quickMessages.list}
+          query={text}
+          target={target}
+          disabled={isSending}
+          onSend={sendQuickMessage}
         />
       )}
 

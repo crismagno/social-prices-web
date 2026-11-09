@@ -19,6 +19,7 @@ import {
   ShoppingCartOutlined,
   TagOutlined,
   TeamOutlined,
+  ThunderboltOutlined,
 } from "@ant-design/icons";
 
 import useAppData from "../../../data/context/app/useAppData";
@@ -211,6 +212,18 @@ export const useSidebarMenuItems = (
         ),
       ]
     : [];
+
+  // Ready answers for the chat: managed by the owner, ADMIN and MASTER (the API
+  // refuses the rest too).
+  if (chatApps.length && employee?.level !== EmployeesEnum.Level.EMPLOYEE) {
+    chatsItems.push(
+      getItem(
+        t("navigation.quickMessages"),
+        Urls.QUICK_MESSAGES,
+        <ThunderboltOutlined />,
+      ),
+    );
+  }
 
   // Collapsed there is no label, so a dot is kept on the icon.
   const appsIcon: React.ReactNode =

@@ -13,6 +13,10 @@ const Urls = {
   CHATS: "/chats",
   // Opens the central chat of one customer.
   CHATS_CUSTOMER: "/chats?customer=:customerId",
+  // Ready answers for the chat (owner, ADMIN and MASTER manage them).
+  QUICK_MESSAGES: "/quick-messages",
+  QUICK_MESSAGES_CREATE: "/quick-messages/create",
+  QUICK_MESSAGES_EDIT: "/quick-messages/:quickMessageId",
   APPS: "/apps",
   APPS_GOOGLE_CONTACTS: "/apps/google-contacts",
   APPS_TELEGRAM: "/apps/telegram",
