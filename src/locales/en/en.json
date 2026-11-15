@@ -608,7 +608,8 @@
     "typeOther": "Other",
     "goToCreateSale": "Create sale",
     "goToCreateSaleTooltip": "Go to create sale for this store",
-    "customersTab": "Customers"
+    "customersTab": "Customers",
+    "productsTab": "Products"
   },
   "products": {
     "title": "Products",

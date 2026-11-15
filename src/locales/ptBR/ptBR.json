@@ -611,7 +611,8 @@
     "typeOther": "Outro",
     "goToCreateSale": "Criar venda",
     "goToCreateSaleTooltip": "Ir para criar venda para esta loja",
-    "customersTab": "Clientes"
+    "customersTab": "Clientes",
+    "productsTab": "Produtos"
   },
   "products": {
     "title": "Produtos",
