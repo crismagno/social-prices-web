@@ -42,6 +42,13 @@ import {
 import { clearAllCachedContacts } from "../../../shared/utils/google-contacts-cache/google-contacts-cache";
 import Urls from '../../../shared/common/routes-app/routes-app';
 import {
+  canSwitchToCustomerView,
+  homeUrlFor,
+  isCustomerView,
+} from "../../../shared/common/routes-app/home-url";
+
+const VIEW_MODE_KEY: string = "socialPrices.viewMode";
+import {
   makeRandomCode,
   sleep,
 } from '../../../shared/utils/functions/functions';
@@ -63,12 +70,23 @@ export interface IAuthContext {
   validateSignInEmployeeCode: (codeValue: string) => Promise<boolean>;
   login: (emailOrUsername: string, password: string) => Promise<void>;
   loginEmployee: (username: string, password: string) => Promise<void>;
-  create: (email: string, password: string) => Promise<void>;
+  create: (
+    email: string,
+    password: string,
+    type?: UsersEnum.Type,
+  ) => Promise<void>;
   logout: () => Promise<void>;
   setUser: (user: IUser | null) => void;
   setEmployee: (employee: IEmployee | null) => void;
   updateUserSession: (newUser: IUser | null) => void;
   updateEmployeeSession: (newEmployee: IEmployee | null) => void;
+  // Customer screens are shown: a CUSTOMER account, or a company owner in the
+  // customer view. Employees are never customers.
+  isCustomer: boolean;
+  // Only a company's owner can look at the account as a customer.
+  canSwitchView: boolean;
+  viewMode: UsersEnum.Type;
+  switchViewMode: (viewMode: UsersEnum.Type) => void;
 }
 
 const AuthContext = createContext<IAuthContext>({
@@ -83,6 +101,10 @@ const AuthContext = createContext<IAuthContext>({
   setEmployee: (employee: IEmployee | null): void => {},
   updateUserSession: (newUser: IUser | null): void => {},
   updateEmployeeSession: (newEmployee: IEmployee | null): void => {},
+  isCustomer: false,
+  canSwitchView: false,
+  viewMode: UsersEnum.Type.COMPANY,
+  switchViewMode: (): void => {},
   loginGoogle: async (): Promise<void> => {},
   logout: async (): Promise<void> => {},
   login: async (): Promise<void> => {},
@@ -190,6 +212,27 @@ export const AuthProvider = ({ children }: { children?: any }) => {
   const [authToken, setAuthToken] = useState<string | null>(null);
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  // Kept in this browser only, so a reload stays in the same view.
+  const [viewMode, setViewMode] = useState<UsersEnum.Type>(() => {
+    try {
+      return localStorage.getItem(VIEW_MODE_KEY) === UsersEnum.Type.CUSTOMER
+        ? UsersEnum.Type.CUSTOMER
+        : UsersEnum.Type.COMPANY;
+    } catch {
+      return UsersEnum.Type.COMPANY;
+    }
+  });
+
+  const _rememberViewMode = (newViewMode: UsersEnum.Type): void => {
+    setViewMode(newViewMode);
+
+    try {
+      localStorage.setItem(VIEW_MODE_KEY, newViewMode);
+    } catch {
+      // Private mode or blocked storage: the view just is not remembered.
+    }
+  };
 
   const [isLogged, setIsLogged] = useState<boolean>(false);
 
@@ -400,7 +443,11 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     }
   };
 
-  const create = async (email: string, password: string) => {
+  const create = async (
+    email: string,
+    password: string,
+    type: UsersEnum.Type = UsersEnum.Type.COMPANY,
+  ) => {
     try {
       setIsLoading(true);
 
@@ -414,7 +461,7 @@ export const AuthProvider = ({ children }: { children?: any }) => {
           extraDataProvider: null,
           phoneNumbers: [],
           uid: null,
-          type: UsersEnum.Type.COMPANY,
+          type,
         });
 
       response.user.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;
@@ -485,7 +532,9 @@ export const AuthProvider = ({ children }: { children?: any }) => {
         user: newUser,
       });
 
-      router.push(Urls.DASHBOARD);
+      _rememberViewMode(UsersEnum.Type.COMPANY);
+
+      router.push(homeUrlFor(newUser.type === UsersEnum.Type.CUSTOMER));
 
       await sleep(5000);
 
@@ -552,7 +601,9 @@ export const AuthProvider = ({ children }: { children?: any }) => {
         user: newUser,
       });
 
-      router.push(Urls.DASHBOARD);
+      _rememberViewMode(UsersEnum.Type.COMPANY);
+
+      router.push(homeUrlFor(newUser.type === UsersEnum.Type.CUSTOMER));
 
       await sleep(5000);
 
@@ -562,6 +613,14 @@ export const AuthProvider = ({ children }: { children?: any }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // A company owner looks at the account as a customer or as a company. Only
+  // the screens change: nothing is saved on the account, the token is the same.
+  const switchViewMode = (newViewMode: UsersEnum.Type): void => {
+    _rememberViewMode(newViewMode);
+
+    router.push(homeUrlFor(newViewMode === UsersEnum.Type.CUSTOMER));
   };
 
   const updateEmployeeSession = (newEmployee: IEmployee | null) => {
@@ -640,6 +699,10 @@ export const AuthProvider = ({ children }: { children?: any }) => {
         updateUserSession,
         setEmployee,
         updateEmployeeSession,
+        isCustomer: isCustomerView(user, employee, viewMode),
+        canSwitchView: canSwitchToCustomerView(user, employee),
+        viewMode,
+        switchViewMode,
       }}
     >
       {children}

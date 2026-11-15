@@ -3,12 +3,15 @@
 import { useState } from "react";
 
 import { Avatar, Tag, Tooltip } from "antd";
+import { useRouter } from "next/navigation";
 
 import { EmployeeEditDrawer } from "../../../app/employees/components/EmployeeEditDrawer/DownloadEmployeesDrawer";
 import useAuthData from "../../../data/context/auth/useAuthData";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import { IEmployee } from "../../../shared/business/employees/employee.interface";
 import EmployeesEnum from "../../../shared/business/employees/employees.enum";
+import UsersEnum from "../../../shared/business/users/users.enum";
+import Urls from "../../../shared/common/routes-app/routes-app";
 import { getImageUrl } from "../../../shared/utils/images/images-url";
 import ImagesEnum from "../../../shared/utils/images/images.enum";
 
@@ -17,7 +20,10 @@ interface Props {
 }
 
 export const EmployeeProfileButton: React.FC<Props> = ({ isCollapsed }) => {
-  const { employee, updateEmployeeSession } = useAuthData();
+  const { employee, isCustomer, updateEmployeeSession } = useAuthData();
+
+  const router = useRouter();
+
   const { t } = useLanguageData();
 
   const [isEmployeeEditDrawerOpen, setIsEmployeeEditDrawerOpen] =
@@ -40,7 +46,11 @@ export const EmployeeProfileButton: React.FC<Props> = ({ isCollapsed }) => {
         bg-gradient-to-tr from-white to-slate-100 text-slate-950
         hover:from-slate-100 hover:to-slate-200
         ${isCollapsed ? "justify-center p-1" : "py-1 pl-1 pr-5 w-full"}`}
-        onClick={() => setIsEmployeeEditDrawerOpen(true)}
+        onClick={() =>
+          isCustomer
+            ? router.push(Urls.PROFILE)
+            : setIsEmployeeEditDrawerOpen(true)
+        }
       >
         <Tooltip title={isCollapsed ? employee.name : undefined}>
           <Avatar
@@ -60,9 +70,13 @@ export const EmployeeProfileButton: React.FC<Props> = ({ isCollapsed }) => {
               </label>
             </Tooltip>
 
-            <Tag color={EmployeesEnum.LevelColors[employee.level]}>
-              {t(EmployeesEnum.LevelLabels[employee.level])}
-            </Tag>
+            {isCustomer ? (
+              <Tag>{t(UsersEnum.TypeLabels[UsersEnum.Type.CUSTOMER])}</Tag>
+            ) : (
+              <Tag color={EmployeesEnum.LevelColors[employee.level]}>
+                {t(EmployeesEnum.LevelLabels[employee.level])}
+              </Tag>
+            )}
           </div>
         )}
       </div>

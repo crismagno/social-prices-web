@@ -156,7 +156,9 @@
     "expandMenu": "Expandir menu",
     "collapseMenu": "Recolher menu",
     "chats": "Chats",
-    "quickMessages": "Mensagens rápidas"
+    "quickMessages": "Mensagens rápidas",
+    "myPurchases": "Minhas compras",
+    "conversations": "Conversas"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -251,7 +253,10 @@
     "send": "Enviar",
     "goToLogin": "Ir para login",
     "pleaseFillCodeValue": "Por favor, preencha o código!",
-    "codeInvalid": "Código inválido"
+    "codeInvalid": "Código inválido",
+    "accountType": "Tipo de conta",
+    "iAmCustomer": "Sou cliente",
+    "iAmCompany": "Sou empresa"
   },
   "sales": {
     "salesTable": "Tabela de Vendas",
@@ -558,7 +563,14 @@
     "chatChannels": "Chats",
     "stores": "Lojas",
     "selectStores": "Selecione as lojas",
-    "noStores": "Nenhuma loja"
+    "noStores": "Nenhuma loja",
+    "invite": "Convidar para o Social Prices",
+    "inviteAgain": "Convidar de novo",
+    "inviteTooltip": "Envia ao cliente um link para acompanhar as compras com uma conta própria",
+    "invited": "Convite enviado.",
+    "invitedAt": "Convidado em {date}. Clique para enviar de novo.",
+    "inviteNeedsEmail": "Cadastre um email para este cliente para poder convidá-lo",
+    "alreadyHasAccount": "Este cliente já tem uma conta"
   },
   "stores": {
     "title": "Lojas",
@@ -984,7 +996,7 @@
     "uploadSales": "Carregar Vendas"
   },
   "users": {
-    "typeCommon": "Comum",
+    "typeCustomer": "Cliente",
     "typeCompany": "Empresa"
   },
   "dynamicFields": {
@@ -2134,5 +2146,43 @@
       "funcionario_email": "E-mail",
       "funcionario_telefone": "Telefone"
     }
+  },
+  "customerPortal": {
+    "dashboardTitle": "Dashboard",
+    "dashboardSubtitle": "Suas compras em um olhar",
+    "totalPurchases": "Compras",
+    "totalSpent": "Total gasto",
+    "openAmount": "Em aberto",
+    "lastPurchases": "Últimas compras",
+    "noPurchases": "Nenhuma compra ainda",
+    "purchasesTitle": "Minhas compras",
+    "purchasesSubtitle": "Todas as compras feitas para você, em qualquer loja",
+    "searchByNumber": "Buscar pelo número",
+    "number": "Número",
+    "date": "Data",
+    "stores": "Lojas",
+    "total": "Total",
+    "status": "Status",
+    "paymentStatus": "Pagamento",
+    "openPurchase": "Abrir compra",
+    "purchase": "Compra",
+    "purchaseNotFound": "Compra não encontrada",
+    "noteFromStore": "Recado da loja",
+    "product": "Produto",
+    "quantity": "Quantidade",
+    "price": "Preço",
+    "storeTotal": "Total da loja",
+    "payments": "Pagamentos",
+    "paymentType": "Tipo",
+    "amount": "Valor",
+    "noPayments": "Nenhum pagamento ainda",
+    "period": "Período",
+    "downloadSummary": "Baixar resumo",
+    "purchaseSubtitle": "Tudo sobre esta compra",
+    "products": "Produtos"
+  },
+  "accountMode": {
+    "hint": "Veja sua conta como cliente (suas compras) ou como empresa (suas vendas)",
+    "switchTo": "Mudar para {mode}"
   }
 }

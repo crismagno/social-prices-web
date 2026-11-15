@@ -11,9 +11,10 @@ import { useRouter } from 'next/navigation';
 import useAuthData from '../../data/context/auth/useAuthData';
 import CookiesEnum from '../../shared/common/cookies/cookies.enum';
 import Urls from '../../shared/common/routes-app/routes-app';
+import { homeUrlFor } from '../../shared/common/routes-app/home-url';
 
 const useForceRedirect = (routeToRedirect: string = Urls.LOGIN): boolean => {
-  const { user } = useAuthData();
+  const { user, isCustomer } = useAuthData();
 
   const router: AppRouterInstance = useRouter();
 
@@ -24,9 +25,9 @@ const useForceRedirect = (routeToRedirect: string = Urls.LOGIN): boolean => {
     }
 
     if (user && Cookies.get(CookiesEnum.CookiesName.COOKIE_AUTH)) {
-      router.push(Urls.DASHBOARD);
+      router.push(homeUrlFor(isCustomer));
     }
-  }, [user, router]);
+  }, [user, isCustomer, router]);
 
   return true;
 };

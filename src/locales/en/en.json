@@ -156,7 +156,9 @@
     "expandMenu": "Expand menu",
     "collapseMenu": "Collapse menu",
     "chats": "Chats",
-    "quickMessages": "Quick messages"
+    "quickMessages": "Quick messages",
+    "myPurchases": "My purchases",
+    "conversations": "Conversations"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -251,7 +253,10 @@
     "send": "Send",
     "goToLogin": "Go to login",
     "pleaseFillCodeValue": "Please fill code value!",
-    "codeInvalid": "Code invalid"
+    "codeInvalid": "Code invalid",
+    "accountType": "Account type",
+    "iAmCustomer": "I am a customer",
+    "iAmCompany": "I am a company"
   },
   "sales": {
     "salesTable": "Sales Table",
@@ -555,7 +560,14 @@
     "chatChannels": "Chats",
     "stores": "Stores",
     "selectStores": "Select stores",
-    "noStores": "No stores"
+    "noStores": "No stores",
+    "invite": "Invite to Social Prices",
+    "inviteAgain": "Invite again",
+    "inviteTooltip": "Send this customer a link to follow their purchases with their own account",
+    "invited": "Invite sent.",
+    "invitedAt": "Invited on {date}. Click to send again.",
+    "inviteNeedsEmail": "Add an email to this customer to invite them",
+    "alreadyHasAccount": "This customer already has an account"
   },
   "stores": {
     "title": "Stores",
@@ -981,7 +993,7 @@
     "uploadSales": "Upload Sales"
   },
   "users": {
-    "typeCommon": "Common",
+    "typeCustomer": "Customer",
     "typeCompany": "Company"
   },
   "dynamicFields": {
@@ -2131,5 +2143,43 @@
       "funcionario_email": "Email",
       "funcionario_telefone": "Phone"
     }
+  },
+  "customerPortal": {
+    "dashboardTitle": "Dashboard",
+    "dashboardSubtitle": "Your purchases at a glance",
+    "totalPurchases": "Purchases",
+    "totalSpent": "Total spent",
+    "openAmount": "Still to pay",
+    "lastPurchases": "Last purchases",
+    "noPurchases": "No purchases yet",
+    "purchasesTitle": "My purchases",
+    "purchasesSubtitle": "Every purchase made for you, from any store",
+    "searchByNumber": "Search by number",
+    "number": "Number",
+    "date": "Date",
+    "stores": "Stores",
+    "total": "Total",
+    "status": "Status",
+    "paymentStatus": "Payment",
+    "openPurchase": "Open purchase",
+    "purchase": "Purchase",
+    "purchaseNotFound": "Purchase not found",
+    "noteFromStore": "Note from the store",
+    "product": "Product",
+    "quantity": "Quantity",
+    "price": "Price",
+    "storeTotal": "Store total",
+    "payments": "Payments",
+    "paymentType": "Type",
+    "amount": "Amount",
+    "noPayments": "No payments yet",
+    "period": "Period",
+    "downloadSummary": "Download summary",
+    "purchaseSubtitle": "Everything about this purchase",
+    "products": "Products"
+  },
+  "accountMode": {
+    "hint": "See your account as a customer (your purchases) or as a company (your sales)",
+    "switchTo": "Switch to {mode}"
   }
 }

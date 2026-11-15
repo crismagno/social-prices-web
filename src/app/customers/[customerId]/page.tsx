@@ -47,6 +47,7 @@ import InboxEnum from "../../../shared/business/inbox/inbox.enum";
 import { IInboxConversation } from "../../../shared/business/inbox/inbox.types";
 import { conversationAppUrl } from "../../chats/chats-links";
 import { useCustomerChats } from "./useCustomerChats";
+import InviteCustomerButton from "./InviteCustomerButton";
 
 // Where the customer lives inside the app they came from, if that app shows them.
 const sourceAppUrl = (source: ICustomerExternalSource): string | null => {
@@ -203,6 +204,7 @@ export default function CustomerPage() {
                       {t("customers.title")}
                     </Button>
                   </Tooltip>
+                  <InviteCustomerButton customer={customer} />
                   <Tooltip title={t("customers.editCustomer")}>
                     <Button
                       type="success"

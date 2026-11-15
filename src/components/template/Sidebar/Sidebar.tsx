@@ -23,6 +23,7 @@ import Avatar from "../../common/Avatar/Avatar";
 import { FastSaleDrawer } from "../../common/FastSaleDrawer/FastSaleDrawer";
 import { IconLogout } from "../../common/icons/icons";
 import { Logo1 } from "../../common/Logo/Logo1";
+import { AccountModeSwitch } from "../AccountModeSwitch/AccountModeSwitch";
 import { EmployeeProfileButton } from "../EmployeeProfileButton/EmployeeProfileButton";
 import { useSidebarCollapsed } from "./useSidebarCollapsed";
 import { useSidebarMenuItems } from "./useSidebarMenuItems";
@@ -32,7 +33,7 @@ interface Props {}
 const Sidebar: React.FC<Props> = ({}) => {
   const { t } = useLanguageData();
 
-  const { user } = useAuthData();
+  const { user, isCustomer } = useAuthData();
 
   const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
 
@@ -161,6 +162,8 @@ const Sidebar: React.FC<Props> = ({}) => {
           className="shrink-0 flex flex-col items-center gap-3 p-3
             border-t border-gray-100 dark:border-gray-700"
         >
+          {!isCustomer && (
+            <>
           <Tooltip title={t("sales.fastSale")}>
             <button
               type="button"
@@ -206,6 +209,10 @@ const Sidebar: React.FC<Props> = ({}) => {
               )}
             </Link>
           </Tooltip>
+            </>
+          )}
+
+          <AccountModeSwitch isCollapsed={isCollapsed} />
 
           <EmployeeProfileButton isCollapsed={isCollapsed} />
 
@@ -228,10 +235,14 @@ const Sidebar: React.FC<Props> = ({}) => {
         </div>
       </aside>
 
-      <FastSaleDrawer
-        open={showFastSale}
-        onClose={() => setShowFastSale(false)}
-      />
+      {/* Mounted only for the company side: it loads the stores, which a
+          customer account cannot read. */}
+      {!isCustomer && (
+        <FastSaleDrawer
+          open={showFastSale}
+          onClose={() => setShowFastSale(false)}
+        />
+      )}
 
       <Modal
         open={showLogoutModal}

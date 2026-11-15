@@ -40,12 +40,13 @@ namespace UsersEnum {
 
   export enum Type {
     COMPANY = "COMPANY",
-    COMMON = "COMMON",
+    // Someone who buys from stores: sees only the sales made for them.
+    CUSTOMER = "CUSTOMER",
   }
 
   export const TypeLabels = {
     [Type.COMPANY]: "users.typeCompany",
-    [Type.COMMON]: "users.typeCommon",
+    [Type.CUSTOMER]: "users.typeCustomer",
   };
 }
 

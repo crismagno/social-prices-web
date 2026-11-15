@@ -49,6 +49,9 @@ const Urls = {
   NEW_STORE: "/stores/detail",
   EDIT_STORE: "/stores/detail?sid=:storeId",
   STORE: "/stores/:storeId",
+  CUSTOMER_DASHBOARD: "/customer/dashboard",
+  CUSTOMER_PURCHASES: "/customer/purchases",
+  CUSTOMER_PURCHASE: "/customer/purchases/:saleId",
 
   // products
   PRODUCTS: "/products",

@@ -38,6 +38,7 @@ export namespace SidebarMenuKeys {
   export const SALES = "sales";
   export const GENERAL = "general";
   export const APPS = "apps";
+  export const CHATS = "chats";
 }
 
 export interface IUseSidebarMenuItems {
@@ -59,6 +60,7 @@ const submenuKeyByUrl = (url: string): string | null => {
     ],
     [SidebarMenuKeys.SALES]: [Urls.SALES, Urls.SALES_CREATE],
     [SidebarMenuKeys.GENERAL]: [Urls.TAGS, Urls.CATEGORIES, Urls.EMPLOYEES],
+    [SidebarMenuKeys.CHATS]: [Urls.CHATS, Urls.QUICK_MESSAGES],
     [SidebarMenuKeys.APPS]: [
       Urls.APPS,
       Urls.APPS_GOOGLE_CONTACTS,
@@ -79,7 +81,8 @@ export const useSidebarMenuItems = (
 ): IUseSidebarMenuItems => {
   const { t } = useLanguageData();
 
-  const { employee } = useAuthData();
+  const { employee, isCustomer } = useAuthData();
+
 
   const {
     notifications: {
@@ -203,27 +206,42 @@ export const useSidebarMenuItems = (
       label
     );
 
-  const chatsItems: MenuItem[] = chatApps.length
-    ? [
-        getItem(
-          labelWithCount(t("navigation.chats"), unreadInChats),
-          Urls.CHATS,
-          chatsIcon,
-        ),
-      ]
-    : [];
-
   // Ready answers for the chat: managed by the owner, ADMIN and MASTER (the API
   // refuses the rest too).
-  if (chatApps.length && employee?.level !== EmployeesEnum.Level.EMPLOYEE) {
-    chatsItems.push(
-      getItem(
-        t("navigation.quickMessages"),
-        Urls.QUICK_MESSAGES,
-        <ThunderboltOutlined />,
-      ),
-    );
-  }
+  const canManageQuickMessages: boolean =
+    employee?.level !== EmployeesEnum.Level.EMPLOYEE;
+
+  // With quick messages, Chats is a submenu holding the conversations and the
+  // ready answers; without them, a plain item straight to the conversations.
+  const chatsItems: MenuItem[] = !chatApps.length
+    ? []
+    : canManageQuickMessages
+      ? [
+          getItem(
+            labelWithCount(t("navigation.chats"), unreadInChats, true),
+            SidebarMenuKeys.CHATS,
+            chatsIcon,
+            [
+              getItem(
+                labelWithCount(t("navigation.conversations"), unreadInChats),
+                Urls.CHATS,
+                <MessageOutlined />,
+              ),
+              getItem(
+                t("navigation.quickMessages"),
+                Urls.QUICK_MESSAGES,
+                <ThunderboltOutlined />,
+              ),
+            ],
+          ),
+        ]
+      : [
+          getItem(
+            labelWithCount(t("navigation.chats"), unreadInChats),
+            Urls.CHATS,
+            chatsIcon,
+          ),
+        ];
 
   // Collapsed there is no label, so a dot is kept on the icon.
   const appsIcon: React.ReactNode =
@@ -309,16 +327,32 @@ export const useSidebarMenuItems = (
     getItem(t("navigation.support"), Urls.SUPPORT, <CustomerServiceOutlined />),
   ];
 
+  // A customer account sees only its own area and the account pages.
+  const customerItems: MenuItem[] = [
+    getItem(t("navigation.home"), Urls.CUSTOMER_DASHBOARD, <HomeOutlined />),
+    getItem(
+      t("navigation.myPurchases"),
+      Urls.CUSTOMER_PURCHASES,
+      <ShoppingCartOutlined />,
+    ),
+    getItem(notificationsLabel, Urls.NOTIFICATIONS, notificationsIcon),
+    getItem(t("navigation.settings"), Urls.SETTINGS, <SettingOutlined />),
+    getItem(t("navigation.support"), Urls.SUPPORT, <CustomerServiceOutlined />),
+  ];
+
   // The longest matching route wins, so /sales/create selects "create sale"
   // rather than "sales".
   const routeUrls: string[] = [
     Urls.DASHBOARD,
+    Urls.CUSTOMER_DASHBOARD,
+    Urls.CUSTOMER_PURCHASES,
     Urls.NOTIFICATIONS,
     Urls.SETTINGS,
     Urls.SUPPORT,
     Urls.TRANSACTIONS,
     Urls.NOTES,
     Urls.CHATS,
+    Urls.QUICK_MESSAGES,
     Urls.APPS,
     Urls.APPS_GOOGLE_CONTACTS,
     Urls.APPS_TELEGRAM,
@@ -372,7 +406,7 @@ export const useSidebarMenuItems = (
   }, [pathname, openSubmenuKey, isCollapsed]);
 
   return {
-    items,
+    items: isCustomer ? customerItems : items,
     selectedKeys,
     openKeys,
     setOpenKeys,

@@ -26,7 +26,8 @@ export const useAppsDefaultValue: IAppContextApps = {
 const POLL_MS: number = 20000;
 
 export const useApps = (): IAppContextApps => {
-  const { isLogged } = useAuthData();
+  const { isLogged, isCustomer } = useAuthData();
+
 
   const [catalog, setCatalog] = useState<IAppCatalogItem[]>([]);
 
@@ -39,7 +40,7 @@ export const useApps = (): IAppContextApps => {
           setIsLoadingApps(true);
         }
 
-        if (isLogged) {
+        if (isLogged && !isCustomer) {
           setCatalog(
             await serviceMethodsInstance.appsServiceMethods.findCatalog(),
           );
@@ -57,7 +58,7 @@ export const useApps = (): IAppContextApps => {
         }
       }
     },
-    [isLogged],
+    [isLogged, isCustomer],
   );
 
   useEffect(() => {

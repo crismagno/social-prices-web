@@ -10,5 +10,5 @@ export default class CreateUserDto {
   phoneNumbers: IPhoneNumber[] = [];
   extraDataProvider: any | null = null;
   about: string | null = null;
-  type: UsersEnum.Type = UsersEnum.Type.COMMON;
+  type: UsersEnum.Type = UsersEnum.Type.COMPANY;
 }

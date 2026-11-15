@@ -10,6 +10,7 @@ import QuickMessagesServiceMethods from "./quick-messages/quick-messages-service
 import MessengerServiceMethods from "./apps/messenger/messenger-service.methods";
 import TelegramServiceMethods from "./apps/telegram/telegram-service.methods";
 import CustomersServiceMethods from "./customers/customers-service.methods";
+import CustomerPortalServiceMethods from "./customer-portal/customer-portal-service.methods";
 import EmployeesServiceMethods from "./employees/employees-service.methods";
 import FeedbacksServiceMethods from "./feedbacks/feedbacks-service.methods";
 import FilesUploadsServiceMethods from "./files-uploads/files-uploads-service.methods";
@@ -46,6 +47,7 @@ export default class ServiceMethods {
 
   public quickMessagesServiceMethods: QuickMessagesServiceMethods;
   public customersServiceMethods: CustomersServiceMethods;
+  public customerPortalServiceMethods: CustomerPortalServiceMethods;
   public notificationsServiceMethods: NotificationsServiceMethods;
   public salesServiceMethods: SalesServiceMethods;
   public tagsServiceMethods: TagsServiceMethods;
@@ -77,6 +79,7 @@ export default class ServiceMethods {
     this.inboxServiceMethods = new InboxServiceMethods();
     this.quickMessagesServiceMethods = new QuickMessagesServiceMethods();
     this.customersServiceMethods = new CustomersServiceMethods();
+    this.customerPortalServiceMethods = new CustomerPortalServiceMethods();
     this.notificationsServiceMethods = new NotificationsServiceMethods();
     this.salesServiceMethods = new SalesServiceMethods();
     this.tagsServiceMethods = new TagsServiceMethods();

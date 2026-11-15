@@ -29,6 +29,8 @@ export interface ICustomer extends ICreatedAtEntity, IUpdatedAtEntity {
   tagsIds: string[];
   // Stores this customer belongs to: set by hand and added by every sale.
   storesIds: string[];
+  // When a store last invited this customer to create an account.
+  invitedAt?: string | null;
   uniqName: string | null;
   uploadFilename: string | null;
   customerId: string | null;

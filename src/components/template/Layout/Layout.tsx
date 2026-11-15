@@ -3,6 +3,7 @@
 import { ReactElement } from "react";
 
 import useAppData from "../../../data/context/app/useAppData";
+import CustomerRouteGuard from "../../auth/CustomerRouteGuard/CustomerRouteGuard";
 import ForceAuth from "../../auth/ForceAuth/ForceAuth";
 import Content from "../Content/Content";
 import Header from "../Header/Header";
@@ -36,7 +37,9 @@ const Layout: React.FC<Props> = ({
             title={title}
             hasBackButton={hasBackButton}
           />
-          <Content>{children}</Content>
+          <Content>
+            <CustomerRouteGuard>{children}</CustomerRouteGuard>
+          </Content>
         </main>
       </div>
     </ForceAuth>
