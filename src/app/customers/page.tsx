@@ -166,6 +166,7 @@ export default function CustomersPage() {
         <TableCustomAntd2<ICustomer>
           rowKey={"_id"}
           dataSource={customers}
+          scroll={{ x: "max-content" }}
           columns={[
             {
               title: "#",
@@ -290,6 +291,7 @@ export default function CustomersPage() {
               dataIndex: "action",
               key: "action",
               align: "center",
+              fixed: "right",
               render: (_: any, customer: ICustomer) => {
                 return (
                   <Space>
