@@ -78,6 +78,30 @@ export default class CustomersServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
+  // The customers of one store, with the same search, sort and pages as the list.
+  public async findByStoreTableState(
+    storeId: string,
+    tableState?: ITableStateRequest<ICustomer>,
+  ): Promise<ITableStateResponse<ICustomer[]>> {
+    const response = await this._fetchAxios.post<
+      ITableStateResponse<ICustomer[]>
+    >(
+      `${this._socialPricesApiV1}${CustomersServiceEnum.Methods.FIND_BY_STORE_TABLE_STATE.replace(
+        ":storeId",
+        storeId,
+      )}`,
+      tableState ?? {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      },
+    );
+
+    return response.data;
+  }
+
   public async countByOwnerUser(): Promise<number> {
     const response = await this._fetchAxios.get<number>(
       `${this._socialPricesApiV1}${CustomersServiceEnum.Methods.COUNT_BY_OWNER_USER}`,

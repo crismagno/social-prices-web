@@ -27,6 +27,8 @@ export interface ICustomer extends ICreatedAtEntity, IUpdatedAtEntity {
   cnpj: string | null;
   phoneNumbers: IPhoneNumber[];
   tagsIds: string[];
+  // Stores this customer belongs to: set by hand and added by every sale.
+  storesIds: string[];
   uniqName: string | null;
   uploadFilename: string | null;
   customerId: string | null;

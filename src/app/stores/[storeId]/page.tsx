@@ -36,6 +36,7 @@ import { SalesChartsStatistics } from "../../sales/components/SalesChartsStatist
 import SalesTable from "../../sales/components/SalesTable/SalesTable";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindStoreById } from "../detail/useFindStoreById";
+import StoreCustomersTable from "./StoreCustomersTable";
 
 export default function StorePage() {
   const router: AppRouterInstance = useRouter();
@@ -403,6 +404,11 @@ export default function StorePage() {
               key: "2",
               label: t("stores.salesTable"),
               children: <SalesTable storeId={storeId} />,
+            },
+            {
+              key: "3",
+              label: t("stores.customersTab"),
+              children: <StoreCustomersTable storeId={storeId} />,
             },
           ]}
         />

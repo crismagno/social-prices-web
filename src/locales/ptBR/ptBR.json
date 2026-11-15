@@ -555,7 +555,10 @@
     "goToCreateSale": "Criar venda",
     "goToCreateSaleTooltip": "Ir para criar venda para este cliente",
     "openChat": "Abrir chat",
-    "chatChannels": "Chats"
+    "chatChannels": "Chats",
+    "stores": "Lojas",
+    "selectStores": "Selecione as lojas",
+    "noStores": "Nenhuma loja"
   },
   "stores": {
     "title": "Lojas",
@@ -607,7 +610,8 @@
     "typeHybrid": "Híbrido",
     "typeOther": "Outro",
     "goToCreateSale": "Criar venda",
-    "goToCreateSaleTooltip": "Ir para criar venda para esta loja"
+    "goToCreateSaleTooltip": "Ir para criar venda para esta loja",
+    "customersTab": "Clientes"
   },
   "products": {
     "title": "Produtos",

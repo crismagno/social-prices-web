@@ -41,6 +41,8 @@ import { SalesChart } from "../../sales/components/SalesChart/SalesChart";
 import SalesTable from "../../sales/components/SalesTable/SalesTable";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindCustomerById } from "../detail/useFindCustomerById";
+import { IStore } from "../../../shared/business/stores/stores.interface";
+import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import InboxEnum from "../../../shared/business/inbox/inbox.enum";
 import { IInboxConversation } from "../../../shared/business/inbox/inbox.types";
 import { conversationAppUrl } from "../../chats/chats-links";
@@ -93,6 +95,8 @@ export default function CustomerPage() {
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
     TagsEnum.Type.CUSTOMER,
   );
+
+  const { stores } = useFindStoresByUser();
 
   if (isLoading || !customer || isLoadingTags) {
     return <LoadingFull />;
@@ -270,6 +274,34 @@ export default function CustomerPage() {
 
                     <Descriptions.Item label={t("common.cnpj")}>
                       {customer.cnpj || "-"}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label={t("customers.stores")} span={3}>
+                      {(() => {
+                        // Deleted stores stay on the customer but are not shown.
+                        const customerStores: IStore[] = stores.filter(
+                          (store: IStore) =>
+                            customer.storesIds?.includes(store._id) &&
+                            !store.softDelete?.isDeleted,
+                        );
+
+                        return customerStores.length ? (
+                          <div className="flex flex-wrap gap-2">
+                            {customerStores.map((store: IStore) => (
+                              <Link
+                                key={store._id}
+                                href={Urls.STORE.replace(":storeId", store._id)}
+                              >
+                                <Tag className="m-0 cursor-pointer">
+                                  {store.name}
+                                </Tag>
+                              </Link>
+                            ))}
+                          </div>
+                        ) : (
+                          t("customers.noStores")
+                        );
+                      })()}
                     </Descriptions.Item>
 
                     <Descriptions.Item

@@ -12,5 +12,6 @@ export default class CreateCustomerDto {
   addresses: any[] = [];
   phoneNumbers: any[] = [];
   tagsIds: string[] = [];
+  storesIds: string[] = [];
   uniqName: string | null = null;
 }

@@ -63,6 +63,8 @@ import TagsEnum from "../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../shared/business/tags/tags.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import { sortArray } from "../../../shared/utils/array/array-functions";
+import { IStore } from "../../../shared/business/stores/stores.interface";
+import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getFileUrl } from "../../../shared/utils/images/images-helper";
 import { getImageUrl } from "../../../shared/utils/images/images-url";
@@ -81,6 +83,7 @@ const formSchema = z.object({
   birthDate: z.string().nullable(),
   gender: z.string().nullable(),
   tagsIds: z.array(z.string()),
+  storesIds: z.array(z.string()),
   uniqName: z
     .string()
     .transform((value) => value.replace(/\s+/g, ""))
@@ -103,6 +106,8 @@ export default function CustomerDetailPage() {
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
     TagsEnum.Type.CUSTOMER,
   );
+
+  const { stores } = useFindStoresByUser();
 
   const [formValues, setFormValues] = useState<TFormSchema>();
 
@@ -161,6 +166,7 @@ export default function CustomerDetailPage() {
         : [generateNewPhoneNumber(false)],
       gender: customer?.gender ?? PersonEnum.Gender.OTHER,
       tagsIds: customer?.tagsIds ?? [],
+      storesIds: customer?.storesIds ?? [],
       uniqName: customer?.uniqName ?? null,
     };
 
@@ -220,6 +226,7 @@ export default function CustomerDetailPage() {
         gender: data.gender as PersonEnum.Gender,
         phoneNumbers: data.phoneNumbers,
         tagsIds: data.tagsIds,
+        storesIds: data.storesIds,
         uniqName: data.uniqName,
       };
 
@@ -291,6 +298,7 @@ export default function CustomerDetailPage() {
         gender: data.gender as PersonEnum.Gender,
         phoneNumbers: data.phoneNumbers,
         tagsIds: data.tagsIds,
+        storesIds: data.storesIds,
         customerId: customer._id,
         uniqName: data.uniqName,
       };
@@ -458,6 +466,30 @@ export default function CustomerDetailPage() {
                 {sortArray(tags, "name").map((tag: ITag) => (
                   <Select.Option key={tag._id} value={tag._id}>
                     <TagTagCustomAntd tag={tag} useTag={false} />
+                  </Select.Option>
+                ))}
+              </SelectCustomAntd>
+            </Col>
+
+            <Col xs={24} md={8}>
+              <SelectCustomAntd<ICustomer>
+                controller={{ control, name: "storesIds" }}
+                label={t("customers.stores")}
+                errorMessage={errors.storesIds?.message}
+                placeholder={t("customers.selectStores")}
+                mode="multiple"
+              >
+                {/* A deleted store stays only if the customer already has it. */}
+                {sortArray(
+                  stores.filter(
+                    (store: IStore) =>
+                      !store.softDelete?.isDeleted ||
+                      customer?.storesIds?.includes(store._id),
+                  ),
+                  "name",
+                ).map((store: IStore) => (
+                  <Select.Option key={store._id} value={store._id}>
+                    {store.name}
                   </Select.Option>
                 ))}
               </SelectCustomAntd>

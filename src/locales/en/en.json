@@ -552,7 +552,10 @@
     "goToCreateSale": "Create sale",
     "goToCreateSaleTooltip": "Go to create sale for this customer",
     "openChat": "Open chat",
-    "chatChannels": "Chats"
+    "chatChannels": "Chats",
+    "stores": "Stores",
+    "selectStores": "Select stores",
+    "noStores": "No stores"
   },
   "stores": {
     "title": "Stores",
@@ -604,7 +607,8 @@
     "typeHybrid": "Hybrid",
     "typeOther": "Other",
     "goToCreateSale": "Create sale",
-    "goToCreateSaleTooltip": "Go to create sale for this store"
+    "goToCreateSaleTooltip": "Go to create sale for this store",
+    "customersTab": "Customers"
   },
   "products": {
     "title": "Products",
