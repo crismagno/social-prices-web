@@ -1529,7 +1529,10 @@
       },
       "errors": {
         "TELEGRAM_INVALID_TOKEN": "Telegram did not accept this token. Copy it again from @BotFather.",
-        "TELEGRAM_BOT_ALREADY_CONNECTED": "This bot is already connected to another account."
+        "TELEGRAM_BOT_ALREADY_CONNECTED": "This bot is already connected to another account.",
+        "TELEGRAM_RATE_LIMITED": "Telegram asked to wait before changing the bot again. Try again in {minutes} min.",
+        "TELEGRAM_BOT_PROFILE_REJECTED": "Telegram did not accept the profile: {reason}",
+        "TELEGRAM_BOT_PHOTO_INVALID": "The photo could not be read as an image. Try another file."
       },
       "connectTitle": "Connect your Telegram bot",
       "connectSubtitle": "Answer the customers who write to your bot without leaving the system.",
@@ -1577,6 +1580,29 @@
             "a": "Copy the whole token, with the number, the colon and the letters, and no spaces. If you revoked it in BotFather, paste the new one."
           }
         }
+      },
+      "editProfile": "Edit profile",
+      "profile": {
+        "title": "Bot profile",
+        "subtitle": "What people see when they open your bot in Telegram. The photo and the @username are changed in @BotFather.",
+        "name": "Name",
+        "nameRequired": "The bot needs a name.",
+        "description": "Description",
+        "descriptionHint": "Shown in the empty chat, before the person presses Start.",
+        "shortDescription": "Short description",
+        "shortDescriptionHint": "Shown on the bot's profile page and when the bot is shared.",
+        "save": "Save",
+        "saved": "Bot profile updated.",
+        "rateLimitNote": "Telegram limits how often a bot can be changed, the name most of all.",
+        "photo": "Photo",
+        "photoChange": "Change photo",
+        "photoRemove": "Remove",
+        "photoRemoveConfirm": "Remove the bot photo?",
+        "photoHint": "Square images look best. It is saved as soon as you pick it.",
+        "photoSaved": "Bot photo updated.",
+        "photoRemoved": "Bot photo removed.",
+        "photoNotImage": "Pick an image file.",
+        "more": "more"
       }
     },
     "instagram": {

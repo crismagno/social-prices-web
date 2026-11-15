@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ITelegramBotProfile,
   ITelegramChat,
   ITelegramConnection,
   ITelegramMessage,
@@ -60,6 +61,65 @@ export default class TelegramServiceMethods extends ServiceMethodsBase {
     );
 
     return response.data;
+  }
+
+  public async getBotProfile(): Promise<ITelegramBotProfile> {
+    const response = await this._fetchAxios.get<ITelegramBotProfile>(
+      this._url(TelegramServiceEnum.Methods.BOT_PROFILE),
+      { headers: this._headers() },
+    );
+
+    return response.data;
+  }
+
+  // Only the fields sent are changed.
+  public async updateBotProfile(
+    profile: Partial<ITelegramBotProfile>,
+  ): Promise<ITelegramBotProfile> {
+    const response = await this._fetchAxios.patch<ITelegramBotProfile>(
+      this._url(TelegramServiceEnum.Methods.BOT_PROFILE),
+      profile,
+      { headers: this._headers() },
+    );
+
+    return response.data;
+  }
+
+  // The bot's current photo, or null when it has none. A blob, like getMedia.
+  public async getBotPhoto(): Promise<Blob | null> {
+    try {
+      const response = await this._fetchAxios.get<Blob>(
+        this._url(TelegramServiceEnum.Methods.BOT_PHOTO),
+        { headers: this._headers(), responseType: "blob" },
+      );
+
+      return response.data;
+    } catch (error: any) {
+      if (error?.response?.status === 404) {
+        return null;
+      }
+
+      throw error;
+    }
+  }
+
+  // Must be a JPEG: the caller converts it first.
+  public async setBotPhoto(jpeg: Blob): Promise<void> {
+    const form: FormData = new FormData();
+    form.append("file", jpeg, "bot.jpg");
+
+    await this._fetchAxios.put(
+      this._url(TelegramServiceEnum.Methods.BOT_PHOTO),
+      form,
+      { headers: { Authorization: this.formatAuthorizationWithToken() } },
+    );
+  }
+
+  public async removeBotPhoto(): Promise<void> {
+    await this._fetchAxios.delete(
+      this._url(TelegramServiceEnum.Methods.BOT_PHOTO),
+      { headers: this._headers() },
+    );
   }
 
   public async disconnect(): Promise<void> {

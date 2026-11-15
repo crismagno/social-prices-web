@@ -52,6 +52,34 @@ export const mergeMessages = (
 export const telegramErrorCode = (error: any): string | null =>
   error?.response?.data?.error?.code ?? error?.response?.data?.code ?? null;
 
+// The message for a refusal while editing the bot profile, or null when it is
+// not one of these and the generic handler should take it.
+export const botProfileErrorText = (
+  error: any,
+  t: (key: string) => string,
+): string | null => {
+  const code: string | null = telegramErrorCode(error);
+
+  const data: any = error?.response?.data?.error ?? error?.response?.data;
+
+  switch (code) {
+    case "TELEGRAM_RATE_LIMITED":
+      return t("apps.telegram.errors.TELEGRAM_RATE_LIMITED").replace(
+        "{minutes}",
+        String(Math.max(1, Math.ceil(Number(data?.retryAfter ?? 60) / 60))),
+      );
+    case "TELEGRAM_BOT_PROFILE_REJECTED":
+      return t("apps.telegram.errors.TELEGRAM_BOT_PROFILE_REJECTED").replace(
+        "{reason}",
+        data?.reason ?? "",
+      );
+    case "TELEGRAM_BOT_PHOTO_INVALID":
+      return t("apps.telegram.errors.TELEGRAM_BOT_PHOTO_INVALID");
+    default:
+      return null;
+  }
+};
+
 // Where a moment falls relative to now, for the day separators of a conversation.
 export const relativeDay = (
   at: string | Date,

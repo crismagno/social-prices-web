@@ -5,18 +5,25 @@ import { useCallback, useEffect, useState } from "react";
 import {
   Alert,
   App,
+  Avatar,
   Badge,
   Button,
   Card,
   Divider,
+  Image,
   Popconfirm,
   Space,
   Tag,
   theme,
+  Typography,
 } from "antd";
 import dayjs from "dayjs";
 
-import { CheckCircleFilled, ExportOutlined } from "@ant-design/icons";
+import {
+  CheckCircleFilled,
+  EditOutlined,
+  ExportOutlined,
+} from "@ant-design/icons";
 
 import AppIcon from "../../../components/common/AppIcon/AppIcon";
 import { AppTile } from "../../../components/common/ConnectSteps/ConnectSteps";
@@ -28,12 +35,15 @@ import {
   ITelegramConnection,
   ITelegramWebhookStatus,
 } from "../../../shared/business/apps/telegram/telegram.types";
+import TelegramBotProfileModal from "./TelegramBotProfileModal";
 import { TELEGRAM_BLUE } from "./telegram-theme";
+import { useTelegramBotProfile } from "./useTelegramBotProfile";
 
 interface Props {
   connection: ITelegramConnection;
   canManage: boolean;
   onDisconnected: () => void;
+  onBotNameChanged: (botName: string) => void;
 }
 
 // Who is connected, the way out, and whether Telegram can still reach us: the
@@ -42,6 +52,7 @@ export default function TelegramBotCard({
   connection,
   canManage,
   onDisconnected,
+  onBotNameChanged,
 }: Props) {
   const { t } = useLanguageData();
 
@@ -56,6 +67,12 @@ export default function TelegramBotCard({
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   const [isDisconnecting, setIsDisconnecting] = useState<boolean>(false);
+
+  const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
+
+  const closeProfile = useCallback(() => setIsProfileOpen(false), []);
+
+  const { profile, photoUrl, setProfile, setPhoto } = useTelegramBotProfile();
 
   const botUrl: string = `https://t.me/${connection.botUsername ?? ""}`;
 
@@ -125,11 +142,20 @@ export default function TelegramBotCard({
     <Card>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex min-w-0 items-center gap-4">
-          <AppTile
-            icon={<AppIcon app={AppsEnum.App.TELEGRAM} />}
-            accentColor={TELEGRAM_BLUE}
-            size={56}
-          />
+          {/* The bot's own photo, as people see it on Telegram; clicking shows it big. */}
+          {photoUrl ? (
+            <Avatar
+              size={72}
+              className="shrink-0 cursor-pointer"
+              src={<Image src={photoUrl} alt="" preview />}
+            />
+          ) : (
+            <AppTile
+              icon={<AppIcon app={AppsEnum.App.TELEGRAM} />}
+              accentColor={TELEGRAM_BLUE}
+              size={72}
+            />
+          )}
 
           <div className="min-w-0">
             <h2 className="m-0 truncate text-xl font-semibold leading-tight">
@@ -148,6 +174,16 @@ export default function TelegramBotCard({
                 @{connection.botUsername}
               </a>
             </div>
+
+            {profile?.shortDescription && (
+              <div
+                className="mt-1 truncate"
+                style={{ color: token.colorTextSecondary }}
+                title={profile.shortDescription}
+              >
+                {profile.shortDescription}
+              </div>
+            )}
           </div>
         </div>
 
@@ -159,6 +195,14 @@ export default function TelegramBotCard({
             icon={<ExportOutlined />}
           >
             {t("apps.telegram.openBot")}
+          </Button>
+
+          <Button
+            icon={<EditOutlined />}
+            disabled={!canManage}
+            onClick={() => setIsProfileOpen(true)}
+          >
+            {t("apps.telegram.editProfile")}
           </Button>
 
           <Popconfirm
@@ -177,6 +221,20 @@ export default function TelegramBotCard({
           </Popconfirm>
         </Space>
       </div>
+
+      {profile?.description && (
+        <Typography.Paragraph
+          className="mb-0 mt-4 whitespace-pre-line"
+          type="secondary"
+          ellipsis={{
+            rows: 2,
+            expandable: true,
+            symbol: t("apps.telegram.profile.more"),
+          }}
+        >
+          {profile.description}
+        </Typography.Paragraph>
+      )}
 
       <Divider className="my-4" />
 
@@ -245,6 +303,18 @@ export default function TelegramBotCard({
           action={refreshButton}
         />
       )}
+
+      <TelegramBotProfileModal
+        open={isProfileOpen}
+        onClose={closeProfile}
+        onSaved={(saved) => {
+          setIsProfileOpen(false);
+          setProfile(saved);
+          onBotNameChanged(saved.name);
+        }}
+        photoUrl={photoUrl}
+        onPhotoChanged={setPhoto}
+      />
     </Card>
   );
 }

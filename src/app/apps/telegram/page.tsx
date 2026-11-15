@@ -66,6 +66,9 @@ export default function TelegramAppPage() {
               setConnection(null);
               fetchApps();
             }}
+            onBotNameChanged={(botName) =>
+              setConnection({ ...connection, botName })
+            }
           />
 
           <TelegramInbox

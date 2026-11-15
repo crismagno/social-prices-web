@@ -1532,7 +1532,10 @@
       },
       "errors": {
         "TELEGRAM_INVALID_TOKEN": "O Telegram não aceitou este token. Copie-o novamente do @BotFather.",
-        "TELEGRAM_BOT_ALREADY_CONNECTED": "Este bot já está conectado a outra conta."
+        "TELEGRAM_BOT_ALREADY_CONNECTED": "Este bot já está conectado a outra conta.",
+        "TELEGRAM_RATE_LIMITED": "O Telegram pediu para esperar antes de alterar o bot de novo. Tente em {minutes} min.",
+        "TELEGRAM_BOT_PROFILE_REJECTED": "O Telegram não aceitou o perfil: {reason}",
+        "TELEGRAM_BOT_PHOTO_INVALID": "Não foi possível ler a foto como imagem. Tente outro arquivo."
       },
       "connectTitle": "Conecte o seu bot do Telegram",
       "connectSubtitle": "Responda aqui os clientes que escrevem para o seu bot, sem sair do sistema.",
@@ -1580,6 +1583,29 @@
             "a": "Copie o token inteiro, com o número, os dois pontos e as letras, sem espaços. Se você o revogou no BotFather, cole o novo."
           }
         }
+      },
+      "editProfile": "Editar perfil",
+      "profile": {
+        "title": "Perfil do bot",
+        "subtitle": "O que as pessoas veem ao abrir o seu bot no Telegram. A foto e o @username são alterados no @BotFather.",
+        "name": "Nome",
+        "nameRequired": "O bot precisa de um nome.",
+        "description": "Descrição",
+        "descriptionHint": "Aparece no chat vazio, antes de a pessoa tocar em Começar.",
+        "shortDescription": "Descrição curta",
+        "shortDescriptionHint": "Aparece na página de perfil do bot e quando o bot é compartilhado.",
+        "save": "Salvar",
+        "saved": "Perfil do bot atualizado.",
+        "rateLimitNote": "O Telegram limita a frequência de alterações no bot, principalmente no nome.",
+        "photo": "Foto",
+        "photoChange": "Trocar foto",
+        "photoRemove": "Remover",
+        "photoRemoveConfirm": "Remover a foto do bot?",
+        "photoHint": "Imagens quadradas ficam melhores. A foto é salva assim que você escolhe.",
+        "photoSaved": "Foto do bot atualizada.",
+        "photoRemoved": "Foto do bot removida.",
+        "photoNotImage": "Escolha um arquivo de imagem.",
+        "more": "mais"
       }
     },
     "instagram": {

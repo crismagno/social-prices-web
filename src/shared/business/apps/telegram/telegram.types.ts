@@ -9,6 +9,13 @@ export interface ITelegramConnection {
   lastUpdateAt: string | null;
 }
 
+// The bot's public profile. Photo and username are changed in @BotFather.
+export interface ITelegramBotProfile {
+  name: string;
+  description: string;
+  shortDescription: string;
+}
+
 // What Telegram says about delivering to this system.
 export interface ITelegramWebhookStatus {
   url: string;

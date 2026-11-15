@@ -4,6 +4,8 @@ namespace TelegramServiceEnum {
     CONNECTION = "/apps/telegram/connection",
     WEBHOOK_STATUS = "/apps/telegram/webhook-status",
     REFRESH_WEBHOOK = "/apps/telegram/refresh-webhook",
+    BOT_PROFILE = "/apps/telegram/bot-profile",
+    BOT_PHOTO = "/apps/telegram/bot-profile/photo",
     CHATS = "/apps/telegram/chats",
     CHAT_MESSAGES = "/apps/telegram/chats/:chatId/messages",
     CHAT_MESSAGE = "/apps/telegram/chats/:chatId/messages/:messageId",
