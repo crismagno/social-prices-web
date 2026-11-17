@@ -448,7 +448,7 @@
     "fastSaleSearchProducts": "Buscar produto para adicionar...",
     "fastSaleNoItems": "Nenhum item adicionado",
     "fastSaleNoItemsError": "Adicione ao menos um produto",
-    "fastSaleNewCustomerRequired": "Nome e email são obrigatórios para o novo cliente",
+    "fastSaleNewCustomerRequired": "O nome é obrigatório para o novo cliente",
     "fastSaleAddressRequired": "Informe endereço, cidade e estado para a entrega",
     "fastSaleCustomerRequired": "Selecione um cliente",
     "createSaleBtnCamelCase": "Criar Venda",

@@ -31,6 +31,8 @@ export interface ICustomer extends ICreatedAtEntity, IUpdatedAtEntity {
   storesIds: string[];
   // When a store last invited this customer to create an account.
   invitedAt?: string | null;
+  // Sent by GET /customers/:id: the linked user account still exists.
+  hasAccount?: boolean;
   uniqName: string | null;
   uploadFilename: string | null;
   customerId: string | null;

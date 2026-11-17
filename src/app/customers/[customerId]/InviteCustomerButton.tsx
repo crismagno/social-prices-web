@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { App, Button, Tooltip } from "antd";
 import moment from "moment";
@@ -14,10 +14,11 @@ import { ICustomer } from "../../../shared/business/customers/customer.interface
 
 interface Props {
   customer: ICustomer;
+  size?: "small" | "middle" | "large";
 }
 
 // Invites the customer to follow their purchases with an account of their own.
-export default function InviteCustomerButton({ customer }: Props) {
+export default function InviteCustomerButton({ customer, size }: Props) {
   const { t } = useLanguageData();
 
   const { message } = App.useApp();
@@ -28,7 +29,24 @@ export default function InviteCustomerButton({ customer }: Props) {
 
   const [isSending, setIsSending] = useState<boolean>(false);
 
-  const hasAccount: boolean = !!customer.userId;
+  // A userId alone is not enough: the account it points to may be gone.
+  const [hasAccount, setHasAccount] = useState<boolean>(
+    customer.hasAccount ?? !!customer.userId,
+  );
+
+  // Customers from lists come without hasAccount: ask the API once.
+  useEffect(() => {
+    if (customer.hasAccount !== undefined || !customer.userId) {
+      return;
+    }
+
+    serviceMethodsInstance.customersServiceMethods
+      .findById(customer._id)
+      .then((found: ICustomer | null) =>
+        setHasAccount(found?.hasAccount ?? !!found?.userId),
+      )
+      .catch(() => undefined);
+  }, [customer._id, customer.hasAccount, customer.userId]);
 
   const disabledReason: string | null = hasAccount
     ? t("customers.alreadyHasAccount")
@@ -47,12 +65,15 @@ export default function InviteCustomerButton({ customer }: Props) {
 
       setInvitedAt(invited.invitedAt ?? new Date().toISOString());
 
+      setHasAccount(false);
+
       message.success(t("customers.invited"));
     } catch (error: any) {
       const code: string | undefined =
         error?.response?.data?.code ?? error?.response?.data?.error?.code;
 
       if (code === "CUSTOMER_ALREADY_HAS_ACCOUNT") {
+        setHasAccount(true);
         message.warning(t("customers.alreadyHasAccount"));
       } else {
         handleClientError(error);
@@ -75,6 +96,7 @@ export default function InviteCustomerButton({ customer }: Props) {
     <Tooltip title={tooltip}>
       <Button
         icon={<SendOutlined />}
+        size={size}
         loading={isSending}
         disabled={!!disabledReason}
         onClick={handleInvite}

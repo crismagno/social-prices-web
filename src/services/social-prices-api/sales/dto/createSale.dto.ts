@@ -74,7 +74,7 @@ export class SaleHeaderDto {
 
 export class SaleBuyerDto {
   userId: string | null = null;
-  email: string = "";
+  email: string | null = null;
   name: string = "";
   birthDate: Date | null = null;
   gender: PersonEnum.Gender | null = null;

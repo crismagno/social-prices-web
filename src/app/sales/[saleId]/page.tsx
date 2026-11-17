@@ -231,7 +231,11 @@ export default function SalePage() {
                 <Description
                   label={t("sales.email")}
                   description={
-                    <a href={`mailto:${buyer?.email}`}>{buyer?.email}</a>
+                    buyer?.email ? (
+                      <a href={`mailto:${buyer.email}`}>{buyer.email}</a>
+                    ) : (
+                      "-"
+                    )
                   }
                 />
 

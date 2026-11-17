@@ -89,6 +89,7 @@ import {
   FastSaleProductPicker,
   IFastSaleItem,
 } from './FastSaleProductPicker';
+import InviteCustomerButton from '../../../app/customers/[customerId]/InviteCustomerButton';
 import { FastSaleSummaryModal } from './FastSaleSummaryModal';
 
 interface Props {
@@ -245,7 +246,7 @@ export const FastSaleDrawer: React.FC<Props> = ({
   });
 
   const isCustomerValid: boolean = isNewCustomer
-    ? !!newCustomer.name.trim() && !!newCustomer.email.trim()
+    ? !!newCustomer.name.trim()
     : !!customer;
 
   const isAddressValid: boolean =
@@ -369,7 +370,7 @@ export const FastSaleDrawer: React.FC<Props> = ({
       buyer: selectedCustomer
         ? {
             userId: selectedCustomer.userId ?? null,
-            email: selectedCustomer.email ?? "",
+            email: selectedCustomer.email || null,
             name: selectedCustomer.name ?? "",
             birthDate: selectedCustomer.birthDate
               ? new Date(selectedCustomer.birthDate)
@@ -390,7 +391,7 @@ export const FastSaleDrawer: React.FC<Props> = ({
           }
         : {
             userId: null,
-            email: newCustomer.email.trim(),
+            email: newCustomer.email.trim() || null,
             name: newCustomer.name.trim(),
             birthDate: null,
             gender: PersonEnum.Gender.OTHER,
@@ -450,7 +451,7 @@ export const FastSaleDrawer: React.FC<Props> = ({
     }
 
     if (isNewCustomer) {
-      if (!newCustomer.name.trim() || !newCustomer.email.trim()) {
+      if (!newCustomer.name.trim()) {
         message.warning(t("sales.fastSaleNewCustomerRequired"));
         return;
       }
@@ -700,6 +701,15 @@ export const FastSaleDrawer: React.FC<Props> = ({
                   {customer.addresses[0].address1}, {customer.addresses[0].city}
                 </span>
               )}
+            </div>
+
+            {/* Keyed so the invite state resets when another customer is picked. */}
+            <div className="ml-auto shrink-0">
+              <InviteCustomerButton
+                key={customer._id}
+                customer={customer}
+                size="small"
+              />
             </div>
           </div>
         )}

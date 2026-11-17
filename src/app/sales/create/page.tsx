@@ -117,6 +117,7 @@ import {
 } from "../../../shared/utils/numbers/numbers";
 import { createAddressName } from "../../../shared/utils/strings/string";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
+import InviteCustomerButton from "../../customers/[customerId]/InviteCustomerButton";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { SaleExtraInfo } from "../components/SaleExtraInfo/SaleExtraInfo";
@@ -145,7 +146,7 @@ export interface ISaleStoresProductsTotals {
 const customerFormSchema = z.object({
   customerId: z.string().nullable(),
   name: z.string().trim().nonempty(),
-  email: z.string().trim().nonempty(),
+  email: z.string().trim(),
   address: addressFormSchema,
   phoneNumber: z.string().trim().nullable(),
   about: z.string().trim().nullable(),
@@ -273,7 +274,8 @@ export default function CreateSalePage() {
       z.object({
         customerId: z.string().nullable(),
         name: z.string().trim().nonempty(t("errors.customerNameRequired")),
-        email: z.string().trim().nonempty(t("errors.customerEmailRequired")),
+        // Optional: some customers have no email.
+        email: z.string().trim(),
         address: addressFormSchema,
         phoneNumber: z.string().trim().nullable(),
         about: z.string().trim().nullable(),
@@ -1109,7 +1111,7 @@ export default function CreateSalePage() {
           birthDate: data.customer.birthDate
             ? moment(data.customer.birthDate).startOf("day").toDate()
             : null,
-          email: data.customer.email,
+          email: data.customer.email || null,
           gender: data.customer.gender as PersonEnum.Gender,
           name: data.customer.name,
           phoneNumber: {
@@ -1437,9 +1439,20 @@ export default function CreateSalePage() {
               </div>
             }
             extra={
-              !isEditMode && (
-                <SelectCustomer onSelectCustomer={handleSelectCustomer} />
-              )
+              <Space>
+                {/* Only a saved customer can be invited; keyed so the
+                    "invited at" state resets when another one is picked. */}
+                {selectedCustomer?._id && (
+                  <InviteCustomerButton
+                    key={selectedCustomer._id}
+                    customer={selectedCustomer}
+                  />
+                )}
+
+                {!isEditMode && (
+                  <SelectCustomer onSelectCustomer={handleSelectCustomer} />
+                )}
+              </Space>
             }
             className="flex-1 border-l-4 border-l-blue-500"
           >
