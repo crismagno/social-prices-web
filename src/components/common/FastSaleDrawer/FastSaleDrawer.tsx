@@ -126,6 +126,9 @@ interface IDeliveryAddress {
   zip: string;
 }
 
+// Address select option for typing an address not saved on the customer.
+const NEW_ADDRESS_UID = "__new_address__";
+
 const emptyDeliveryAddress: IDeliveryAddress = {
   address1: "",
   address2: "",
@@ -220,8 +223,11 @@ export const FastSaleDrawer: React.FC<Props> = ({
   const customerAddresses: IAddress[] =
     !isNewCustomer && customer?.addresses?.length ? customer.addresses : [];
 
-  // Typed address is used for new customers and for customers with none saved.
-  const isTypingAddress: boolean = isDelivery && !customerAddresses.length;
+  // Typed address is used for new customers, for customers with none saved
+  // and when "New address" is picked; it goes on the sale only.
+  const isTypingAddress: boolean =
+    isDelivery &&
+    (!customerAddresses.length || customerAddressUid === NEW_ADDRESS_UID);
 
   const selectedCustomerAddress: IAddress | undefined =
     customerAddresses.find((a) => a.uid === customerAddressUid) ??
@@ -486,10 +492,34 @@ export const FastSaleDrawer: React.FC<Props> = ({
         );
 
       setCreatedSale(filled ?? created);
+
+      await saveTypedAddressOnCustomer();
     } catch (error) {
       handleClientError(error);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  // A delivery address typed for a saved customer is kept on the customer too,
+  // so it shows in the address list next time. The sale is already created:
+  // failing here only warns.
+  const saveTypedAddressOnCustomer = async (): Promise<void> => {
+    if (isNewCustomer || !customer?._id || !isTypingAddress) {
+      return;
+    }
+
+    try {
+      const updated: ICustomer =
+        await serviceMethodsInstance.customersServiceMethods.addAddress(
+          customer._id,
+          buildTypedAddress(),
+        );
+
+      setCustomer(updated);
+      setCustomerAddressUid(null);
+    } catch {
+      message.warning(t("sales.fastSaleAddressNotSaved"));
     }
   };
 
@@ -767,15 +797,25 @@ export const FastSaleDrawer: React.FC<Props> = ({
                     )}
                   />
 
-                  {isDelivery && !isTypingAddress && (
+                  {isDelivery && customerAddresses.length > 0 && (
                     <Select
-                      value={selectedCustomerAddress?.uid}
+                      value={
+                        isTypingAddress
+                          ? NEW_ADDRESS_UID
+                          : selectedCustomerAddress?.uid
+                      }
                       onChange={setCustomerAddressUid}
                       className="w-full"
-                      options={customerAddresses.map((a: IAddress) => ({
-                        value: a.uid,
-                        label: `${a.address1}, ${a.city}`,
-                      }))}
+                      options={[
+                        ...customerAddresses.map((a: IAddress) => ({
+                          value: a.uid,
+                          label: `${a.address1}, ${a.city}`,
+                        })),
+                        {
+                          value: NEW_ADDRESS_UID,
+                          label: `+ ${t("address.newAddress")}`,
+                        },
+                      ]}
                     />
                   )}
 

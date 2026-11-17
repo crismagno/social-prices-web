@@ -450,6 +450,7 @@
     "fastSaleNoItemsError": "Add at least one product",
     "fastSaleNewCustomerRequired": "Name is required for the new customer",
     "fastSaleAddressRequired": "Fill in address, city and state for delivery",
+    "fastSaleAddressNotSaved": "Sale created, but the new address could not be saved on the customer.",
     "fastSaleCustomerRequired": "Select a customer",
     "createSaleBtnCamelCase": "Create Sale",
     "removeAllProductsByStore": "Remove all products by store",

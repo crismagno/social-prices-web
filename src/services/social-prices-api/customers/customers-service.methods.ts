@@ -2,6 +2,7 @@
 
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import { IFiltersDownloadCustomers } from "../../../shared/business/customers/customers.type";
+import { CreateAddressDto } from "../../../shared/business/shared/address/CreateAddress.dto";
 import {
   ITableStateRequest,
   ITableStateResponse,
@@ -103,6 +104,27 @@ export default class CustomersServiceMethods extends ServiceMethodsBase {
   }
 
   // Emails the customer a link to create a customer account.
+  public async addAddress(
+    customerId: string,
+    address: CreateAddressDto,
+  ): Promise<ICustomer> {
+    const response = await this._fetchAxios.post<ICustomer>(
+      `${this._socialPricesApiV1}${CustomersServiceEnum.Methods.ADD_ADDRESS.replace(
+        ":customerId",
+        customerId,
+      )}`,
+      address,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      },
+    );
+
+    return response.data;
+  }
+
   public async invite(customerId: string): Promise<ICustomer> {
     const response = await this._fetchAxios.post<ICustomer>(
       `${this._socialPricesApiV1}${CustomersServiceEnum.Methods.INVITE.replace(
