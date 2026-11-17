@@ -253,10 +253,7 @@
     "send": "Send",
     "goToLogin": "Go to login",
     "pleaseFillCodeValue": "Please fill code value!",
-    "codeInvalid": "Code invalid",
-    "accountType": "Account type",
-    "iAmCustomer": "I am a customer",
-    "iAmCompany": "I am a company"
+    "codeInvalid": "Code invalid"
   },
   "sales": {
     "salesTable": "Sales Table",
@@ -2176,7 +2173,10 @@
     "period": "Period",
     "downloadSummary": "Download summary",
     "purchaseSubtitle": "Everything about this purchase",
-    "products": "Products"
+    "products": "Products",
+    "orderStatus": "Order status",
+    "orderStatusHint": "Which stage your order is at: open, in progress, completed, cancelled...",
+    "paymentStatusHint": "Where the payment of this purchase stands: pending, partially paid, paid, cancelled or refunded"
   },
   "accountMode": {
     "hint": "See your account as a customer (your purchases) or as a company (your sales)",

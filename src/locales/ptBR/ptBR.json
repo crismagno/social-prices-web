@@ -253,10 +253,7 @@
     "send": "Enviar",
     "goToLogin": "Ir para login",
     "pleaseFillCodeValue": "Por favor, preencha o código!",
-    "codeInvalid": "Código inválido",
-    "accountType": "Tipo de conta",
-    "iAmCustomer": "Sou cliente",
-    "iAmCompany": "Sou empresa"
+    "codeInvalid": "Código inválido"
   },
   "sales": {
     "salesTable": "Tabela de Vendas",
@@ -2179,7 +2176,10 @@
     "period": "Período",
     "downloadSummary": "Baixar resumo",
     "purchaseSubtitle": "Tudo sobre esta compra",
-    "products": "Produtos"
+    "products": "Produtos",
+    "orderStatus": "Status do pedido",
+    "orderStatusHint": "Em que etapa o seu pedido está: aberto, em andamento, concluído, cancelado...",
+    "paymentStatusHint": "Situação do pagamento desta compra: pendente, pago em parte, pago, cancelado ou reembolsado"
   },
   "accountMode": {
     "hint": "Veja sua conta como cliente (suas compras) ou como empresa (suas vendas)",

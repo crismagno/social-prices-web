@@ -14,7 +14,6 @@ import { Logo1 } from "../../components/common/Logo/Logo1";
 import useAuthData from "../../data/context/auth/useAuthData";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import useForceRedirect from "../../hooks/useForceRedirect/useForceRedirect";
-import UsersEnum from "../../shared/business/users/users.enum";
 import LoginEnum from "../../shared/common/enums/login.enum";
 import Urls from "../../shared/common/routes-app/routes-app";
 
@@ -37,10 +36,6 @@ export default function LoginPage() {
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const [accountType, setAccountType] = useState<UsersEnum.Type>(
-    UsersEnum.Type.COMPANY,
-  );
-
   // A store invite links here as ?signup=customer&email=...: open the sign up
   // already filled in. Read once from the URL, without a Suspense boundary.
   useEffect(() => {
@@ -48,7 +43,6 @@ export default function LoginPage() {
 
     if (params.get("signup") === "customer") {
       setMode(LoginEnum.Mode.CREATE);
-      setAccountType(UsersEnum.Type.CUSTOMER);
       setEmailOrUsername(params.get("email") ?? undefined);
     }
   }, []);
@@ -77,7 +71,7 @@ export default function LoginPage() {
       }
 
       if (mode === LoginEnum.Mode.CREATE) {
-        await create(emailOrUsername, password, accountType);
+        await create(emailOrUsername, password);
         return;
       }
 
@@ -124,34 +118,6 @@ export default function LoginPage() {
             ? t("auth.enterWithYourAccount")
             : t("auth.createNewAccount")}
         </h1>
-
-        {mode === LoginEnum.Mode.CREATE && (
-          <div className="mt-4">
-            <span className="text-sm text-slate-600">
-              {t("auth.accountType")}
-            </span>
-
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              {[
-                { type: UsersEnum.Type.CUSTOMER, label: t("auth.iAmCustomer") },
-                { type: UsersEnum.Type.COMPANY, label: t("auth.iAmCompany") },
-              ].map((option) => (
-                <button
-                  key={option.type}
-                  type="button"
-                  onClick={() => setAccountType(option.type)}
-                  className={`rounded-lg border px-3 py-2 text-sm ${
-                    accountType === option.type
-                      ? "border-indigo-500 bg-indigo-50 text-indigo-700"
-                      : "border-gray-300 text-slate-600 hover:border-indigo-300"
-                  }`}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
 
         <AuthInput
           ref={userInputRef}

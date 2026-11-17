@@ -3,13 +3,13 @@
 import { useEffect, useState } from "react";
 
 import {
+  Button,
   Card,
   Col,
   Divider,
   Empty,
-  Image,
+  Modal,
   Row,
-  Table,
   Tag,
   Tooltip,
 } from "antd";
@@ -21,12 +21,15 @@ import {
   CheckSquareOutlined,
   DollarCircleOutlined,
   EnvironmentOutlined,
+  EyeOutlined,
+  ProfileOutlined,
+  QuestionCircleTwoTone,
   ShopOutlined,
   ShoppingCartOutlined,
-  ShoppingOutlined,
 } from "@ant-design/icons";
 
 import { DeliveryAddressMapButton } from "../../../../components/common/DeliveryAddressMapButton/DeliveryAddressMapButton";
+import { SaleSummary } from "../../../../components/common/SaleSummary/SaleSummary";
 import { DownloadSalesSummaryButton } from "../../../../components/common/DownloadSalesSummaryButton/DownloadSalesSummaryButton";
 import Description from "../../../../components/common/Description/Description";
 import handleClientError from "../../../../components/common/HandleClientError/HandleClientError";
@@ -36,20 +39,20 @@ import Layout from "../../../../components/template/Layout/Layout";
 import useLanguageData from "../../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import { ICustomerPortalSale } from "../../../../shared/business/customer-portal/customer-portal.types";
+import { IProduct } from "../../../../shared/business/products/products.interface";
 import {
+  ISale,
   ISaleStore,
   ISaleStoreProduct,
 } from "../../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../../shared/business/sales/sales.enum";
+import { IStore } from "../../../../shared/business/stores/stores.interface";
 import { IAddress } from "../../../../shared/business/shared/address/address.interface";
 import DatesEnum from "../../../../shared/utils/dates/dates.enum";
-import {
-  addressTypesToString,
-  formatterMoney,
-} from "../../../../shared/utils/strings/string";
-import { getImageUrl } from "../../../../shared/utils/images/images-url";
-import ImagesEnum from "../../../../shared/utils/images/images.enum";
+import { addressTypesToString } from "../../../../shared/utils/strings/string";
 import { SalePaymentsReadOnly } from "../../../sales/components/SalePaymentsReadOnly/SalePaymentsReadOnly";
+import { SaleCartTotals } from "../../../sales/components/SaleSelectedProducts/SaleCartTotals";
+import { SaleStoresProducts } from "../../../sales/components/SaleSelectedProducts/SaleStoresProducts";
 
 // One purchase, read only, laid out like the store's sale page: what was
 // bought, where, how it is being delivered and paid. Nothing internal to the
@@ -64,6 +67,8 @@ export default function CustomerPurchasePage() {
   const [sale, setSale] = useState<ICustomerPortalSale | null>(null);
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const [isOpenSummary, setIsOpenSummary] = useState<boolean>(false);
 
   useEffect(() => {
     if (!saleId) {
@@ -97,6 +102,24 @@ export default function CustomerPurchasePage() {
   const storeName = (store: ISaleStore): string =>
     sale.storesNames[String(store.storeId)] ?? "-";
 
+  // The portal sends names and pictures as maps instead of filled documents;
+  // fill the store and product of each line so the sale's cart can draw them.
+  const cartSale: ISale = {
+    ...sale,
+    stores: sale.stores.map((store: ISaleStore) => ({
+      ...store,
+      store: { _id: String(store.storeId), name: storeName(store) } as IStore,
+      products: store.products.map((product: ISaleStoreProduct) => ({
+        ...product,
+        product: {
+          _id: String(product.productId),
+          name: sale.productsNames[String(product.productId)] ?? "-",
+          mainUrl: sale.productsImages?.[String(product.productId)] ?? null,
+        } as IProduct,
+      })),
+    })),
+  };
+
   return (
     <Layout
       title={t("customerPortal.purchase")}
@@ -122,20 +145,44 @@ export default function CustomerPurchasePage() {
               </div>
 
               <div className="flex flex-wrap items-center gap-2">
-                <Tag
-                  color={SalesEnum.StatusColors[sale.status]}
-                  className="m-0"
-                >
-                  {t(SalesEnum.StatusLabels[sale.status])}
-                </Tag>
-                <Tag
-                  color={
-                    (SalesEnum.PaymentStatusColors as any)[sale.paymentStatus]
-                  }
-                  className="m-0"
-                >
-                  {t(SalesEnum.PaymentStatusLabels[sale.paymentStatus])}
-                </Tag>
+                {/* Each tag says what it is about, with a hint on hover. */}
+                <Tooltip title={t("customerPortal.orderStatusHint")}>
+                  <Tag
+                    color={SalesEnum.StatusColors[sale.status]}
+                    className="m-0 px-3 py-1 text-sm"
+                  >
+                    <span className="font-normal">
+                      {t("customerPortal.orderStatus")}:
+                    </span>{" "}
+                    <b>{t(SalesEnum.StatusLabels[sale.status])}</b>
+                  </Tag>
+                </Tooltip>
+
+                <Tooltip title={t("customerPortal.paymentStatusHint")}>
+                  <Tag
+                    color={
+                      (SalesEnum.PaymentStatusColors as any)[sale.paymentStatus]
+                    }
+                    className="m-0 px-3 py-1 text-sm"
+                  >
+                    <span className="font-normal">
+                      {t("customerPortal.paymentStatus")}:
+                    </span>{" "}
+                    <b>
+                      {t(SalesEnum.PaymentStatusLabels[sale.paymentStatus])}
+                    </b>
+                  </Tag>
+                </Tooltip>
+
+                <Tooltip title={t("sales.seeSummaryTooltip")}>
+                  <Button
+                    type="primary"
+                    onClick={() => setIsOpenSummary(true)}
+                    icon={<EyeOutlined />}
+                  >
+                    {t("sales.seeSummary")}
+                  </Button>
+                </Tooltip>
 
                 <DownloadSalesSummaryButton
                   sale={sale}
@@ -251,96 +298,26 @@ export default function CustomerPurchasePage() {
         </Col>
       </Row>
 
-      {/* What was bought, store by store */}
+      {/* The cart, drawn by the same component as the store's sale page */}
       <Row gutter={[16, 16]} className="mt-4">
         <Col xs={24}>
           <Card
             title={
               <div className="flex items-center gap-2">
-                <ShoppingOutlined className="text-orange-500" />
-                <span className="font-semibold">
-                  {t("customerPortal.products")}
-                </span>
+                <ProfileOutlined className="text-amber-500" />
+                <span className="font-semibold">{t("sales.cart")}</span>
+                <Tooltip title={t("sales.selectedProductsTooltip")}>
+                  <QuestionCircleTwoTone />
+                </Tooltip>
               </div>
             }
-            className="border-l-4 border-l-orange-500"
+            className="border-l-4 border-l-amber-500"
           >
-            {sale.stores.map((store: ISaleStore, index: number) => (
-              <div key={String(store.storeId)}>
-                {sale.stores.length > 1 && (
-                  <Divider
-                    orientation="left"
-                    className={index === 0 ? "mt-0" : undefined}
-                  >
-                    {storeName(store)}
-                  </Divider>
-                )}
+            <div style={{ maxHeight: 878 }}>
+              <SaleStoresProducts sale={cartSale} />
+            </div>
 
-                <Table<ISaleStoreProduct>
-                  rowKey={(product) => `${product.productId}-${product.sku}`}
-                  dataSource={store.products}
-                  pagination={false}
-                  size="small"
-                  scroll={{ x: "max-content" }}
-                  columns={[
-                    {
-                      title: t("customerPortal.product"),
-                      dataIndex: "productId",
-                      render: (productId: string) => {
-                        const image: string | null | undefined =
-                          sale.productsImages?.[String(productId)];
-
-                        return (
-                          <div className="flex items-center gap-3">
-                            {/* Click to see the picture big. */}
-                            <Image
-                              width={48}
-                              height={48}
-                              className="rounded-lg object-cover"
-                              src={
-                                image
-                                  ? getImageUrl(image)
-                                  : ImagesEnum.FilesNames.DefaultProductImage
-                              }
-                              fallback={
-                                ImagesEnum.FilesNames.DefaultProductImage
-                              }
-                              preview={!!image}
-                              alt=""
-                            />
-                            <span>
-                              {sale.productsNames[String(productId)] ?? "-"}
-                            </span>
-                          </div>
-                        );
-                      },
-                    },
-                    {
-                      title: t("customerPortal.quantity"),
-                      dataIndex: "quantity",
-                      align: "center",
-                    },
-                    {
-                      title: t("customerPortal.price"),
-                      dataIndex: "price",
-                      align: "right",
-                      render: (price: number) => formatterMoney(price),
-                    },
-                    {
-                      title: t("customerPortal.total"),
-                      align: "right",
-                      render: (_: any, product: ISaleStoreProduct) =>
-                        formatterMoney(product.price * product.quantity),
-                    },
-                  ]}
-                />
-
-                <div className="mt-3 mb-2 text-right">
-                  {t("customerPortal.storeTotal")}:{" "}
-                  <b>{formatterMoney(store.totals?.totalFinalAmount)}</b>
-                </div>
-              </div>
-            ))}
+            <SaleCartTotals sale={sale} />
           </Card>
         </Col>
       </Row>
@@ -460,6 +437,17 @@ export default function CustomerPurchasePage() {
           </Card>
         </Col>
       </Row>
+
+      <Modal
+        title={t("sales.saleSummary")}
+        open={isOpenSummary}
+        cancelButtonProps={{ hidden: true }}
+        onOk={() => setIsOpenSummary(false)}
+        onCancel={() => setIsOpenSummary(false)}
+        width={700}
+      >
+        <SaleSummary sale={cartSale} stores={[]} tags={[]} isCustomerView />
+      </Modal>
     </Layout>
   );
 }

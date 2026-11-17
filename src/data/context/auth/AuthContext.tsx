@@ -70,11 +70,7 @@ export interface IAuthContext {
   validateSignInEmployeeCode: (codeValue: string) => Promise<boolean>;
   login: (emailOrUsername: string, password: string) => Promise<void>;
   loginEmployee: (username: string, password: string) => Promise<void>;
-  create: (
-    email: string,
-    password: string,
-    type?: UsersEnum.Type,
-  ) => Promise<void>;
+  create: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   setUser: (user: IUser | null) => void;
   setEmployee: (employee: IEmployee | null) => void;
@@ -366,7 +362,6 @@ export const AuthProvider = ({ children }: { children?: any }) => {
         phoneNumbers: userNormalized.phoneNumbers ?? [],
         uid: userNormalized.uid,
         about: null,
-        type: userNormalized.type,
       });
 
     response.user.providerId = userNormalized.providerId;
@@ -446,7 +441,6 @@ export const AuthProvider = ({ children }: { children?: any }) => {
   const create = async (
     email: string,
     password: string,
-    type: UsersEnum.Type = UsersEnum.Type.COMPANY,
   ) => {
     try {
       setIsLoading(true);
@@ -461,7 +455,6 @@ export const AuthProvider = ({ children }: { children?: any }) => {
           extraDataProvider: null,
           phoneNumbers: [],
           uid: null,
-          type,
         });
 
       response.user.loggedByAuthProvider = UsersEnum.Provider.SOCIAL_PRICES;

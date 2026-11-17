@@ -41,6 +41,11 @@ interface Props {
   stores: IStore[];
   tags: ITag[];
   categories?: ICategory[];
+  /**
+   * The customer looking at their own purchase: leaves out what belongs to the
+   * store (internal note, tags, categories, sending the summary).
+   */
+  isCustomerView?: boolean;
 }
 
 export const SaleSummary: React.FC<Props> = ({
@@ -48,6 +53,7 @@ export const SaleSummary: React.FC<Props> = ({
   stores,
   tags,
   categories = [],
+  isCustomerView = false,
 }) => {
   const { t } = useLanguageData();
 
@@ -57,9 +63,14 @@ export const SaleSummary: React.FC<Props> = ({
 
   const buyer: ISaleBuyer | null = sale?.buyer ?? null;
 
-  if (!sale || !customer || !buyer) {
+  // The customer portal does not fill the store's customer: fall back to the
+  // buyer, which carries the same name and gender.
+  if (!sale || !buyer || (!customer && !isCustomerView)) {
     return <Empty />;
   }
+
+  const gender: PersonEnum.Gender | null | undefined =
+    customer?.gender ?? buyer.gender;
 
   const quantityTotal = getQuantity(sale);
 
@@ -191,12 +202,12 @@ export const SaleSummary: React.FC<Props> = ({
 
   return (
     <div className="w-full">
-      <SendSaleSummary sale={sale} />
+      {!isCustomerView && <SendSaleSummary sale={sale} />}
 
       <div className="flex flex-col w-full justify-center items-center mt-5">
-        <ImageOrDefault width={80} src={customer.avatar} />
+        <ImageOrDefault width={80} src={customer?.avatar} />
 
-        <label className="mt-3">{customer.name}</label>
+        <label className="mt-3">{customer?.name ?? buyer.name}</label>
 
         <label>
           {buyer.email} / {buyer.phoneNumber?.number}
@@ -206,7 +217,7 @@ export const SaleSummary: React.FC<Props> = ({
           {buyer.birthDate
             ? moment(buyer.birthDate).format(DatesEnum.Format.MMDDYYYY)
             : ""}{" "}
-          / {t(PersonEnum.GenderLabels[customer.gender as PersonEnum.Gender])}
+          / {gender ? t(PersonEnum.GenderLabels[gender]) : ""}
         </label>
 
         <div className="text-center">
@@ -344,12 +355,16 @@ export const SaleSummary: React.FC<Props> = ({
 
       <Divider />
 
-      <div className="flex pr-10 mt-2">
-        <label className="font-semibold mr-1">{t("common.note")}: </label>
-        <label>{sale.note}</label>
-      </div>
+      {!isCustomerView && (
+        <>
+          <div className="flex pr-10 mt-2">
+            <label className="font-semibold mr-1">{t("common.note")}: </label>
+            <label>{sale.note}</label>
+          </div>
 
-      <Divider />
+          <Divider />
+        </>
+      )}
 
       <div className="flex pr-10 mt-2">
         <label className="font-semibold mr-1">
@@ -360,23 +375,29 @@ export const SaleSummary: React.FC<Props> = ({
 
       <Divider />
 
-      <div className="flex pr-10 mt-2">
-        <label className="font-semibold mr-1">{t("sales.tags")}: </label>
-        <TagTagsCustomAntd tags={tags} tagsIds={sale.tagsIds} useTag />
-      </div>
+      {!isCustomerView && (
+        <>
+          <div className="flex pr-10 mt-2">
+            <label className="font-semibold mr-1">{t("sales.tags")}: </label>
+            <TagTagsCustomAntd tags={tags} tagsIds={sale.tagsIds} useTag />
+          </div>
 
-      <Divider />
+          <Divider />
 
-      <div className="flex pr-10 mt-2">
-        <label className="font-semibold mr-1">{t("sales.categories")}: </label>
-        <TagCategoriesCustomAntd
-          categories={categories}
-          categoriesIds={sale.categoriesIds}
-          useTag
-        />
-      </div>
+          <div className="flex pr-10 mt-2">
+            <label className="font-semibold mr-1">
+              {t("sales.categories")}:{" "}
+            </label>
+            <TagCategoriesCustomAntd
+              categories={categories}
+              categoriesIds={sale.categoriesIds}
+              useTag
+            />
+          </div>
 
-      <Divider />
+          <Divider />
+        </>
+      )}
     </div>
   );
 };
