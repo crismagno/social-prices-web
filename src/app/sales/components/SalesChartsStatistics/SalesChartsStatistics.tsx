@@ -3,14 +3,13 @@ import React, { useState } from 'react';
 import {
   Card,
   Col,
-  Divider,
-  Radio,
   Row,
+  Segmented,
 } from 'antd';
 import moment from 'moment';
 
 import {
-  DotChartOutlined,
+  BarChartOutlined,
   LineChartOutlined,
 } from '@ant-design/icons';
 
@@ -45,31 +44,31 @@ export const SalesChartsStatistics: React.FC<Props> = ({
       title={
         <div className="flex items-center">
           {isShowHeaderLabel && (
-            <h2 className="mr-3">{t("sales.salesStatistics")}:</h2>
+            <h2 className="mr-3">{t("sales.salesStatistics")}</h2>
           )}
 
-          <Radio.Group
-            onChange={(e) => {
-              setIsSalesQuantityMode(e.target.value);
-            }}
+          <Segmented<boolean>
             value={isSalesQuantityMode}
-          >
-            <Radio.Button value={false}>
-              <LineChartOutlined />
-              <span className="ml-1">{t("sales.amount")}</span>
-            </Radio.Button>
-
-            <Radio.Button value={true}>
-              <DotChartOutlined />
-              <span className="ml-1">{t("sales.quantity")}</span>
-            </Radio.Button>
-          </Radio.Group>
+            onChange={setIsSalesQuantityMode}
+            options={[
+              {
+                label: t("sales.amount"),
+                value: false,
+                icon: <LineChartOutlined />,
+              },
+              {
+                label: t("sales.quantity"),
+                value: true,
+                icon: <BarChartOutlined />,
+              },
+            ]}
+          />
         </div>
       }
       styles={{ header: { display: isShowHeader ? "" : "none" } }}
     >
-      <Row gutter={[2, 2]}>
-        <Col xs={24} sm={24} md={12}>
+      <Row gutter={[16, 16]}>
+        <Col xs={24} lg={12}>
           <SalesChartStatistic
             periodType={ChartsEnum.PeriodType.HOUR}
             rangeDate={{
@@ -77,7 +76,7 @@ export const SalesChartsStatistics: React.FC<Props> = ({
               startDate: moment().startOf("day").toDate(),
             }}
             chartProps={{
-              height: 300,
+              height: 240,
             }}
             storeId={storeId}
             customerId={customerId}
@@ -89,11 +88,9 @@ export const SalesChartsStatistics: React.FC<Props> = ({
             }
             isSalesQuantityMode={isSalesQuantityMode}
           />
-
-          <Divider type="horizontal" />
         </Col>
 
-        <Col xs={24} sm={24} md={12}>
+        <Col xs={24} lg={12}>
           <SalesChartStatistic
             periodType={ChartsEnum.PeriodType.DAY}
             rangeDate={{
@@ -101,7 +98,7 @@ export const SalesChartsStatistics: React.FC<Props> = ({
               startDate: moment().startOf("month").toDate(),
             }}
             chartProps={{
-              height: 300,
+              height: 240,
             }}
             storeId={storeId}
             customerId={customerId}
@@ -113,11 +110,9 @@ export const SalesChartsStatistics: React.FC<Props> = ({
             }
             isSalesQuantityMode={isSalesQuantityMode}
           />
-
-          <Divider type="horizontal" />
         </Col>
 
-        <Col xs={24} sm={24} md={12}>
+        <Col xs={24} lg={12}>
           <SalesChartStatistic
             periodType={ChartsEnum.PeriodType.MONTH}
             rangeDate={{
@@ -125,7 +120,7 @@ export const SalesChartsStatistics: React.FC<Props> = ({
               startDate: moment().startOf("year").toDate(),
             }}
             chartProps={{
-              height: 300,
+              height: 240,
             }}
             storeId={storeId}
             customerId={customerId}
@@ -137,11 +132,9 @@ export const SalesChartsStatistics: React.FC<Props> = ({
             }
             isSalesQuantityMode={isSalesQuantityMode}
           />
-
-          <Divider type="horizontal" />
         </Col>
 
-        <Col xs={24} sm={24} md={12}>
+        <Col xs={24} lg={12}>
           <SalesChartStatistic
             periodType={ChartsEnum.PeriodType.YEAR}
             rangeDate={{
@@ -149,7 +142,7 @@ export const SalesChartsStatistics: React.FC<Props> = ({
               endDate: moment().toDate(),
             }}
             chartProps={{
-              height: 300,
+              height: 240,
             }}
             storeId={storeId}
             customerId={customerId}
@@ -161,8 +154,6 @@ export const SalesChartsStatistics: React.FC<Props> = ({
             }
             isSalesQuantityMode={isSalesQuantityMode}
           />
-
-          <Divider type="horizontal" />
         </Col>
       </Row>
     </Card>

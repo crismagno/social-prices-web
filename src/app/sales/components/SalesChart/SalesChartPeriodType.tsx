@@ -1,38 +1,12 @@
-import React from 'react';
+import React from "react";
 
-import {
-  Divider,
-  Select,
-  Tag,
-} from 'antd';
-import {
-  find,
-  map,
-  reduce,
-} from 'lodash';
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  Legend,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
+import { Select } from "antd";
+import { map } from "lodash";
 
-import useLanguageData from '../../../../data/context/language/useLanguageData';
-import {
-  IGetSalesAnalyticsResponse,
-} from '../../../../shared/business/sales/sales.type';
-import {
-  ITotalQuantity,
-} from '../../../../shared/common/interfaces/global.interface';
-import ChartsEnum from '../../../../shared/utils/charts/charts-enum';
-import {
-  IChartDataPeriodTypeItem,
-} from '../../../../shared/utils/charts/charts-types';
-import { formatToMoneyDecimal } from '../../../../shared/utils/strings/string';
+import useLanguageData from "../../../../data/context/language/useLanguageData";
+import { IGetSalesAnalyticsResponse } from "../../../../shared/business/sales/sales.type";
+import ChartsEnum from "../../../../shared/utils/charts/charts-enum";
+import { SalesAmountChartStatistic } from "../SalesChartsStatistics/SalesAmountChartStatistic";
 
 interface Props {
   salesAnalytics: IGetSalesAnalyticsResponse | null;
@@ -47,227 +21,22 @@ export const SalesChartPeriodType: React.FC<Props> = ({
 }) => {
   const { t } = useLanguageData();
 
-  const chartDataPeriodType: IChartDataPeriodTypeItem[] =
-    salesAnalytics?.chartDataPeriodType ?? [];
-
-  const totalQuantityByData: ITotalQuantity = reduce(
-    chartDataPeriodType,
-    (acc: ITotalQuantity, curr: IChartDataPeriodTypeItem) => {
-      acc.total += curr.total;
-      acc.quantity += curr.quantity;
-
-      return acc;
-    },
-    {
-      total: 0,
-      quantity: 0,
-    }
-  ) || { total: 0, quantity: 0 };
-
-  const renderTooltip = (props: any) => {
-    const { active, payload } = props;
-
-    if (!active || !payload?.length) {
-      return null;
-    }
-
-    const item: IChartDataPeriodTypeItem = payload[0].payload;
-
-    const itemTotal: number = item?.total ?? 0;
-
-    const itemQuantity: number = item?.quantity ?? 0;
-
-    const percentageByTotal: number =
-      (itemTotal * 100) / totalQuantityByData.total;
-
-    const percentageByQuantity: number =
-      (itemQuantity * 100) / totalQuantityByData.quantity;
-
-    return (
-      <div
-        style={{
-          backgroundColor: "white",
-          border: "1px solid #ccc",
-          padding: "5px",
-        }}
-      >
-        <p>{`${t(`sales.${periodType.toLowerCase()}`)}: ${item.name} `}</p>
-        <p>{`${t("sales.totalAmount")}: ${formatToMoneyDecimal(
-          item.total
-        )}`}</p>
-        <p>{`${t("common.percentage")} ${t(
-          "sales.totalAmount"
-        )}: ${percentageByTotal.toFixed(2)}%`}</p>
-        <p>{`${t("sales.productQuantity")}: ${item.quantity}`}</p>
-        <p>{`${t("common.percentage")} ${t(
-          "sales.productQuantity"
-        )}: ${percentageByQuantity.toFixed(2)}%`}</p>
-      </div>
-    );
-  };
-
-  const renderXAxis = (tickProps: any) => {
-    const { x, y, payload } = tickProps;
-    const { value } = payload;
-
-    const valueFormatted: string = `${value}${ChartsEnum.PeriodTypeShortLabel[periodType]}`;
-
-    const item: IChartDataPeriodTypeItem | undefined = find(
-      chartDataPeriodType,
-      { name: value }
-    );
-
-    const itemTotal: number = item?.total || 0;
-
-    const percentageByTotal: number =
-      (itemTotal * 100) / totalQuantityByData.total || 0;
-
-    return (
-      <>
-        <text
-          style={{ fontSize: "0.7rem" }}
-          textAnchor="middle"
-          x={x}
-          y={y + 8}
-          rotate={10}
-        >
-          {valueFormatted}
-        </text>
-        <text
-          fill="#1677FE"
-          style={{ fontSize: "0.5rem" }}
-          textAnchor="middle"
-          x={x}
-          y={y + 20}
-          rotate={10}
-        >
-          {percentageByTotal.toFixed(1)}%
-        </text>
-      </>
-    );
-  };
-
-  const renderYAxisTotal = (tickProps: any) => {
-    const { x, y, payload } = tickProps;
-    const { value } = payload;
-
-    return (
-      <>
-        <text
-          style={{ fontSize: "0.6rem" }}
-          textAnchor="middle"
-          x={x - 24}
-          y={y + 4}
-        >
-          {formatToMoneyDecimal(value)}
-        </text>
-      </>
-    );
-  };
-
-  const renderYAxisQuantity = (tickProps: any) => {
-    const { x, y, payload } = tickProps;
-    const { value } = payload;
-
-    return (
-      <>
-        <text
-          style={{ fontSize: "0.6rem" }}
-          textAnchor="middle"
-          x={x + 20}
-          y={y + 4}
-        >
-          {t("common.qty")}: {value}
-        </text>
-      </>
-    );
-  };
-
-  const periodTypeLabel: string = t(`sales.${periodType.toLowerCase()}`);
-
   return (
-    <>
-      <div className="flex items-center justify-center">
-        <label className="font-semibold mr-2">
-          {t("sales.salesRevenueByPeriod")}:{" "}
-        </label>
-
-        {onChange ? (
-          <Select style={{ width: 120 }} value={periodType} onChange={onChange}>
-            {map(
-              Object.keys(ChartsEnum.PeriodType),
-              (periodTypeParam: ChartsEnum.PeriodType) => (
-                <Select.Option key={periodTypeParam} value={periodTypeParam}>
-                  {t(`sales.${periodTypeParam.toLowerCase()}`)}
-                </Select.Option>
-              )
-            )}
-          </Select>
-        ) : (
-          <Tag>{periodTypeLabel}</Tag>
-        )}
-      </div>
-
-      <div className="ml-5">
-        <ResponsiveContainer width={"100%"} height={390}>
-          <AreaChart
-            data={chartDataPeriodType}
-            margin={{
-              top: 10,
-              right: 0,
-              left: 0,
-              bottom: 10,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" tick={renderXAxis} />
-            <YAxis tick={renderYAxisTotal} yAxisId="total" />
-            <YAxis
-              tick={renderYAxisQuantity}
-              yAxisId="quantity"
-              orientation="right"
-            />
-
-            <Tooltip content={renderTooltip} />
-            <Legend />
-
-            <Area
-              type="monotone"
-              dataKey="total"
-              name={t("sales.totalAmount")}
-              stroke="#8dc5f8"
-              fillOpacity={0.5}
-              fill="#8dc5f8"
-              yAxisId="total"
-            />
-            <Area
-              type="monotone"
-              dataKey="quantity"
-              name={t("sales.productQuantity")}
-              stroke="#1f1f1f"
-              fillOpacity={1}
-              fill="url(#colorPv)"
-              yAxisId="quantity"
-            />
-          </AreaChart>
-        </ResponsiveContainer>
-
-        <div className="text-center mt-1">
-          <span className="font-semibold">
-            {t("sales.totalAmount")}:
-            <span className="ml-1">
-              {formatToMoneyDecimal(totalQuantityByData.total)}
-            </span>
-          </span>
-
-          <Divider type="vertical" />
-
-          <span className="font-semibold">
-            {t("sales.productQuantity")}:
-            <span className="ml-1">{totalQuantityByData.quantity}</span>
-          </span>
-        </div>
-      </div>
-    </>
+    <SalesAmountChartStatistic
+      periodType={periodType}
+      salesAnalytics={salesAnalytics}
+      extra={
+        <Select style={{ width: 120 }} value={periodType} onChange={onChange}>
+          {map(
+            Object.keys(ChartsEnum.PeriodType),
+            (periodTypeParam: ChartsEnum.PeriodType) => (
+              <Select.Option key={periodTypeParam} value={periodTypeParam}>
+                {t(`sales.${periodTypeParam.toLowerCase()}`)}
+              </Select.Option>
+            )
+          )}
+        </Select>
+      }
+    />
   );
 };

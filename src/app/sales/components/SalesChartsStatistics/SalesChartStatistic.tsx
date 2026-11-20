@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import { ChartPanel } from "../../../../components/common/charts/ChartPanel";
 import Loading from "../../../../components/common/Loading/Loading";
 import SalesEnum from "../../../../shared/business/sales/sales.enum";
 import { IGetSalesAnalyticsParams } from "../../../../shared/business/sales/sales.type";
@@ -11,10 +12,7 @@ import { SalesQuantityChartStatistic } from "./SalesQuantityChartStatistic";
 interface Props {
   periodType: ChartsEnum.PeriodType;
   chartProps?: {
-    width?: number | string;
     height?: number | string;
-    totalColor?: string;
-    quantityColor?: string;
   };
   rangeDate: {
     startDate: Date;
@@ -51,7 +49,13 @@ export const SalesChartStatistic: React.FC<Props> = ({
   );
 
   if (isLoading) {
-    return <Loading />;
+    return (
+      <ChartPanel title={title}>
+        <div style={{ height: chartProps?.height ?? 320 }}>
+          <Loading />
+        </div>
+      </ChartPanel>
+    );
   }
 
   if (isSalesQuantityMode) {

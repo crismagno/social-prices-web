@@ -1,43 +1,30 @@
-import React from 'react';
+import React, { ReactNode } from "react";
 
-import { Divider } from 'antd';
-import {
-  find,
-  reduce,
-} from 'lodash';
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  Legend,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
+import { sumBy } from "lodash";
 
-import useLanguageData from '../../../../data/context/language/useLanguageData';
+import { ChartPanel } from "../../../../components/common/charts/ChartPanel";
+import { ChartTooltip } from "../../../../components/common/charts/ChartTooltip";
+import { TrendChart } from "../../../../components/common/charts/TrendChart";
+import { useChartTheme } from "../../../../components/common/charts/useChartTheme";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
+import { IGetSalesAnalyticsResponse } from "../../../../shared/business/sales/sales.type";
+import ChartsEnum from "../../../../shared/utils/charts/charts-enum";
 import {
-  IGetSalesAnalyticsResponse,
-} from '../../../../shared/business/sales/sales.type';
-import {
-  ITotalQuantity,
-} from '../../../../shared/common/interfaces/global.interface';
-import ChartsEnum from '../../../../shared/utils/charts/charts-enum';
-import {
-  IChartDataPeriodTypeItem,
-} from '../../../../shared/utils/charts/charts-types';
-import { formatToMoneyDecimal } from '../../../../shared/utils/strings/string';
+  formatCompactMoney,
+  formatCompactNumber,
+  formatPercentage,
+} from "../../../../shared/utils/charts/charts-format";
+import { IChartDataPeriodTypeItem } from "../../../../shared/utils/charts/charts-types";
+import { getLocale } from "../../../../shared/utils/locales/locales";
+import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
 
 interface Props {
   periodType: ChartsEnum.PeriodType;
   chartProps?: {
-    width?: number | string;
     height?: number | string;
-    totalColor?: string;
-    quantityColor?: string;
   };
   title?: string;
+  extra?: ReactNode;
   salesAnalytics?: IGetSalesAnalyticsResponse | null;
 }
 
@@ -45,225 +32,76 @@ export const SalesAmountChartStatistic: React.FC<Props> = ({
   periodType,
   chartProps,
   title,
+  extra,
   salesAnalytics,
 }) => {
-  const { t } = useLanguageData();
+  const { t, language } = useLanguageData();
 
-  const chartDataPeriodType: IChartDataPeriodTypeItem[] =
+  const chartTheme = useChartTheme();
+
+  const locale: string = getLocale(language);
+
+  const data: IChartDataPeriodTypeItem[] =
     salesAnalytics?.chartDataPeriodType ?? [];
 
-  const totalQuantityByData: ITotalQuantity = reduce(
-    chartDataPeriodType,
-    (acc: ITotalQuantity, curr: IChartDataPeriodTypeItem) => {
-      acc.total += curr.total;
-      acc.quantity += curr.quantity;
+  const total: number = sumBy(data, "total");
 
-      return acc;
-    },
-    {
-      total: 0,
-      quantity: 0,
-    }
-  ) || { total: 0, quantity: 0 };
+  const quantity: number = sumBy(data, "quantity");
 
-  const renderTooltip = (props: any) => {
-    const { active, payload } = props;
-
-    if (!active || !payload?.length) {
-      return null;
-    }
-
-    const item: IChartDataPeriodTypeItem = payload[0].payload;
-
-    const itemTotal: number = item?.total ?? 0;
-
-    const itemQuantity: number = item?.quantity ?? 0;
-
-    const percentageByTotal: number =
-      (itemTotal * 100) / totalQuantityByData.total;
-
-    const percentageByQuantity: number =
-      (itemQuantity * 100) / totalQuantityByData.quantity;
-
-    return (
-      <div
-        style={{
-          backgroundColor: "white",
-          border: "1px solid #ccc",
-          padding: "5px",
-        }}
-      >
-        <p>{`${t(`sales.${periodType.toLowerCase()}`)}: ${item.name} `}</p>
-        <p>{`${t("sales.totalAmount")}: ${formatToMoneyDecimal(
-          item.total
-        )}`}</p>
-        <p>{`${t("common.percentage") || "Percentage"} ${t(
-          "sales.totalAmount"
-        )}: ${percentageByTotal.toFixed(2)}%`}</p>
-        <p>{`${t("sales.productQuantity")}: ${item.quantity}`}</p>
-        <p>{`${t("common.percentage") || "Percentage"} ${t(
-          "sales.productQuantity"
-        )}: ${percentageByQuantity.toFixed(2)}%`}</p>
-      </div>
-    );
-  };
-
-  const renderXAxis = (tickProps: any) => {
-    const { x, y, payload } = tickProps;
-    const { value } = payload;
-
-    const valueFormatted: string = `${value}${ChartsEnum.PeriodTypeShortLabel[periodType]}`;
-
-    const item: IChartDataPeriodTypeItem | undefined = find(
-      chartDataPeriodType,
-      { name: value }
-    );
-
-    const itemTotal: number = item?.total || 0;
-
-    const percentageByTotal: number =
-      (itemTotal * 100) / totalQuantityByData.total || 0;
-
-    return (
-      <>
-        <text
-          style={{ fontSize: "0.7rem" }}
-          textAnchor="middle"
-          x={x}
-          y={y + 8}
-          rotate={10}
-        >
-          {valueFormatted}
-        </text>
-        <text
-          fill="#1677FE"
-          style={{ fontSize: "0.5rem" }}
-          textAnchor="middle"
-          x={x}
-          y={y + 20}
-          rotate={10}
-        >
-          {percentageByTotal.toFixed(1)}%
-        </text>
-      </>
-    );
-  };
-
-  const renderYAxisTotal = (tickProps: any) => {
-    const { x, y, payload } = tickProps;
-    const { value } = payload;
-
-    return (
-      <>
-        <text
-          style={{ fontSize: "0.6rem" }}
-          textAnchor="middle"
-          x={x - 24}
-          y={y + 4}
-        >
-          {formatToMoneyDecimal(value)}
-        </text>
-      </>
-    );
-  };
-
-  const renderYAxisQuantity = (tickProps: any) => {
-    const { x, y, payload } = tickProps;
-    const { value } = payload;
-
-    return (
-      <>
-        <text
-          style={{ fontSize: "0.6rem" }}
-          textAnchor="middle"
-          x={x + 20}
-          y={y + 4}
-        >
-          {t("common.qty")}: {value}
-        </text>
-      </>
-    );
-  };
+  const periodLabel: string = t(`sales.${periodType.toLowerCase()}`);
 
   return (
-    <>
-      <div className="w-full text-center">
-        {title ? (
-          <label className="font-semibold">{title}</label>
-        ) : (
-          <>
-            <span className="mr-2">{t("sales.salesRevenueByPeriod")}:</span>
-
-            <label className="font-semibold">
-              {t(`sales.${periodType.toLowerCase()}`)}
-            </label>
-          </>
+    <ChartPanel
+      title={title ?? t("sales.salesRevenueByPeriod")}
+      value={formatToMoneyDecimal(total)}
+      caption={`${t("sales.productQuantity")}: ${quantity}`}
+      extra={extra}
+    >
+      <TrendChart<IChartDataPeriodTypeItem>
+        variant="area"
+        data={data}
+        dataKey="total"
+        name={t("sales.totalAmount")}
+        nameKey="name"
+        secondary={{
+          dataKey: "quantity",
+          name: t("sales.productQuantity"),
+          color: chartTheme.productQuantity,
+          allowDecimals: false,
+          formatYTick: (value: number) => formatCompactNumber(value, locale),
+        }}
+        color={chartTheme.amount}
+        height={chartProps?.height ?? 320}
+        formatXTick={(value: any) =>
+          `${value}${ChartsEnum.PeriodTypeShortLabel[periodType]}`
+        }
+        formatYTick={(value: number) => formatCompactMoney(value, locale)}
+        renderTooltip={(item: IChartDataPeriodTypeItem) => (
+          <ChartTooltip
+            title={`${periodLabel}: ${item.name}`}
+            rows={[
+              {
+                label: t("sales.totalAmount"),
+                value: formatToMoneyDecimal(item.total ?? 0),
+                color: chartTheme.amount,
+              },
+              {
+                label: t("common.percentage"),
+                value: formatPercentage(item.total ?? 0, total),
+              },
+              {
+                label: t("sales.productQuantity"),
+                value: item.quantity ?? 0,
+                color: chartTheme.productQuantity,
+              },
+              {
+                label: t("common.percentage"),
+                value: formatPercentage(item.quantity ?? 0, quantity),
+              },
+            ]}
+          />
         )}
-      </div>
-
-      <div className="ml-5">
-        <ResponsiveContainer
-          width={chartProps?.width ?? "100%"}
-          height={chartProps?.height ?? 390}
-        >
-          <AreaChart
-            data={chartDataPeriodType}
-            margin={{
-              top: 10,
-              right: 0,
-              left: 0,
-              bottom: 10,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" tick={renderXAxis} />
-            <YAxis tick={renderYAxisTotal} yAxisId="total" />
-            <YAxis
-              tick={renderYAxisQuantity}
-              yAxisId="quantity"
-              orientation="right"
-            />
-
-            <Tooltip content={renderTooltip} />
-            <Legend />
-
-            <Area
-              type="monotone"
-              dataKey="total"
-              name={t("sales.totalAmount")}
-              stroke={chartProps?.totalColor ?? "#8dc5f8"}
-              fillOpacity={0.5}
-              fill={chartProps?.totalColor ?? "#8dc5f8"}
-              yAxisId="total"
-            />
-            <Area
-              type="monotone"
-              dataKey="quantity"
-              name={t("sales.productQuantity")}
-              stroke={chartProps?.quantityColor ?? "#1f1f1f"}
-              fillOpacity={1}
-              fill="url(#colorPv)"
-              yAxisId="quantity"
-            />
-          </AreaChart>
-        </ResponsiveContainer>
-
-        <div className="text-center mt-1">
-          <span className="font-semibold">
-            {t("sales.totalAmount")}:
-            <span className="ml-1">
-              {formatToMoneyDecimal(totalQuantityByData.total)}
-            </span>
-          </span>
-
-          <Divider type="vertical" />
-
-          <span className="font-semibold">
-            {t("sales.productQuantity")}:
-            <span className="ml-1">{totalQuantityByData.quantity}</span>
-          </span>
-        </div>
-      </div>
-    </>
+      />
+    </ChartPanel>
   );
 };

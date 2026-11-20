@@ -5,7 +5,6 @@ import {
   Button,
   Card,
   Col,
-  Divider,
   Row,
   Select,
   Tooltip,
@@ -63,10 +62,9 @@ import { useFindStoresByUser } from '../../../stores/useFindStoresByUser';
 import { useFindCategoriesByType } from '../../../categories/useFindCategoriesByType';
 import { useFindTagsByType } from '../../../tags/useFindTagsByType';
 import { useGetSalesAnalytics } from '../../useGetSalesAnalytics';
-import { SalesChartListProducts } from './SalesChartListProducts';
 import { SalesChartPeriodType } from './SalesChartPeriodType';
-import { SalesChartProducts } from './SalesChartProducts';
 import { SalesQuantityChartPeriodType } from './SalesQuantityChartPeriodType';
+import { SalesTopProducts } from './SalesTopProducts';
 
 interface Props {
   title?: string;
@@ -372,8 +370,8 @@ export const SalesChart: React.FC<Props> = ({
         </Col>
       </Row>
 
-      <Row gutter={[16, 16]} className="mt-3">
-        <Col md={12}>
+      <Row gutter={[16, 16]} className="mt-4">
+        <Col xs={24} lg={12}>
           <SalesChartPeriodType
             periodType={getSalesAnalyticsParams.periodType!}
             onChange={(periodType: ChartsEnum.PeriodType) => {
@@ -385,23 +383,15 @@ export const SalesChart: React.FC<Props> = ({
             salesAnalytics={salesAnalytics}
           />
         </Col>
-        <Col md={12}>
+        <Col xs={24} lg={12}>
           <SalesQuantityChartPeriodType
             periodType={getSalesAnalyticsParams.periodType!}
             salesAnalytics={salesAnalytics}
           />
         </Col>
-      </Row>
 
-      <Divider />
-
-      <Row gutter={[16, 16]} className="mt-2">
-        <Col md={12}>
-          <SalesChartProducts salesAnalytics={salesAnalytics} />
-        </Col>
-
-        <Col md={12}>
-          <SalesChartListProducts salesAnalytics={salesAnalytics} />
+        <Col xs={24}>
+          <SalesTopProducts salesAnalytics={salesAnalytics} />
         </Col>
       </Row>
     </Card>

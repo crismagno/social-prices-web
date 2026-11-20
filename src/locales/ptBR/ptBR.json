@@ -177,7 +177,11 @@
     "seeCategories": "Ver Categorias",
     "createNewStore": "Criar uma nova Loja",
     "createNewCustomer": "Criar um novo Cliente",
-    "createNewProduct": "Criar um novo Produto"
+    "createNewProduct": "Criar um novo Produto",
+    "goodMorning": "Bom dia",
+    "goodAfternoon": "Boa tarde",
+    "goodEvening": "Boa noite",
+    "planUsage": "Uso do limite do seu plano"
   },
   "settings": {
     "title": "Configurações para atualizar o sistema",
@@ -855,6 +859,7 @@
     "noNotifications": "Sem notificações",
     "type": "Tipo",
     "sort": "Ordenação",
+    "date": "Data",
     "selectType": "Selecione um Tipo",
     "selectSort": "Selecione uma Ordenação",
     "searchNotifications": "Buscar notificações...",

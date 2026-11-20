@@ -1,46 +1,38 @@
-import React from 'react';
+import React, { ReactNode } from "react";
 
-import {
-  Card,
-  Divider,
-  Tooltip,
-} from 'antd';
-import {
-  AppRouterInstance,
-} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useRouter } from 'next/navigation';
+import { Button, Tooltip } from "antd";
+import Link from "next/link";
 
-import { ShoppingCartOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined } from "@ant-design/icons";
 
-import {
-  AvatarDescription,
-} from '../../../../components/common/AvatarDescription/AvatarDescription';
-import useLanguageData from '../../../../data/context/language/useLanguageData';
-import {
-  IProductItem,
-} from '../../../../shared/business/product-items/product-items.interface';
-import {
-  IProduct,
-} from '../../../../shared/business/products/products.interface';
+import { ImageOrDefault } from "../../../../components/common/ImageOrDefault/ImageOrDefault";
+import useLanguageData from "../../../../data/context/language/useLanguageData";
 import {
   IGetSalesBalanceTotalsResponse,
   IGetSalesProductBalanceResponse,
-} from '../../../../shared/business/sales/sales.type';
-import Urls from '../../../../shared/common/routes-app/routes-app';
-import ImagesEnum from '../../../../shared/utils/images/images.enum';
-import { formatToMoneyDecimal } from '../../../../shared/utils/strings/string';
+} from "../../../../shared/business/sales/sales.type";
+import Urls from "../../../../shared/common/routes-app/routes-app";
+import ImagesEnum from "../../../../shared/utils/images/images.enum";
+import { formatToMoneyDecimal } from "../../../../shared/utils/strings/string";
 
 interface Props {
   className?: string;
   title?: string;
+  icon?: ReactNode;
+  iconClassName?: string;
   salesBalanceTotals?: IGetSalesBalanceTotalsResponse;
   storeId?: string;
   customerId?: string;
 }
 
+const DEFAULT_ICON_CLASS_NAME: string =
+  "bg-blue-100 text-blue-600 dark:bg-blue-500/15 dark:text-blue-300";
+
 export const SalesBalanceStatistic: React.FC<Props> = ({
-  className,
+  className = "",
   title,
+  icon,
+  iconClassName = DEFAULT_ICON_CLASS_NAME,
   salesBalanceTotals = {
     quantity: 0,
     total: 0,
@@ -50,170 +42,168 @@ export const SalesBalanceStatistic: React.FC<Props> = ({
   storeId,
   customerId,
 }) => {
-  const router: AppRouterInstance = useRouter();
   const { t } = useLanguageData();
 
-  const productBalance: IGetSalesProductBalanceResponse | undefined =
-    salesBalanceTotals?.productsBalance?.[0];
+  const productsBalance: IGetSalesProductBalanceResponse[] =
+    salesBalanceTotals.productsBalance ?? [];
 
-  const renderProductsBalance = () => {
-    if (salesBalanceTotals.productsBalance?.length) {
-      return (
-        <>
-          {salesBalanceTotals.productsBalance.map(
+  const getCreateSaleUrl = (
+    productId: string,
+    productItemId?: string
+  ): string => {
+    if (storeId) {
+      return Urls.SALES_CREATE_BY_PRODUCT_AND_STORE.replace(
+        ":productId",
+        productId
+      ).replace(":storeId", storeId);
+    }
+
+    if (customerId) {
+      return Urls.SALES_CREATE_BY_PRODUCT_AND_CUSTOMER.replace(
+        ":productId",
+        productId
+      ).replace(":customerId", customerId);
+    }
+
+    if (productItemId) {
+      return Urls.SALES_CREATE_BY_PRODUCT_ITEM.replace(
+        ":productItemId",
+        productItemId
+      );
+    }
+
+    return Urls.SALES_CREATE_BY_PRODUCT.replace(":productId", productId);
+  };
+
+  const getProductUrl = (productId: string, productItemId?: string): string =>
+    productItemId
+      ? Urls.PRODUCT_ITEM.replace(":productItemId", productItemId)
+      : Urls.PRODUCT.replace(":productId", productId);
+
+  const statClassName: string = `flex flex-col rounded-lg px-3 py-2
+    bg-gray-50 dark:bg-gray-700/40`;
+
+  return (
+    <div
+      className={`flex flex-col h-full rounded-xl border p-4
+        border-gray-200 dark:border-gray-700 ${className}`}
+    >
+      <div className="flex items-center gap-3">
+        {icon && (
+          <span
+            className={`flex items-center justify-center shrink-0
+              w-9 h-9 rounded-lg text-lg ${iconClassName}`}
+          >
+            {icon}
+          </span>
+        )}
+
+        {title && (
+          <span className="text-sm truncate text-gray-500 dark:text-gray-400">
+            {title}
+          </span>
+        )}
+      </div>
+
+      <div
+        className="mt-3 text-3xl font-semibold leading-tight tabular-nums
+          text-slate-800 dark:text-white"
+      >
+        {formatToMoneyDecimal(salesBalanceTotals.total ?? 0)}
+      </div>
+
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        <div className={statClassName}>
+          <span className="text-xs truncate text-gray-500 dark:text-gray-400">
+            {t("sales.salesQuantity")}
+          </span>
+
+          <span className="text-base font-semibold tabular-nums text-slate-800 dark:text-white">
+            {salesBalanceTotals.salesQuantity || 0}
+          </span>
+        </div>
+
+        <div className={statClassName}>
+          <span className="text-xs truncate text-gray-500 dark:text-gray-400">
+            {t("sales.productQty")}
+          </span>
+
+          <span className="text-base font-semibold tabular-nums text-slate-800 dark:text-white">
+            {salesBalanceTotals.quantity || 0}
+          </span>
+        </div>
+      </div>
+
+      <div
+        className="mt-3 pt-3 pb-1 flex gap-2 overflow-x-auto
+          border-t border-gray-100 dark:border-gray-700"
+      >
+        {productsBalance.length ? (
+          productsBalance.map(
             (
               productBalance: IGetSalesProductBalanceResponse,
               index: number
             ) => {
               const productId: string = productBalance.product?._id!;
-              const productItemId: string = productBalance.productItem?._id!;
 
-              const mainUrl: string | undefined | null =
-                productBalance.productItem?.mainUrl ??
-                productBalance.product?.mainUrl;
+              const productItemId: string | undefined =
+                productBalance.productItem?._id;
+
               const name: string | undefined =
                 productBalance.productItem?.name ??
                 productBalance.product?.name;
 
               return (
-                <AvatarDescription
-                  key={index}
-                  src={mainUrl}
-                  defaultImage={ImagesEnum.FilesNames.DefaultProductImage}
-                  buttonIcon={<ShoppingCartOutlined />}
-                  buttonTooltip={t("sales.createSaleByProduct")}
-                  onClickButton={() => {
-                    if (storeId) {
-                      router.push(
-                        Urls.SALES_CREATE_BY_PRODUCT_AND_STORE.replace(
-                          ":productId",
-                          productId
-                        ).replace(":storeId", storeId)
-                      );
-                    } else if (customerId) {
-                      router.push(
-                        Urls.SALES_CREATE_BY_PRODUCT_AND_CUSTOMER.replace(
-                          ":productId",
-                          productId
-                        ).replace(":customerId", customerId)
-                      );
-                    } else if (productItemId) {
-                      router.push(
-                        Urls.SALES_CREATE_BY_PRODUCT_ITEM.replace(
-                          ":productItemId",
-                          productItemId
-                        )
-                      );
-                    } else {
-                      router.push(
-                        Urls.SALES_CREATE_BY_PRODUCT.replace(
-                          ":productId",
-                          productId
-                        )
-                      );
+                <div
+                  key={`${productId}-${productItemId ?? index}`}
+                  className="flex items-center gap-2 shrink-0 w-56 rounded-lg p-2
+                    bg-gray-50 dark:bg-gray-700/40"
+                >
+                  <ImageOrDefault
+                    src={
+                      productBalance.productItem?.mainUrl ??
+                      productBalance.product?.mainUrl
                     }
-                  }}
-                  onClickTitleButton={() => {
-                    if (productItemId) {
-                      router.push(
-                        Urls.PRODUCT_ITEM.replace(
-                          ":productItemId",
-                          productItemId
-                        )
-                      );
-                    } else {
-                      router.push(
-                        Urls.PRODUCT.replace(":productId", productId)
-                      );
-                    }
-                  }}
-                  title={name}
-                  subtitle={`${t("common.total")}: ${formatToMoneyDecimal(
-                    productBalance?.total
-                  )} | ${t("common.qty")}: ${productBalance?.quantity}`}
-                  className={index > 0 ? "ml-2" : ""}
-                />
+                    width={36}
+                    className="rounded-md"
+                    defaultImage={ImagesEnum.FilesNames.DefaultProductImage}
+                  />
+
+                  <div className="flex-1 min-w-0 flex flex-col">
+                    <Link
+                      href={getProductUrl(productId, productItemId)}
+                      className="text-sm truncate text-slate-800
+                        hover:text-blue-500 dark:text-white"
+                    >
+                      {name}
+                    </Link>
+
+                    <span className="text-xs truncate text-gray-500 dark:text-gray-400">
+                      {formatToMoneyDecimal(productBalance.total ?? 0)} ·{" "}
+                      {t("common.qty")}: {productBalance.quantity ?? 0}
+                    </span>
+                  </div>
+
+                  <Tooltip title={t("sales.createSaleByProduct")}>
+                    <Link href={getCreateSaleUrl(productId, productItemId)}>
+                      <Button
+                        type="text"
+                        size="small"
+                        icon={<ShoppingCartOutlined />}
+                        aria-label={t("sales.createSaleByProduct")}
+                      />
+                    </Link>
+                  </Tooltip>
+                </div>
               );
             }
-          )}
-        </>
-      );
-    }
-
-    const product: IProduct | undefined = productBalance?.product;
-    const productItem: IProductItem | undefined = productBalance?.productItem;
-
-    const mainUrl: string | undefined | null =
-      productItem?.mainUrl ?? product?.mainUrl;
-    const name: string | undefined = productItem?.name ?? product?.name;
-
-    return (
-      <AvatarDescription
-        src={mainUrl}
-        defaultImage={ImagesEnum.FilesNames.DefaultProductImage}
-        buttonIcon={<ShoppingCartOutlined />}
-        buttonTooltip={t("sales.createSaleByProduct")}
-        onClickButton={
-          productItem || product
-            ? () =>
-                router.push(
-                  productItem
-                    ? Urls.SALES_CREATE_BY_PRODUCT_ITEM.replace(
-                        ":productItemId",
-                        productItem._id!
-                      )
-                    : Urls.SALES_CREATE_BY_PRODUCT.replace(
-                        ":productId",
-                        product?._id!
-                      )
-                )
-            : undefined
-        }
-        styleLeft={{ width: product || productItem ? 282 : 318 }}
-        title={name}
-        subtitle={`${t("common.total")}: ${formatToMoneyDecimal(
-          productBalance?.total
-        )} | ${t("common.qty")}: ${productBalance?.quantity ?? 0}`}
-      />
-    );
-  };
-
-  return (
-    <Card className={`p-1 text-family-1 ${className}`}>
-      <div className="flex justify-between items-center">
-        {title && <label className="text-lg color-gray-1">{title}</label>}
-
-        <Divider type="vertical" dashed />
-
-        <Tooltip title={t("sales.salesQuantity")}>
-          <label className="color-black-1 text-lg">
-            {salesBalanceTotals.salesQuantity || 0}
-          </label>
-        </Tooltip>
+          )
+        ) : (
+          <span className="flex items-center h-[52px] text-xs text-gray-400">
+            {t("common.noData")}
+          </span>
+        )}
       </div>
-
-      <div className="my-2 flex items-center text-family-1">
-        <div>
-          <label className="color-black-1 text-3xl">
-            {formatToMoneyDecimal(salesBalanceTotals.total)}
-          </label>
-        </div>
-
-        <Divider type="vertical" dashed />
-
-        <div>
-          <label className="color-black-1">{t("sales.productQty")}: </label>
-          <label className="color-black-1 text-lg">
-            {salesBalanceTotals.quantity}
-          </label>
-        </div>
-      </div>
-
-      <Divider type="horizontal" className="my-3" />
-
-      <div className="flex w-full overflow-y-hidden pb-2">
-        {renderProductsBalance()}
-      </div>
-    </Card>
+    </div>
   );
 };

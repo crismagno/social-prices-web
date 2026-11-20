@@ -1,10 +1,5 @@
 "use client";
 
-import {
-  Col,
-  Row,
-} from 'antd';
-
 import Layout from '../../components/template/Layout/Layout';
 import useLanguageData from '../../data/context/language/useLanguageData';
 import { SalesBalance } from '../sales/components/SalesBalance/SalesBalance';
@@ -12,45 +7,21 @@ import { SalesChart } from '../sales/components/SalesChart/SalesChart';
 import {
   SalesChartsStatistics,
 } from '../sales/components/SalesChartsStatistics/SalesChartsStatistics';
-import SalesTable from '../sales/components/SalesTable/SalesTable';
-import { CategoriesCard } from './components/CategoriesCard/CategoriesCard';
-import { CustomersCard } from './components/CustomersCard/CustomersCard';
-import { ProductsCard } from './components/ProductsCard/ProductsCard';
-import { StoresCard } from './components/StoresCard/StoresCard';
+import {
+  DashboardOverview,
+} from './components/DashboardOverview/DashboardOverview';
 
 export default function DashboardPage() {
   const { t } = useLanguageData();
   return (
     <Layout subtitle={t("dashboard.subtitle")} title={t("dashboard.title")}>
-      <Row gutter={[10, 10]} className="mt-5">
-        <Col xs={24} sm={12} md={6}>
-          <StoresCard />
-        </Col>
-
-        <Col xs={24} sm={12} md={6}>
-          <CustomersCard />
-        </Col>
-
-        <Col xs={24} sm={12} md={6}>
-          <ProductsCard />
-        </Col>
-
-        <Col xs={24} sm={12} md={6}>
-          <CategoriesCard />
-        </Col>
-      </Row>
+      <DashboardOverview />
 
       <SalesBalance />
 
       <SalesChartsStatistics />
 
       <SalesChart cardClassName="mt-2" />
-
-      <Row>
-        <Col xs={24}>
-          <SalesTable />
-        </Col>
-      </Row>
     </Layout>
   );
 }

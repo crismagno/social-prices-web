@@ -177,7 +177,11 @@
     "seeCategories": "See Categories",
     "createNewStore": "Create a new Store",
     "createNewCustomer": "Create a new Customer",
-    "createNewProduct": "Create a new Product"
+    "createNewProduct": "Create a new Product",
+    "goodMorning": "Good morning",
+    "goodAfternoon": "Good afternoon",
+    "goodEvening": "Good evening",
+    "planUsage": "Usage of your plan limit"
   },
   "settings": {
     "title": "Settings to update system",
@@ -852,6 +856,7 @@
     "noNotifications": "No notifications",
     "type": "Type",
     "sort": "Sort",
+    "date": "Date",
     "selectType": "Select a Type",
     "selectSort": "Select a Sort",
     "searchNotifications": "Search notifications...",

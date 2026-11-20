@@ -59,6 +59,10 @@ const Sidebar: React.FC<Props> = ({}) => {
 
   const isDark: boolean = theme === ThemeEnum.Theme.DARK;
 
+  const toggleLabel: string = isCollapsed
+    ? t("navigation.expandMenu")
+    : t("navigation.collapseMenu");
+
   return (
     <>
       <aside
@@ -70,41 +74,13 @@ const Sidebar: React.FC<Props> = ({}) => {
           bg-white dark:bg-gray-800 dark:text-white`}
       >
         <div className="shrink-0">
-          <div
-            className={`relative flex items-center justify-center px-2 py-3 ${
-              isCollapsed ? "flex-col gap-2" : "flex-row"
-            }`}
-          >
+          <div className="flex items-center justify-center px-2 py-3">
             <Link
               href={Urls.DASHBOARD}
               className="flex items-center justify-center shrink-0"
             >
               <Logo1 size={isCollapsed ? 52 : 56} className="m-0" />
             </Link>
-
-            <Tooltip
-              title={
-                isCollapsed
-                  ? t("navigation.expandMenu")
-                  : t("navigation.collapseMenu")
-              }
-            >
-              <button
-                type="button"
-                onClick={toggleIsCollapsed}
-                aria-label={
-                  isCollapsed
-                    ? t("navigation.expandMenu")
-                    : t("navigation.collapseMenu")
-                }
-                className={`flex items-center justify-center w-8 h-8 rounded-full
-                  text-slate-600 hover:bg-gray-100 hover:text-blue-500
-                  dark:text-white dark:hover:bg-gray-700 transition-all
-                  ${isCollapsed ? "" : "absolute right-2"}`}
-              >
-                {isCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              </button>
-            </Tooltip>
           </div>
 
           <div
@@ -233,6 +209,34 @@ const Sidebar: React.FC<Props> = ({}) => {
             )}
           </button>
         </div>
+
+        <Tooltip
+          placement="right"
+          title={isCollapsed ? toggleLabel : undefined}
+        >
+          <button
+            type="button"
+            onClick={toggleIsCollapsed}
+            aria-label={toggleLabel}
+            aria-expanded={!isCollapsed}
+            className={`shrink-0 flex items-center gap-2 w-full h-11
+              border-t border-gray-100 dark:border-gray-700
+              text-slate-500 hover:bg-gray-100 hover:text-blue-500
+              dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white
+              transition-colors
+              ${isCollapsed ? "justify-center" : "justify-between px-5"}`}
+          >
+            {!isCollapsed && (
+              <span className="text-sm truncate">{toggleLabel}</span>
+            )}
+
+            {isCollapsed ? (
+              <MenuUnfoldOutlined className="text-base" />
+            ) : (
+              <MenuFoldOutlined className="text-base" />
+            )}
+          </button>
+        </Tooltip>
       </aside>
 
       {/* Mounted only for the company side: it loads the stores, which a
