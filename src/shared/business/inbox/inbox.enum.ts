@@ -7,6 +7,8 @@ namespace InboxEnum {
     MESSENGER = "MESSENGER",
     INSTAGRAM = "INSTAGRAM",
     WHATSAPP = "WHATSAPP",
+    // The platform's own chat between a customer account and a store.
+    STORE = "STORE",
   }
 
   export enum Direction {
@@ -29,8 +31,9 @@ namespace InboxEnum {
     OTHER = "OTHER",
   }
 
-  // The app that owns each channel: its icon, its name, its page.
-  export const ChannelApp: Record<Channel, AppsEnum.App> = {
+  // The app that owns each channel: its icon, its name, its page. The store
+  // chat is the platform's own, so it has none.
+  export const ChannelApp: Partial<Record<Channel, AppsEnum.App>> = {
     [Channel.TELEGRAM]: AppsEnum.App.TELEGRAM,
     [Channel.MESSENGER]: AppsEnum.App.FACEBOOK,
     [Channel.INSTAGRAM]: AppsEnum.App.INSTAGRAM,

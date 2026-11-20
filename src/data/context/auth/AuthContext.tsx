@@ -46,6 +46,7 @@ import {
   homeUrlFor,
   isCustomerView,
 } from "../../../shared/common/routes-app/home-url";
+import { takePostLoginRedirect } from "../../../shared/utils/auth/post-login-redirect";
 
 const VIEW_MODE_KEY: string = "socialPrices.viewMode";
 import {
@@ -527,7 +528,14 @@ export const AuthProvider = ({ children }: { children?: any }) => {
 
       _rememberViewMode(UsersEnum.Type.COMPANY);
 
-      router.push(homeUrlFor(newUser.type === UsersEnum.Type.CUSTOMER));
+      const isCustomerAccount: boolean =
+        newUser.type === UsersEnum.Type.CUSTOMER;
+
+      // The page asked for before the login, when there was one, else home.
+      router.push(
+        takePostLoginRedirect(isCustomerAccount) ??
+          homeUrlFor(isCustomerAccount),
+      );
 
       await sleep(5000);
 
@@ -596,7 +604,14 @@ export const AuthProvider = ({ children }: { children?: any }) => {
 
       _rememberViewMode(UsersEnum.Type.COMPANY);
 
-      router.push(homeUrlFor(newUser.type === UsersEnum.Type.CUSTOMER));
+      const isCustomerAccount: boolean =
+        newUser.type === UsersEnum.Type.CUSTOMER;
+
+      // The page asked for before the login, when there was one, else home.
+      router.push(
+        takePostLoginRedirect(isCustomerAccount) ??
+          homeUrlFor(isCustomerAccount),
+      );
 
       await sleep(5000);
 

@@ -572,6 +572,11 @@
     "alreadyHasAccount": "This customer already has an account"
   },
   "stores": {
+    "copyChatLink": "Copy chat link",
+    "copyChatLinkTooltip": "Copy the link customers open to talk to this store",
+    "chatLinkCopied": "Chat link copied",
+    "visibleInSearch": "Appear in the store search",
+    "visibleInSearchHelp": "Customers can find this store and start a conversation. When off, only the chat link and customers who already bought here reach it.",
     "title": "Stores",
     "subtitle": "My Stores",
     "myStores": "My Stores",
@@ -1017,6 +1022,8 @@
     }
   },
   "limits": {
+    "featureActive": "feature active",
+    "featureActiveHint": "When off, the account cannot see or use this feature.",
     "reached": "You reached the limit of {limit} {feature}.",
     "usage": "{used}/{limit}",
     "unlimited": "Unlimited",
@@ -1031,7 +1038,8 @@
       "employees": "Employees",
       "stores": "Stores",
       "categories": "Categories",
-      "tags": "Tags"
+      "tags": "Tags",
+      "quick-messages": "Quick messages"
     }
   },
   "support": {
@@ -1997,7 +2005,7 @@
     "pick": "Pick a conversation",
     "empty": {
       "title": "No conversations yet",
-      "text": "Messages from Telegram, Messenger and Instagram show up here, grouped by customer."
+      "text": "Messages from your customers on the store chat and on the apps you connect show up here, grouped by customer."
     },
     "filter": {
       "all": "All",
@@ -2037,7 +2045,8 @@
       "TELEGRAM": "Telegram",
       "MESSENGER": "Messenger",
       "INSTAGRAM": "Instagram",
-      "WHATSAPP": "WhatsApp"
+      "WHATSAPP": "WhatsApp",
+      "STORE": "Store chat"
     },
     "conversations": {
       "title": "Conversations of this customer"
@@ -2112,6 +2121,7 @@
     "confirmActivate": "Reactivate this quick message?",
     "saved": "Quick message saved",
     "forbidden": "Only the owner and ADMIN or MASTER employees manage quick messages.",
+    "disabled": "Quick messages are not active for this account.",
     "partial": "Sent {sent} of {total} blocks. The channel refused the next one.",
     "errors": {
       "name": "Give the message a name.",
@@ -2145,6 +2155,38 @@
       "funcionario_usuario": "Username",
       "funcionario_email": "Email",
       "funcionario_telefone": "Phone"
+    }
+  },
+  "customerChats": {
+    "title": "Chats",
+    "subtitle": "Talk to the stores",
+    "findStore": "Find a store to talk to",
+    "noStoresFound": "No store found",
+    "noConversations": "No conversations yet. Find a store above to start one.",
+    "pick": "Pick a conversation, or find a store to start one",
+    "firstMessage": "Send the first message to start the conversation",
+    "placeholder": "Write a message...",
+    "send": "Send",
+    "back": "Back",
+    "talkToStore": "Talk to the store",
+    "storeUnavailable": "This store is not available",
+    "storeClosed": "This store is not taking messages at the moment",
+    "errors": {
+      "dailyLimit": "You reached today's limit of new conversations. Try again tomorrow.",
+      "ownStore": "You cannot write to your own store."
+    }
+  },
+  "storeChat": {
+    "start": {
+      "button": "Message",
+      "tooltip": "Write to this customer on the store chat",
+      "title": "Message to {name}",
+      "store": "From the store",
+      "placeholder": "Write the first message...",
+      "send": "Send",
+      "sent": "Message sent",
+      "noAccount": "This customer has no account on the platform yet, so there is nowhere for them to read it. Invite them to create one first.",
+      "noStore": "You need an active store to start a conversation."
     }
   },
   "customerPortal": {

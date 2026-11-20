@@ -18,7 +18,7 @@ import {
 
 import handleClientError from "../../components/common/HandleClientError/HandleClientError";
 import EditCustomerDrawer from "../../components/common/EditCustomerDrawer/EditCustomerDrawer";
-import AppIcon from "../../components/common/AppIcon/AppIcon";
+import ChannelIcon from "../../components/common/ChannelIcon/ChannelIcon";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import InboxEnum from "../../shared/business/inbox/inbox.enum";
@@ -170,25 +170,45 @@ export default function ChatsThread({
             <span className="truncate font-semibold">{name}</span>
 
             <span className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs">
-              {chat.conversations.map((conversation: IInboxConversation) => (
+              {chat.conversations.map((conversation: IInboxConversation) => {
+                const appUrl: string | null = conversationAppUrl(conversation);
+
+                // The store chat has no app to go to: it is only named.
+                if (!appUrl) {
+                  return (
+                    <span
+                      key={conversation._id}
+                      className="flex items-center gap-1"
+                      style={{ color: token.colorTextSecondary }}
+                      title={t(`chats.channels.${conversation.channel}`)}
+                    >
+                      <ChannelIcon channel={conversation.channel} />
+
+                      {t(`chats.channels.${conversation.channel}`)}
+                    </span>
+                  );
+                }
+
                 // The person on that channel: a click goes to the app, with this conversation open.
-                <Link
-                  key={conversation._id}
-                  href={conversationAppUrl(conversation)}
-                  className="flex items-center gap-1 hover:underline"
-                  style={{ color: token.colorTextSecondary }}
-                  title={t("chats.openInApp").replace(
-                    "{app}",
-                    t(`chats.channels.${conversation.channel}`),
-                  )}
-                >
-                  <AppIcon app={InboxEnum.ChannelApp[conversation.channel]} />
+                return (
+                  <Link
+                    key={conversation._id}
+                    href={appUrl}
+                    className="flex items-center gap-1 hover:underline"
+                    style={{ color: token.colorTextSecondary }}
+                    title={t("chats.openInApp").replace(
+                      "{app}",
+                      t(`chats.channels.${conversation.channel}`),
+                    )}
+                  >
+                    <ChannelIcon channel={conversation.channel} />
 
-                  {conversationName(conversation, t("chats.unnamed"))}
+                    {conversationName(conversation, t("chats.unnamed"))}
 
-                  <ExportOutlined style={{ fontSize: 10, opacity: 0.6 }} />
-                </Link>
-              ))}
+                    <ExportOutlined style={{ fontSize: 10, opacity: 0.6 }} />
+                  </Link>
+                );
+              })}
             </span>
           </div>
         </div>
@@ -346,7 +366,7 @@ export default function ChatsThread({
                         className="flex items-center gap-1"
                         title={t(`chats.channels.${item.channel}`)}
                       >
-                        <AppIcon app={InboxEnum.ChannelApp[item.channel]} />
+                        <ChannelIcon channel={item.channel} />
 
                         {conversation
                           ? conversationName(conversation, t("chats.unnamed"))

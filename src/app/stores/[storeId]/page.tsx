@@ -1,6 +1,16 @@
 "use client";
 
-import { Button, Card, Col, Descriptions, Row, Tabs, Tag, Tooltip } from "antd";
+import {
+  App,
+  Button,
+  Card,
+  Col,
+  Descriptions,
+  Row,
+  Tabs,
+  Tag,
+  Tooltip,
+} from "antd";
 import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
@@ -8,6 +18,7 @@ import { useParams, useRouter } from "next/navigation";
 
 import {
   EditOutlined,
+  LinkOutlined,
   ShopOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
@@ -43,6 +54,8 @@ export default function StorePage() {
   const router: AppRouterInstance = useRouter();
   const params: Params = useParams();
   const { t } = useLanguageData();
+
+  const { message } = App.useApp();
 
   const { isLoadingStore, store } = useFindStoreById(params?.storeId);
 
@@ -121,6 +134,29 @@ export default function StorePage() {
                       }
                     >
                       {t("stores.goToCreateSale")}
+                    </Button>
+                  </Tooltip>
+                  <Tooltip title={t("stores.copyChatLinkTooltip")}>
+                    <Button
+                      icon={<LinkOutlined />}
+                      onClick={async () => {
+                        // What a customer opens to talk to this store.
+                        const link: string = `${window.location.origin}${Urls.CUSTOMER_CHAT_STORE.replace(
+                          ":storeId",
+                          storeId,
+                        )}`;
+
+                        try {
+                          await navigator.clipboard.writeText(link);
+
+                          message.success(t("stores.chatLinkCopied"));
+                        } catch {
+                          // No clipboard access: the link is shown to be copied by hand.
+                          message.info(link, 10);
+                        }
+                      }}
+                    >
+                      {t("stores.copyChatLink")}
                     </Button>
                   </Tooltip>
                   <Tooltip title={t("stores.goToStores")}>

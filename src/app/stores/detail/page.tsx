@@ -11,6 +11,7 @@ import {
   Divider,
   Row,
   Select,
+  Switch,
   Tooltip,
   UploadFile,
 } from "antd";
@@ -23,7 +24,7 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 
 import { EnterOutlined } from "@ant-design/icons";
@@ -87,6 +88,7 @@ const formSchema = z.object({
   tagsIds: z.array(z.string()),
   cnpj: z.string().trim().nullable(),
   type: z.string().trim().nullable(),
+  isVisibleInSearch: z.boolean(),
 });
 
 type TFormSchema = z.infer<typeof formSchema>;
@@ -166,6 +168,7 @@ export default function StoreDetailPage() {
       tagsIds: store?.tagsIds ?? [],
       cnpj: store?.cnpj ?? null,
       type: store?.type ?? null,
+      isVisibleInSearch: store?.isVisibleInSearch ?? true,
     };
 
     setFormValues(values);
@@ -225,6 +228,7 @@ export default function StoreDetailPage() {
         tagsIds: data.tagsIds,
         cnpj: data.cnpj,
         type: data.type as StoresEnum.Type,
+        isVisibleInSearch: data.isVisibleInSearch,
       };
 
       for (const property of Object.keys(createStoreDto)) {
@@ -297,6 +301,7 @@ export default function StoreDetailPage() {
         tagsIds: data.tagsIds,
         cnpj: data.cnpj,
         type: data.type as StoresEnum.Type,
+        isVisibleInSearch: data.isVisibleInSearch,
       };
 
       for (const property of Object.keys(updateStoreDto)) {
@@ -506,6 +511,34 @@ export default function StoreDetailPage() {
                   </Select.Option>
                 ))}
               </SelectCustomAntd>
+            </Col>
+          </Row>
+
+          <Row className="mb-4">
+            <Col xs={24}>
+              <Controller
+                control={control}
+                name="isVisibleInSearch"
+                render={({ field }) => (
+                  <div className="flex items-start gap-3">
+                    <Switch
+                      className="mt-1"
+                      checked={field.value ?? true}
+                      onChange={field.onChange}
+                    />
+
+                    <div className="flex flex-col">
+                      <span className="font-bold">
+                        {t("stores.visibleInSearch")}
+                      </span>
+
+                      <span className="text-sm opacity-70">
+                        {t("stores.visibleInSearchHelp")}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              />
             </Col>
           </Row>
 

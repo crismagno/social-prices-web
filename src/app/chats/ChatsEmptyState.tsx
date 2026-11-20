@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { theme } from "antd";
 
-import AppIcon from "../../components/common/AppIcon/AppIcon";
+import ChannelIcon from "../../components/common/ChannelIcon/ChannelIcon";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import InboxEnum from "../../shared/business/inbox/inbox.enum";
 import { CHANNEL_COLOR } from "./chats-display";
@@ -93,7 +93,7 @@ export default function ChatsEmptyState({ isEmpty }: Props) {
                     "opacity 600ms ease, transform 700ms cubic-bezier(0.34, 1.56, 0.64, 1)",
                 }}
               >
-                <AppIcon app={InboxEnum.ChannelApp[channel]} />
+                <ChannelIcon channel={channel} />
               </span>
             );
           })}

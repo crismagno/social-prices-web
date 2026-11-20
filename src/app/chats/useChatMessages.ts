@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import handleClientError from "../../components/common/HandleClientError/HandleClientError";
 import { useInboxRealtime } from "../../data/context/socket/useInboxRealtime";
+import { useStoreChatRealtime } from "../../data/context/socket/useStoreChatRealtime";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import AppsEnum from "../../shared/business/apps/apps.enum";
 import {
@@ -115,6 +116,9 @@ export const useChatMessages = (
   useInboxRealtime(AppsEnum.App.FACEBOOK, () => fetchLatest(true));
   useInboxRealtime(AppsEnum.App.INSTAGRAM, () => fetchLatest(true));
   useInboxRealtime(AppsEnum.App.WHATSAPP, () => fetchLatest(true));
+  useStoreChatRealtime(() => {
+    fetchLatest(true);
+  });
 
   const loadOlder = useCallback(async (): Promise<void> => {
     const wanted: IInboxScope | null = scopeRef.current;

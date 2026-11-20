@@ -6,7 +6,7 @@ import { App, Button, List, Modal, Popconfirm } from "antd";
 
 import { UserAddOutlined } from "@ant-design/icons";
 
-import AppIcon from "../../components/common/AppIcon/AppIcon";
+import ChannelIcon from "../../components/common/ChannelIcon/ChannelIcon";
 import handleClientError from "../../components/common/HandleClientError/HandleClientError";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
@@ -143,7 +143,7 @@ export default function ChatsConversationsModal({
             >
               <List.Item.Meta
                 avatar={
-                  <AppIcon app={InboxEnum.ChannelApp[conversation.channel]} />
+                  <ChannelIcon channel={conversation.channel} />
                 }
                 title={conversationName(conversation, t("chats.unnamed"))}
                 description={

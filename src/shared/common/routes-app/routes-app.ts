@@ -52,6 +52,8 @@ const Urls = {
   CUSTOMER_DASHBOARD: "/customer/dashboard",
   CUSTOMER_PURCHASES: "/customer/purchases",
   CUSTOMER_PURCHASE: "/customer/purchases/:saleId",
+  CUSTOMER_CHATS: "/customer/chats",
+  CUSTOMER_CHAT_STORE: "/customer/chats?store=:storeId",
 
   // products
   PRODUCTS: "/products",

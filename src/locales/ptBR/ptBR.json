@@ -575,6 +575,11 @@
     "alreadyHasAccount": "Este cliente já tem uma conta"
   },
   "stores": {
+    "copyChatLink": "Copiar link do chat",
+    "copyChatLinkTooltip": "Copiar o link que os clientes abrem para falar com esta loja",
+    "chatLinkCopied": "Link do chat copiado",
+    "visibleInSearch": "Aparecer na busca de lojas",
+    "visibleInSearchHelp": "Os clientes podem encontrar esta loja e iniciar uma conversa. Desligado, só o link do chat e quem já comprou aqui chegam até ela.",
     "title": "Lojas",
     "subtitle": "Minhas Lojas",
     "myStores": "Minhas Lojas",
@@ -1020,6 +1025,8 @@
     }
   },
   "limits": {
+    "featureActive": "recurso ativo",
+    "featureActiveHint": "Desligado, a conta não vê nem usa este recurso.",
     "reached": "Você atingiu o limite de {limit} {feature}.",
     "usage": "{used}/{limit}",
     "unlimited": "Ilimitado",
@@ -1034,7 +1041,8 @@
       "employees": "Funcionários",
       "stores": "Lojas",
       "categories": "Categorias",
-      "tags": "Tags"
+      "tags": "Tags",
+      "quick-messages": "Mensagens rápidas"
     }
   },
   "support": {
@@ -2000,7 +2008,7 @@
     "pick": "Escolha uma conversa",
     "empty": {
       "title": "Nenhuma conversa ainda",
-      "text": "As mensagens do Telegram, Messenger e Instagram aparecem aqui, agrupadas por cliente."
+      "text": "As mensagens dos seus clientes no chat da loja e nos apps que você conectar aparecem aqui, agrupadas por cliente."
     },
     "filter": {
       "all": "Todos",
@@ -2040,7 +2048,8 @@
       "TELEGRAM": "Telegram",
       "MESSENGER": "Messenger",
       "INSTAGRAM": "Instagram",
-      "WHATSAPP": "WhatsApp"
+      "WHATSAPP": "WhatsApp",
+      "STORE": "Chat da loja"
     },
     "conversations": {
       "title": "Conversas deste cliente"
@@ -2115,6 +2124,7 @@
     "confirmActivate": "Reativar esta mensagem rápida?",
     "saved": "Mensagem rápida salva",
     "forbidden": "Só o dono e funcionários ADMIN ou MASTER gerenciam mensagens rápidas.",
+    "disabled": "As mensagens rápidas não estão ativas para esta conta.",
     "partial": "Enviados {sent} de {total} blocos. O canal recusou o próximo.",
     "errors": {
       "name": "Dê um nome à mensagem.",
@@ -2148,6 +2158,38 @@
       "funcionario_usuario": "Usuário",
       "funcionario_email": "E-mail",
       "funcionario_telefone": "Telefone"
+    }
+  },
+  "customerChats": {
+    "title": "Chats",
+    "subtitle": "Converse com as lojas",
+    "findStore": "Encontre uma loja para conversar",
+    "noStoresFound": "Nenhuma loja encontrada",
+    "noConversations": "Nenhuma conversa ainda. Encontre uma loja acima para começar.",
+    "pick": "Escolha uma conversa ou encontre uma loja para começar",
+    "firstMessage": "Envie a primeira mensagem para iniciar a conversa",
+    "placeholder": "Escreva uma mensagem...",
+    "send": "Enviar",
+    "back": "Voltar",
+    "talkToStore": "Falar com a loja",
+    "storeUnavailable": "Esta loja não está disponível",
+    "storeClosed": "Esta loja não está recebendo mensagens no momento",
+    "errors": {
+      "dailyLimit": "Você atingiu o limite de novas conversas de hoje. Tente novamente amanhã.",
+      "ownStore": "Você não pode escrever para a sua própria loja."
+    }
+  },
+  "storeChat": {
+    "start": {
+      "button": "Mensagem",
+      "tooltip": "Escrever para este cliente pelo chat da loja",
+      "title": "Mensagem para {name}",
+      "store": "Da loja",
+      "placeholder": "Escreva a primeira mensagem...",
+      "send": "Enviar",
+      "sent": "Mensagem enviada",
+      "noAccount": "Este cliente ainda não tem conta na plataforma, então não teria onde ler a mensagem. Convide-o a criar uma conta primeiro.",
+      "noStore": "Você precisa de uma loja ativa para iniciar uma conversa."
     }
   },
   "customerPortal": {

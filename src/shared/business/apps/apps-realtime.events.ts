@@ -8,6 +8,8 @@ export const AppsRealtimeEvents = {
   UNSUBSCRIBE: "apps:unsubscribe",
   // Server to client: something changed in an app's inbox. No message content.
   INBOX_UPDATED: "apps:inbox-updated",
+  // Server to client: a store chat of this account changed. No message content.
+  STORE_CHAT_UPDATED: "store-chat:updated",
 } as const;
 
 export interface IInboxUpdatedEvent {

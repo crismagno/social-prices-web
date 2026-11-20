@@ -14,6 +14,7 @@ import {
   Tooltip,
 } from "antd";
 import moment from "moment";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 
 import {
@@ -22,6 +23,7 @@ import {
   DollarCircleOutlined,
   EnvironmentOutlined,
   EyeOutlined,
+  MessageOutlined,
   ProfileOutlined,
   QuestionCircleTwoTone,
   ShopOutlined,
@@ -45,6 +47,7 @@ import {
   ISaleStore,
   ISaleStoreProduct,
 } from "../../../../shared/business/sales/sale.interface";
+import Urls from "../../../../shared/common/routes-app/routes-app";
 import SalesEnum from "../../../../shared/business/sales/sales.enum";
 import { IStore } from "../../../../shared/business/stores/stores.interface";
 import { IAddress } from "../../../../shared/business/shared/address/address.interface";
@@ -291,6 +294,16 @@ export default function CustomerPurchasePage() {
               {sale.stores.map((store: ISaleStore) => (
                 <Tag key={String(store.storeId)} className="m-0 text-sm">
                   {storeName(store)}
+
+                  <Link
+                    className="ml-2"
+                    href={Urls.CUSTOMER_CHAT_STORE.replace(
+                      ":storeId",
+                      String(store.storeId),
+                    )}
+                  >
+                    <MessageOutlined /> {t("customerChats.talkToStore")}
+                  </Link>
                 </Tag>
               ))}
             </div>

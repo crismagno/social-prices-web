@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   App,
@@ -10,6 +10,7 @@ import {
   Form,
   Input,
   InputNumber,
+  Switch,
   Select,
   Tabs,
   Tag,
@@ -25,6 +26,7 @@ import AppsEnum from "../../../../shared/business/apps/apps.enum";
 import ManagersEnum from "../../../../shared/business/managers/managers.enum";
 import {
   FEATURE_KEYS,
+  TOGGLEABLE_FEATURE_KEYS,
   FeatureKey,
 } from "../../../../shared/business/users/user-limits.interface";
 import UsersEnum from "../../../../shared/business/users/users.enum";
@@ -71,7 +73,15 @@ export default function ManagerUserDetailPage() {
       type: user.type,
     });
 
-    limitsForm.setFieldsValue(user.limits?.features ?? {});
+    limitsForm.setFieldsValue({
+      ...(user.limits?.features ?? {}),
+      enabled: Object.fromEntries(
+        TOGGLEABLE_FEATURE_KEYS.map((key: FeatureKey) => [
+          key,
+          user.limits?.enabled?.[key] !== false,
+        ]),
+      ),
+    });
 
     setEnabledApps(user.enabledApps ?? []);
   }, [user, userForm, limitsForm]);
@@ -124,7 +134,9 @@ export default function ManagerUserDetailPage() {
   };
 
   const saveLimits = async (
-    values: Partial<Record<FeatureKey, number | null>>,
+    values: Partial<Record<FeatureKey, number | null>> & {
+      enabled?: Partial<Record<FeatureKey, boolean>>;
+    },
   ): Promise<void> => {
     if (!userId) {
       return;
@@ -140,12 +152,18 @@ export default function ManagerUserDetailPage() {
       }
     }
 
+    const enabled: Partial<Record<FeatureKey, boolean>> = {};
+
+    for (const key of TOGGLEABLE_FEATURE_KEYS) {
+      enabled[key] = values.enabled?.[key] !== false;
+    }
+
     try {
       setIsSubmitting(true);
 
       await serviceMethodsInstance.managerUsersServiceMethods.updateLimits(
         userId,
-        { features },
+        { features, enabled },
       );
 
       message.success(t("limits.saved"));
@@ -275,18 +293,39 @@ export default function ManagerUserDetailPage() {
                     onFinish={saveLimits}
                   >
                     {FEATURE_KEYS.map((key: FeatureKey) => (
-                      <Form.Item
-                        key={key}
-                        name={key}
-                        label={t(`limits.features.${key}`)}
-                        extra={
-                          typeof limitsValues?.[key] === "number"
-                            ? undefined
-                            : t("limits.unlimited")
-                        }
-                      >
-                        <InputNumber min={0} precision={0} className="w-full" />
-                      </Form.Item>
+                      <React.Fragment key={key}>
+                        {TOGGLEABLE_FEATURE_KEYS.includes(key) && (
+                          <Form.Item
+                            name={["enabled", key]}
+                            label={`${t(`limits.features.${key}`)}: ${t(
+                              "limits.featureActive",
+                            )}`}
+                            valuePropName="checked"
+                            extra={t("limits.featureActiveHint")}
+                          >
+                            <Switch
+                              checkedChildren={t("common.yes")}
+                              unCheckedChildren={t("common.no")}
+                            />
+                          </Form.Item>
+                        )}
+
+                        <Form.Item
+                          name={key}
+                          label={t(`limits.features.${key}`)}
+                          extra={
+                            typeof limitsValues?.[key] === "number"
+                              ? undefined
+                              : t("limits.unlimited")
+                          }
+                        >
+                          <InputNumber
+                            min={0}
+                            precision={0}
+                            className="w-full"
+                          />
+                        </Form.Item>
+                      </React.Fragment>
                     ))}
 
                     {canEdit && (

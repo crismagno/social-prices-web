@@ -24,8 +24,14 @@ import {
 
 import useAppData from "../../../data/context/app/useAppData";
 import useAuthData from "../../../data/context/auth/useAuthData";
+import {
+  isFeatureDisabled,
+  useFeaturesUsage,
+} from "../../common/FeatureUsageBadge/useFeaturesUsage";
+import { useStoreChatUnread } from "./useStoreChatUnread";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import EmployeesEnum from "../../../shared/business/employees/employees.enum";
+import UsersEnum from "../../../shared/business/users/users.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import AppsEnum from "../../../shared/business/apps/apps.enum";
 import { IAppCatalogItem } from "../../../shared/business/apps/apps.types";
@@ -81,8 +87,10 @@ export const useSidebarMenuItems = (
 ): IUseSidebarMenuItems => {
   const { t } = useLanguageData();
 
-  const { employee, isCustomer } = useAuthData();
+  const { employee, isCustomer, isLogged, user } = useAuthData();
 
+  // Says whether a manager switched quick messages off for this account.
+  const { usage } = useFeaturesUsage();
 
   const {
     notifications: {
@@ -165,10 +173,23 @@ export const useSidebarMenuItems = (
       app.id === AppsEnum.App.WHATSAPP,
   );
 
-  const unreadInChats: number = chatApps.reduce(
-    (sum: number, app: IAppCatalogItem) => sum + app.unreadCount,
-    0,
+  // The store chat is the platform's own channel: it needs no app, so Chats is
+  // in every company's menu, and its unread adds to the apps'.
+  // Asked only once the account is known, and by what the account is: a
+  // customer account must never ask for the store's count (the API refuses it).
+  const unreadInStoreChat: number = useStoreChatUnread(
+    !isLogged || !user
+      ? null
+      : isCustomer || user.type === UsersEnum.Type.CUSTOMER
+        ? "customer"
+        : "owner",
   );
+
+  const unreadInChats: number =
+    chatApps.reduce(
+      (sum: number, app: IAppCatalogItem) => sum + app.unreadCount,
+      0,
+    ) + (isCustomer ? 0 : unreadInStoreChat);
 
   const chatsIcon: React.ReactNode =
     unreadInChats > 0 && isCollapsed ? (
@@ -209,39 +230,38 @@ export const useSidebarMenuItems = (
   // Ready answers for the chat: managed by the owner, ADMIN and MASTER (the API
   // refuses the rest too).
   const canManageQuickMessages: boolean =
-    employee?.level !== EmployeesEnum.Level.EMPLOYEE;
+    employee?.level !== EmployeesEnum.Level.EMPLOYEE &&
+    !isFeatureDisabled(usage, "quick-messages");
 
   // With quick messages, Chats is a submenu holding the conversations and the
   // ready answers; without them, a plain item straight to the conversations.
-  const chatsItems: MenuItem[] = !chatApps.length
-    ? []
-    : canManageQuickMessages
-      ? [
-          getItem(
-            labelWithCount(t("navigation.chats"), unreadInChats, true),
-            SidebarMenuKeys.CHATS,
-            chatsIcon,
-            [
-              getItem(
-                labelWithCount(t("navigation.conversations"), unreadInChats),
-                Urls.CHATS,
-                <MessageOutlined />,
-              ),
-              getItem(
-                t("navigation.quickMessages"),
-                Urls.QUICK_MESSAGES,
-                <ThunderboltOutlined />,
-              ),
-            ],
-          ),
-        ]
-      : [
-          getItem(
-            labelWithCount(t("navigation.chats"), unreadInChats),
-            Urls.CHATS,
-            chatsIcon,
-          ),
-        ];
+  const chatsItems: MenuItem[] = canManageQuickMessages
+    ? [
+        getItem(
+          labelWithCount(t("navigation.chats"), unreadInChats, true),
+          SidebarMenuKeys.CHATS,
+          chatsIcon,
+          [
+            getItem(
+              labelWithCount(t("navigation.conversations"), unreadInChats),
+              Urls.CHATS,
+              <MessageOutlined />,
+            ),
+            getItem(
+              t("navigation.quickMessages"),
+              Urls.QUICK_MESSAGES,
+              <ThunderboltOutlined />,
+            ),
+          ],
+        ),
+      ]
+    : [
+        getItem(
+          labelWithCount(t("navigation.chats"), unreadInChats),
+          Urls.CHATS,
+          chatsIcon,
+        ),
+      ];
 
   // Collapsed there is no label, so a dot is kept on the icon.
   const appsIcon: React.ReactNode =
@@ -335,6 +355,17 @@ export const useSidebarMenuItems = (
       Urls.CUSTOMER_PURCHASES,
       <ShoppingCartOutlined />,
     ),
+    getItem(
+      labelWithCount(t("navigation.chats"), unreadInStoreChat),
+      Urls.CUSTOMER_CHATS,
+      unreadInStoreChat > 0 && isCollapsed ? (
+        <Badge dot offset={[-3, 3]}>
+          <MessageOutlined />
+        </Badge>
+      ) : (
+        <MessageOutlined />
+      ),
+    ),
     getItem(notificationsLabel, Urls.NOTIFICATIONS, notificationsIcon),
     getItem(t("navigation.support"), Urls.SUPPORT, <CustomerServiceOutlined />),
     getItem(t("navigation.settings"), Urls.SETTINGS, <SettingOutlined />),
@@ -346,6 +377,7 @@ export const useSidebarMenuItems = (
     Urls.DASHBOARD,
     Urls.CUSTOMER_DASHBOARD,
     Urls.CUSTOMER_PURCHASES,
+    Urls.CUSTOMER_CHATS,
     Urls.NOTIFICATIONS,
     Urls.SETTINGS,
     Urls.SUPPORT,

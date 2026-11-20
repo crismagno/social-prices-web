@@ -50,6 +50,12 @@ export const isFeatureLimitReached = (
   );
 };
 
+// Only an explicit `false` from the API means the feature is switched off.
+export const isFeatureDisabled = (
+  usage: IFeaturesUsage | null,
+  feature: FeatureKey
+): boolean => usage?.[feature]?.enabled === false;
+
 export const formatFeatureLimitReached = (
   t: (key: string) => string,
   feature: FeatureKey,

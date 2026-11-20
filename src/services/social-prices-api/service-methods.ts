@@ -23,6 +23,7 @@ import NotificationsServiceMethods from "./notifications/notifications-service.m
 import ProductItemsServiceMethods from "./product-items/product-items-service.methods";
 import ProductsServiceMethods from "./products/products-service.methods";
 import SalesServiceMethods from "./sales/sales-service.methods";
+import StoreChatServiceMethods from "./store-chat/store-chat-service.methods";
 import StoresServiceMethods from "./stores/stores-service.methods";
 import TagsServiceMethods from "./tags/tags-service.methods";
 import NotesServiceMethods from "./notes/notes-service.methods";
@@ -48,6 +49,7 @@ export default class ServiceMethods {
   public quickMessagesServiceMethods: QuickMessagesServiceMethods;
   public customersServiceMethods: CustomersServiceMethods;
   public customerPortalServiceMethods: CustomerPortalServiceMethods;
+  public storeChatServiceMethods: StoreChatServiceMethods;
   public notificationsServiceMethods: NotificationsServiceMethods;
   public salesServiceMethods: SalesServiceMethods;
   public tagsServiceMethods: TagsServiceMethods;
@@ -80,6 +82,7 @@ export default class ServiceMethods {
     this.quickMessagesServiceMethods = new QuickMessagesServiceMethods();
     this.customersServiceMethods = new CustomersServiceMethods();
     this.customerPortalServiceMethods = new CustomerPortalServiceMethods();
+    this.storeChatServiceMethods = new StoreChatServiceMethods();
     this.notificationsServiceMethods = new NotificationsServiceMethods();
     this.salesServiceMethods = new SalesServiceMethods();
     this.tagsServiceMethods = new TagsServiceMethods();

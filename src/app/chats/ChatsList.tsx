@@ -6,7 +6,7 @@ import { Avatar, Badge, Checkbox, Input, Segmented, Spin, theme } from "antd";
 
 import { SearchOutlined } from "@ant-design/icons";
 
-import AppIcon from "../../components/common/AppIcon/AppIcon";
+import ChannelIcon from "../../components/common/ChannelIcon/ChannelIcon";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import InboxEnum from "../../shared/business/inbox/inbox.enum";
 import {
@@ -110,7 +110,7 @@ export default function ChatsList({
                 value,
                 label: (
                   <span title={t(`chats.channels.${value}`)}>
-                    <AppIcon app={InboxEnum.ChannelApp[value]} />
+                    <ChannelIcon channel={value} />
                   </span>
                 ),
               })),
@@ -229,9 +229,7 @@ export default function ChatsList({
                             className="flex min-w-0 items-center gap-1"
                             title={t(`chats.channels.${conversation.channel}`)}
                           >
-                            <AppIcon
-                              app={InboxEnum.ChannelApp[conversation.channel]}
-                            />
+                            <ChannelIcon channel={conversation.channel} />
 
                             <span
                               className="truncate"

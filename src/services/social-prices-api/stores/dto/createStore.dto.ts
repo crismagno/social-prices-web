@@ -13,4 +13,5 @@ export default class CreateStoreDto {
   tagsIds: string[] = [];
   cnpj: string | null = null;
   type: StoresEnum.Type | null = null;
+  isVisibleInSearch: boolean = true;
 }

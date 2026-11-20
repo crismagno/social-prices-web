@@ -11,6 +11,9 @@ import CookiesEnum from '../../../shared/common/cookies/cookies.enum';
 import LocalStorageEnum
   from '../../../shared/common/local-storage/local-storage.enum';
 import Urls from '../../../shared/common/routes-app/routes-app';
+import {
+  rememberPostLoginRedirect,
+} from '../../../shared/utils/auth/post-login-redirect';
 import LoadingFull from '../../common/LoadingFull/LoadingFull';
 
 const ForceAuth = ({ children }: any) => {
@@ -39,6 +42,18 @@ const ForceAuth = ({ children }: any) => {
         </Head>
         {children}
       </>
+    );
+  }
+
+  // A visitor who opened a store's chat link comes back to it after signing in.
+  // Only that: any other page asked for while logged out (a logout, an expired
+  // session) keeps landing on the account's home, as before.
+  if (
+    typeof window !== "undefined" &&
+    window.location.pathname.startsWith(Urls.CUSTOMER_CHATS)
+  ) {
+    rememberPostLoginRedirect(
+      `${window.location.pathname}${window.location.search}`,
     );
   }
 

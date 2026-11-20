@@ -13,6 +13,7 @@ import {
   EditOutlined,
   ExportOutlined,
   MessageOutlined,
+  ShopOutlined,
   ThunderboltOutlined,
   ShoppingCartOutlined,
   UsergroupAddOutlined,
@@ -21,6 +22,7 @@ import {
 import { FastSaleDrawer } from "../../../components/common/FastSaleDrawer/FastSaleDrawer";
 import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
 import AppIcon from "../../../components/common/AppIcon/AppIcon";
+import ChannelIcon from "../../../components/common/ChannelIcon/ChannelIcon";
 import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
@@ -46,6 +48,7 @@ import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import InboxEnum from "../../../shared/business/inbox/inbox.enum";
 import { IInboxConversation } from "../../../shared/business/inbox/inbox.types";
 import { conversationAppUrl } from "../../chats/chats-links";
+import StoreChatStartModal from "./StoreChatStartModal";
 import { useCustomerChats } from "./useCustomerChats";
 import InviteCustomerButton from "./InviteCustomerButton";
 
@@ -83,6 +86,8 @@ export default function CustomerPage() {
   const router: AppRouterInstance = useRouter();
 
   const [isFastSaleOpen, setIsFastSaleOpen] = useState<boolean>(false);
+
+  const [isStoreChatOpen, setIsStoreChatOpen] = useState<boolean>(false);
 
   const params: Params = useParams();
 
@@ -170,6 +175,14 @@ export default function CustomerPage() {
                       </Button>
                     </Tooltip>
                   )}
+                  <Tooltip title={t("storeChat.start.tooltip")}>
+                    <Button
+                      icon={<ShopOutlined />}
+                      onClick={() => setIsStoreChatOpen(true)}
+                    >
+                      {t("storeChat.start.button")}
+                    </Button>
+                  </Tooltip>
                   <Tooltip title={t("sales.fastSale")}>
                     <Button
                       className="!border-amber-500 !bg-amber-500 !text-white hover:!bg-amber-400"
@@ -323,7 +336,14 @@ export default function CustomerPage() {
                               return (
                                 <Link
                                   key={conversation._id}
-                                  href={conversationAppUrl(conversation)}
+                                  href={
+                                    // The store chat lives in the central chat only.
+                                    conversationAppUrl(conversation) ??
+                                    Urls.CHATS_CUSTOMER.replace(
+                                      ":customerId",
+                                      paramsCustomerId,
+                                    )
+                                  }
                                 >
                                   <Button
                                     size="small"
@@ -332,12 +352,8 @@ export default function CustomerPage() {
                                       appName,
                                     )}
                                   >
-                                    <AppIcon
-                                      app={
-                                        InboxEnum.ChannelApp[
-                                          conversation.channel
-                                        ]
-                                      }
+                                    <ChannelIcon
+                                      channel={conversation.channel}
                                     />
                                     {appName}
                                     <ExportOutlined />
@@ -585,6 +601,13 @@ export default function CustomerPage() {
           ]}
         />
       </Card>
+      <StoreChatStartModal
+        customerId={paramsCustomerId}
+        customerName={customer?.name ?? null}
+        isOpen={isStoreChatOpen}
+        onClose={() => setIsStoreChatOpen(false)}
+      />
+
       <FastSaleDrawer
         open={isFastSaleOpen}
         onClose={() => setIsFastSaleOpen(false)}

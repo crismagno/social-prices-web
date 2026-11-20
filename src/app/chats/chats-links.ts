@@ -3,10 +3,14 @@ import { IInboxConversation } from "../../shared/business/inbox/inbox.types";
 import Urls from "../../shared/common/routes-app/routes-app";
 
 // The page of the app a conversation belongs to, with that conversation open.
+// Null for the store chat: it lives in the central chat only.
 export const conversationAppUrl = (
   conversation: Pick<IInboxConversation, "channel" | "contactKey">,
-): string => {
+): string | null => {
   switch (conversation.channel) {
+    case InboxEnum.Channel.STORE:
+      return null;
+
     case InboxEnum.Channel.TELEGRAM:
       return Urls.APPS_TELEGRAM_CHAT.replace(
         ":chatId",

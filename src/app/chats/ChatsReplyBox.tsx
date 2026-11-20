@@ -14,7 +14,7 @@ import {
   SendOutlined,
 } from "@ant-design/icons";
 
-import AppIcon from "../../components/common/AppIcon/AppIcon";
+import ChannelIcon from "../../components/common/ChannelIcon/ChannelIcon";
 import handleClientError from "../../components/common/HandleClientError/HandleClientError";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
@@ -275,7 +275,7 @@ export default function ChatsReplyBox({ chat, onSent }: Props) {
                 value: conversation._id,
                 label: (
                   <span className="flex items-center gap-1">
-                    <AppIcon app={InboxEnum.ChannelApp[conversation.channel]} />
+                    <ChannelIcon channel={conversation.channel} />
 
                     {conversationName(conversation, t("chats.unnamed"))}
                   </span>

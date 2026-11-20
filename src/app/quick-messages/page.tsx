@@ -14,6 +14,12 @@ import {
   UndoOutlined,
 } from "@ant-design/icons";
 
+import { FeatureUsageBadge } from "../../components/common/FeatureUsageBadge/FeatureUsageBadge";
+import {
+  formatFeatureLimitReached,
+  isFeatureLimitReached,
+  useFeaturesUsage,
+} from "../../components/common/FeatureUsageBadge/useFeaturesUsage";
 import handleClientError from "../../components/common/HandleClientError/HandleClientError";
 import TableCustomAntd2 from "../../components/custom/antd/TableCustomAntd2/TableCustomAntd2";
 import Layout from "../../components/template/Layout/Layout";
@@ -40,6 +46,8 @@ const countBlocks = (blocks: IQuickMessageBlock[]) => ({
 
 export default function QuickMessagesPage() {
   const { t } = useLanguageData();
+
+  const { usage } = useFeaturesUsage();
 
   const { message } = App.useApp();
 
@@ -72,6 +80,11 @@ export default function QuickMessagesPage() {
     }
   };
 
+  const isLimitReached: boolean = isFeatureLimitReached(
+    usage,
+    "quick-messages",
+  );
+
   return (
     <Layout
       title={t("quickMessages.title")}
@@ -83,13 +96,29 @@ export default function QuickMessagesPage() {
           title={t("quickMessages.title")}
           className="h-min-80 mt-5"
           extra={
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={() => router.push(Urls.QUICK_MESSAGES_CREATE)}
-            >
-              {t("quickMessages.new")}
-            </Button>
+            <Space>
+              <FeatureUsageBadge
+                feature="quick-messages"
+                usage={usage?.["quick-messages"]}
+              />
+
+              <Tooltip
+                title={
+                  isLimitReached
+                    ? formatFeatureLimitReached(t, "quick-messages", usage)
+                    : undefined
+                }
+              >
+                <Button
+                  type="primary"
+                  icon={<PlusOutlined />}
+                  disabled={isLimitReached}
+                  onClick={() => router.push(Urls.QUICK_MESSAGES_CREATE)}
+                >
+                  {t("quickMessages.new")}
+                </Button>
+              </Tooltip>
+            </Space>
           }
         >
           <TableCustomAntd2<IQuickMessage>
