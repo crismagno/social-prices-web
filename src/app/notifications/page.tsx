@@ -7,6 +7,7 @@ import moment from "moment";
 
 import { CheckOutlined } from "@ant-design/icons";
 
+import { CustomRangeDatePicker } from "../../components/common/CustomRangeDatePicker/CustomRangeDatePicker";
 import handleClientError from "../../components/common/HandleClientError/HandleClientError";
 import { IconBellAlert } from "../../components/common/icons/icons";
 import ListCustomAntd from "../../components/custom/antd/ListCustomAntd/ListCustomAntd";
@@ -55,11 +56,15 @@ export default function NotificationsPage() {
 
     if (notificationsNotSeenIds.length > 0) {
       const updateNotificationsToSeen = async () => {
-        await serviceMethodsInstance.notificationsServiceMethods.updateToSeen(
-          notificationsNotSeenIds
-        );
+        try {
+          await serviceMethodsInstance.notificationsServiceMethods.updateToSeen(
+            notificationsNotSeenIds
+          );
 
-        await fetchCountNotSeenNotificationsByUser();
+          await fetchCountNotSeenNotificationsByUser();
+        } catch (error: any) {
+          handleClientError(error);
+        }
       };
 
       updateNotificationsToSeen();
@@ -91,6 +96,11 @@ export default function NotificationsPage() {
   };
 
   const handleScrollList = () => {
+    // Nothing left to load, or a page is already on its way.
+    if (isLoading || notifications.length >= total) {
+      return;
+    }
+
     setTableStateRequest({
       ...tableStateRequest,
       filters: tableStateRequest?.filters ?? {},
@@ -118,14 +128,40 @@ export default function NotificationsPage() {
     });
   };
 
-  const handleChangeType = (type: NotificationsEnum.Type | null) => {
+  const handleChangeType = (type?: NotificationsEnum.Type | null) => {
     setTableStateRequest({
       ...tableStateRequest,
-      filters: type
-        ? {
-            type: [type],
-          }
-        : [],
+      filters: {
+        ...tableStateRequest?.filters,
+        type: type ? [type] : undefined,
+      },
+      pagination: {
+        total: 0,
+        current: undefined,
+        pageSize: 10,
+        skip: 0,
+      },
+      useConcat: false,
+    });
+  };
+
+  const handleChangeRangeDate = (
+    startDate: Date | null,
+    endDate: Date | null
+  ) => {
+    setTableStateRequest({
+      ...tableStateRequest,
+      filters: {
+        ...tableStateRequest?.filters,
+        // Whole days: from the first moment of the start to the last of the end.
+        rangeDate:
+          startDate && endDate
+            ? {
+                startDate: moment(startDate).startOf("day").toISOString(),
+                endDate: moment(endDate).endOf("day").toISOString(),
+              }
+            : undefined,
+      },
       pagination: {
         total: 0,
         current: undefined,
@@ -210,28 +246,34 @@ export default function NotificationsPage() {
           </Button>
         }
       >
-        <Row gutter={[8, 8]}>
-          <Col lg={5} md={8} sm={12} xs={24}>
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+          <div>
             <label className="font-bold mr-2">{t("notifications.type")}:</label>
             <Select
               onChange={handleChangeType}
               className="w-52"
               placeholder={t("notifications.selectType")}
-              value={tableStateRequest?.filters?.type?.[0]! as any}
+              value={tableStateRequest?.filters?.type?.[0]}
+              allowClear
             >
-              <Select.Option value={""}>
-                {t("notifications.selectType")}
-              </Select.Option>
-
               {Object.keys(NotificationsEnum.Type).map((type: string) => (
                 <Select.Option key={type} value={type}>
                   {t(NotificationsEnum.TypeLabels[type as NotificationsEnum.Type])}
                 </Select.Option>
               ))}
             </Select>
-          </Col>
+          </div>
 
-          <Col lg={5} md={8} sm={12} xs={24}>
+          <div>
+            <CustomRangeDatePicker
+              label={`${t("notifications.date")}:`}
+              labelClassName="mr-2"
+              format={DatesEnum.Format.DDMMYYY}
+              onChange={handleChangeRangeDate}
+            />
+          </div>
+
+          <div>
             <label className="font-bold mr-2">{t("notifications.sort")}:</label>
             <Select
               onChange={handleChangeBySort}
@@ -251,8 +293,8 @@ export default function NotificationsPage() {
                 )
               )}
             </Select>
-          </Col>
-        </Row>
+          </div>
+        </div>
 
         <Row>
           <Col xs={24}>
