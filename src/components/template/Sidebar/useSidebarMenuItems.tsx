@@ -290,7 +290,6 @@ export const useSidebarMenuItems = (
   const items: MenuItem[] = [
     getItem(t("navigation.home"), Urls.DASHBOARD, <HomeOutlined />),
     getItem(notificationsLabel, Urls.NOTIFICATIONS, notificationsIcon),
-    getItem(t("navigation.settings"), Urls.SETTINGS, <SettingOutlined />),
     getItem(t("navigation.notes"), Urls.NOTES, <CalendarOutlined />),
     ...chatsItems,
     ...appsItems,
@@ -325,6 +324,7 @@ export const useSidebarMenuItems = (
       generalChildren,
     ),
     getItem(t("navigation.support"), Urls.SUPPORT, <CustomerServiceOutlined />),
+    getItem(t("navigation.settings"), Urls.SETTINGS, <SettingOutlined />),
   ];
 
   // A customer account sees only its own area and the account pages.
@@ -336,8 +336,8 @@ export const useSidebarMenuItems = (
       <ShoppingCartOutlined />,
     ),
     getItem(notificationsLabel, Urls.NOTIFICATIONS, notificationsIcon),
-    getItem(t("navigation.settings"), Urls.SETTINGS, <SettingOutlined />),
     getItem(t("navigation.support"), Urls.SUPPORT, <CustomerServiceOutlined />),
+    getItem(t("navigation.settings"), Urls.SETTINGS, <SettingOutlined />),
   ];
 
   // The longest matching route wins, so /sales/create selects "create sale"
