@@ -2275,6 +2275,8 @@
     "withCurrentPrice": "With the current price",
     "profitAmount": "Profit",
     "margin": "Margin",
+    "currentProfit": "Profit at the current price",
+    "currentMargin": "Margin at the current price",
     "overLimit": "Expenses and profit add up to 100% or more of the price, so no price can cover the cost. Lower one of the percentages.",
     "informCost": "Enter the unit cost to see the suggested price."
   }

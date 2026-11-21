@@ -29,6 +29,7 @@ import {
 import ContainerTitle from "../../../components/common/ContainerTitle/ContainerTitle";
 import { ImageOrDefault } from "../../../components/common/ImageOrDefault/ImageOrDefault";
 import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
+import { PricingView } from "../../../components/common/PricingSection/PricingView";
 import { ProductHistoricPricesButton } from "../../../components/common/ProductHistoricPricesButton/ProductHistoricPricesButton";
 import { TagCategoriesCustomAntd } from "../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
 import { TagStoresCustomAntd } from "../../../components/common/TagStoresCustomAntd/TagStoresCustomAntd";
@@ -38,6 +39,7 @@ import YesNo from "../../../components/common/YesNo/YesNo";
 import Layout from "../../../components/template/Layout/Layout";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import CategoriesEnum from "../../../shared/business/categories/categories.enum";
+import { hasPricing } from "../../../shared/business/shared/pricing/pricing.utils";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
@@ -420,6 +422,16 @@ export default function ProductItemPage() {
                         </div>
                       </Descriptions.Item>
                     </Descriptions>
+                  </Col>
+                )}
+
+                {/* Pricing */}
+                {hasPricing(productItem.pricing) && (
+                  <Col xs={24}>
+                    <PricingView
+                      pricing={productItem.pricing}
+                      price={productItem.price}
+                    />
                   </Col>
                 )}
 

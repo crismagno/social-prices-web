@@ -24,6 +24,12 @@ export const normalizePricing = (
   profitPercentage: toNumber(pricing?.profitPercentage),
 });
 
+/** True when at least one pricing number was informed. */
+export const hasPricing = (pricing?: IPricing | null): boolean =>
+  Object.values(normalizePricing(pricing)).some(
+    (value: number | null) => value !== null,
+  );
+
 /**
  * Markup over the sale price: expenses and profit are percentages of the price,
  * so the price is the cost divided by what is left of 100%.

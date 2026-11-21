@@ -2278,6 +2278,8 @@
     "withCurrentPrice": "Com o preço atual",
     "profitAmount": "Lucro",
     "margin": "Margem",
+    "currentProfit": "Lucro com o preço atual",
+    "currentMargin": "Margem com o preço atual",
     "overLimit": "Despesas e lucro somam 100% ou mais do preço, então nenhum preço cobre o custo. Reduza um dos percentuais.",
     "informCost": "Informe o custo unitário para ver o preço sugerido."
   }
