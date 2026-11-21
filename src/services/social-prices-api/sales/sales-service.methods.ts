@@ -4,6 +4,7 @@ import { ISale } from "../../../shared/business/sales/sale.interface";
 import SalesEnum from "../../../shared/business/sales/sales.enum";
 import {
   IFiltersDownloadSales,
+  IGetCustomerProductResponse,
   IGetSalesAnalyticsParams,
   IGetSalesAnalyticsResponse,
   IGetSalesBalanceParams,
@@ -198,6 +199,24 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
       {
         headers: {
           "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      },
+    );
+
+    return response.data;
+  }
+
+  public async getProductsByCustomer(
+    customerId: string,
+  ): Promise<IGetCustomerProductResponse[]> {
+    const response = await this._fetchAxios.get<IGetCustomerProductResponse[]>(
+      `${this._socialPricesApiV1}${SalesServiceEnum.Methods.GET_PRODUCTS_BY_CUSTOMER.replace(
+        ":customerId",
+        customerId,
+      )}`,
+      {
+        headers: {
           Authorization: this.formatAuthorizationWithToken(),
         },
       },

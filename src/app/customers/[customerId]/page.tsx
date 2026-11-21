@@ -50,6 +50,7 @@ import { IInboxConversation } from "../../../shared/business/inbox/inbox.types";
 import { conversationAppUrl } from "../../chats/chats-links";
 import StoreChatStartModal from "./StoreChatStartModal";
 import { useCustomerChats } from "./useCustomerChats";
+import CustomerProductsTable from "./CustomerProductsTable";
 import InviteCustomerButton from "./InviteCustomerButton";
 
 // Where the customer lives inside the app they came from, if that app shows them.
@@ -597,6 +598,11 @@ export default function CustomerPage() {
               key: "2",
               label: t("sales.salesTable"),
               children: <SalesTable customerId={customerId} />,
+            },
+            {
+              key: "3",
+              label: t("customers.productsBought"),
+              children: <CustomerProductsTable customerId={customerId} />,
             },
           ]}
         />

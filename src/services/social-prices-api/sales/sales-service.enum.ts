@@ -11,6 +11,7 @@ namespace SalesServiceEnum {
     ACTIVATE_MANUAL = "/sales/activateManual/:saleId",
     GET_SALES_ANALYTICS = "/sales/getSalesAnalytics",
     GET_SALES_BALANCE = "/sales/getSalesBalance",
+    GET_PRODUCTS_BY_CUSTOMER = "/sales/getProductsByCustomer/:customerId",
     UPLOAD_SALES = "/sales/uploadSales",
     DOWNLOAD_SALES = "/sales/downloadSales",
     DOWNLOAD_SALE_SUMMARY_PDF = "/sales/downloadSaleSummaryPdf/:saleId",

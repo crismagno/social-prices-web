@@ -554,6 +554,9 @@
     "customerNotFoundToUpdate": "Cliente não encontrado para atualizar!",
     "openInApp": "Abrir no {app}",
     "sourceApps": "Apps de origem",
+    "productsBought": "Produtos comprados",
+    "purchases": "Compras",
+    "lastPurchase": "Última compra",
     "customerProfile": "Perfil do Cliente",
     "customerProfileSubtitle": "Perfil do cliente",
     "customerEmailTooltip": "E-mail do cliente, clique para enviar um e-mail",
@@ -2251,7 +2254,13 @@
     "products": "Produtos",
     "orderStatus": "Status do pedido",
     "orderStatusHint": "Em que etapa o seu pedido está: aberto, em andamento, concluído, cancelado...",
-    "paymentStatusHint": "Situação do pagamento desta compra: pendente, pago em parte, pago, cancelado ou reembolsado"
+    "paymentStatusHint": "Situação do pagamento desta compra: pendente, pago em parte, pago, cancelado ou reembolsado",
+    "seeAllPurchases": "Ver todas",
+    "totalPurchasesHint": "Em todas as lojas",
+    "totalSpentHint": "Em compras concluídas",
+    "openAmountHint": "Ainda a pagar",
+    "nothingOpen": "Tudo pago",
+    "noPurchasesHint": "Quando uma loja registrar uma compra para você, ela aparece aqui."
   },
   "accountMode": {
     "hint": "Veja sua conta como cliente (suas compras) ou como empresa (suas vendas)",

@@ -551,6 +551,9 @@
     "customerNotFoundToUpdate": "Customer not found to update!",
     "openInApp": "Open in {app}",
     "sourceApps": "Source apps",
+    "productsBought": "Products bought",
+    "purchases": "Purchases",
+    "lastPurchase": "Last purchase",
     "customerProfile": "Customer Profile",
     "customerProfileSubtitle": "Customer profile of",
     "customerEmailTooltip": "Customer email, click to send an email",
@@ -2248,7 +2251,13 @@
     "products": "Products",
     "orderStatus": "Order status",
     "orderStatusHint": "Which stage your order is at: open, in progress, completed, cancelled...",
-    "paymentStatusHint": "Where the payment of this purchase stands: pending, partially paid, paid, cancelled or refunded"
+    "paymentStatusHint": "Where the payment of this purchase stands: pending, partially paid, paid, cancelled or refunded",
+    "seeAllPurchases": "See all",
+    "totalPurchasesHint": "Across every store",
+    "totalSpentHint": "On completed purchases",
+    "openAmountHint": "Still to pay",
+    "nothingOpen": "All paid",
+    "noPurchasesHint": "When a store registers a purchase for you, it shows up here."
   },
   "accountMode": {
     "hint": "See your account as a customer (your purchases) or as a company (your sales)",
