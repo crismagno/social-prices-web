@@ -81,6 +81,92 @@ export default class StoreChatServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
+  // A file, or a recording from the microphone, with a caption if there is one.
+  public async sendMedia(
+    storeId: string,
+    file: File,
+    caption: string,
+    asVoice: boolean = false,
+  ): Promise<IStoreChatMessage> {
+    const formData: FormData = new FormData();
+
+    formData.append("file", file);
+
+    if (asVoice) {
+      formData.append("voice", "true");
+    }
+
+    if (caption.trim()) {
+      formData.append("caption", caption.trim());
+    }
+
+    const response = await this._fetchAxios.post<IStoreChatMessage>(
+      this._url(StoreChatServiceEnum.Methods.MEDIA, storeId),
+      formData,
+      { headers: { Authorization: this.formatAuthorizationWithToken() } },
+    );
+
+    return response.data;
+  }
+
+  // The bytes of one file of a message. They come through the API with the
+  // login, never from a public address.
+  public async getAttachment(
+    storeId: string,
+    messageId: string,
+    index: number,
+  ): Promise<Blob> {
+    const response = await this._fetchAxios.get<Blob>(
+      this._url(StoreChatServiceEnum.Methods.ATTACHMENT, storeId)
+        .replace(":messageId", encodeURIComponent(messageId))
+        .replace(":index", String(index)),
+      { headers: this._headers(), responseType: "blob" },
+    );
+
+    return response.data;
+  }
+
+  // Changes the words of a message the customer wrote; the store sees the new ones.
+  public async editMessage(
+    storeId: string,
+    messageId: string,
+    text: string,
+  ): Promise<IStoreChatMessage> {
+    const response = await this._fetchAxios.patch<IStoreChatMessage>(
+      this._url(StoreChatServiceEnum.Methods.MESSAGE, storeId).replace(
+        ":messageId",
+        encodeURIComponent(messageId),
+      ),
+      { text },
+      { headers: this._headers() },
+    );
+
+    return response.data;
+  }
+
+  // Removes a message the customer wrote; it is gone for the store too.
+  public async deleteMessage(
+    storeId: string,
+    messageId: string,
+  ): Promise<void> {
+    await this._fetchAxios.delete(
+      this._url(StoreChatServiceEnum.Methods.MESSAGE, storeId).replace(
+        ":messageId",
+        encodeURIComponent(messageId),
+      ),
+      { headers: this._headers() },
+    );
+  }
+
+  // "typing…" for the store while the customer writes. Best effort.
+  public async sendTyping(storeId: string): Promise<void> {
+    await this._fetchAxios.post<void>(
+      this._url(StoreChatServiceEnum.Methods.TYPING, storeId),
+      {},
+      { headers: this._headers() },
+    );
+  }
+
   public async markRead(storeId: string): Promise<void> {
     await this._fetchAxios.post<void>(
       this._url(StoreChatServiceEnum.Methods.READ, storeId),

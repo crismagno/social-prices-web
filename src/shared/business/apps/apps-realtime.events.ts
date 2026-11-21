@@ -10,6 +10,8 @@ export const AppsRealtimeEvents = {
   INBOX_UPDATED: "apps:inbox-updated",
   // Server to client: a store chat of this account changed. No message content.
   STORE_CHAT_UPDATED: "store-chat:updated",
+  // Server to client: the other side of a store chat is writing. Nothing stored.
+  STORE_CHAT_TYPING: "store-chat:typing",
 } as const;
 
 export interface IInboxUpdatedEvent {

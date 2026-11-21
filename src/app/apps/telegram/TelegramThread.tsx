@@ -31,6 +31,7 @@ import {
 } from "@ant-design/icons";
 
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
+import ScrollToBottomButton from "../../../components/common/ScrollToBottomButton/ScrollToBottomButton";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import { useTypingSignal } from "../../../shared/hooks/useTypingSignal";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
@@ -43,6 +44,9 @@ import { ICustomer } from "../../../shared/business/customers/customer.interface
 import Urls from "../../../shared/common/routes-app/routes-app";
 import EditCustomerDrawer from "../../../components/common/EditCustomerDrawer/EditCustomerDrawer";
 import ChatsFastSale from "../../chats/ChatsFastSale";
+import ChatsMessageEditor, {
+  ChatsEditedMark,
+} from "../../chats/ChatsMessageEditor";
 import LinkCustomerModal from "./LinkCustomerModal";
 import {
   chatDisplayName,
@@ -60,6 +64,22 @@ const MAX_LENGTH: number = 4096;
 
 // A file's text is its caption, which Telegram limits more tightly.
 const MAX_CAPTION_LENGTH: number = 1024;
+
+// What the bot can send with a caption: an edit of those changes the caption.
+const CAPTIONED_CONTENT_TYPES: TelegramEnum.ContentType[] = [
+  TelegramEnum.ContentType.PHOTO,
+  TelegramEnum.ContentType.DOCUMENT,
+  TelegramEnum.ContentType.VOICE,
+  TelegramEnum.ContentType.AUDIO,
+  TelegramEnum.ContentType.VIDEO,
+];
+
+// Only what the bot sent, and only a text or a file that takes a caption (the
+// API refuses the rest too).
+const isEditable = (item: ITelegramMessage): boolean =>
+  item.direction === TelegramEnum.Direction.OUT &&
+  (item.contentType === TelegramEnum.ContentType.TEXT ||
+    CAPTIONED_CONTENT_TYPES.includes(item.contentType));
 
 // The most the bot can fetch back from Telegram, so the most worth sending.
 const MAX_FILE_BYTES: number = 20 * 1024 * 1024;
@@ -110,6 +130,9 @@ export default function TelegramThread({
 
   const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
 
+  // The message whose words are being changed, if any: one at a time.
+  const [editingId, setEditingId] = useState<string | null>(null);
+
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
   const inputRef = useRef<TextAreaRef | null>(null);
@@ -153,6 +176,35 @@ export default function TelegramThread({
 
     setFile(picked);
     inputRef.current?.focus();
+  };
+
+  // Thrown again after being shown, so the editor stays open.
+  const editMessage = async (
+    item: ITelegramMessage,
+    newText: string,
+  ): Promise<void> => {
+    try {
+      const edited: ITelegramMessage =
+        await serviceMethodsInstance.telegramServiceMethods.editMessage(
+          chat.chatId,
+          item._id,
+          newText,
+        );
+
+      // Same id: it takes the place of the message as it was.
+      addMessage(edited);
+
+      setEditingId(null);
+
+      message.success(t("chats.edit.done"));
+
+      onChatChanged();
+    } catch (error: any) {
+      // Telegram's own reason comes with the error.
+      handleClientError(error);
+
+      throw error;
+    }
   };
 
   const deleteMessage = async (item: ITelegramMessage): Promise<void> => {
@@ -487,24 +539,51 @@ export default function TelegramThread({
                       </div>
                     )}
 
-                    {contentLabel(item) && (
-                      <div
-                        style={{
-                          whiteSpace: "pre-wrap",
-                          wordBreak: "break-word",
-                        }}
-                      >
-                        {contentLabel(item)}
-                      </div>
+                    {editingId === item._id ? (
+                      <ChatsMessageEditor
+                        initialText={item.text ?? ""}
+                        maxLength={
+                          item.contentType === TelegramEnum.ContentType.TEXT
+                            ? MAX_LENGTH
+                            : MAX_CAPTION_LENGTH
+                        }
+                        onSave={(newText: string) => editMessage(item, newText)}
+                        onCancel={() => setEditingId(null)}
+                      />
+                    ) : (
+                      contentLabel(item) && (
+                        <div
+                          style={{
+                            whiteSpace: "pre-wrap",
+                            wordBreak: "break-word",
+                          }}
+                        >
+                          {contentLabel(item)}
+                        </div>
+                      )
                     )}
 
                     <div
-                      className="mt-0.5 text-right text-[11px]"
+                      className="mt-0.5 flex items-center justify-end gap-1 text-[11px]"
                       style={{ opacity: 0.7 }}
                     >
-                      {dayjs(item.sentAt).format("HH:mm")}
+                      <ChatsEditedMark editedAt={item.editedAt} />
+
+                      <span>{dayjs(item.sentAt).format("HH:mm")}</span>
                     </div>
                   </div>
+
+                  {isEditable(item) && editingId !== item._id && (
+                    <Button
+                      type="text"
+                      size="small"
+                      icon={<EditOutlined />}
+                      className="opacity-60 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100"
+                      aria-label={t("chats.edit.action")}
+                      title={t("chats.edit.action")}
+                      onClick={() => setEditingId(item._id)}
+                    />
+                  )}
 
                   {canDelete && (
                     <Popconfirm
@@ -529,6 +608,8 @@ export default function TelegramThread({
         )}
 
         <div ref={bottomRef} />
+
+        <ScrollToBottomButton />
       </div>
 
       <div

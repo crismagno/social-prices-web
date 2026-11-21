@@ -3,17 +3,18 @@
 import { useState } from "react";
 
 import {
+  Badge,
   ConfigProvider,
   Menu,
   Modal,
-  Tag,
   ThemeConfig,
   Tooltip,
 } from "antd";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import {
+  BellOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   ShoppingCartOutlined,
@@ -91,9 +92,15 @@ const Sidebar: React.FC<Props> = ({}) => {
 
   const {
     theme: { theme },
+    notifications: {
+      countNotificationNotSeen,
+      isLoadingCountNotificationNotSeen,
+    },
   } = useAppData();
 
   const router = useRouter();
+
+  const pathname: string = usePathname() ?? "";
 
   const { isCollapsed, isTransitionEnabled, toggleIsCollapsed } =
     useSidebarCollapsed();
@@ -117,14 +124,18 @@ const Sidebar: React.FC<Props> = ({}) => {
     ? t(UsersEnum.TypeLabels[UsersEnum.Type.CUSTOMER])
     : t(EmployeesEnum.LevelLabels[employee.level]);
 
-  const employeeTagColor: string | undefined =
-    employee && !isCustomer
-      ? EmployeesEnum.LevelColors[employee.level]
-      : undefined;
-
   const avatarTitle: string = employee
     ? `${userName} · ${employeeTagLabel}`
     : userName;
+
+  // Notifications are not a menu entry: a bell next to the account warns about
+  // the unseen ones and opens the page.
+  const hasUnseenNotifications: boolean =
+    !isLoadingCountNotificationNotSeen && !!countNotificationNotSeen;
+
+  const isOnNotifications: boolean =
+    pathname === Urls.NOTIFICATIONS ||
+    pathname.startsWith(`${Urls.NOTIFICATIONS}/`);
 
   const toggleLabel: string = isCollapsed
     ? t("navigation.expandMenu")
@@ -240,48 +251,54 @@ const Sidebar: React.FC<Props> = ({}) => {
         <div
           className={`shrink-0 flex items-center gap-1
             border-t border-gray-100 dark:border-gray-700
-            ${isCollapsed ? "flex-col py-2" : "px-3 py-2"}`}
+            ${isCollapsed ? "flex-col py-2" : "justify-between px-3 py-2"}`}
         >
-          <Link
-            href={Urls.PROFILE}
-            className={`flex items-center min-w-0 rounded-lg p-1
-              transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 ${
-                isCollapsed ? "justify-center" : "flex-1 gap-2"
-              }`}
+          <Tooltip
+            placement={isCollapsed ? "right" : "top"}
+            title={avatarTitle}
           >
-            <Avatar
-              src={user.avatar}
-              alt={userName}
-              title={isCollapsed ? avatarTitle : undefined}
-              width={32}
-            />
+            <Link
+              href={Urls.PROFILE}
+              aria-label={avatarTitle}
+              className="flex items-center justify-center shrink-0 rounded-lg
+                p-1 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              <Avatar src={user.avatar} alt={userName} width={32} />
+            </Link>
+          </Tooltip>
 
-            {!isCollapsed && (
-              <div className="flex flex-col min-w-0 leading-tight">
-                <span
-                  className="text-sm font-semibold truncate
-                    text-slate-800 dark:text-white"
-                >
-                  {userName}
-                </span>
-
-                {employee ? (
-                  <Tooltip title={employee.name}>
-                    <Tag
-                      className="m-0 mt-0.5 w-fit max-w-full truncate"
-                      color={employeeTagColor}
-                    >
-                      {employeeTagLabel}
-                    </Tag>
-                  </Tooltip>
-                ) : (
-                  <span className="text-xs text-gray-400 truncate">
-                    {t("navigation.profile")}
-                  </span>
-                )}
-              </div>
-            )}
-          </Link>
+          <Tooltip
+            placement={isCollapsed ? "right" : "top"}
+            title={t("navigation.notifications")}
+          >
+            <Link
+              href={Urls.NOTIFICATIONS}
+              aria-label={t("navigation.notifications")}
+              aria-current={isOnNotifications ? "page" : undefined}
+              className={`${ICON_BUTTON_CLASS_NAME} ${
+                isOnNotifications
+                  ? "bg-blue-50 text-blue-600 dark:bg-blue-500/25 dark:text-white"
+                  : `text-slate-500 hover:bg-gray-100 hover:text-blue-500
+                    dark:text-gray-300 dark:hover:bg-gray-700
+                    dark:hover:text-white`
+              }`}
+            >
+              <Badge
+                count={hasUnseenNotifications ? countNotificationNotSeen : 0}
+                size="small"
+                overflowCount={99}
+                offset={[2, -2]}
+              >
+                <BellOutlined
+                  className={`text-base ${
+                    hasUnseenNotifications
+                      ? "animate-pulse text-yellow-500"
+                      : "text-inherit"
+                  }`}
+                />
+              </Badge>
+            </Link>
+          </Tooltip>
 
           <Tooltip
             placement={isCollapsed ? "right" : "top"}

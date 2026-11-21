@@ -124,6 +124,8 @@ const SelectProducts: React.FC<Props> = ({
                     ? getImageUrl(product.mainUrl)
                     : ImagesEnum.FilesNames.DefaultProductImage
                 }
+                // Shown by antd when the image fails to load.
+                icon={<img src={ImagesEnum.FilesNames.DefaultProductImage} alt="" />}
                 size={"small"}
                 className="mr-2"
               />

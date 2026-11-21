@@ -122,6 +122,7 @@ export const SelectProductItemModal: React.FC<Props> = ({
                       }
                       alt={productItem.name}
                       className="rounded object-cover"
+                      fallback={ImagesEnum.FilesNames.DefaultProductImage}
                     />
 
                     {/* Content */}

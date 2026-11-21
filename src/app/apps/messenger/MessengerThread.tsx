@@ -33,6 +33,7 @@ import {
 } from "@ant-design/icons";
 
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
+import ScrollToBottomButton from "../../../components/common/ScrollToBottomButton/ScrollToBottomButton";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import { useTypingSignal } from "../../../shared/hooks/useTypingSignal";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
@@ -548,6 +549,8 @@ export default function MessengerThread({
         )}
 
         <div ref={bottomRef} />
+
+        <ScrollToBottomButton />
       </div>
 
       <div

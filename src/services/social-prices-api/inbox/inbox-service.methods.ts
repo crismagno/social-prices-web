@@ -45,6 +45,23 @@ export default class InboxServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
+  // Changes the words of a message already sent, where its channel allows it:
+  // the person on the other side sees the new ones.
+  public async editMessage(
+    messageId: string,
+    text: string,
+  ): Promise<IInboxMessage> {
+    const response = await this._fetchAxios.patch<IInboxMessage>(
+      this._url(
+        InboxServiceEnum.Methods.MESSAGE.replace(":messageId", messageId),
+      ),
+      { text },
+      { headers: this._headers() },
+    );
+
+    return response.data;
+  }
+
   // Removes it through its channel: Telegram deletes it for the customer too, the
   // others only take it out of the inbox.
   public async deleteMessage(messageId: string): Promise<void> {

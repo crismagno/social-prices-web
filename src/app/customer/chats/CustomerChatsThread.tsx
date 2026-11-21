@@ -1,22 +1,41 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
 
-import { App, Button, Empty, Input, Spin, theme } from "antd";
+import { App, Button, Popconfirm, Spin, theme } from "antd";
 import dayjs from "dayjs";
 
-import { ArrowLeftOutlined, SendOutlined } from "@ant-design/icons";
+import {
+  ArrowLeftOutlined,
+  DeleteOutlined,
+  EditOutlined,
+} from "@ant-design/icons";
 
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
+import TypingBubble from "../../../components/common/TypingBubble/TypingBubble";
+import { useStoreChatTyping } from "../../../data/context/socket/useStoreChatTyping";
+import ScrollToBottomButton from "../../../components/common/ScrollToBottomButton/ScrollToBottomButton";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import {
   IStoreChatMessage,
   IStoreChatStoreCard,
   STORE_CHAT_MAX_TEXT,
+  STORE_CHAT_MAX_UPLOAD_BYTES,
   StoreChatCodes,
   storeChatErrorCode,
 } from "../../../shared/business/store-chat/store-chat.types";
-import { StoreAvatar } from "./CustomerChatsList";
+import { IInboxAttachment } from "../../../shared/business/inbox/inbox.types";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
+import {
+  formatFileSize,
+  relativeDay,
+} from "../../apps/telegram/telegram-display";
+import ChatsAttachment from "../../chats/ChatsAttachment";
+import ChatsMessageEditor, {
+  ChatsEditedMark,
+} from "../../chats/ChatsMessageEditor";
+import CustomerChatsComposer from "./CustomerChatsComposer";
+import StoreAvatar from "./StoreAvatar";
 import { useCustomerThread } from "./useCustomerThread";
 
 interface Props {
@@ -24,18 +43,20 @@ interface Props {
   // What the list already knows of the store, shown when it can no longer be
   // talked to (its history stays).
   knownStore: IStoreChatStoreCard | null;
-  onBack: () => void;
+  // Present on a phone, where the thread takes the place of the list.
+  onBack?: () => void;
   onSent: () => void;
+  // Leaves a store that is not there.
+  onLeave: () => void;
 }
 
-const dayOf = (date: string): string => dayjs(date).format("DD/MM/YYYY");
-
-// The right side: the conversation with one store.
+// The right side: the conversation with one store, drawn like the stores' chat.
 export default function CustomerChatsThread({
   storeId,
   knownStore,
   onBack,
   onSent,
+  onLeave,
 }: Props) {
   const { t } = useLanguageData();
 
@@ -52,50 +73,120 @@ export default function CustomerChatsThread({
     isSending,
     loadOlder,
     send,
+    sendMedia,
+    edit,
+    remove,
   } = useCustomerThread(storeId);
 
-  const [text, setText] = useState<string>("");
+  // The message whose words are being changed, if any: one at a time.
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const scroller = useRef<HTMLDivElement | null>(null);
 
   const lastId: string | undefined = messages[messages.length - 1]?._id;
 
-  // A new message at the end brings the view down; older ones loaded on top do not.
+  // The store is writing: shown for a few seconds, until its message arrives.
+  const { isTyping, clear: clearTyping } = useStoreChatTyping(
+    (event) => event.storeId === storeId,
+  );
+
+  useEffect(() => {
+    clearTyping();
+  }, [lastId, clearTyping]);
+
+  // A new message at the end (or "typing…") brings the view down; older ones
+  // loaded on top do not.
   useLayoutEffect(() => {
     if (scroller.current) {
       scroller.current.scrollTop = scroller.current.scrollHeight;
     }
-  }, [lastId, isLoading]);
-
-  useEffect(() => {
-    setText("");
-  }, [storeId]);
+  }, [lastId, isLoading, isTyping]);
 
   const shown: IStoreChatStoreCard | null = store ?? knownStore;
 
-  const onSend = async (): Promise<void> => {
-    if (isSending || !text.trim()) {
-      return;
-    }
+  const dayLabel = (at: string): string => {
+    const day = relativeDay(at);
 
+    return day === "today"
+      ? t("chats.today")
+      : day === "yesterday"
+        ? t("chats.yesterday")
+        : dayjs(at).format("DD/MM/YYYY");
+  };
+
+  // Says in the customer's words why the store did not get the message.
+  const explain = (error: any): void => {
+    const code: string | null = storeChatErrorCode(error);
+
+    if (code === StoreChatCodes.DAILY_LIMIT) {
+      message.warning(t("customerChats.errors.dailyLimit"));
+    } else if (code === StoreChatCodes.OWN_STORE) {
+      message.warning(t("customerChats.errors.ownStore"));
+    } else if (
+      code === StoreChatCodes.FILE_TOO_LARGE ||
+      error?.response?.status === 413
+    ) {
+      message.error(
+        t("chats.media.tooLarge").replace(
+          "{size}",
+          formatFileSize(STORE_CHAT_MAX_UPLOAD_BYTES),
+        ),
+      );
+    } else if (error?.response?.status === 404) {
+      message.warning(t("customerChats.storeUnavailable"));
+    } else {
+      handleClientError(error);
+    }
+  };
+
+  // True when it went: the composer only then clears what was typed or picked.
+  const deliver = async (act: () => Promise<boolean>): Promise<boolean> => {
     try {
-      // The text is only cleared once it really went.
-      if (await send(text)) {
-        setText("");
+      const hasGone: boolean = await act();
+
+      if (hasGone) {
         onSent();
       }
-    } catch (error: any) {
-      const code: string | null = storeChatErrorCode(error);
 
-      if (code === StoreChatCodes.DAILY_LIMIT) {
-        message.warning(t("customerChats.errors.dailyLimit"));
-      } else if (code === StoreChatCodes.OWN_STORE) {
-        message.warning(t("customerChats.errors.ownStore"));
-      } else if (error?.response?.status === 404) {
-        message.warning(t("customerChats.storeUnavailable"));
-      } else {
-        handleClientError(error);
-      }
+      return hasGone;
+    } catch (error: any) {
+      explain(error);
+
+      return false;
+    }
+  };
+
+  // Thrown again after being explained, so the editor stays open.
+  const onEdit = async (
+    item: IStoreChatMessage,
+    text: string,
+  ): Promise<void> => {
+    try {
+      await edit(item._id, text);
+
+      setEditingId(null);
+
+      message.success(t("chats.edit.done"));
+
+      // The list's preview follows the new words.
+      onSent();
+    } catch (error: any) {
+      explain(error);
+
+      throw error;
+    }
+  };
+
+  const onDelete = async (item: IStoreChatMessage): Promise<void> => {
+    try {
+      await remove(item._id);
+
+      message.success(t("chats.delete.done"));
+
+      // The list's preview moves to what is now the newest message.
+      onSent();
+    } catch (error: any) {
+      handleClientError(error);
     }
   };
 
@@ -110,151 +201,232 @@ export default function CustomerChatsThread({
   // Nothing to show at all: the store is not there and nothing was ever said.
   if (!shown && !messages.length) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-3 p-6">
-        <Empty
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description={t("customerChats.storeUnavailable")}
-        />
+      <div className="flex h-full flex-col items-center justify-center gap-4 p-6 text-center">
+        <div style={{ opacity: 0.5, filter: "grayscale(1)" }}>
+          <StoreAvatar store={null} size={72} />
+        </div>
 
-        <Button onClick={onBack}>{t("customerChats.back")}</Button>
+        <div className="text-lg font-semibold">
+          {t("customerChats.storeUnavailable")}
+        </div>
+
+        <Button onClick={onLeave}>{t("customerChats.back")}</Button>
       </div>
     );
   }
 
   return (
-    <div className="flex h-full min-h-0 flex-col">
+    <div className="flex h-full flex-col">
       <div
-        className="flex items-center gap-3 p-3"
+        className="flex items-center gap-3 px-4 py-3"
         style={{ borderBottom: `1px solid ${token.colorBorderSecondary}` }}
       >
-        <Button
-          className="md:hidden"
-          type="text"
-          icon={<ArrowLeftOutlined />}
-          aria-label={t("customerChats.back")}
-          onClick={onBack}
-        />
+        {onBack && (
+          <Button
+            type="text"
+            icon={<ArrowLeftOutlined />}
+            onClick={onBack}
+            aria-label={t("customerChats.back")}
+          />
+        )}
 
-        {shown && <StoreAvatar store={shown} size={36} />}
+        <StoreAvatar store={shown} size={40} />
 
         <div className="flex min-w-0 flex-col">
           <span className="truncate font-semibold">
             {shown?.name ?? t("customerChats.storeUnavailable")}
           </span>
 
-          {shown?.description && (
+          {/* While the store writes, the line under its name says so. */}
+          {isTyping ? (
             <span
-              className="truncate text-xs"
-              style={{ color: token.colorTextSecondary }}
+              className="truncate text-xs italic"
+              style={{ color: token.colorPrimary }}
             >
-              {shown.description}
+              {t("chats.typing")}
             </span>
+          ) : (
+            shown?.description && (
+              <span
+                className="truncate text-xs"
+                style={{ color: token.colorTextSecondary }}
+              >
+                {shown.description}
+              </span>
+            )
           )}
         </div>
       </div>
 
       <div
         ref={scroller}
-        className="flex min-h-0 flex-1 flex-col gap-1.5 overflow-y-auto p-3"
+        className="flex flex-1 flex-col gap-1 overflow-y-auto px-4 py-3"
         style={{ background: token.colorFillQuaternary }}
       >
         {hasOlder && (
-          <div className="flex justify-center pb-2">
+          <div className="mb-2 text-center">
             <Button size="small" loading={isLoadingOlder} onClick={loadOlder}>
               {t("chats.loadOlder")}
             </Button>
           </div>
         )}
 
-        {!messages.length && (
-          <div className="m-auto max-w-xs text-center">
-            <Empty
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
-              description={t("customerChats.firstMessage")}
-            />
+        {messages.length === 0 && (
+          <div className="m-auto flex max-w-xs flex-col items-center gap-3 p-6 text-center">
+            <StoreAvatar store={shown} size={72} />
+
+            <div className="font-semibold">{shown?.name}</div>
+
+            <div style={{ color: token.colorTextSecondary }}>
+              {t("customerChats.firstMessage")}
+            </div>
           </div>
         )}
 
         {messages.map((item: IStoreChatMessage, index: number) => {
-          const isNewDay: boolean =
+          const startsDay: boolean =
             index === 0 ||
-            dayOf(messages[index - 1].sentAt) !== dayOf(item.sentAt);
+            !dayjs(item.sentAt).isSame(
+              dayjs(messages[index - 1].sentAt),
+              "day",
+            );
 
           return (
-            <div key={item._id} className="flex flex-col">
-              {isNewDay && (
-                <span
-                  className="my-2 self-center rounded-full px-2.5 py-0.5 text-xs"
-                  style={{
-                    background: token.colorFillSecondary,
-                    color: token.colorTextSecondary,
-                  }}
-                >
-                  {dayOf(item.sentAt)}
-                </span>
+            <Fragment key={item._id}>
+              {startsDay && (
+                <div className="my-2 text-center">
+                  <span
+                    className="rounded-full px-3 py-0.5 text-xs"
+                    style={{
+                      background: token.colorFillSecondary,
+                      color: token.colorTextSecondary,
+                    }}
+                  >
+                    {dayLabel(item.sentAt)}
+                  </span>
+                </div>
               )}
 
               <div
-                className={`max-w-[80%] rounded-2xl px-3 py-1.5 ${
-                  item.fromMe ? "self-end" : "self-start"
-                }`}
-                style={{
-                  background: item.fromMe
-                    ? token.colorPrimary
-                    : token.colorBgContainer,
-                  color: item.fromMe
-                    ? token.colorTextLightSolid
-                    : token.colorText,
-                  border: item.fromMe
-                    ? "none"
-                    : `1px solid ${token.colorBorderSecondary}`,
-                }}
+                className={`group flex w-full items-center gap-1 ${item.fromMe ? "flex-row-reverse justify-start" : "justify-start"}`}
               >
-                <span className="whitespace-pre-wrap break-words">
-                  {item.text}
-                </span>
+                <div
+                  className={`max-w-[80%] rounded-2xl px-3 py-2 shadow-sm ${item.fromMe ? "rounded-br-md" : "rounded-bl-md"}`}
+                  style={{
+                    background: item.fromMe
+                      ? token.colorPrimary
+                      : token.colorBgContainer,
+                    color: item.fromMe
+                      ? token.colorTextLightSolid
+                      : token.colorText,
+                  }}
+                >
+                  {item.attachments?.map((attachment: IInboxAttachment) => (
+                    <div
+                      key={attachment.index}
+                      className={item.text ? "mb-1" : ""}
+                    >
+                      <ChatsAttachment
+                        message={item}
+                        attachment={attachment}
+                        isOut={item.fromMe}
+                        fetchBlob={() =>
+                          serviceMethodsInstance.storeChatServiceMethods.getAttachment(
+                            storeId,
+                            item._id,
+                            attachment.index,
+                          )
+                        }
+                      />
+                    </div>
+                  ))}
 
-                <span className="ml-2 inline-block text-[10px] opacity-70">
-                  {dayjs(item.sentAt).format("HH:mm")}
-                </span>
+                  {editingId === item._id ? (
+                    <ChatsMessageEditor
+                      initialText={item.text ?? ""}
+                      maxLength={STORE_CHAT_MAX_TEXT}
+                      onSave={(text: string) => onEdit(item, text)}
+                      onCancel={() => setEditingId(null)}
+                    />
+                  ) : (
+                    item.text && (
+                      <div
+                        style={{
+                          whiteSpace: "pre-wrap",
+                          wordBreak: "break-word",
+                        }}
+                      >
+                        {item.text}
+                      </div>
+                    )
+                  )}
+
+                  <div
+                    className="mt-0.5 flex items-center justify-end gap-1 text-[11px]"
+                    style={{ opacity: 0.8 }}
+                  >
+                    <ChatsEditedMark editedAt={item.editedAt} />
+
+                    <span>{dayjs(item.sentAt).format("HH:mm")}</span>
+                  </div>
+                </div>
+
+                {/* Only what the customer wrote can be changed by them, and only
+                    while the store is still there to read it. */}
+                {item.fromMe && store && editingId !== item._id && (
+                  <Button
+                    type="text"
+                    size="small"
+                    icon={<EditOutlined />}
+                    className="opacity-60 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100"
+                    aria-label={t("chats.edit.action")}
+                    title={t("chats.edit.action")}
+                    onClick={() => setEditingId(item._id)}
+                  />
+                )}
+
+                {/* Only what the customer wrote can be removed by them. */}
+                {item.fromMe && (
+                  <Popconfirm
+                    title={t("customerChats.deleteConfirm")}
+                    okText={t("chats.delete.ok")}
+                    cancelText={t("common.cancel")}
+                    okButtonProps={{ danger: true }}
+                    onConfirm={() => onDelete(item)}
+                  >
+                    <Button
+                      type="text"
+                      size="small"
+                      icon={<DeleteOutlined />}
+                      className="opacity-60 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100"
+                      aria-label={t("chats.delete.ok")}
+                    />
+                  </Popconfirm>
+                )}
               </div>
-            </div>
+            </Fragment>
           );
         })}
+        {isTyping && <TypingBubble label={t("chats.typing")} />}
+
+        <ScrollToBottomButton />
       </div>
 
       {store ? (
-        <div
-          className="flex items-end gap-2 p-3"
-          style={{ borderTop: `1px solid ${token.colorBorderSecondary}` }}
-        >
-          <Input.TextArea
-            value={text}
-            maxLength={STORE_CHAT_MAX_TEXT}
-            autoSize={{ minRows: 1, maxRows: 5 }}
-            placeholder={t("customerChats.placeholder")}
-            onChange={(event) => setText(event.target.value)}
-            onPressEnter={(event) => {
-              // Enter sends, Shift+Enter breaks the line.
-              if (!event.shiftKey && !event.nativeEvent.isComposing) {
-                event.preventDefault();
-                onSend();
-              }
-            }}
-          />
-
-          <Button
-            type="primary"
-            icon={<SendOutlined />}
-            loading={isSending}
-            disabled={!text.trim()}
-            aria-label={t("customerChats.send")}
-            onClick={onSend}
-          />
-        </div>
+        <CustomerChatsComposer
+          key={storeId}
+          isSending={isSending}
+          onTyping={() =>
+            serviceMethodsInstance.storeChatServiceMethods.sendTyping(storeId)
+          }
+          onSendText={(text: string) => deliver(() => send(text))}
+          onSendMedia={(file: File, caption: string, asVoice: boolean) =>
+            deliver(() => sendMedia(file, caption, asVoice))
+          }
+        />
       ) : (
         <div
-          className="p-3 text-center text-sm"
+          className="px-4 py-3 text-center text-sm"
           style={{
             borderTop: `1px solid ${token.colorBorderSecondary}`,
             color: token.colorTextSecondary,

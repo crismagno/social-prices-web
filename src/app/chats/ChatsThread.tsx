@@ -17,8 +17,11 @@ import {
 } from "@ant-design/icons";
 
 import handleClientError from "../../components/common/HandleClientError/HandleClientError";
+import TypingBubble from "../../components/common/TypingBubble/TypingBubble";
+import { useStoreChatTyping } from "../../data/context/socket/useStoreChatTyping";
 import EditCustomerDrawer from "../../components/common/EditCustomerDrawer/EditCustomerDrawer";
 import ChannelIcon from "../../components/common/ChannelIcon/ChannelIcon";
+import ScrollToBottomButton from "../../components/common/ScrollToBottomButton/ScrollToBottomButton";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import InboxEnum from "../../shared/business/inbox/inbox.enum";
@@ -33,6 +36,7 @@ import { relativeDay } from "../apps/telegram/telegram-display";
 import ChatsAttachment from "./ChatsAttachment";
 import ChatsConversationsModal from "./ChatsConversationsModal";
 import ChatsFastSale from "./ChatsFastSale";
+import ChatsMessageEditor, { ChatsEditedMark } from "./ChatsMessageEditor";
 import ChatsReplyBox from "./ChatsReplyBox";
 import { conversationAppUrl } from "./chats-links";
 import {
@@ -57,6 +61,13 @@ interface Props {
   // Removing a message needs an admin or master employee (the API enforces it too).
   canDelete: boolean;
 }
+
+// The longest text each channel that can change a message takes: a caption is
+// shorter than a text in Telegram.
+const EDIT_MAX_LENGTH: Partial<Record<InboxEnum.Channel, number>> = {
+  [InboxEnum.Channel.TELEGRAM]: 4096,
+  [InboxEnum.Channel.STORE]: 1000,
+};
 
 // One customer (or one person): the messages of every channel together, each
 // marked with where it came from.
@@ -94,6 +105,9 @@ export default function ChatsThread({
 
   const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
 
+  // The message whose words are being changed, if any: one at a time.
+  const [editingId, setEditingId] = useState<string | null>(null);
+
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
   const name: string = chatName(chat, t("chats.unnamed"));
@@ -101,9 +115,22 @@ export default function ChatsThread({
   const lastMessageId: string | undefined = messages[messages.length - 1]?._id;
 
   // Reading goes to the newest message; loading older ones does not move it.
+  // The customer is writing on the store chat: shown for a few seconds, until
+  // the message arrives. The other channels do not tell us this.
+  const { isTyping, clear: clearTyping } = useStoreChatTyping((event) =>
+    chat.conversations.some(
+      (conversation: IInboxConversation) =>
+        conversation._id === event.conversationId,
+    ),
+  );
+
+  useEffect(() => {
+    clearTyping();
+  }, [lastMessageId, chat.key, clearTyping]);
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ block: "end" });
-  }, [lastMessageId, chat.key]);
+  }, [lastMessageId, chat.key, isTyping]);
 
   const conversationOf = (
     message: IInboxMessage,
@@ -112,6 +139,34 @@ export default function ChatsThread({
       (conversation: IInboxConversation) =>
         conversation._id === message.conversationId,
     );
+
+  // Thrown again after being shown, so the editor stays open.
+  const editMessage = async (
+    item: IInboxMessage,
+    text: string,
+  ): Promise<void> => {
+    try {
+      const edited: IInboxMessage =
+        await serviceMethodsInstance.inboxServiceMethods.editMessage(
+          item._id,
+          text,
+        );
+
+      // Same id: it takes the place of the message as it was.
+      addMessage(edited);
+
+      setEditingId(null);
+
+      message.success(t("chats.edit.done"));
+
+      onSent();
+    } catch (error: any) {
+      // The channel's own reason comes with the error.
+      handleClientError(error);
+
+      throw error;
+    }
+  };
 
   const deleteMessage = async (item: IInboxMessage): Promise<void> => {
     try {
@@ -167,7 +222,19 @@ export default function ChatsThread({
           </Avatar>
 
           <div className="flex min-w-0 flex-col">
-            <span className="truncate font-semibold">{name}</span>
+            <span className="truncate font-semibold">
+              {name}
+
+              {/* While the customer writes on the store chat, it says so here too. */}
+              {isTyping && (
+                <span
+                  className="ml-2 text-xs font-normal italic"
+                  style={{ color: token.colorPrimary }}
+                >
+                  {t("chats.typing")}
+                </span>
+              )}
+            </span>
 
             <span className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs">
               {chat.conversations.map((conversation: IInboxConversation) => {
@@ -347,15 +414,24 @@ export default function ChatsThread({
                       </div>
                     )}
 
-                    {item.text && (
-                      <div
-                        style={{
-                          whiteSpace: "pre-wrap",
-                          wordBreak: "break-word",
-                        }}
-                      >
-                        {item.text}
-                      </div>
+                    {editingId === item._id ? (
+                      <ChatsMessageEditor
+                        initialText={item.text ?? ""}
+                        maxLength={EDIT_MAX_LENGTH[item.channel] ?? 1000}
+                        onSave={(text: string) => editMessage(item, text)}
+                        onCancel={() => setEditingId(null)}
+                      />
+                    ) : (
+                      item.text && (
+                        <div
+                          style={{
+                            whiteSpace: "pre-wrap",
+                            wordBreak: "break-word",
+                          }}
+                        >
+                          {item.text}
+                        </div>
+                      )
                     )}
 
                     <div
@@ -373,16 +449,34 @@ export default function ChatsThread({
                           : null}
                       </span>
 
+                      <ChatsEditedMark editedAt={item.editedAt} />
+
                       <span>{dayjs(item.sentAt).format("HH:mm")}</span>
                     </div>
                   </div>
+
+                  {/* Offered only where the message's channel lets its words
+                      be changed for the person too. */}
+                  {item.canEdit && editingId !== item._id && (
+                    <Button
+                      type="text"
+                      size="small"
+                      icon={<EditOutlined />}
+                      className="opacity-60 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100"
+                      aria-label={t("chats.edit.action")}
+                      title={t("chats.edit.action")}
+                      onClick={() => setEditingId(item._id)}
+                    />
+                  )}
 
                   {canDelete && item.canDelete && (
                     <Popconfirm
                       title={t(
                         item.channel === InboxEnum.Channel.TELEGRAM
                           ? "chats.delete.confirmTelegram"
-                          : "chats.delete.confirmLocal",
+                          : item.channel === InboxEnum.Channel.STORE
+                            ? "chats.delete.confirmStore"
+                            : "chats.delete.confirmLocal",
                       )}
                       okText={t("chats.delete.ok")}
                       okButtonProps={{ danger: true }}
@@ -403,7 +497,11 @@ export default function ChatsThread({
           })
         )}
 
+        {isTyping && <TypingBubble label={t("chats.typing")} />}
+
         <div ref={bottomRef} />
+
+        <ScrollToBottomButton />
       </div>
 
       <ChatsReplyBox

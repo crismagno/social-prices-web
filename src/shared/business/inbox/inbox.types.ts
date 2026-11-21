@@ -60,8 +60,12 @@ export interface IInboxMessage {
   isUnsupported: boolean;
   sentAt: string;
   sentByEmployeeId: string | null;
+  // When its words were last changed after being sent; null when they never were.
+  editedAt: string | null;
   // Whether the message's channel lets it be removed.
   canDelete: boolean;
+  // Whether the message's channel lets its words be changed.
+  canEdit: boolean;
 }
 
 // Which conversations a call is about: a customer's, or just one.

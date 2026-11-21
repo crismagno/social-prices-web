@@ -22,15 +22,23 @@ import AnimatedSticker from "../apps/telegram/AnimatedSticker";
 import { attachmentShape, contentKey } from "./chats-display";
 
 interface Props {
-  message: IInboxMessage;
+  message: Pick<IInboxMessage, "_id" | "kind">;
   attachment: IInboxAttachment;
   isOut: boolean;
+  // Where the bytes come from, when it is not the store's inbox (the customer's
+  // side of the store chat reads them through its own route).
+  fetchBlob?: () => Promise<Blob>;
 }
 
 // A file of a message. Pictures load by themselves; video, audio and files wait
 // for a click, so a long chat does not download everything. The bytes always come
 // through our API: the channel's own address expires, and a tag cannot send the token.
-export default function ChatsAttachment({ message, attachment, isOut }: Props) {
+export default function ChatsAttachment({
+  message,
+  attachment,
+  isOut,
+  fetchBlob,
+}: Props) {
   const { t } = useLanguageData();
 
   const { token } = theme.useToken();
@@ -54,11 +62,12 @@ export default function ChatsAttachment({ message, attachment, isOut }: Props) {
       setIsLoading(true);
       setHasFailed(false);
 
-      const blob: Blob =
-        await serviceMethodsInstance.inboxServiceMethods.getAttachment(
-          message._id,
-          attachment.index,
-        );
+      const blob: Blob = fetchBlob
+        ? await fetchBlob()
+        : await serviceMethodsInstance.inboxServiceMethods.getAttachment(
+            message._id,
+            attachment.index,
+          );
 
       const objectUrl: string = URL.createObjectURL(blob);
 

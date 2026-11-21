@@ -7,6 +7,7 @@ import {
   Card,
   Col,
   Divider,
+  Dropdown,
   Empty,
   Modal,
   Row,
@@ -105,6 +106,13 @@ export default function CustomerPurchasePage() {
   const storeName = (store: ISaleStore): string =>
     sale.storesNames[String(store.storeId)] ?? "-";
 
+  // The customer's chat with that store, where the conversation starts or goes on.
+  const storeChatUrl = (store: ISaleStore): string =>
+    Urls.CUSTOMER_CHAT_STORE.replace(
+      ":storeId",
+      encodeURIComponent(String(store.storeId)),
+    );
+
   // The portal sends names and pictures as maps instead of filled documents;
   // fill the store and product of each line so the sale's cart can draw them.
   const cartSale: ISale = {
@@ -176,6 +184,37 @@ export default function CustomerPurchasePage() {
                     </b>
                   </Tag>
                 </Tooltip>
+
+                {/* Questions about this purchase go to the store's chat. With
+                    several stores the customer picks which one. */}
+                {sale.stores.length === 1 ? (
+                  <Tooltip title={t("customerChats.talkToStoreTooltip")}>
+                    <Link href={storeChatUrl(sale.stores[0])}>
+                      <Button icon={<MessageOutlined />}>
+                        {t("customerChats.talkToStore")}
+                      </Button>
+                    </Link>
+                  </Tooltip>
+                ) : sale.stores.length > 1 ? (
+                  <Dropdown
+                    trigger={["click"]}
+                    menu={{
+                      items: sale.stores.map((store: ISaleStore) => ({
+                        key: String(store.storeId),
+                        icon: <ShopOutlined />,
+                        label: (
+                          <Link href={storeChatUrl(store)}>
+                            {storeName(store)}
+                          </Link>
+                        ),
+                      })),
+                    }}
+                  >
+                    <Button icon={<MessageOutlined />}>
+                      {t("customerChats.talkToStore")}
+                    </Button>
+                  </Dropdown>
+                ) : null}
 
                 <Tooltip title={t("sales.seeSummaryTooltip")}>
                   <Button
@@ -292,19 +331,18 @@ export default function CustomerPurchasePage() {
           >
             <div className="flex flex-wrap gap-2">
               {sale.stores.map((store: ISaleStore) => (
-                <Tag key={String(store.storeId)} className="m-0 text-sm">
-                  {storeName(store)}
+                <div
+                  key={String(store.storeId)}
+                  className="flex w-full items-center justify-between gap-2"
+                >
+                  <Tag className="m-0 text-sm">{storeName(store)}</Tag>
 
-                  <Link
-                    className="ml-2"
-                    href={Urls.CUSTOMER_CHAT_STORE.replace(
-                      ":storeId",
-                      String(store.storeId),
-                    )}
-                  >
-                    <MessageOutlined /> {t("customerChats.talkToStore")}
+                  <Link href={storeChatUrl(store)}>
+                    <Button size="small" type="link" icon={<MessageOutlined />}>
+                      {t("customerChats.talkToStore")}
+                    </Button>
                   </Link>
-                </Tag>
+                </div>
               ))}
             </div>
           </Card>

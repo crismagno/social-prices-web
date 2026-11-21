@@ -8,6 +8,7 @@ import {
   useStoreChatRealtime,
 } from "../../../data/context/socket/useStoreChatRealtime";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
+import { reconcileLatest } from "../../chats/chats-display";
 import {
   IStoreChatMessage,
   IStoreChatStoreCard,
@@ -50,6 +51,13 @@ export const useCustomerThread = (
   isSending: boolean;
   loadOlder: () => Promise<void>;
   send: (text: string) => Promise<boolean>;
+  sendMedia: (
+    file: File,
+    caption: string,
+    asVoice: boolean,
+  ) => Promise<boolean>;
+  edit: (messageId: string, text: string) => Promise<void>;
+  remove: (messageId: string) => Promise<void>;
 } => {
   const [store, setStore] = useState<IStoreChatStoreCard | null>(null);
 
@@ -67,6 +75,10 @@ export const useCustomerThread = (
   const current = useRef<string>(storeId);
 
   const messagesRef = useRef<IStoreChatMessage[]>([]);
+
+  // Messages just sent from here that the server has not shown back yet: a
+  // refresh already on its way must not take them off the screen.
+  const pendingIds = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     messagesRef.current = messages;
@@ -104,7 +116,20 @@ export const useCustomerThread = (
             !message.fromMe && !known.has(message._id),
         );
 
-        setMessages((existing) => merge(existing, page));
+        page.forEach((message: IStoreChatMessage) =>
+          pendingIds.current.delete(message._id),
+        );
+
+        // What is no longer in the newest page was removed (by the store, or
+        // in another tab) and leaves the screen too.
+        setMessages((existing) =>
+          reconcileLatest(
+            existing,
+            page,
+            page.length < PAGE_SIZE,
+            pendingIds.current,
+          ),
+        );
 
         if (!silent) {
           setHasOlder(page.length >= PAGE_SIZE);
@@ -214,6 +239,8 @@ export const useCustomerThread = (
             body,
           );
 
+        pendingIds.current.add(sent._id);
+
         if (current.current === storeId) {
           setMessages((existing) => merge(existing, [sent]));
         }
@@ -228,6 +255,79 @@ export const useCustomerThread = (
     [storeId],
   );
 
+  // A file, or a recording, with a caption if there is one. True when it was
+  // sent; a refusal is thrown for the screen to explain.
+  const sendMedia = useCallback(
+    async (file: File, caption: string, asVoice: boolean): Promise<boolean> => {
+      try {
+        setIsSending(true);
+
+        const sent: IStoreChatMessage =
+          await serviceMethodsInstance.storeChatServiceMethods.sendMedia(
+            storeId,
+            file,
+            caption,
+            asVoice,
+          );
+
+        pendingIds.current.add(sent._id);
+
+        if (current.current === storeId) {
+          setMessages((existing) => merge(existing, [sent]));
+        }
+
+        announceStoreChatChange();
+
+        return true;
+      } finally {
+        setIsSending(false);
+      }
+    },
+    [storeId],
+  );
+
+  // Changes the words of a message the customer wrote; the store sees the new
+  // ones. A refusal is thrown for the screen to explain.
+  const edit = useCallback(
+    async (messageId: string, text: string): Promise<void> => {
+      const edited: IStoreChatMessage =
+        await serviceMethodsInstance.storeChatServiceMethods.editMessage(
+          storeId,
+          messageId,
+          text,
+        );
+
+      if (current.current === storeId) {
+        setMessages((existing) => merge(existing, [edited]));
+      }
+
+      announceStoreChatChange();
+    },
+    [storeId],
+  );
+
+  // Removes a message the customer wrote; it is gone for the store too. A
+  // refusal is thrown for the screen to explain.
+  const remove = useCallback(
+    async (messageId: string): Promise<void> => {
+      await serviceMethodsInstance.storeChatServiceMethods.deleteMessage(
+        storeId,
+        messageId,
+      );
+
+      if (current.current === storeId) {
+        setMessages((existing) =>
+          existing.filter(
+            (message: IStoreChatMessage) => message._id !== messageId,
+          ),
+        );
+      }
+
+      announceStoreChatChange();
+    },
+    [storeId],
+  );
+
   return {
     store,
     messages,
@@ -237,5 +337,8 @@ export const useCustomerThread = (
     isSending,
     loadOlder,
     send,
+    sendMedia,
+    edit,
+    remove,
   };
 };

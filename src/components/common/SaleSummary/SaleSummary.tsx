@@ -149,17 +149,9 @@ export const SaleSummary: React.FC<Props> = ({
                             width={30}
                             height={30}
                             src={fileUrl}
-                            onError={() => (
-                              <Image
-                                width={30}
-                                height={30}
-                                src={ImagesEnum.FilesNames.DefaultProductImage}
-                                alt="mainUrl"
-                                className="rounded-full"
-                              />
-                            )}
                             alt="mainUrl"
                             className="rounded-full"
+                            fallback={ImagesEnum.FilesNames.DefaultProductImage}
                           />
                         </div>
 

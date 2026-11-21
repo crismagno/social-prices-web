@@ -15,6 +15,7 @@ import {
   isImageFile,
 } from "../../../../shared/utils/images/images-helper";
 import { getImageUrl } from "../../../../shared/utils/images/images-url";
+import ImagesEnum from "../../../../shared/utils/images/images.enum";
 
 interface Props {
   sale: ISale | null;
@@ -85,6 +86,11 @@ export const SaleFilesList: React.FC<Props> = ({ sale }) => {
               <img
                 src={getImageUrl(file.name)}
                 alt={file.name}
+                onError={(event) => {
+                  event.currentTarget.onerror = null;
+                  event.currentTarget.src =
+                    ImagesEnum.FilesNames.DefaultSaleImage;
+                }}
                 className="object-cover w-full h-full"
               />
             ) : (

@@ -2054,6 +2054,11 @@
     "conversations": {
       "title": "Conversas deste cliente"
     },
+    "typing": "digitando…",
+    "scrollToBottom": "Ir para o final da conversa",
+    "apps": {
+      "title": "Apps"
+    },
     "today": "Hoje",
     "yesterday": "Ontem",
     "back": "Voltar",
@@ -2085,7 +2090,15 @@
       "ok": "Excluir",
       "done": "Mensagem removida",
       "confirmTelegram": "Excluir esta mensagem? Ela também é apagada para o cliente no Telegram.",
-      "confirmLocal": "Remover esta mensagem da caixa de entrada? O canal não permite apagar mensagens, então ela continua lá para o cliente."
+      "confirmLocal": "Remover esta mensagem da caixa de entrada? O canal não permite apagar mensagens, então ela continua lá para o cliente.",
+      "confirmStore": "Excluir esta mensagem? Ela também é excluída para o cliente."
+    },
+    "edit": {
+      "action": "Editar mensagem",
+      "placeholder": "Escreva a mensagem",
+      "done": "Mensagem editada",
+      "edited": "editada",
+      "editedAt": "Editada em"
     },
     "pickHint": "Telegram, Messenger e Instagram, juntos por cliente.",
     "openInApp": "Abrir no {app}"
@@ -2167,11 +2180,15 @@
     "noStoresFound": "Nenhuma loja encontrada",
     "noConversations": "Nenhuma conversa ainda. Encontre uma loja acima para começar.",
     "pick": "Escolha uma conversa ou encontre uma loja para começar",
+    "emptyTitle": "Converse com uma loja",
+    "pickTitle": "Suas conversas com as lojas",
     "firstMessage": "Envie a primeira mensagem para iniciar a conversa",
     "placeholder": "Escreva uma mensagem...",
     "send": "Enviar",
     "back": "Voltar",
     "talkToStore": "Falar com a loja",
+    "deleteConfirm": "Excluir esta mensagem? Ela também é excluída para a loja.",
+    "talkToStoreTooltip": "Tire dúvidas sobre esta compra com a loja",
     "storeUnavailable": "Esta loja não está disponível",
     "storeClosed": "Esta loja não está recebendo mensagens no momento",
     "errors": {

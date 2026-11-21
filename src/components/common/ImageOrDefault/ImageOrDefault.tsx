@@ -21,15 +21,7 @@ export const ImageOrDefault: React.FC<Props> = ({
       width={width}
       height={width}
       src={src ? getImageUrl(src) : defaultImage}
-      onError={() => (
-        <Image
-          width={width}
-          height={width}
-          src={defaultImage}
-          alt="image default"
-          className={className}
-        />
-      )}
+      fallback={defaultImage}
       alt="image default"
       className={className}
     />

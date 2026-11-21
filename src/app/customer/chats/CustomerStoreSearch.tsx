@@ -10,6 +10,7 @@ import handleClientError from "../../../components/common/HandleClientError/Hand
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import { IStoreChatStoreCard } from "../../../shared/business/store-chat/store-chat.types";
+import StoreAvatar from "./StoreAvatar";
 
 const DEBOUNCE_MS: number = 300;
 
@@ -76,6 +77,7 @@ export default function CustomerStoreSearch({ onPick }: Props) {
     <Select
       showSearch
       className="w-full"
+      size="large"
       value={null}
       filterOption={false}
       loading={isSearching}
@@ -98,14 +100,18 @@ export default function CustomerStoreSearch({ onPick }: Props) {
       options={stores.map((store: IStoreChatStoreCard) => ({
         value: store._id,
         label: (
-          <div className="flex flex-col py-0.5">
-            <span className="truncate font-medium">{store.name}</span>
+          <div className="flex items-center gap-2.5 py-1">
+            <StoreAvatar store={store} size={32} />
 
-            {store.description && (
-              <span className="truncate text-xs opacity-60">
-                {store.description}
-              </span>
-            )}
+            <div className="flex min-w-0 flex-col leading-tight">
+              <span className="truncate font-medium">{store.name}</span>
+
+              {store.description && (
+                <span className="truncate text-xs opacity-60">
+                  {store.description}
+                </span>
+              )}
+            </div>
           </div>
         ),
       }))}

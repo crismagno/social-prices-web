@@ -148,6 +148,8 @@ export const SelectCustomer: React.FC<Props> = ({
                     ? getImageUrl(initialCustomer.avatar)
                     : ImagesEnum.FilesNames.DefaultAvatarImage
                 }
+                // Shown by antd when the image fails to load.
+                icon={<img src={ImagesEnum.FilesNames.DefaultAvatarImage} alt="" />}
                 size={"small"}
                 className="mr-2"
               />
@@ -165,6 +167,8 @@ export const SelectCustomer: React.FC<Props> = ({
                   ? getImageUrl(customer.avatar)
                   : ImagesEnum.FilesNames.DefaultAvatarImage
               }
+              // Shown by antd when the image fails to load.
+              icon={<img src={ImagesEnum.FilesNames.DefaultAvatarImage} alt="" />}
               size={"small"}
               className="mr-2"
             />

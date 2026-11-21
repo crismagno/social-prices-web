@@ -2051,6 +2051,11 @@
     "conversations": {
       "title": "Conversations of this customer"
     },
+    "typing": "typing…",
+    "scrollToBottom": "Go to the end of the conversation",
+    "apps": {
+      "title": "Apps"
+    },
     "today": "Today",
     "yesterday": "Yesterday",
     "back": "Back",
@@ -2082,7 +2087,15 @@
       "ok": "Delete",
       "done": "Message removed",
       "confirmTelegram": "Delete this message? It is also deleted for the customer in Telegram.",
-      "confirmLocal": "Remove this message from the inbox? The channel cannot delete messages, so it stays there for the customer."
+      "confirmLocal": "Remove this message from the inbox? The channel cannot delete messages, so it stays there for the customer.",
+      "confirmStore": "Delete this message? It is also deleted for the customer."
+    },
+    "edit": {
+      "action": "Edit message",
+      "placeholder": "Write the message",
+      "done": "Message edited",
+      "edited": "edited",
+      "editedAt": "Edited on"
     },
     "pickHint": "Telegram, Messenger and Instagram, together by customer.",
     "openInApp": "Open in {app}"
@@ -2164,11 +2177,15 @@
     "noStoresFound": "No store found",
     "noConversations": "No conversations yet. Find a store above to start one.",
     "pick": "Pick a conversation, or find a store to start one",
+    "emptyTitle": "Talk to a store",
+    "pickTitle": "Your conversations with stores",
     "firstMessage": "Send the first message to start the conversation",
     "placeholder": "Write a message...",
     "send": "Send",
     "back": "Back",
     "talkToStore": "Talk to the store",
+    "deleteConfirm": "Delete this message? It is also deleted for the store.",
+    "talkToStoreTooltip": "Ask the store about this purchase",
     "storeUnavailable": "This store is not available",
     "storeClosed": "This store is not taking messages at the moment",
     "errors": {

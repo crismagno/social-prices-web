@@ -89,6 +89,37 @@ export const mergeMessages = (
   );
 };
 
+// What a thread shows after its newest page was read again: that page is the
+// truth for the stretch of time it covers, so a message of that stretch that is
+// not in it was removed (by the other side, or elsewhere) and leaves the screen.
+// Older messages already loaded stay, unless the page is the whole thread.
+// `keepIds` are messages added here that a request already on its way may not
+// have seen yet. Oldest first, each message once.
+export const reconcileLatest = <T extends { _id: string; sentAt: string }>(
+  current: T[],
+  page: T[],
+  isWholeThread: boolean,
+  keepIds: Set<string>,
+): T[] => {
+  const time = (message: T): number => new Date(message.sentAt).getTime();
+
+  const inPage: Set<string> = new Set(page.map((message: T) => message._id));
+
+  const oldest: number = page.length
+    ? Math.min(...page.map(time))
+    : Number.POSITIVE_INFINITY;
+
+  const kept: T[] = current.filter(
+    (message: T) =>
+      !inPage.has(message._id) &&
+      (keepIds.has(message._id) || (!isWholeThread && time(message) < oldest)),
+  );
+
+  return [...kept, ...page].sort(
+    (a: T, b: T) => time(a) - time(b) || a._id.localeCompare(b._id),
+  );
+};
+
 // The kinds the texts have a name for.
 export const contentKey = (kind: InboxEnum.MessageKind): string =>
   kind.toLowerCase();

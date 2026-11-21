@@ -628,6 +628,7 @@ export const FastSaleDrawer: React.FC<Props> = ({
                       : ImagesEnum.FilesNames.DefaultProductImage
                   }
                   alt={item.name}
+                  fallback={ImagesEnum.FilesNames.DefaultProductImage}
                 />
 
                 <div className="flex-1 min-w-0 flex flex-col">
@@ -702,6 +703,8 @@ export const FastSaleDrawer: React.FC<Props> = ({
                   ? getImageUrl(customer.avatar)
                   : ImagesEnum.FilesNames.DefaultAvatarImage
               }
+              // Shown by antd when the image fails to load.
+              icon={<img src={ImagesEnum.FilesNames.DefaultAvatarImage} alt="" />}
             />
 
             <div className="flex min-w-0 flex-col text-xs">

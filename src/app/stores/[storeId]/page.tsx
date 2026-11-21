@@ -228,6 +228,22 @@ export default function StorePage() {
                           )
                         : "-"}
                     </Descriptions.Item>
+
+                    {/* Same default as the edit form: a store without the
+                        flag is in the search. */}
+                    <Descriptions.Item label={t("stores.visibleInSearch")}>
+                      <Tooltip title={t("stores.visibleInSearchHelp")}>
+                        <Tag
+                          color={
+                            store.isVisibleInSearch ?? true ? "green" : "red"
+                          }
+                        >
+                          {store.isVisibleInSearch ?? true
+                            ? t("common.yes")
+                            : t("common.no")}
+                        </Tag>
+                      </Tooltip>
+                    </Descriptions.Item>
                   </Descriptions>
                 </Col>
 

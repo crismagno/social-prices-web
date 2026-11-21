@@ -72,6 +72,7 @@ export default function StoreProductsTable({ storeId }: Props) {
               }
               alt=""
               className="rounded-full"
+              fallback={ImagesEnum.FilesNames.DefaultProductImage}
             />
           ),
         },

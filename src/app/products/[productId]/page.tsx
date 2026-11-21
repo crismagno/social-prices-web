@@ -120,6 +120,7 @@ export default function ProductPage() {
                     src={getImageUrl(fileUrl)}
                     alt="mainUrl"
                     className="rounded-full"
+                    fallback={ImagesEnum.FilesNames.DefaultProductImage}
                   />
                 ))}
               </AvatarAntd.Group>

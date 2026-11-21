@@ -11,7 +11,7 @@ import {
   IInboxMessage,
   IInboxScope,
 } from "../../shared/business/inbox/inbox.types";
-import { mergeMessages } from "./chats-display";
+import { mergeMessages, reconcileLatest } from "./chats-display";
 
 const PAGE_SIZE: number = 50;
 const POLL_MS: number = 5000;
@@ -47,6 +47,10 @@ export const useChatMessages = (
 
   const scopeRef = useRef<IInboxScope | null>(scope);
 
+  // Messages added here (just sent) that the server has not shown back yet: a
+  // refresh already on its way must not take them off the screen.
+  const pendingIds = useRef<Set<string>>(new Set());
+
   scopeRef.current = scope;
 
   const fetchLatest = useCallback(
@@ -71,7 +75,20 @@ export const useChatMessages = (
           return;
         }
 
-        setMessages((current) => mergeMessages(current, page));
+        page.forEach((message: IInboxMessage) =>
+          pendingIds.current.delete(message._id),
+        );
+
+        // What is no longer in the newest page was removed, here or by the
+        // other side, and leaves the screen too.
+        setMessages((current) =>
+          reconcileLatest(
+            current,
+            page,
+            page.length < PAGE_SIZE,
+            pendingIds.current,
+          ),
+        );
 
         if (!silent) {
           setHasOlder(page.length === PAGE_SIZE);
@@ -149,6 +166,8 @@ export const useChatMessages = (
   }, [scopeKey, messages]);
 
   const addMessage = useCallback((message: IInboxMessage): void => {
+    pendingIds.current.add(message._id);
+
     setMessages((current) => mergeMessages(current, [message]));
   }, []);
 

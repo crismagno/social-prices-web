@@ -1,6 +1,6 @@
 "use client";
 
-import { RefObject, useLayoutEffect, useRef, useState } from "react";
+import { RefCallback, useLayoutEffect, useState } from "react";
 
 // The page's own padding under the content (the main area has 1.75rem all around).
 const PAGE_BOTTOM_PADDING: number = 28;
@@ -10,17 +10,31 @@ const PAGE_BOTTOM_PADDING: number = 28;
 // window being resized. Never smaller than `minHeight`.
 export const useFillViewportHeight = (
   minHeight: number,
-): { ref: RefObject<HTMLDivElement>; height: number } => {
-  const ref = useRef<HTMLDivElement>(null);
+): { ref: RefCallback<HTMLDivElement>; height: number } => {
+  // Kept in state, not in a ref object: the element may mount after this hook
+  // (the layout holds the page back while the session loads), and the height
+  // has to be measured again once it is there.
+  const [element, setElement] = useState<HTMLDivElement | null>(null);
 
   const [height, setHeight] = useState<number>(minHeight);
 
   useLayoutEffect(() => {
+    if (!element) {
+      return;
+    }
+
     const fit = (): void => {
-      const top: number = ref.current?.getBoundingClientRect().top ?? 0;
+      // Where the element starts in the page, whatever the current scroll.
+      const top: number = element.getBoundingClientRect().top + window.scrollY;
+
+      // The element's own borders are outside the height it hands out.
+      const borders: number = element.offsetHeight - element.clientHeight;
 
       setHeight(
-        Math.max(minHeight, window.innerHeight - top - PAGE_BOTTOM_PADDING),
+        Math.max(
+          minHeight,
+          window.innerHeight - top - borders - PAGE_BOTTOM_PADDING,
+        ),
       );
     };
 
@@ -29,7 +43,7 @@ export const useFillViewportHeight = (
     window.addEventListener("resize", fit);
 
     return () => window.removeEventListener("resize", fit);
-  }, [minHeight]);
+  }, [element, minHeight]);
 
-  return { ref, height };
+  return { ref: setElement, height };
 };

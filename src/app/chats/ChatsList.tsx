@@ -8,6 +8,7 @@ import { SearchOutlined } from "@ant-design/icons";
 
 import ChannelIcon from "../../components/common/ChannelIcon/ChannelIcon";
 import useLanguageData from "../../data/context/language/useLanguageData";
+import { useStoreChatTypingKeys } from "../../data/context/socket/useStoreChatTyping";
 import InboxEnum from "../../shared/business/inbox/inbox.enum";
 import {
   IInboxChat,
@@ -47,6 +48,13 @@ export default function ChatsList({
   const { token } = theme.useToken();
 
   const [search, setSearch] = useState<string>("");
+
+  // The conversations whose customer is writing right now, on the store chat
+  // (the other channels do not tell us this): their row says so instead of
+  // showing the last message.
+  const typingConversationIds: Set<string> = useStoreChatTypingKeys(
+    (event) => event.conversationId,
+  );
 
   const [channel, setChannel] = useState<InboxEnum.Channel | "ALL">("ALL");
 
@@ -148,6 +156,11 @@ export default function ChatsList({
 
             const hasUnread: boolean = chat.unreadCount > 0;
 
+            const isTyping: boolean = chat.conversations.some(
+              (conversation: IInboxConversation) =>
+                typingConversationIds.has(conversation._id),
+            );
+
             return (
               <button
                 key={chat.key}
@@ -195,16 +208,25 @@ export default function ChatsList({
                   </div>
 
                   <div className="flex items-center justify-between gap-2">
-                    <span
-                      className="truncate text-sm"
-                      style={{
-                        color: hasUnread
-                          ? token.colorText
-                          : token.colorTextSecondary,
-                      }}
-                    >
-                      {previewOf(chat)}
-                    </span>
+                    {isTyping ? (
+                      <span
+                        className="truncate text-sm italic"
+                        style={{ color: token.colorPrimary }}
+                      >
+                        {t("chats.typing")}
+                      </span>
+                    ) : (
+                      <span
+                        className="truncate text-sm"
+                        style={{
+                          color: hasUnread
+                            ? token.colorText
+                            : token.colorTextSecondary,
+                        }}
+                      >
+                        {previewOf(chat)}
+                      </span>
+                    )}
 
                     {hasUnread && (
                       <Badge

@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import {
   ApiOutlined,
   AppstoreOutlined,
-  BellOutlined,
   BlockOutlined,
   CalendarOutlined,
   CustomerServiceOutlined,
@@ -41,7 +40,6 @@ import { getItem, MenuItem } from "../../utils/navigation/navigation.util";
 
 export namespace SidebarMenuKeys {
   export const STORES = "stores";
-  export const SALES = "sales";
   export const GENERAL = "general";
   export const APPS = "apps";
   export const CHATS = "chats";
@@ -64,8 +62,12 @@ const submenuKeyByUrl = (url: string): string | null => {
       Urls.PRODUCTS,
       Urls.PRODUCT_ITEMS,
     ],
-    [SidebarMenuKeys.SALES]: [Urls.SALES, Urls.SALES_CREATE],
-    [SidebarMenuKeys.GENERAL]: [Urls.TAGS, Urls.CATEGORIES, Urls.EMPLOYEES],
+    [SidebarMenuKeys.GENERAL]: [
+      Urls.NOTES,
+      Urls.TAGS,
+      Urls.CATEGORIES,
+      Urls.EMPLOYEES,
+    ],
     [SidebarMenuKeys.CHATS]: [Urls.CHATS, Urls.QUICK_MESSAGES],
     [SidebarMenuKeys.APPS]: [
       Urls.APPS,
@@ -90,51 +92,18 @@ export const useSidebarMenuItems = (
   const { employee, isCustomer, isLogged, user } = useAuthData();
 
   // Says whether a manager switched quick messages off for this account.
-  const { usage } = useFeaturesUsage();
+  // Only the company menu reads the usage (quick messages); a customer account
+  // has no access to it.
+  const { usage } = useFeaturesUsage(isLogged && !!user && !isCustomer);
 
   const {
-    notifications: {
-      countNotificationNotSeen,
-      isLoadingCountNotificationNotSeen,
-    },
     apps: { catalog },
   } = useAppData();
 
   const pathname: string = usePathname() ?? "";
 
-  const hasUnseenNotifications: boolean =
-    !isLoadingCountNotificationNotSeen && !!countNotificationNotSeen;
-
-  // Expanded: the badge sits at the right end of the item. Collapsed: there is
-  // no label, so a dot is kept on the icon, pulled inside so it is not clipped.
-  const notificationsIcon = hasUnseenNotifications ? (
-    isCollapsed ? (
-      <Badge dot offset={[-3, 3]}>
-        <BellOutlined className="animate-pulse text-yellow-500" />
-      </Badge>
-    ) : (
-      <BellOutlined className="animate-pulse text-yellow-500" />
-    )
-  ) : (
-    <BellOutlined />
-  );
-
-  const notificationsLabel: React.ReactNode =
-    hasUnseenNotifications && !isCollapsed ? (
-      <span className="flex items-center justify-between w-full">
-        <span>{t("navigation.notifications")}</span>
-
-        <Badge
-          count={countNotificationNotSeen}
-          size="small"
-          overflowCount={99}
-        />
-      </span>
-    ) : (
-      t("navigation.notifications")
-    );
-
   const generalChildren: MenuItem[] = [
+    getItem(t("navigation.notes"), Urls.NOTES, <CalendarOutlined />),
     getItem(t("navigation.tags"), Urls.TAGS, <TagOutlined />),
     getItem(t("navigation.categories"), Urls.CATEGORIES, <BlockOutlined />),
   ];
@@ -309,8 +278,6 @@ export const useSidebarMenuItems = (
 
   const items: MenuItem[] = [
     getItem(t("navigation.home"), Urls.DASHBOARD, <HomeOutlined />),
-    getItem(notificationsLabel, Urls.NOTIFICATIONS, notificationsIcon),
-    getItem(t("navigation.notes"), Urls.NOTES, <CalendarOutlined />),
     ...chatsItems,
     ...appsItems,
     getItem(t("navigation.stores"), SidebarMenuKeys.STORES, <ShopOutlined />, [
@@ -323,19 +290,7 @@ export const useSidebarMenuItems = (
         <InboxOutlined />,
       ),
     ]),
-    getItem(
-      t("navigation.sales"),
-      SidebarMenuKeys.SALES,
-      <ShoppingCartOutlined />,
-      [
-        getItem(t("navigation.sales"), Urls.SALES, <ShoppingCartOutlined />),
-        getItem(
-          t("sales.createSale"),
-          Urls.SALES_CREATE,
-          <ShoppingCartOutlined />,
-        ),
-      ],
-    ),
+    getItem(t("navigation.sales"), Urls.SALES, <ShoppingCartOutlined />),
     ...transactionsItems,
     getItem(
       t("navigation.general"),
@@ -366,7 +321,6 @@ export const useSidebarMenuItems = (
         <MessageOutlined />
       ),
     ),
-    getItem(notificationsLabel, Urls.NOTIFICATIONS, notificationsIcon),
     getItem(t("navigation.support"), Urls.SUPPORT, <CustomerServiceOutlined />),
     getItem(t("navigation.settings"), Urls.SETTINGS, <SettingOutlined />),
   ];
@@ -378,7 +332,6 @@ export const useSidebarMenuItems = (
     Urls.CUSTOMER_DASHBOARD,
     Urls.CUSTOMER_PURCHASES,
     Urls.CUSTOMER_CHATS,
-    Urls.NOTIFICATIONS,
     Urls.SETTINGS,
     Urls.SUPPORT,
     Urls.TRANSACTIONS,
@@ -396,7 +349,6 @@ export const useSidebarMenuItems = (
     Urls.PRODUCTS,
     Urls.PRODUCT_ITEMS,
     Urls.SALES,
-    Urls.SALES_CREATE,
     Urls.TAGS,
     Urls.CATEGORIES,
     Urls.EMPLOYEES,

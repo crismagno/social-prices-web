@@ -66,5 +66,7 @@ export interface ITelegramMessage {
   text: string | null;
   media?: ITelegramMedia;
   sentAt: string;
+  // When its words were last changed after being sent; null when they never were.
+  editedAt?: string | null;
   sentByEmployeeId?: string | null;
 }

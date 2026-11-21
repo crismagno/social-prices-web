@@ -222,6 +222,7 @@ export default function ProductsPage() {
                         src={getImageUrl(fileUrl)}
                         alt="mainUrl"
                         className="rounded-full"
+                        fallback={ImagesEnum.FilesNames.DefaultProductImage}
                       />
                     ))}
                   </Avatar.Group>

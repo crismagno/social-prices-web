@@ -164,6 +164,28 @@ export default class TelegramServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
+  // Changes the words of a message the bot sent (its text, or the caption of
+  // its file); the customer sees the new ones in Telegram.
+  public async editMessage(
+    chatId: number,
+    messageId: string,
+    text: string,
+  ): Promise<ITelegramMessage> {
+    const response = await this._fetchAxios.patch<ITelegramMessage>(
+      this._url(
+        TelegramServiceEnum.Methods.CHAT_MESSAGE.replace(
+          ":messageId",
+          messageId,
+        ),
+        chatId,
+      ),
+      { text },
+      { headers: this._headers() },
+    );
+
+    return response.data;
+  }
+
   // Removes it for the customer too; Telegram only allows that for 48 hours.
   public async deleteMessage(chatId: number, messageId: string): Promise<void> {
     await this._fetchAxios.delete(

@@ -329,6 +329,7 @@ export const ProductItemsTable: React.FC<Props> = ({ productId }) => {
                         src={getImageUrl(fileUrl)}
                         alt="mainUrl"
                         className="rounded-full"
+                        fallback={ImagesEnum.FilesNames.DefaultProductImage}
                       />
                     ))}
                   </Avatar.Group>

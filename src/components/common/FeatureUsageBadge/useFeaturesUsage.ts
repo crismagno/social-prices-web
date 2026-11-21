@@ -7,7 +7,11 @@ import {
 } from "../../../shared/business/users/user-limits.interface";
 import handleClientError from "../HandleClientError/HandleClientError";
 
-export const useFeaturesUsage = (): {
+// `isEnabled` false skips the request: the usage belongs to company accounts,
+// and the API refuses a customer account that asks for it.
+export const useFeaturesUsage = (
+  isEnabled: boolean = true
+): {
   usage: IFeaturesUsage | null;
   isLoading: boolean;
   refetch: () => Promise<void>;
@@ -17,6 +21,12 @@ export const useFeaturesUsage = (): {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const refetch = useCallback(async () => {
+    if (!isEnabled) {
+      setUsage(null);
+
+      return;
+    }
+
     try {
       setIsLoading(true);
 
@@ -28,7 +38,7 @@ export const useFeaturesUsage = (): {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [isEnabled]);
 
   useEffect(() => {
     refetch();
