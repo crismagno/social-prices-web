@@ -2262,5 +2262,20 @@
   "accountMode": {
     "hint": "See your account as a customer (your purchases) or as a company (your sales)",
     "switchTo": "Switch to {mode}"
+  },
+  "pricing": {
+    "title": "Pricing",
+    "description": "For your reference only: it helps you find the sale price that covers costs and expenses and leaves the profit you want.",
+    "cost": "Unit cost",
+    "variableExpenses": "Variable expenses (taxes, fees, commissions)",
+    "fixedExpenses": "Fixed expenses (rent, salaries)",
+    "profit": "Desired profit",
+    "suggestedPrice": "Suggested price",
+    "useThisPrice": "Use this price",
+    "withCurrentPrice": "With the current price",
+    "profitAmount": "Profit",
+    "margin": "Margin",
+    "overLimit": "Expenses and profit add up to 100% or more of the price, so no price can cover the cost. Lower one of the percentages.",
+    "informCost": "Enter the unit cost to see the suggested price."
   }
 }

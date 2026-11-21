@@ -1,4 +1,5 @@
 import { IDynamicField } from "../shared/dynamic-field/dynamic-field.interface";
+import { IPricing } from "../shared/pricing/pricing.interface";
 import { IProduct } from '../products/products.interface';
 import { ICreatedAtEntity } from '../shared/global/created-at.interface';
 import { IUpdatedAtEntity } from '../shared/global/updated-at.interface';
@@ -26,6 +27,7 @@ export interface IProductItem extends ICreatedAtEntity, IUpdatedAtEntity {
   releaseDate: Date | null;
   expirationDate: Date | null;
   dimensions: IProductItemDimensions | null;
+  pricing?: IPricing | null;
   colors: string[] | null;
   dynamicFields: IDynamicField[];
   isDefault: boolean;

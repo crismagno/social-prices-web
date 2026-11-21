@@ -32,6 +32,11 @@ import handleClientError from "../../../../components/common/HandleClientError/H
 import HrCustom from "../../../../components/common/HrCustom/HrCustom";
 import LoadingFull from "../../../../components/common/LoadingFull/LoadingFull";
 import {
+  PricingSection,
+  pricingFormSchema,
+  pricingToFormValues,
+} from "../../../../components/common/PricingSection/PricingSection";
+import {
   colorSchema,
   MultiColors,
 } from "../../../../components/common/MultiColors/MultiColors";
@@ -57,6 +62,7 @@ import CategoriesEnum from "../../../../shared/business/categories/categories.en
 import { ICategory } from "../../../../shared/business/categories/categories.interface";
 import { IProductItem } from "../../../../shared/business/product-items/product-items.interface";
 import { IProduct } from "../../../../shared/business/products/products.interface";
+import { normalizePricing } from "../../../../shared/business/shared/pricing/pricing.utils";
 import TagsEnum from "../../../../shared/business/tags/tags.enum";
 import { ITag } from "../../../../shared/business/tags/tags.interface";
 import { parseColorPickerToHexString } from "../../../../shared/utils/antd/color-picker/color-picker";
@@ -104,6 +110,7 @@ const formSchema = z.object({
   releaseDate: z.any().nullable().optional(),
   expirationDate: z.any().nullable().optional(),
   dimensions: dimensionsFormSchema.optional(),
+  pricing: pricingFormSchema.optional(),
   colors: z.array(colorSchema).optional(),
   dynamicFields: z
     .array(dynamicFieldSchema)
@@ -207,6 +214,7 @@ export const ProductItemDetail: React.FC<Props> = ({
       colors: map(productItem?.colors ?? [], (color: string) => ({
         value: color,
       })),
+      pricing: pricingToFormValues(productItem?.pricing),
       dimensions: {
         size: productItem?.dimensions?.size ?? "",
         height: productItem?.dimensions?.height ?? 0,
@@ -252,6 +260,7 @@ export const ProductItemDetail: React.FC<Props> = ({
       expirationDate: null,
       colors: [],
       dynamicFields: [],
+      pricing: pricingToFormValues(),
       dimensions: {
         size: "",
         height: 0,
@@ -340,6 +349,7 @@ export const ProductItemDetail: React.FC<Props> = ({
             )
           : [],
         dimensions: data?.dimensions as any,
+        pricing: normalizePricing(data.pricing),
       };
 
       for (const property of Object.keys(createProductItemDto)) {
@@ -431,6 +441,7 @@ export const ProductItemDetail: React.FC<Props> = ({
             )
           : [],
         dimensions: data?.dimensions as any,
+        pricing: normalizePricing(data.pricing),
       };
 
       for (const property of Object.keys(updateProductItemDto)) {
@@ -737,6 +748,12 @@ export const ProductItemDetail: React.FC<Props> = ({
             />
           </Col>
         </Row>
+
+        <PricingSection
+          control={control}
+          setValue={setValue}
+          disabled={isReadonly}
+        />
 
         <ContainerTitle title={t("products.dimensions")} className="mt-7">
           <Row>

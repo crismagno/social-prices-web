@@ -1,4 +1,5 @@
 import { IDynamicField } from "../../../../shared/business/shared/dynamic-field/dynamic-field.interface";
+import { IPricing } from "../../../../shared/business/shared/pricing/pricing.interface";
 
 export class ProductDimensionsDto {
   size: string | null = null;
@@ -29,6 +30,7 @@ export default class CreateProductDto {
   releaseDate: string | null = null;
   expirationDate: string | null = null;
   dimensions: ProductDimensionsDto | null = null;
+  pricing: IPricing | null = null;
   colors: string[] = [];
 
   dynamicFields: IDynamicField[] = [];

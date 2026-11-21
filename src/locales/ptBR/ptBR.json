@@ -2265,5 +2265,20 @@
   "accountMode": {
     "hint": "Veja sua conta como cliente (suas compras) ou como empresa (suas vendas)",
     "switchTo": "Mudar para {mode}"
+  },
+  "pricing": {
+    "title": "Precificação",
+    "description": "Apenas para sua referência: ajuda a encontrar o preço de venda que cobre custos e despesas e deixa o lucro que você quer.",
+    "cost": "Custo unitário",
+    "variableExpenses": "Despesas variáveis (impostos, taxas, comissões)",
+    "fixedExpenses": "Despesas fixas (aluguel, salários)",
+    "profit": "Lucro desejado",
+    "suggestedPrice": "Preço sugerido",
+    "useThisPrice": "Usar este preço",
+    "withCurrentPrice": "Com o preço atual",
+    "profitAmount": "Lucro",
+    "margin": "Margem",
+    "overLimit": "Despesas e lucro somam 100% ou mais do preço, então nenhum preço cobre o custo. Reduza um dos percentuais.",
+    "informCost": "Informe o custo unitário para ver o preço sugerido."
   }
 }
