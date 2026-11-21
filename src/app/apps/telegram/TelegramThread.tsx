@@ -44,6 +44,7 @@ import { ICustomer } from "../../../shared/business/customers/customer.interface
 import Urls from "../../../shared/common/routes-app/routes-app";
 import EditCustomerDrawer from "../../../components/common/EditCustomerDrawer/EditCustomerDrawer";
 import ChatsFastSale from "../../chats/ChatsFastSale";
+import { useChatsSidePanel } from "../../chats/ChatsSidePanel";
 import ChatsMessageEditor, {
   ChatsEditedMark,
 } from "../../chats/ChatsMessageEditor";
@@ -129,6 +130,12 @@ export default function TelegramThread({
   const [isFastSaleOpen, setIsFastSaleOpen] = useState<boolean>(false);
 
   const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
+
+  // The fast sale and the customer's data open beside the conversation when
+  // there is room, so it can go on while they are filled in; one at a time.
+  const sidePanel: HTMLElement | undefined = useChatsSidePanel(
+    isEditOpen || isFastSaleOpen,
+  );
 
   // The message whose words are being changed, if any: one at a time.
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -344,7 +351,10 @@ export default function TelegramThread({
         <Button
           size="small"
           icon={<EditOutlined />}
-          onClick={() => setIsEditOpen(true)}
+          onClick={() => {
+            setIsFastSaleOpen(false);
+            setIsEditOpen(true);
+          }}
         >
           {t("customers.editCustomer")}
         </Button>
@@ -354,7 +364,10 @@ export default function TelegramThread({
           size="small"
           className="!border-amber-500 !bg-amber-500 !text-white hover:!bg-amber-400"
           icon={<ThunderboltOutlined />}
-          onClick={() => setIsFastSaleOpen(true)}
+          onClick={() => {
+            setIsEditOpen(false);
+            setIsFastSaleOpen(true);
+          }}
         >
           {t("sales.fastSale")}
         </Button>
@@ -768,6 +781,7 @@ export default function TelegramThread({
           customerId={chat.customerId}
           onClose={() => setIsEditOpen(false)}
           onSaved={() => onChatChanged()}
+          container={sidePanel}
         />
       )}
 
@@ -775,6 +789,7 @@ export default function TelegramThread({
         <ChatsFastSale
           customerId={chat.customerId}
           onClose={() => setIsFastSaleOpen(false)}
+          container={sidePanel}
         />
       )}
 

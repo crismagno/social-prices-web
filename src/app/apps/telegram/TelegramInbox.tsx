@@ -10,6 +10,7 @@ import { ExportOutlined } from "@ant-design/icons";
 import AppIcon from "../../../components/common/AppIcon/AppIcon";
 import { AppTile } from "../../../components/common/ConnectSteps/ConnectSteps";
 import useAppData from "../../../data/context/app/useAppData";
+import ChatsSidePanelLayout from "../../chats/ChatsSidePanel";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import AppsEnum from "../../../shared/business/apps/apps.enum";
@@ -168,7 +169,7 @@ export default function TelegramInbox({
               {list}
             </div>
 
-            <div className="min-w-0 flex-1">{thread}</div>
+            <ChatsSidePanelLayout>{thread}</ChatsSidePanelLayout>
           </>
         )}
       </div>

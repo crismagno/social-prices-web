@@ -36,6 +36,7 @@ import { relativeDay } from "../apps/telegram/telegram-display";
 import ChatsAttachment from "./ChatsAttachment";
 import ChatsConversationsModal from "./ChatsConversationsModal";
 import ChatsFastSale from "./ChatsFastSale";
+import { useChatsSidePanel } from "./ChatsSidePanel";
 import ChatsMessageEditor, { ChatsEditedMark } from "./ChatsMessageEditor";
 import ChatsReplyBox from "./ChatsReplyBox";
 import { conversationAppUrl } from "./chats-links";
@@ -104,6 +105,12 @@ export default function ChatsThread({
   const [isFastSaleOpen, setIsFastSaleOpen] = useState<boolean>(false);
 
   const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
+
+  // The fast sale and the customer's data open beside the conversation when
+  // there is room, so it can go on while they are filled in; one at a time.
+  const sidePanel: HTMLElement | undefined = useChatsSidePanel(
+    isEditOpen || isFastSaleOpen,
+  );
 
   // The message whose words are being changed, if any: one at a time.
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -286,7 +293,10 @@ export default function ChatsThread({
             <Button
               size="small"
               icon={<EditOutlined />}
-              onClick={() => setIsEditOpen(true)}
+              onClick={() => {
+                setIsFastSaleOpen(false);
+                setIsEditOpen(true);
+              }}
             >
               {t("customers.editCustomer")}
             </Button>
@@ -298,7 +308,10 @@ export default function ChatsThread({
               size="small"
               className="!border-amber-500 !bg-amber-500 !text-white hover:!bg-amber-400"
               icon={<ThunderboltOutlined />}
-              onClick={() => setIsFastSaleOpen(true)}
+              onClick={() => {
+                setIsEditOpen(false);
+                setIsFastSaleOpen(true);
+              }}
             >
               {t("sales.fastSale")}
             </Button>
@@ -517,6 +530,7 @@ export default function ChatsThread({
           customerId={chat.customerId}
           onClose={() => setIsEditOpen(false)}
           onSaved={() => onChanged()}
+          container={sidePanel}
         />
       )}
 
@@ -524,6 +538,7 @@ export default function ChatsThread({
         <ChatsFastSale
           customerId={chat.customerId}
           onClose={() => setIsFastSaleOpen(false)}
+          container={sidePanel}
         />
       )}
 

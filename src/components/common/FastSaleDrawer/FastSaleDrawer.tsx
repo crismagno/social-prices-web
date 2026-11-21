@@ -90,6 +90,7 @@ import {
   IFastSaleItem,
 } from './FastSaleProductPicker';
 import InviteCustomerButton from '../../../app/customers/[customerId]/InviteCustomerButton';
+import { sidePanelDrawerProps } from '../../../shared/utils/drawer/side-panel-drawer';
 import { FastSaleSummaryModal } from './FastSaleSummaryModal';
 
 interface Props {
@@ -97,6 +98,9 @@ interface Props {
   onClose: () => void;
   // Opens with this customer already picked (from a customer's page or row).
   initialCustomer?: ICustomer | null;
+  // Rendered inside this element, filling it, instead of over the page: a
+  // panel beside what the user is doing (the chat).
+  container?: HTMLElement;
 }
 
 const parseAddress = (
@@ -171,6 +175,7 @@ export const FastSaleDrawer: React.FC<Props> = ({
   open,
   onClose,
   initialCustomer = null,
+  container,
 }) => {
   const { message } = App.useApp();
   const { t } = useLanguageData();
@@ -1014,6 +1019,7 @@ export const FastSaleDrawer: React.FC<Props> = ({
       placement="right"
       width="min(760px, 100vw)"
       maskClosable={!isSubmitting}
+      {...sidePanelDrawerProps(container)}
       footer={createdSale ? null : renderFooter()}
     >
       {createdSale ? renderSuccess(createdSale) : renderForm()}

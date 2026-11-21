@@ -46,6 +46,7 @@ import { ICustomer } from "../../../shared/business/customers/customer.interface
 import Urls from "../../../shared/common/routes-app/routes-app";
 import EditCustomerDrawer from "../../../components/common/EditCustomerDrawer/EditCustomerDrawer";
 import ChatsFastSale from "../../chats/ChatsFastSale";
+import { useChatsSidePanel } from "../../chats/ChatsSidePanel";
 import LinkCustomerModal from "../telegram/LinkCustomerModal";
 import { relativeDay } from "../telegram/telegram-display";
 import { avatarColor } from "../telegram/telegram-theme";
@@ -114,6 +115,12 @@ export default function MessengerThread({
   const [isFastSaleOpen, setIsFastSaleOpen] = useState<boolean>(false);
 
   const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
+
+  // The fast sale and the customer's data open beside the conversation when
+  // there is room, so it can go on while they are filled in; one at a time.
+  const sidePanel: HTMLElement | undefined = useChatsSidePanel(
+    isEditOpen || isFastSaleOpen,
+  );
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
@@ -297,7 +304,10 @@ export default function MessengerThread({
         <Button
           size="small"
           icon={<EditOutlined />}
-          onClick={() => setIsEditOpen(true)}
+          onClick={() => {
+            setIsFastSaleOpen(false);
+            setIsEditOpen(true);
+          }}
         >
           {t("customers.editCustomer")}
         </Button>
@@ -307,7 +317,10 @@ export default function MessengerThread({
           size="small"
           className="!border-amber-500 !bg-amber-500 !text-white hover:!bg-amber-400"
           icon={<ThunderboltOutlined />}
-          onClick={() => setIsFastSaleOpen(true)}
+          onClick={() => {
+            setIsEditOpen(false);
+            setIsFastSaleOpen(true);
+          }}
         >
           {t("sales.fastSale")}
         </Button>
@@ -722,6 +735,7 @@ export default function MessengerThread({
           customerId={chat.customerId}
           onClose={() => setIsEditOpen(false)}
           onSaved={() => onChatChanged()}
+          container={sidePanel}
         />
       )}
 
@@ -729,6 +743,7 @@ export default function MessengerThread({
         <ChatsFastSale
           customerId={chat.customerId}
           onClose={() => setIsFastSaleOpen(false)}
+          container={sidePanel}
         />
       )}
 

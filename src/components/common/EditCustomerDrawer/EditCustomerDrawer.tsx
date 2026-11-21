@@ -55,6 +55,7 @@ import {
   PhoneNumbers,
 } from "../PhoneNumbers/PhoneNumbers";
 import { TagTagCustomAntd } from "../TagTagCustomAntd/TagTagCustomAntd";
+import { sidePanelDrawerProps } from "../../../shared/utils/drawer/side-panel-drawer";
 
 // What a customer made from a chat has is a name; the rest gets filled in as the
 // conversation goes, so e-mail and the other fields may stay empty.
@@ -107,6 +108,9 @@ interface Props {
   onClose: () => void;
   // The customer as saved, so the screen behind can show the new data.
   onSaved?: (customer: ICustomer) => void;
+  // Rendered inside this element, filling it, instead of over the page: a
+  // panel beside what the user is doing (the chat).
+  container?: HTMLElement;
 }
 
 const valuesOf = (customer: ICustomer): TFormSchema => ({
@@ -144,6 +148,7 @@ export default function EditCustomerDrawer({
   customerId,
   onClose,
   onSaved,
+  container,
 }: Props) {
   const { t } = useLanguageData();
 
@@ -276,6 +281,7 @@ export default function EditCustomerDrawer({
       onClose={onClose}
       width={720}
       title={t("customers.editCustomer")}
+      {...sidePanelDrawerProps(container)}
       loading={!customer}
       footer={
         <div className="flex justify-end gap-2">

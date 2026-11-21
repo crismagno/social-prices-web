@@ -9,6 +9,7 @@ import useAuthData from "../../data/context/auth/useAuthData";
 import EmployeesEnum from "../../shared/business/employees/employees.enum";
 import { useFillViewportHeight } from "../../shared/hooks/useFillViewportHeight";
 import useAppData from "../../data/context/app/useAppData";
+import ChatsSidePanelLayout from "./ChatsSidePanel";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import InboxEnum from "../../shared/business/inbox/inbox.enum";
@@ -165,7 +166,7 @@ export default function ChatsInbox({ channel }: Props) {
               {list}
             </div>
 
-            <div className="min-w-0 flex-1">{thread}</div>
+            <ChatsSidePanelLayout>{thread}</ChatsSidePanelLayout>
           </>
         )}
       </div>
