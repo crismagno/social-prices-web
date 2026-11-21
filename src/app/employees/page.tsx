@@ -158,6 +158,7 @@ export default function EmployeesPage() {
         <TableCustomAntd2<IEmployee>
           rowKey={"_id"}
           dataSource={employees}
+          scroll={{ x: "max-content" }}
           columns={[
             {
               title: "#",
@@ -293,6 +294,7 @@ export default function EmployeesPage() {
               dataIndex: "action",
               key: "action",
               align: "center",
+              fixed: "right",
               render: (_: any, employee: IEmployee) => {
                 return (
                   <Space>
