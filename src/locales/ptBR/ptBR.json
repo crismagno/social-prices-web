@@ -2415,7 +2415,12 @@
         "ctaLabel": "Texto do botão",
         "backgroundImage": "Imagem de fundo",
         "backgroundImageHint": "Ocupa a entrada do site, sob um véu das suas cores.",
-        "featuredImage": "Imagem em destaque"
+        "featuredImage": "Imagem em destaque",
+        "slides": {
+          "label": "Mais imagens de fundo",
+          "hint": "Com mais de uma, o fundo vai trocando de uma imagem para a outra, como um slider. Até 5 além da primeira.",
+          "seconds": "Segundos que cada imagem fica"
+        }
       },
       "sections": {
         "block": "Bloco",
@@ -2513,7 +2518,7 @@
         "text": "Texto",
         "textHint": "Algumas palavras abaixo do nome da loja: endereço, horário, uma frase.",
         "login": "Mostrar o botão de entrar no app",
-        "loginHint": "Leva o cliente ao login, onde ele acompanha os pedidos.",
+        "loginHint": "Leva o cliente para o app, na mesma página do botão do topo.",
         "linksHeading": "Links",
         "add": "Adicionar link",
         "empty": "Nenhum link ainda. Adicione suas redes sociais, outros sites ou formas de contato.",
@@ -2555,6 +2560,19 @@
         "kept": "O template, o endereço do site e se ele está no ar continuam como estão.",
         "notSaved": "Nada é salvo ainda: você ainda precisa salvar. Para desistir, recarregue a página sem salvar.",
         "confirm": "Voltar ao padrão"
+      },
+      "signIn": {
+        "heading": "Botão de entrar",
+        "hint": "No topo do site, ao lado do carrinho. O cliente que não está logado entra primeiro e depois vai para a página escolhida abaixo; quem já está logado vai direto. O botão do rodapé diz e faz o mesmo.",
+        "show": "Mostrar o botão de entrar no topo",
+        "label": "Texto do botão",
+        "labelHint": "Vazio mostra “Entrar”.",
+        "destination": "Depois de entrar, o cliente vai para",
+        "destinations": {
+          "STORE_CHAT": "A conversa com a loja",
+          "ORDERS": "Os pedidos dele",
+          "HOME": "O início da conta dele"
+        }
       }
     },
     "footer": {
@@ -2576,6 +2594,9 @@
         "WEBSITE": "Site",
         "TEXT": "Texto livre (sem ícone)"
       }
+    },
+    "signIn": {
+      "default": "Entrar"
     }
   }
 }

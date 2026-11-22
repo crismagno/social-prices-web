@@ -2,10 +2,12 @@
 
 import { IStoreSiteSection } from "../../../../shared/business/store-sites/store-site.interface";
 import { IPublicSiteProduct } from "../../../../shared/business/store-sites/store-sites.types";
+import HeroBackground from "../../shared/HeroBackground";
 import Reveal from "../../shared/Reveal";
 import base from "../../shared/site-base.module.css";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
 import SiteFooter from "../../shared/SiteFooter";
+import SiteSignIn from "../../shared/SiteSignIn";
 import SiteThemeVars from "../../shared/SiteThemeVars";
 import {
   addLabel,
@@ -49,9 +51,7 @@ const Aurora = ({
       }`}
     >
       <header className={styles.hero}>
-        {backgroundImage && (
-          <div className={styles.bg} style={{ backgroundImage }} />
-        )}
+        <HeroBackground hero={hero} className={styles.bg} />
         <div
           className={`${styles.tint} ${backgroundImage ? "" : styles.tintSolid}`}
         />
@@ -80,6 +80,14 @@ const Aurora = ({
                 <a href="#sobre">{t("storeSite.public.about")}</a>
               )}
               <a href="#produtos">{t("storeSite.public.products")}</a>
+              {site.signIn?.isVisible !== false && (
+                <SiteSignIn
+                  signIn={site.signIn}
+                  storeId={site.storeId}
+                  className={`${styles.bag} ${styles.signIn}`}
+                  isCompact
+                />
+              )}
               <button type="button" className={styles.bag} onClick={cart.open}>
                 {t("storeSite.public.cart")} · {cart.count}
               </button>
@@ -212,7 +220,12 @@ const Aurora = ({
         </Reveal>
       )}
 
-      <SiteFooter footer={site.footer} brandName={brandName} />
+      <SiteFooter
+        footer={site.footer}
+        brandName={brandName}
+        signIn={site.signIn}
+        storeId={site.storeId}
+      />
     </SiteThemeVars>
   );
 };

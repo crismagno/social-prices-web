@@ -15,11 +15,13 @@ import { getImageUrl } from "../../../shared/utils/images/images-url";
 interface Props {
   storeId: string;
   value: string | null;
+  /** Cannot be chosen yet (or no more can be added). */
+  disabled?: boolean;
   onChange: (value: string | null) => void;
 }
 
 /** One image of the site: sends the file and keeps what the API answers. */
-const ImageField = ({ storeId, value, onChange }: Props) => {
+const ImageField = ({ storeId, value, disabled, onChange }: Props) => {
   const { t } = useLanguageData();
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -76,6 +78,7 @@ const ImageField = ({ storeId, value, onChange }: Props) => {
       <Button
         icon={<UploadOutlined />}
         loading={isUploading}
+        disabled={disabled}
         onClick={() => inputRef.current?.click()}
       >
         {value

@@ -517,3 +517,16 @@
     gap: 24px 14px;
   }
 }
+
+/* The sign-in button beside the cart: same pill, with its icon. */
+.signIn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+@media (max-width: 767px) {
+  .links .signIn {
+    display: inline-flex;
+  }
+}

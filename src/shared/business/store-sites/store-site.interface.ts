@@ -1,4 +1,5 @@
 import { IStoreSiteFooter } from "./store-site-footer";
+import { IStoreSiteSignIn } from "./store-site-sign-in";
 import { TStoreSiteSizes } from "./store-site-sizes";
 import StoreSitesEnum from "./store-sites.enum";
 
@@ -16,6 +17,10 @@ export interface IStoreSiteHero {
   title: string;
   subtitle: string | null;
   backgroundImageUrl: string | null;
+  /** More backgrounds: with any, the entrance changes from one to the next. */
+  backgroundImageUrls?: string[];
+  /** Seconds each background stays, when there is more than one. */
+  slideSeconds?: number;
   featuredImageUrl: string | null;
   ctaLabel: string | null;
 }
@@ -52,6 +57,7 @@ export interface ISaveStoreSite {
   /** Sizes the owner set, in pixels; an empty one is the template's own. */
   sizes: TStoreSiteSizes;
   footer: IStoreSiteFooter;
+  signIn: IStoreSiteSignIn;
   hero: IStoreSiteHero;
   sections: IStoreSiteSection[];
   marquee: IStoreSiteMarquee;

@@ -1,6 +1,7 @@
 import { IStoreSiteSection } from "../../../shared/business/store-sites/store-site.interface";
 import { IPublicSiteProduct } from "../../../shared/business/store-sites/store-sites.types";
 import { ISiteCartApi, IStoreSiteTemplateProps } from "../template.types";
+import { heroSlideKeys } from "./HeroBackground";
 import { cssUrl, siteLogo } from "./site-format";
 import { TSiteTranslate } from "./useSiteT";
 
@@ -28,7 +29,7 @@ export const getSiteContent = ({
   marqueeItems: site.marquee.isActive
     ? site.marquee.items.filter((item: string) => item.trim())
     : [],
-  backgroundImage: cssUrl(site.hero.backgroundImageUrl),
+  backgroundImage: cssUrl(heroSlideKeys(site.hero)[0]),
   featuredImage: cssUrl(site.hero.featuredImageUrl),
   logo: siteLogo(site.logo, store.logo),
   brandName: site.displayName?.trim() || store.name,

@@ -4,11 +4,13 @@ import { CSSProperties } from "react";
 
 import { IStoreSiteSection } from "../../../../shared/business/store-sites/store-site.interface";
 import { IPublicSiteProduct } from "../../../../shared/business/store-sites/store-sites.types";
+import HeroBackground from "../../shared/HeroBackground";
 import Reveal from "../../shared/Reveal";
 import base from "../../shared/site-base.module.css";
 import { siteRounded } from "../../shared/site-fonts";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
 import SiteFooter from "../../shared/SiteFooter";
+import SiteSignIn from "../../shared/SiteSignIn";
 import SiteThemeVars from "../../shared/SiteThemeVars";
 import {
   addLabel,
@@ -62,9 +64,7 @@ const Studio = ({
       } ${siteRounded.className}`}
     >
       <header className={styles.hero}>
-        {backgroundImage && (
-          <div className={styles.bg} style={{ backgroundImage }} />
-        )}
+        <HeroBackground hero={hero} className={styles.bg} />
         <div
           className={`${styles.veil} ${backgroundImage ? "" : styles.veilSolid}`}
         />
@@ -77,6 +77,14 @@ const Studio = ({
           <span className={styles.links}>
             <a href="#produtos">{t("storeSite.public.products")}</a>
             {store.about && <a href="#sobre">{t("storeSite.public.about")}</a>}
+            {site.signIn?.isVisible !== false && (
+              <SiteSignIn
+                signIn={site.signIn}
+                storeId={site.storeId}
+                className={`${styles.bag} ${styles.signIn}`}
+                isCompact
+              />
+            )}
             <button type="button" className={styles.bag} onClick={cart.open}>
               {t("storeSite.public.bag")} · {cart.count}
             </button>
@@ -327,7 +335,12 @@ const Studio = ({
         </div>
       )}
 
-      <SiteFooter footer={site.footer} brandName={brandName} />
+      <SiteFooter
+        footer={site.footer}
+        brandName={brandName}
+        signIn={site.signIn}
+        storeId={site.storeId}
+      />
     </SiteThemeVars>
   );
 };

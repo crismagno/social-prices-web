@@ -28,11 +28,15 @@ export interface IStoreSiteTemplateProps {
     | "displayName"
     | "sizes"
     | "footer"
+    | "signIn"
     | "hero"
     | "sections"
     | "marquee"
     | "logo"
-  >;
+  > & {
+    /** Only on the published site: the editor's draft has no store yet. */
+    storeId?: string;
+  };
   store: IPublicSiteStore;
   products: IPublicSiteProduct[];
   mode: "live" | "preview";

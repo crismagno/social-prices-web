@@ -7,7 +7,6 @@ import {
   GlobalOutlined,
   InstagramOutlined,
   LinkedinOutlined,
-  LoginOutlined,
   MailOutlined,
   PhoneOutlined,
   PinterestOutlined,
@@ -26,14 +25,18 @@ import {
   siteFooterOf,
 } from "../../../shared/business/store-sites/store-site-footer";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
-import Urls from "../../../shared/common/routes-app/routes-app";
+import { IStoreSiteSignIn } from "../../../shared/business/store-sites/store-site-sign-in";
 import styles from "./SiteFooter.module.css";
+import SiteSignIn from "./SiteSignIn";
 import useSiteT from "./useSiteT";
 
 interface Props {
   footer: Partial<IStoreSiteFooter> | null | undefined;
   /** The name at the top of the site, repeated here. */
   brandName: string;
+  /** The sign-in button of the site: the footer's says and goes the same. */
+  signIn?: Partial<IStoreSiteSignIn> | null;
+  storeId?: string | null;
 }
 
 // A link of free text has no icon: it is just the owner's words.
@@ -58,7 +61,7 @@ const ICONS: Record<StoreSitesEnum.FooterLinkType, ReactNode> = {
  * one to five sections, side by side, and says in which one each thing goes:
  * the name with its words, the way into the app, and each link.
  */
-const SiteFooter = ({ footer, brandName }: Props) => {
+const SiteFooter = ({ footer, brandName, signIn, storeId }: Props) => {
   const t = useSiteT();
 
   const {
@@ -163,10 +166,11 @@ const SiteFooter = ({ footer, brandName }: Props) => {
 
               {hasLogin && (
                 <div className={styles.loginBox}>
-                  <a href={Urls.LOGIN} className={styles.login}>
-                    <LoginOutlined />
-                    {t("storeSite.footer.login")}
-                  </a>
+                  <SiteSignIn
+                    signIn={signIn}
+                    storeId={storeId}
+                    className={styles.login}
+                  />
                   <span className={styles.loginHint}>
                     {t("storeSite.footer.loginHint")}
                   </span>

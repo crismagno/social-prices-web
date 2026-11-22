@@ -2412,7 +2412,12 @@
         "ctaLabel": "Button text",
         "backgroundImage": "Background image",
         "backgroundImageHint": "Fills the entrance of the site, under a veil of your colors.",
-        "featuredImage": "Featured image"
+        "featuredImage": "Featured image",
+        "slides": {
+          "label": "More background images",
+          "hint": "With more than one, the background changes from one image to the next, like a slider. Up to 5 besides the first.",
+          "seconds": "Seconds each image stays"
+        }
       },
       "sections": {
         "block": "Block",
@@ -2510,7 +2515,7 @@
         "text": "Text",
         "textHint": "A few words under the name of the store: address, opening hours, a phrase.",
         "login": "Show the button to sign in to the app",
-        "loginHint": "Takes the customer to the login, where they follow their orders.",
+        "loginHint": "Takes the customer into the app, to the same page as the button at the top.",
         "linksHeading": "Links",
         "add": "Add link",
         "empty": "No link yet. Add your social networks, other sites or ways to get in touch.",
@@ -2552,6 +2557,19 @@
         "kept": "The template, the address of the site and whether it is online stay as they are.",
         "notSaved": "Nothing is saved yet: you still have to save. To give up, reload the page without saving.",
         "confirm": "Reset to the defaults"
+      },
+      "signIn": {
+        "heading": "Sign-in button",
+        "hint": "At the top of the site, beside the cart. A customer who is not signed in signs in first and then goes to the page chosen below; one already signed in goes straight there. The button in the footer says and does the same.",
+        "show": "Show the sign-in button at the top",
+        "label": "Text of the button",
+        "labelHint": "Empty shows “Sign in”.",
+        "destination": "After signing in, the customer goes to",
+        "destinations": {
+          "STORE_CHAT": "The conversation with the store",
+          "ORDERS": "Their orders",
+          "HOME": "The home of their account"
+        }
       }
     },
     "footer": {
@@ -2573,6 +2591,9 @@
         "WEBSITE": "Website",
         "TEXT": "Free text (no icon)"
       }
+    },
+    "signIn": {
+      "default": "Sign in"
     }
   }
 }

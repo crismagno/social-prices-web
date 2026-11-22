@@ -4,11 +4,13 @@ import { CSSProperties } from "react";
 
 import { IPublicSiteProduct } from "../../../../shared/business/store-sites/store-sites.types";
 import { IStoreSiteSection } from "../../../../shared/business/store-sites/store-site.interface";
+import HeroBackground, { heroSlideKeys } from "../../shared/HeroBackground";
 import Reveal from "../../shared/Reveal";
 import base from "../../shared/site-base.module.css";
 import { siteSerif } from "../../shared/site-fonts";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
 import SiteFooter from "../../shared/SiteFooter";
+import SiteSignIn from "../../shared/SiteSignIn";
 import SiteThemeVars from "../../shared/SiteThemeVars";
 import { getSiteContent } from "../../shared/useSiteContent";
 import useSiteT from "../../shared/useSiteT";
@@ -38,7 +40,7 @@ const Atelier = ({
     ? marquee.items.filter((item: string) => item.trim())
     : [];
 
-  const backgroundImage: string | undefined = cssUrl(hero.backgroundImageUrl);
+  const backgroundImage: string | undefined = cssUrl(heroSlideKeys(hero)[0]);
   const featuredImage: string | undefined = cssUrl(hero.featuredImageUrl);
   const { logo, brandName } = getSiteContent({ site, store });
 
@@ -51,9 +53,7 @@ const Atelier = ({
       }`}
     >
       <header className={styles.hero}>
-        {backgroundImage && (
-          <div className={styles.bg} style={{ backgroundImage }} />
-        )}
+        <HeroBackground hero={hero} className={styles.bg} />
         <div
           className={`${styles.veil} ${backgroundImage ? "" : styles.veilSolid}`}
         />
@@ -88,6 +88,14 @@ const Atelier = ({
           <span className={styles.links}>
             {store.about && <a href="#sobre">{t("storeSite.public.about")}</a>}
             <a href="#produtos">{t("storeSite.public.products")}</a>
+            {site.signIn?.isVisible !== false && (
+              <SiteSignIn
+                signIn={site.signIn}
+                storeId={site.storeId}
+                className={`${styles.bag} ${styles.signIn}`}
+                isCompact
+              />
+            )}
             <button type="button" className={styles.bag} onClick={cart.open}>
               {t("storeSite.public.bag")} ({cart.count})
             </button>
@@ -265,7 +273,12 @@ const Atelier = ({
         </Reveal>
       )}
 
-      <SiteFooter footer={site.footer} brandName={brandName} />
+      <SiteFooter
+        footer={site.footer}
+        brandName={brandName}
+        signIn={site.signIn}
+        storeId={site.storeId}
+      />
     </SiteThemeVars>
   );
 };

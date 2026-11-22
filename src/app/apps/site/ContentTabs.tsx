@@ -1,6 +1,16 @@
 "use client";
 
-import { Button, Card, Form, Input, Space, Switch } from "antd";
+import {
+  Button,
+  Card,
+  Divider,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Space,
+  Switch,
+} from "antd";
 
 import {
   ArrowDownOutlined,
@@ -16,6 +26,7 @@ import {
   IStoreSiteSection,
 } from "../../../shared/business/store-sites/store-site.interface";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
+import { IStoreSiteSignIn } from "../../../shared/business/store-sites/store-site-sign-in";
 import ImageField from "./ImageField";
 import SizeFields from "./SizeFields";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
@@ -51,6 +62,36 @@ export const HeroTab = ({ editor, storeId, storeName }: IHeroTabProps) => {
   }
 
   const { hero, logo } = editor.draft;
+
+  const signIn: IStoreSiteSignIn = editor.draft.signIn;
+
+  // From the draft as it is when applied, like every change of the editor.
+  const setSignIn = (patch: Partial<IStoreSiteSignIn>): void =>
+    editor.update((draft) => ({ signIn: { ...draft.signIn, ...patch } }));
+
+  const extraImages: string[] = hero.backgroundImageUrls ?? [];
+
+  // From the draft as it is when applied: an upload finishes later, and the
+  // list may have changed meanwhile. An emptied field removes its image.
+  const setExtraImage = (index: number, imageKey: string | null): void =>
+    editor.update((draft) => {
+      const images: string[] = [...(draft.hero.backgroundImageUrls ?? [])];
+
+      if (imageKey) {
+        images[index] = imageKey;
+      } else {
+        images.splice(index, 1);
+      }
+
+      return {
+        hero: {
+          ...draft.hero,
+          backgroundImageUrls: images
+            .filter(Boolean)
+            .slice(0, StoreSitesEnum.MAX_HERO_EXTRA_IMAGES),
+        },
+      };
+    });
 
   // From the draft as it is when applied: an upload that finishes later must
   // not bring back what the hero was when it started.
@@ -110,6 +151,49 @@ export const HeroTab = ({ editor, storeId, storeName }: IHeroTabProps) => {
           onChange={(backgroundImageUrl) => set({ backgroundImageUrl })}
         />
       </Form.Item>
+      <Form.Item
+        label={t("storeSite.editor.hero.slides.label")}
+        extra={t("storeSite.editor.hero.slides.hint")}
+      >
+        <Space direction="vertical" className="w-full">
+          {extraImages.map((imageKey: string, index: number) => (
+            <ImageField
+              key={`${index}-${imageKey}`}
+              storeId={storeId}
+              value={imageKey}
+              onChange={(next) => setExtraImage(index, next)}
+            />
+          ))}
+          <ImageField
+            // A new, empty field each time one is filled.
+            key={`new-${extraImages.length}`}
+            storeId={storeId}
+            value={null}
+            disabled={
+              !hero.backgroundImageUrl ||
+              extraImages.length >= StoreSitesEnum.MAX_HERO_EXTRA_IMAGES
+            }
+            onChange={(next) => next && setExtraImage(extraImages.length, next)}
+          />
+        </Space>
+      </Form.Item>
+      {extraImages.length > 0 && (
+        <Form.Item label={t("storeSite.editor.hero.slides.seconds")}>
+          <InputNumber
+            min={StoreSitesEnum.MIN_SLIDE_SECONDS}
+            max={StoreSitesEnum.MAX_SLIDE_SECONDS}
+            precision={0}
+            addonAfter="s"
+            value={hero.slideSeconds ?? StoreSitesEnum.DEFAULT_SLIDE_SECONDS}
+            onChange={(slideSeconds: number | null) =>
+              set({
+                slideSeconds:
+                  slideSeconds ?? StoreSitesEnum.DEFAULT_SLIDE_SECONDS,
+              })
+            }
+          />
+        </Form.Item>
+      )}
       <SizeFields editor={editor} sizes={["heroHeight"]} />
       <Form.Item label={t("storeSite.editor.hero.featuredImage")}>
         <ImageField
@@ -161,6 +245,45 @@ export const HeroTab = ({ editor, storeId, storeName }: IHeroTabProps) => {
       {logo.isActive && (
         <SizeFields editor={editor} sizes={["logoWidth", "logoHeight"]} />
       )}
+
+      <Divider orientation="left" plain>
+        {t("storeSite.editor.signIn.heading")}
+      </Divider>
+      <p className="text-xs opacity-70 mb-3">
+        {t("storeSite.editor.signIn.hint")}
+      </p>
+      <Form.Item label={t("storeSite.editor.signIn.show")}>
+        <Switch
+          checked={signIn.isVisible}
+          onChange={(isVisible: boolean) => setSignIn({ isVisible })}
+        />
+      </Form.Item>
+      <Form.Item
+        label={t("storeSite.editor.signIn.label")}
+        extra={t("storeSite.editor.signIn.labelHint")}
+      >
+        <Input
+          maxLength={30}
+          allowClear
+          placeholder={t("storeSite.signIn.default")}
+          value={signIn.label ?? ""}
+          onChange={(event) => setSignIn({ label: event.target.value || null })}
+        />
+      </Form.Item>
+      <Form.Item label={t("storeSite.editor.signIn.destination")}>
+        <Select
+          value={signIn.destination}
+          onChange={(destination: StoreSitesEnum.SignInDestination) =>
+            setSignIn({ destination })
+          }
+          options={Object.values(StoreSitesEnum.SignInDestination).map(
+            (destination: StoreSitesEnum.SignInDestination) => ({
+              value: destination,
+              label: t(`storeSite.editor.signIn.destinations.${destination}`),
+            }),
+          )}
+        />
+      </Form.Item>
     </Form>
   );
 };

@@ -4,11 +4,13 @@ import { CSSProperties } from "react";
 
 import { IStoreSiteSection } from "../../../../shared/business/store-sites/store-site.interface";
 import { IPublicSiteProduct } from "../../../../shared/business/store-sites/store-sites.types";
+import HeroBackground from "../../shared/HeroBackground";
 import Reveal from "../../shared/Reveal";
 import base from "../../shared/site-base.module.css";
 import { siteSerif } from "../../shared/site-fonts";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
 import SiteFooter from "../../shared/SiteFooter";
+import SiteSignIn from "../../shared/SiteSignIn";
 import SiteThemeVars from "../../shared/SiteThemeVars";
 import {
   addLabel,
@@ -63,9 +65,7 @@ const Garden = ({
       }`}
     >
       <header className={styles.hero}>
-        {backgroundImage && (
-          <div className={styles.bg} style={{ backgroundImage }} />
-        )}
+        <HeroBackground hero={hero} className={styles.bg} />
         <div
           className={`${styles.veil} ${backgroundImage ? "" : styles.veilSolid}`}
         />
@@ -94,9 +94,19 @@ const Garden = ({
             {logo && <img src={logo} alt="" />}
             {brandName}
           </span>
-          <button type="button" className={styles.bag} onClick={cart.open}>
-            {t("storeSite.public.bag")} ({cart.count})
-          </button>
+          <span className={styles.navRight}>
+            {site.signIn?.isVisible !== false && (
+              <SiteSignIn
+                signIn={site.signIn}
+                storeId={site.storeId}
+                className={`${styles.bag} ${styles.signIn}`}
+                isCompact
+              />
+            )}
+            <button type="button" className={styles.bag} onClick={cart.open}>
+              {t("storeSite.public.bag")} ({cart.count})
+            </button>
+          </span>
         </nav>
 
         <div className={styles.copy}>
@@ -256,7 +266,12 @@ const Garden = ({
         </Reveal>
       )}
 
-      <SiteFooter footer={site.footer} brandName={brandName} />
+      <SiteFooter
+        footer={site.footer}
+        brandName={brandName}
+        signIn={site.signIn}
+        storeId={site.storeId}
+      />
     </SiteThemeVars>
   );
 };

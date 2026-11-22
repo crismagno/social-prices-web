@@ -11,6 +11,7 @@ import {
   IStoreSite,
 } from "../../../shared/business/store-sites/store-site.interface";
 import { siteFooterOf } from "../../../shared/business/store-sites/store-site-footer";
+import { siteSignInOf } from "../../../shared/business/store-sites/store-site-sign-in";
 import {
   EMPTY_SITE_SIZES,
   siteSizesOf,
@@ -74,6 +75,8 @@ const toDraft = (site: IStoreSite): ISaveStoreSite => ({
   sizes: siteSizesOf(site.sizes),
   // A site saved before the footer existed gets the default one.
   footer: siteFooterOf(site.footer),
+  // A site saved before the button existed shows it, leading to the store.
+  signIn: siteSignInOf(site.signIn),
   hero: { ...site.hero },
   sections: site.sections.map((section) => ({ ...section })),
   marquee: { isActive: site.marquee.isActive, items: [...site.marquee.items] },
@@ -92,11 +95,14 @@ const newDraft = (store: IStore): ISaveStoreSite => ({
   displayName: null,
   sizes: { ...EMPTY_SITE_SIZES },
   footer: siteFooterOf(null),
+  signIn: siteSignInOf(null),
   hero: {
     tagline: null,
     title: store.name,
     subtitle: store.description ?? null,
     backgroundImageUrl: null,
+    backgroundImageUrls: [],
+    slideSeconds: StoreSitesEnum.DEFAULT_SLIDE_SECONDS,
     featuredImageUrl: null,
     ctaLabel: null,
   },
