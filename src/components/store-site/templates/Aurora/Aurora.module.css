@@ -215,7 +215,10 @@
   animation: floaty 5s ease-in-out infinite;
 }
 
+/* Holds the featured images, each filling it. */
 .glassPhoto {
+  position: relative;
+  overflow: hidden;
   aspect-ratio: var(--sz-featured-ratio, 4 / 5);
   border-radius: 16px;
   background-size: cover;

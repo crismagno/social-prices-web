@@ -4,7 +4,11 @@ import { CSSProperties } from "react";
 
 import { IPublicSiteProduct } from "../../../../shared/business/store-sites/store-sites.types";
 import { IStoreSiteSection } from "../../../../shared/business/store-sites/store-site.interface";
-import HeroBackground, { heroSlideKeys } from "../../shared/HeroBackground";
+import ImageSlides from "../../shared/ImageSlides";
+import HeroBackground, {
+  featuredSlideKeys,
+  heroSlideKeys,
+} from "../../shared/HeroBackground";
 import Reveal from "../../shared/Reveal";
 import base from "../../shared/site-base.module.css";
 import { siteSerif } from "../../shared/site-fonts";
@@ -45,7 +49,7 @@ const Atelier = ({
     : [];
 
   const backgroundImage: string | undefined = cssUrl(heroSlideKeys(hero)[0]);
-  const featuredImage: string | undefined = cssUrl(hero.featuredImageUrl);
+  const featuredImage: string | undefined = cssUrl(featuredSlideKeys(hero)[0]);
   const { logo, brandName } = getSiteContent({ site, store });
 
   return (
@@ -141,10 +145,12 @@ const Atelier = ({
           {featuredImage && (
             <div className={styles.figure}>
               <div className={styles.frame} />
-              <div
-                className={styles.photo}
-                style={{ backgroundImage: featuredImage }}
-              />
+              <div className={styles.photo}>
+                <ImageSlides
+                  keys={featuredSlideKeys(hero)}
+                  seconds={hero.featuredSlideSeconds}
+                />
+              </div>
               <span
                 className={styles.chip}
                 style={
@@ -270,7 +276,8 @@ const Atelier = ({
         about={site.about}
         storeAbout={store.about}
         defaultTitle={t("storeSite.public.about")}
-        titleClassName={`${styles.aboutTitle} ${siteSerif.className}`}
+        variant="atelier"
+        titleClassName={siteSerif.className}
       />
 
       <SiteFooter

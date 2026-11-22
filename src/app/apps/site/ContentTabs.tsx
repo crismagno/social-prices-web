@@ -27,6 +27,7 @@ import {
 } from "../../../shared/business/store-sites/store-site.interface";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteSignIn } from "../../../shared/business/store-sites/store-site-sign-in";
+import ExtraImagesField from "./ExtraImagesField";
 import ImageField from "./ImageField";
 import SizeFields from "./SizeFields";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
@@ -69,13 +70,17 @@ export const HeroTab = ({ editor, storeId, storeName }: IHeroTabProps) => {
   const setSignIn = (patch: Partial<IStoreSiteSignIn>): void =>
     editor.update((draft) => ({ signIn: { ...draft.signIn, ...patch } }));
 
-  const extraImages: string[] = hero.backgroundImageUrls ?? [];
+  type TExtraImagesKey = "backgroundImageUrls" | "featuredImageUrls";
 
   // From the draft as it is when applied: an upload finishes later, and the
   // list may have changed meanwhile. An emptied field removes its image.
-  const setExtraImage = (index: number, imageKey: string | null): void =>
+  const setExtraImage = (
+    field: TExtraImagesKey,
+    index: number,
+    imageKey: string | null,
+  ): void =>
     editor.update((draft) => {
-      const images: string[] = [...(draft.hero.backgroundImageUrls ?? [])];
+      const images: string[] = [...(draft.hero[field] ?? [])];
 
       if (imageKey) {
         images[index] = imageKey;
@@ -86,7 +91,7 @@ export const HeroTab = ({ editor, storeId, storeName }: IHeroTabProps) => {
       return {
         hero: {
           ...draft.hero,
-          backgroundImageUrls: images
+          [field]: images
             .filter(Boolean)
             .slice(0, StoreSitesEnum.MAX_HERO_EXTRA_IMAGES),
         },
@@ -151,49 +156,18 @@ export const HeroTab = ({ editor, storeId, storeName }: IHeroTabProps) => {
           onChange={(backgroundImageUrl) => set({ backgroundImageUrl })}
         />
       </Form.Item>
-      <Form.Item
+      <ExtraImagesField
+        storeId={storeId}
+        images={hero.backgroundImageUrls ?? []}
+        hasFirst={!!hero.backgroundImageUrl}
+        seconds={hero.slideSeconds}
         label={t("storeSite.editor.hero.slides.label")}
-        extra={t("storeSite.editor.hero.slides.hint")}
-      >
-        <Space direction="vertical" className="w-full">
-          {extraImages.map((imageKey: string, index: number) => (
-            <ImageField
-              key={`${index}-${imageKey}`}
-              storeId={storeId}
-              value={imageKey}
-              onChange={(next) => setExtraImage(index, next)}
-            />
-          ))}
-          <ImageField
-            // A new, empty field each time one is filled.
-            key={`new-${extraImages.length}`}
-            storeId={storeId}
-            value={null}
-            disabled={
-              !hero.backgroundImageUrl ||
-              extraImages.length >= StoreSitesEnum.MAX_HERO_EXTRA_IMAGES
-            }
-            onChange={(next) => next && setExtraImage(extraImages.length, next)}
-          />
-        </Space>
-      </Form.Item>
-      {extraImages.length > 0 && (
-        <Form.Item label={t("storeSite.editor.hero.slides.seconds")}>
-          <InputNumber
-            min={StoreSitesEnum.MIN_SLIDE_SECONDS}
-            max={StoreSitesEnum.MAX_SLIDE_SECONDS}
-            precision={0}
-            addonAfter="s"
-            value={hero.slideSeconds ?? StoreSitesEnum.DEFAULT_SLIDE_SECONDS}
-            onChange={(slideSeconds: number | null) =>
-              set({
-                slideSeconds:
-                  slideSeconds ?? StoreSitesEnum.DEFAULT_SLIDE_SECONDS,
-              })
-            }
-          />
-        </Form.Item>
-      )}
+        hint={t("storeSite.editor.hero.slides.hint")}
+        onImageChange={(index, imageKey) =>
+          setExtraImage("backgroundImageUrls", index, imageKey)
+        }
+        onSecondsChange={(slideSeconds) => set({ slideSeconds })}
+      />
       <SizeFields editor={editor} sizes={["heroHeight"]} />
       <Form.Item label={t("storeSite.editor.hero.featuredImage")}>
         <ImageField
@@ -202,6 +176,20 @@ export const HeroTab = ({ editor, storeId, storeName }: IHeroTabProps) => {
           onChange={(featuredImageUrl) => set({ featuredImageUrl })}
         />
       </Form.Item>
+      <ExtraImagesField
+        storeId={storeId}
+        images={hero.featuredImageUrls ?? []}
+        hasFirst={!!hero.featuredImageUrl}
+        seconds={hero.featuredSlideSeconds}
+        label={t("storeSite.editor.hero.featuredSlides.label")}
+        hint={t("storeSite.editor.hero.featuredSlides.hint")}
+        onImageChange={(index, imageKey) =>
+          setExtraImage("featuredImageUrls", index, imageKey)
+        }
+        onSecondsChange={(featuredSlideSeconds) =>
+          set({ featuredSlideSeconds })
+        }
+      />
       <SizeFields
         editor={editor}
         sizes={["featuredImageWidth", "featuredImageHeight"]}

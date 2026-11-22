@@ -2418,6 +2418,10 @@
           "label": "More background images",
           "hint": "With more than one, the background changes from one image to the next, like a slider. Up to 5 besides the first.",
           "seconds": "Seconds each image stays"
+        },
+        "featuredSlides": {
+          "label": "More featured images",
+          "hint": "With more than one, the featured image changes from one to the next, like a slider. Up to 5 besides the first."
         }
       },
       "sections": {

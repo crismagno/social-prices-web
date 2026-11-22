@@ -108,6 +108,8 @@ const newDraft = (store: IStore): ISaveStoreSite => ({
     backgroundImageUrls: [],
     slideSeconds: StoreSitesEnum.DEFAULT_SLIDE_SECONDS,
     featuredImageUrl: null,
+    featuredImageUrls: [],
+    featuredSlideSeconds: StoreSitesEnum.DEFAULT_SLIDE_SECONDS,
     ctaLabel: null,
   },
   sections: [],

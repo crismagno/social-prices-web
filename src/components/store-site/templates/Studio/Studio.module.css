@@ -196,7 +196,9 @@
   height: var(--sz-featured-h, auto);
 }
 
+/* Holds the featured images, each filling it. */
 .pic {
+  overflow: hidden;
   position: absolute;
   inset: 0;
   background-size: cover;

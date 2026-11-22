@@ -2,7 +2,8 @@
 
 import { IStoreSiteSection } from "../../../../shared/business/store-sites/store-site.interface";
 import { IPublicSiteProduct } from "../../../../shared/business/store-sites/store-sites.types";
-import HeroBackground from "../../shared/HeroBackground";
+import ImageSlides from "../../shared/ImageSlides";
+import HeroBackground, { featuredSlideKeys } from "../../shared/HeroBackground";
 import Reveal from "../../shared/Reveal";
 import base from "../../shared/site-base.module.css";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
@@ -115,10 +116,12 @@ const Aurora = ({
 
           {featuredImage && (
             <div className={styles.glass}>
-              <div
-                className={styles.glassPhoto}
-                style={{ backgroundImage: featuredImage }}
-              />
+              <div className={styles.glassPhoto}>
+                <ImageSlides
+                  keys={featuredSlideKeys(hero)}
+                  seconds={hero.featuredSlideSeconds}
+                />
+              </div>
             </div>
           )}
         </div>
@@ -217,7 +220,8 @@ const Aurora = ({
         about={site.about}
         storeAbout={store.about}
         defaultTitle={brandName}
-        titleClassName={styles.aboutTitle}
+        kicker={t("storeSite.public.ourStory")}
+        variant="aurora"
       />
 
       <SiteFooter

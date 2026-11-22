@@ -4,7 +4,8 @@ import { CSSProperties } from "react";
 
 import { IStoreSiteSection } from "../../../../shared/business/store-sites/store-site.interface";
 import { IPublicSiteProduct } from "../../../../shared/business/store-sites/store-sites.types";
-import HeroBackground from "../../shared/HeroBackground";
+import ImageSlides from "../../shared/ImageSlides";
+import HeroBackground, { featuredSlideKeys } from "../../shared/HeroBackground";
 import Reveal from "../../shared/Reveal";
 import base from "../../shared/site-base.module.css";
 import { siteSerif } from "../../shared/site-fonts";
@@ -124,10 +125,12 @@ const Garden = ({
         {featuredImage && (
           <div className={styles.stage}>
             <div className={styles.archLine} />
-            <div
-              className={styles.arch}
-              style={{ backgroundImage: featuredImage }}
-            />
+            <div className={styles.arch}>
+              <ImageSlides
+                keys={featuredSlideKeys(hero)}
+                seconds={hero.featuredSlideSeconds}
+              />
+            </div>
             <div className={styles.seal} aria-hidden="true">
               <svg viewBox="0 0 100 100">
                 <circle cx="50" cy="50" r="48" fill="var(--site-bg)" />
@@ -263,7 +266,8 @@ const Garden = ({
         storeAbout={store.about}
         defaultTitle={brandName}
         kicker={t("storeSite.public.ourStory")}
-        titleClassName={`${styles.aboutTitle} ${siteSerif.className}`}
+        variant="garden"
+        titleClassName={siteSerif.className}
       />
 
       <SiteFooter

@@ -233,8 +233,8 @@ const Impact = ({
         about={site.about}
         storeAbout={store.about}
         defaultTitle={t("storeSite.public.ourStory")}
-        titleClassName={styles.aboutTitle}
-        align="left"
+        kicker={brandName}
+        variant="impact"
       />
 
       <SiteFooter

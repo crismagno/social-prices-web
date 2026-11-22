@@ -2421,6 +2421,10 @@
           "label": "Mais imagens de fundo",
           "hint": "Com mais de uma, o fundo vai trocando de uma imagem para a outra, como um slider. Até 5 além da primeira.",
           "seconds": "Segundos que cada imagem fica"
+        },
+        "featuredSlides": {
+          "label": "Mais imagens em destaque",
+          "hint": "Com mais de uma, a imagem em destaque vai trocando de uma para a outra, como um slider. Até 5 além da primeira."
         }
       },
       "sections": {

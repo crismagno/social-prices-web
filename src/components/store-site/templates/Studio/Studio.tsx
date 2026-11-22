@@ -4,7 +4,8 @@ import { CSSProperties } from "react";
 
 import { IStoreSiteSection } from "../../../../shared/business/store-sites/store-site.interface";
 import { IPublicSiteProduct } from "../../../../shared/business/store-sites/store-sites.types";
-import HeroBackground from "../../shared/HeroBackground";
+import ImageSlides from "../../shared/ImageSlides";
+import HeroBackground, { featuredSlideKeys } from "../../shared/HeroBackground";
 import Reveal from "../../shared/Reveal";
 import base from "../../shared/site-base.module.css";
 import { siteRounded } from "../../shared/site-fonts";
@@ -136,13 +137,13 @@ const Studio = ({
             <div className={styles.figure}>
               <div
                 className={styles.pic}
-                style={
-                  {
-                    backgroundImage: featuredImage,
-                    "--tilt": "3deg",
-                  } as CSSProperties
-                }
-              />
+                style={{ "--tilt": "3deg" } as CSSProperties}
+              >
+                <ImageSlides
+                  keys={featuredSlideKeys(hero)}
+                  seconds={hero.featuredSlideSeconds}
+                />
+              </div>
               <span
                 className={styles.sticker}
                 style={
@@ -327,9 +328,8 @@ const Studio = ({
         about={site.about}
         storeAbout={store.about}
         defaultTitle={brandName}
-        titleClassName={styles.calloutTitle}
-        align="left"
-        isCard
+        kicker={t("storeSite.public.ourStory")}
+        variant="studio"
       />
 
       <SiteFooter

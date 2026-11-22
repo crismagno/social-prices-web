@@ -162,7 +162,9 @@
   height: var(--sz-featured-h, auto);
 }
 
+/* Holds the featured images, each filling it. */
 .arch {
+  overflow: hidden;
   position: absolute;
   inset: 0;
   border-radius: 999px 999px 18px 18px;

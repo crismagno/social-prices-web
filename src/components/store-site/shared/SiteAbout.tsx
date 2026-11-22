@@ -9,8 +9,12 @@ import {
 } from "../../../shared/business/store-sites/store-site-about";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import { getImageUrl } from "../../../shared/utils/images/images-url";
-import Reveal from "./Reveal";
 import styles from "./SiteAbout.module.css";
+import useReveal from "./useReveal";
+
+/** The look of the section: each template's own. */
+export type TSiteAboutVariant =
+  "atelier" | "garden" | "studio" | "aurora" | "impact";
 
 interface Props {
   about: Partial<IStoreSiteAbout> | null | undefined;
@@ -18,14 +22,11 @@ interface Props {
   storeAbout: string | null;
   /** The template's own title, shown when the owner gave none. */
   defaultTitle: string;
-  /** A small line above the title, in templates that have one. */
+  /** A small line above the title. */
   kicker?: string;
+  variant: TSiteAboutVariant;
   /** The template's letters for the title. */
   titleClassName?: string;
-  /** Without media: words centered, as in the template's own about. */
-  align?: "center" | "left";
-  /** A block of the main color around it (Studio). */
-  isCard?: boolean;
 }
 
 /** The words of the section: the owner's, else the store's own description. */
@@ -53,19 +54,26 @@ export const siteHasAbout = (
   );
 };
 
+// Words centered when there is no picture beside them, in the templates that
+// center their texts.
+const CENTERED: TSiteAboutVariant[] = ["atelier", "garden", "aurora"];
+
 /**
- * The "about" of the site, the same in every template: a title, the owner's
- * paragraphs, and an image, an uploaded video or a YouTube/Vimeo player.
+ * The "about" of the site, drawn the way each template draws everything else:
+ * a title, the owner's paragraphs, and an image, an uploaded video or a
+ * YouTube/Vimeo player. Its parts come in one after the other when it scrolls
+ * into view.
  */
 const SiteAbout = ({
   about,
   storeAbout,
   defaultTitle,
   kicker,
+  variant,
   titleClassName,
-  align = "center",
-  isCard,
 }: Props) => {
+  const { ref, phase } = useReveal<HTMLElement>();
+
   const checked: IStoreSiteAbout = siteAboutOf(about);
 
   if (!siteHasAbout(about, storeAbout)) {
@@ -107,58 +115,76 @@ const SiteAbout = ({
     );
   }
 
+  const position: StoreSitesEnum.AboutMediaPosition = checked.mediaPosition;
+
   const layout: string = !mediaNode
     ? styles.alone
-    : checked.mediaPosition === StoreSitesEnum.AboutMediaPosition.RIGHT
+    : position === StoreSitesEnum.AboutMediaPosition.RIGHT
       ? styles.right
-      : checked.mediaPosition === StoreSitesEnum.AboutMediaPosition.TOP
+      : position === StoreSitesEnum.AboutMediaPosition.TOP
         ? styles.top
         : styles.left;
 
   const isCentered: boolean =
-    align === "center" &&
-    (!mediaNode ||
-      checked.mediaPosition === StoreSitesEnum.AboutMediaPosition.TOP);
+    CENTERED.includes(variant) &&
+    (!mediaNode || position === StoreSitesEnum.AboutMediaPosition.TOP);
+
+  // The order things come in: the picture, then the words, line by line.
+  let order: number = 0;
+
+  const step = (): CSSProperties => ({ "--i": order++ }) as CSSProperties;
 
   return (
-    <Reveal>
-      <section id="sobre" className={styles.about}>
-        <div
-          className={`${styles.layout} ${layout} ${isCentered ? styles.center : ""} ${
-            isCard ? styles.card : ""
-          }`}
-        >
-          {mediaNode && (
-            <div className={styles.media}>
-              <div
-                className={styles.frame}
-                style={
-                  {
-                    "--about-ratio":
-                      media?.type === StoreSitesEnum.AboutMediaType.IMAGE
-                        ? "4 / 3"
-                        : "16 / 9",
-                  } as CSSProperties
-                }
-              >
-                {mediaNode}
-              </div>
+    <section
+      ref={ref}
+      id="sobre"
+      data-phase={phase}
+      className={`${styles.about} ${styles[variant]}`}
+    >
+      <div
+        className={`${styles.layout} ${layout} ${isCentered ? styles.center : ""}`}
+      >
+        {mediaNode && (
+          <div className={`${styles.media} ${styles.item}`} style={step()}>
+            <span className={styles.deco} aria-hidden="true" />
+            <div
+              className={styles.frame}
+              style={
+                {
+                  "--about-ratio":
+                    media?.type === StoreSitesEnum.AboutMediaType.IMAGE
+                      ? "4 / 3"
+                      : "16 / 9",
+                } as CSSProperties
+              }
+            >
+              {mediaNode}
             </div>
+          </div>
+        )}
+        <div className={styles.body}>
+          {kicker && (
+            <p className={`${styles.kicker} ${styles.item}`} style={step()}>
+              {kicker}
+            </p>
           )}
-          <div className={styles.body}>
-            {kicker && <p className={styles.kicker}>{kicker}</p>}
+          <div className={`${styles.titleBox} ${styles.item}`} style={step()}>
             <h2 className={`${styles.title} ${titleClassName ?? ""}`}>
               {checked.title ?? defaultTitle}
             </h2>
-            {texts.map((text: string, index: number) => (
-              <p key={index} className={styles.text}>
-                {text}
-              </p>
-            ))}
           </div>
+          {texts.map((text: string, index: number) => (
+            <p
+              key={index}
+              className={`${styles.text} ${styles.item}`}
+              style={step()}
+            >
+              {text}
+            </p>
+          ))}
         </div>
-      </section>
-    </Reveal>
+      </div>
+    </section>
   );
 };
 

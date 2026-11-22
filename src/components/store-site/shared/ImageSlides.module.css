@@ -1,0 +1,8 @@
+/* One image of a slider inside a framed picture: it takes the frame's shape. */
+.layer {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-size: cover;
+  background-position: center;
+}
