@@ -1,5 +1,6 @@
 import { IStoreSiteAbout } from "./store-site-about";
 import { IStoreSiteFooter } from "./store-site-footer";
+import { IStoreSitePage } from "./store-site-pages";
 import { IStoreSiteSignIn } from "./store-site-sign-in";
 import { TStoreSiteSizes } from "./store-site-sizes";
 import StoreSitesEnum from "./store-sites.enum";
@@ -64,6 +65,7 @@ export interface ISaveStoreSite {
   footer: IStoreSiteFooter;
   signIn: IStoreSiteSignIn;
   about: IStoreSiteAbout;
+  pages: IStoreSitePage[];
   hero: IStoreSiteHero;
   sections: IStoreSiteSection[];
   marquee: IStoreSiteMarquee;

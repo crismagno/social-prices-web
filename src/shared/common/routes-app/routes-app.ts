@@ -28,6 +28,8 @@ const Urls = {
   APPS_SITE_STORE: "/apps/site?store=:storeId",
   // The public storefront of one store.
   SITE: "/site/:slug",
+  // A page of a site besides its home: products, about, support or the owner's.
+  SITE_PAGE: "/site/:slug/:page",
   // The frame the site editor draws the draft in.
   SITE_PREVIEW: "/site-preview",
   // Opens the conversation of one person (their phone number).

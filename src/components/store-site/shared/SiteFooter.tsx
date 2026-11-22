@@ -57,6 +57,38 @@ const ICONS: Record<StoreSitesEnum.FooterLinkType, ReactNode> = {
   [StoreSitesEnum.FooterLinkType.TEXT]: null,
 };
 
+/** One link of the footer: a pill with its icon, or plain free text. */
+export const SiteFooterLink = ({ link }: { link: IStoreSiteFooterLink }) => {
+  const t = useSiteT();
+
+  const isWeb: boolean = /^https?:/i.test(link.url);
+
+  const isText: boolean = link.type === StoreSitesEnum.FooterLinkType.TEXT;
+
+  return (
+    <li key={link.key}>
+      <a
+        href={link.url}
+        className={isText ? styles.plainLink : styles.link}
+        // A link out of the site opens beside it and tells the other side
+        // nothing about where the visitor came from.
+        {...(isWeb
+          ? { target: "_blank", rel: "noopener noreferrer nofollow" }
+          : {})}
+      >
+        {!isText && (ICONS[link.type] ?? <GlobalOutlined />)}
+        <span className={styles.linkLabel}>
+          {link.label?.trim() ||
+            (isText
+              ? // No words were given: the address says where it goes.
+                link.url.replace(/^(https?:\/\/|mailto:|tel:)/i, "")
+              : t(`storeSite.footer.types.${link.type}`))}
+        </span>
+      </a>
+    </li>
+  );
+};
+
 /**
  * The foot of the site, the same in every template. The owner divides it in
  * one to five sections, side by side, and says in which one each thing goes:
@@ -100,35 +132,6 @@ const SiteFooter = ({ footer, brandName, signIn, storeId }: Props) => {
     (link: IStoreSiteFooterLink) => isSafeFooterUrl(link.url),
   );
 
-  const renderLink = (link: IStoreSiteFooterLink): ReactNode => {
-    const isWeb: boolean = /^https?:/i.test(link.url);
-
-    const isText: boolean = link.type === StoreSitesEnum.FooterLinkType.TEXT;
-
-    return (
-      <li key={link.key}>
-        <a
-          href={link.url}
-          className={isText ? styles.plainLink : styles.link}
-          // A link out of the site opens beside it and tells the other side
-          // nothing about where the visitor came from.
-          {...(isWeb
-            ? { target: "_blank", rel: "noopener noreferrer nofollow" }
-            : {})}
-        >
-          {!isText && (ICONS[link.type] ?? <GlobalOutlined />)}
-          <span className={styles.linkLabel}>
-            {link.label?.trim() ||
-              (isText
-                ? // No words were given: the address says where it goes.
-                  link.url.replace(/^(https?:\/\/|mailto:|tel:)/i, "")
-                : t(`storeSite.footer.types.${link.type}`))}
-          </span>
-        </a>
-      </li>
-    );
-  };
-
   return (
     <footer ref={ref} data-phase={phase} className={styles.footer}>
       <div
@@ -168,7 +171,9 @@ const SiteFooter = ({ footer, brandName, signIn, storeId }: Props) => {
                   className={styles.links}
                   aria-label={section.title ?? t("storeSite.footer.links")}
                 >
-                  {sectionLinks.map(renderLink)}
+                  {sectionLinks.map((link: IStoreSiteFooterLink) => (
+                    <SiteFooterLink key={link.key} link={link} />
+                  ))}
                 </ul>
               )}
 

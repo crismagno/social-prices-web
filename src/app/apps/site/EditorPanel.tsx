@@ -11,6 +11,7 @@ import {
   BorderBottomOutlined,
   CheckCircleFilled,
   ExportOutlined,
+  FileTextOutlined,
   LinkOutlined,
   NotificationOutlined,
   ReadOutlined,
@@ -21,6 +22,7 @@ import {
 } from "@ant-design/icons";
 
 import useLanguageData from "../../../data/context/language/useLanguageData";
+import { invalidPageKeys } from "../../../shared/business/store-sites/store-site-pages";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
@@ -29,6 +31,7 @@ import { HeroTab, MarqueeTab, SectionsTab } from "./ContentTabs";
 import { ColorsTab, TemplateTab } from "./DesignTabs";
 import AboutTab from "./AboutTab";
 import FooterTab from "./FooterTab";
+import PagesTab from "./PagesTab";
 import useAvailableHeight from "./useAvailableHeight";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
 
@@ -40,6 +43,7 @@ type TTab =
   | "marquee"
   | "products"
   | "about"
+  | "pages"
   | "footer"
   | "publish";
 
@@ -60,6 +64,7 @@ const TABS: { key: TTab; icon: ReactNode }[] = [
   { key: "marquee", icon: <NotificationOutlined /> },
   { key: "products", icon: <ShoppingOutlined /> },
   { key: "about", icon: <ReadOutlined /> },
+  { key: "pages", icon: <FileTextOutlined /> },
   { key: "footer", icon: <BorderBottomOutlined /> },
   { key: "publish", icon: <LinkOutlined /> },
 ];
@@ -126,6 +131,7 @@ const EditorPanel = ({
     marquee: false,
     products: false,
     about: false,
+    pages: invalidPageKeys(draft.pages).length > 0,
     footer: false,
     publish: !isSlugValid || !!editor.slugError,
   };
@@ -161,6 +167,7 @@ const EditorPanel = ({
         storeAbout={currentStore?.about ?? null}
       />
     ),
+    pages: <PagesTab editor={editor} storeId={storeId} />,
     footer: <FooterTab editor={editor} />,
     publish: <PublishTab editor={editor} storeId={storeId} />,
   };

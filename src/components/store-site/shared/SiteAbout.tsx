@@ -27,6 +27,8 @@ interface Props {
   variant: TSiteAboutVariant;
   /** The template's letters for the title. */
   titleClassName?: string;
+  /** On a page whose top already says the title. */
+  isTitleHidden?: boolean;
 }
 
 /** The words of the section: the owner's, else the store's own description. */
@@ -71,6 +73,7 @@ const SiteAbout = ({
   kicker,
   variant,
   titleClassName,
+  isTitleHidden,
 }: Props) => {
   const { ref, phase } = useReveal<HTMLElement>();
 
@@ -168,11 +171,13 @@ const SiteAbout = ({
               {kicker}
             </p>
           )}
-          <div className={`${styles.titleBox} ${styles.item}`} style={step()}>
-            <h2 className={`${styles.title} ${titleClassName ?? ""}`}>
-              {checked.title ?? defaultTitle}
-            </h2>
-          </div>
+          {!isTitleHidden && (
+            <div className={`${styles.titleBox} ${styles.item}`} style={step()}>
+              <h2 className={`${styles.title} ${titleClassName ?? ""}`}>
+                {checked.title ?? defaultTitle}
+              </h2>
+            </div>
+          )}
           {texts.map((text: string, index: number) => (
             <p
               key={index}

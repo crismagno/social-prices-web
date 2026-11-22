@@ -12,6 +12,8 @@ import { siteSerif } from "../../shared/site-fonts";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
 import SiteAbout, { siteHasAbout } from "../../shared/SiteAbout";
 import SiteFooter from "../../shared/SiteFooter";
+import SiteMenu from "../../shared/SiteMenu";
+import SitePageBody from "../../shared/SitePageBody";
 import SiteSignIn from "../../shared/SiteSignIn";
 import SiteThemeVars from "../../shared/SiteThemeVars";
 import {
@@ -20,6 +22,11 @@ import {
   repeatForMarquee,
 } from "../../shared/useSiteContent";
 import useSiteT from "../../shared/useSiteT";
+import {
+  pageShows,
+  sitePagePath,
+} from "../../../../shared/business/store-sites/store-site-pages";
+import StoreSitesEnum from "../../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteTemplateProps } from "../../template.types";
 import styles from "./Garden.module.css";
 
@@ -44,11 +51,22 @@ const Garden = ({
   products,
   mode,
   cart,
+  page,
 }: IStoreSiteTemplateProps) => {
   const t = useSiteT();
 
   // The menus link to the about section only when the site shows one.
   const hasAbout: boolean = siteHasAbout(site.about, store.about);
+
+  // The home shows every part; each other page shows its own.
+  const shows = pageShows(page);
+
+  const homeHref: string = sitePagePath(site.slug);
+
+  // "See the products" leads to them, on this page or on theirs.
+  const productsHref: string = shows.products
+    ? "#produtos"
+    : sitePagePath(site.slug, StoreSitesEnum.READY_PAGE_SLUGS.PRODUCTS);
 
   const { hero } = site;
 
@@ -92,19 +110,20 @@ const Garden = ({
 
         <nav className={styles.nav}>
           <span className={styles.navLeft}>
-            {hasAbout && (
-              <a href="#sobre" data-navlink>
-                {t("storeSite.public.about")}
-              </a>
-            )}
-            <a href="#produtos" data-navlink>
-              {t("storeSite.public.products")}
-            </a>
+            <SiteMenu
+              pages={site.pages}
+              siteSlug={site.slug}
+              currentKey={page?.key}
+              hasAbout={hasAbout}
+            />
           </span>
-          <span className={`${styles.brand} ${siteSerif.className}`}>
+          <a
+            href={homeHref}
+            className={`${styles.brand} ${siteSerif.className}`}
+          >
             {logo && <img src={logo} alt="" />}
             {brandName}
-          </span>
+          </a>
           <span className={styles.navRight}>
             {site.signIn?.isVisible !== false && (
               <SiteSignIn
@@ -175,7 +194,7 @@ const Garden = ({
           </div>
         )}
 
-        <a href="#produtos" className={styles.cta} data-shine data-intro="3">
+        <a href={productsHref} className={styles.cta} data-shine data-intro="3">
           {hero.ctaLabel || t("storeSite.public.seeProducts")}
         </a>
       </header>
@@ -228,79 +247,92 @@ const Garden = ({
         </Reveal>
       ))}
 
-      <section id="produtos">
-        <Reveal effect="blur">
-          <div className={styles.productsHead}>
-            <div className={styles.tag}>
-              {t("storeSite.public.availableNow")}
+      {shows.products && (
+        <section id="produtos">
+          <Reveal effect="blur">
+            <div className={styles.productsHead}>
+              <div className={styles.tag}>
+                {t("storeSite.public.availableNow")}
+              </div>
+              <h2 className={`${styles.productsTitle} ${siteSerif.className}`}>
+                {t("storeSite.public.products")}
+              </h2>
             </div>
-            <h2 className={`${styles.productsTitle} ${siteSerif.className}`}>
-              {t("storeSite.public.products")}
-            </h2>
-          </div>
-        </Reveal>
+          </Reveal>
 
-        {products.length === 0 ? (
-          <p className={styles.empty}>{t("storeSite.public.noProducts")}</p>
-        ) : (
-          <div className={styles.products}>
-            {products.map((product: IPublicSiteProduct, index: number) => (
-              <Reveal key={product._id} delay={(index % 4) * 0.08}>
-                <article
-                  data-card
-                  className={`${styles.polaroid} ${
-                    product.isAvailable ? "" : styles.soldOut
-                  }`}
-                  style={
-                    {
-                      "--tilt": TILTS[index % TILTS.length],
-                      animationDelay: `${-2 * (index % 4)}s`,
-                    } as CSSProperties
-                  }
-                >
-                  <div
-                    className={styles.polaroidPhoto}
-                    data-part="0"
-                    data-shine
-                    style={{ backgroundImage: cssUrl(product.mainUrl) }}
-                    role="img"
-                    aria-label={product.name}
-                  />
-                  <span
-                    className={`${styles.productName} ${siteSerif.className}`}
-                    data-part="1"
+          {products.length === 0 ? (
+            <p className={styles.empty}>{t("storeSite.public.noProducts")}</p>
+          ) : (
+            <div className={styles.products}>
+              {products.map((product: IPublicSiteProduct, index: number) => (
+                <Reveal key={product._id} delay={(index % 4) * 0.08}>
+                  <article
+                    data-card
+                    className={`${styles.polaroid} ${
+                      product.isAvailable ? "" : styles.soldOut
+                    }`}
+                    style={
+                      {
+                        "--tilt": TILTS[index % TILTS.length],
+                        animationDelay: `${-2 * (index % 4)}s`,
+                      } as CSSProperties
+                    }
                   >
-                    {product.name}
-                  </span>
-                  <span className={styles.price} data-part="2">
-                    {formatSiteMoney(product.price)}
-                  </span>
-                  <div>
-                    <button
-                      type="button"
-                      className={styles.add}
-                      data-part="3"
-                      disabled={!product.isAvailable}
-                      onClick={() => cart.add(product._id)}
+                    <div
+                      className={styles.polaroidPhoto}
+                      data-part="0"
+                      data-shine
+                      style={{ backgroundImage: cssUrl(product.mainUrl) }}
+                      role="img"
+                      aria-label={product.name}
+                    />
+                    <span
+                      className={`${styles.productName} ${siteSerif.className}`}
+                      data-part="1"
                     >
-                      {addLabel(product, cart, t)}
-                    </button>
-                  </div>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-        )}
-      </section>
+                      {product.name}
+                    </span>
+                    <span className={styles.price} data-part="2">
+                      {formatSiteMoney(product.price)}
+                    </span>
+                    <div>
+                      <button
+                        type="button"
+                        className={styles.add}
+                        data-part="3"
+                        disabled={!product.isAvailable}
+                        onClick={() => cart.add(product._id)}
+                      >
+                        {addLabel(product, cart, t)}
+                      </button>
+                    </div>
+                  </article>
+                </Reveal>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
 
-      <SiteAbout
-        about={site.about}
-        storeAbout={store.about}
-        defaultTitle={brandName}
-        kicker={t("storeSite.public.ourStory")}
-        variant="garden"
-        titleClassName={siteSerif.className}
-      />
+      {shows.about && (
+        <SiteAbout
+          about={site.about}
+          storeAbout={store.about}
+          defaultTitle={brandName}
+          kicker={t("storeSite.public.ourStory")}
+          variant="garden"
+          titleClassName={siteSerif.className}
+        />
+      )}
+
+      {page && (
+        <SitePageBody
+          page={page}
+          variant="garden"
+          titleClassName={siteSerif.className}
+          footer={site.footer}
+        />
+      )}
 
       <SiteFooter
         footer={site.footer}

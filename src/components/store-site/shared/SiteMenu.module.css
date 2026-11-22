@@ -1,0 +1,79 @@
+/* The links of the top menu inherit the look of each template's top. */
+.link[aria-current="page"]::after {
+  scale: 1 1;
+}
+
+.link[aria-current="page"] {
+  font-weight: 700;
+}
+
+/* On a phone the links fold into a button that opens them as a panel. */
+.toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--site-bg) 80%, transparent);
+  color: var(--site-text);
+  font-size: 18px;
+  backdrop-filter: blur(8px);
+  visibility: visible;
+  transition: transform 0.25s;
+}
+
+.toggle:hover {
+  transform: scale(1.06);
+}
+
+.panel {
+  position: fixed;
+  z-index: 70;
+  top: 72px;
+  left: 12px;
+  right: 12px;
+  padding: 10px;
+  border-radius: 20px;
+  background: var(--site-bg);
+  color: var(--site-text);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+  animation: panelIn 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* Higher than any template's "hide the links on a phone". */
+.panel .panelLink {
+  display: block;
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-size: 16px;
+  text-align: left;
+  visibility: visible;
+}
+
+.panel .panelLink:hover,
+.panel .panelLink[aria-current="page"] {
+  background: color-mix(in srgb, var(--site-primary) 14%, transparent);
+}
+
+@media (max-width: 767px) {
+  .toggle {
+    display: inline-flex;
+  }
+}
+
+@media (min-width: 768px) {
+  .panel {
+    display: none;
+  }
+}
+
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    translate: 0 -10px;
+  }
+  to {
+    translate: none;
+  }
+}

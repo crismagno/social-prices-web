@@ -9,6 +9,8 @@ import base from "../../shared/site-base.module.css";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
 import SiteAbout, { siteHasAbout } from "../../shared/SiteAbout";
 import SiteFooter from "../../shared/SiteFooter";
+import SiteMenu from "../../shared/SiteMenu";
+import SitePageBody from "../../shared/SitePageBody";
 import SiteSignIn from "../../shared/SiteSignIn";
 import SiteThemeVars from "../../shared/SiteThemeVars";
 import {
@@ -17,6 +19,11 @@ import {
   repeatForMarquee,
 } from "../../shared/useSiteContent";
 import useSiteT from "../../shared/useSiteT";
+import {
+  pageShows,
+  sitePagePath,
+} from "../../../../shared/business/store-sites/store-site-pages";
+import StoreSitesEnum from "../../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteTemplateProps } from "../../template.types";
 import styles from "./Aurora.module.css";
 
@@ -30,11 +37,22 @@ const Aurora = ({
   products,
   mode,
   cart,
+  page,
 }: IStoreSiteTemplateProps) => {
   const t = useSiteT();
 
   // The menus link to the about section only when the site shows one.
   const hasAbout: boolean = siteHasAbout(site.about, store.about);
+
+  // The home shows every part; each other page shows its own.
+  const shows = pageShows(page);
+
+  const homeHref: string = sitePagePath(site.slug);
+
+  // "See the products" leads to them, on this page or on theirs.
+  const productsHref: string = shows.products
+    ? "#produtos"
+    : sitePagePath(site.slug, StoreSitesEnum.READY_PAGE_SLUGS.PRODUCTS);
 
   const { hero } = site;
 
@@ -77,18 +95,17 @@ const Aurora = ({
 
         <div className={styles.navWrap}>
           <nav className={styles.nav}>
-            <span className={styles.brand}>
+            <a href={homeHref} className={styles.brand}>
               {logo && <img src={logo} alt="" />}✦ {brandName}
-            </span>
+            </a>
             <span className={styles.links}>
-              {hasAbout && (
-                <a href="#sobre" data-navlink>
-                  {t("storeSite.public.about")}
-                </a>
-              )}
-              <a href="#produtos" data-navlink>
-                {t("storeSite.public.products")}
-              </a>
+              <SiteMenu
+                pages={site.pages}
+                siteSlug={site.slug}
+                currentKey={page?.key}
+                hasAbout={hasAbout}
+              />
+
               {site.signIn?.isVisible !== false && (
                 <SiteSignIn
                   signIn={site.signIn}
@@ -121,7 +138,7 @@ const Aurora = ({
                 {hero.subtitle}
               </p>
             )}
-            <a href="#produtos" className={styles.cta} data-shine>
+            <a href={productsHref} className={styles.cta} data-shine>
               {hero.ctaLabel || t("storeSite.public.seeProducts")} →
             </a>
           </div>
@@ -181,73 +198,81 @@ const Aurora = ({
         </Reveal>
       ))}
 
-      <section id="produtos">
-        <Reveal effect="blur">
-          <h2 className={styles.productsTitle}>
-            {t("storeSite.public.products")}
-          </h2>
-        </Reveal>
+      {shows.products && (
+        <section id="produtos">
+          <Reveal effect="blur">
+            <h2 className={styles.productsTitle}>
+              {t("storeSite.public.products")}
+            </h2>
+          </Reveal>
 
-        {products.length === 0 ? (
-          <p className={styles.empty}>{t("storeSite.public.noProducts")}</p>
-        ) : (
-          <div className={styles.products}>
-            {products.map((product: IPublicSiteProduct, index: number) => (
-              <Reveal key={product._id} delay={(index % 4) * 0.08}>
-                <article
-                  data-card
-                  className={`${styles.product} ${
-                    product.isAvailable ? "" : styles.soldOut
-                  }`}
-                  style={{ animationDelay: `${-1.5 * (index % 4)}s` }}
-                >
-                  <div className={styles.productInner}>
-                    <div
-                      className={styles.productPhotoClip}
-                      data-part="0"
-                      data-shine
-                    >
+          {products.length === 0 ? (
+            <p className={styles.empty}>{t("storeSite.public.noProducts")}</p>
+          ) : (
+            <div className={styles.products}>
+              {products.map((product: IPublicSiteProduct, index: number) => (
+                <Reveal key={product._id} delay={(index % 4) * 0.08}>
+                  <article
+                    data-card
+                    className={`${styles.product} ${
+                      product.isAvailable ? "" : styles.soldOut
+                    }`}
+                    style={{ animationDelay: `${-1.5 * (index % 4)}s` }}
+                  >
+                    <div className={styles.productInner}>
                       <div
-                        className={styles.productPhoto}
-                        style={{ backgroundImage: cssUrl(product.mainUrl) }}
-                        role="img"
-                        aria-label={product.name}
-                      />
-                    </div>
-                    <div className={styles.productBody}>
-                      <span>
-                        <span className={styles.productName} data-part="1">
-                          {product.name}
-                        </span>
-                        <span className={styles.price} data-part="2">
-                          {formatSiteMoney(product.price)}
-                        </span>
-                      </span>
-                      <button
-                        type="button"
-                        className={styles.add}
-                        data-part="3"
-                        disabled={!product.isAvailable}
-                        onClick={() => cart.add(product._id)}
+                        className={styles.productPhotoClip}
+                        data-part="0"
+                        data-shine
                       >
-                        {addLabel(product, cart, t)}
-                      </button>
+                        <div
+                          className={styles.productPhoto}
+                          style={{ backgroundImage: cssUrl(product.mainUrl) }}
+                          role="img"
+                          aria-label={product.name}
+                        />
+                      </div>
+                      <div className={styles.productBody}>
+                        <span>
+                          <span className={styles.productName} data-part="1">
+                            {product.name}
+                          </span>
+                          <span className={styles.price} data-part="2">
+                            {formatSiteMoney(product.price)}
+                          </span>
+                        </span>
+                        <button
+                          type="button"
+                          className={styles.add}
+                          data-part="3"
+                          disabled={!product.isAvailable}
+                          onClick={() => cart.add(product._id)}
+                        >
+                          {addLabel(product, cart, t)}
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-        )}
-      </section>
+                  </article>
+                </Reveal>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
 
-      <SiteAbout
-        about={site.about}
-        storeAbout={store.about}
-        defaultTitle={brandName}
-        kicker={t("storeSite.public.ourStory")}
-        variant="aurora"
-      />
+      {shows.about && (
+        <SiteAbout
+          about={site.about}
+          storeAbout={store.about}
+          defaultTitle={brandName}
+          kicker={t("storeSite.public.ourStory")}
+          variant="aurora"
+        />
+      )}
+
+      {page && (
+        <SitePageBody page={page} variant="aurora" footer={site.footer} />
+      )}
 
       <SiteFooter
         footer={site.footer}

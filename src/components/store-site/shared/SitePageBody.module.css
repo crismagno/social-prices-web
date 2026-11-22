@@ -1,0 +1,91 @@
+/* The support page below its own words: questions and ways to talk. */
+.support {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 20px clamp(18px, 5vw, 56px) 80px;
+}
+
+.heading {
+  font-size: clamp(22px, 3vw, 30px);
+  margin: 40px 0 18px;
+}
+
+.faq {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.question {
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--site-text) 6%, var(--site-bg));
+  border: 1px solid color-mix(in srgb, var(--site-text) 12%, transparent);
+  transition:
+    background 0.3s,
+    border-color 0.3s;
+}
+
+.question[open] {
+  border-color: var(--site-primary);
+  background: color-mix(in srgb, var(--site-primary) 8%, var(--site-bg));
+}
+
+.question summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  font-weight: 700;
+}
+
+.question summary::-webkit-details-marker {
+  display: none;
+}
+
+.question summary::after {
+  content: "+";
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--site-primary);
+  color: var(--site-on-primary, #fff);
+  font-weight: 700;
+  transition: rotate 0.3s;
+}
+
+.question[open] summary::after {
+  rotate: 45deg;
+}
+
+.answer {
+  margin: 0;
+  padding: 0 20px 20px;
+  opacity: 0.85;
+  white-space: pre-line;
+  animation: answerIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.contacts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@keyframes answerIn {
+  from {
+    opacity: 0;
+    translate: 0 -6px;
+  }
+  to {
+    translate: none;
+  }
+}

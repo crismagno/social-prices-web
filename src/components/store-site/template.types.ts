@@ -1,5 +1,6 @@
 import { ComponentType } from "react";
 
+import { IStoreSitePage } from "../../shared/business/store-sites/store-site-pages";
 import { IStoreSiteTheme } from "../../shared/business/store-sites/store-site.interface";
 import {
   IPublicSiteProduct,
@@ -30,6 +31,7 @@ export interface IStoreSiteTemplateProps {
     | "footer"
     | "signIn"
     | "about"
+    | "pages"
     | "hero"
     | "sections"
     | "marquee"
@@ -42,6 +44,8 @@ export interface IStoreSiteTemplateProps {
   products: IPublicSiteProduct[];
   mode: "live" | "preview";
   cart: ISiteCartApi;
+  /** The page shown; none is the home, which shows everything. */
+  page?: IStoreSitePage | null;
 }
 
 export interface IStoreSiteTemplateEntry {

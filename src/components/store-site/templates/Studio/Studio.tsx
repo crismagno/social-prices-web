@@ -12,6 +12,8 @@ import { siteRounded } from "../../shared/site-fonts";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
 import SiteAbout, { siteHasAbout } from "../../shared/SiteAbout";
 import SiteFooter from "../../shared/SiteFooter";
+import SiteMenu from "../../shared/SiteMenu";
+import SitePageBody from "../../shared/SitePageBody";
 import SiteSignIn from "../../shared/SiteSignIn";
 import SiteThemeVars from "../../shared/SiteThemeVars";
 import {
@@ -20,6 +22,11 @@ import {
   repeatForMarquee,
 } from "../../shared/useSiteContent";
 import useSiteT from "../../shared/useSiteT";
+import {
+  pageShows,
+  sitePagePath,
+} from "../../../../shared/business/store-sites/store-site-pages";
+import StoreSitesEnum from "../../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteTemplateProps } from "../../template.types";
 import styles from "./Studio.module.css";
 
@@ -43,11 +50,27 @@ const Studio = ({
   products,
   mode,
   cart,
+  page,
 }: IStoreSiteTemplateProps) => {
   const t = useSiteT();
 
   // The menus link to the about section only when the site shows one.
   const hasAbout: boolean = siteHasAbout(site.about, store.about);
+
+  // The home shows every part; each other page shows its own.
+  const shows = pageShows(page);
+
+  const homeHref: string = sitePagePath(site.slug);
+
+  // "About" leads to it, on this page or on its own.
+  const aboutHref: string = shows.about
+    ? "#sobre"
+    : sitePagePath(site.slug, StoreSitesEnum.READY_PAGE_SLUGS.ABOUT);
+
+  // "See the products" leads to them, on this page or on theirs.
+  const productsHref: string = shows.products
+    ? "#produtos"
+    : sitePagePath(site.slug, StoreSitesEnum.READY_PAGE_SLUGS.PRODUCTS);
 
   const { hero } = site;
 
@@ -75,19 +98,18 @@ const Studio = ({
         />
 
         <nav className={styles.nav}>
-          <span className={styles.brand}>
+          <a href={homeHref} className={styles.brand}>
             {logo && <img src={logo} alt="" />}
             {brandName}
-          </span>
+          </a>
           <span className={styles.links}>
-            <a href="#produtos" data-navlink>
-              {t("storeSite.public.products")}
-            </a>
-            {hasAbout && (
-              <a href="#sobre" data-navlink>
-                {t("storeSite.public.about")}
-              </a>
-            )}
+            <SiteMenu
+              pages={site.pages}
+              siteSlug={site.slug}
+              currentKey={page?.key}
+              hasAbout={hasAbout}
+            />
+
             {site.signIn?.isVisible !== false && (
               <SiteSignIn
                 signIn={site.signIn}
@@ -132,11 +154,11 @@ const Studio = ({
               </p>
             )}
             <div className={styles.buttons} data-intro="3">
-              <a href="#produtos" className={styles.cta} data-shine>
+              <a href={productsHref} className={styles.cta} data-shine>
                 {hero.ctaLabel || t("storeSite.public.seeProducts")}
               </a>
               {hasAbout && (
-                <a href="#sobre" className={styles.ctaLight}>
+                <a href={aboutHref} className={styles.ctaLight}>
                   {t("storeSite.public.about")}
                 </a>
               )}
@@ -198,59 +220,61 @@ const Studio = ({
         </div>
       )}
 
-      <nav
-        className={styles.highlights}
-        aria-label={t("storeSite.public.news")}
-      >
-        {sections.map((section: IStoreSiteSection, index: number) => (
-          <a
-            key={section.key}
-            href={`#${sectionAnchor(section)}`}
-            className={styles.highlight}
-          >
-            <span className={styles.ring}>
-              <span
-                className={styles.ringFill}
-                style={{
-                  backgroundColor: CARD_COLORS[index % CARD_COLORS.length],
-                  backgroundImage: cssUrl(section.imageUrl),
-                }}
-              >
-                {!section.imageUrl && "❦"}
-              </span>
-            </span>
-            <span className={styles.highlightLabel}>{section.title}</span>
-          </a>
-        ))}
-        <a href="#produtos" className={styles.highlight}>
-          <span className={styles.ring}>
-            <span
-              className={styles.ringFill}
-              style={{ backgroundColor: "var(--site-secondary)" }}
+      {!page && (
+        <nav
+          className={styles.highlights}
+          aria-label={t("storeSite.public.news")}
+        >
+          {sections.map((section: IStoreSiteSection, index: number) => (
+            <a
+              key={section.key}
+              href={`#${sectionAnchor(section)}`}
+              className={styles.highlight}
             >
-              ❦
-            </span>
-          </span>
-          <span className={styles.highlightLabel}>
-            {t("storeSite.public.products")}
-          </span>
-        </a>
-        {hasAbout && (
-          <a href="#sobre" className={styles.highlight}>
+              <span className={styles.ring}>
+                <span
+                  className={styles.ringFill}
+                  style={{
+                    backgroundColor: CARD_COLORS[index % CARD_COLORS.length],
+                    backgroundImage: cssUrl(section.imageUrl),
+                  }}
+                >
+                  {!section.imageUrl && "❦"}
+                </span>
+              </span>
+              <span className={styles.highlightLabel}>{section.title}</span>
+            </a>
+          ))}
+          <a href={productsHref} className={styles.highlight}>
             <span className={styles.ring}>
               <span
                 className={styles.ringFill}
-                style={{ backgroundColor: "var(--site-primary)" }}
+                style={{ backgroundColor: "var(--site-secondary)" }}
               >
                 ❦
               </span>
             </span>
             <span className={styles.highlightLabel}>
-              {t("storeSite.public.about")}
+              {t("storeSite.public.products")}
             </span>
           </a>
-        )}
-      </nav>
+          {hasAbout && (
+            <a href={aboutHref} className={styles.highlight}>
+              <span className={styles.ring}>
+                <span
+                  className={styles.ringFill}
+                  style={{ backgroundColor: "var(--site-primary)" }}
+                >
+                  ❦
+                </span>
+              </span>
+              <span className={styles.highlightLabel}>
+                {t("storeSite.public.about")}
+              </span>
+            </a>
+          )}
+        </nav>
+      )}
 
       {sections.map((section: IStoreSiteSection, index: number) => (
         <Reveal key={section.key} effect={index % 2 === 1 ? "right" : "left"}>
@@ -287,71 +311,79 @@ const Studio = ({
         </Reveal>
       ))}
 
-      <section>
-        <Reveal effect="blur">
-          <div id="produtos" className={styles.productsHead}>
-            <span className={`${styles.marker} ${styles.markerAlt}`}>
-              {t("storeSite.public.products")}
-            </span>
-          </div>
-        </Reveal>
+      {shows.products && (
+        <section>
+          <Reveal effect="blur">
+            <div id="produtos" className={styles.productsHead}>
+              <span className={`${styles.marker} ${styles.markerAlt}`}>
+                {t("storeSite.public.products")}
+              </span>
+            </div>
+          </Reveal>
 
-        {products.length === 0 ? (
-          <p className={styles.empty}>{t("storeSite.public.noProducts")}</p>
-        ) : (
-          <div className={styles.products}>
-            {products.map((product: IPublicSiteProduct, index: number) => (
-              <Reveal key={product._id} delay={(index % 4) * 0.08}>
-                <article
-                  data-card
-                  className={`${styles.product} ${
-                    product.isAvailable ? "" : styles.soldOut
-                  }`}
-                  style={
-                    {
-                      "--card-color": CARD_COLORS[index % CARD_COLORS.length],
-                    } as CSSProperties
-                  }
-                >
-                  <div
-                    className={styles.productPhoto}
-                    data-part="0"
-                    data-shine
-                    style={{ backgroundImage: cssUrl(product.mainUrl) }}
-                    role="img"
-                    aria-label={product.name}
-                  />
-                  <span className={styles.productName} data-part="1">
-                    {product.name}
-                  </span>
-                  <span className={styles.price} data-part="2">
-                    {formatSiteMoney(product.price)}
-                  </span>
-                  <div>
-                    <button
-                      type="button"
-                      className={styles.add}
-                      data-part="3"
-                      disabled={!product.isAvailable}
-                      onClick={() => cart.add(product._id)}
-                    >
-                      {addLabel(product, cart, t)}
-                    </button>
-                  </div>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-        )}
-      </section>
+          {products.length === 0 ? (
+            <p className={styles.empty}>{t("storeSite.public.noProducts")}</p>
+          ) : (
+            <div className={styles.products}>
+              {products.map((product: IPublicSiteProduct, index: number) => (
+                <Reveal key={product._id} delay={(index % 4) * 0.08}>
+                  <article
+                    data-card
+                    className={`${styles.product} ${
+                      product.isAvailable ? "" : styles.soldOut
+                    }`}
+                    style={
+                      {
+                        "--card-color": CARD_COLORS[index % CARD_COLORS.length],
+                      } as CSSProperties
+                    }
+                  >
+                    <div
+                      className={styles.productPhoto}
+                      data-part="0"
+                      data-shine
+                      style={{ backgroundImage: cssUrl(product.mainUrl) }}
+                      role="img"
+                      aria-label={product.name}
+                    />
+                    <span className={styles.productName} data-part="1">
+                      {product.name}
+                    </span>
+                    <span className={styles.price} data-part="2">
+                      {formatSiteMoney(product.price)}
+                    </span>
+                    <div>
+                      <button
+                        type="button"
+                        className={styles.add}
+                        data-part="3"
+                        disabled={!product.isAvailable}
+                        onClick={() => cart.add(product._id)}
+                      >
+                        {addLabel(product, cart, t)}
+                      </button>
+                    </div>
+                  </article>
+                </Reveal>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
 
-      <SiteAbout
-        about={site.about}
-        storeAbout={store.about}
-        defaultTitle={brandName}
-        kicker={t("storeSite.public.ourStory")}
-        variant="studio"
-      />
+      {shows.about && (
+        <SiteAbout
+          about={site.about}
+          storeAbout={store.about}
+          defaultTitle={brandName}
+          kicker={t("storeSite.public.ourStory")}
+          variant="studio"
+        />
+      )}
+
+      {page && (
+        <SitePageBody page={page} variant="studio" footer={site.footer} />
+      )}
 
       <SiteFooter
         footer={site.footer}

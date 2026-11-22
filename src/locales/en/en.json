@@ -2396,7 +2396,8 @@
         "products": "Products",
         "publish": "Address",
         "footer": "Footer",
-        "about": "About"
+        "about": "About",
+        "pages": "Pages"
       },
       "colors": {
         "primary": "Main color",
@@ -2481,12 +2482,14 @@
         "products": "Which products the site sells, in the order they appear.",
         "publish": "The address of the site, and whether it is online.",
         "footer": "The foot of the site: a few words, your links and the button to sign in to the app.",
-        "about": "The about section: a title, your texts and an image or a video."
+        "about": "The about section: a title, your texts and an image or a video.",
+        "pages": "The pages of the site besides its home, in the order of the menu. Add your own."
       },
       "problems": {
         "hero": "The entrance needs a title.",
         "sections": "Every block needs a title.",
-        "publish": "The address of the site is not valid yet."
+        "publish": "The address of the site is not valid yet.",
+        "pages": "A page has an address that cannot be used."
       },
       "displayName": {
         "label": "Name shown at the top of the site",
@@ -2608,6 +2611,25 @@
           "RIGHT": "Right of the texts",
           "TOP": "Above the texts"
         }
+      },
+      "pages": {
+        "newPage": "New page",
+        "inMenu": "Show in the menu",
+        "label": "Name in the menu",
+        "labelHint": "Empty shows the name of the kind of page.",
+        "slug": "Address of the page",
+        "slugInvalid": "Use 2 to 40 lowercase letters, numbers or hyphens, not used by another page.",
+        "title": "Title at the top of the page",
+        "titleHint": "Empty shows the name in the menu.",
+        "intro": "Line under the title",
+        "productsHint": "This page shows the products chosen in the Products tab.",
+        "aboutHint": "This page shows what you wrote in the About tab.",
+        "faq": "Questions and answers",
+        "supportHint": "Below them, the page shows the WhatsApp, email, phone and Telegram links of the footer.",
+        "question": "Question",
+        "answer": "Answer",
+        "addQuestion": "Add question",
+        "add": "Add page"
       }
     },
     "footer": {
@@ -2632,6 +2654,22 @@
     },
     "signIn": {
       "default": "Sign in"
+    },
+    "pages": {
+      "types": {
+        "PRODUCTS": "Products",
+        "ABOUT": "About",
+        "SUPPORT": "Support",
+        "CUSTOM": "Page"
+      },
+      "menu": "Menu",
+      "openMenu": "Open the menu",
+      "closeMenu": "Close the menu",
+      "home": "Home"
+    },
+    "support": {
+      "faq": "Frequently asked questions",
+      "contact": "Talk to us"
     }
   }
 }
