@@ -81,8 +81,14 @@ const Aurora = ({
               {logo && <img src={logo} alt="" />}✦ {brandName}
             </span>
             <span className={styles.links}>
-              {hasAbout && <a href="#sobre">{t("storeSite.public.about")}</a>}
-              <a href="#produtos">{t("storeSite.public.products")}</a>
+              {hasAbout && (
+                <a href="#sobre" data-navlink>
+                  {t("storeSite.public.about")}
+                </a>
+              )}
+              <a href="#produtos" data-navlink>
+                {t("storeSite.public.products")}
+              </a>
               {site.signIn?.isVisible !== false && (
                 <SiteSignIn
                   signIn={site.signIn}
@@ -104,12 +110,18 @@ const Aurora = ({
           }`}
         >
           <div className={styles.copy}>
-            {hero.tagline && <div className={styles.tag}>{hero.tagline}</div>}
+            {hero.tagline && (
+              <div className={styles.tag} data-intro="0">
+                {hero.tagline}
+              </div>
+            )}
             <h1 className={styles.title}>{hero.title}</h1>
             {hero.subtitle && (
-              <p className={styles.subtitle}>{hero.subtitle}</p>
+              <p className={styles.subtitle} data-intro="2">
+                {hero.subtitle}
+              </p>
             )}
-            <a href="#produtos" className={styles.cta}>
+            <a href="#produtos" className={styles.cta} data-shine>
               {hero.ctaLabel || t("storeSite.public.seeProducts")} →
             </a>
           </div>
@@ -140,7 +152,7 @@ const Aurora = ({
       )}
 
       {sections.map((section: IStoreSiteSection, index: number) => (
-        <Reveal key={section.key}>
+        <Reveal key={section.key} effect={index % 2 === 1 ? "right" : "left"}>
           <section
             className={`${styles.block} ${index % 2 === 1 ? styles.blockFlip : ""} ${
               section.imageUrl ? "" : styles.blockAlone
@@ -150,14 +162,19 @@ const Aurora = ({
               <div className={styles.blockPhotoWrap}>
                 <div
                   className={styles.blockPhoto}
+                  data-shine
                   style={{ backgroundImage: cssUrl(section.imageUrl) }}
                 />
               </div>
             )}
             <div>
-              <h2 className={styles.blockTitle}>{section.title}</h2>
+              <h2 className={styles.blockTitle} data-part="1">
+                {section.title}
+              </h2>
               {section.description && (
-                <p className={styles.blockText}>{section.description}</p>
+                <p className={styles.blockText} data-part="2">
+                  {section.description}
+                </p>
               )}
             </div>
           </section>
@@ -165,9 +182,11 @@ const Aurora = ({
       ))}
 
       <section id="produtos">
-        <h2 className={styles.productsTitle}>
-          {t("storeSite.public.products")}
-        </h2>
+        <Reveal effect="blur">
+          <h2 className={styles.productsTitle}>
+            {t("storeSite.public.products")}
+          </h2>
+        </Reveal>
 
         {products.length === 0 ? (
           <p className={styles.empty}>{t("storeSite.public.noProducts")}</p>
@@ -176,13 +195,18 @@ const Aurora = ({
             {products.map((product: IPublicSiteProduct, index: number) => (
               <Reveal key={product._id} delay={(index % 4) * 0.08}>
                 <article
+                  data-card
                   className={`${styles.product} ${
                     product.isAvailable ? "" : styles.soldOut
                   }`}
                   style={{ animationDelay: `${-1.5 * (index % 4)}s` }}
                 >
                   <div className={styles.productInner}>
-                    <div className={styles.productPhotoClip}>
+                    <div
+                      className={styles.productPhotoClip}
+                      data-part="0"
+                      data-shine
+                    >
                       <div
                         className={styles.productPhoto}
                         style={{ backgroundImage: cssUrl(product.mainUrl) }}
@@ -192,16 +216,17 @@ const Aurora = ({
                     </div>
                     <div className={styles.productBody}>
                       <span>
-                        <span className={styles.productName}>
+                        <span className={styles.productName} data-part="1">
                           {product.name}
                         </span>
-                        <span className={styles.price}>
+                        <span className={styles.price} data-part="2">
                           {formatSiteMoney(product.price)}
                         </span>
                       </span>
                       <button
                         type="button"
                         className={styles.add}
+                        data-part="3"
                         disabled={!product.isAvailable}
                         onClick={() => cart.add(product._id)}
                       >

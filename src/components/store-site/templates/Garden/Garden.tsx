@@ -92,8 +92,14 @@ const Garden = ({
 
         <nav className={styles.nav}>
           <span className={styles.navLeft}>
-            {hasAbout && <a href="#sobre">{t("storeSite.public.about")}</a>}
-            <a href="#produtos">{t("storeSite.public.products")}</a>
+            {hasAbout && (
+              <a href="#sobre" data-navlink>
+                {t("storeSite.public.about")}
+              </a>
+            )}
+            <a href="#produtos" data-navlink>
+              {t("storeSite.public.products")}
+            </a>
           </span>
           <span className={`${styles.brand} ${siteSerif.className}`}>
             {logo && <img src={logo} alt="" />}
@@ -115,11 +121,22 @@ const Garden = ({
         </nav>
 
         <div className={styles.copy}>
-          {hero.tagline && <div className={styles.tag}>{hero.tagline}</div>}
-          <h1 className={`${styles.title} ${siteSerif.className}`}>
+          {hero.tagline && (
+            <div className={styles.tag} data-intro="0">
+              {hero.tagline}
+            </div>
+          )}
+          <h1
+            className={`${styles.title} ${siteSerif.className}`}
+            data-intro="1"
+          >
             {hero.title}
           </h1>
-          {hero.subtitle && <p className={styles.subtitle}>{hero.subtitle}</p>}
+          {hero.subtitle && (
+            <p className={styles.subtitle} data-intro="2">
+              {hero.subtitle}
+            </p>
+          )}
         </div>
 
         {featuredImage && (
@@ -158,7 +175,7 @@ const Garden = ({
           </div>
         )}
 
-        <a href="#produtos" className={styles.cta}>
+        <a href="#produtos" className={styles.cta} data-shine data-intro="3">
           {hero.ctaLabel || t("storeSite.public.seeProducts")}
         </a>
       </header>
@@ -179,26 +196,32 @@ const Garden = ({
       )}
 
       {sections.map((section: IStoreSiteSection, index: number) => (
-        <Reveal key={section.key}>
+        <Reveal key={section.key} effect={index % 2 === 1 ? "right" : "left"}>
           <section
             className={`${styles.story} ${
               index % 2 === 1 ? styles.storyFlip : ""
             } ${section.imageUrl ? "" : styles.storyAlone}`}
           >
             {section.imageUrl && (
-              <div className={styles.storyPhotoWrap}>
+              <div className={styles.storyPhotoWrap} data-part="0">
                 <div
                   className={styles.storyPhoto}
+                  data-shine
                   style={{ backgroundImage: cssUrl(section.imageUrl) }}
                 />
               </div>
             )}
             <div>
-              <h2 className={`${styles.storyTitle} ${siteSerif.className}`}>
+              <h2
+                className={`${styles.storyTitle} ${siteSerif.className}`}
+                data-part="1"
+              >
                 {section.title}
               </h2>
               {section.description && (
-                <p className={styles.storyText}>{section.description}</p>
+                <p className={styles.storyText} data-part="2">
+                  {section.description}
+                </p>
               )}
             </div>
           </section>
@@ -206,12 +229,16 @@ const Garden = ({
       ))}
 
       <section id="produtos">
-        <div className={styles.productsHead}>
-          <div className={styles.tag}>{t("storeSite.public.availableNow")}</div>
-          <h2 className={`${styles.productsTitle} ${siteSerif.className}`}>
-            {t("storeSite.public.products")}
-          </h2>
-        </div>
+        <Reveal effect="blur">
+          <div className={styles.productsHead}>
+            <div className={styles.tag}>
+              {t("storeSite.public.availableNow")}
+            </div>
+            <h2 className={`${styles.productsTitle} ${siteSerif.className}`}>
+              {t("storeSite.public.products")}
+            </h2>
+          </div>
+        </Reveal>
 
         {products.length === 0 ? (
           <p className={styles.empty}>{t("storeSite.public.noProducts")}</p>
@@ -220,6 +247,7 @@ const Garden = ({
             {products.map((product: IPublicSiteProduct, index: number) => (
               <Reveal key={product._id} delay={(index % 4) * 0.08}>
                 <article
+                  data-card
                   className={`${styles.polaroid} ${
                     product.isAvailable ? "" : styles.soldOut
                   }`}
@@ -232,22 +260,26 @@ const Garden = ({
                 >
                   <div
                     className={styles.polaroidPhoto}
+                    data-part="0"
+                    data-shine
                     style={{ backgroundImage: cssUrl(product.mainUrl) }}
                     role="img"
                     aria-label={product.name}
                   />
                   <span
                     className={`${styles.productName} ${siteSerif.className}`}
+                    data-part="1"
                   >
                     {product.name}
                   </span>
-                  <span className={styles.price}>
+                  <span className={styles.price} data-part="2">
                     {formatSiteMoney(product.price)}
                   </span>
                   <div>
                     <button
                       type="button"
                       className={styles.add}
+                      data-part="3"
                       disabled={!product.isAvailable}
                       onClick={() => cart.add(product._id)}
                     >

@@ -94,8 +94,14 @@ const Atelier = ({
             {brandName}
           </span>
           <span className={styles.links}>
-            {hasAbout && <a href="#sobre">{t("storeSite.public.about")}</a>}
-            <a href="#produtos">{t("storeSite.public.products")}</a>
+            {hasAbout && (
+              <a href="#sobre" data-navlink>
+                {t("storeSite.public.about")}
+              </a>
+            )}
+            <a href="#produtos" data-navlink>
+              {t("storeSite.public.products")}
+            </a>
             {site.signIn?.isVisible !== false && (
               <SiteSignIn
                 signIn={site.signIn}
@@ -116,9 +122,14 @@ const Atelier = ({
           }`}
         >
           <div className={styles.copy}>
-            {hero.tagline && <div className={styles.tag}>{hero.tagline}</div>}
+            {hero.tagline && (
+              <div className={styles.tag} data-intro="0">
+                {hero.tagline}
+              </div>
+            )}
             <h1
               className={`${styles.title} ${styles.serif} ${siteSerif.className}`}
+              data-intro="1"
             >
               {hero.title}
             </h1>
@@ -135,9 +146,16 @@ const Atelier = ({
               />
             </svg>
             {hero.subtitle && (
-              <p className={styles.subtitle}>{hero.subtitle}</p>
+              <p className={styles.subtitle} data-intro="2">
+                {hero.subtitle}
+              </p>
             )}
-            <a href="#produtos" className={styles.cta}>
+            <a
+              href="#produtos"
+              className={styles.cta}
+              data-shine
+              data-intro="3"
+            >
               {hero.ctaLabel || t("storeSite.public.seeProducts")}
             </a>
           </div>
@@ -199,19 +217,26 @@ const Atelier = ({
       {sections.length > 0 && (
         <section className={styles.sections}>
           {sections.map((section: IStoreSiteSection, index: number) => (
-            <Reveal key={section.key} delay={index * 0.12}>
-              <article className={styles.step}>
+            <Reveal key={section.key} delay={index * 0.12} effect="zoom">
+              <article data-card className={styles.step}>
                 {section.imageUrl && (
                   <div
                     className={styles.stepPhoto}
+                    data-part="0"
+                    data-shine
                     style={{ backgroundImage: cssUrl(section.imageUrl) }}
                   />
                 )}
-                <h2 className={`${styles.stepTitle} ${siteSerif.className}`}>
+                <h2
+                  className={`${styles.stepTitle} ${siteSerif.className}`}
+                  data-part="1"
+                >
                   {section.title}
                 </h2>
                 {section.description && (
-                  <p className={styles.stepText}>{section.description}</p>
+                  <p className={styles.stepText} data-part="2">
+                    {section.description}
+                  </p>
                 )}
               </article>
             </Reveal>
@@ -220,9 +245,11 @@ const Atelier = ({
       )}
 
       <section id="produtos">
-        <h2 className={`${styles.productsTitle} ${siteSerif.className}`}>
-          {t("storeSite.public.products")}
-        </h2>
+        <Reveal effect="blur">
+          <h2 className={`${styles.productsTitle} ${siteSerif.className}`}>
+            {t("storeSite.public.products")}
+          </h2>
+        </Reveal>
 
         {products.length === 0 ? (
           <p className={styles.empty}>{t("storeSite.public.noProducts")}</p>
@@ -231,28 +258,33 @@ const Atelier = ({
             {products.map((product: IPublicSiteProduct, index: number) => (
               <Reveal key={product._id} delay={(index % 4) * 0.08}>
                 <article
+                  data-card
                   className={`${styles.product} ${
                     product.isAvailable ? "" : styles.soldOut
                   }`}
                 >
                   <div
                     className={styles.productPhoto}
+                    data-part="0"
+                    data-shine
                     style={{ backgroundImage: cssUrl(product.mainUrl) }}
                     role="img"
                     aria-label={product.name}
                   />
                   <span
                     className={`${styles.productName} ${siteSerif.className}`}
+                    data-part="1"
                   >
                     {product.name}
                   </span>
-                  <span className={styles.price}>
+                  <span className={styles.price} data-part="2">
                     {formatSiteMoney(product.price)}
                   </span>
                   <div>
                     <button
                       type="button"
                       className={styles.add}
+                      data-part="3"
                       disabled={!product.isAvailable}
                       onClick={() => cart.add(product._id)}
                     >

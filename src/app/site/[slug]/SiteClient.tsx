@@ -1,5 +1,6 @@
 "use client";
 
+import ScrollProgress from "../../../components/store-site/shared/ScrollProgress";
 import SiteCart from "../../../components/store-site/shared/SiteCart";
 import useSiteCart from "../../../components/store-site/shared/useSiteCart";
 import { getTemplateEntry } from "../../../components/store-site/template-registry";
@@ -19,6 +20,7 @@ const SiteClient = ({ data }: Props) => {
 
   return (
     <>
+      <ScrollProgress color={site.theme.primary} />
       <Component
         site={site}
         store={store}

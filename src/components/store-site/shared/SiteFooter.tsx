@@ -28,6 +28,7 @@ import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enu
 import { IStoreSiteSignIn } from "../../../shared/business/store-sites/store-site-sign-in";
 import styles from "./SiteFooter.module.css";
 import SiteSignIn from "./SiteSignIn";
+import useReveal from "./useReveal";
 import useSiteT from "./useSiteT";
 
 interface Props {
@@ -62,6 +63,9 @@ const ICONS: Record<StoreSitesEnum.FooterLinkType, ReactNode> = {
  * the name with its words, the way into the app, and each link.
  */
 const SiteFooter = ({ footer, brandName, signIn, storeId }: Props) => {
+  // Its columns come in one after the other as it scrolls into view.
+  const { ref, phase } = useReveal<HTMLElement>();
+
   const t = useSiteT();
 
   const {
@@ -126,13 +130,13 @@ const SiteFooter = ({ footer, brandName, signIn, storeId }: Props) => {
   };
 
   return (
-    <footer className={styles.footer}>
+    <footer ref={ref} data-phase={phase} className={styles.footer}>
       <div
         className={styles.inner}
         data-columns={sections.length}
         style={{ "--footer-columns": sections.length } as CSSProperties}
       >
-        {sections.map((section: IStoreSiteFooterSection) => {
+        {sections.map((section: IStoreSiteFooterSection, index: number) => {
           const sectionLinks: IStoreSiteFooterLink[] = safeLinks.filter(
             (link: IStoreSiteFooterLink) => link.section === section.key,
           );
@@ -143,7 +147,11 @@ const SiteFooter = ({ footer, brandName, signIn, storeId }: Props) => {
             isLoginVisible && loginSection === section.key;
 
           return (
-            <div key={section.key} className={styles.section}>
+            <div
+              key={section.key}
+              className={styles.section}
+              style={{ "--i": index } as CSSProperties}
+            >
               {section.title && (
                 <p className={styles.sectionTitle}>{section.title}</p>
               )}

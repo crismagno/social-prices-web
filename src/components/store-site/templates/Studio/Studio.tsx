@@ -80,8 +80,14 @@ const Studio = ({
             {brandName}
           </span>
           <span className={styles.links}>
-            <a href="#produtos">{t("storeSite.public.products")}</a>
-            {hasAbout && <a href="#sobre">{t("storeSite.public.about")}</a>}
+            <a href="#produtos" data-navlink>
+              {t("storeSite.public.products")}
+            </a>
+            {hasAbout && (
+              <a href="#sobre" data-navlink>
+                {t("storeSite.public.about")}
+              </a>
+            )}
             {site.signIn?.isVisible !== false && (
               <SiteSignIn
                 signIn={site.signIn}
@@ -103,9 +109,11 @@ const Studio = ({
         >
           <div className={styles.copy}>
             {hero.tagline && (
-              <span className={styles.pill}>{hero.tagline} ✿</span>
+              <span className={styles.pill} data-intro="0">
+                {hero.tagline} ✿
+              </span>
             )}
-            <h1 className={styles.title}>
+            <h1 className={styles.title} data-intro="1">
               <span className={styles.star} aria-hidden="true">
                 ✦
               </span>{" "}
@@ -119,10 +127,12 @@ const Studio = ({
               </span>
             </h1>
             {hero.subtitle && (
-              <p className={styles.subtitle}>{hero.subtitle}</p>
+              <p className={styles.subtitle} data-intro="2">
+                {hero.subtitle}
+              </p>
             )}
-            <div className={styles.buttons}>
-              <a href="#produtos" className={styles.cta}>
+            <div className={styles.buttons} data-intro="3">
+              <a href="#produtos" className={styles.cta} data-shine>
                 {hero.ctaLabel || t("storeSite.public.seeProducts")}
               </a>
               {hasAbout && (
@@ -243,7 +253,7 @@ const Studio = ({
       </nav>
 
       {sections.map((section: IStoreSiteSection, index: number) => (
-        <Reveal key={section.key}>
+        <Reveal key={section.key} effect={index % 2 === 1 ? "right" : "left"}>
           <section
             id={sectionAnchor(section)}
             className={`${styles.block} ${index % 2 === 1 ? styles.blockFlip : ""} ${
@@ -253,6 +263,7 @@ const Studio = ({
             {section.imageUrl && (
               <div
                 className={styles.blockPhoto}
+                data-shine
                 style={{ backgroundImage: cssUrl(section.imageUrl) }}
               />
             )}
@@ -267,7 +278,9 @@ const Studio = ({
                 </span>
               </h2>
               {section.description && (
-                <p className={styles.blockText}>{section.description}</p>
+                <p className={styles.blockText} data-part="2">
+                  {section.description}
+                </p>
               )}
             </div>
           </section>
@@ -275,11 +288,13 @@ const Studio = ({
       ))}
 
       <section>
-        <div id="produtos" className={styles.productsHead}>
-          <span className={`${styles.marker} ${styles.markerAlt}`}>
-            {t("storeSite.public.products")}
-          </span>
-        </div>
+        <Reveal effect="blur">
+          <div id="produtos" className={styles.productsHead}>
+            <span className={`${styles.marker} ${styles.markerAlt}`}>
+              {t("storeSite.public.products")}
+            </span>
+          </div>
+        </Reveal>
 
         {products.length === 0 ? (
           <p className={styles.empty}>{t("storeSite.public.noProducts")}</p>
@@ -288,6 +303,7 @@ const Studio = ({
             {products.map((product: IPublicSiteProduct, index: number) => (
               <Reveal key={product._id} delay={(index % 4) * 0.08}>
                 <article
+                  data-card
                   className={`${styles.product} ${
                     product.isAvailable ? "" : styles.soldOut
                   }`}
@@ -299,18 +315,23 @@ const Studio = ({
                 >
                   <div
                     className={styles.productPhoto}
+                    data-part="0"
+                    data-shine
                     style={{ backgroundImage: cssUrl(product.mainUrl) }}
                     role="img"
                     aria-label={product.name}
                   />
-                  <span className={styles.productName}>{product.name}</span>
-                  <span className={styles.price}>
+                  <span className={styles.productName} data-part="1">
+                    {product.name}
+                  </span>
+                  <span className={styles.price} data-part="2">
                     {formatSiteMoney(product.price)}
                   </span>
                   <div>
                     <button
                       type="button"
                       className={styles.add}
+                      data-part="3"
                       disabled={!product.isAvailable}
                       onClick={() => cart.add(product._id)}
                     >
