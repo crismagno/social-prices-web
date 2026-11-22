@@ -85,6 +85,10 @@ const sizeVars = (
   set("--sz-product-w", "productWidth");
   set("--sz-product-img-h", "productImageHeight", "--sz-product-img-ratio");
   set("--sz-product-name", "productNameSize");
+  set("--sz-about-title", "aboutTitleSize");
+  set("--sz-about-text", "aboutTextSize");
+  set("--sz-about-media-w", "aboutMediaWidth");
+  set("--sz-about-media-h", "aboutMediaHeight", "--sz-about-media-ratio");
 
   return vars;
 };

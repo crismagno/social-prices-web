@@ -6,6 +6,7 @@ import HeroBackground from "../../shared/HeroBackground";
 import Reveal from "../../shared/Reveal";
 import base from "../../shared/site-base.module.css";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
+import SiteAbout, { siteHasAbout } from "../../shared/SiteAbout";
 import SiteFooter from "../../shared/SiteFooter";
 import SiteSignIn from "../../shared/SiteSignIn";
 import SiteThemeVars from "../../shared/SiteThemeVars";
@@ -30,6 +31,9 @@ const Aurora = ({
   cart,
 }: IStoreSiteTemplateProps) => {
   const t = useSiteT();
+
+  // The menus link to the about section only when the site shows one.
+  const hasAbout: boolean = siteHasAbout(site.about, store.about);
 
   const { hero } = site;
 
@@ -76,9 +80,7 @@ const Aurora = ({
               {logo && <img src={logo} alt="" />}✦ {brandName}
             </span>
             <span className={styles.links}>
-              {store.about && (
-                <a href="#sobre">{t("storeSite.public.about")}</a>
-              )}
+              {hasAbout && <a href="#sobre">{t("storeSite.public.about")}</a>}
               <a href="#produtos">{t("storeSite.public.products")}</a>
               {site.signIn?.isVisible !== false && (
                 <SiteSignIn
@@ -211,14 +213,12 @@ const Aurora = ({
         )}
       </section>
 
-      {store.about && (
-        <Reveal>
-          <section id="sobre" className={styles.about}>
-            <h2 className={styles.aboutTitle}>{brandName}</h2>
-            <p className={styles.aboutText}>{store.about}</p>
-          </section>
-        </Reveal>
-      )}
+      <SiteAbout
+        about={site.about}
+        storeAbout={store.about}
+        defaultTitle={brandName}
+        titleClassName={styles.aboutTitle}
+      />
 
       <SiteFooter
         footer={site.footer}

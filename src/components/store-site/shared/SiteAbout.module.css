@@ -1,0 +1,121 @@
+/* The about section, the same in every template: it takes the site's colors
+   and the template's own letters for its title. */
+.about {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 70px clamp(18px, 5vw, 56px) 80px;
+  scroll-margin-top: 20px;
+}
+
+.layout {
+  display: grid;
+  gap: clamp(24px, 5vw, 60px);
+  align-items: center;
+}
+
+.left {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+}
+
+.right {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+}
+
+.right .media {
+  order: 2;
+}
+
+.top,
+.alone {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.top .body,
+.alone .body {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.center .body {
+  text-align: center;
+}
+
+.card {
+  border-radius: 28px;
+  padding: clamp(24px, 4vw, 44px);
+  background: var(--site-primary);
+  color: var(--site-on-primary, #fff);
+}
+
+.kicker {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--site-secondary);
+  margin: 0 0 8px;
+}
+
+.card .kicker {
+  color: inherit;
+  opacity: 0.8;
+}
+
+.title {
+  font-size: var(--sz-about-title, clamp(26px, 3.6vw, 40px));
+  line-height: 1.1;
+  margin: 0 0 16px;
+  overflow-wrap: anywhere;
+}
+
+.text {
+  font-size: var(--sz-about-text, 17px);
+  margin: 0 0 14px;
+  opacity: 0.88;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.text:last-child {
+  margin-bottom: 0;
+}
+
+.media {
+  width: min(100%, var(--sz-about-media-w, 100%));
+  justify-self: center;
+}
+
+.frame {
+  width: 100%;
+  height: var(--sz-about-media-h, auto);
+  aspect-ratio: var(--sz-about-media-ratio, var(--about-ratio, 16 / 9));
+  border-radius: 22px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--site-text) 8%, var(--site-bg));
+  box-shadow: 0 20px 50px
+    color-mix(in srgb, var(--site-primary) 22%, transparent);
+}
+
+.frame img,
+.frame video,
+.frame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+}
+
+.frame video {
+  background: #000;
+}
+
+@media (max-width: 767px) {
+  .left,
+  .right {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .right .media {
+    order: 0;
+  }
+}

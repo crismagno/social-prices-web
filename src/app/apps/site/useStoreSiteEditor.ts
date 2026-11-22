@@ -11,6 +11,7 @@ import {
   IStoreSite,
 } from "../../../shared/business/store-sites/store-site.interface";
 import { siteFooterOf } from "../../../shared/business/store-sites/store-site-footer";
+import { siteAboutOf } from "../../../shared/business/store-sites/store-site-about";
 import { siteSignInOf } from "../../../shared/business/store-sites/store-site-sign-in";
 import {
   EMPTY_SITE_SIZES,
@@ -77,6 +78,8 @@ const toDraft = (site: IStoreSite): ISaveStoreSite => ({
   footer: siteFooterOf(site.footer),
   // A site saved before the button existed shows it, leading to the store.
   signIn: siteSignInOf(site.signIn),
+  // A site saved before it existed shows the store's own description.
+  about: siteAboutOf(site.about),
   hero: { ...site.hero },
   sections: site.sections.map((section) => ({ ...section })),
   marquee: { isActive: site.marquee.isActive, items: [...site.marquee.items] },
@@ -96,6 +99,7 @@ const newDraft = (store: IStore): ISaveStoreSite => ({
   sizes: { ...EMPTY_SITE_SIZES },
   footer: siteFooterOf(null),
   signIn: siteSignInOf(null),
+  about: siteAboutOf(null),
   hero: {
     tagline: null,
     title: store.name,

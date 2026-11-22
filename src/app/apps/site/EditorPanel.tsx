@@ -13,6 +13,7 @@ import {
   ExportOutlined,
   LinkOutlined,
   NotificationOutlined,
+  ReadOutlined,
   PictureOutlined,
   SaveOutlined,
   UndoOutlined,
@@ -26,6 +27,7 @@ import Urls from "../../../shared/common/routes-app/routes-app";
 import { ProductsTab, PublishTab } from "./CatalogPublishTabs";
 import { HeroTab, MarqueeTab, SectionsTab } from "./ContentTabs";
 import { ColorsTab, TemplateTab } from "./DesignTabs";
+import AboutTab from "./AboutTab";
 import FooterTab from "./FooterTab";
 import useAvailableHeight from "./useAvailableHeight";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
@@ -37,6 +39,7 @@ type TTab =
   | "sections"
   | "marquee"
   | "products"
+  | "about"
   | "footer"
   | "publish";
 
@@ -56,6 +59,7 @@ const TABS: { key: TTab; icon: ReactNode }[] = [
   { key: "sections", icon: <BlockOutlined /> },
   { key: "marquee", icon: <NotificationOutlined /> },
   { key: "products", icon: <ShoppingOutlined /> },
+  { key: "about", icon: <ReadOutlined /> },
   { key: "footer", icon: <BorderBottomOutlined /> },
   { key: "publish", icon: <LinkOutlined /> },
 ];
@@ -121,6 +125,7 @@ const EditorPanel = ({
     sections: draft.sections.some((section) => !section.title.trim()),
     marquee: false,
     products: false,
+    about: false,
     footer: false,
     publish: !isSlugValid || !!editor.slugError,
   };
@@ -149,6 +154,13 @@ const EditorPanel = ({
     sections: <SectionsTab editor={editor} storeId={storeId} />,
     marquee: <MarqueeTab editor={editor} />,
     products: <ProductsTab editor={editor} />,
+    about: (
+      <AboutTab
+        editor={editor}
+        storeId={storeId}
+        storeAbout={currentStore?.about ?? null}
+      />
+    ),
     footer: <FooterTab editor={editor} />,
     publish: <PublishTab editor={editor} storeId={storeId} />,
   };
@@ -229,7 +241,7 @@ const EditorPanel = ({
       <div
         role="tablist"
         aria-label={t("storeSite.editor.title")}
-        className="grid grid-cols-8 border-b border-gray-200 dark:border-gray-700"
+        className="flex overflow-x-auto border-b border-gray-200 dark:border-gray-700"
       >
         {TABS.map(({ key, icon }: { key: TTab; icon: ReactNode }) => {
           const isActive: boolean = key === tab;
@@ -243,7 +255,7 @@ const EditorPanel = ({
               aria-controls={`site-editor-${key}`}
               title={t(`storeSite.editor.tabs.${key}`)}
               onClick={() => setTab(key)}
-              className={`flex flex-col items-center gap-1 py-2.5 px-0.5 text-[11px] leading-none border-b-2 transition-colors ${
+              className={`flex-1 min-w-[58px] flex flex-col items-center gap-1 py-2.5 px-0.5 text-[11px] leading-none border-b-2 transition-colors ${
                 isActive
                   ? "border-blue-500 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40"
                   : "border-transparent opacity-70 hover:opacity-100 hover:bg-gray-50 dark:hover:bg-gray-800"

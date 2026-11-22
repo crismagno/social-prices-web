@@ -2395,7 +2395,8 @@
         "marquee": "Strip",
         "products": "Products",
         "publish": "Address",
-        "footer": "Footer"
+        "footer": "Footer",
+        "about": "About"
       },
       "colors": {
         "primary": "Main color",
@@ -2475,7 +2476,8 @@
         "marquee": "Short phrases that run across the page.",
         "products": "Which products the site sells, in the order they appear.",
         "publish": "The address of the site, and whether it is online.",
-        "footer": "The foot of the site: a few words, your links and the button to sign in to the app."
+        "footer": "The foot of the site: a few words, your links and the button to sign in to the app.",
+        "about": "The about section: a title, your texts and an image or a video."
       },
       "problems": {
         "hero": "The entrance needs a title.",
@@ -2508,7 +2510,11 @@
         "productImageHeight": "Photo height",
         "productNameSize": "Name letter size",
         "brandNameWidth": "Name width",
-        "brandNameHeight": "Name height"
+        "brandNameHeight": "Name height",
+        "aboutTitleSize": "Title letter size",
+        "aboutTextSize": "Text letter size",
+        "aboutMediaWidth": "Width of the image or video",
+        "aboutMediaHeight": "Height of the image or video"
       },
       "footer": {
         "show": "Show the footer",
@@ -2569,6 +2575,34 @@
           "STORE_CHAT": "The conversation with the store",
           "ORDERS": "Their orders",
           "HOME": "The home of their account"
+        }
+      },
+      "about": {
+        "show": "Show the about section",
+        "title": "Title",
+        "titleHint": "Empty shows the template's own title.",
+        "texts": "Texts",
+        "textsHint": "One paragraph per box. Add as many as you want, up to 6.",
+        "textsFromStore": "No text yet: the site shows the description of the store. Add a text to write your own.",
+        "textPlaceholder": "Tell the story of the store, how the pieces are made…",
+        "addText": "Add text",
+        "media": "Image or video",
+        "mediaNone": "None",
+        "mediaImage": "Image",
+        "mediaVideo": "Video file",
+        "mediaLink": "YouTube / Vimeo",
+        "videoHint": "MP4, WebM or MOV, up to 20MB.",
+        "videoTooLarge": "The video can be at most 20MB.",
+        "chooseVideo": "Choose video",
+        "changeVideo": "Change video",
+        "removeVideo": "Remove video",
+        "linkHint": "Paste the link of a YouTube or Vimeo video.",
+        "linkInvalid": "This is not a YouTube or Vimeo video link.",
+        "position": "Where the image or video goes",
+        "positions": {
+          "LEFT": "Left of the texts",
+          "RIGHT": "Right of the texts",
+          "TOP": "Above the texts"
         }
       }
     },

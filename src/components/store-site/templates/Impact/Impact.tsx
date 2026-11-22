@@ -6,6 +6,7 @@ import HeroBackground from "../../shared/HeroBackground";
 import Reveal from "../../shared/Reveal";
 import base from "../../shared/site-base.module.css";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
+import SiteAbout, { siteHasAbout } from "../../shared/SiteAbout";
 import SiteFooter from "../../shared/SiteFooter";
 import SiteSignIn from "../../shared/SiteSignIn";
 import SiteThemeVars from "../../shared/SiteThemeVars";
@@ -39,6 +40,9 @@ const Impact = ({
   cart,
 }: IStoreSiteTemplateProps) => {
   const t = useSiteT();
+
+  // The menus link to the about section only when the site shows one.
+  const hasAbout: boolean = siteHasAbout(site.about, store.about);
 
   const { hero } = site;
 
@@ -74,7 +78,7 @@ const Impact = ({
             {brandName}
           </span>
           <span className={styles.links}>
-            {store.about && <a href="#sobre">{t("storeSite.public.about")}</a>}
+            {hasAbout && <a href="#sobre">{t("storeSite.public.about")}</a>}
             <a href="#produtos">{t("storeSite.public.products")}</a>
             {site.signIn?.isVisible !== false && (
               <SiteSignIn
@@ -136,7 +140,7 @@ const Impact = ({
               <a href="#produtos" className={styles.cta}>
                 {hero.ctaLabel || t("storeSite.public.seeProducts")}
               </a>
-              {store.about && (
+              {hasAbout && (
                 <a href="#sobre" className={styles.ctaGhost}>
                   {t("storeSite.public.ourStory")}
                 </a>
@@ -225,16 +229,13 @@ const Impact = ({
         )}
       </section>
 
-      {store.about && (
-        <Reveal>
-          <section id="sobre" className={styles.about}>
-            <h2 className={styles.aboutTitle}>
-              {t("storeSite.public.ourStory")}
-            </h2>
-            <p className={styles.aboutText}>{store.about}</p>
-          </section>
-        </Reveal>
-      )}
+      <SiteAbout
+        about={site.about}
+        storeAbout={store.about}
+        defaultTitle={t("storeSite.public.ourStory")}
+        titleClassName={styles.aboutTitle}
+        align="left"
+      />
 
       <SiteFooter
         footer={site.footer}

@@ -33,6 +33,10 @@ export const SITE_SIZE_KINDS = {
   productWidth: "width",
   productImageHeight: "height",
   productNameSize: "fontSize",
+  aboutTitleSize: "fontSize",
+  aboutTextSize: "fontSize",
+  aboutMediaWidth: "width",
+  aboutMediaHeight: "height",
 } as const satisfies Record<string, TSiteSizeKind>;
 
 export type TSiteSizeKey = keyof typeof SITE_SIZE_KINDS;

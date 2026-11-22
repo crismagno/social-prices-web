@@ -29,6 +29,7 @@ export interface IStoreSiteTemplateProps {
     | "sizes"
     | "footer"
     | "signIn"
+    | "about"
     | "hero"
     | "sections"
     | "marquee"

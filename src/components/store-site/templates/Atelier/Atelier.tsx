@@ -9,6 +9,7 @@ import Reveal from "../../shared/Reveal";
 import base from "../../shared/site-base.module.css";
 import { siteSerif } from "../../shared/site-fonts";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
+import SiteAbout, { siteHasAbout } from "../../shared/SiteAbout";
 import SiteFooter from "../../shared/SiteFooter";
 import SiteSignIn from "../../shared/SiteSignIn";
 import SiteThemeVars from "../../shared/SiteThemeVars";
@@ -29,6 +30,9 @@ const Atelier = ({
   cart,
 }: IStoreSiteTemplateProps) => {
   const t = useSiteT();
+
+  // The menus link to the about section only when the site shows one.
+  const hasAbout: boolean = siteHasAbout(site.about, store.about);
 
   const { hero, marquee } = site;
 
@@ -86,7 +90,7 @@ const Atelier = ({
             {brandName}
           </span>
           <span className={styles.links}>
-            {store.about && <a href="#sobre">{t("storeSite.public.about")}</a>}
+            {hasAbout && <a href="#sobre">{t("storeSite.public.about")}</a>}
             <a href="#produtos">{t("storeSite.public.products")}</a>
             {site.signIn?.isVisible !== false && (
               <SiteSignIn
@@ -262,16 +266,12 @@ const Atelier = ({
         )}
       </section>
 
-      {store.about && (
-        <Reveal>
-          <section id="sobre" className={styles.about}>
-            <h2 className={`${styles.aboutTitle} ${siteSerif.className}`}>
-              {t("storeSite.public.about")}
-            </h2>
-            <p className={styles.aboutText}>{store.about}</p>
-          </section>
-        </Reveal>
-      )}
+      <SiteAbout
+        about={site.about}
+        storeAbout={store.about}
+        defaultTitle={t("storeSite.public.about")}
+        titleClassName={`${styles.aboutTitle} ${siteSerif.className}`}
+      />
 
       <SiteFooter
         footer={site.footer}

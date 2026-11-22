@@ -6,6 +6,7 @@ namespace StoreSitesServiceEnum {
     PUBLISH = "/store-sites/store/:storeId/publish",
     UNPUBLISH = "/store-sites/store/:storeId/unpublish",
     UPLOAD_IMAGE = "/store-sites/store/:storeId/images",
+    UPLOAD_VIDEO = "/store-sites/store/:storeId/videos",
     PUBLIC_FIND_BY_SLUG = "/public/store-sites/:slug",
     PUBLIC_CREATE_ORDER = "/public/store-sites/:slug/orders",
   }

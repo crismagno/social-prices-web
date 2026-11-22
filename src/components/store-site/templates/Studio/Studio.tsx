@@ -9,6 +9,7 @@ import Reveal from "../../shared/Reveal";
 import base from "../../shared/site-base.module.css";
 import { siteRounded } from "../../shared/site-fonts";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
+import SiteAbout, { siteHasAbout } from "../../shared/SiteAbout";
 import SiteFooter from "../../shared/SiteFooter";
 import SiteSignIn from "../../shared/SiteSignIn";
 import SiteThemeVars from "../../shared/SiteThemeVars";
@@ -44,6 +45,9 @@ const Studio = ({
 }: IStoreSiteTemplateProps) => {
   const t = useSiteT();
 
+  // The menus link to the about section only when the site shows one.
+  const hasAbout: boolean = siteHasAbout(site.about, store.about);
+
   const { hero } = site;
 
   const {
@@ -76,7 +80,7 @@ const Studio = ({
           </span>
           <span className={styles.links}>
             <a href="#produtos">{t("storeSite.public.products")}</a>
-            {store.about && <a href="#sobre">{t("storeSite.public.about")}</a>}
+            {hasAbout && <a href="#sobre">{t("storeSite.public.about")}</a>}
             {site.signIn?.isVisible !== false && (
               <SiteSignIn
                 signIn={site.signIn}
@@ -120,7 +124,7 @@ const Studio = ({
               <a href="#produtos" className={styles.cta}>
                 {hero.ctaLabel || t("storeSite.public.seeProducts")}
               </a>
-              {store.about && (
+              {hasAbout && (
                 <a href="#sobre" className={styles.ctaLight}>
                   {t("storeSite.public.about")}
                 </a>
@@ -220,7 +224,7 @@ const Studio = ({
             {t("storeSite.public.products")}
           </span>
         </a>
-        {store.about && (
+        {hasAbout && (
           <a href="#sobre" className={styles.highlight}>
             <span className={styles.ring}>
               <span
@@ -319,21 +323,14 @@ const Studio = ({
         )}
       </section>
 
-      {store.about && (
-        <div className={styles.calloutWrap}>
-          <Reveal>
-            <section id="sobre" className={styles.callout}>
-              <h2 className={styles.calloutTitle}>
-                <span className={styles.star} aria-hidden="true">
-                  ✦
-                </span>{" "}
-                {brandName}
-              </h2>
-              <p className={styles.calloutText}>{store.about}</p>
-            </section>
-          </Reveal>
-        </div>
-      )}
+      <SiteAbout
+        about={site.about}
+        storeAbout={store.about}
+        defaultTitle={brandName}
+        titleClassName={styles.calloutTitle}
+        align="left"
+        isCard
+      />
 
       <SiteFooter
         footer={site.footer}

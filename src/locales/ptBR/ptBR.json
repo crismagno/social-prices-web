@@ -2398,7 +2398,8 @@
         "marquee": "Faixa",
         "products": "Produtos",
         "publish": "Endereço",
-        "footer": "Rodapé"
+        "footer": "Rodapé",
+        "about": "Sobre"
       },
       "colors": {
         "primary": "Cor principal",
@@ -2478,7 +2479,8 @@
         "marquee": "Frases curtas que correm pela página.",
         "products": "Quais produtos o site vende, na ordem em que aparecem.",
         "publish": "O endereço do site e se ele está no ar.",
-        "footer": "O pé do site: algumas palavras, seus links e o botão de entrar no app."
+        "footer": "O pé do site: algumas palavras, seus links e o botão de entrar no app.",
+        "about": "A seção Sobre: um título, seus textos e uma imagem ou um vídeo."
       },
       "problems": {
         "hero": "A entrada precisa de um título.",
@@ -2511,7 +2513,11 @@
         "productImageHeight": "Altura da foto",
         "productNameSize": "Tamanho da letra do nome",
         "brandNameWidth": "Largura do nome",
-        "brandNameHeight": "Altura do nome"
+        "brandNameHeight": "Altura do nome",
+        "aboutTitleSize": "Tamanho da letra do título",
+        "aboutTextSize": "Tamanho da letra do texto",
+        "aboutMediaWidth": "Largura da imagem ou vídeo",
+        "aboutMediaHeight": "Altura da imagem ou vídeo"
       },
       "footer": {
         "show": "Mostrar o rodapé",
@@ -2572,6 +2578,34 @@
           "STORE_CHAT": "A conversa com a loja",
           "ORDERS": "Os pedidos dele",
           "HOME": "O início da conta dele"
+        }
+      },
+      "about": {
+        "show": "Mostrar a seção Sobre",
+        "title": "Título",
+        "titleHint": "Vazio mostra o título do próprio template.",
+        "texts": "Textos",
+        "textsHint": "Um parágrafo por caixa. Adicione quantos quiser, até 6.",
+        "textsFromStore": "Nenhum texto ainda: o site mostra a descrição da loja. Adicione um texto para escrever o seu.",
+        "textPlaceholder": "Conte a história da loja, como as peças são feitas…",
+        "addText": "Adicionar texto",
+        "media": "Imagem ou vídeo",
+        "mediaNone": "Nenhum",
+        "mediaImage": "Imagem",
+        "mediaVideo": "Arquivo de vídeo",
+        "mediaLink": "YouTube / Vimeo",
+        "videoHint": "MP4, WebM ou MOV, até 20MB.",
+        "videoTooLarge": "O vídeo pode ter no máximo 20MB.",
+        "chooseVideo": "Escolher vídeo",
+        "changeVideo": "Trocar vídeo",
+        "removeVideo": "Remover vídeo",
+        "linkHint": "Cole o link de um vídeo do YouTube ou do Vimeo.",
+        "linkInvalid": "Este não é um link de vídeo do YouTube ou do Vimeo.",
+        "position": "Onde fica a imagem ou o vídeo",
+        "positions": {
+          "LEFT": "À esquerda dos textos",
+          "RIGHT": "À direita dos textos",
+          "TOP": "Acima dos textos"
         }
       }
     },

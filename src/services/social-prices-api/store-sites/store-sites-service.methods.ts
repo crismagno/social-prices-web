@@ -108,6 +108,26 @@ export default class StoreSitesServiceMethods extends ServiceMethodsBase {
     return response.data.url;
   }
 
+  /** Stores one video (the about section) and answers with its file key. */
+  public async uploadVideo(storeId: string, file: File): Promise<string> {
+    const formData: FormData = new FormData();
+
+    formData.append("files", file);
+
+    const response = await this._fetchAxios.post<{ url: string }>(
+      this._url(StoreSitesServiceEnum.Methods.UPLOAD_VIDEO, { storeId }),
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      },
+    );
+
+    return response.data.url;
+  }
+
   /** Sent by a visitor: no account, so no token. */
   public async createOrder(
     slug: string,
