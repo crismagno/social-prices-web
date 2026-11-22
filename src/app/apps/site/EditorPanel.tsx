@@ -308,7 +308,7 @@ const EditorPanel = ({
           <Tooltip title={t("storeSite.editor.reset.button")}>
             <Button
               danger
-              type="text"
+              type="primary"
               icon={<UndoOutlined />}
               aria-label={t("storeSite.editor.reset.button")}
               disabled={editor.isSaving}
