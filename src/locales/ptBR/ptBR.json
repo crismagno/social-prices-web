@@ -579,6 +579,8 @@
     "alreadyHasAccount": "Este cliente já tem uma conta"
   },
   "stores": {
+    "editSite": "Editar site",
+    "editSiteTooltip": "Abrir o editor do site desta loja",
     "copyChatLink": "Copiar link do chat",
     "copyChatLinkTooltip": "Copiar o link que os clientes abrem para falar com esta loja",
     "chatLinkCopied": "Link do chat copiado",
@@ -2197,6 +2199,7 @@
     "firstMessage": "Envie a primeira mensagem para iniciar a conversa",
     "placeholder": "Escreva uma mensagem...",
     "send": "Enviar",
+    "visitSite": "Visitar o site",
     "back": "Voltar",
     "talkToStore": "Falar com a loja",
     "deleteConfirm": "Excluir esta mensagem? Ela também é excluída para a loja.",
@@ -2383,6 +2386,7 @@
       "changeImage": "Trocar",
       "removeImage": "Remover imagem",
       "imageTooLarge": "A imagem pode ter no máximo 5MB.",
+      "dragToReorder": "Arraste para mudar a ordem",
       "moveUp": "Mover para cima",
       "moveDown": "Mover para baixo",
       "remove": "Remover",
@@ -2393,14 +2397,16 @@
         "sections": "Blocos",
         "marquee": "Faixa",
         "products": "Produtos",
-        "publish": "Endereço"
+        "publish": "Endereço",
+        "footer": "Rodapé"
       },
       "colors": {
         "primary": "Cor principal",
         "secondary": "Segunda cor",
         "accent": "Cor de detalhe",
         "background": "Fundo",
-        "text": "Texto"
+        "text": "Texto",
+        "reset": "Voltar às cores padrão do template"
       },
       "hero": {
         "tagline": "Linha pequena acima do título",
@@ -2466,7 +2472,8 @@
         "sections": "Blocos que apresentam a loja: uma foto, um título e algumas palavras cada.",
         "marquee": "Frases curtas que correm pela página.",
         "products": "Quais produtos o site vende, na ordem em que aparecem.",
-        "publish": "O endereço do site e se ele está no ar."
+        "publish": "O endereço do site e se ele está no ar.",
+        "footer": "O pé do site: algumas palavras, seus links e o botão de entrar no app."
       },
       "problems": {
         "hero": "A entrada precisa de um título.",
@@ -2476,6 +2483,98 @@
       "displayName": {
         "label": "Nome exibido no topo do site",
         "hint": "Deixe vazio para usar o nome da loja."
+      },
+      "sizes": {
+        "auto": "automático",
+        "blocksHeading": "Tamanho dos blocos",
+        "productsHeading": "Tamanho dos produtos",
+        "logoWidth": "Largura do logo",
+        "logoHeight": "Altura do logo",
+        "brandNameSize": "Tamanho da letra do nome",
+        "heroHeight": "Altura da entrada",
+        "heroTitleWidth": "Largura do título",
+        "heroTitleSize": "Tamanho da letra do título",
+        "heroSubtitleWidth": "Largura do texto",
+        "heroSubtitleSize": "Tamanho da letra do texto",
+        "featuredImageWidth": "Largura da imagem",
+        "featuredImageHeight": "Altura da imagem",
+        "sectionImageWidth": "Largura da imagem",
+        "sectionImageHeight": "Altura da imagem",
+        "sectionTitleSize": "Tamanho da letra do título",
+        "sectionTextSize": "Tamanho da letra do texto",
+        "productWidth": "Largura do produto",
+        "productImageHeight": "Altura da foto",
+        "productNameSize": "Tamanho da letra do nome",
+        "brandNameWidth": "Largura do nome",
+        "brandNameHeight": "Altura do nome"
+      },
+      "footer": {
+        "show": "Mostrar o rodapé",
+        "text": "Texto",
+        "textHint": "Algumas palavras abaixo do nome da loja: endereço, horário, uma frase.",
+        "login": "Mostrar o botão de entrar no app",
+        "loginHint": "Leva o cliente ao login, onde ele acompanha os pedidos.",
+        "linksHeading": "Links",
+        "add": "Adicionar link",
+        "empty": "Nenhum link ainda. Adicione suas redes sociais, outros sites ou formas de contato.",
+        "type": "Tipo",
+        "label": "Texto do link",
+        "labelHint": "Vazio mostra o nome do tipo, ou o endereço no texto livre.",
+        "url": "Endereço",
+        "invalidUrl": "Este endereço não é válido.",
+        "placeholders": {
+          "INSTAGRAM": "instagram.com/sualoja",
+          "FACEBOOK": "facebook.com/sualoja",
+          "WHATSAPP": "Número com DDD, ou um link wa.me",
+          "TIKTOK": "tiktok.com/@sualoja",
+          "YOUTUBE": "youtube.com/@sualoja",
+          "X": "x.com/sualoja",
+          "LINKEDIN": "linkedin.com/company/sualoja",
+          "PINTEREST": "pinterest.com/sualoja",
+          "TELEGRAM": "t.me/sualoja",
+          "EMAIL": "oi@sualoja.com",
+          "PHONE": "Número com DDD",
+          "WEBSITE": "seusite.com",
+          "TEXT": "Qualquer endereço: seusite.com/pagina"
+        },
+        "sections": {
+          "heading": "Seções",
+          "hint": "O rodapé é dividido em colunas, lado a lado: de uma a cinco. Abaixo, escolha em qual delas fica cada coisa.",
+          "section": "Seção",
+          "titlePlaceholder": "Título (opcional)",
+          "add": "Adicionar seção",
+          "textIn": "Nome e texto ficam em",
+          "loginIn": "Botão de entrar fica em",
+          "linkIn": "Aparece em"
+        }
+      },
+      "reset": {
+        "button": "Voltar o site ao padrão",
+        "title": "Voltar o site ao padrão?",
+        "lost": "Cores, tamanhos, o nome e o logo do topo, os textos e imagens da entrada, os blocos, a faixa, o rodapé e os produtos escolhidos voltam a ser como num site novo.",
+        "kept": "O template, o endereço do site e se ele está no ar continuam como estão.",
+        "notSaved": "Nada é salvo ainda: você ainda precisa salvar. Para desistir, recarregue a página sem salvar.",
+        "confirm": "Voltar ao padrão"
+      }
+    },
+    "footer": {
+      "login": "Entrar",
+      "loginHint": "Acompanhe seus pedidos na sua conta.",
+      "links": "Links da loja",
+      "types": {
+        "INSTAGRAM": "Instagram",
+        "FACEBOOK": "Facebook",
+        "WHATSAPP": "WhatsApp",
+        "TIKTOK": "TikTok",
+        "YOUTUBE": "YouTube",
+        "X": "X (Twitter)",
+        "LINKEDIN": "LinkedIn",
+        "PINTEREST": "Pinterest",
+        "TELEGRAM": "Telegram",
+        "EMAIL": "E-mail",
+        "PHONE": "Telefone",
+        "WEBSITE": "Site",
+        "TEXT": "Texto livre (sem ícone)"
       }
     }
   }

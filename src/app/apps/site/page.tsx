@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { Empty, Spin } from "antd";
+import { useSearchParams } from "next/navigation";
 
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
 import { IPreviewData } from "../../../components/store-site/preview-channel";
@@ -20,6 +21,9 @@ import useStoreSiteEditor from "./useStoreSiteEditor";
 export default function AppSitePage() {
   const { t } = useLanguageData();
 
+  // The store asked for by who linked here (the store profile).
+  const askedStoreId: string | null = useSearchParams().get("store");
+
   const [stores, setStores] = useState<IStore[]>([]);
   const [storeId, setStoreId] = useState<string | null>(null);
   const [isLoadingStores, setIsLoadingStores] = useState<boolean>(true);
@@ -31,8 +35,13 @@ export default function AppSitePage() {
           await serviceMethodsInstance.storesServiceMethods.findByUser();
 
         setStores(found);
+        const asked: IStore | undefined = found.find(
+          (candidate: IStore) => candidate._id === askedStoreId,
+        );
+
         setStoreId(
-          (current: string | null) => current ?? found[0]?._id ?? null,
+          (current: string | null) =>
+            current ?? asked?._id ?? found[0]?._id ?? null,
         );
       } catch (error: any) {
         handleClientError(error);

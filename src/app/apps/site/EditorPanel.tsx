@@ -2,18 +2,20 @@
 
 import { ReactNode, useState } from "react";
 
-import { Alert, Badge, Button, Card, Select, Tag, Tooltip } from "antd";
+import { Alert, App, Badge, Button, Card, Select, Tag, Tooltip } from "antd";
 
 import {
   AppstoreOutlined,
   BgColorsOutlined,
   BlockOutlined,
+  BorderBottomOutlined,
   CheckCircleFilled,
   ExportOutlined,
   LinkOutlined,
   NotificationOutlined,
   PictureOutlined,
   SaveOutlined,
+  UndoOutlined,
   ShoppingOutlined,
 } from "@ant-design/icons";
 
@@ -24,6 +26,7 @@ import Urls from "../../../shared/common/routes-app/routes-app";
 import { ProductsTab, PublishTab } from "./CatalogPublishTabs";
 import { HeroTab, MarqueeTab, SectionsTab } from "./ContentTabs";
 import { ColorsTab, TemplateTab } from "./DesignTabs";
+import FooterTab from "./FooterTab";
 import useAvailableHeight from "./useAvailableHeight";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
 
@@ -34,6 +37,7 @@ type TTab =
   | "sections"
   | "marquee"
   | "products"
+  | "footer"
   | "publish";
 
 interface Props {
@@ -52,6 +56,7 @@ const TABS: { key: TTab; icon: ReactNode }[] = [
   { key: "sections", icon: <BlockOutlined /> },
   { key: "marquee", icon: <NotificationOutlined /> },
   { key: "products", icon: <ShoppingOutlined /> },
+  { key: "footer", icon: <BorderBottomOutlined /> },
   { key: "publish", icon: <LinkOutlined /> },
 ];
 
@@ -68,6 +73,29 @@ const EditorPanel = ({
   isSideBySide,
 }: Props) => {
   const { t } = useLanguageData();
+  const { modal } = App.useApp();
+
+  // Asked first, and said plainly: it throws away what the owner wrote.
+  const confirmReset = (): void => {
+    modal.confirm({
+      title: t("storeSite.editor.reset.title"),
+      content: (
+        <div className="text-sm">
+          <p className="mb-2">{t("storeSite.editor.reset.lost")}</p>
+          <p className="mb-2">{t("storeSite.editor.reset.kept")}</p>
+          <p className="mb-0 opacity-70">
+            {t("storeSite.editor.reset.notSaved")}
+          </p>
+        </div>
+      ),
+      okText: t("storeSite.editor.reset.confirm"),
+      okButtonProps: { danger: true },
+      cancelText: t("storeSite.editor.cancel"),
+      // Enter and the highlighted button keep things as they are.
+      autoFocusButton: "cancel",
+      onOk: () => editor.resetToDefaults(),
+    });
+  };
 
   const [tab, setTab] = useState<TTab>("template");
 
@@ -93,6 +121,7 @@ const EditorPanel = ({
     sections: draft.sections.some((section) => !section.title.trim()),
     marquee: false,
     products: false,
+    footer: false,
     publish: !isSlugValid || !!editor.slugError,
   };
 
@@ -120,6 +149,7 @@ const EditorPanel = ({
     sections: <SectionsTab editor={editor} storeId={storeId} />,
     marquee: <MarqueeTab editor={editor} />,
     products: <ProductsTab editor={editor} />,
+    footer: <FooterTab editor={editor} />,
     publish: <PublishTab editor={editor} storeId={storeId} />,
   };
 
@@ -199,7 +229,7 @@ const EditorPanel = ({
       <div
         role="tablist"
         aria-label={t("storeSite.editor.title")}
-        className="grid grid-cols-7 border-b border-gray-200 dark:border-gray-700"
+        className="grid grid-cols-8 border-b border-gray-200 dark:border-gray-700"
       >
         {TABS.map(({ key, icon }: { key: TTab; icon: ReactNode }) => {
           const isActive: boolean = key === tab;
@@ -264,7 +294,7 @@ const EditorPanel = ({
           />
         )}
         <div className="flex items-center justify-between gap-3">
-          <span className="text-xs min-w-0 truncate">
+          <span className="text-xs min-w-0 flex-1 truncate">
             {editor.hasUnsaved ? (
               <span className="text-orange-500">
                 ● {t("storeSite.editor.unsaved")}
@@ -275,6 +305,16 @@ const EditorPanel = ({
               </span>
             )}
           </span>
+          <Tooltip title={t("storeSite.editor.reset.button")}>
+            <Button
+              danger
+              type="text"
+              icon={<UndoOutlined />}
+              aria-label={t("storeSite.editor.reset.button")}
+              disabled={editor.isSaving}
+              onClick={confirmReset}
+            />
+          </Tooltip>
           <Button
             type="primary"
             icon={<SaveOutlined />}

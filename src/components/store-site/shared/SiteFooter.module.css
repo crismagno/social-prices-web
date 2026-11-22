@@ -1,0 +1,184 @@
+/* One footer for every template: it takes the site's colors and the template's
+   own letters, so it belongs to whichever page it closes. */
+.footer {
+  margin-top: 40px;
+  padding: 48px clamp(18px, 5vw, 56px) 28px;
+  background: color-mix(in srgb, var(--site-text) 7%, var(--site-bg));
+  border-top: 1px solid color-mix(in srgb, var(--site-text) 14%, transparent);
+  color: var(--site-text);
+}
+
+.inner {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: grid;
+  /* As many columns as the owner made sections, one to five. */
+  grid-template-columns: repeat(var(--footer-columns, 2), minmax(0, 1fr));
+  gap: 28px clamp(20px, 4vw, 56px);
+  align-items: start;
+}
+
+.section {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.65;
+  overflow-wrap: anywhere;
+}
+
+.loginBox {
+  min-width: 0;
+}
+
+.name {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.text {
+  margin: 0;
+  max-width: 46ch;
+  opacity: 0.8;
+  white-space: pre-line;
+}
+
+.login {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 99px;
+  background: var(--site-primary);
+  color: var(--site-on-primary, #fff);
+  font-weight: 700;
+  font-size: 14px;
+  transition:
+    transform 0.25s,
+    filter 0.25s;
+}
+
+.login:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
+
+.loginHint {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+.links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 9px 16px;
+  border-radius: 99px;
+  border: 1px solid color-mix(in srgb, var(--site-text) 22%, transparent);
+  font-size: 14px;
+  transition:
+    background 0.25s,
+    color 0.25s,
+    border-color 0.25s,
+    transform 0.25s;
+}
+
+.link:hover {
+  background: var(--site-primary);
+  border-color: var(--site-primary);
+  color: var(--site-on-primary, #fff);
+  transform: translateY(-2px);
+}
+
+/* Free text: no pill, no icon, only the words. */
+.plainLink {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 9px 4px;
+  font-size: 14px;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--site-text) 35%, transparent);
+  text-underline-offset: 4px;
+  transition:
+    color 0.25s,
+    text-decoration-color 0.25s;
+}
+
+.plainLink:hover {
+  color: var(--site-primary);
+  text-decoration-color: var(--site-primary);
+}
+
+.linkLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bottom {
+  max-width: 1140px;
+  margin: 36px auto 0;
+  padding-top: 18px;
+  border-top: 1px solid color-mix(in srgb, var(--site-text) 12%, transparent);
+  font-size: 12px;
+  opacity: 0.6;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+}
+
+/* Switched off by the owner: only the line that closes the page stays. */
+.bare {
+  padding-top: 0;
+  background: transparent;
+  border-top: 0;
+}
+
+.bare .bottom {
+  margin-top: 0;
+}
+
+/* Fewer columns as the screen narrows: never more than fit. */
+@media (max-width: 1023px) {
+  .inner[data-columns="4"],
+  .inner[data-columns="5"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .inner:not([data-columns="1"]) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 479px) {
+  .inner:not([data-columns="1"]) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

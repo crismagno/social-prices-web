@@ -4,7 +4,7 @@
 
 .hero {
   position: relative;
-  min-height: min(94vh, 800px);
+  min-height: var(--sz-hero-h, min(94vh, 800px));
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -60,11 +60,16 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  font-size: var(--sz-brand, inherit);
+  max-width: min(100%, var(--sz-brand-w, 100%));
+  width: var(--sz-brand-w, auto);
+  height: var(--sz-brand-h, auto);
+  overflow-wrap: anywhere;
 }
 
 .brand img {
-  width: 34px;
-  height: 34px;
+  width: var(--sz-logo-w, 34px);
+  height: var(--sz-logo-h, 34px);
   object-fit: cover;
 }
 
@@ -115,13 +120,14 @@
 
 /* Enormous, and outlined in the main color where the page lets it. */
 .title {
-  font-size: clamp(52px, 10.5vw, 136px);
+  font-size: var(--sz-title, clamp(52px, 10.5vw, 136px));
   line-height: 0.86;
   font-weight: 900;
   letter-spacing: -0.05em;
   text-transform: uppercase;
   margin: 10px 0 22px;
   overflow-wrap: anywhere;
+  max-width: var(--sz-title-w, none);
 }
 
 .titleOutline {
@@ -130,8 +136,8 @@
 }
 
 .subtitle {
-  font-size: 17px;
-  max-width: 46ch;
+  font-size: var(--sz-subtitle, 17px);
+  max-width: var(--sz-subtitle-w, 46ch);
   margin: 0 0 26px;
   opacity: 0.85;
 }
@@ -218,7 +224,13 @@
 /* ---------- demonstration blocks: tiles that zoom under the pointer ---------- */
 .tiles {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(
+      min(100%, var(--sz-section-img-w, 260px)),
+      var(--sz-section-img-w, 1fr)
+    )
+  );
   gap: 12px;
   max-width: 1300px;
   margin: 0 auto;
@@ -228,7 +240,7 @@
 .tile {
   position: relative;
   height: 100%;
-  min-height: 300px;
+  min-height: var(--sz-section-img-h, 300px);
   overflow: hidden;
   display: flex;
   align-items: flex-end;
@@ -263,7 +275,7 @@
 }
 
 .tileTitle {
-  font-size: 24px;
+  font-size: var(--sz-section-title, 24px);
   line-height: 1.05;
   font-weight: 900;
   text-transform: uppercase;
@@ -273,7 +285,7 @@
 
 .tileText {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--sz-section-text, 14px);
   opacity: 0.85;
   white-space: pre-line;
 }
@@ -292,7 +304,10 @@
 
 .products {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(100%, var(--sz-product-w, 210px)), var(--sz-product-w, 1fr))
+  );
   gap: 12px;
   max-width: 1300px;
   margin: 0 auto;
@@ -320,9 +335,10 @@
 }
 
 .productPhoto {
-  aspect-ratio: 1;
+  aspect-ratio: var(--sz-product-img-ratio, 1);
   background: color-mix(in srgb, var(--site-text) 16%, var(--site-bg)) center /
     cover no-repeat;
+  height: var(--sz-product-img-h, auto);
 }
 
 .productBody {
@@ -334,6 +350,7 @@
   font-weight: 800;
   text-transform: uppercase;
   overflow-wrap: anywhere;
+  font-size: var(--sz-product-name, inherit);
 }
 
 .price {
@@ -395,15 +412,6 @@
   font-size: 17px;
   opacity: 0.85;
   white-space: pre-line;
-}
-
-.footer {
-  padding: 24px clamp(18px, 5vw, 56px) 36px;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  opacity: 0.55;
-  border-top: 1px solid color-mix(in srgb, var(--site-text) 14%, transparent);
 }
 
 @keyframes kenBurns {

@@ -1,3 +1,5 @@
+import { IStoreSiteFooter } from "./store-site-footer";
+import { TStoreSiteSizes } from "./store-site-sizes";
 import StoreSitesEnum from "./store-sites.enum";
 
 /** Hex colors (#rrggbb). Every template reads the same five. */
@@ -47,6 +49,9 @@ export interface ISaveStoreSite {
   theme: IStoreSiteTheme;
   /** The name shown at the top of the site; empty means the store's name. */
   displayName: string | null;
+  /** Sizes the owner set, in pixels; an empty one is the template's own. */
+  sizes: TStoreSiteSizes;
+  footer: IStoreSiteFooter;
   hero: IStoreSiteHero;
   sections: IStoreSiteSection[];
   marquee: IStoreSiteMarquee;

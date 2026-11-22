@@ -17,6 +17,7 @@ import {
 } from "../../../shared/business/store-sites/store-site.interface";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import ImageField from "./ImageField";
+import SizeFields from "./SizeFields";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
 
 interface Props {
@@ -79,6 +80,7 @@ export const HeroTab = ({ editor, storeId, storeName }: IHeroTabProps) => {
           onChange={(event) => set({ title: event.target.value })}
         />
       </Form.Item>
+      <SizeFields editor={editor} sizes={["heroTitleWidth", "heroTitleSize"]} />
       <Form.Item label={t("storeSite.editor.hero.subtitle")}>
         <Input.TextArea
           maxLength={400}
@@ -87,6 +89,10 @@ export const HeroTab = ({ editor, storeId, storeName }: IHeroTabProps) => {
           onChange={(event) => set({ subtitle: event.target.value || null })}
         />
       </Form.Item>
+      <SizeFields
+        editor={editor}
+        sizes={["heroSubtitleWidth", "heroSubtitleSize"]}
+      />
       <Form.Item label={t("storeSite.editor.hero.ctaLabel")}>
         <Input
           maxLength={40}
@@ -104,6 +110,7 @@ export const HeroTab = ({ editor, storeId, storeName }: IHeroTabProps) => {
           onChange={(backgroundImageUrl) => set({ backgroundImageUrl })}
         />
       </Form.Item>
+      <SizeFields editor={editor} sizes={["heroHeight"]} />
       <Form.Item label={t("storeSite.editor.hero.featuredImage")}>
         <ImageField
           storeId={storeId}
@@ -111,6 +118,10 @@ export const HeroTab = ({ editor, storeId, storeName }: IHeroTabProps) => {
           onChange={(featuredImageUrl) => set({ featuredImageUrl })}
         />
       </Form.Item>
+      <SizeFields
+        editor={editor}
+        sizes={["featuredImageWidth", "featuredImageHeight"]}
+      />
       <Form.Item
         label={t("storeSite.editor.displayName.label")}
         extra={t("storeSite.editor.displayName.hint")}
@@ -125,6 +136,10 @@ export const HeroTab = ({ editor, storeId, storeName }: IHeroTabProps) => {
           }
         />
       </Form.Item>
+      <SizeFields
+        editor={editor}
+        sizes={["brandNameWidth", "brandNameHeight", "brandNameSize"]}
+      />
       <Form.Item label={t("storeSite.editor.logo.show")}>
         <Switch
           checked={logo.isActive}
@@ -142,6 +157,9 @@ export const HeroTab = ({ editor, storeId, storeName }: IHeroTabProps) => {
             onChange={(imageUrl) => setLogo({ imageUrl })}
           />
         </Form.Item>
+      )}
+      {logo.isActive && (
+        <SizeFields editor={editor} sizes={["logoWidth", "logoHeight"]} />
       )}
     </Form>
   );
@@ -182,6 +200,18 @@ export const SectionsTab = ({ editor, storeId }: Props) => {
 
   return (
     <Space direction="vertical" className="w-full">
+      <Card size="small" title={t("storeSite.editor.sizes.blocksHeading")}>
+        <SizeFields
+          editor={editor}
+          className=""
+          sizes={[
+            "sectionImageWidth",
+            "sectionImageHeight",
+            "sectionTitleSize",
+            "sectionTextSize",
+          ]}
+        />
+      </Card>
       {sections.map((section: IStoreSiteSection, index: number) => (
         <Card
           key={section.key}

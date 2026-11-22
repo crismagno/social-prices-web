@@ -4,7 +4,7 @@
 
 .hero {
   position: relative;
-  min-height: min(96vh, 860px);
+  min-height: var(--sz-hero-h, min(96vh, 860px));
   overflow: hidden;
   text-align: center;
   display: flex;
@@ -86,18 +86,22 @@
 }
 
 .brand {
-  font-size: 22px;
+  font-size: var(--sz-brand, 22px);
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--site-primary);
   display: flex;
   align-items: center;
   gap: 10px;
+  max-width: min(100%, var(--sz-brand-w, 100%));
+  width: var(--sz-brand-w, auto);
+  height: var(--sz-brand-h, auto);
+  overflow-wrap: anywhere;
 }
 
 .brand img {
-  width: 38px;
-  height: 38px;
+  width: var(--sz-logo-w, 38px);
+  height: var(--sz-logo-h, 38px);
   border-radius: 50%;
   object-fit: cover;
 }
@@ -132,25 +136,30 @@
 }
 
 .title {
-  font-size: clamp(36px, 6vw, 66px);
+  font-size: var(--sz-title, clamp(36px, 6vw, 66px));
   line-height: 1.06;
   font-weight: 400;
   margin: 14px 0 0;
   overflow-wrap: anywhere;
+  max-width: var(--sz-title-w, none);
+  margin-inline: auto;
 }
 
 .subtitle {
-  max-width: 52ch;
+  max-width: var(--sz-subtitle-w, 52ch);
   margin: 16px auto 0;
   opacity: 0.86;
+  font-size: var(--sz-subtitle, inherit);
+  margin-inline: auto;
 }
 
 .stage {
   position: relative;
   z-index: 3;
   margin-top: 34px;
-  width: min(74vw, 300px);
-  aspect-ratio: 23 / 24;
+  width: min(74vw, var(--sz-featured-w, 300px));
+  aspect-ratio: var(--sz-featured-ratio, 23 / 24);
+  height: var(--sz-featured-h, auto);
 }
 
 .arch {
@@ -265,7 +274,7 @@
 }
 
 .storyPhoto {
-  aspect-ratio: 4 / 3;
+  aspect-ratio: var(--sz-section-img-ratio, 4 / 3);
   background-size: cover;
   background-position: center;
   border: 8px solid #fff;
@@ -273,6 +282,9 @@
     color-mix(in srgb, var(--site-primary) 24%, transparent);
   transform: rotate(-2.5deg);
   transition: transform 0.6s;
+  height: var(--sz-section-img-h, auto);
+  width: min(100%, var(--sz-section-img-w, 100%));
+  margin-inline: auto;
 }
 
 .storyFlip .storyPhoto {
@@ -284,7 +296,7 @@
 }
 
 .storyTitle {
-  font-size: clamp(26px, 3.4vw, 38px);
+  font-size: var(--sz-section-title, clamp(26px, 3.4vw, 38px));
   line-height: 1.15;
   font-weight: 400;
   margin: 10px 0 12px;
@@ -294,6 +306,7 @@
   margin: 0;
   opacity: 0.86;
   white-space: pre-line;
+  font-size: var(--sz-section-text, inherit);
 }
 
 .productsHead {
@@ -309,7 +322,10 @@
 
 .products {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 250px));
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--sz-product-w, 200px)), var(--sz-product-w, 250px))
+  );
   justify-content: center;
   gap: 30px 24px;
   max-width: 1240px;
@@ -345,16 +361,17 @@
 }
 
 .polaroidPhoto {
-  aspect-ratio: 1;
+  aspect-ratio: var(--sz-product-img-ratio, 1);
   background: color-mix(in srgb, var(--site-accent) 70%, #fff) center / cover
     no-repeat;
+  height: var(--sz-product-img-h, auto);
 }
 
 .productName {
   display: block;
   margin-top: 12px;
   font-style: italic;
-  font-size: 19px;
+  font-size: var(--sz-product-name, 19px);
   overflow-wrap: anywhere;
 }
 
@@ -407,14 +424,6 @@
   white-space: pre-line;
   opacity: 0.86;
   margin: 0;
-}
-
-.footer {
-  text-align: center;
-  padding: 26px 18px 36px;
-  font-size: 12px;
-  opacity: 0.6;
-  border-top: 1px solid color-mix(in srgb, var(--site-primary) 16%, transparent);
 }
 
 @keyframes kenBurns {

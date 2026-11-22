@@ -10,6 +10,11 @@ import {
   ISaveStoreSite,
   IStoreSite,
 } from "../../../shared/business/store-sites/store-site.interface";
+import { siteFooterOf } from "../../../shared/business/store-sites/store-site-footer";
+import {
+  EMPTY_SITE_SIZES,
+  siteSizesOf,
+} from "../../../shared/business/store-sites/store-site-sizes";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import { IStore } from "../../../shared/business/stores/stores.interface";
 
@@ -35,6 +40,12 @@ export interface IStoreSiteEditor {
    * the draft as it is at that moment, not as it was when the upload began.
    */
   update: (patch: TDraftPatch) => void;
+  /**
+   * Puts the draft back to how a new site starts, in the template it is in.
+   * The address stays (links to the site keep working) and so does whether it
+   * is online. Nothing is saved: the owner still has to save, or can reload.
+   */
+  resetToDefaults: () => void;
   changeTemplate: (
     templateId: StoreSitesEnum.Template,
     useDefaultColors: boolean,
@@ -59,6 +70,10 @@ const toDraft = (site: IStoreSite): ISaveStoreSite => ({
   templateId: site.templateId,
   theme: { ...site.theme },
   displayName: site.displayName ?? null,
+  // A site saved before the sizes existed has none set.
+  sizes: siteSizesOf(site.sizes),
+  // A site saved before the footer existed gets the default one.
+  footer: siteFooterOf(site.footer),
   hero: { ...site.hero },
   sections: site.sections.map((section) => ({ ...section })),
   marquee: { isActive: site.marquee.isActive, items: [...site.marquee.items] },
@@ -75,6 +90,8 @@ const newDraft = (store: IStore): ISaveStoreSite => ({
   templateId: StoreSitesEnum.Template.ATELIER,
   theme: { ...getTemplateEntry(StoreSitesEnum.Template.ATELIER).defaultTheme },
   displayName: null,
+  sizes: { ...EMPTY_SITE_SIZES },
+  footer: siteFooterOf(null),
   hero: {
     tagline: null,
     title: store.name,
@@ -175,6 +192,24 @@ const useStoreSiteEditor = (store: IStore | null): IStoreSiteEditor => {
       setSlugError(null);
     }
   }, []);
+
+  const resetToDefaults = useCallback(() => {
+    if (!store) {
+      return;
+    }
+
+    setDraft((current: ISaveStoreSite | null) =>
+      current
+        ? {
+            ...newDraft(store),
+            slug: current.slug,
+            templateId: current.templateId,
+            theme: { ...getTemplateEntry(current.templateId).defaultTheme },
+          }
+        : current,
+    );
+    // Depends on the store itself: its name is the default title.
+  }, [store]);
 
   const changeTemplate = useCallback(
     (templateId: StoreSitesEnum.Template, useDefaultColors: boolean) =>
@@ -289,6 +324,7 @@ const useStoreSiteEditor = (store: IStore | null): IStoreSiteEditor => {
     isSaving,
     slugError,
     update,
+    resetToDefaults,
     changeTemplate,
     save,
     publish: useCallback(() => setPublished(true), [setPublished]),

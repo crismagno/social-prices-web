@@ -10,7 +10,7 @@
 /* ---------- entrance ---------- */
 .hero {
   position: relative;
-  min-height: min(92vh, 780px);
+  min-height: var(--sz-hero-h, min(92vh, 780px));
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -82,14 +82,18 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 24px;
+  font-size: var(--sz-brand, 24px);
   font-style: italic;
   color: var(--site-primary);
+  max-width: min(100%, var(--sz-brand-w, 100%));
+  width: var(--sz-brand-w, auto);
+  height: var(--sz-brand-h, auto);
+  overflow-wrap: anywhere;
 }
 
 .brand img {
-  width: 40px;
-  height: 40px;
+  width: var(--sz-logo-w, 40px);
+  height: var(--sz-logo-h, 40px);
   border-radius: 50%;
   object-fit: cover;
 }
@@ -142,10 +146,11 @@
 }
 
 .title {
-  font-size: clamp(38px, 6vw, 68px);
+  font-size: var(--sz-title, clamp(38px, 6vw, 68px));
   line-height: 1.06;
   margin: 14px 0 6px;
   overflow-wrap: anywhere;
+  max-width: var(--sz-title-w, none);
 }
 
 .squiggle {
@@ -163,8 +168,8 @@
 }
 
 .subtitle {
-  font-size: 17px;
-  max-width: 46ch;
+  font-size: var(--sz-subtitle, 17px);
+  max-width: var(--sz-subtitle-w, 46ch);
   margin: 0 0 26px;
   opacity: 0.88;
 }
@@ -192,9 +197,10 @@
 
 .figure {
   position: relative;
-  width: min(100%, 440px);
-  aspect-ratio: 1;
+  width: min(100%, var(--sz-featured-w, 440px));
+  aspect-ratio: var(--sz-featured-ratio, 1);
   justify-self: center;
+  height: var(--sz-featured-h, auto);
 }
 
 .photo {
@@ -278,22 +284,24 @@
 }
 
 .stepPhoto {
-  height: 190px;
+  height: var(--sz-section-img-h, 190px);
   border-radius: 18px;
   background-size: cover;
   background-position: center;
   margin-bottom: 16px;
+  width: min(100%, var(--sz-section-img-w, 100%));
+  margin-inline: auto;
 }
 
 .stepTitle {
   font-style: italic;
-  font-size: 22px;
+  font-size: var(--sz-section-title, 22px);
   margin: 0 0 6px;
 }
 
 .stepText {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--sz-section-text, 14px);
   opacity: 0.82;
   white-space: pre-line;
 }
@@ -309,7 +317,10 @@
 
 .products {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 250px));
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--sz-product-w, 190px)), var(--sz-product-w, 250px))
+  );
   justify-content: center;
   gap: 30px 22px;
   padding: 34px clamp(18px, 5vw, 56px) 70px;
@@ -328,7 +339,7 @@
 }
 
 .productPhoto {
-  aspect-ratio: 4 / 5;
+  aspect-ratio: var(--sz-product-img-ratio, 4 / 5);
   border-radius: 999px 999px 22px 22px;
   background: color-mix(in srgb, var(--site-secondary) 60%, #fff) center / cover
     no-repeat;
@@ -338,6 +349,7 @@
   transition:
     border-radius 0.5s,
     transform 0.5s;
+  height: var(--sz-product-img-h, auto);
 }
 
 .product:hover .productPhoto {
@@ -348,7 +360,7 @@
 .productName {
   display: block;
   margin-top: 14px;
-  font-size: 19px;
+  font-size: var(--sz-product-name, 19px);
   overflow-wrap: anywhere;
 }
 
@@ -401,14 +413,6 @@
   white-space: pre-line;
   opacity: 0.85;
   margin: 0;
-}
-
-.footer {
-  text-align: center;
-  padding: 26px 18px 36px;
-  font-size: 12px;
-  opacity: 0.6;
-  border-top: 1px solid color-mix(in srgb, var(--site-primary) 16%, transparent);
 }
 
 @keyframes kenBurns {

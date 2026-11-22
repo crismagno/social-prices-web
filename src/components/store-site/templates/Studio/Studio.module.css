@@ -4,7 +4,7 @@
 
 .hero {
   position: relative;
-  min-height: min(90vh, 760px);
+  min-height: var(--sz-hero-h, min(90vh, 760px));
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -60,16 +60,19 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 13px;
+  font-size: var(--sz-brand, 13px);
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  max-width: 14ch;
+  max-width: min(100%, var(--sz-brand-w, 14ch));
   line-height: 1.25;
+  width: var(--sz-brand-w, auto);
+  height: var(--sz-brand-h, auto);
+  overflow-wrap: anywhere;
 }
 
 .brand img {
-  width: 40px;
-  height: 40px;
+  width: var(--sz-logo-w, 40px);
+  height: var(--sz-logo-h, 40px);
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid var(--site-bg);
@@ -126,7 +129,7 @@
 }
 
 .title {
-  font-size: clamp(40px, 6.6vw, 78px);
+  font-size: var(--sz-title, clamp(40px, 6.6vw, 78px));
   line-height: 1;
   font-weight: 900;
   letter-spacing: -0.02em;
@@ -135,6 +138,7 @@
   text-shadow: 0 4px 24px
     color-mix(in srgb, var(--site-secondary) 50%, transparent);
   overflow-wrap: anywhere;
+  max-width: var(--sz-title-w, none);
 }
 
 .star {
@@ -146,8 +150,8 @@
 .subtitle {
   color: var(--site-bg);
   font-weight: 600;
-  font-size: 17px;
-  max-width: 44ch;
+  font-size: var(--sz-subtitle, 17px);
+  max-width: var(--sz-subtitle-w, 44ch);
   margin: 0 0 24px;
 }
 
@@ -187,8 +191,9 @@
 .figure {
   position: relative;
   justify-self: center;
-  width: min(100%, 380px);
-  aspect-ratio: 4 / 5;
+  width: min(100%, var(--sz-featured-w, 380px));
+  aspect-ratio: var(--sz-featured-ratio, 4 / 5);
+  height: var(--sz-featured-h, auto);
 }
 
 .pic {
@@ -314,7 +319,7 @@
 }
 
 .blockPhoto {
-  aspect-ratio: 4 / 3;
+  aspect-ratio: var(--sz-section-img-ratio, 4 / 3);
   border-radius: 28px;
   background-size: cover;
   background-position: center;
@@ -322,6 +327,9 @@
   transition:
     box-shadow 0.4s,
     transform 0.4s;
+  height: var(--sz-section-img-h, auto);
+  width: min(100%, var(--sz-section-img-w, 100%));
+  margin-inline: auto;
 }
 
 .blockPhoto:hover {
@@ -352,9 +360,13 @@
   transform-origin: left center;
 }
 
+.blockTitle .marker {
+  font-size: var(--sz-section-title, clamp(24px, 3.4vw, 36px));
+}
+
 .blockText {
   margin: 0;
-  font-size: 17px;
+  font-size: var(--sz-section-text, 17px);
   white-space: pre-line;
 }
 
@@ -366,7 +378,10 @@
 
 .products {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 250px));
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--sz-product-w, 200px)), var(--sz-product-w, 250px))
+  );
   justify-content: center;
   gap: 18px;
   max-width: 1240px;
@@ -396,18 +411,19 @@
 }
 
 .productPhoto {
-  aspect-ratio: 1;
+  aspect-ratio: var(--sz-product-img-ratio, 1);
   border-radius: 18px;
   border: 5px solid var(--site-bg);
   background: color-mix(in srgb, var(--card-color) 50%, #fff) center / cover
     no-repeat;
+  height: var(--sz-product-img-h, auto);
 }
 
 .productName {
   display: block;
   margin-top: 12px;
   font-weight: 900;
-  font-size: 17px;
+  font-size: var(--sz-product-name, 17px);
   overflow-wrap: anywhere;
 }
 
@@ -469,14 +485,6 @@
   white-space: pre-line;
   font-weight: 600;
   opacity: 0.92;
-}
-
-.footer {
-  text-align: center;
-  padding: 24px 18px 36px;
-  font-size: 12px;
-  font-weight: 600;
-  opacity: 0.6;
 }
 
 @keyframes kenBurns {

@@ -576,6 +576,8 @@
     "alreadyHasAccount": "This customer already has an account"
   },
   "stores": {
+    "editSite": "Edit site",
+    "editSiteTooltip": "Open the site editor on this store",
     "copyChatLink": "Copy chat link",
     "copyChatLinkTooltip": "Copy the link customers open to talk to this store",
     "chatLinkCopied": "Chat link copied",
@@ -2194,6 +2196,7 @@
     "firstMessage": "Send the first message to start the conversation",
     "placeholder": "Write a message...",
     "send": "Send",
+    "visitSite": "Visit the site",
     "back": "Back",
     "talkToStore": "Talk to the store",
     "deleteConfirm": "Delete this message? It is also deleted for the store.",
@@ -2380,6 +2383,7 @@
       "changeImage": "Change",
       "removeImage": "Remove image",
       "imageTooLarge": "The image can be at most 5MB.",
+      "dragToReorder": "Drag to change the order",
       "moveUp": "Move up",
       "moveDown": "Move down",
       "remove": "Remove",
@@ -2390,14 +2394,16 @@
         "sections": "Blocks",
         "marquee": "Strip",
         "products": "Products",
-        "publish": "Address"
+        "publish": "Address",
+        "footer": "Footer"
       },
       "colors": {
         "primary": "Main color",
         "secondary": "Second color",
         "accent": "Detail color",
         "background": "Background",
-        "text": "Text"
+        "text": "Text",
+        "reset": "Back to the template's default colors"
       },
       "hero": {
         "tagline": "Small line above the title",
@@ -2463,7 +2469,8 @@
         "sections": "Blocks that present the store: a photo, a title and a few words each.",
         "marquee": "Short phrases that run across the page.",
         "products": "Which products the site sells, in the order they appear.",
-        "publish": "The address of the site, and whether it is online."
+        "publish": "The address of the site, and whether it is online.",
+        "footer": "The foot of the site: a few words, your links and the button to sign in to the app."
       },
       "problems": {
         "hero": "The entrance needs a title.",
@@ -2473,6 +2480,98 @@
       "displayName": {
         "label": "Name shown at the top of the site",
         "hint": "Leave empty to use the name of the store."
+      },
+      "sizes": {
+        "auto": "automatic",
+        "blocksHeading": "Size of the blocks",
+        "productsHeading": "Size of the products",
+        "logoWidth": "Logo width",
+        "logoHeight": "Logo height",
+        "brandNameSize": "Name letter size",
+        "heroHeight": "Height of the entrance",
+        "heroTitleWidth": "Title width",
+        "heroTitleSize": "Title letter size",
+        "heroSubtitleWidth": "Text width",
+        "heroSubtitleSize": "Text letter size",
+        "featuredImageWidth": "Image width",
+        "featuredImageHeight": "Image height",
+        "sectionImageWidth": "Image width",
+        "sectionImageHeight": "Image height",
+        "sectionTitleSize": "Title letter size",
+        "sectionTextSize": "Text letter size",
+        "productWidth": "Product width",
+        "productImageHeight": "Photo height",
+        "productNameSize": "Name letter size",
+        "brandNameWidth": "Name width",
+        "brandNameHeight": "Name height"
+      },
+      "footer": {
+        "show": "Show the footer",
+        "text": "Text",
+        "textHint": "A few words under the name of the store: address, opening hours, a phrase.",
+        "login": "Show the button to sign in to the app",
+        "loginHint": "Takes the customer to the login, where they follow their orders.",
+        "linksHeading": "Links",
+        "add": "Add link",
+        "empty": "No link yet. Add your social networks, other sites or ways to get in touch.",
+        "type": "Kind",
+        "label": "Text of the link",
+        "labelHint": "Empty shows the name of the kind, or the address for free text.",
+        "url": "Address",
+        "invalidUrl": "This address is not valid.",
+        "placeholders": {
+          "INSTAGRAM": "instagram.com/yourstore",
+          "FACEBOOK": "facebook.com/yourstore",
+          "WHATSAPP": "Number with area code, or a wa.me link",
+          "TIKTOK": "tiktok.com/@yourstore",
+          "YOUTUBE": "youtube.com/@yourstore",
+          "X": "x.com/yourstore",
+          "LINKEDIN": "linkedin.com/company/yourstore",
+          "PINTEREST": "pinterest.com/yourstore",
+          "TELEGRAM": "t.me/yourstore",
+          "EMAIL": "hello@yourstore.com",
+          "PHONE": "Number with area code",
+          "WEBSITE": "yoursite.com",
+          "TEXT": "Any address: yoursite.com/page"
+        },
+        "sections": {
+          "heading": "Sections",
+          "hint": "The footer is divided in columns, side by side: from one to five. Below, choose in which one each thing goes.",
+          "section": "Section",
+          "titlePlaceholder": "Title (optional)",
+          "add": "Add section",
+          "textIn": "Name and text go in",
+          "loginIn": "Sign-in button goes in",
+          "linkIn": "Shown in"
+        }
+      },
+      "reset": {
+        "button": "Reset the site to the defaults",
+        "title": "Reset the site to the defaults?",
+        "lost": "Colors, sizes, the name and logo at the top, the texts and images of the entrance, the blocks, the strip, the footer and the chosen products go back to how a new site starts.",
+        "kept": "The template, the address of the site and whether it is online stay as they are.",
+        "notSaved": "Nothing is saved yet: you still have to save. To give up, reload the page without saving.",
+        "confirm": "Reset to the defaults"
+      }
+    },
+    "footer": {
+      "login": "Sign in",
+      "loginHint": "Follow your orders in your account.",
+      "links": "Links of the store",
+      "types": {
+        "INSTAGRAM": "Instagram",
+        "FACEBOOK": "Facebook",
+        "WHATSAPP": "WhatsApp",
+        "TIKTOK": "TikTok",
+        "YOUTUBE": "YouTube",
+        "X": "X (Twitter)",
+        "LINKEDIN": "LinkedIn",
+        "PINTEREST": "Pinterest",
+        "TELEGRAM": "Telegram",
+        "EMAIL": "Email",
+        "PHONE": "Phone",
+        "WEBSITE": "Website",
+        "TEXT": "Free text (no icon)"
       }
     }
   }

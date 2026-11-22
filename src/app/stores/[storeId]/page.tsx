@@ -18,6 +18,7 @@ import { useParams, useRouter } from "next/navigation";
 
 import {
   EditOutlined,
+  GlobalOutlined,
   LinkOutlined,
   ShopOutlined,
   ShoppingCartOutlined,
@@ -29,7 +30,10 @@ import LoadingFull from "../../../components/common/LoadingFull/LoadingFull";
 import { TagCategoriesCustomAntd } from "../../../components/common/TagCategoriesCustomAntd/TagCategoriesCustomAntd";
 import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/TagTagsCustomAntd";
 import Layout from "../../../components/template/Layout/Layout";
+import useAppData from "../../../data/context/app/useAppData";
 import useLanguageData from "../../../data/context/language/useLanguageData";
+import AppsEnum from "../../../shared/business/apps/apps.enum";
+import { IAppCatalogItem } from "../../../shared/business/apps/apps.types";
 import CategoriesEnum from "../../../shared/business/categories/categories.enum";
 import AddressEnum from "../../../shared/business/shared/address/address.enum";
 import { IAddress } from "../../../shared/business/shared/address/address.interface";
@@ -56,6 +60,15 @@ export default function StorePage() {
   const { t } = useLanguageData();
 
   const { message } = App.useApp();
+
+  const {
+    apps: { catalog },
+  } = useAppData();
+
+  // Only for an account that may use the site app.
+  const canEditSite: boolean = catalog.some(
+    (app: IAppCatalogItem) => app.id === AppsEnum.App.SITE && app.enabled,
+  );
 
   const { isLoadingStore, store } = useFindStoreById(params?.storeId);
 
@@ -159,6 +172,20 @@ export default function StorePage() {
                       {t("stores.copyChatLink")}
                     </Button>
                   </Tooltip>
+                  {canEditSite && (
+                    <Tooltip title={t("stores.editSiteTooltip")}>
+                      <Button
+                        icon={<GlobalOutlined />}
+                        onClick={() =>
+                          router.push(
+                            Urls.APPS_SITE_STORE.replace(":storeId", storeId),
+                          )
+                        }
+                      >
+                        {t("stores.editSite")}
+                      </Button>
+                    </Tooltip>
+                  )}
                   <Tooltip title={t("stores.goToStores")}>
                     <Button
                       type="primary"

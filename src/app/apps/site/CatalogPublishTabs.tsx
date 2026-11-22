@@ -6,6 +6,7 @@ import {
   Alert,
   App,
   Button,
+  Card,
   Form,
   Input,
   List,
@@ -20,6 +21,7 @@ import {
   CopyOutlined,
   DeleteOutlined,
   ExportOutlined,
+  HolderOutlined,
 } from "@ant-design/icons";
 
 import useLanguageData from "../../../data/context/language/useLanguageData";
@@ -27,6 +29,8 @@ import { serviceMethodsInstance } from "../../../services/social-prices-api/serv
 import { IProduct } from "../../../shared/business/products/products.interface";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
+import SizeFields from "./SizeFields";
+import useDragReorder from "./useDragReorder";
 import { IStoreSiteEditor, slugify } from "./useStoreSiteEditor";
 
 interface Props {
@@ -37,6 +41,17 @@ interface Props {
 /** Which products the site sells, in the order they are shown. */
 export const ProductsTab = ({ editor }: Omit<Props, "storeId">) => {
   const { t } = useLanguageData();
+
+  // From the draft as it is when the item is dropped.
+  const drag = useDragReorder((from: number, to: number) =>
+    editor.update((draft) => {
+      const next: string[] = [...draft.productIds];
+
+      next.splice(to, 0, next.splice(from, 1)[0]);
+
+      return { productIds: next };
+    }),
+  );
 
   if (!editor.draft) {
     return null;
@@ -60,6 +75,13 @@ export const ProductsTab = ({ editor }: Omit<Props, "storeId">) => {
 
   return (
     <Space direction="vertical" className="w-full">
+      <Card size="small" title={t("storeSite.editor.sizes.productsHeading")}>
+        <SizeFields
+          editor={editor}
+          className=""
+          sizes={["productWidth", "productImageHeight", "productNameSize"]}
+        />
+      </Card>
       {editor.storeProducts.length === 0 && (
         <Alert
           type="info"
@@ -96,6 +118,7 @@ export const ProductsTab = ({ editor }: Omit<Props, "storeId">) => {
 
           return (
             <List.Item
+              {...drag.itemProps(index)}
               actions={[
                 <Button
                   key="up"
@@ -132,14 +155,20 @@ export const ProductsTab = ({ editor }: Omit<Props, "storeId">) => {
                 />,
               ]}
             >
-              {product ? (
-                product.name
-              ) : (
-                // Switched off or moved to another store since it was chosen.
-                <Tag color="warning">
-                  {t("storeSite.editor.products.unavailable")}
-                </Tag>
-              )}
+              <span className="flex min-w-0 items-center gap-2">
+                <HolderOutlined
+                  className="opacity-50"
+                  title={t("storeSite.editor.dragToReorder")}
+                />
+                {product ? (
+                  <span className="truncate">{product.name}</span>
+                ) : (
+                  // Switched off or moved to another store since it was chosen.
+                  <Tag color="warning">
+                    {t("storeSite.editor.products.unavailable")}
+                  </Tag>
+                )}
+              </span>
             </List.Item>
           );
         }}

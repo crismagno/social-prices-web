@@ -111,7 +111,15 @@ export const ColorsTab = ({ editor }: Props) => {
     return null;
   }
 
-  const { theme } = editor.draft;
+  const { theme, templateId } = editor.draft;
+
+  const defaultTheme: IStoreSiteTheme =
+    TEMPLATE_REGISTRY[templateId].defaultTheme;
+
+  const isDefault: boolean = COLOR_KEYS.every(
+    (key: keyof IStoreSiteTheme) =>
+      theme[key].toLowerCase() === defaultTheme[key].toLowerCase(),
+  );
 
   return (
     <Form layout="vertical">
@@ -129,6 +137,13 @@ export const ColorsTab = ({ editor }: Props) => {
           />
         </Form.Item>
       ))}
+      {/* Only the colors: the template and the content stay as they are. */}
+      <Button
+        disabled={isDefault}
+        onClick={() => editor.update({ theme: { ...defaultTheme } })}
+      >
+        {t("storeSite.editor.colors.reset")}
+      </Button>
     </Form>
   );
 };

@@ -26,6 +26,8 @@ export interface IStoreSiteTemplateProps {
     | "templateId"
     | "theme"
     | "displayName"
+    | "sizes"
+    | "footer"
     | "hero"
     | "sections"
     | "marquee"

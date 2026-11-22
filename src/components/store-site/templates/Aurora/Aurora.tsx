@@ -5,6 +5,7 @@ import { IPublicSiteProduct } from "../../../../shared/business/store-sites/stor
 import Reveal from "../../shared/Reveal";
 import base from "../../shared/site-base.module.css";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
+import SiteFooter from "../../shared/SiteFooter";
 import SiteThemeVars from "../../shared/SiteThemeVars";
 import {
   addLabel,
@@ -42,6 +43,7 @@ const Aurora = ({
   return (
     <SiteThemeVars
       theme={site.theme}
+      sizes={site.sizes}
       className={`${base.root} ${mode === "preview" ? base.preview : ""} ${
         styles.page
       }`}
@@ -210,9 +212,7 @@ const Aurora = ({
         </Reveal>
       )}
 
-      <footer className={styles.footer}>
-        {brandName} · {t("storeSite.public.madeWith")}
-      </footer>
+      <SiteFooter footer={site.footer} brandName={brandName} />
     </SiteThemeVars>
   );
 };

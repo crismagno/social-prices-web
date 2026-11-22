@@ -4,7 +4,7 @@
 
 .hero {
   position: relative;
-  min-height: min(92vh, 780px);
+  min-height: var(--sz-hero-h, min(92vh, 780px));
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -92,11 +92,16 @@
   align-items: center;
   gap: 10px;
   font-weight: 800;
+  font-size: var(--sz-brand, inherit);
+  max-width: min(100%, var(--sz-brand-w, 100%));
+  width: var(--sz-brand-w, auto);
+  height: var(--sz-brand-h, auto);
+  overflow-wrap: anywhere;
 }
 
 .brand img {
-  width: 32px;
-  height: 32px;
+  width: var(--sz-logo-w, 32px);
+  height: var(--sz-logo-h, 32px);
   border-radius: 50%;
   object-fit: cover;
 }
@@ -148,7 +153,7 @@
 
 /* The title itself is a gradient that keeps moving. */
 .title {
-  font-size: clamp(42px, 7vw, 86px);
+  font-size: var(--sz-title, clamp(42px, 7vw, 86px));
   line-height: 0.98;
   font-weight: 900;
   letter-spacing: -0.035em;
@@ -166,11 +171,12 @@
   color: transparent;
   animation: sweep 6s linear infinite;
   overflow-wrap: anywhere;
+  max-width: var(--sz-title-w, none);
 }
 
 .subtitle {
-  font-size: 18px;
-  max-width: 46ch;
+  font-size: var(--sz-subtitle, 18px);
+  max-width: var(--sz-subtitle-w, 46ch);
   margin: 0 0 26px;
   opacity: 0.9;
 }
@@ -199,7 +205,7 @@
 
 .glass {
   justify-self: center;
-  width: min(100%, 320px);
+  width: min(100%, var(--sz-featured-w, 320px));
   padding: 12px;
   border-radius: 24px;
   background: rgba(255, 255, 255, 0.14);
@@ -210,10 +216,11 @@
 }
 
 .glassPhoto {
-  aspect-ratio: 4 / 5;
+  aspect-ratio: var(--sz-featured-ratio, 4 / 5);
   border-radius: 16px;
   background-size: cover;
   background-position: center;
+  height: var(--sz-featured-h, auto);
 }
 
 .marquee {
@@ -278,6 +285,8 @@
     color-mix(in srgb, var(--site-primary) 34%, transparent);
   transform: rotate(-2deg);
   transition: transform 0.5s;
+  width: min(100%, var(--sz-section-img-w, 100%));
+  margin-inline: auto;
 }
 
 .blockFlip .blockPhotoWrap {
@@ -289,14 +298,15 @@
 }
 
 .blockPhoto {
-  aspect-ratio: 4 / 3;
+  aspect-ratio: var(--sz-section-img-ratio, 4 / 3);
   border-radius: 24px;
   background-size: cover;
   background-position: center;
+  height: var(--sz-section-img-h, auto);
 }
 
 .blockTitle {
-  font-size: clamp(28px, 4vw, 46px);
+  font-size: var(--sz-section-title, clamp(28px, 4vw, 46px));
   line-height: 1.05;
   font-weight: 900;
   letter-spacing: -0.03em;
@@ -305,7 +315,7 @@
 
 .blockText {
   margin: 0;
-  font-size: 17px;
+  font-size: var(--sz-section-text, 17px);
   opacity: 0.85;
   white-space: pre-line;
 }
@@ -321,7 +331,10 @@
 
 .products {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 260px));
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--sz-product-w, 200px)), var(--sz-product-w, 260px))
+  );
   justify-content: center;
   gap: 18px;
   max-width: 1240px;
@@ -367,10 +380,11 @@
 }
 
 .productPhoto {
-  aspect-ratio: 1;
+  aspect-ratio: var(--sz-product-img-ratio, 1);
   background: color-mix(in srgb, var(--site-primary) 30%, var(--site-bg))
     center / cover no-repeat;
   transition: transform 0.5s;
+  height: var(--sz-product-img-h, auto);
 }
 
 .product:hover .productPhoto {
@@ -389,6 +403,7 @@
   display: block;
   font-weight: 700;
   overflow-wrap: anywhere;
+  font-size: var(--sz-product-name, inherit);
 }
 
 .price {
@@ -440,14 +455,6 @@
   margin: 0;
   opacity: 0.85;
   white-space: pre-line;
-}
-
-.footer {
-  text-align: center;
-  padding: 26px 18px 36px;
-  font-size: 12px;
-  opacity: 0.55;
-  border-top: 1px solid color-mix(in srgb, var(--site-text) 12%, transparent);
 }
 
 @keyframes kenBurns {

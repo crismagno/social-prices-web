@@ -8,6 +8,7 @@ import Reveal from "../../shared/Reveal";
 import base from "../../shared/site-base.module.css";
 import { siteRounded } from "../../shared/site-fonts";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
+import SiteFooter from "../../shared/SiteFooter";
 import SiteThemeVars from "../../shared/SiteThemeVars";
 import {
   addLabel,
@@ -55,6 +56,7 @@ const Studio = ({
   return (
     <SiteThemeVars
       theme={site.theme}
+      sizes={site.sizes}
       className={`${base.root} ${mode === "preview" ? base.preview : ""} ${
         styles.page
       } ${siteRounded.className}`}
@@ -325,9 +327,7 @@ const Studio = ({
         </div>
       )}
 
-      <footer className={styles.footer}>
-        {brandName} · {t("storeSite.public.madeWith")}
-      </footer>
+      <SiteFooter footer={site.footer} brandName={brandName} />
     </SiteThemeVars>
   );
 };

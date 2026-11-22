@@ -24,6 +24,8 @@ const Urls = {
   APPS_INSTAGRAM: "/apps/instagram",
   APPS_WHATSAPP: "/apps/whatsapp",
   APPS_SITE: "/apps/site",
+  // Opens the site editor on one store.
+  APPS_SITE_STORE: "/apps/site?store=:storeId",
   // The public storefront of one store.
   SITE: "/site/:slug",
   // The frame the site editor draws the draft in.

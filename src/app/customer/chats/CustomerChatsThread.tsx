@@ -9,6 +9,7 @@ import {
   ArrowLeftOutlined,
   DeleteOutlined,
   EditOutlined,
+  GlobalOutlined,
 } from "@ant-design/icons";
 
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
@@ -26,6 +27,7 @@ import {
 } from "../../../shared/business/store-chat/store-chat.types";
 import { IInboxAttachment } from "../../../shared/business/inbox/inbox.types";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
+import Urls from "../../../shared/common/routes-app/routes-app";
 import {
   formatFileSize,
   relativeDay,
@@ -256,6 +258,18 @@ export default function CustomerChatsThread({
             )
           )}
         </div>
+
+        {store?.siteSlug && (
+          <Button
+            className="ml-auto shrink-0"
+            icon={<GlobalOutlined />}
+            href={Urls.SITE.replace(":slug", store.siteSlug)}
+            target="_blank"
+            rel="noopener"
+          >
+            {t("customerChats.visitSite")}
+          </Button>
+        )}
       </div>
 
       <div
