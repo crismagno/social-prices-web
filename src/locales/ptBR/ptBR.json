@@ -515,7 +515,8 @@
     "sortDeliveryAt": "Data de Entrega",
     "sortCreatedDate": "Data Criada",
     "sortCompletedAt": "Concluída Em",
-    "paymentNote": "Nota sobre o pagamento"
+    "paymentNote": "Nota sobre o pagamento",
+    "typeSite": "Site"
   },
   "customers": {
     "filterName": "Filtrar por nome",
@@ -1150,7 +1151,8 @@
       "INSTAGRAM": "Instagram",
       "FACEBOOK": "Messenger",
       "WHATSAPP": "WhatsApp",
-      "TELEGRAM": "Telegram"
+      "TELEGRAM": "Telegram",
+      "SITE": "Site"
     },
     "google": {
       "title": "Google Contatos",
@@ -2282,5 +2284,168 @@
     "currentMargin": "Margem com o preço atual",
     "overLimit": "Despesas e lucro somam 100% ou mais do preço, então nenhum preço cobre o custo. Reduza um dos percentuais.",
     "informCost": "Informe o custo unitário para ver o preço sugerido."
+  },
+  "storeSite": {
+    "public": {
+      "noProducts": "Os produtos aparecem aqui em breve.",
+      "unavailable": "Indisponível",
+      "add": "Adicionar",
+      "cart": "Carrinho",
+      "bag": "Sacola",
+      "products": "Produtos",
+      "about": "Sobre",
+      "seeProducts": "Ver produtos",
+      "inCart": "{count} no carrinho",
+      "madeWith": "Feito com Social Prices",
+      "notFoundTitle": "Não há site neste endereço",
+      "notFoundText": "O endereço pode ter mudado, ou a loja tirou o site do ar.",
+      "handmade": "feito à mão",
+      "personalized": "feito para você",
+      "availableNow": "Disponíveis agora",
+      "ourStory": "Nossa história",
+      "news": "Novidades"
+    },
+    "cart": {
+      "title": "Seu carrinho",
+      "empty": "Seu carrinho está vazio.",
+      "quantity": "Quantidade",
+      "subtotal": "Subtotal",
+      "shippingNote": "O frete é combinado com a loja depois do pedido.",
+      "checkout": "Continuar",
+      "remove": "Remover",
+      "unavailable": "Não está mais disponível",
+      "unavailableHint": "Remova o que não está mais disponível para continuar.",
+      "removedProduct": "Produto removido"
+    },
+    "checkout": {
+      "title": "Seus dados",
+      "name": "Nome completo",
+      "email": "E-mail",
+      "phone": "Telefone",
+      "zip": "CEP",
+      "address1": "Endereço e número",
+      "address2": "Complemento (opcional)",
+      "district": "Bairro",
+      "city": "Cidade",
+      "state": "Estado",
+      "note": "Observação para a loja (opcional)",
+      "required": "Obrigatório",
+      "invalidEmail": "Informe um e-mail válido",
+      "send": "Enviar pedido",
+      "back": "Voltar ao carrinho",
+      "tooManyAttempts": "Muitas tentativas. Aguarde um minuto e tente de novo.",
+      "networkError": "Não foi possível falar com a loja. Verifique sua conexão e tente de novo.",
+      "doneTitle": "Pedido enviado",
+      "doneLabel": "O número do seu pedido é",
+      "inviteNote": "Quando a loja aprovar, você recebe um e-mail para criar sua conta e acompanhar o pedido.",
+      "keepBrowsing": "Continuar navegando",
+      "failed": "Não foi possível enviar o pedido. Tente de novo em instantes ou fale com a loja."
+    },
+    "templates": {
+      "ATELIER": {
+        "name": "Ateliê",
+        "description": "Delicado e pastel, para peças feitas à mão."
+      },
+      "GARDEN": {
+        "name": "Jardim",
+        "description": "Sálvia e pêssego, centralizado, com janela em arco."
+      },
+      "STUDIO": {
+        "name": "Estúdio",
+        "description": "Quente e divertido, letra redonda e blocos de cor."
+      },
+      "AURORA": {
+        "name": "Aurora",
+        "description": "Degradês vivos sobre a foto, cartões de vidro."
+      },
+      "IMPACT": {
+        "name": "Impacto",
+        "description": "Escuro e forte, título gigante com contorno."
+      }
+    },
+    "editor": {
+      "title": "Site",
+      "subtitle": "Monte o site público da sua loja",
+      "noStore": "Crie uma loja primeiro para montar o site dela.",
+      "save": "Salvar",
+      "unsaved": "Alterações não salvas",
+      "cancel": "Cancelar",
+      "preview": "Pré-visualização",
+      "desktop": "Computador",
+      "mobile": "Celular",
+      "inUse": "Em uso",
+      "changeTemplateTitle": "Trocar o template?",
+      "changeTemplateText": "Seus textos, imagens e produtos continuam iguais. Quer as cores do novo template ou manter as suas?",
+      "useTemplateColors": "Usar as cores do template",
+      "keepMyColors": "Manter minhas cores",
+      "chooseImage": "Escolher imagem",
+      "changeImage": "Trocar",
+      "removeImage": "Remover imagem",
+      "imageTooLarge": "A imagem pode ter no máximo 5MB.",
+      "moveUp": "Mover para cima",
+      "moveDown": "Mover para baixo",
+      "remove": "Remover",
+      "tabs": {
+        "template": "Template",
+        "colors": "Cores",
+        "hero": "Entrada",
+        "sections": "Blocos",
+        "marquee": "Faixa",
+        "products": "Produtos",
+        "publish": "Endereço"
+      },
+      "colors": {
+        "primary": "Cor principal",
+        "secondary": "Segunda cor",
+        "accent": "Cor de detalhe",
+        "background": "Fundo",
+        "text": "Texto"
+      },
+      "hero": {
+        "tagline": "Linha pequena acima do título",
+        "title": "Título",
+        "subtitle": "Texto abaixo do título",
+        "ctaLabel": "Texto do botão",
+        "backgroundImage": "Imagem de fundo",
+        "backgroundImageHint": "Ocupa a entrada do site, sob um véu das suas cores.",
+        "featuredImage": "Imagem em destaque"
+      },
+      "sections": {
+        "block": "Bloco",
+        "add": "Adicionar bloco",
+        "newTitle": "Novo bloco",
+        "title": "Título",
+        "description": "Texto",
+        "image": "Imagem",
+        "show": "Mostrar no site"
+      },
+      "marquee": {
+        "show": "Mostrar a faixa rolando",
+        "items": "Frases",
+        "itemsHint": "Uma frase curta por linha, até 8."
+      },
+      "products": {
+        "add": "Adicionar um produto",
+        "empty": "Nenhum produto escolhido ainda.",
+        "none": "Esta loja ainda não tem produtos ativos.",
+        "unavailable": "Não está mais disponível nesta loja"
+      },
+      "publish": {
+        "slug": "Endereço do site",
+        "slugInvalid": "Use de 3 a 40 letras minúsculas, números ou hífens.",
+        "slugTaken": "Este endereço já está em uso. Escolha outro.",
+        "slugAvailable": "Endereço disponível.",
+        "address": "Link do site",
+        "copy": "Copiar o link",
+        "copied": "Link copiado.",
+        "open": "Abrir o site",
+        "saveFirst": "Salve o site para ter o link.",
+        "online": "No ar",
+        "offline": "Fora do ar",
+        "unsavedHint": "Salve as alterações antes de publicar.",
+        "publish": "Publicar o site",
+        "unpublish": "Tirar o site do ar"
+      }
+    }
   }
 }

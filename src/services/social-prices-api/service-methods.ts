@@ -2,6 +2,7 @@ import AccountServiceMethods from "./account/account-service.methods";
 import AuthServiceMethods from "./auth/auth-service.methods";
 import CategoriesServiceMethods from "./categories/categories-service.methods";
 import AppsServiceMethods from "./apps/apps-service.methods";
+import StoreSitesServiceMethods from "./store-sites/store-sites-service.methods";
 import GoogleContactsServiceMethods from "./apps/google-contacts/google-contacts-service.methods";
 import InstagramServiceMethods from "./apps/instagram/instagram-service.methods";
 import WhatsappServiceMethods from "./apps/whatsapp/whatsapp-service.methods";
@@ -39,6 +40,7 @@ export default class ServiceMethods {
   public productItemsServiceMethods: ProductItemsServiceMethods;
   public categoriesServiceMethods: CategoriesServiceMethods;
   public appsServiceMethods: AppsServiceMethods;
+  public storeSitesServiceMethods: StoreSitesServiceMethods;
   public googleContactsServiceMethods: GoogleContactsServiceMethods;
   public telegramServiceMethods: TelegramServiceMethods;
   public messengerServiceMethods: MessengerServiceMethods;
@@ -73,6 +75,7 @@ export default class ServiceMethods {
     this.productItemsServiceMethods = new ProductItemsServiceMethods();
     this.categoriesServiceMethods = new CategoriesServiceMethods();
     this.appsServiceMethods = new AppsServiceMethods();
+    this.storeSitesServiceMethods = new StoreSitesServiceMethods();
     this.googleContactsServiceMethods = new GoogleContactsServiceMethods();
     this.telegramServiceMethods = new TelegramServiceMethods();
     this.messengerServiceMethods = new MessengerServiceMethods();

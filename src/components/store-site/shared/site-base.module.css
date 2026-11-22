@@ -1,0 +1,81 @@
+/* What every template shares: the reset of the page and the reveal on scroll. */
+.root {
+  background: var(--site-bg);
+  color: var(--site-text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+:where(.root) *,
+:where(.root) *::before,
+:where(.root) *::after {
+  box-sizing: border-box;
+}
+
+:where(.root) img {
+  max-width: 100%;
+  display: block;
+}
+
+:where(.root) button {
+  font: inherit;
+  cursor: pointer;
+  border: 0;
+  background: none;
+  color: inherit;
+}
+
+:where(.root) button:disabled {
+  cursor: not-allowed;
+}
+
+:where(.root) a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.root :focus-visible {
+  outline: 3px solid var(--site-primary);
+  outline-offset: 3px;
+}
+
+/* In the editor the page is a picture of itself: nothing is clickable. */
+.preview a,
+.preview button {
+  pointer-events: none;
+}
+
+.waiting {
+  opacity: 0;
+}
+
+.shown {
+  animation: revealUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root *,
+  .root *::before,
+  .root *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+
+  .waiting {
+    opacity: 1;
+  }
+}

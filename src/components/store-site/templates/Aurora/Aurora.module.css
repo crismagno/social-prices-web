@@ -1,0 +1,549 @@
+.page {
+  font-size: 16px;
+}
+
+.hero {
+  position: relative;
+  min-height: min(92vh, 780px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.bg {
+  position: absolute;
+  inset: -5%;
+  background-size: cover;
+  background-position: center;
+  animation: kenBurns 14s ease-in-out infinite alternate;
+}
+
+/* The site's three colors sweeping across the photo. */
+.tint {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    color-mix(in srgb, var(--site-primary) 80%, transparent),
+    color-mix(in srgb, var(--site-secondary) 80%, transparent),
+    color-mix(in srgb, var(--site-accent) 80%, transparent),
+    color-mix(in srgb, var(--site-primary) 80%, transparent)
+  );
+  background-size: 300% 300%;
+  animation: sweep 10s ease infinite;
+  mix-blend-mode: multiply;
+}
+
+.tintSolid {
+  mix-blend-mode: normal;
+  background: linear-gradient(
+    120deg,
+    var(--site-primary),
+    var(--site-secondary),
+    var(--site-accent),
+    var(--site-primary)
+  );
+  background-size: 300% 300%;
+  opacity: 0.85;
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--site-bg) 34%, transparent) 0%,
+    transparent 40%,
+    var(--site-bg) 100%
+  );
+}
+
+.blob {
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.7;
+  animation: wander 9s ease-in-out infinite;
+}
+
+.navWrap {
+  position: relative;
+  z-index: 5;
+  padding: 18px clamp(14px, 4vw, 40px) 0;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 20px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 14px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+}
+
+.brand img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 2vw, 24px);
+}
+
+.bag {
+  padding: 7px 16px;
+  border-radius: 99px;
+  background: var(--site-text);
+  color: var(--site-bg);
+  font-weight: 700;
+  transition: transform 0.25s;
+}
+
+.bag:hover {
+  transform: scale(1.05);
+}
+
+.heroBody {
+  position: relative;
+  z-index: 3;
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(20px, 4vw, 50px);
+  align-items: end;
+  padding: 30px clamp(18px, 5vw, 56px) 70px;
+}
+
+.heroBodyAlone {
+  grid-template-columns: minmax(0, 820px);
+}
+
+.copy {
+  animation: rise 1s ease both;
+}
+
+.tag {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+/* The title itself is a gradient that keeps moving. */
+.title {
+  font-size: clamp(42px, 7vw, 86px);
+  line-height: 0.98;
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  margin: 12px 0 18px;
+  background: linear-gradient(
+    90deg,
+    var(--site-text),
+    color-mix(in srgb, var(--site-secondary) 45%, var(--site-text)),
+    color-mix(in srgb, var(--site-accent) 45%, var(--site-text)),
+    var(--site-text)
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: sweep 6s linear infinite;
+  overflow-wrap: anywhere;
+}
+
+.subtitle {
+  font-size: 18px;
+  max-width: 46ch;
+  margin: 0 0 26px;
+  opacity: 0.9;
+}
+
+.cta {
+  display: inline-block;
+  padding: 15px 30px;
+  border-radius: 99px;
+  font-weight: 800;
+  color: var(--site-bg);
+  background: linear-gradient(
+    90deg,
+    var(--site-accent),
+    var(--site-secondary),
+    var(--site-primary),
+    var(--site-accent)
+  );
+  background-size: 300% 100%;
+  animation: sweep 4s linear infinite;
+  transition: transform 0.25s;
+}
+
+.cta:hover {
+  transform: translateY(-3px) scale(1.03);
+}
+
+.glass {
+  justify-self: center;
+  width: min(100%, 320px);
+  padding: 12px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
+  animation: floaty 5s ease-in-out infinite;
+}
+
+.glassPhoto {
+  aspect-ratio: 4 / 5;
+  border-radius: 16px;
+  background-size: cover;
+  background-position: center;
+}
+
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 13px 0;
+  background: linear-gradient(
+    90deg,
+    var(--site-primary),
+    var(--site-secondary),
+    var(--site-accent)
+  );
+  color: var(--site-bg);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.marqueeTrack {
+  display: inline-block;
+  animation: marquee 26s linear infinite;
+}
+
+.marqueeTrack span {
+  margin: 0 16px;
+}
+
+/* ---------- demonstration blocks ---------- */
+.block {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: center;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 80px clamp(18px, 5vw, 56px) 0;
+}
+
+.blockFlip .blockPhotoWrap {
+  order: 2;
+}
+
+.blockAlone {
+  grid-template-columns: minmax(0, 760px);
+  justify-content: center;
+}
+
+/* A moving gradient shows as the border of the photo. */
+.blockPhotoWrap {
+  padding: 2px;
+  border-radius: 26px;
+  background: linear-gradient(
+    135deg,
+    var(--site-primary),
+    var(--site-secondary),
+    var(--site-accent),
+    var(--site-primary)
+  );
+  background-size: 300% 300%;
+  animation: sweep 6s ease infinite;
+  box-shadow: 0 20px 60px
+    color-mix(in srgb, var(--site-primary) 34%, transparent);
+  transform: rotate(-2deg);
+  transition: transform 0.5s;
+}
+
+.blockFlip .blockPhotoWrap {
+  transform: rotate(2deg);
+}
+
+.blockPhotoWrap:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+.blockPhoto {
+  aspect-ratio: 4 / 3;
+  border-radius: 24px;
+  background-size: cover;
+  background-position: center;
+}
+
+.blockTitle {
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: 1.05;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  margin: 0 0 14px;
+}
+
+.blockText {
+  margin: 0;
+  font-size: 17px;
+  opacity: 0.85;
+  white-space: pre-line;
+}
+
+.productsTitle {
+  text-align: center;
+  font-size: clamp(30px, 4.4vw, 48px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  margin: 0;
+  padding: 90px 18px 0;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 260px));
+  justify-content: center;
+  gap: 18px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 36px clamp(18px, 5vw, 56px) 80px;
+}
+
+.empty {
+  text-align: center;
+  padding: 40px 18px 80px;
+  opacity: 0.7;
+}
+
+.product {
+  height: 100%;
+  border-radius: 20px;
+  padding: 1.5px;
+  background: linear-gradient(
+    135deg,
+    var(--site-primary),
+    var(--site-secondary),
+    var(--site-accent),
+    var(--site-primary)
+  );
+  background-size: 300% 300%;
+  animation: sweep 6s ease infinite;
+  transition: transform 0.35s;
+}
+
+.product:hover {
+  transform: translateY(-8px);
+}
+
+.productInner {
+  height: 100%;
+  border-radius: 19px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--site-bg) 90%, var(--site-text));
+}
+
+.productPhotoClip {
+  overflow: hidden;
+}
+
+.productPhoto {
+  aspect-ratio: 1;
+  background: color-mix(in srgb, var(--site-primary) 30%, var(--site-bg))
+    center / cover no-repeat;
+  transition: transform 0.5s;
+}
+
+.product:hover .productPhoto {
+  transform: scale(1.12);
+}
+
+.productBody {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+}
+
+.productName {
+  display: block;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.price {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.add {
+  flex-shrink: 0;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 99px;
+  background: var(--site-text);
+  color: var(--site-bg);
+  font-weight: 800;
+  font-size: 13px;
+  transition: transform 0.25s;
+}
+
+.add:hover:not(:disabled) {
+  transform: scale(1.1);
+}
+
+.soldOut .productPhoto {
+  filter: grayscale(0.9);
+  opacity: 0.5;
+}
+
+.soldOut .add {
+  opacity: 0.5;
+}
+
+.about {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 18px 90px;
+  text-align: center;
+}
+
+.aboutTitle {
+  font-size: clamp(26px, 3.6vw, 38px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  margin: 0 0 12px;
+}
+
+.aboutText {
+  margin: 0;
+  opacity: 0.85;
+  white-space: pre-line;
+}
+
+.footer {
+  text-align: center;
+  padding: 26px 18px 36px;
+  font-size: 12px;
+  opacity: 0.55;
+  border-top: 1px solid color-mix(in srgb, var(--site-text) 12%, transparent);
+}
+
+@keyframes kenBurns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.18) translate(-2%, -2%);
+  }
+}
+
+@keyframes sweep {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes wander {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(40px, -20px) scale(1.2);
+  }
+  66% {
+    transform: translate(-30px, 25px) scale(0.9);
+  }
+}
+
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0) rotate(4deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(4deg);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 767px) {
+  .links a {
+    display: none;
+  }
+
+  .heroBody {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: center;
+    padding-bottom: 50px;
+  }
+
+  .glass {
+    width: min(64%, 240px);
+  }
+
+  .block,
+  .blockFlip {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 54px;
+  }
+
+  .blockFlip .blockPhotoWrap {
+    order: 0;
+  }
+
+  .products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .productBody {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

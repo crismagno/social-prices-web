@@ -1,0 +1,106 @@
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.line {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--site-primary) 14%, #fff) center / cover
+    no-repeat;
+}
+
+.name {
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.muted {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.lineTotal {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.unavailable {
+  opacity: 0.6;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 18px 0 6px;
+}
+
+.note {
+  font-size: 12px;
+  opacity: 0.75;
+  margin-bottom: 16px;
+}
+
+.done {
+  text-align: center;
+  padding: 32px 8px;
+}
+
+.doneMark {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 34px;
+  color: var(--site-on-primary, #fff);
+  background: var(--site-primary);
+  animation: pop 0.5s cubic-bezier(0.2, 1.5, 0.4, 1) both;
+}
+
+.doneNumber {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 6px 0 14px;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doneMark {
+    animation: none;
+  }
+}
+
+/* The panel's own button colors are global: the site's win inside its cart. */
+.primary:global(.ant-btn-primary):not(:disabled) {
+  background: var(--site-primary) !important;
+  border-color: var(--site-primary) !important;
+  color: var(--site-on-primary, #fff) !important;
+}
+
+.primary:global(.ant-btn-primary):not(:disabled):hover {
+  filter: brightness(1.08);
+}

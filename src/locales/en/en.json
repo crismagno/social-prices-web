@@ -512,7 +512,8 @@
     "deliveryDelivery": "Delivery",
     "typeManual": "Manual",
     "typeShopping": "Shopping",
-    "paymentNote": "Note about payment"
+    "paymentNote": "Note about payment",
+    "typeSite": "Site"
   },
   "customers": {
     "filterName": "Filter by name",
@@ -1147,7 +1148,8 @@
       "INSTAGRAM": "Instagram",
       "FACEBOOK": "Messenger",
       "WHATSAPP": "WhatsApp",
-      "TELEGRAM": "Telegram"
+      "TELEGRAM": "Telegram",
+      "SITE": "Site"
     },
     "google": {
       "title": "Google Contacts",
@@ -2279,5 +2281,168 @@
     "currentMargin": "Margin at the current price",
     "overLimit": "Expenses and profit add up to 100% or more of the price, so no price can cover the cost. Lower one of the percentages.",
     "informCost": "Enter the unit cost to see the suggested price."
+  },
+  "storeSite": {
+    "public": {
+      "noProducts": "The products will be here soon.",
+      "unavailable": "Unavailable",
+      "add": "Add",
+      "cart": "Cart",
+      "bag": "Bag",
+      "products": "Products",
+      "about": "About",
+      "seeProducts": "See the products",
+      "inCart": "{count} in the cart",
+      "madeWith": "Made with Social Prices",
+      "notFoundTitle": "There is no site here",
+      "notFoundText": "The address may have changed, or the store took its site offline.",
+      "handmade": "handmade",
+      "personalized": "made for you",
+      "availableNow": "Available now",
+      "ourStory": "Our story",
+      "news": "News"
+    },
+    "cart": {
+      "title": "Your cart",
+      "empty": "Your cart is empty.",
+      "quantity": "Quantity",
+      "subtotal": "Subtotal",
+      "shippingNote": "Shipping is arranged with the store after the order.",
+      "checkout": "Continue",
+      "remove": "Remove",
+      "unavailable": "No longer available",
+      "unavailableHint": "Remove what is no longer available to continue.",
+      "removedProduct": "Product removed"
+    },
+    "checkout": {
+      "title": "Your details",
+      "name": "Full name",
+      "email": "Email",
+      "phone": "Phone",
+      "zip": "ZIP code",
+      "address1": "Address and number",
+      "address2": "Complement (optional)",
+      "district": "District",
+      "city": "City",
+      "state": "State",
+      "note": "Note to the store (optional)",
+      "required": "Required",
+      "invalidEmail": "Enter a valid email",
+      "send": "Send order",
+      "back": "Back to the cart",
+      "tooManyAttempts": "Too many attempts. Wait a minute and try again.",
+      "networkError": "Could not reach the store. Check your connection and try again.",
+      "doneTitle": "Order sent",
+      "doneLabel": "Your order number is",
+      "inviteNote": "When the store approves it, you will get an email to create your account and follow the order.",
+      "keepBrowsing": "Keep browsing",
+      "failed": "The order could not be sent. Try again in a moment, or contact the store."
+    },
+    "templates": {
+      "ATELIER": {
+        "name": "Atelier",
+        "description": "Delicate and pastel, for handmade pieces."
+      },
+      "GARDEN": {
+        "name": "Garden",
+        "description": "Sage and peach, centered, with an arch window."
+      },
+      "STUDIO": {
+        "name": "Studio",
+        "description": "Warm and playful, rounded letters and color blocks."
+      },
+      "AURORA": {
+        "name": "Aurora",
+        "description": "Vivid gradients over the photo, glass cards."
+      },
+      "IMPACT": {
+        "name": "Impact",
+        "description": "Dark and bold, giant outlined title."
+      }
+    },
+    "editor": {
+      "title": "Site",
+      "subtitle": "Build the public site of your store",
+      "noStore": "Create a store first to build its site.",
+      "save": "Save",
+      "unsaved": "Changes not saved",
+      "cancel": "Cancel",
+      "preview": "Preview",
+      "desktop": "Desktop",
+      "mobile": "Phone",
+      "inUse": "In use",
+      "changeTemplateTitle": "Change the template?",
+      "changeTemplateText": "Your texts, images and products stay the same. Do you want the colors of the new template, or to keep yours?",
+      "useTemplateColors": "Use the template colors",
+      "keepMyColors": "Keep my colors",
+      "chooseImage": "Choose image",
+      "changeImage": "Change",
+      "removeImage": "Remove image",
+      "imageTooLarge": "The image can be at most 5MB.",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "remove": "Remove",
+      "tabs": {
+        "template": "Template",
+        "colors": "Colors",
+        "hero": "Entrance",
+        "sections": "Blocks",
+        "marquee": "Strip",
+        "products": "Products",
+        "publish": "Address"
+      },
+      "colors": {
+        "primary": "Main color",
+        "secondary": "Second color",
+        "accent": "Detail color",
+        "background": "Background",
+        "text": "Text"
+      },
+      "hero": {
+        "tagline": "Small line above the title",
+        "title": "Title",
+        "subtitle": "Text below the title",
+        "ctaLabel": "Button text",
+        "backgroundImage": "Background image",
+        "backgroundImageHint": "Fills the entrance of the site, under a veil of your colors.",
+        "featuredImage": "Featured image"
+      },
+      "sections": {
+        "block": "Block",
+        "add": "Add block",
+        "newTitle": "New block",
+        "title": "Title",
+        "description": "Text",
+        "image": "Image",
+        "show": "Show on the site"
+      },
+      "marquee": {
+        "show": "Show the running strip",
+        "items": "Phrases",
+        "itemsHint": "One short phrase per line, up to 8."
+      },
+      "products": {
+        "add": "Add a product",
+        "empty": "No product chosen yet.",
+        "none": "This store has no active products yet.",
+        "unavailable": "No longer available in this store"
+      },
+      "publish": {
+        "slug": "Address of the site",
+        "slugInvalid": "Use 3 to 40 lowercase letters, numbers or hyphens.",
+        "slugTaken": "This address is already in use. Choose another.",
+        "slugAvailable": "Address available.",
+        "address": "Link of the site",
+        "copy": "Copy the link",
+        "copied": "Link copied.",
+        "open": "Open the site",
+        "saveFirst": "Save the site to get its link.",
+        "online": "Online",
+        "offline": "Offline",
+        "unsavedHint": "Save your changes before publishing.",
+        "publish": "Publish the site",
+        "unpublish": "Take the site offline"
+      }
+    }
   }
 }

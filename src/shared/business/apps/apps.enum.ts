@@ -5,6 +5,7 @@ namespace AppsEnum {
     FACEBOOK = "FACEBOOK",
     WHATSAPP = "WHATSAPP",
     TELEGRAM = "TELEGRAM",
+    SITE = "SITE",
   }
 
   export enum ConnectionStatus {

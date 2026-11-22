@@ -126,6 +126,16 @@ const AppIcon: React.FC<Props> = ({ app, className }) => {
         </Svg>
       );
 
+    case AppsEnum.App.SITE:
+      return (
+        <Svg className={className}>
+          <circle cx="24" cy="24" r="22" fill="#6a3dff" />
+          <circle cx="24" cy="24" r="12" fill="none" stroke="#fff" strokeWidth="2.4" />
+          <ellipse cx="24" cy="24" rx="5" ry="12" fill="none" stroke="#fff" strokeWidth="2.4" />
+          <path d="M12 24h24" stroke="#fff" strokeWidth="2.4" />
+        </Svg>
+      );
+
     default:
       return null;
   }

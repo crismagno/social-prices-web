@@ -1,0 +1,587 @@
+.page {
+  font-size: 16px;
+}
+
+.hero {
+  position: relative;
+  min-height: min(90vh, 760px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.bg {
+  position: absolute;
+  inset: -6%;
+  background-size: cover;
+  background-position: center;
+  animation: kenBurns 22s ease-in-out infinite alternate;
+}
+
+/* Warm on the side of the words, cooling to the main color across the photo. */
+.veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    color-mix(in srgb, var(--site-secondary) 90%, transparent) 0%,
+    color-mix(in srgb, var(--site-accent) 86%, transparent) 34%,
+    color-mix(in srgb, var(--site-accent) 52%, transparent) 60%,
+    color-mix(in srgb, var(--site-primary) 62%, transparent) 100%
+  );
+  background-size: 240% 240%;
+  animation: drift 14s ease infinite;
+}
+
+.veilSolid {
+  background: linear-gradient(
+    115deg,
+    var(--site-secondary),
+    var(--site-accent),
+    var(--site-primary)
+  );
+  background-size: 240% 240%;
+}
+
+.nav {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 22px clamp(18px, 5vw, 56px);
+  color: var(--site-bg);
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  max-width: 14ch;
+  line-height: 1.25;
+}
+
+.brand img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--site-bg);
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 2vw, 24px);
+}
+
+.bag {
+  background: var(--site-bg);
+  color: var(--site-primary);
+  padding: 9px 18px;
+  border-radius: 99px;
+  font-weight: 800;
+  transition: transform 0.3s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+
+.bag:hover {
+  transform: scale(1.06) rotate(-2deg);
+}
+
+.heroBody {
+  position: relative;
+  z-index: 4;
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(20px, 4vw, 50px);
+  align-items: center;
+  padding: 10px clamp(18px, 5vw, 56px) 70px;
+}
+
+.heroBodyAlone {
+  grid-template-columns: minmax(0, 760px);
+}
+
+.copy {
+  animation: pop 0.9s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+
+.pill {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--site-secondary) 26%, #fff);
+  color: color-mix(in srgb, var(--site-secondary) 60%, #2b1a1a);
+  font-weight: 800;
+  font-size: 13px;
+  transform: rotate(-2deg);
+  margin-bottom: 18px;
+}
+
+.title {
+  font-size: clamp(40px, 6.6vw, 78px);
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin: 0 0 16px;
+  color: color-mix(in srgb, var(--site-bg) 92%, var(--site-accent));
+  text-shadow: 0 4px 24px
+    color-mix(in srgb, var(--site-secondary) 50%, transparent);
+  overflow-wrap: anywhere;
+}
+
+.star {
+  display: inline-block;
+  color: color-mix(in srgb, var(--site-accent) 40%, #fff6c8);
+  animation: twinkle 2.2s ease-in-out infinite;
+}
+
+.subtitle {
+  color: var(--site-bg);
+  font-weight: 600;
+  font-size: 17px;
+  max-width: 44ch;
+  margin: 0 0 24px;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cta,
+.ctaLight {
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 99px;
+  font-weight: 800;
+  font-size: 15px;
+  transition: transform 0.3s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+
+.cta {
+  background: var(--site-primary);
+  color: var(--site-bg);
+  box-shadow: 0 12px 26px
+    color-mix(in srgb, var(--site-primary) 44%, transparent);
+}
+
+.ctaLight {
+  background: var(--site-bg);
+  color: var(--site-primary);
+}
+
+.cta:hover,
+.ctaLight:hover {
+  transform: translateY(-3px) scale(1.03);
+}
+
+.figure {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 380px);
+  aspect-ratio: 4 / 5;
+}
+
+.pic {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  border: 7px solid var(--site-bg);
+  border-radius: 26px;
+  box-shadow: 0 24px 54px rgba(60, 40, 30, 0.34);
+  animation: bob 6s ease-in-out infinite;
+}
+
+.sticker {
+  position: absolute;
+  z-index: 2;
+  font-size: 34px;
+  animation: bob 5s ease-in-out infinite;
+}
+
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 12px 0;
+  background: color-mix(in srgb, var(--site-primary) 55%, var(--site-accent));
+  color: var(--site-bg);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.marqueeTrack {
+  display: inline-block;
+  animation: marquee 30s linear infinite;
+}
+
+.marqueeTrack span {
+  margin: 0 16px;
+}
+
+/* ---------- highlight circles: the page's menu ---------- */
+.highlights {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px clamp(14px, 3vw, 34px);
+  padding: 40px 18px 6px;
+}
+
+.highlight {
+  text-align: center;
+  font-weight: 800;
+  font-size: 13px;
+  width: 92px;
+}
+
+.ring {
+  position: relative;
+  display: block;
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 8px;
+}
+
+.ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--site-secondary),
+    var(--site-accent),
+    var(--site-primary),
+    var(--site-secondary)
+  );
+  animation: spin 6s linear infinite;
+}
+
+.ringFill {
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  border: 3px solid var(--site-bg);
+  display: grid;
+  place-items: center;
+  font-size: 32px;
+  color: var(--site-bg);
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.3s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+
+.highlight:hover .ringFill {
+  transform: scale(1.1);
+}
+
+.highlightLabel {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- demonstration blocks ---------- */
+.block {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(24px, 5vw, 60px);
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 60px clamp(18px, 5vw, 56px) 0;
+  scroll-margin-top: 20px;
+}
+
+.blockFlip .blockPhoto {
+  order: 2;
+}
+
+.blockAlone {
+  grid-template-columns: minmax(0, 720px);
+  justify-content: center;
+}
+
+.blockPhoto {
+  aspect-ratio: 4 / 3;
+  border-radius: 28px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 14px 14px 0 var(--site-accent);
+  transition:
+    box-shadow 0.4s,
+    transform 0.4s;
+}
+
+.blockPhoto:hover {
+  box-shadow: 20px 20px 0 var(--site-secondary);
+  transform: translate(-4px, -4px);
+}
+
+/* Words on a strip of highlighter, rocking a little. */
+.marker {
+  display: inline;
+  padding: 4px 12px;
+  font-weight: 900;
+  font-size: clamp(24px, 3.4vw, 36px);
+  line-height: 1.5;
+  color: #2f3b40;
+  background: color-mix(in srgb, var(--site-accent) 50%, #fff);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.markerAlt {
+  background: color-mix(in srgb, var(--site-secondary) 34%, #fff);
+}
+
+.blockTitle {
+  margin: 0 0 14px;
+  animation: wiggle 5s ease-in-out infinite;
+  transform-origin: left center;
+}
+
+.blockText {
+  margin: 0;
+  font-size: 17px;
+  white-space: pre-line;
+}
+
+.productsHead {
+  text-align: center;
+  padding: 76px 18px 4px;
+  scroll-margin-top: 20px;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 250px));
+  justify-content: center;
+  gap: 18px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 30px clamp(18px, 5vw, 56px) 60px;
+}
+
+.empty {
+  text-align: center;
+  padding: 40px 18px 80px;
+  opacity: 0.7;
+}
+
+/* Each card takes one of the site's colors in turn. */
+.product {
+  height: 100%;
+  border-radius: 26px;
+  padding: 12px 12px 18px;
+  text-align: center;
+  color: #2f3b40;
+  background: color-mix(in srgb, var(--card-color) 30%, #fff);
+  transition: transform 0.35s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+
+.product:hover {
+  transform: translateY(-8px) rotate(-1.5deg);
+}
+
+.productPhoto {
+  aspect-ratio: 1;
+  border-radius: 18px;
+  border: 5px solid var(--site-bg);
+  background: color-mix(in srgb, var(--card-color) 50%, #fff) center / cover
+    no-repeat;
+}
+
+.productName {
+  display: block;
+  margin-top: 12px;
+  font-weight: 900;
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+
+.price {
+  font-weight: 600;
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+.add {
+  margin-top: 10px;
+  padding: 9px 20px;
+  border-radius: 99px;
+  background: var(--site-bg);
+  color: color-mix(in srgb, var(--card-color) 70%, #1d2a2e);
+  font-weight: 900;
+  font-size: 13px;
+  transition: transform 0.3s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+
+.add:hover:not(:disabled) {
+  transform: scale(1.08);
+}
+
+.soldOut .productPhoto {
+  filter: grayscale(0.8);
+  opacity: 0.55;
+}
+
+.soldOut .add {
+  opacity: 0.6;
+}
+
+.callout {
+  position: relative;
+  overflow: hidden;
+  max-width: 1100px;
+  margin: 0 auto 60px;
+  border-radius: 28px;
+  background: var(--site-primary);
+  color: var(--site-bg);
+  padding: clamp(24px, 4vw, 40px);
+  scroll-margin-top: 20px;
+}
+
+.calloutWrap {
+  padding: 0 clamp(18px, 5vw, 56px);
+}
+
+.calloutTitle {
+  font-size: clamp(24px, 3.4vw, 34px);
+  font-weight: 900;
+  line-height: 1.1;
+  margin: 0 0 10px;
+}
+
+.calloutText {
+  margin: 0;
+  white-space: pre-line;
+  font-weight: 600;
+  opacity: 0.92;
+}
+
+.footer {
+  text-align: center;
+  padding: 24px 18px 36px;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.6;
+}
+
+@keyframes kenBurns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.15) translate(-1.5%, 1.5%);
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.5) rotate(45deg);
+    opacity: 0.5;
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--tilt, 0deg));
+  }
+  50% {
+    transform: translateY(-10px) rotate(calc(var(--tilt, 0deg) + 3deg));
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(-1.2deg);
+  }
+  50% {
+    transform: rotate(0.8deg);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 767px) {
+  .links a {
+    display: none;
+  }
+
+  .heroBody {
+    grid-template-columns: minmax(0, 1fr);
+    padding-bottom: 50px;
+  }
+
+  .figure {
+    width: min(70%, 280px);
+  }
+
+  .block,
+  .blockFlip {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 44px;
+  }
+
+  .blockFlip .blockPhoto {
+    order: 0;
+  }
+
+  .products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}

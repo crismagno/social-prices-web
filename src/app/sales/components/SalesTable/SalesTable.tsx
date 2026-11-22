@@ -492,9 +492,14 @@ const SalesTable: React.FC<Props> = ({
               key: "number",
               align: "center",
               sorter: true,
-              render: (number: string) => (
+              render: (number: string, sale: ISale) => (
                 <>
                   <strong className="mr-2">{number}</strong>
+                  {sale.type === SalesEnum.Type.SHOPPING && (
+                    <Tag color={SalesEnum.TypeColors[sale.type]}>
+                      {t("sales.typeSite")}
+                    </Tag>
+                  )}
                 </>
               ),
             },

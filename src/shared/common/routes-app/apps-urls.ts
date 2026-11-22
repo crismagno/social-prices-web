@@ -8,4 +8,5 @@ export const APP_URLS: Partial<Record<AppsEnum.App, string>> = {
   [AppsEnum.App.FACEBOOK]: Urls.APPS_MESSENGER,
   [AppsEnum.App.INSTAGRAM]: Urls.APPS_INSTAGRAM,
   [AppsEnum.App.WHATSAPP]: Urls.APPS_WHATSAPP,
+  [AppsEnum.App.SITE]: Urls.APPS_SITE,
 };

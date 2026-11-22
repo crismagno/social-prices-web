@@ -23,6 +23,11 @@ const Urls = {
   APPS_MESSENGER: "/apps/messenger",
   APPS_INSTAGRAM: "/apps/instagram",
   APPS_WHATSAPP: "/apps/whatsapp",
+  APPS_SITE: "/apps/site",
+  // The public storefront of one store.
+  SITE: "/site/:slug",
+  // The frame the site editor draws the draft in.
+  SITE_PREVIEW: "/site-preview",
   // Opens the conversation of one person (their phone number).
   APPS_WHATSAPP_CHAT: "/apps/whatsapp?chat=:waId",
   // Opens the conversation of one person (their account-scoped id).
