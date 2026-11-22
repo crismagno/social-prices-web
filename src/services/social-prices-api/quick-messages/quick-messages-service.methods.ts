@@ -11,6 +11,7 @@ import {
   ITableStateRequest,
   ITableStateResponse,
 } from "../../../shared/utils/table/table-state.interface";
+import InboxEnum from "../../../shared/business/inbox/inbox.enum";
 import ServiceMethodsBase from "../service-methods.base";
 import QuickMessagesServiceEnum from "./quick-messages-service.enum";
 
@@ -122,11 +123,12 @@ export default class QuickMessagesServiceMethods extends ServiceMethodsBase {
 
   public async send(
     id: string,
-    conversationId: string,
+    // The conversation's id, or the person on a channel (from an app's own chat).
+    to: string | { channel: InboxEnum.Channel; contactKey: string },
   ): Promise<IQuickMessageSendResult> {
     const response = await this._fetchAxios.post<IQuickMessageSendResult>(
       this._url(QuickMessagesServiceEnum.Methods.SEND, id),
-      { conversationId },
+      typeof to === "string" ? { conversationId: to } : to,
       { headers: this._headers() },
     );
 

@@ -35,6 +35,7 @@ import {
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
 import ScrollToBottomButton from "../../../components/common/ScrollToBottomButton/ScrollToBottomButton";
 import useLanguageData from "../../../data/context/language/useLanguageData";
+import InboxEnum from "../../../shared/business/inbox/inbox.enum";
 import { useTypingSignal } from "../../../shared/hooks/useTypingSignal";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import MessengerEnum from "../../../shared/business/apps/messenger/messenger.enum";
@@ -45,6 +46,7 @@ import {
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import EditCustomerDrawer from "../../../components/common/EditCustomerDrawer/EditCustomerDrawer";
+import ChannelQuickMessages from "../../chats/ChannelQuickMessages";
 import ChatsFastSale from "../../chats/ChatsFastSale";
 import { useChatsSidePanel } from "../../chats/ChatsSidePanel";
 import LinkCustomerModal from "../telegram/LinkCustomerModal";
@@ -97,6 +99,7 @@ export default function MessengerThread({
     loadOlder,
     addMessage,
     removeMessage,
+    refresh,
   } = useMessengerMessages(chat.psid);
 
   const [text, setText] = useState<string>("");
@@ -166,6 +169,15 @@ export default function MessengerThread({
 
     setFile(picked);
     inputRef.current?.focus();
+  };
+
+  // A quick message went by the inbox: what was typed only searched for it.
+  const handleQuickMessageSent = (): void => {
+    setText("");
+
+    refresh();
+
+    onChatChanged();
   };
 
   const handleSend = async (): Promise<void> => {
@@ -577,6 +589,22 @@ export default function MessengerThread({
             showIcon
             message={t("apps.messenger.window.closed")}
             description={t("apps.messenger.window.closedHint")}
+          />
+        )}
+
+        {!isRecording && (
+          <ChannelQuickMessages
+            channel={InboxEnum.Channel.MESSENGER}
+            contactKey={chat.psid}
+            target={{
+              canReply: chat.canReply,
+              canSendMedia: true,
+              maxUploadBytes: MAX_FILE_BYTES,
+            }}
+            query={text}
+            disabled={isSending}
+            onSendingChange={setIsSending}
+            onSent={handleQuickMessageSent}
           />
         )}
 

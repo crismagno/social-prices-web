@@ -31,6 +31,7 @@ import {
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
 import ScrollToBottomButton from "../../../components/common/ScrollToBottomButton/ScrollToBottomButton";
 import useLanguageData from "../../../data/context/language/useLanguageData";
+import InboxEnum from "../../../shared/business/inbox/inbox.enum";
 import { useTypingSignal } from "../../../shared/hooks/useTypingSignal";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import InstagramEnum from "../../../shared/business/apps/instagram/instagram.enum";
@@ -41,6 +42,7 @@ import {
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import EditCustomerDrawer from "../../../components/common/EditCustomerDrawer/EditCustomerDrawer";
+import ChannelQuickMessages from "../../chats/ChannelQuickMessages";
 import ChatsFastSale from "../../chats/ChatsFastSale";
 import { useChatsSidePanel } from "../../chats/ChatsSidePanel";
 import LinkCustomerModal from "../telegram/LinkCustomerModal";
@@ -81,6 +83,7 @@ export default function InstagramThread({
     loadOlder,
     addMessage,
     removeMessage,
+    refresh,
   } = useInstagramMessages(chat.igsid);
 
   const [text, setText] = useState<string>("");
@@ -121,6 +124,15 @@ export default function InstagramThread({
 
   const canSend: boolean =
     chat.canReply && text.trim().length > 0 && !isSending;
+
+  // A quick message went by the inbox: what was typed only searched for it.
+  const handleQuickMessageSent = (): void => {
+    setText("");
+
+    refresh();
+
+    onChatChanged();
+  };
 
   const handleSend = async (): Promise<void> => {
     if (!canSend) {
@@ -478,6 +490,21 @@ export default function InstagramThread({
             description={t("apps.instagram.window.closedHint")}
           />
         )}
+
+        <ChannelQuickMessages
+          channel={InboxEnum.Channel.INSTAGRAM}
+          contactKey={chat.igsid}
+          target={{
+            // Text only here: a message with files says so on its chip.
+            canReply: chat.canReply,
+            canSendMedia: false,
+            maxUploadBytes: null,
+          }}
+          query={text}
+          disabled={isSending}
+          onSendingChange={setIsSending}
+          onSent={handleQuickMessageSent}
+        />
 
         <div
           className="flex items-end gap-2 rounded-3xl py-1 pl-4 pr-1"

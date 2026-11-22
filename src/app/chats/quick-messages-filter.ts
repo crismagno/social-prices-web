@@ -66,10 +66,16 @@ const mediaOf = (
       block.type === QuickMessagesEnum.BlockType.MEDIA,
   );
 
+// What of a conversation decides whether a quick message can go there.
+export type QuickMessageTarget = Pick<
+  IInboxConversation,
+  "canReply" | "canSendMedia" | "maxUploadBytes"
+>;
+
 // Why this conversation cannot take the message now, as a translation key; null when it can.
 export const unavailableReason = (
   message: IQuickMessageAvailable,
-  target: IInboxConversation,
+  target: QuickMessageTarget,
 ): string | null => {
   if (!target.canReply) {
     return "quickMessages.unavailable.windowClosed";

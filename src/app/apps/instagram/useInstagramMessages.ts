@@ -24,6 +24,8 @@ export const useInstagramMessages = (
   loadOlder: () => Promise<void>;
   addMessage: (message: IInstagramMessage) => void;
   removeMessage: (messageId: string) => void;
+  // Asks for the latest page now: something was sent by another way.
+  refresh: () => void;
 } => {
   const [messages, setMessages] = useState<IInstagramMessage[]>([]);
 
@@ -131,6 +133,10 @@ export const useInstagramMessages = (
     }
   }, [igsid, messages]);
 
+  const refresh = useCallback((): void => {
+    fetchLatest(true);
+  }, [fetchLatest]);
+
   const addMessage = useCallback((message: IInstagramMessage): void => {
     setMessages((current) => mergeMessages(current, [message]));
   }, []);
@@ -149,5 +155,6 @@ export const useInstagramMessages = (
     loadOlder,
     addMessage,
     removeMessage,
+    refresh,
   };
 };

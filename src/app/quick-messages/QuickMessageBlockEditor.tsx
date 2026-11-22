@@ -181,6 +181,7 @@ export default function QuickMessageBlockEditor({
           <Tooltip title={t("quickMessages.removeBlock")}>
             <Button
               size="small"
+              type="primary"
               danger
               icon={<DeleteOutlined />}
               disabled={count === 1}

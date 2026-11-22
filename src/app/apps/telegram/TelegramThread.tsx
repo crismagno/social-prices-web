@@ -33,6 +33,7 @@ import {
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
 import ScrollToBottomButton from "../../../components/common/ScrollToBottomButton/ScrollToBottomButton";
 import useLanguageData from "../../../data/context/language/useLanguageData";
+import InboxEnum from "../../../shared/business/inbox/inbox.enum";
 import { useTypingSignal } from "../../../shared/hooks/useTypingSignal";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import TelegramEnum from "../../../shared/business/apps/telegram/telegram.enum";
@@ -43,7 +44,9 @@ import {
 import { ICustomer } from "../../../shared/business/customers/customer.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import EditCustomerDrawer from "../../../components/common/EditCustomerDrawer/EditCustomerDrawer";
+import ChannelQuickMessages from "../../chats/ChannelQuickMessages";
 import ChatsFastSale from "../../chats/ChatsFastSale";
+import { QuickMessageTarget } from "../../chats/quick-messages-filter";
 import { useChatsSidePanel } from "../../chats/ChatsSidePanel";
 import ChatsMessageEditor, {
   ChatsEditedMark,
@@ -85,6 +88,13 @@ const isEditable = (item: ITelegramMessage): boolean =>
 // The most the bot can fetch back from Telegram, so the most worth sending.
 const MAX_FILE_BYTES: number = 20 * 1024 * 1024;
 
+// A bot answers whenever it wants, with files up to the limit above.
+const QUICK_MESSAGE_TARGET: QuickMessageTarget = {
+  canReply: true,
+  canSendMedia: true,
+  maxUploadBytes: MAX_FILE_BYTES,
+};
+
 interface Props {
   chat: ITelegramChat;
   onChatChanged: () => void;
@@ -112,6 +122,7 @@ export default function TelegramThread({
     loadOlder,
     addMessage,
     removeMessage,
+    refresh,
   } = useTelegramMessages(chat.chatId);
 
   const [text, setText] = useState<string>("");
@@ -269,6 +280,15 @@ export default function TelegramThread({
       sendVoice();
     }
   }, [recorder.seconds, recorder.state]);
+
+  // A quick message went by the inbox: what was typed only searched for it.
+  const handleQuickMessageSent = (): void => {
+    setText("");
+
+    refresh();
+
+    onChatChanged();
+  };
 
   const handleSend = async (): Promise<void> => {
     if (!canSend) {
@@ -629,6 +649,18 @@ export default function TelegramThread({
         className="px-4 py-3"
         style={{ borderTop: `1px solid ${token.colorBorderSecondary}` }}
       >
+        {!isRecording && (
+          <ChannelQuickMessages
+            channel={InboxEnum.Channel.TELEGRAM}
+            contactKey={String(chat.chatId)}
+            target={QUICK_MESSAGE_TARGET}
+            query={text}
+            disabled={isSending}
+            onSendingChange={setIsSending}
+            onSent={handleQuickMessageSent}
+          />
+        )}
+
         {file && (
           <div
             className="mb-2 flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm"

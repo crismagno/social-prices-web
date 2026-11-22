@@ -24,6 +24,8 @@ export const useTelegramMessages = (
   loadOlder: () => Promise<void>;
   addMessage: (message: ITelegramMessage) => void;
   removeMessage: (messageId: string) => void;
+  // Asks for the latest page now: something was sent by another way.
+  refresh: () => void;
 } => {
   const [messages, setMessages] = useState<ITelegramMessage[]>([]);
 
@@ -131,6 +133,10 @@ export const useTelegramMessages = (
     }
   }, [chatId, messages]);
 
+  const refresh = useCallback((): void => {
+    fetchLatest(true);
+  }, [fetchLatest]);
+
   const addMessage = useCallback((message: ITelegramMessage): void => {
     setMessages((current) => mergeMessages(current, [message]));
   }, []);
@@ -149,5 +155,6 @@ export const useTelegramMessages = (
     loadOlder,
     addMessage,
     removeMessage,
+    refresh,
   };
 };

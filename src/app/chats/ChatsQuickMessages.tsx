@@ -5,9 +5,9 @@ import { Button, Tooltip, theme } from "antd";
 import { ThunderboltOutlined } from "@ant-design/icons";
 
 import useLanguageData from "../../data/context/language/useLanguageData";
-import { IInboxConversation } from "../../shared/business/inbox/inbox.types";
 import { IQuickMessageAvailable } from "../../shared/business/quick-messages/quick-messages.types";
 import {
+  QuickMessageTarget,
   firstText,
   mediaSummary,
   rankQuickMessages,
@@ -17,7 +17,7 @@ import {
 interface Props {
   list: IQuickMessageAvailable[];
   query: string;
-  target: IInboxConversation;
+  target: QuickMessageTarget;
   disabled: boolean;
   onSend: (message: IQuickMessageAvailable) => void;
 }

@@ -184,11 +184,13 @@ export default class StoreChatServiceMethods extends ServiceMethodsBase {
     return Number(response.data) || 0;
   }
 
-  // The store writes first, to a customer that has an account.
+  // The store writes first, to a customer that has an account. Without a text
+  // it only opens the conversation: a file, a recording or a quick message
+  // then goes through the inbox, to the conversation that comes back.
   public async startWithCustomer(
     customerId: string,
     storeId: string,
-    text: string,
+    text?: string,
   ): Promise<IStoreChatStarted> {
     const response = await this._fetchAxios.post<IStoreChatStarted>(
       this._url(StoreChatServiceEnum.Methods.START_WITH_CUSTOMER, customerId),

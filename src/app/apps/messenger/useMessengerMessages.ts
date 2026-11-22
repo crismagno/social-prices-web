@@ -24,6 +24,8 @@ export const useMessengerMessages = (
   loadOlder: () => Promise<void>;
   addMessage: (message: IMessengerMessage) => void;
   removeMessage: (messageId: string) => void;
+  // Asks for the latest page now: something was sent by another way.
+  refresh: () => void;
 } => {
   const [messages, setMessages] = useState<IMessengerMessage[]>([]);
 
@@ -131,6 +133,10 @@ export const useMessengerMessages = (
     }
   }, [psid, messages]);
 
+  const refresh = useCallback((): void => {
+    fetchLatest(true);
+  }, [fetchLatest]);
+
   const addMessage = useCallback((message: IMessengerMessage): void => {
     setMessages((current) => mergeMessages(current, [message]));
   }, []);
@@ -149,5 +155,6 @@ export const useMessengerMessages = (
     loadOlder,
     addMessage,
     removeMessage,
+    refresh,
   };
 };
