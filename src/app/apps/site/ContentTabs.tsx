@@ -12,6 +12,7 @@ import {
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import {
   IStoreSiteHero,
+  IStoreSiteLogo,
   IStoreSiteSection,
 } from "../../../shared/business/store-sites/store-site.interface";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
@@ -21,6 +22,11 @@ import { IStoreSiteEditor } from "./useStoreSiteEditor";
 interface Props {
   editor: IStoreSiteEditor;
   storeId: string;
+}
+
+interface IHeroTabProps extends Props {
+  /** The store's own name: what the top of the site shows when left empty. */
+  storeName: string;
 }
 
 const move = <T,>(list: T[], from: number, to: number): T[] => {
@@ -36,19 +42,22 @@ const move = <T,>(list: T[], from: number, to: number): T[] => {
 };
 
 /** The entrance of the site: its photo and its first words. */
-export const HeroTab = ({ editor, storeId }: Props) => {
+export const HeroTab = ({ editor, storeId, storeName }: IHeroTabProps) => {
   const { t } = useLanguageData();
 
   if (!editor.draft) {
     return null;
   }
 
-  const { hero } = editor.draft;
+  const { hero, logo } = editor.draft;
 
   // From the draft as it is when applied: an upload that finishes later must
   // not bring back what the hero was when it started.
   const set = (patch: Partial<IStoreSiteHero>): void =>
     editor.update((draft) => ({ hero: { ...draft.hero, ...patch } }));
+
+  const setLogo = (patch: Partial<IStoreSiteLogo>): void =>
+    editor.update((draft) => ({ logo: { ...draft.logo, ...patch } }));
 
   return (
     <Form layout="vertical">
@@ -102,6 +111,38 @@ export const HeroTab = ({ editor, storeId }: Props) => {
           onChange={(featuredImageUrl) => set({ featuredImageUrl })}
         />
       </Form.Item>
+      <Form.Item
+        label={t("storeSite.editor.displayName.label")}
+        extra={t("storeSite.editor.displayName.hint")}
+      >
+        <Input
+          maxLength={60}
+          allowClear
+          placeholder={storeName}
+          value={editor.draft.displayName ?? ""}
+          onChange={(event) =>
+            editor.update({ displayName: event.target.value || null })
+          }
+        />
+      </Form.Item>
+      <Form.Item label={t("storeSite.editor.logo.show")}>
+        <Switch
+          checked={logo.isActive}
+          onChange={(isActive: boolean) => setLogo({ isActive })}
+        />
+      </Form.Item>
+      {logo.isActive && (
+        <Form.Item
+          label={t("storeSite.editor.logo.image")}
+          extra={t("storeSite.editor.logo.imageHint")}
+        >
+          <ImageField
+            storeId={storeId}
+            value={logo.imageUrl}
+            onChange={(imageUrl) => setLogo({ imageUrl })}
+          />
+        </Form.Item>
+      )}
     </Form>
   );
 };

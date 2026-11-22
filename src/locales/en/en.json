@@ -2334,7 +2334,8 @@
       "networkError": "Could not reach the store. Check your connection and try again.",
       "doneTitle": "Order sent",
       "doneLabel": "Your order number is",
-      "inviteNote": "When the store approves it, you will get an email to create your account and follow the order.",
+      "inviteNote": "We sent you an email to create your account and follow this order. Already have an account? Just sign in.",
+      "followOrder": "Sign in to follow the order",
       "keepBrowsing": "Keep browsing",
       "failed": "The order could not be sent. Try again in a moment, or contact the store."
     },
@@ -2416,6 +2417,11 @@
         "image": "Image",
         "show": "Show on the site"
       },
+      "logo": {
+        "show": "Show the logo on the site",
+        "image": "Logo of the site",
+        "imageHint": "Without an image here, the site shows the logo of the store."
+      },
       "marquee": {
         "show": "Show the running strip",
         "items": "Phrases",
@@ -2442,6 +2448,31 @@
         "unsavedHint": "Save your changes before publishing.",
         "publish": "Publish the site",
         "unpublish": "Take the site offline"
+      },
+      "panel": {
+        "store": "Store",
+        "notCreated": "Not created yet",
+        "allSaved": "All saved",
+        "goThere": "Go there",
+        "saveBeforeSwitching": "Save your changes before switching stores."
+      },
+      "hints": {
+        "template": "Pick how the site looks. Your texts, images and products stay the same.",
+        "colors": "The five colors the template paints the site with.",
+        "hero": "The top of the site (name and logo) and the first thing a visitor sees: the photo and the opening words.",
+        "sections": "Blocks that present the store: a photo, a title and a few words each.",
+        "marquee": "Short phrases that run across the page.",
+        "products": "Which products the site sells, in the order they appear.",
+        "publish": "The address of the site, and whether it is online."
+      },
+      "problems": {
+        "hero": "The entrance needs a title.",
+        "sections": "Every block needs a title.",
+        "publish": "The address of the site is not valid yet."
+      },
+      "displayName": {
+        "label": "Name shown at the top of the site",
+        "hint": "Leave empty to use the name of the store."
       }
     }
   }

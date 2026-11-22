@@ -30,8 +30,14 @@ const Aurora = ({
 
   const { hero } = site;
 
-  const { sections, marqueeItems, backgroundImage, featuredImage, logo } =
-    getSiteContent({ site, store });
+  const {
+    sections,
+    marqueeItems,
+    backgroundImage,
+    featuredImage,
+    logo,
+    brandName,
+  } = getSiteContent({ site, store });
 
   return (
     <SiteThemeVars
@@ -65,7 +71,7 @@ const Aurora = ({
         <div className={styles.navWrap}>
           <nav className={styles.nav}>
             <span className={styles.brand}>
-              {logo && <img src={logo} alt="" />}✦ {store.name}
+              {logo && <img src={logo} alt="" />}✦ {brandName}
             </span>
             <span className={styles.links}>
               {store.about && (
@@ -198,14 +204,14 @@ const Aurora = ({
       {store.about && (
         <Reveal>
           <section id="sobre" className={styles.about}>
-            <h2 className={styles.aboutTitle}>{store.name}</h2>
+            <h2 className={styles.aboutTitle}>{brandName}</h2>
             <p className={styles.aboutText}>{store.about}</p>
           </section>
         </Reveal>
       )}
 
       <footer className={styles.footer}>
-        {store.name} · {t("storeSite.public.madeWith")}
+        {brandName} · {t("storeSite.public.madeWith")}
       </footer>
     </SiteThemeVars>
   );

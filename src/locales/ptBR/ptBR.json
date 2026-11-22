@@ -2337,7 +2337,8 @@
       "networkError": "Não foi possível falar com a loja. Verifique sua conexão e tente de novo.",
       "doneTitle": "Pedido enviado",
       "doneLabel": "O número do seu pedido é",
-      "inviteNote": "Quando a loja aprovar, você recebe um e-mail para criar sua conta e acompanhar o pedido.",
+      "inviteNote": "Enviamos um e-mail para você criar sua conta e acompanhar este pedido. Já tem conta? É só entrar.",
+      "followOrder": "Entrar para acompanhar o pedido",
       "keepBrowsing": "Continuar navegando",
       "failed": "Não foi possível enviar o pedido. Tente de novo em instantes ou fale com a loja."
     },
@@ -2419,6 +2420,11 @@
         "image": "Imagem",
         "show": "Mostrar no site"
       },
+      "logo": {
+        "show": "Mostrar o logo no site",
+        "image": "Logo do site",
+        "imageHint": "Sem uma imagem aqui, o site mostra o logo da loja."
+      },
       "marquee": {
         "show": "Mostrar a faixa rolando",
         "items": "Frases",
@@ -2445,6 +2451,31 @@
         "unsavedHint": "Salve as alterações antes de publicar.",
         "publish": "Publicar o site",
         "unpublish": "Tirar o site do ar"
+      },
+      "panel": {
+        "store": "Loja",
+        "notCreated": "Ainda não criado",
+        "allSaved": "Tudo salvo",
+        "goThere": "Ir até lá",
+        "saveBeforeSwitching": "Salve as alterações antes de trocar de loja."
+      },
+      "hints": {
+        "template": "Escolha a aparência do site. Seus textos, imagens e produtos continuam os mesmos.",
+        "colors": "As cinco cores com que o template pinta o site.",
+        "hero": "O topo do site (nome e logo) e a primeira coisa que o visitante vê: a foto e as palavras de abertura.",
+        "sections": "Blocos que apresentam a loja: uma foto, um título e algumas palavras cada.",
+        "marquee": "Frases curtas que correm pela página.",
+        "products": "Quais produtos o site vende, na ordem em que aparecem.",
+        "publish": "O endereço do site e se ele está no ar."
+      },
+      "problems": {
+        "hero": "A entrada precisa de um título.",
+        "sections": "Todo bloco precisa de um título.",
+        "publish": "O endereço do site ainda não é válido."
+      },
+      "displayName": {
+        "label": "Nome exibido no topo do site",
+        "hint": "Deixe vazio para usar o nome da loja."
       }
     }
   }

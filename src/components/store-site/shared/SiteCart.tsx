@@ -20,6 +20,7 @@ import {
   IPublicSiteProduct,
 } from "../../../shared/business/store-sites/store-sites.types";
 import { IStoreSiteTheme } from "../../../shared/business/store-sites/store-site.interface";
+import Urls from "../../../shared/common/routes-app/routes-app";
 import brazilStates from "../../../shared/utils/mock-data/brazil-states.json";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import handleClientError from "../../common/HandleClientError/HandleClientError";
@@ -414,7 +415,22 @@ const SiteCart = ({ slug, theme, products, cart }: Props) => {
               <div>{t("storeSite.checkout.doneLabel")}</div>
               <div className={styles.doneNumber}>#{orderNumber}</div>
               <p>{t("storeSite.checkout.inviteNote")}</p>
-              <Button type="primary" className={styles.primary} onClick={close}>
+              <Button
+                block
+                type="primary"
+                className={styles.primary}
+                href={Urls.LOGIN}
+                target="_blank"
+                rel="noopener"
+              >
+                {t("storeSite.checkout.followOrder")}
+              </Button>
+              <Button
+                block
+                type="text"
+                style={{ marginTop: 8 }}
+                onClick={close}
+              >
                 {t("storeSite.checkout.keepBrowsing")}
               </Button>
             </div>

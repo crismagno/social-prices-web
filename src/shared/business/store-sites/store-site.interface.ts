@@ -26,6 +26,15 @@ export interface IStoreSiteSection {
   isActive: boolean;
 }
 
+/**
+ * The logo shown on the site. Without an image of its own it is the logo of
+ * the store; switched off, the site shows none.
+ */
+export interface IStoreSiteLogo {
+  isActive: boolean;
+  imageUrl: string | null;
+}
+
 export interface IStoreSiteMarquee {
   isActive: boolean;
   items: string[];
@@ -36,9 +45,12 @@ export interface ISaveStoreSite {
   slug: string;
   templateId: StoreSitesEnum.Template;
   theme: IStoreSiteTheme;
+  /** The name shown at the top of the site; empty means the store's name. */
+  displayName: string | null;
   hero: IStoreSiteHero;
   sections: IStoreSiteSection[];
   marquee: IStoreSiteMarquee;
+  logo: IStoreSiteLogo;
   productIds: string[];
 }
 

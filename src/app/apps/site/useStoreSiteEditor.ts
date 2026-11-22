@@ -58,9 +58,15 @@ const toDraft = (site: IStoreSite): ISaveStoreSite => ({
   slug: site.slug,
   templateId: site.templateId,
   theme: { ...site.theme },
+  displayName: site.displayName ?? null,
   hero: { ...site.hero },
   sections: site.sections.map((section) => ({ ...section })),
   marquee: { isActive: site.marquee.isActive, items: [...site.marquee.items] },
+  // A site saved before the logo was editable shows the logo of the store.
+  logo: {
+    isActive: site.logo?.isActive ?? true,
+    imageUrl: site.logo?.imageUrl ?? null,
+  },
   productIds: site.productIds.map(String),
 });
 
@@ -68,6 +74,7 @@ const newDraft = (store: IStore): ISaveStoreSite => ({
   slug: slugify(store.name) || "minha-loja",
   templateId: StoreSitesEnum.Template.ATELIER,
   theme: { ...getTemplateEntry(StoreSitesEnum.Template.ATELIER).defaultTheme },
+  displayName: null,
   hero: {
     tagline: null,
     title: store.name,
@@ -78,6 +85,7 @@ const newDraft = (store: IStore): ISaveStoreSite => ({
   },
   sections: [],
   marquee: { isActive: false, items: [] },
+  logo: { isActive: true, imageUrl: null },
   productIds: [],
 });
 

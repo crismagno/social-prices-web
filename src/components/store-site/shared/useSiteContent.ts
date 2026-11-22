@@ -1,7 +1,7 @@
 import { IStoreSiteSection } from "../../../shared/business/store-sites/store-site.interface";
 import { IPublicSiteProduct } from "../../../shared/business/store-sites/store-sites.types";
 import { ISiteCartApi, IStoreSiteTemplateProps } from "../template.types";
-import { cssUrl, siteImage } from "./site-format";
+import { cssUrl, siteLogo } from "./site-format";
 import { TSiteTranslate } from "./useSiteT";
 
 export interface ISiteContent {
@@ -11,7 +11,10 @@ export interface ISiteContent {
   marqueeItems: string[];
   backgroundImage: string | undefined;
   featuredImage: string | undefined;
+  /** The picture at the top: the site's own, else the store's; null when hidden. */
   logo: string | null;
+  /** The name at the top: the site's own, else the store's. */
+  brandName: string;
 }
 
 /** What every template asks of the content, answered once. */
@@ -27,7 +30,8 @@ export const getSiteContent = ({
     : [],
   backgroundImage: cssUrl(site.hero.backgroundImageUrl),
   featuredImage: cssUrl(site.hero.featuredImageUrl),
-  logo: siteImage(store.logo),
+  logo: siteLogo(site.logo, store.logo),
+  brandName: site.displayName?.trim() || store.name,
 });
 
 /** What the "add" button of a product says, given the stock and the cart. */

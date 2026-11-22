@@ -22,7 +22,14 @@ export interface ISiteCartApi {
 export interface IStoreSiteTemplateProps {
   site: Pick<
     TPublicSite,
-    "slug" | "templateId" | "theme" | "hero" | "sections" | "marquee"
+    | "slug"
+    | "templateId"
+    | "theme"
+    | "displayName"
+    | "hero"
+    | "sections"
+    | "marquee"
+    | "logo"
   >;
   store: IPublicSiteStore;
   products: IPublicSiteProduct[];

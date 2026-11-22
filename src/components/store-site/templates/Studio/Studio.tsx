@@ -43,8 +43,14 @@ const Studio = ({
 
   const { hero } = site;
 
-  const { sections, marqueeItems, backgroundImage, featuredImage, logo } =
-    getSiteContent({ site, store });
+  const {
+    sections,
+    marqueeItems,
+    backgroundImage,
+    featuredImage,
+    logo,
+    brandName,
+  } = getSiteContent({ site, store });
 
   return (
     <SiteThemeVars
@@ -64,7 +70,7 @@ const Studio = ({
         <nav className={styles.nav}>
           <span className={styles.brand}>
             {logo && <img src={logo} alt="" />}
-            {store.name}
+            {brandName}
           </span>
           <span className={styles.links}>
             <a href="#produtos">{t("storeSite.public.products")}</a>
@@ -311,7 +317,7 @@ const Studio = ({
                 <span className={styles.star} aria-hidden="true">
                   ✦
                 </span>{" "}
-                {store.name}
+                {brandName}
               </h2>
               <p className={styles.calloutText}>{store.about}</p>
             </section>
@@ -320,7 +326,7 @@ const Studio = ({
       )}
 
       <footer className={styles.footer}>
-        {store.name} · {t("storeSite.public.madeWith")}
+        {brandName} · {t("storeSite.public.madeWith")}
       </footer>
     </SiteThemeVars>
   );

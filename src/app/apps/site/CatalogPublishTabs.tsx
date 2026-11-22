@@ -279,7 +279,12 @@ export const PublishTab = ({ editor, storeId }: Props) => {
             />
           )}
           {editor.saved.isPublished ? (
-            <Button danger loading={editor.isSaving} onClick={editor.unpublish}>
+            <Button
+              type="primary"
+              danger
+              loading={editor.isSaving}
+              onClick={editor.unpublish}
+            >
               {t("storeSite.editor.publish.unpublish")}
             </Button>
           ) : (

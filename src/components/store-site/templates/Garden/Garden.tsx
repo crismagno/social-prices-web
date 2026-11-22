@@ -44,8 +44,14 @@ const Garden = ({
 
   const { hero } = site;
 
-  const { sections, marqueeItems, backgroundImage, featuredImage, logo } =
-    getSiteContent({ site, store });
+  const {
+    sections,
+    marqueeItems,
+    backgroundImage,
+    featuredImage,
+    logo,
+    brandName,
+  } = getSiteContent({ site, store });
 
   return (
     <SiteThemeVars
@@ -84,7 +90,7 @@ const Garden = ({
           </span>
           <span className={`${styles.brand} ${siteSerif.className}`}>
             {logo && <img src={logo} alt="" />}
-            {store.name}
+            {brandName}
           </span>
           <button type="button" className={styles.bag} onClick={cart.open}>
             {t("storeSite.public.bag")} ({cart.count})
@@ -241,7 +247,7 @@ const Garden = ({
           <section id="sobre" className={styles.about}>
             <div className={styles.tag}>{t("storeSite.public.ourStory")}</div>
             <h2 className={`${styles.aboutTitle} ${siteSerif.className}`}>
-              {store.name}
+              {brandName}
             </h2>
             <p className={styles.aboutText}>{store.about}</p>
           </section>
@@ -249,7 +255,7 @@ const Garden = ({
       )}
 
       <footer className={styles.footer}>
-        {store.name} · {t("storeSite.public.madeWith")}
+        {brandName} · {t("storeSite.public.madeWith")}
       </footer>
     </SiteThemeVars>
   );

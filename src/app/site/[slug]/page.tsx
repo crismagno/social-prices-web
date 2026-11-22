@@ -19,7 +19,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: "Site" };
   }
 
-  const title: string = `${data.site.hero.title} · ${data.store.name}`;
+  const brandName: string = data.site.displayName?.trim() || data.store.name;
+
+  const title: string = `${data.site.hero.title} · ${brandName}`;
 
   const description: string | undefined =
     data.site.hero.subtitle ?? data.store.description ?? undefined;

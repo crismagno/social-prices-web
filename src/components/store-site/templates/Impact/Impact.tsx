@@ -39,14 +39,15 @@ const Impact = ({
 
   const { hero } = site;
 
-  const { sections, marqueeItems, backgroundImage, logo } = getSiteContent({
-    site,
-    store,
-  });
+  const { sections, marqueeItems, backgroundImage, logo, brandName } =
+    getSiteContent({
+      site,
+      store,
+    });
 
   const { lead, last } = splitTitle(hero.title);
 
-  const badgeText: string = `${hero.tagline || store.name} • ${t(
+  const badgeText: string = `${hero.tagline || brandName} • ${t(
     "storeSite.public.seeProducts",
   )} • `.toUpperCase();
 
@@ -68,7 +69,7 @@ const Impact = ({
         <nav className={styles.nav}>
           <span className={styles.brand}>
             {logo && <img src={logo} alt="" />}
-            {store.name}
+            {brandName}
           </span>
           <span className={styles.links}>
             {store.about && <a href="#sobre">{t("storeSite.public.about")}</a>}
@@ -226,7 +227,7 @@ const Impact = ({
       )}
 
       <footer className={styles.footer}>
-        {store.name} · {t("storeSite.public.madeWith")}
+        {brandName} · {t("storeSite.public.madeWith")}
       </footer>
     </SiteThemeVars>
   );

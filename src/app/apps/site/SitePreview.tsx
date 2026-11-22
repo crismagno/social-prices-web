@@ -14,6 +14,7 @@ import {
 } from "../../../components/store-site/preview-channel";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import Urls from "../../../shared/common/routes-app/routes-app";
+import useAvailableHeight from "./useAvailableHeight";
 
 interface Props {
   data: IPreviewData;
@@ -32,7 +33,11 @@ const SitePreview = ({ data }: Props) => {
   const { t } = useLanguageData();
 
   const frameRef = useRef<HTMLIFrameElement>(null);
-  const holderRef = useRef<HTMLDivElement>(null);
+
+  // Ends at the bottom of the window: the site scrolls inside the frame, the
+  // editor page does not.
+  const { ref: holderRef, height: paneHeight } =
+    useAvailableHeight<HTMLDivElement>();
 
   const [device, setDevice] = useState<TDevice>("desktop");
   const [isReady, setIsReady] = useState<boolean>(false);
@@ -87,19 +92,21 @@ const SitePreview = ({ data }: Props) => {
     setHolderWidth(holder.clientWidth);
 
     return () => observer.disconnect();
-  }, []);
+  }, [holderRef]);
 
   const frameWidth: number =
     device === "desktop" ? DESKTOP_WIDTH : MOBILE_WIDTH;
 
-  // The desktop frame is wider than the pane: it is shown scaled down.
+  // The frame keeps its real width, so the template lays out as on that
+  // device, and is shown scaled down to fit the pane: nothing scrolls sideways.
   const scale: number =
     holderWidth > 0 ? Math.min(1, holderWidth / frameWidth) : 1;
 
-  const frameHeight: number = 720 / scale;
+  // Centered when it is narrower than the pane (the phone).
+  const left: number = Math.max(0, (holderWidth - frameWidth * scale) / 2);
 
   return (
-    <div>
+    <div className="min-w-0">
       <div className="flex justify-end mb-2">
         <Segmented<TDevice>
           value={device}
@@ -120,21 +127,23 @@ const SitePreview = ({ data }: Props) => {
       </div>
       <div
         ref={holderRef}
-        className="rounded-lg border overflow-hidden bg-gray-100 dark:bg-gray-800"
-        style={{ height: 720 }}
+        className="relative rounded-lg border overflow-hidden bg-gray-100 dark:bg-gray-800"
+        style={{ height: paneHeight }}
       >
         <iframe
           ref={frameRef}
           src={Urls.SITE_PREVIEW}
           title={t("storeSite.editor.preview")}
           style={{
+            position: "absolute",
+            top: 0,
+            left,
             width: frameWidth,
-            height: frameHeight,
+            // Taller before scaling, so after it the frame fills the pane.
+            height: paneHeight / scale,
             border: 0,
-            display: "block",
-            margin: "0 auto",
             transform: `scale(${scale})`,
-            transformOrigin: scale < 1 ? "top left" : "top center",
+            transformOrigin: "top left",
             background: "#fff",
           }}
         />

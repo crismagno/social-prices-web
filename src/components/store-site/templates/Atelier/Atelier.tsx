@@ -7,8 +7,9 @@ import { IStoreSiteSection } from "../../../../shared/business/store-sites/store
 import Reveal from "../../shared/Reveal";
 import base from "../../shared/site-base.module.css";
 import { siteSerif } from "../../shared/site-fonts";
-import { cssUrl, formatSiteMoney, siteImage } from "../../shared/site-format";
+import { cssUrl, formatSiteMoney } from "../../shared/site-format";
 import SiteThemeVars from "../../shared/SiteThemeVars";
+import { getSiteContent } from "../../shared/useSiteContent";
 import useSiteT from "../../shared/useSiteT";
 import { IStoreSiteTemplateProps } from "../../template.types";
 import styles from "./Atelier.module.css";
@@ -38,7 +39,7 @@ const Atelier = ({
 
   const backgroundImage: string | undefined = cssUrl(hero.backgroundImageUrl);
   const featuredImage: string | undefined = cssUrl(hero.featuredImageUrl);
-  const logo: string | null = siteImage(store.logo);
+  const { logo, brandName } = getSiteContent({ site, store });
 
   return (
     <SiteThemeVars
@@ -80,7 +81,7 @@ const Atelier = ({
         <nav className={styles.nav}>
           <span className={`${styles.brand} ${siteSerif.className}`}>
             {logo && <img src={logo} alt="" />}
-            {store.name}
+            {brandName}
           </span>
           <span className={styles.links}>
             {store.about && <a href="#sobre">{t("storeSite.public.about")}</a>}
@@ -263,7 +264,7 @@ const Atelier = ({
       )}
 
       <footer className={styles.footer}>
-        {store.name} · {t("storeSite.public.madeWith")}
+        {brandName} · {t("storeSite.public.madeWith")}
       </footer>
     </SiteThemeVars>
   );
