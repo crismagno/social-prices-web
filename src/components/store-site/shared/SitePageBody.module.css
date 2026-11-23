@@ -89,3 +89,134 @@
     translate: none;
   }
 }
+
+/* The contact page: a form that writes to the store, and the ways to reach it. */
+.contactForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: clamp(18px, 3vw, 28px);
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--site-text) 5%, var(--site-bg));
+  border: 1px solid color-mix(in srgb, var(--site-text) 12%, transparent);
+}
+
+.contactRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.contactField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.contactField small {
+  font-weight: 400;
+  opacity: 0.65;
+}
+
+.contactField input,
+.contactField textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--site-text) 18%, transparent);
+  background: var(--site-bg);
+  color: var(--site-text);
+  font: inherit;
+  font-weight: 400;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.contactField textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.contactField input:focus,
+.contactField textarea:focus {
+  outline: none;
+  border-color: var(--site-primary);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--site-primary) 18%, transparent);
+}
+
+.contactError {
+  margin: 0;
+  font-size: 13px;
+  color: #d4380d;
+}
+
+.contactSend {
+  align-self: flex-start;
+  padding: 13px 28px;
+  border: 0;
+  border-radius: 99px;
+  background: var(--site-primary);
+  color: var(--site-on-primary, #fff);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.25s cubic-bezier(0.2, 1.6, 0.4, 1),
+    box-shadow 0.25s;
+}
+
+.contactSend:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px
+    color-mix(in srgb, var(--site-primary) 35%, transparent);
+}
+
+.contactSend:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.contactDone {
+  padding: clamp(24px, 4vw, 40px);
+  border-radius: 22px;
+  text-align: center;
+  background: color-mix(in srgb, var(--site-primary) 8%, var(--site-bg));
+  border: 1px solid color-mix(in srgb, var(--site-primary) 30%, transparent);
+}
+
+.contactDone p {
+  margin: 0 0 10px;
+}
+
+.contactDoneMark {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: var(--site-primary);
+  color: var(--site-on-primary, #fff);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.contactDoneTitle {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.contactGhost {
+  margin-top: 8px;
+  padding: 10px 20px;
+  border: 1px solid color-mix(in srgb, var(--site-text) 20%, transparent);
+  border-radius: 99px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}

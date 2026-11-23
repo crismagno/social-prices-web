@@ -407,7 +407,13 @@ const Studio = ({
       )}
 
       {page && (
-        <SitePageBody page={page} variant="studio" footer={site.footer} />
+        <SitePageBody
+          page={page}
+          variant="studio"
+          footer={site.footer}
+          slug={site.slug}
+          isPreview={mode === "preview"}
+        />
       )}
 
       <SiteFooter

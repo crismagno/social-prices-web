@@ -68,6 +68,8 @@ namespace StoreSitesEnum {
     PRODUCTS = "PRODUCTS",
     ABOUT = "ABOUT",
     SUPPORT = "SUPPORT",
+    /** A form that writes to the store's inbox, and the ways to reach it. */
+    CONTACT = "CONTACT",
     /** A page the owner made: title, texts and an image or a video. */
     CUSTOM = "CUSTOM",
   }
@@ -77,6 +79,7 @@ namespace StoreSitesEnum {
     [SitePageType.PRODUCTS]: "produtos",
     [SitePageType.ABOUT]: "sobre",
     [SitePageType.SUPPORT]: "suporte",
+    [SitePageType.CONTACT]: "contato",
   } as const;
 
   export const MAX_CUSTOM_PAGES = 7;

@@ -80,21 +80,6 @@
   transform: scale(0.95);
 }
 
-.halo {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  border-radius: inherit;
-  background: var(--site-primary);
-  opacity: 0;
-  animation: halo 2.8s ease-out infinite 1.6s;
-  pointer-events: none;
-}
-
-.button[aria-expanded="true"] .halo {
-  animation: none;
-}
-
 .icon {
   display: inline-flex;
   animation: iconIn 0.45s cubic-bezier(0.2, 1.6, 0.4, 1) both;
@@ -831,18 +816,6 @@
   }
 }
 
-@keyframes halo {
-  0% {
-    opacity: 0.45;
-    scale: 1;
-  }
-  70%,
-  100% {
-    opacity: 0;
-    scale: 1.35 1.6;
-  }
-}
-
 @keyframes drift {
   from {
     translate: 0 0;
@@ -921,7 +894,6 @@
   .panel,
   .bubble,
   .dot,
-  .halo,
   .icon,
   .blob,
   .avatar,

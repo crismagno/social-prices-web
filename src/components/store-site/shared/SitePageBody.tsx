@@ -13,6 +13,7 @@ import {
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import Reveal from "./Reveal";
 import SiteAbout, { TSiteAboutVariant } from "./SiteAbout";
+import SiteContactForm from "./SiteContactForm";
 import { SiteFooterLink } from "./SiteFooter";
 import styles from "./SitePageBody.module.css";
 import useSiteT from "./useSiteT";
@@ -23,6 +24,10 @@ interface Props {
   titleClassName?: string;
   /** Where the ways to talk to the store come from. */
   footer: Partial<IStoreSiteFooter> | null | undefined;
+  /** The site the contact form writes to. */
+  slug: string;
+  /** The editor: the contact form sends nothing. */
+  isPreview: boolean;
 }
 
 /** The links of the footer that are a way to talk to the store. */
@@ -36,24 +41,39 @@ const CONTACT_TYPES: StoreSitesEnum.FooterLinkType[] = [
 /**
  * What a page shows below its top, for the pages that are not a part of the
  * home: the owner's own pages (their texts and an image or a video, in the
- * look of the template) and the support page (its words, its questions, and
- * the ways to talk to the store the footer already lists).
+ * look of the template), the support page (its words, its questions, and
+ * the ways to talk to the store the footer already lists) and the contact
+ * page (its words, a form that writes to the store, and those same ways).
  */
-const SitePageBody = ({ page, variant, titleClassName, footer }: Props) => {
+const SitePageBody = ({
+  page,
+  variant,
+  titleClassName,
+  footer,
+  slug,
+  isPreview,
+}: Props) => {
   const t = useSiteT();
 
   const isSupport: boolean = page.type === StoreSitesEnum.SitePageType.SUPPORT;
 
-  if (page.type !== StoreSitesEnum.SitePageType.CUSTOM && !isSupport) {
+  const isContact: boolean = page.type === StoreSitesEnum.SitePageType.CONTACT;
+
+  if (
+    page.type !== StoreSitesEnum.SitePageType.CUSTOM &&
+    !isSupport &&
+    !isContact
+  ) {
     return null;
   }
 
-  const contacts: IStoreSiteFooterLink[] = isSupport
-    ? siteFooterOf(footer).links.filter(
-        (link: IStoreSiteFooterLink) =>
-          CONTACT_TYPES.includes(link.type) && isSafeFooterUrl(link.url),
-      )
-    : [];
+  const contacts: IStoreSiteFooterLink[] =
+    isSupport || isContact
+      ? siteFooterOf(footer).links.filter(
+          (link: IStoreSiteFooterLink) =>
+            CONTACT_TYPES.includes(link.type) && isSafeFooterUrl(link.url),
+        )
+      : [];
 
   return (
     <>
@@ -101,6 +121,30 @@ const SitePageBody = ({ page, variant, titleClassName, footer }: Props) => {
             <Reveal effect="up">
               <h2 className={`${styles.heading} ${titleClassName ?? ""}`}>
                 {t("storeSite.support.contact")}
+              </h2>
+              <ul className={styles.contacts}>
+                {contacts.map((link: IStoreSiteFooterLink) => (
+                  <SiteFooterLink key={link.key} link={link} />
+                ))}
+              </ul>
+            </Reveal>
+          )}
+        </section>
+      )}
+
+      {isContact && (
+        <section className={styles.support}>
+          <Reveal effect="up">
+            <h2 className={`${styles.heading} ${titleClassName ?? ""}`}>
+              {t("storeSite.contact.formTitle")}
+            </h2>
+            <SiteContactForm slug={slug} isPreview={isPreview} />
+          </Reveal>
+
+          {contacts.length > 0 && (
+            <Reveal effect="up">
+              <h2 className={`${styles.heading} ${titleClassName ?? ""}`}>
+                {t("storeSite.contact.others")}
               </h2>
               <ul className={styles.contacts}>
                 {contacts.map((link: IStoreSiteFooterLink) => (

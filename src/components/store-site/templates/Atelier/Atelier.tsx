@@ -359,6 +359,8 @@ const Atelier = ({
           variant="atelier"
           titleClassName={siteSerif.className}
           footer={site.footer}
+          slug={site.slug}
+          isPreview={mode === "preview"}
         />
       )}
 

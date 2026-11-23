@@ -15,6 +15,7 @@ const READY_PAGE_NAMES: Partial<Record<StoreSitesEnum.SitePageType, string>> = {
   [StoreSitesEnum.SitePageType.PRODUCTS]: "Produtos",
   [StoreSitesEnum.SitePageType.ABOUT]: "Sobre",
   [StoreSitesEnum.SitePageType.SUPPORT]: "Suporte",
+  [StoreSitesEnum.SitePageType.CONTACT]: "Contato",
 };
 
 interface Props {

@@ -36,12 +36,23 @@ export interface IStoreSitePage {
 
 export const PAGE_SLUG_REGEX = /^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]$/;
 
-const READY_PAGES: { type: StoreSitesEnum.SitePageType; isInMenu: boolean }[] =
-  [
-    { type: StoreSitesEnum.SitePageType.PRODUCTS, isInMenu: true },
-    { type: StoreSitesEnum.SitePageType.ABOUT, isInMenu: true },
-    { type: StoreSitesEnum.SitePageType.SUPPORT, isInMenu: false },
-  ];
+const READY_PAGES: {
+  type: StoreSitesEnum.SitePageType;
+  isInMenu: boolean;
+  /** In the menu when the owner adds it, whatever an older site got. */
+  isInMenuWhenAdded?: boolean;
+}[] = [
+  { type: StoreSitesEnum.SitePageType.PRODUCTS, isInMenu: true },
+  { type: StoreSitesEnum.SitePageType.ABOUT, isInMenu: true },
+  { type: StoreSitesEnum.SitePageType.SUPPORT, isInMenu: false },
+  // Its form writes to the store's inbox: an older site does not show it
+  // until the owner decides; added on purpose, it goes to the menu.
+  {
+    type: StoreSitesEnum.SitePageType.CONTACT,
+    isInMenu: false,
+    isInMenuWhenAdded: true,
+  },
+];
 
 export const emptyPageContent = (): IStoreSitePageContent => ({
   texts: [],
@@ -90,11 +101,11 @@ export const sitePagesOf = (
 /** A ready page as a new site has it, to add back one that was removed. */
 export const newReadyPage = (
   type: StoreSitesEnum.SitePageType,
-): IStoreSitePage =>
-  readyPage(
-    type,
-    READY_PAGES.find((ready) => ready.type === type)?.isInMenu ?? true,
-  );
+): IStoreSitePage => {
+  const ready = READY_PAGES.find((candidate) => candidate.type === type);
+
+  return readyPage(type, ready?.isInMenuWhenAdded ?? ready?.isInMenu ?? true);
+};
 
 /** The ready pages a site does not have (the owner removed them). */
 export const missingReadyPages = (

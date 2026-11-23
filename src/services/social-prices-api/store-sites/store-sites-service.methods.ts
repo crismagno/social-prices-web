@@ -11,6 +11,7 @@ import {
 import {
   ISiteChatMessage,
   ISiteChatVisitor,
+  ISiteContactForm,
 } from "../../../shared/business/store-sites/store-site-chat";
 import ServiceMethodsBase from "../service-methods.base";
 import StoreSitesServiceEnum from "./store-sites-service.enum";
@@ -161,6 +162,23 @@ export default class StoreSitesServiceMethods extends ServiceMethodsBase {
     );
 
     return response.data.token;
+  }
+
+  /**
+   * The form of the contact page. Answers with the secret of the conversation
+   * when the site has its chat on, so the chat window can follow the answer.
+   */
+  public async sendContact(
+    slug: string,
+    form: ISiteContactForm,
+  ): Promise<string | null> {
+    const response = await this._fetchAxios.post<{ token: string | null }>(
+      this._url(StoreSitesServiceEnum.Methods.PUBLIC_CHAT_CONTACT, { slug }),
+      form,
+      { headers: { "Content-Type": "application/json" } },
+    );
+
+    return response.data.token ?? null;
   }
 
   /** The visitor's conversation, oldest first. */

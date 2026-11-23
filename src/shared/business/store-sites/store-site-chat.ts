@@ -48,6 +48,11 @@ export interface ISiteChatVisitor {
   phone: string | null;
 }
 
+/** What the form of the contact page sends. */
+export interface ISiteContactForm extends ISiteChatVisitor {
+  message: string;
+}
+
 /** The chat of a site, also for one saved before it existed: off. */
 export const siteChatOf = (
   chat: Partial<IStoreSiteChat> | null | undefined,

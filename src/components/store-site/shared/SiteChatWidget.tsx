@@ -89,6 +89,23 @@ const write = (key: string, value: string | null): void => {
   }
 };
 
+const FOLLOW_EVENT = "site-chat:follow";
+
+/**
+ * Hands the chat window a conversation that started somewhere else on the
+ * page (the form of the contact page), so the answer shows up in it.
+ */
+export const followSiteChat = (
+  slug: string,
+  token: string,
+  who: ISiteChatWho,
+): void => {
+  write(tokenKey(slug), token);
+  write(whoKey(slug), JSON.stringify(who));
+
+  window.dispatchEvent(new Event(FOLLOW_EVENT));
+};
+
 /**
  * The chat of the site, in a corner. A visitor says who they are once (their
  * browser keeps the secret of the chat), then talks with the store, which
@@ -123,8 +140,16 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
   const recorder = useVoiceRecorder(onMicrophoneError);
 
   useEffect(() => {
-    setToken(read(tokenKey(slug)));
-    setWho(readWho(slug));
+    const adopt = (): void => {
+      setToken(read(tokenKey(slug)));
+      setWho(readWho(slug));
+    };
+
+    adopt();
+
+    window.addEventListener(FOLLOW_EVENT, adopt);
+
+    return () => window.removeEventListener(FOLLOW_EVENT, adopt);
   }, [slug]);
 
   const forget = useCallback((): void => {
@@ -680,7 +705,6 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
         aria-label={isOpen ? t("storeSite.chat.close") : buttonLabel}
         onClick={() => setIsOpen((open: boolean) => !open)}
       >
-        <span className={styles.halo} aria-hidden />
         <span key={isOpen ? "close" : "open"} className={styles.icon}>
           {isOpen ? <CloseOutlined /> : <SiteChatIcon icon={settings.icon} />}
         </span>

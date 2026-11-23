@@ -313,7 +313,13 @@ const Impact = ({
       )}
 
       {page && (
-        <SitePageBody page={page} variant="impact" footer={site.footer} />
+        <SitePageBody
+          page={page}
+          variant="impact"
+          footer={site.footer}
+          slug={site.slug}
+          isPreview={mode === "preview"}
+        />
       )}
 
       <SiteFooter

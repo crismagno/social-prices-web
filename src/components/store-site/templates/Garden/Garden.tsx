@@ -348,6 +348,8 @@ const Garden = ({
           variant="garden"
           titleClassName={siteSerif.className}
           footer={site.footer}
+          slug={site.slug}
+          isPreview={mode === "preview"}
         />
       )}
 

@@ -291,7 +291,13 @@ const Aurora = ({
       )}
 
       {page && (
-        <SitePageBody page={page} variant="aurora" footer={site.footer} />
+        <SitePageBody
+          page={page}
+          variant="aurora"
+          footer={site.footer}
+          slug={site.slug}
+          isPreview={mode === "preview"}
+        />
       )}
 
       <SiteFooter

@@ -114,6 +114,8 @@ const PagesTab = ({ editor, storeId }: Props) => {
           page.type === StoreSitesEnum.SitePageType.CUSTOM;
         const isSupport: boolean =
           page.type === StoreSitesEnum.SitePageType.SUPPORT;
+        const isContact: boolean =
+          page.type === StoreSitesEnum.SitePageType.CONTACT;
 
         const setFaq = (
           change: (faq: IStoreSiteFaqItem[]) => IStoreSiteFaqItem[],
@@ -282,7 +284,16 @@ const PagesTab = ({ editor, storeId }: Props) => {
                   />
                 )}
 
-                {(isCustom || isSupport) && (
+                {isContact && (
+                  <Alert
+                    className="mb-3"
+                    type="info"
+                    showIcon
+                    message={t("storeSite.editor.pages.contactHint")}
+                  />
+                )}
+
+                {(isCustom || isSupport || isContact) && (
                   <PageContentFields
                     storeId={storeId}
                     content={page.content}
