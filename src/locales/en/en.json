@@ -2723,7 +2723,16 @@
       "required": "Fill in the required fields.",
       "invalidEmail": "Enter a valid email.",
       "tooMany": "Too many messages. Wait a moment and try again.",
-      "failed": "It could not be sent. Try again."
+      "failed": "It could not be sent. Try again.",
+      "attach": "Send a file",
+      "record": "Record audio",
+      "recording": "Recording",
+      "preparing": "Preparing the audio…",
+      "cancelRecording": "Discard the recording",
+      "sendRecording": "Send the recording",
+      "microphoneDenied": "Allow the microphone to record audio.",
+      "tooLarge": "The file is too big. The limit is 16 MB.",
+      "download": "Download"
     }
   }
 }

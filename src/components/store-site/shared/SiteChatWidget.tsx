@@ -3,18 +3,29 @@
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 
 import {
+  AudioOutlined,
   CloseOutlined,
+  DeleteOutlined,
+  PaperClipOutlined,
   SendOutlined,
 } from "@ant-design/icons";
 
+import {
+  MAX_RECORDING_SECONDS,
+  useVoiceRecorder,
+} from "../../../app/apps/telegram/useVoiceRecorder";
+
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import {
+  ISiteChatAttachment,
   ISiteChatMessage,
   IStoreSiteChat,
+  SITE_CHAT_MAX_UPLOAD_BYTES,
   siteChatOf,
 } from "../../../shared/business/store-sites/store-site-chat";
 import { IStoreSiteTheme } from "../../../shared/business/store-sites/store-site.interface";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
+import SiteChatAttachment from "./SiteChatAttachment";
 import SiteChatIcon from "./SiteChatIcon";
 import styles from "./SiteChatWidget.module.css";
 import SiteThemeVars from "./SiteThemeVars";
@@ -76,6 +87,14 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
 
   const endRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const onMicrophoneError = useCallback(
+    () => setError(t("storeSite.chat.microphoneDenied")),
+    [t],
+  );
+
+  const recorder = useVoiceRecorder(onMicrophoneError);
 
   useEffect(() => {
     setToken(read(tokenKey(slug)));
@@ -233,9 +252,76 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
     }
   };
 
+  /** A file or a recording, with what is written as its words. */
+  const sendFile = async (file: File, voice: boolean): Promise<void> => {
+    if (!token || isBusy) {
+      return;
+    }
+
+    if (file.size > SITE_CHAT_MAX_UPLOAD_BYTES) {
+      setError(t("storeSite.chat.tooLarge"));
+      return;
+    }
+
+    try {
+      setIsBusy(true);
+      setError(null);
+
+      const caption: string | null = voice ? null : text.trim() || null;
+
+      const sent: ISiteChatMessage =
+        await serviceMethodsInstance.storeSitesServiceMethods.sendChatMedia(
+          slug,
+          token,
+          file,
+          { caption, voice },
+        );
+
+      setMessages((current: ISiteChatMessage[]) => [...current, sent]);
+
+      if (caption) {
+        setText("");
+      }
+    } catch (caught: any) {
+      if (caught?.response?.status === 401) {
+        forget();
+      }
+
+      setError(
+        caught?.response?.status === 413
+          ? t("storeSite.chat.tooLarge")
+          : describeError(caught),
+      );
+    } finally {
+      setIsBusy(false);
+    }
+  };
+
+  const finishRecording = async (): Promise<void> => {
+    const recording: File | null = await recorder.finish();
+
+    if (recording) {
+      await sendFile(recording, true);
+    }
+  };
+
+  // A recording has a limit: when it is reached, it goes as it is.
+  useEffect(() => {
+    if (
+      recorder.state === "recording" &&
+      recorder.seconds >= MAX_RECORDING_SECONDS
+    ) {
+      finishRecording();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recorder.seconds, recorder.state]);
+
   if (!settings.isActive) {
     return null;
   }
+
+  const clock = (seconds: number): string =>
+    `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
 
   const time = (at: string): string =>
     new Date(at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -301,6 +387,19 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
                     message.fromStore ? styles.fromStore : styles.fromVisitor
                   }`}
                 >
+                  {(message.attachments ?? []).map(
+                    (attachment: ISiteChatAttachment, index: number) => (
+                      <SiteChatAttachment
+                        key={`${message.id}-${index}`}
+                        slug={slug}
+                        token={token}
+                        messageId={message.id}
+                        index={index}
+                        attachment={attachment}
+                        downloadLabel={t("storeSite.chat.download")}
+                      />
+                    ),
+                  )}
                   {message.text}
                   <span className={styles.time}>{time(message.sentAt)}</span>
                 </div>
@@ -372,8 +471,68 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
             <div ref={endRef} />
           </div>
 
-          {token && (
+          {token && recorder.state !== "idle" && (
+            <div className={`${styles.composer} ${styles.recording}`}>
+              <button
+                type="button"
+                className={styles.tool}
+                aria-label={t("storeSite.chat.cancelRecording")}
+                onClick={recorder.cancel}
+                disabled={recorder.state !== "recording"}
+              >
+                <DeleteOutlined />
+              </button>
+              <span className={styles.recordingInfo}>
+                <span className={styles.recordingDot} />
+                {recorder.state === "recording"
+                  ? `${t("storeSite.chat.recording")} ${clock(recorder.seconds)}`
+                  : t("storeSite.chat.preparing")}
+                <span className={styles.wave} aria-hidden>
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                </span>
+              </span>
+              <button
+                type="button"
+                className={styles.send}
+                aria-label={t("storeSite.chat.sendRecording")}
+                onClick={finishRecording}
+                disabled={recorder.state !== "recording"}
+              >
+                <SendOutlined />
+              </button>
+            </div>
+          )}
+
+          {token && recorder.state === "idle" && (
             <div className={styles.composer}>
+              <input
+                ref={fileRef}
+                type="file"
+                hidden
+                onChange={(event) => {
+                  const file: File | undefined = event.target.files?.[0];
+
+                  event.target.value = "";
+
+                  if (file) {
+                    sendFile(file, false);
+                  }
+                }}
+              />
+              <button
+                type="button"
+                className={styles.tool}
+                aria-label={t("storeSite.chat.attach")}
+                title={t("storeSite.chat.attach")}
+                disabled={isBusy}
+                onClick={() => fileRef.current?.click()}
+              >
+                <PaperClipOutlined />
+              </button>
               <textarea
                 className={styles.field}
                 rows={1}
@@ -390,15 +549,31 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
                   }
                 }}
               />
-              <button
-                type="button"
-                className={styles.send}
-                aria-label={t("storeSite.chat.send")}
-                disabled={!text.trim() || isBusy}
-                onClick={send}
-              >
-                <SendOutlined />
-              </button>
+              {text.trim() ? (
+                <button
+                  type="button"
+                  className={styles.send}
+                  aria-label={t("storeSite.chat.send")}
+                  disabled={isBusy}
+                  onClick={send}
+                >
+                  <SendOutlined />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className={`${styles.send} ${styles.mic}`}
+                  aria-label={t("storeSite.chat.record")}
+                  title={t("storeSite.chat.record")}
+                  disabled={isBusy}
+                  onClick={() => {
+                    setError(null);
+                    recorder.start();
+                  }}
+                >
+                  <AudioOutlined />
+                </button>
+              )}
             </div>
           )}
           {token && error && (

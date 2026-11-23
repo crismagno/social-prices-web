@@ -20,11 +20,25 @@ export interface IStoreSiteChat {
   phoneField: StoreSitesEnum.ChatFieldMode;
 }
 
+/** The largest file or recording the chat takes, as the API says. */
+export const SITE_CHAT_MAX_UPLOAD_BYTES: number = 16 * 1024 * 1024;
+
+/** A file of a message as the visitor sees it; its bytes are fetched apart. */
+export interface ISiteChatAttachment {
+  /** The inbox's kind: IMAGE, VIDEO, AUDIO, VOICE, FILE... */
+  kind: string;
+  mimeType: string | null;
+  fileName: string | null;
+  size: number | null;
+}
+
 /** One message as the visitor sees it. */
 export interface ISiteChatMessage {
   id: string;
   fromStore: boolean;
+  kind?: string;
   text: string | null;
+  attachments?: ISiteChatAttachment[];
   sentAt: string;
 }
 

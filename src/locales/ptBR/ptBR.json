@@ -2726,7 +2726,16 @@
       "required": "Preencha os campos obrigatórios.",
       "invalidEmail": "Informe um e-mail válido.",
       "tooMany": "Muitas mensagens. Aguarde um pouco e tente de novo.",
-      "failed": "Não foi possível enviar. Tente de novo."
+      "failed": "Não foi possível enviar. Tente de novo.",
+      "attach": "Enviar arquivo",
+      "record": "Gravar áudio",
+      "recording": "Gravando",
+      "preparing": "Preparando o áudio…",
+      "cancelRecording": "Descartar a gravação",
+      "sendRecording": "Enviar a gravação",
+      "microphoneDenied": "Permita o microfone para gravar áudio.",
+      "tooLarge": "O arquivo é grande demais. O limite é 16 MB.",
+      "download": "Baixar"
     }
   }
 }

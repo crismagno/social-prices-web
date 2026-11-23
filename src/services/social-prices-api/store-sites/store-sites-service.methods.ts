@@ -194,4 +194,51 @@ export default class StoreSitesServiceMethods extends ServiceMethodsBase {
 
     return response.data;
   }
+
+  /** A file or a recording of the visitor, with its words when there are any. */
+  public async sendChatMedia(
+    slug: string,
+    token: string,
+    file: File,
+    options: { caption: string | null; voice: boolean },
+  ): Promise<ISiteChatMessage> {
+    const body: FormData = new FormData();
+
+    body.append("file", file, file.name);
+    body.append("voice", String(options.voice));
+
+    if (options.caption) {
+      body.append("caption", options.caption);
+    }
+
+    const response = await this._fetchAxios.post<ISiteChatMessage>(
+      this._url(StoreSitesServiceEnum.Methods.PUBLIC_CHAT_MEDIA, { slug }),
+      body,
+      { headers: { [SITE_CHAT_TOKEN_HEADER]: token } },
+    );
+
+    return response.data;
+  }
+
+  /** The bytes of one file of a message of the visitor's chat. */
+  public async chatAttachment(
+    slug: string,
+    token: string,
+    messageId: string,
+    index: number,
+  ): Promise<Blob> {
+    const response = await this._fetchAxios.get<Blob>(
+      this._url(StoreSitesServiceEnum.Methods.PUBLIC_CHAT_ATTACHMENT, {
+        slug,
+        messageId,
+        index: String(index),
+      }),
+      {
+        headers: { [SITE_CHAT_TOKEN_HEADER]: token },
+        responseType: "blob",
+      },
+    );
+
+    return response.data;
+  }
 }
