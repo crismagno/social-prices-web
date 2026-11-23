@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
+import useAuthData from "../../../data/context/auth/useAuthData";
 import { useStoreChatRealtime } from "../../../data/context/socket/useStoreChatRealtime";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import { IStoreChatConversation } from "../../../shared/business/store-chat/store-chat.types";
@@ -22,6 +23,10 @@ export const useCustomerConversations = (): {
   );
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // Nothing is asked before there is a session: a visitor who arrives here
+  // logged out (from a store's site, say) is on the way to the login.
+  const { authToken } = useAuthData();
 
   const refetch = useCallback(async (silent: boolean = false) => {
     try {
@@ -44,6 +49,10 @@ export const useCustomerConversations = (): {
   }, []);
 
   useEffect(() => {
+    if (!authToken) {
+      return;
+    }
+
     refetch();
 
     const interval = setInterval(() => {
@@ -53,7 +62,7 @@ export const useCustomerConversations = (): {
     }, POLL_MS);
 
     return () => clearInterval(interval);
-  }, [refetch]);
+  }, [refetch, authToken]);
 
   useStoreChatRealtime(() => {
     refetch(true);
