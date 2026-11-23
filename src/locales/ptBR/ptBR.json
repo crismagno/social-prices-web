@@ -2290,6 +2290,24 @@
     "informCost": "Informe o custo unitário para ver o preço sugerido."
   },
   "storeSite": {
+    "product": {
+      "open": "Ver os detalhes",
+      "photo": "Foto {number}",
+      "details": "Detalhes",
+      "colors": "Cores",
+      "measures": "Medidas",
+      "dimensions": {
+        "size": "Tamanho",
+        "height": "Altura",
+        "width": "Largura",
+        "length": "Comprimento",
+        "depth": "Profundidade",
+        "diameter": "Diâmetro",
+        "thickness": "Espessura",
+        "volume": "Volume",
+        "weight": "Peso"
+      }
+    },
     "public": {
       "noProducts": "Os produtos aparecem aqui em breve.",
       "unavailable": "Indisponível",

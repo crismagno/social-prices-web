@@ -1,7 +1,10 @@
 "use client";
 
+import { useState } from "react";
+
 import ScrollProgress from "../../../components/store-site/shared/ScrollProgress";
 import SiteCart from "../../../components/store-site/shared/SiteCart";
+import SiteProductModal from "../../../components/store-site/shared/SiteProductModal";
 import SiteChatWidget from "../../../components/store-site/shared/SiteChatWidget";
 import { usePageLabel } from "../../../components/store-site/shared/SiteMenu";
 import useSiteCart from "../../../components/store-site/shared/useSiteCart";
@@ -11,6 +14,7 @@ import {
   sitePagesOf,
 } from "../../../shared/business/store-sites/store-site-pages";
 import {
+  IPublicSiteProduct,
   IPublicStoreSite,
   TPublicSite,
 } from "../../../shared/business/store-sites/store-sites.types";
@@ -35,6 +39,8 @@ const SiteClient = ({ data, pageSlug }: Props) => {
   const labelOf = usePageLabel();
 
   const cart = useSiteCart(data.site.slug, products);
+
+  const [openProductId, setOpenProductId] = useState<string | null>(null);
 
   const page: IStoreSitePage | null = pageSlug
     ? (sitePagesOf(data.site.pages).find(
@@ -72,6 +78,17 @@ const SiteClient = ({ data, pageSlug }: Props) => {
         mode="live"
         cart={cart}
         page={page}
+        onProductOpen={setOpenProductId}
+      />
+      <SiteProductModal
+        product={
+          products.find(
+            (product: IPublicSiteProduct) => product._id === openProductId,
+          ) ?? null
+        }
+        theme={site.theme}
+        cart={cart}
+        onClose={() => setOpenProductId(null)}
       />
       <SiteChatWidget
         slug={site.slug}

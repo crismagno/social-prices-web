@@ -6,6 +6,10 @@ import ImageSlides from "../../shared/ImageSlides";
 import HeroBackground, { featuredSlideKeys } from "../../shared/HeroBackground";
 import Reveal from "../../shared/Reveal";
 import base from "../../shared/site-base.module.css";
+import {
+  productNameOpenProps,
+  productPhotoOpenProps,
+} from "../../shared/site-product-open";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
 import SiteAbout, { siteHasAbout } from "../../shared/SiteAbout";
 import SiteFooter from "../../shared/SiteFooter";
@@ -39,6 +43,7 @@ const Aurora = ({
   mode,
   cart,
   page,
+  onProductOpen,
 }: IStoreSiteTemplateProps) => {
   const t = useSiteT();
 
@@ -236,11 +241,20 @@ const Aurora = ({
                           style={{ backgroundImage: cssUrl(product.mainUrl) }}
                           role="img"
                           aria-label={product.name}
+                          {...productPhotoOpenProps(
+                            product,
+                            onProductOpen,
+                            t("storeSite.product.open"),
+                          )}
                         />
                       </div>
                       <div className={styles.productBody}>
                         <span>
-                          <span className={styles.productName} data-part="1">
+                          <span
+                            className={styles.productName}
+                            data-part="1"
+                            {...productNameOpenProps(product, onProductOpen)}
+                          >
                             {product.name}
                           </span>
                           <span className={styles.price} data-part="2">

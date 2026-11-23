@@ -2287,6 +2287,24 @@
     "informCost": "Enter the unit cost to see the suggested price."
   },
   "storeSite": {
+    "product": {
+      "open": "See the details",
+      "photo": "Picture {number}",
+      "details": "Details",
+      "colors": "Colors",
+      "measures": "Measures",
+      "dimensions": {
+        "size": "Size",
+        "height": "Height",
+        "width": "Width",
+        "length": "Length",
+        "depth": "Depth",
+        "diameter": "Diameter",
+        "thickness": "Thickness",
+        "volume": "Volume",
+        "weight": "Weight"
+      }
+    },
     "public": {
       "noProducts": "The products will be here soon.",
       "unavailable": "Unavailable",

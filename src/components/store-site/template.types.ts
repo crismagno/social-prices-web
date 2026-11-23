@@ -46,6 +46,8 @@ export interface IStoreSiteTemplateProps {
   cart: ISiteCartApi;
   /** The page shown; none is the home, which shows everything. */
   page?: IStoreSitePage | null;
+  /** Opens the details of a product. Absent in the editor, where nothing opens. */
+  onProductOpen?: (productId: string) => void;
 }
 
 export interface IStoreSiteTemplateEntry {

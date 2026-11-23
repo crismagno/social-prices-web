@@ -114,6 +114,16 @@
   animation-delay: calc(0.15s + var(--part) * 0.13s);
 }
 
+/* A picture or a name that opens the details of its product. */
+.root [data-product-open] {
+  cursor: pointer;
+}
+
+.root [data-product-open]:focus-visible {
+  outline: 2px solid var(--site-primary);
+  outline-offset: 3px;
+}
+
 /* A light that crosses a picture or a button under the pointer. */
 .root [data-shine] {
   position: relative;
