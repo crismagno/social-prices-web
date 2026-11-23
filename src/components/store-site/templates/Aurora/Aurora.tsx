@@ -21,6 +21,7 @@ import {
 import useSiteT from "../../shared/useSiteT";
 import {
   pageShows,
+  readyPageHref,
   sitePagePath,
 } from "../../../../shared/business/store-sites/store-site-pages";
 import StoreSitesEnum from "../../../../shared/business/store-sites/store-sites.enum";
@@ -52,7 +53,12 @@ const Aurora = ({
   // "See the products" leads to them, on this page or on theirs.
   const productsHref: string = shows.products
     ? "#produtos"
-    : sitePagePath(site.slug, StoreSitesEnum.READY_PAGE_SLUGS.PRODUCTS);
+    : readyPageHref(
+        site.slug,
+        site.pages,
+        StoreSitesEnum.SitePageType.PRODUCTS,
+        "produtos",
+      );
 
   const { hero } = site;
 

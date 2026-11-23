@@ -17,6 +17,8 @@ import useLanguageData from "../../../data/context/language/useLanguageData";
 import {
   emptyPageContent,
   invalidPageKeys,
+  missingReadyPages,
+  newReadyPage,
   IStoreSiteFaqItem,
   IStoreSitePage,
   IStoreSitePageContent,
@@ -47,6 +49,9 @@ const PagesTab = ({ editor, storeId }: Props) => {
   const { pages } = editor.draft;
 
   const invalid: string[] = invalidPageKeys(pages);
+
+  // Ready pages the owner removed, which can be added back.
+  const missing: StoreSitesEnum.SitePageType[] = missingReadyPages(pages);
 
   const customCount: number = pages.filter(
     (page: IStoreSitePage) => page.type === StoreSitesEnum.SitePageType.CUSTOM,
@@ -160,7 +165,7 @@ const PagesTab = ({ editor, storeId }: Props) => {
                   aria-label={t("storeSite.editor.moveDown")}
                   onClick={() => move(index, index + 1)}
                 />
-                {isCustom && (
+                {
                   <Button
                     type="text"
                     size="small"
@@ -175,7 +180,7 @@ const PagesTab = ({ editor, storeId }: Props) => {
                       }))
                     }
                   />
-                )}
+                }
               </Space>
             }
           >
@@ -374,6 +379,25 @@ const PagesTab = ({ editor, storeId }: Props) => {
           </Card>
         );
       })}
+
+      {missing.length > 0 && (
+        <Space wrap>
+          {missing.map((type: StoreSitesEnum.SitePageType) => (
+            <Button
+              key={type}
+              icon={<PlusOutlined />}
+              onClick={() =>
+                // Back at the end of the menu, as a new site has it.
+                editor.update((draft) => ({
+                  pages: [...draft.pages, newReadyPage(type)],
+                }))
+              }
+            >
+              {t(`storeSite.pages.types.${type}`)}
+            </Button>
+          ))}
+        </Space>
+      )}
 
       <Button
         icon={<PlusOutlined />}

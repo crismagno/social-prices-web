@@ -67,28 +67,43 @@ const readyPage = (
 });
 
 /**
- * The pages of a site, also for one saved before pages existed: the ready ones
- * are always there. The API checks everything else when saving.
+ * The pages of a site. One saved before pages existed gets the ready ones;
+ * after that the owner decides, and a ready page can be removed. The API
+ * checks everything else when saving.
  */
 export const sitePagesOf = (
   pages: IStoreSitePage[] | null | undefined,
 ): IStoreSitePage[] => {
-  const kept: IStoreSitePage[] = (Array.isArray(pages) ? pages : [])
+  if (!Array.isArray(pages)) {
+    return READY_PAGES.map((ready) => readyPage(ready.type, ready.isInMenu));
+  }
+
+  return pages
     .filter((page: IStoreSitePage) => !!page && typeof page.type === "string")
     .map((page: IStoreSitePage) => ({
       ...page,
       content: page.content ?? emptyPageContent(),
       faq: page.faq ?? [],
     }));
-
-  for (const ready of READY_PAGES) {
-    if (!kept.some((page: IStoreSitePage) => page.type === ready.type)) {
-      kept.push(readyPage(ready.type, ready.isInMenu));
-    }
-  }
-
-  return kept;
 };
+
+/** A ready page as a new site has it, to add back one that was removed. */
+export const newReadyPage = (
+  type: StoreSitesEnum.SitePageType,
+): IStoreSitePage =>
+  readyPage(
+    type,
+    READY_PAGES.find((ready) => ready.type === type)?.isInMenu ?? true,
+  );
+
+/** The ready pages a site does not have (the owner removed them). */
+export const missingReadyPages = (
+  pages: IStoreSitePage[],
+): StoreSitesEnum.SitePageType[] =>
+  READY_PAGES.map((ready) => ready.type).filter(
+    (type: StoreSitesEnum.SitePageType) =>
+      !pages.some((page: IStoreSitePage) => page.type === type),
+  );
 
 export const slugifyPage = (value: string): string =>
   value
@@ -101,10 +116,32 @@ export const slugifyPage = (value: string): string =>
     .replace(/-+$/g, "");
 
 /** The address of a page of the site; without a page, its home. */
-export const sitePagePath = (siteSlug: string, pageSlug?: string | null): string => {
+export const sitePagePath = (
+  siteSlug: string,
+  pageSlug?: string | null,
+): string => {
   const home: string = Urls.SITE.replace(":slug", encodeURIComponent(siteSlug));
 
   return pageSlug ? `${home}/${encodeURIComponent(pageSlug)}` : home;
+};
+
+/**
+ * Where "see the products" or "about" leads from a page that does not show
+ * them: their own page if the site has it, else that part of the home.
+ */
+export const readyPageHref = (
+  siteSlug: string,
+  pages: IStoreSitePage[] | null | undefined,
+  type: StoreSitesEnum.SitePageType,
+  homeAnchor: string,
+): string => {
+  const page: IStoreSitePage | undefined = sitePagesOf(pages).find(
+    (candidate: IStoreSitePage) => candidate.type === type,
+  );
+
+  return page
+    ? sitePagePath(siteSlug, page.slug)
+    : `${sitePagePath(siteSlug)}#${homeAnchor}`;
 };
 
 /** What each page of the site shows of the parts the home has. */
@@ -124,7 +161,10 @@ export const invalidPageKeys = (pages: IStoreSitePage[]): string[] => {
   const seen: Set<string> = new Set();
 
   return pages
-    .filter((page: IStoreSitePage) => page.type === StoreSitesEnum.SitePageType.CUSTOM)
+    .filter(
+      (page: IStoreSitePage) =>
+        page.type === StoreSitesEnum.SitePageType.CUSTOM,
+    )
     .filter((page: IStoreSitePage) => {
       const isBad: boolean =
         !PAGE_SLUG_REGEX.test(page.slug) ||
