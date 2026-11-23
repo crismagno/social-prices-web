@@ -2423,7 +2423,8 @@
         "footer": "Rodapé",
         "about": "Sobre",
         "pages": "Páginas",
-        "chat": "Chat"
+        "chat": "Chat",
+        "blocks": "Blocos"
       },
       "colors": {
         "primary": "Cor principal",
@@ -2691,6 +2692,281 @@
           "OPTIONAL": "Opcional",
           "HIDDEN": "Não pedir"
         }
+      },
+      "blocks": {
+        "hint": "Adicione blocos prontos ao site: equipe, depoimentos, logos, diferenciais, perguntas, números, passo a passo e chamada final. Cada bloco aparece no fim da página escolhida, antes do rodapé, na ordem desta lista.",
+        "add": "Adicionar bloco",
+        "empty": "Nenhum bloco ainda. Comece por \"Adicionar bloco\".",
+        "home": "Início",
+        "removedPage": "Página removida",
+        "page": "Mostrar na página",
+        "kicker": "Linha acima do título",
+        "title": "Título",
+        "subtitle": "Texto abaixo do título",
+        "item": "Item",
+        "addItem": "Adicionar item",
+        "hide": "Esconder do site",
+        "show": "Mostrar no site",
+        "removeConfirm": "Remover este bloco?",
+        "button": {
+          "label": "Texto do botão",
+          "target": "O botão leva para",
+          "page": "Página",
+          "targets": {
+            "PAGE": "Página",
+            "WHATSAPP": "WhatsApp",
+            "PHONE": "Telefone",
+            "EMAIL": "E-mail",
+            "URL": "Site"
+          },
+          "values": {
+            "WHATSAPP": "Número do WhatsApp",
+            "PHONE": "Telefone",
+            "EMAIL": "E-mail",
+            "URL": "Endereço do site"
+          },
+          "placeholders": {
+            "WHATSAPP": "+55 11 99999-0000",
+            "PHONE": "+55 11 3333-4444",
+            "EMAIL": "contato@suaempresa.com",
+            "URL": "suaempresa.com"
+          }
+        },
+        "types": {
+          "TEAM": {
+            "name": "Equipe",
+            "hint": "Fotos, nomes e cargos de quem faz a empresa"
+          },
+          "TESTIMONIALS": {
+            "name": "Depoimentos",
+            "hint": "O que os clientes dizem, com estrelas"
+          },
+          "LOGOS": {
+            "name": "Ferramentas e marcas",
+            "hint": "Logos de parceiros, marcas ou ferramentas"
+          },
+          "FEATURES": {
+            "name": "Diferenciais",
+            "hint": "Cards com ícone, título e texto"
+          },
+          "FAQ": {
+            "name": "Perguntas frequentes",
+            "hint": "Perguntas que abrem e fecham"
+          },
+          "STATS": {
+            "name": "Números",
+            "hint": "Números grandes que contam ao aparecer"
+          },
+          "STEPS": {
+            "name": "Passo a passo",
+            "hint": "Como funciona, em etapas numeradas"
+          },
+          "CTA": {
+            "name": "Chamada final",
+            "hint": "Um banner com um botão de ação"
+          }
+        },
+        "fields": {
+          "TEAM": {
+            "imageUrl": "Foto",
+            "title": "Nome",
+            "subtitle": "Cargo",
+            "text": "Sobre a pessoa (opcional)"
+          },
+          "TESTIMONIALS": {
+            "text": "Depoimento",
+            "rating": "Estrelas",
+            "title": "Nome",
+            "subtitle": "Empresa ou cidade",
+            "imageUrl": "Foto (opcional)"
+          },
+          "LOGOS": {
+            "imageUrl": "Logo",
+            "title": "Nome (aparece se não houver logo)"
+          },
+          "FEATURES": {
+            "icon": "Ícone",
+            "title": "Título",
+            "text": "Descrição"
+          },
+          "FAQ": {
+            "title": "Pergunta",
+            "text": "Resposta"
+          },
+          "STATS": {
+            "title": "Número (ex.: 1.200, 4,9 ou 700k+)",
+            "subtitle": "O que ele conta"
+          },
+          "STEPS": {
+            "title": "Título da etapa",
+            "text": "Descrição"
+          }
+        },
+        "icons": {
+          "STAR": "Estrela",
+          "HEART": "Coração",
+          "ROCKET": "Foguete",
+          "SHIELD": "Escudo",
+          "BOLT": "Raio",
+          "CHECK": "Confirmado",
+          "CLOCK": "Relógio",
+          "GIFT": "Presente",
+          "TRUCK": "Entrega",
+          "SMILE": "Sorriso",
+          "TROPHY": "Troféu",
+          "BULB": "Ideia",
+          "TEAM": "Equipe",
+          "GLOBAL": "Mundo",
+          "LOCK": "Cadeado",
+          "CUSTOMER_SERVICE": "Atendimento"
+        },
+        "samples": {
+          "TEAM": {
+            "kicker": "Nossa equipe",
+            "title": "Quem faz acontecer",
+            "subtitle": "Pessoas apaixonadas pelo que fazem.",
+            "items": [
+              {
+                "title": "Ana Souza",
+                "subtitle": "Fundadora"
+              },
+              {
+                "title": "Bruno Lima",
+                "subtitle": "Atendimento"
+              },
+              {
+                "title": "Carla Dias",
+                "subtitle": "Produção"
+              }
+            ]
+          },
+          "TESTIMONIALS": {
+            "kicker": "Depoimentos",
+            "title": "O que nossos clientes dizem",
+            "subtitle": "Histórias reais de quem já comprou com a gente.",
+            "items": [
+              {
+                "title": "Mariana R.",
+                "subtitle": "São Paulo",
+                "text": "Atendimento impecável e entrega antes do prazo. Recomendo muito!"
+              },
+              {
+                "title": "Pedro A.",
+                "subtitle": "Curitiba",
+                "text": "Qualidade excelente, superou o que eu esperava."
+              },
+              {
+                "title": "Juliana M.",
+                "subtitle": "Recife",
+                "text": "Já é a terceira vez que compro. Sempre perfeito."
+              }
+            ]
+          },
+          "LOGOS": {
+            "kicker": "Parceiros",
+            "title": "Marcas e ferramentas que usamos",
+            "subtitle": "",
+            "items": [
+              {
+                "title": "Parceiro 1"
+              },
+              {
+                "title": "Parceiro 2"
+              },
+              {
+                "title": "Parceiro 3"
+              },
+              {
+                "title": "Parceiro 4"
+              },
+              {
+                "title": "Parceiro 5"
+              }
+            ]
+          },
+          "FEATURES": {
+            "kicker": "Diferenciais",
+            "title": "Por que escolher a gente",
+            "subtitle": "O que torna nossa empresa diferente.",
+            "items": [
+              {
+                "title": "Rápido",
+                "text": "Entregamos no prazo, sem complicação."
+              },
+              {
+                "title": "Seguro",
+                "text": "Seus dados e sua compra sempre protegidos."
+              },
+              {
+                "title": "Feito com carinho",
+                "text": "Cada detalhe pensado para você."
+              }
+            ]
+          },
+          "FAQ": {
+            "kicker": "Dúvidas",
+            "title": "Perguntas frequentes",
+            "subtitle": "",
+            "items": [
+              {
+                "title": "Qual o prazo de entrega?",
+                "text": "O prazo depende da sua região e aparece antes de finalizar o pedido."
+              },
+              {
+                "title": "Posso trocar um produto?",
+                "text": "Sim, você tem até 7 dias após o recebimento para pedir a troca."
+              },
+              {
+                "title": "Como falo com vocês?",
+                "text": "Pelo chat do site, pelo WhatsApp ou por e-mail."
+              }
+            ]
+          },
+          "STATS": {
+            "kicker": "Em números",
+            "title": "Nossa história em números",
+            "subtitle": "",
+            "items": [
+              {
+                "title": "1.200+",
+                "subtitle": "Clientes atendidos"
+              },
+              {
+                "title": "4,9",
+                "subtitle": "Nota média"
+              },
+              {
+                "title": "10 anos",
+                "subtitle": "De experiência"
+              }
+            ]
+          },
+          "STEPS": {
+            "kicker": "Como funciona",
+            "title": "Simples em 3 passos",
+            "subtitle": "",
+            "items": [
+              {
+                "title": "Escolha",
+                "text": "Veja os produtos e escolha o seu."
+              },
+              {
+                "title": "Peça",
+                "text": "Faça o pedido em poucos cliques."
+              },
+              {
+                "title": "Receba",
+                "text": "A gente prepara e entrega para você."
+              }
+            ]
+          },
+          "CTA": {
+            "kicker": "Vamos conversar?",
+            "title": "Pronto para começar?",
+            "subtitle": "Fale com a gente e tire suas dúvidas.",
+            "button": "Ver produtos"
+          }
+        }
       }
     },
     "footer": {
@@ -2784,6 +3060,12 @@
       "microphoneDenied": "Permita o microfone para gravar áudio.",
       "tooLarge": "O arquivo é grande demais. O limite é 16 MB.",
       "download": "Baixar"
+    },
+    "blocks": {
+      "rating": "{count} de 5 estrelas",
+      "previous": "Anterior",
+      "next": "Próximo",
+      "ctaButton": "Fale com a gente"
     }
   }
 }

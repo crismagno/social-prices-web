@@ -1,4 +1,5 @@
 import { IStoreSiteAbout } from "./store-site-about";
+import { IStoreSiteBlock } from "./store-site-blocks";
 import { IStoreSiteChat } from "./store-site-chat";
 import { IStoreSiteFooter } from "./store-site-footer";
 import { IStoreSitePage } from "./store-site-pages";
@@ -68,6 +69,7 @@ export interface ISaveStoreSite {
   about: IStoreSiteAbout;
   pages: IStoreSitePage[];
   chat: IStoreSiteChat;
+  blocks: IStoreSiteBlock[];
   hero: IStoreSiteHero;
   sections: IStoreSiteSection[];
   marquee: IStoreSiteMarquee;

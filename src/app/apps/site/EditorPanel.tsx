@@ -5,6 +5,7 @@ import { ReactNode, useState } from "react";
 import { Alert, App, Badge, Button, Card, Select, Tag, Tooltip } from "antd";
 
 import {
+  AppstoreAddOutlined,
   AppstoreOutlined,
   BgColorsOutlined,
   BlockOutlined,
@@ -31,6 +32,7 @@ import { ProductsTab, PublishTab } from "./CatalogPublishTabs";
 import { HeroTab, MarqueeTab, SectionsTab } from "./ContentTabs";
 import { ColorsTab, TemplateTab } from "./DesignTabs";
 import AboutTab from "./AboutTab";
+import BlocksTab from "./BlocksTab";
 import ChatTab from "./ChatTab";
 import FooterTab from "./FooterTab";
 import PagesTab from "./PagesTab";
@@ -45,6 +47,7 @@ type TTab =
   | "marquee"
   | "products"
   | "about"
+  | "blocks"
   | "pages"
   | "chat"
   | "footer"
@@ -67,6 +70,7 @@ const TABS: { key: TTab; icon: ReactNode }[] = [
   { key: "marquee", icon: <NotificationOutlined /> },
   { key: "products", icon: <ShoppingOutlined /> },
   { key: "about", icon: <ReadOutlined /> },
+  { key: "blocks", icon: <AppstoreAddOutlined /> },
   { key: "pages", icon: <FileTextOutlined /> },
   { key: "chat", icon: <CommentOutlined /> },
   { key: "footer", icon: <BorderBottomOutlined /> },
@@ -135,6 +139,7 @@ const EditorPanel = ({
     marquee: false,
     products: false,
     about: false,
+    blocks: false,
     pages: invalidPageKeys(draft.pages).length > 0,
     chat: false,
     footer: false,
@@ -172,6 +177,7 @@ const EditorPanel = ({
         storeAbout={currentStore?.about ?? null}
       />
     ),
+    blocks: <BlocksTab editor={editor} storeId={storeId} />,
     pages: <PagesTab editor={editor} storeId={storeId} />,
     chat: <ChatTab editor={editor} />,
     footer: <FooterTab editor={editor} />,

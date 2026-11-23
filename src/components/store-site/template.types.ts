@@ -32,6 +32,7 @@ export interface IStoreSiteTemplateProps {
     | "signIn"
     | "about"
     | "pages"
+    | "blocks"
     | "hero"
     | "sections"
     | "marquee"

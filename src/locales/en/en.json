@@ -2420,7 +2420,8 @@
         "footer": "Footer",
         "about": "About",
         "pages": "Pages",
-        "chat": "Chat"
+        "chat": "Chat",
+        "blocks": "Blocks"
       },
       "colors": {
         "primary": "Main color",
@@ -2688,6 +2689,281 @@
           "OPTIONAL": "Optional",
           "HIDDEN": "Not asked"
         }
+      },
+      "blocks": {
+        "hint": "Add ready-made blocks to the site: team, testimonials, logos, features, questions, numbers, steps and a final call to action. Each block shows at the end of the chosen page, before the footer, in the order of this list.",
+        "add": "Add block",
+        "empty": "No blocks yet. Start with \"Add block\".",
+        "home": "Home",
+        "removedPage": "Removed page",
+        "page": "Show on page",
+        "kicker": "Line above the title",
+        "title": "Title",
+        "subtitle": "Text under the title",
+        "item": "Item",
+        "addItem": "Add item",
+        "hide": "Hide from the site",
+        "show": "Show on the site",
+        "removeConfirm": "Remove this block?",
+        "button": {
+          "label": "Button text",
+          "target": "The button goes to",
+          "page": "Page",
+          "targets": {
+            "PAGE": "Page",
+            "WHATSAPP": "WhatsApp",
+            "PHONE": "Phone",
+            "EMAIL": "E-mail",
+            "URL": "Website"
+          },
+          "values": {
+            "WHATSAPP": "WhatsApp number",
+            "PHONE": "Phone",
+            "EMAIL": "E-mail",
+            "URL": "Website address"
+          },
+          "placeholders": {
+            "WHATSAPP": "+1 555 123 4567",
+            "PHONE": "+1 555 123 4567",
+            "EMAIL": "hello@yourcompany.com",
+            "URL": "yourcompany.com"
+          }
+        },
+        "types": {
+          "TEAM": {
+            "name": "Team",
+            "hint": "Photos, names and roles of your people"
+          },
+          "TESTIMONIALS": {
+            "name": "Testimonials",
+            "hint": "What customers say, with stars"
+          },
+          "LOGOS": {
+            "name": "Tools and brands",
+            "hint": "Logos of partners, brands or tools"
+          },
+          "FEATURES": {
+            "name": "Features",
+            "hint": "Cards with an icon, a title and text"
+          },
+          "FAQ": {
+            "name": "FAQ",
+            "hint": "Questions that open and close"
+          },
+          "STATS": {
+            "name": "Numbers",
+            "hint": "Big numbers that count up when seen"
+          },
+          "STEPS": {
+            "name": "Steps",
+            "hint": "How it works, in numbered steps"
+          },
+          "CTA": {
+            "name": "Call to action",
+            "hint": "A banner with an action button"
+          }
+        },
+        "fields": {
+          "TEAM": {
+            "imageUrl": "Photo",
+            "title": "Name",
+            "subtitle": "Role",
+            "text": "About the person (optional)"
+          },
+          "TESTIMONIALS": {
+            "text": "Testimonial",
+            "rating": "Stars",
+            "title": "Name",
+            "subtitle": "Company or city",
+            "imageUrl": "Photo (optional)"
+          },
+          "LOGOS": {
+            "imageUrl": "Logo",
+            "title": "Name (shown when there is no logo)"
+          },
+          "FEATURES": {
+            "icon": "Icon",
+            "title": "Title",
+            "text": "Description"
+          },
+          "FAQ": {
+            "title": "Question",
+            "text": "Answer"
+          },
+          "STATS": {
+            "title": "Number (e.g. 1,200, 4.9 or 700k+)",
+            "subtitle": "What it counts"
+          },
+          "STEPS": {
+            "title": "Step title",
+            "text": "Description"
+          }
+        },
+        "icons": {
+          "STAR": "Star",
+          "HEART": "Heart",
+          "ROCKET": "Rocket",
+          "SHIELD": "Shield",
+          "BOLT": "Bolt",
+          "CHECK": "Check",
+          "CLOCK": "Clock",
+          "GIFT": "Gift",
+          "TRUCK": "Delivery",
+          "SMILE": "Smile",
+          "TROPHY": "Trophy",
+          "BULB": "Idea",
+          "TEAM": "Team",
+          "GLOBAL": "World",
+          "LOCK": "Lock",
+          "CUSTOMER_SERVICE": "Support"
+        },
+        "samples": {
+          "TEAM": {
+            "kicker": "Our team",
+            "title": "The people behind it",
+            "subtitle": "People who love what they do.",
+            "items": [
+              {
+                "title": "Anna Smith",
+                "subtitle": "Founder"
+              },
+              {
+                "title": "Ben Lee",
+                "subtitle": "Customer care"
+              },
+              {
+                "title": "Carla Diaz",
+                "subtitle": "Production"
+              }
+            ]
+          },
+          "TESTIMONIALS": {
+            "kicker": "Testimonials",
+            "title": "What our customers say",
+            "subtitle": "Real stories from people who bought from us.",
+            "items": [
+              {
+                "title": "Maria R.",
+                "subtitle": "New York",
+                "text": "Flawless service and delivery ahead of time. Highly recommended!"
+              },
+              {
+                "title": "Peter A.",
+                "subtitle": "Chicago",
+                "text": "Excellent quality, beyond what I expected."
+              },
+              {
+                "title": "Julia M.",
+                "subtitle": "Austin",
+                "text": "Third time buying here. Always perfect."
+              }
+            ]
+          },
+          "LOGOS": {
+            "kicker": "Partners",
+            "title": "Brands and tools we use",
+            "subtitle": "",
+            "items": [
+              {
+                "title": "Partner 1"
+              },
+              {
+                "title": "Partner 2"
+              },
+              {
+                "title": "Partner 3"
+              },
+              {
+                "title": "Partner 4"
+              },
+              {
+                "title": "Partner 5"
+              }
+            ]
+          },
+          "FEATURES": {
+            "kicker": "Why us",
+            "title": "Why choose us",
+            "subtitle": "What makes our company different.",
+            "items": [
+              {
+                "title": "Fast",
+                "text": "We deliver on time, hassle free."
+              },
+              {
+                "title": "Safe",
+                "text": "Your data and your purchase always protected."
+              },
+              {
+                "title": "Made with care",
+                "text": "Every detail thought out for you."
+              }
+            ]
+          },
+          "FAQ": {
+            "kicker": "Questions",
+            "title": "Frequently asked questions",
+            "subtitle": "",
+            "items": [
+              {
+                "title": "How long does delivery take?",
+                "text": "It depends on your region and is shown before you place the order."
+              },
+              {
+                "title": "Can I exchange a product?",
+                "text": "Yes, you have 7 days after delivery to ask for an exchange."
+              },
+              {
+                "title": "How do I reach you?",
+                "text": "Through the site chat, WhatsApp or e-mail."
+              }
+            ]
+          },
+          "STATS": {
+            "kicker": "In numbers",
+            "title": "Our story in numbers",
+            "subtitle": "",
+            "items": [
+              {
+                "title": "1,200+",
+                "subtitle": "Happy customers"
+              },
+              {
+                "title": "4.9",
+                "subtitle": "Average rating"
+              },
+              {
+                "title": "10 years",
+                "subtitle": "Of experience"
+              }
+            ]
+          },
+          "STEPS": {
+            "kicker": "How it works",
+            "title": "Simple, in 3 steps",
+            "subtitle": "",
+            "items": [
+              {
+                "title": "Choose",
+                "text": "Browse the products and pick yours."
+              },
+              {
+                "title": "Order",
+                "text": "Place the order in a few clicks."
+              },
+              {
+                "title": "Receive",
+                "text": "We prepare it and deliver it to you."
+              }
+            ]
+          },
+          "CTA": {
+            "kicker": "Let's talk?",
+            "title": "Ready to start?",
+            "subtitle": "Get in touch and ask us anything.",
+            "button": "See products"
+          }
+        }
       }
     },
     "footer": {
@@ -2781,6 +3057,12 @@
       "microphoneDenied": "Allow the microphone to record audio.",
       "tooLarge": "The file is too big. The limit is 16 MB.",
       "download": "Download"
+    },
+    "blocks": {
+      "rating": "{count} out of 5 stars",
+      "previous": "Previous",
+      "next": "Next",
+      "ctaButton": "Contact us"
     }
   }
 }

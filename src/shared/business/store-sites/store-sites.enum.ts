@@ -103,6 +103,47 @@ namespace StoreSitesEnum {
     MAIL = "MAIL",
   }
 
+  /** The kinds of content block an owner can add to the site. */
+  export enum BlockType {
+    TEAM = "TEAM",
+    TESTIMONIALS = "TESTIMONIALS",
+    LOGOS = "LOGOS",
+    FEATURES = "FEATURES",
+    FAQ = "FAQ",
+    STATS = "STATS",
+    STEPS = "STEPS",
+    CTA = "CTA",
+  }
+
+  /** Where the button of a call-to-action block goes. */
+  export enum BlockButtonTarget {
+    PAGE = "PAGE",
+    WHATSAPP = "WHATSAPP",
+    PHONE = "PHONE",
+    EMAIL = "EMAIL",
+    URL = "URL",
+  }
+
+  /** The ready icons of a feature card. */
+  export enum FeatureIcon {
+    STAR = "STAR",
+    HEART = "HEART",
+    ROCKET = "ROCKET",
+    SHIELD = "SHIELD",
+    BOLT = "BOLT",
+    CHECK = "CHECK",
+    CLOCK = "CLOCK",
+    GIFT = "GIFT",
+    TRUCK = "TRUCK",
+    SMILE = "SMILE",
+    TROPHY = "TROPHY",
+    BULB = "BULB",
+    TEAM = "TEAM",
+    GLOBAL = "GLOBAL",
+    LOCK = "LOCK",
+    CUSTOMER_SERVICE = "CUSTOMER_SERVICE",
+  }
+
   /** How the chat asks a field before it starts. */
   export enum ChatFieldMode {
     REQUIRED = "REQUIRED",

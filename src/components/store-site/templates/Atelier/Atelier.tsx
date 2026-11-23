@@ -18,6 +18,7 @@ import {
 import { siteSerif } from "../../shared/site-fonts";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
 import SiteAbout, { siteHasAbout } from "../../shared/SiteAbout";
+import SiteBlocks from "../../shared/blocks/SiteBlocks";
 import SiteFooter from "../../shared/SiteFooter";
 import SiteMenu from "../../shared/SiteMenu";
 import SitePageBody from "../../shared/SitePageBody";
@@ -363,6 +364,15 @@ const Atelier = ({
           isPreview={mode === "preview"}
         />
       )}
+
+      <SiteBlocks
+        blocks={site.blocks}
+        pages={site.pages}
+        siteSlug={site.slug}
+        pageKey={page?.key ?? null}
+        variant="atelier"
+        mode={mode}
+      />
 
       <SiteFooter
         footer={site.footer}
