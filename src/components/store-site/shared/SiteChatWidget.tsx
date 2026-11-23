@@ -7,6 +7,7 @@ import {
   CloseOutlined,
   DeleteOutlined,
   PaperClipOutlined,
+  PlusOutlined,
   SendOutlined,
 } from "@ant-design/icons";
 
@@ -45,6 +46,28 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const tokenKey = (slug: string): string => `site-chat:${slug}`;
 const seenKey = (slug: string): string => `site-chat-seen:${slug}`;
+const whoKey = (slug: string): string => `site-chat-who:${slug}`;
+
+/** Who the visitor said they are, for them to see whose conversation this is. */
+interface ISiteChatWho {
+  name: string;
+  email: string | null;
+}
+
+const readWho = (slug: string): ISiteChatWho | null => {
+  try {
+    const parsed: any = JSON.parse(read(whoKey(slug)) ?? "null");
+
+    return typeof parsed?.name === "string" && parsed.name
+      ? {
+          name: parsed.name,
+          email: typeof parsed.email === "string" ? parsed.email : null,
+        }
+      : null;
+  } catch {
+    return null;
+  }
+};
 
 const read = (key: string): string | null => {
   try {
@@ -79,12 +102,15 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [token, setToken] = useState<string | null>(null);
+  const [who, setWho] = useState<ISiteChatWho | null>(null);
   const [messages, setMessages] = useState<ISiteChatMessage[]>([]);
   const [hasUnread, setHasUnread] = useState<boolean>(false);
   const [text, setText] = useState<string>("");
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
+  // Asked before leaving a conversation: here it cannot be opened again.
+  const [isAskingNew, setIsAskingNew] = useState<boolean>(false);
 
   const endRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -98,11 +124,14 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
 
   useEffect(() => {
     setToken(read(tokenKey(slug)));
+    setWho(readWho(slug));
   }, [slug]);
 
   const forget = useCallback((): void => {
     write(tokenKey(slug), null);
+    write(whoKey(slug), null);
     setToken(null);
+    setWho(null);
     setMessages([]);
   }, [slug]);
 
@@ -172,6 +201,21 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
     endRef.current?.scrollIntoView({ block: "end" });
   }, [isOpen, messages, slug]);
 
+  // Someone else at this browser, or another subject: back to saying who is
+  // writing. The store keeps the conversation that is left behind.
+  const startNew = (): void => {
+    recorder.cancel();
+
+    write(seenKey(slug), null);
+    forget();
+
+    setText("");
+    setError(null);
+    setHasUnread(false);
+    setForm({ name: "", email: "", phone: "" });
+    setIsAskingNew(false);
+  };
+
   const describeError = (caught: any): string =>
     caught?.response?.status === 429
       ? t("storeSite.chat.tooMany")
@@ -212,8 +256,12 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
           phone: phone || null,
         });
 
+      const newWho: ISiteChatWho = { name, email: email || null };
+
       write(tokenKey(slug), newToken);
+      write(whoKey(slug), JSON.stringify(newWho));
       setToken(newToken);
+      setWho(newWho);
     } catch (caught: any) {
       setError(describeError(caught));
     } finally {
@@ -364,6 +412,18 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
               <p className={styles.title}>{settings.title ?? brandName}</p>
               <p className={styles.subtitle}>{t("storeSite.chat.subtitle")}</p>
             </div>
+            {token && (
+              <button
+                type="button"
+                className={styles.headerTool}
+                aria-label={t("storeSite.chat.new")}
+                title={t("storeSite.chat.new")}
+                disabled={isBusy}
+                onClick={() => setIsAskingNew(true)}
+              >
+                <PlusOutlined />
+              </button>
+            )}
             <button
               type="button"
               className={styles.close}
@@ -373,6 +433,13 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
               <CloseOutlined />
             </button>
           </header>
+
+          {token && who && (
+            <p className={styles.who}>
+              {t("storeSite.chat.who")} <strong>{who.name}</strong>
+              {who.email && <span> · {who.email}</span>}
+            </p>
+          )}
 
           <div className={styles.body} aria-live="polite">
             <div className={`${styles.bubble} ${styles.fromStore}`}>
@@ -470,6 +537,28 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
             )}
             <div ref={endRef} />
           </div>
+
+          {token && isAskingNew && (
+            <div className={styles.confirm} role="alertdialog">
+              <p>{t("storeSite.chat.newConfirm")}</p>
+              <div className={styles.confirmActions}>
+                <button
+                  type="button"
+                  className={styles.ghost}
+                  onClick={() => setIsAskingNew(false)}
+                >
+                  {t("storeSite.chat.newCancel")}
+                </button>
+                <button
+                  type="button"
+                  className={styles.primary}
+                  onClick={startNew}
+                >
+                  {t("storeSite.chat.newStart")}
+                </button>
+              </div>
+            </div>
+          )}
 
           {token && recorder.state !== "idle" && (
             <div className={`${styles.composer} ${styles.recording}`}>

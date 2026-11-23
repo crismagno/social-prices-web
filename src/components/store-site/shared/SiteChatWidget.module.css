@@ -239,6 +239,76 @@
   background: color-mix(in srgb, currentColor 30%, transparent);
 }
 
+.headerTool {
+  position: relative;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, currentColor 18%, transparent);
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.headerTool:hover:not(:disabled) {
+  background: color-mix(in srgb, currentColor 30%, transparent);
+}
+
+.headerTool:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.who {
+  margin: 0;
+  padding: 7px 16px;
+  border-bottom: 1px solid color-mix(in srgb, var(--site-text) 10%, transparent);
+  background: var(--site-bg);
+  color: color-mix(in srgb, var(--site-text) 75%, transparent);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.who strong {
+  color: var(--site-text);
+}
+
+.confirm {
+  padding: 12px 14px;
+  border-top: 1px solid color-mix(in srgb, var(--site-text) 12%, transparent);
+  background: var(--site-bg);
+  color: var(--site-text);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.confirm p {
+  margin: 0 0 10px;
+}
+
+.confirmActions {
+  display: flex;
+  gap: 8px;
+}
+
+.confirmActions > * {
+  flex: 1;
+  padding: 9px 10px;
+  font-size: 13px;
+}
+
+.ghost {
+  border: 1px solid color-mix(in srgb, var(--site-text) 18%, transparent);
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .body {
   flex: 1;
   min-height: 0;

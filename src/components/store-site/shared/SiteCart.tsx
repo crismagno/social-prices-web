@@ -11,6 +11,7 @@ import {
   Form,
   Input,
   InputNumber,
+  Popconfirm,
   Select,
 } from "antd";
 
@@ -90,6 +91,13 @@ const SiteCart = ({ slug, theme, products, cart }: Props) => {
 
   const canCheckout: boolean =
     orderableLines.length > 0 && unavailableIds.length === 0;
+
+  const clear = (): void => {
+    cart.clear();
+
+    // Nothing left for the store to have refused.
+    setRefusedIds([]);
+  };
 
   const close = (): void => {
     cart.close();
@@ -179,6 +187,23 @@ const SiteCart = ({ slug, theme, products, cart }: Props) => {
         open={cart.isOpen}
         onClose={close}
         title={title}
+        extra={
+          step === "cart" &&
+          cart.items.length > 0 && (
+            <Popconfirm
+              title={t("storeSite.cart.clearConfirm")}
+              okText={t("storeSite.cart.clear")}
+              cancelText={t("storeSite.cart.clearCancel")}
+              okButtonProps={{ danger: true }}
+              placement="bottomRight"
+              onConfirm={clear}
+            >
+              <Button type="text" danger size="small">
+                {t("storeSite.cart.clear")}
+              </Button>
+            </Popconfirm>
+          )
+        }
         width={440}
         destroyOnClose={false}
       >
