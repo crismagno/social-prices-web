@@ -2059,7 +2059,8 @@
       "MESSENGER": "Messenger",
       "INSTAGRAM": "Instagram",
       "WHATSAPP": "WhatsApp",
-      "STORE": "Store chat"
+      "STORE": "Store chat",
+      "SITE": "Site chat"
     },
     "conversations": {
       "title": "Conversations of this customer"
@@ -2397,7 +2398,8 @@
         "publish": "Address",
         "footer": "Footer",
         "about": "About",
-        "pages": "Pages"
+        "pages": "Pages",
+        "chat": "Chat"
       },
       "colors": {
         "primary": "Main color",
@@ -2483,7 +2485,8 @@
         "publish": "The address of the site, and whether it is online.",
         "footer": "The foot of the site: a few words, your links and the button to sign in to the app.",
         "about": "The about section: a title, your texts and an image or a video.",
-        "pages": "The pages of the site besides its home, in the order of the menu. Add your own."
+        "pages": "The pages of the site besides its home, in the order of the menu. Add your own.",
+        "chat": "A chat window on the site: visitors write, you answer in Chats."
       },
       "problems": {
         "hero": "The entrance needs a title.",
@@ -2630,6 +2633,39 @@
         "answer": "Answer",
         "addQuestion": "Add question",
         "add": "Add page"
+      },
+      "chat": {
+        "show": "Let visitors chat with the store",
+        "showHint": "A button in a corner of every page opens a conversation.",
+        "where": "Messages arrive in Chats, in the panel, on the Site chat channel. You answer from there and the visitor reads it in the window.",
+        "position": "Corner of the button",
+        "positions": {
+          "LEFT": "Left",
+          "RIGHT": "Right"
+        },
+        "icon": "Icon of the button",
+        "icons": {
+          "MESSAGE": "Message",
+          "COMMENT": "Comment",
+          "CUSTOMER_SERVICE": "Support",
+          "QUESTION": "Question",
+          "SMILE": "Smile",
+          "HEART": "Heart",
+          "SHOP": "Shop",
+          "MAIL": "Email"
+        },
+        "buttonLabel": "Text of the button",
+        "buttonLabelHint": "Empty shows “Chat with us”.",
+        "title": "Title of the window",
+        "titleHint": "Empty shows the name of the site.",
+        "greeting": "First message",
+        "asked": "What is asked before the conversation",
+        "askedHint": "The name is always asked.",
+        "modes": {
+          "REQUIRED": "Required",
+          "OPTIONAL": "Optional",
+          "HIDDEN": "Not asked"
+        }
       }
     },
     "footer": {
@@ -2670,6 +2706,24 @@
     "support": {
       "faq": "Frequently asked questions",
       "contact": "Talk to us"
+    },
+    "chat": {
+      "button": "Chat with us",
+      "subtitle": "We answer right here",
+      "greeting": "Hi! How can we help?",
+      "intro": "Tell us who you are to start.",
+      "name": "Your name",
+      "email": "Email",
+      "phone": "Phone",
+      "optional": "(optional)",
+      "start": "Start the conversation",
+      "placeholder": "Write your message…",
+      "send": "Send",
+      "close": "Close the chat",
+      "required": "Fill in the required fields.",
+      "invalidEmail": "Enter a valid email.",
+      "tooMany": "Too many messages. Wait a moment and try again.",
+      "failed": "It could not be sent. Try again."
     }
   }
 }

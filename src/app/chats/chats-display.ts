@@ -19,6 +19,7 @@ export const CHANNEL_COLOR: Record<InboxEnum.Channel, string> = {
   [InboxEnum.Channel.INSTAGRAM]: INSTAGRAM_PINK,
   [InboxEnum.Channel.WHATSAPP]: WHATSAPP_GREEN,
   [InboxEnum.Channel.STORE]: STORE_CHAT_COLOR,
+  [InboxEnum.Channel.SITE]: "#6a3dff",
 };
 
 export const chatInitial = (name: string): string =>

@@ -9,6 +9,7 @@ export const conversationAppUrl = (
 ): string | null => {
   switch (conversation.channel) {
     case InboxEnum.Channel.STORE:
+    case InboxEnum.Channel.SITE:
       return null;
 
     case InboxEnum.Channel.TELEGRAM:

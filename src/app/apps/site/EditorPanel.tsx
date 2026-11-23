@@ -10,6 +10,7 @@ import {
   BlockOutlined,
   BorderBottomOutlined,
   CheckCircleFilled,
+  CommentOutlined,
   ExportOutlined,
   FileTextOutlined,
   LinkOutlined,
@@ -30,6 +31,7 @@ import { ProductsTab, PublishTab } from "./CatalogPublishTabs";
 import { HeroTab, MarqueeTab, SectionsTab } from "./ContentTabs";
 import { ColorsTab, TemplateTab } from "./DesignTabs";
 import AboutTab from "./AboutTab";
+import ChatTab from "./ChatTab";
 import FooterTab from "./FooterTab";
 import PagesTab from "./PagesTab";
 import useAvailableHeight from "./useAvailableHeight";
@@ -44,6 +46,7 @@ type TTab =
   | "products"
   | "about"
   | "pages"
+  | "chat"
   | "footer"
   | "publish";
 
@@ -65,6 +68,7 @@ const TABS: { key: TTab; icon: ReactNode }[] = [
   { key: "products", icon: <ShoppingOutlined /> },
   { key: "about", icon: <ReadOutlined /> },
   { key: "pages", icon: <FileTextOutlined /> },
+  { key: "chat", icon: <CommentOutlined /> },
   { key: "footer", icon: <BorderBottomOutlined /> },
   { key: "publish", icon: <LinkOutlined /> },
 ];
@@ -132,6 +136,7 @@ const EditorPanel = ({
     products: false,
     about: false,
     pages: invalidPageKeys(draft.pages).length > 0,
+    chat: false,
     footer: false,
     publish: !isSlugValid || !!editor.slugError,
   };
@@ -168,6 +173,7 @@ const EditorPanel = ({
       />
     ),
     pages: <PagesTab editor={editor} storeId={storeId} />,
+    chat: <ChatTab editor={editor} />,
     footer: <FooterTab editor={editor} />,
     publish: <PublishTab editor={editor} storeId={storeId} />,
   };

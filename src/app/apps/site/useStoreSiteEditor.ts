@@ -12,6 +12,7 @@ import {
 } from "../../../shared/business/store-sites/store-site.interface";
 import { siteFooterOf } from "../../../shared/business/store-sites/store-site-footer";
 import { siteAboutOf } from "../../../shared/business/store-sites/store-site-about";
+import { siteChatOf } from "../../../shared/business/store-sites/store-site-chat";
 import { sitePagesOf } from "../../../shared/business/store-sites/store-site-pages";
 import { siteSignInOf } from "../../../shared/business/store-sites/store-site-sign-in";
 import {
@@ -83,6 +84,8 @@ const toDraft = (site: IStoreSite): ISaveStoreSite => ({
   about: siteAboutOf(site.about),
   // A site saved before pages existed gets the three ready ones.
   pages: sitePagesOf(site.pages),
+  // A site saved before the chat existed has it off.
+  chat: siteChatOf(site.chat),
   hero: { ...site.hero },
   sections: site.sections.map((section) => ({ ...section })),
   marquee: { isActive: site.marquee.isActive, items: [...site.marquee.items] },
@@ -104,6 +107,7 @@ const newDraft = (store: IStore): ISaveStoreSite => ({
   signIn: siteSignInOf(null),
   about: siteAboutOf(null),
   pages: sitePagesOf(null),
+  chat: siteChatOf(null),
   hero: {
     tagline: null,
     title: store.name,

@@ -9,6 +9,8 @@ namespace InboxEnum {
     WHATSAPP = "WHATSAPP",
     // The platform's own chat between a customer account and a store.
     STORE = "STORE",
+    // A visitor of a store's site, without an account, through its chat window.
+    SITE = "SITE",
   }
 
   export enum Direction {
@@ -38,6 +40,7 @@ namespace InboxEnum {
     [Channel.MESSENGER]: AppsEnum.App.FACEBOOK,
     [Channel.INSTAGRAM]: AppsEnum.App.INSTAGRAM,
     [Channel.WHATSAPP]: AppsEnum.App.WHATSAPP,
+    [Channel.SITE]: AppsEnum.App.SITE,
   };
 }
 

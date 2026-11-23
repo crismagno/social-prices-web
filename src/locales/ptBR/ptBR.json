@@ -2062,7 +2062,8 @@
       "MESSENGER": "Messenger",
       "INSTAGRAM": "Instagram",
       "WHATSAPP": "WhatsApp",
-      "STORE": "Chat da loja"
+      "STORE": "Chat da loja",
+      "SITE": "Chat do site"
     },
     "conversations": {
       "title": "Conversas deste cliente"
@@ -2400,7 +2401,8 @@
         "publish": "Endereço",
         "footer": "Rodapé",
         "about": "Sobre",
-        "pages": "Páginas"
+        "pages": "Páginas",
+        "chat": "Chat"
       },
       "colors": {
         "primary": "Cor principal",
@@ -2486,7 +2488,8 @@
         "publish": "O endereço do site e se ele está no ar.",
         "footer": "O pé do site: algumas palavras, seus links e o botão de entrar no app.",
         "about": "A seção Sobre: um título, seus textos e uma imagem ou um vídeo.",
-        "pages": "As páginas do site além da inicial, na ordem do menu. Adicione as suas."
+        "pages": "As páginas do site além da inicial, na ordem do menu. Adicione as suas.",
+        "chat": "Uma janela de chat no site: o visitante escreve e você responde em Conversas."
       },
       "problems": {
         "hero": "A entrada precisa de um título.",
@@ -2633,6 +2636,39 @@
         "answer": "Resposta",
         "addQuestion": "Adicionar pergunta",
         "add": "Adicionar página"
+      },
+      "chat": {
+        "show": "Deixar visitantes conversarem com a loja",
+        "showHint": "Um botão no canto de todas as páginas abre uma conversa.",
+        "where": "As mensagens chegam em Conversas, no painel, no canal Chat do site. Você responde por lá e o visitante lê na janela.",
+        "position": "Canto do botão",
+        "positions": {
+          "LEFT": "Esquerda",
+          "RIGHT": "Direita"
+        },
+        "icon": "Ícone do botão",
+        "icons": {
+          "MESSAGE": "Mensagem",
+          "COMMENT": "Comentário",
+          "CUSTOMER_SERVICE": "Atendimento",
+          "QUESTION": "Dúvida",
+          "SMILE": "Sorriso",
+          "HEART": "Coração",
+          "SHOP": "Loja",
+          "MAIL": "E-mail"
+        },
+        "buttonLabel": "Texto do botão",
+        "buttonLabelHint": "Vazio mostra “Fale com a gente”.",
+        "title": "Título da janela",
+        "titleHint": "Vazio mostra o nome do site.",
+        "greeting": "Primeira mensagem",
+        "asked": "O que é pedido antes da conversa",
+        "askedHint": "O nome é sempre pedido.",
+        "modes": {
+          "REQUIRED": "Obrigatório",
+          "OPTIONAL": "Opcional",
+          "HIDDEN": "Não pedir"
+        }
       }
     },
     "footer": {
@@ -2673,6 +2709,24 @@
     "support": {
       "faq": "Perguntas frequentes",
       "contact": "Fale com a gente"
+    },
+    "chat": {
+      "button": "Fale com a gente",
+      "subtitle": "Respondemos por aqui",
+      "greeting": "Oi! Como podemos ajudar?",
+      "intro": "Conte quem você é para começarmos.",
+      "name": "Seu nome",
+      "email": "E-mail",
+      "phone": "Telefone",
+      "optional": "(opcional)",
+      "start": "Começar a conversa",
+      "placeholder": "Escreva sua mensagem…",
+      "send": "Enviar",
+      "close": "Fechar o chat",
+      "required": "Preencha os campos obrigatórios.",
+      "invalidEmail": "Informe um e-mail válido.",
+      "tooMany": "Muitas mensagens. Aguarde um pouco e tente de novo.",
+      "failed": "Não foi possível enviar. Tente de novo."
     }
   }
 }

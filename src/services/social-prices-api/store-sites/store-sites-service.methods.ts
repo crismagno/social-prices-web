@@ -8,8 +8,15 @@ import {
   ICreateSiteOrder,
   ISiteOrderCreated,
 } from "../../../shared/business/store-sites/store-sites.types";
+import {
+  ISiteChatMessage,
+  ISiteChatVisitor,
+} from "../../../shared/business/store-sites/store-site-chat";
 import ServiceMethodsBase from "../service-methods.base";
 import StoreSitesServiceEnum from "./store-sites-service.enum";
+
+/** The header a visitor's chat sends its secret in. */
+const SITE_CHAT_TOKEN_HEADER = "x-site-chat-token";
 
 export default class StoreSitesServiceMethods extends ServiceMethodsBase {
   private _url(
@@ -137,6 +144,52 @@ export default class StoreSitesServiceMethods extends ServiceMethodsBase {
       this._url(StoreSitesServiceEnum.Methods.PUBLIC_CREATE_ORDER, { slug }),
       order,
       { headers: { "Content-Type": "application/json" } },
+    );
+
+    return response.data;
+  }
+
+  /** A visitor starts the chat of a site: answers with the secret of that chat. */
+  public async startChat(
+    slug: string,
+    visitor: ISiteChatVisitor,
+  ): Promise<string> {
+    const response = await this._fetchAxios.post<{ token: string }>(
+      this._url(StoreSitesServiceEnum.Methods.PUBLIC_CHAT_START, { slug }),
+      visitor,
+      { headers: { "Content-Type": "application/json" } },
+    );
+
+    return response.data.token;
+  }
+
+  /** The visitor's conversation, oldest first. */
+  public async listChat(
+    slug: string,
+    token: string,
+  ): Promise<ISiteChatMessage[]> {
+    const response = await this._fetchAxios.get<ISiteChatMessage[]>(
+      this._url(StoreSitesServiceEnum.Methods.PUBLIC_CHAT_MESSAGES, { slug }),
+      { headers: { [SITE_CHAT_TOKEN_HEADER]: token } },
+    );
+
+    return response.data;
+  }
+
+  public async sendChat(
+    slug: string,
+    token: string,
+    text: string,
+  ): Promise<ISiteChatMessage> {
+    const response = await this._fetchAxios.post<ISiteChatMessage>(
+      this._url(StoreSitesServiceEnum.Methods.PUBLIC_CHAT_MESSAGES, { slug }),
+      { text },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          [SITE_CHAT_TOKEN_HEADER]: token,
+        },
+      },
     );
 
     return response.data;

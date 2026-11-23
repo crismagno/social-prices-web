@@ -2,6 +2,7 @@
 
 import ScrollProgress from "../../../components/store-site/shared/ScrollProgress";
 import SiteCart from "../../../components/store-site/shared/SiteCart";
+import SiteChatWidget from "../../../components/store-site/shared/SiteChatWidget";
 import { usePageLabel } from "../../../components/store-site/shared/SiteMenu";
 import useSiteCart from "../../../components/store-site/shared/useSiteCart";
 import { getTemplateEntry } from "../../../components/store-site/template-registry";
@@ -71,6 +72,12 @@ const SiteClient = ({ data, pageSlug }: Props) => {
         mode="live"
         cart={cart}
         page={page}
+      />
+      <SiteChatWidget
+        slug={site.slug}
+        chat={site.chat}
+        theme={site.theme}
+        brandName={site.displayName?.trim() || store.name}
       />
       <SiteCart
         slug={site.slug}
