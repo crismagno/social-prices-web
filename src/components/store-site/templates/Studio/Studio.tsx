@@ -429,6 +429,8 @@ const Studio = ({
       <SiteFooter
         footer={site.footer}
         brandName={brandName}
+        siteLogo={logo}
+        variant="studio"
         signIn={site.signIn}
         storeId={site.storeId}
       />

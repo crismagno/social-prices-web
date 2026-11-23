@@ -313,6 +313,8 @@ const Aurora = ({
       <SiteFooter
         footer={site.footer}
         brandName={brandName}
+        siteLogo={logo}
+        variant="aurora"
         signIn={site.signIn}
         storeId={site.storeId}
       />

@@ -26,6 +26,8 @@ import {
 } from "../../../shared/business/store-sites/store-site-footer";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteSignIn } from "../../../shared/business/store-sites/store-site-sign-in";
+import { getImageUrl } from "../../../shared/utils/images/images-url";
+import { TSiteAboutVariant } from "./SiteAbout";
 import styles from "./SiteFooter.module.css";
 import SiteSignIn from "./SiteSignIn";
 import useReveal from "./useReveal";
@@ -38,6 +40,10 @@ interface Props {
   /** The sign-in button of the site: the footer's says and goes the same. */
   signIn?: Partial<IStoreSiteSignIn> | null;
   storeId?: string | null;
+  /** The logo of the site: the footer's own when it has none. */
+  siteLogo?: string | null;
+  /** The template: the logo takes the shape it has at the top of the site. */
+  variant?: TSiteAboutVariant;
 }
 
 // A link of free text has no icon: it is just the owner's words.
@@ -94,7 +100,14 @@ export const SiteFooterLink = ({ link }: { link: IStoreSiteFooterLink }) => {
  * one to five sections, side by side, and says in which one each thing goes:
  * the name with its words, the way into the app, and each link.
  */
-const SiteFooter = ({ footer, brandName, signIn, storeId }: Props) => {
+const SiteFooter = ({
+  footer,
+  brandName,
+  signIn,
+  storeId,
+  siteLogo,
+  variant,
+}: Props) => {
   // Its columns come in one after the other as it scrolls into view.
   const { ref, phase } = useReveal<HTMLElement>();
 
@@ -104,6 +117,9 @@ const SiteFooter = ({ footer, brandName, signIn, storeId }: Props) => {
     isActive,
     text,
     isLoginVisible,
+    isLogoVisible,
+    logoUrl,
+    logoHeight,
     sections,
     textSection,
     loginSection,
@@ -111,6 +127,12 @@ const SiteFooter = ({ footer, brandName, signIn, storeId }: Props) => {
   } = siteFooterOf(footer);
 
   const year: number = new Date().getFullYear();
+
+  const logo: string | null = isLogoVisible
+    ? logoUrl
+      ? getImageUrl(logoUrl)
+      : (siteLogo ?? null)
+    : null;
 
   const closing: ReactNode = (
     <div className={styles.bottom}>
@@ -161,7 +183,21 @@ const SiteFooter = ({ footer, brandName, signIn, storeId }: Props) => {
 
               {hasText && (
                 <>
-                  <p className={styles.name}>{brandName}</p>
+                  <div className={styles.brand}>
+                    {logo && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        className={`${styles.logo} ${
+                          variant ? (styles[variant] ?? "") : ""
+                        }`}
+                        src={logo}
+                        alt=""
+                        style={{ width: logoHeight, height: logoHeight }}
+                        loading="lazy"
+                      />
+                    )}
+                    <p className={styles.name}>{brandName}</p>
+                  </div>
                   {text && <p className={styles.text}>{text}</p>}
                 </>
               )}

@@ -2589,7 +2589,12 @@
           "textIn": "Nome e texto ficam em",
           "loginIn": "Botão de entrar fica em",
           "linkIn": "Aparece em"
-        }
+        },
+        "logo": "Mostrar logo no rodapé",
+        "logoHint": "Aparece ao lado do nome, no formato do logo do topo do site.",
+        "logoImage": "Imagem do logo",
+        "logoImageHint": "Vazio usa o logo do site.",
+        "logoHeight": "Altura do logo"
       },
       "reset": {
         "button": "Voltar o site ao padrão",

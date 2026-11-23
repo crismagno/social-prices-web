@@ -377,6 +377,8 @@ const Atelier = ({
       <SiteFooter
         footer={site.footer}
         brandName={brandName}
+        siteLogo={logo}
+        variant="atelier"
         signIn={site.signIn}
         storeId={site.storeId}
       />

@@ -335,6 +335,8 @@ const Impact = ({
       <SiteFooter
         footer={site.footer}
         brandName={brandName}
+        siteLogo={logo}
+        variant="impact"
         signIn={site.signIn}
         storeId={site.storeId}
       />

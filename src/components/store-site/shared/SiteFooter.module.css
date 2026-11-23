@@ -40,6 +40,36 @@
   min-width: 0;
 }
 
+/* The name with its logo beside it, as at the top of the site. */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* The logo in the shape the template gives it at the top: round, cut to fill. */
+.logo {
+  flex-shrink: 0;
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: scale 0.4s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+
+.logo:hover {
+  scale: 1.06;
+}
+
+/* Studio rings it in the page's color; Impact keeps it square. */
+.studio {
+  border: 2px solid var(--site-bg);
+}
+
+.impact {
+  border-radius: 0;
+}
+
 .name {
   font-size: 22px;
   font-weight: 700;

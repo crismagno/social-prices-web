@@ -2586,7 +2586,12 @@
           "textIn": "Name and text go in",
           "loginIn": "Sign-in button goes in",
           "linkIn": "Shown in"
-        }
+        },
+        "logo": "Show a logo in the footer",
+        "logoHint": "Shown beside the name, in the shape of the logo at the top of the site.",
+        "logoImage": "Logo image",
+        "logoImageHint": "Empty uses the logo of the site.",
+        "logoHeight": "Logo height"
       },
       "reset": {
         "button": "Reset the site to the defaults",

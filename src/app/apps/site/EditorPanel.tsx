@@ -180,7 +180,7 @@ const EditorPanel = ({
     blocks: <BlocksTab editor={editor} storeId={storeId} />,
     pages: <PagesTab editor={editor} storeId={storeId} />,
     chat: <ChatTab editor={editor} />,
-    footer: <FooterTab editor={editor} />,
+    footer: <FooterTab editor={editor} storeId={storeId} />,
     publish: <PublishTab editor={editor} storeId={storeId} />,
   };
 

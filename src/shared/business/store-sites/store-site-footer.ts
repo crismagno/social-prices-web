@@ -25,6 +25,12 @@ export interface IStoreSiteFooter {
   text: string | null;
   /** The button that takes a customer to the login of the app. */
   isLoginVisible: boolean;
+  /** A logo above the name, in the same column. */
+  isLogoVisible: boolean;
+  /** The footer's own logo; empty, the logo of the site. */
+  logoUrl: string | null;
+  /** Its height in pixels, 20 to 160. */
+  logoHeight: number;
   /** The columns of the footer, left to right: one to five. */
   sections: IStoreSiteFooterSection[];
   /** The section the name and the text are in. */
@@ -47,6 +53,9 @@ export const DEFAULT_SITE_FOOTER: IStoreSiteFooter = {
   isActive: true,
   text: null,
   isLoginVisible: true,
+  isLogoVisible: false,
+  logoUrl: null,
+  logoHeight: 48,
   sections: DEFAULT_FOOTER_SECTIONS.map((section) => ({ ...section })),
   textSection: "main",
   loginSection: "main",
@@ -105,6 +114,13 @@ export const siteFooterOf = (
     isActive: footer?.isActive !== false,
     text: footer?.text?.trim() || null,
     isLoginVisible: footer?.isLoginVisible !== false,
+    isLogoVisible: footer?.isLogoVisible === true,
+    logoUrl: footer?.logoUrl?.trim() || null,
+    logoHeight:
+      typeof footer?.logoHeight === "number" &&
+      Number.isFinite(footer.logoHeight)
+        ? Math.min(160, Math.max(20, Math.round(footer.logoHeight)))
+        : 48,
     sections,
     textSection: placeOf(footer?.textSection, first),
     loginSection: placeOf(footer?.loginSection, first),

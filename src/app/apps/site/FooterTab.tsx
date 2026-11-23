@@ -1,6 +1,16 @@
 "use client";
 
-import { Button, Card, Empty, Form, Input, Select, Space, Switch } from "antd";
+import {
+  Button,
+  Card,
+  Empty,
+  Form,
+  Input,
+  Select,
+  Slider,
+  Space,
+  Switch,
+} from "antd";
 
 import {
   ArrowDownOutlined,
@@ -17,10 +27,12 @@ import {
   IStoreSiteFooterSection,
 } from "../../../shared/business/store-sites/store-site-footer";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
+import ImageField from "./ImageField";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
 
 interface Props {
   editor: IStoreSiteEditor;
+  storeId: string;
 }
 
 const TYPES: StoreSitesEnum.FooterLinkType[] = Object.values(
@@ -31,7 +43,7 @@ const TYPES: StoreSitesEnum.FooterLinkType[] = Object.values(
  * The foot of the site: a few words, the button into the app, and as many
  * links as the owner wants (social networks, other sites, ways to get in touch).
  */
-const FooterTab = ({ editor }: Props) => {
+const FooterTab = ({ editor, storeId }: Props) => {
   const { t } = useLanguageData();
 
   if (!editor.draft) {
@@ -249,6 +261,44 @@ const FooterTab = ({ editor }: Props) => {
               onChange={(event) => set({ text: event.target.value || null })}
             />
           </Form.Item>
+
+          <Form.Item
+            label={t("storeSite.editor.footer.logo")}
+            extra={t("storeSite.editor.footer.logoHint")}
+          >
+            <Switch
+              checked={footer.isLogoVisible}
+              onChange={(isLogoVisible: boolean) => set({ isLogoVisible })}
+            />
+          </Form.Item>
+
+          {footer.isLogoVisible && (
+            <>
+              <Form.Item
+                label={t("storeSite.editor.footer.logoImage")}
+                extra={t("storeSite.editor.footer.logoImageHint")}
+              >
+                <ImageField
+                  storeId={storeId}
+                  value={footer.logoUrl}
+                  onChange={(logoUrl: string | null) =>
+                    editor.update((draft) => ({
+                      footer: { ...draft.footer, logoUrl },
+                    }))
+                  }
+                />
+              </Form.Item>
+              <Form.Item label={t("storeSite.editor.footer.logoHeight")}>
+                <Slider
+                  min={20}
+                  max={160}
+                  value={footer.logoHeight}
+                  tooltip={{ formatter: (value?: number) => `${value} px` }}
+                  onChange={(logoHeight: number) => set({ logoHeight })}
+                />
+              </Form.Item>
+            </>
+          )}
 
           <Form.Item
             label={t("storeSite.editor.footer.login")}

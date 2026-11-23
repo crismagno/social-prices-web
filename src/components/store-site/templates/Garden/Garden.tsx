@@ -366,6 +366,8 @@ const Garden = ({
       <SiteFooter
         footer={site.footer}
         brandName={brandName}
+        siteLogo={logo}
+        variant="garden"
         signIn={site.signIn}
         storeId={site.storeId}
       />
