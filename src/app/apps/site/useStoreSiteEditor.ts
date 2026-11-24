@@ -15,6 +15,7 @@ import { siteAboutOf } from "../../../shared/business/store-sites/store-site-abo
 import { siteBlocksOf } from "../../../shared/business/store-sites/store-site-blocks";
 import { siteChatOf } from "../../../shared/business/store-sites/store-site-chat";
 import { sitePagesOf } from "../../../shared/business/store-sites/store-site-pages";
+import { siteCatalogOf } from "../../../shared/business/store-sites/store-site-catalog";
 import { siteSignInOf } from "../../../shared/business/store-sites/store-site-sign-in";
 import {
   EMPTY_SITE_SIZES,
@@ -81,6 +82,8 @@ const toDraft = (site: IStoreSite): ISaveStoreSite => ({
   footer: siteFooterOf(site.footer),
   // A site saved before the button existed shows it, leading to the store.
   signIn: siteSignInOf(site.signIn),
+  // A site saved before these choices existed shows what it always showed.
+  catalog: siteCatalogOf(site.catalog),
   // A site saved before it existed shows the store's own description.
   about: siteAboutOf(site.about),
   // A site saved before pages existed gets the three ready ones.
@@ -89,6 +92,7 @@ const toDraft = (site: IStoreSite): ISaveStoreSite => ({
   chat: siteChatOf(site.chat),
   // A site saved before blocks existed has none.
   blocks: siteBlocksOf(site.blocks),
+  isLayoutCustom: site.isLayoutCustom === true,
   hero: { ...site.hero },
   sections: site.sections.map((section) => ({ ...section })),
   marquee: { isActive: site.marquee.isActive, items: [...site.marquee.items] },
@@ -108,10 +112,12 @@ const newDraft = (store: IStore): ISaveStoreSite => ({
   sizes: { ...EMPTY_SITE_SIZES },
   footer: siteFooterOf(null),
   signIn: siteSignInOf(null),
+  catalog: siteCatalogOf(null),
   about: siteAboutOf(null),
   pages: sitePagesOf(null),
   chat: siteChatOf(null),
   blocks: [],
+  isLayoutCustom: false,
   hero: {
     tagline: null,
     title: store.name,

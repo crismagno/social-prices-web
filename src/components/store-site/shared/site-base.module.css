@@ -47,6 +47,23 @@
   pointer-events: none;
 }
 
+/* The short description of a product, the same letters in every template. */
+.productDescription {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  opacity: 0.75;
+}
+
 .waiting {
   opacity: 0;
 }

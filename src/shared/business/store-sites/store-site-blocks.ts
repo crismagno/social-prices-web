@@ -1,3 +1,8 @@
+import {
+  IStoreSiteAboutMedia,
+  embedUrlOf,
+  isKnownPlayer,
+} from "./store-site-about";
 import { IStoreSitePage, sitePagePath, sitePagesOf } from "./store-site-pages";
 import { completeFooterUrl, isSafeFooterUrl } from "./store-site-footer";
 import StoreSitesEnum from "./store-sites.enum";
@@ -17,6 +22,8 @@ export interface IStoreSiteBlockItem {
   icon: StoreSitesEnum.FeatureIcon | null;
   /** Testimonials only: 1 to 5 stars. */
   rating: number | null;
+  /** A column of a box only. */
+  button: IStoreSiteBlockButton | null;
 }
 
 /** The button of a call-to-action block. */
@@ -27,6 +34,19 @@ export interface IStoreSiteBlockButton {
   pageKey: string | null;
   /** What the owner typed for the other targets: a number, an e-mail, an address. */
   value: string | null;
+  variant: StoreSitesEnum.ButtonVariant;
+}
+
+/** The few options a piece of the page has; null where its type has none. */
+export interface IStoreSiteBlockSettings {
+  align: StoreSitesEnum.SectionAlign | null;
+  width: StoreSitesEnum.SectionWidth | null;
+  tone: StoreSitesEnum.SectionTone | null;
+  /** A spacer's height in pixels. */
+  height: number | null;
+  divider: StoreSitesEnum.DividerStyle | null;
+  /** A video piece: an uploaded video or a YouTube/Vimeo player. */
+  media: IStoreSiteAboutMedia | null;
 }
 
 /**
@@ -45,15 +65,25 @@ export interface IStoreSiteBlock {
   items: IStoreSiteBlockItem[];
   /** Calls to action only. */
   button: IStoreSiteBlockButton | null;
+  /** A row of buttons only. */
+  buttons: IStoreSiteBlockButton[];
+  settings: IStoreSiteBlockSettings;
 }
 
-export const MAX_BLOCKS: number = 20;
+/** Sections of the whole site, every page together. */
+export const MAX_BLOCKS: number = 60;
+export const MAX_SECTION_BUTTONS: number = 3;
+export const SPACER_LIMITS = { min: 8, max: 240, initial: 48 } as const;
+
+export const isPartType = (type: StoreSitesEnum.BlockType): boolean =>
+  StoreSitesEnum.PART_TYPES.includes(type);
 
 /** Sizes the API cuts texts to: the editor stops there too. */
 export const BLOCK_LIMITS = {
   kicker: 40,
   title: 120,
   subtitle: 300,
+  textBody: 2000,
   itemTitle: 80,
   itemSubtitle: 80,
   itemText: 600,
@@ -61,8 +91,31 @@ export const BLOCK_LIMITS = {
   buttonValue: 300,
 } as const;
 
-export const maxItemsOf = (type: StoreSitesEnum.BlockType): number =>
-  type === StoreSitesEnum.BlockType.FAQ ? 20 : 12;
+export const maxItemsOf = (type: StoreSitesEnum.BlockType): number => {
+  switch (type) {
+    case StoreSitesEnum.BlockType.FAQ:
+      return 20;
+    case StoreSitesEnum.BlockType.BOX:
+      return 3;
+    case StoreSitesEnum.BlockType.IMAGE:
+      return 1;
+    default:
+      return 12;
+  }
+};
+
+/** Types whose content lives in the items list. */
+const WITH_ITEMS: StoreSitesEnum.BlockType[] = [
+  StoreSitesEnum.BlockType.TEAM,
+  StoreSitesEnum.BlockType.TESTIMONIALS,
+  StoreSitesEnum.BlockType.LOGOS,
+  StoreSitesEnum.BlockType.FEATURES,
+  StoreSitesEnum.BlockType.FAQ,
+  StoreSitesEnum.BlockType.STATS,
+  StoreSitesEnum.BlockType.STEPS,
+  StoreSitesEnum.BlockType.IMAGE,
+  StoreSitesEnum.BlockType.BOX,
+];
 
 type TRecord = Record<string, unknown>;
 
@@ -95,6 +148,15 @@ export const isUsableItem = (
       return !!item.title?.trim() && !!item.text?.trim();
     case StoreSitesEnum.BlockType.TEAM:
       return !!item.title?.trim() || !!item.imageUrl;
+    case StoreSitesEnum.BlockType.IMAGE:
+      return !!item.imageUrl;
+    case StoreSitesEnum.BlockType.BOX:
+      return (
+        !!item.title?.trim() ||
+        !!item.text?.trim() ||
+        !!item.imageUrl ||
+        !!item.button
+      );
     default:
       return !!item.title?.trim() || !!item.text?.trim();
   }
@@ -124,6 +186,10 @@ const itemOf = (
           StoreSitesEnum.FeatureIcon.STAR)
         : null,
     rating: type === StoreSitesEnum.BlockType.TESTIMONIALS ? rating : null,
+    button:
+      type === StoreSitesEnum.BlockType.BOX && source.button
+        ? buttonOf(source.button)
+        : null,
   };
 };
 
@@ -141,6 +207,76 @@ const buttonOf = (raw: unknown): IStoreSiteBlockButton => {
     target,
     pageKey: isPage ? textOf(source.pageKey, 40) : null,
     value: isPage ? null : textOf(source.value, BLOCK_LIMITS.buttonValue),
+    variant:
+      oneOf(source.variant, Object.values(StoreSitesEnum.ButtonVariant)) ??
+      StoreSitesEnum.ButtonVariant.PRIMARY,
+  };
+};
+
+/** A new button: to the home, in the template's main style. */
+export const newBlockButton = (
+  patch: Partial<IStoreSiteBlockButton> = {},
+): IStoreSiteBlockButton => ({
+  label: null,
+  target: StoreSitesEnum.BlockButtonTarget.PAGE,
+  pageKey: null,
+  value: null,
+  variant: StoreSitesEnum.ButtonVariant.PRIMARY,
+  ...patch,
+});
+
+const mediaOf = (raw: unknown): IStoreSiteAboutMedia | null => {
+  const source: TRecord = recordOf(raw);
+  const url: string = typeof source.url === "string" ? source.url.trim() : "";
+
+  if (source.type === StoreSitesEnum.AboutMediaType.EMBED) {
+    const embed: string | null = isKnownPlayer(url) ? url : embedUrlOf(url);
+
+    return embed ? { type: StoreSitesEnum.AboutMediaType.EMBED, url: embed } : null;
+  }
+
+  return source.type === StoreSitesEnum.AboutMediaType.VIDEO && url
+    ? { type: StoreSitesEnum.AboutMediaType.VIDEO, url }
+    : null;
+};
+
+/** The options of a piece; each kept only by the types that use it. */
+export const blockSettingsOf = (
+  type: StoreSitesEnum.BlockType,
+  raw: unknown,
+): IStoreSiteBlockSettings => {
+  const source: TRecord = recordOf(raw);
+  const T = StoreSitesEnum.BlockType;
+  const uses = (...types: StoreSitesEnum.BlockType[]): boolean =>
+    types.includes(type);
+  const height: unknown = source.height;
+
+  return {
+    align: uses(T.TEXT, T.BUTTONS, T.IMAGE, T.BOX)
+      ? (oneOf(source.align, Object.values(StoreSitesEnum.SectionAlign)) ??
+        StoreSitesEnum.SectionAlign.CENTER)
+      : null,
+    width: uses(T.IMAGE, T.VIDEO, T.BOX)
+      ? (oneOf(source.width, Object.values(StoreSitesEnum.SectionWidth)) ??
+        StoreSitesEnum.SectionWidth.WIDE)
+      : null,
+    tone: uses(T.TEXT, T.BOX)
+      ? (oneOf(source.tone, Object.values(StoreSitesEnum.SectionTone)) ??
+        StoreSitesEnum.SectionTone.NONE)
+      : null,
+    height: uses(T.SPACER)
+      ? typeof height === "number" && Number.isFinite(height)
+        ? Math.min(
+            SPACER_LIMITS.max,
+            Math.max(SPACER_LIMITS.min, Math.round(height)),
+          )
+        : SPACER_LIMITS.initial
+      : null,
+    divider: uses(T.DIVIDER)
+      ? (oneOf(source.divider, Object.values(StoreSitesEnum.DividerStyle)) ??
+        StoreSitesEnum.DividerStyle.LINE)
+      : null,
+    media: uses(T.VIDEO) ? mediaOf(source.media) : null,
   };
 };
 
@@ -170,9 +306,14 @@ export const siteBlocksOf = (blocks: unknown): IStoreSiteBlock[] =>
         pageKey: textOf(source.pageKey, 40),
         kicker: textOf(source.kicker, BLOCK_LIMITS.kicker),
         title: textOf(source.title, BLOCK_LIMITS.title),
-        subtitle: textOf(source.subtitle, BLOCK_LIMITS.subtitle),
+        subtitle: textOf(
+          source.subtitle,
+          type === StoreSitesEnum.BlockType.TEXT
+            ? BLOCK_LIMITS.textBody
+            : BLOCK_LIMITS.subtitle,
+        ),
         items:
-          type === StoreSitesEnum.BlockType.CTA || !Array.isArray(source.items)
+          !WITH_ITEMS.includes(type) || !Array.isArray(source.items)
             ? []
             : source.items
                 .map((item: unknown) => itemOf(type, item))
@@ -182,6 +323,12 @@ export const siteBlocksOf = (blocks: unknown): IStoreSiteBlock[] =>
           type === StoreSitesEnum.BlockType.CTA && source.button
             ? buttonOf(source.button)
             : null,
+        buttons:
+          type === StoreSitesEnum.BlockType.BUTTONS &&
+          Array.isArray(source.buttons)
+            ? source.buttons.slice(0, MAX_SECTION_BUTTONS).map(buttonOf)
+            : [],
+        settings: blockSettingsOf(type, source.settings),
       };
     });
 
@@ -250,21 +397,49 @@ export const blocksForPage = (
         block.pageKey === pageKey &&
         isPageThere(block.pageKey, pages),
     )
-    .map((block: IStoreSiteBlock) => ({
-      ...block,
-      items: block.items.filter((item: IStoreSiteBlockItem) =>
-        isUsableItem(block.type, item),
-      ),
-    }))
-    .filter((block: IStoreSiteBlock) =>
-      block.type === StoreSitesEnum.BlockType.CTA
-        ? !!block.title
-        : block.items.length > 0,
-    );
+    .map(showableSection)
+    .filter((block: IStoreSiteBlock | null) => !!block) as IStoreSiteBlock[];
+
+/**
+ * A section as visitors see it: only the items and buttons it can show, or
+ * null when nothing is left. A part always stays (its own tab decides).
+ */
+export const showableSection = (
+  block: IStoreSiteBlock,
+): IStoreSiteBlock | null => {
+  const T = StoreSitesEnum.BlockType;
+
+  if (isPartType(block.type)) {
+    return block;
+  }
+
+  const shown: IStoreSiteBlock = {
+    ...block,
+    items: block.items.filter((item: IStoreSiteBlockItem) =>
+      isUsableItem(block.type, item),
+    ),
+  };
+
+  switch (block.type) {
+    case T.CTA:
+      return block.title ? shown : null;
+    case T.TEXT:
+      return block.title || block.subtitle ? shown : null;
+    case T.BUTTONS:
+      return block.buttons.length ? shown : null;
+    case T.VIDEO:
+      return block.settings.media ? shown : null;
+    case T.SPACER:
+    case T.DIVIDER:
+      return shown;
+    default:
+      return shown.items.length ? shown : null;
+  }
+};
 
 type TTranslate = (key: string) => string;
 
-const SAMPLE_ITEMS: Record<StoreSitesEnum.BlockType, number> = {
+const SAMPLE_ITEMS: Partial<Record<StoreSitesEnum.BlockType, number>> = {
   [StoreSitesEnum.BlockType.TEAM]: 3,
   [StoreSitesEnum.BlockType.TESTIMONIALS]: 3,
   [StoreSitesEnum.BlockType.LOGOS]: 5,
@@ -282,9 +457,8 @@ const SAMPLE_ICONS: StoreSitesEnum.FeatureIcon[] = [
 ];
 
 /** The fields a sample item of each type fills. */
-const SAMPLE_FIELDS: Record<
-  StoreSitesEnum.BlockType,
-  ("title" | "subtitle" | "text")[]
+const SAMPLE_FIELDS: Partial<
+  Record<StoreSitesEnum.BlockType, ("title" | "subtitle" | "text")[]>
 > = {
   [StoreSitesEnum.BlockType.TEAM]: ["title", "subtitle"],
   [StoreSitesEnum.BlockType.TESTIMONIALS]: ["title", "subtitle", "text"],
@@ -319,10 +493,10 @@ export const newBlock = (
     kicker: t(`${base}.kicker`),
     title: t(`${base}.title`),
     subtitle: t(`${base}.subtitle`),
-    items: Array.from({ length: SAMPLE_ITEMS[type] }, (_, index: number) => {
+    items: Array.from({ length: SAMPLE_ITEMS[type] ?? 0 }, (_, index: number) => {
       const item: IStoreSiteBlockItem = newBlockItem(type);
 
-      SAMPLE_FIELDS[type].forEach((field) => {
+      (SAMPLE_FIELDS[type] ?? []).forEach((field) => {
         item[field] = t(`${base}.items.${index}.${field}`);
       });
 
@@ -334,12 +508,9 @@ export const newBlock = (
     }),
     button:
       type === StoreSitesEnum.BlockType.CTA
-        ? {
-            label: t(`${base}.button`),
-            target: StoreSitesEnum.BlockButtonTarget.PAGE,
-            pageKey: null,
-            value: null,
-          }
+        ? newBlockButton({ label: t(`${base}.button`) })
         : null,
+    buttons: [],
+    settings: blockSettingsOf(type, {}),
   };
 };

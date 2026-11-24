@@ -14,7 +14,16 @@ import useReveal from "./useReveal";
 
 /** The look of the section: each template's own. */
 export type TSiteAboutVariant =
-  "atelier" | "garden" | "studio" | "aurora" | "impact";
+  | "atelier"
+  | "garden"
+  | "studio"
+  | "aurora"
+  | "impact"
+  | "riviera"
+  | "mare"
+  | "swell"
+  | "buddy"
+  | "arcade";
 
 interface Props {
   about: Partial<IStoreSiteAbout> | null | undefined;
@@ -58,7 +67,13 @@ export const siteHasAbout = (
 
 // Words centered when there is no picture beside them, in the templates that
 // center their texts.
-const CENTERED: TSiteAboutVariant[] = ["atelier", "garden", "aurora"];
+const CENTERED: TSiteAboutVariant[] = [
+  "atelier",
+  "garden",
+  "aurora",
+  "riviera",
+  "buddy",
+];
 
 /**
  * The "about" of the site, drawn the way each template draws everything else:

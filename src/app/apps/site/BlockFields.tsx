@@ -6,7 +6,7 @@ import {
   DeleteOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Form, Input, Segmented, Select, Space } from "antd";
+import { Button, Card, Form, Input, Select, Space } from "antd";
 
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import {
@@ -15,14 +15,14 @@ import {
   IStoreSiteBlockButton,
   IStoreSiteBlockItem,
   maxItemsOf,
+  newBlockButton,
   newBlockItem,
 } from "../../../shared/business/store-sites/store-site-blocks";
 import { IStoreSitePage } from "../../../shared/business/store-sites/store-site-pages";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import BlockItemFields from "./BlockItemFields";
+import ButtonFields, { HOME_PAGE } from "./ButtonFields";
 
-/** The page select's value for the home: a page key is never this. */
-export const HOME_PAGE: string = "__home__";
 
 interface Props {
   block: IStoreSiteBlock;
@@ -30,6 +30,8 @@ interface Props {
   storeId: string;
   /** Applied to the block as it is then. */
   onChange: (change: (block: IStoreSiteBlock) => Partial<IStoreSiteBlock>) => void;
+  /** A piece without a list (a text) shows no items. */
+  showItems?: boolean;
 }
 
 const move = <T,>(list: T[], from: number, to: number): T[] => {
@@ -42,7 +44,13 @@ const move = <T,>(list: T[], from: number, to: number): T[] => {
 };
 
 /** The fields of one block: where it shows, its heading, its items or button. */
-const BlockFields = ({ block, pages, storeId, onChange }: Props) => {
+const BlockFields = ({
+  block,
+  pages,
+  storeId,
+  onChange,
+  showItems = true,
+}: Props) => {
   const { t } = useLanguageData();
 
   const pageName = (page: IStoreSitePage): string =>
@@ -65,14 +73,7 @@ const BlockFields = ({ block, pages, storeId, onChange }: Props) => {
 
   const setButton = (patch: Partial<IStoreSiteBlockButton>): void =>
     onChange((current: IStoreSiteBlock) => ({
-      button: {
-        label: null,
-        target: StoreSitesEnum.BlockButtonTarget.PAGE,
-        pageKey: null,
-        value: null,
-        ...current.button,
-        ...patch,
-      },
+      button: newBlockButton({ ...current.button, ...patch }),
     }));
 
   const isCta: boolean = block.type === StoreSitesEnum.BlockType.CTA;
@@ -120,8 +121,15 @@ const BlockFields = ({ block, pages, storeId, onChange }: Props) => {
         </Form.Item>
         <Form.Item label={t("storeSite.editor.blocks.subtitle")}>
           <Input.TextArea
-            autoSize={{ minRows: 1, maxRows: 4 }}
-            maxLength={BLOCK_LIMITS.subtitle}
+            autoSize={{
+              minRows: block.type === StoreSitesEnum.BlockType.TEXT ? 4 : 1,
+              maxRows: block.type === StoreSitesEnum.BlockType.TEXT ? 14 : 4,
+            }}
+            maxLength={
+              block.type === StoreSitesEnum.BlockType.TEXT
+                ? BLOCK_LIMITS.textBody
+                : BLOCK_LIMITS.subtitle
+            }
             value={block.subtitle ?? ""}
             onChange={(event) =>
               onChange(() => ({ subtitle: event.target.value }))
@@ -130,60 +138,11 @@ const BlockFields = ({ block, pages, storeId, onChange }: Props) => {
         </Form.Item>
 
         {isCta && (
-          <>
-            <Form.Item label={t("storeSite.editor.blocks.button.label")}>
-              <Input
-                maxLength={BLOCK_LIMITS.buttonLabel}
-                placeholder={t("storeSite.blocks.ctaButton")}
-                value={button?.label ?? ""}
-                onChange={(event) => setButton({ label: event.target.value })}
-              />
-            </Form.Item>
-            <Form.Item label={t("storeSite.editor.blocks.button.target")}>
-              <Segmented<StoreSitesEnum.BlockButtonTarget>
-                block
-                value={button?.target ?? StoreSitesEnum.BlockButtonTarget.PAGE}
-                onChange={(target) => setButton({ target })}
-                options={Object.values(StoreSitesEnum.BlockButtonTarget).map(
-                  (target: StoreSitesEnum.BlockButtonTarget) => ({
-                    value: target,
-                    label: t(`storeSite.editor.blocks.button.targets.${target}`),
-                  }),
-                )}
-              />
-            </Form.Item>
-            {(button?.target ?? StoreSitesEnum.BlockButtonTarget.PAGE) ===
-            StoreSitesEnum.BlockButtonTarget.PAGE ? (
-              <Form.Item label={t("storeSite.editor.blocks.button.page")}>
-                <Select
-                  value={button?.pageKey ?? HOME_PAGE}
-                  options={pageOptions}
-                  onChange={(value: string) =>
-                    setButton({ pageKey: value === HOME_PAGE ? null : value })
-                  }
-                />
-              </Form.Item>
-            ) : (
-              <Form.Item
-                label={t(
-                  `storeSite.editor.blocks.button.values.${button?.target}`,
-                )}
-              >
-                <Input
-                  maxLength={BLOCK_LIMITS.buttonValue}
-                  placeholder={t(
-                    `storeSite.editor.blocks.button.placeholders.${button?.target}`,
-                  )}
-                  value={button?.value ?? ""}
-                  onChange={(event) => setButton({ value: event.target.value })}
-                />
-              </Form.Item>
-            )}
-          </>
+          <ButtonFields button={button} pages={pages} onChange={setButton} />
         )}
       </Form>
 
-      {!isCta && (
+      {!isCta && showItems && (
         <Space direction="vertical" style={{ width: "100%" }} size={10}>
           {block.items.map((item: IStoreSiteBlockItem, index: number) => (
             <Card
@@ -237,6 +196,7 @@ const BlockFields = ({ block, pages, storeId, onChange }: Props) => {
                 type={block.type}
                 item={item}
                 storeId={storeId}
+                pages={pages}
                 onChange={(patch) => setItem(item.key, patch)}
               />
             </Card>

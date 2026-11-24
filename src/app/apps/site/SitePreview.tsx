@@ -9,15 +9,19 @@ import { DesktopOutlined, MobileOutlined } from "@ant-design/icons";
 import {
   IPreviewData,
   IPreviewMessage,
+  PREVIEW_BUILDER,
   PREVIEW_DATA,
   PREVIEW_READY,
 } from "../../../components/store-site/preview-channel";
+import { TBuilderAction } from "../../../components/store-site/shared/blocks/builder-types";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import useAvailableHeight from "./useAvailableHeight";
 
 interface Props {
   data: IPreviewData;
+  /** What the owner did on a section in the preview, in builder mode. */
+  onBuilderAction?: (action: TBuilderAction) => void;
 }
 
 type TDevice = "desktop" | "mobile";
@@ -29,10 +33,15 @@ const MOBILE_WIDTH = 390;
  * The draft drawn by the real template, in a frame of its own so the template
  * answers to the frame's width (desktop or phone), not to the editor's.
  */
-const SitePreview = ({ data }: Props) => {
+const SitePreview = ({ data, onBuilderAction }: Props) => {
   const { t } = useLanguageData();
 
   const frameRef = useRef<HTMLIFrameElement>(null);
+
+  // The latest handler, without listening again on every draw.
+  const builderActionRef = useRef(onBuilderAction);
+
+  builderActionRef.current = onBuilderAction;
 
   // Ends at the bottom of the window: the site scrolls inside the frame, the
   // editor page does not.
@@ -51,6 +60,15 @@ const SitePreview = ({ data }: Props) => {
         event.data?.type === PREVIEW_READY
       ) {
         setIsReady(true);
+      }
+
+      if (
+        event.origin === window.location.origin &&
+        event.source === frameRef.current?.contentWindow &&
+        event.data?.type === PREVIEW_BUILDER &&
+        event.data.action
+      ) {
+        builderActionRef.current?.(event.data.action);
       }
     };
 

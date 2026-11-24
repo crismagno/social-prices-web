@@ -2290,6 +2290,10 @@
     "product": {
       "open": "See the details",
       "photo": "Picture {number}",
+      "zoom": "See the picture larger",
+      "previous": "Previous picture",
+      "next": "Next picture",
+      "close": "Close",
       "details": "Details",
       "colors": "Colors",
       "measures": "Measures",
@@ -2307,6 +2311,9 @@
     },
     "public": {
       "noProducts": "The products will be here soon.",
+      "noProductsFound": "No product matches your search.",
+      "searchProducts": "Search products",
+      "clearSearch": "Clear the search",
       "unavailable": "Unavailable",
       "add": "Add",
       "cart": "Cart",
@@ -2384,6 +2391,26 @@
       "IMPACT": {
         "name": "Impact",
         "description": "Dark and bold, giant outlined title."
+      },
+      "RIVIERA": {
+        "name": "Riviera",
+        "description": "Serene and editorial, serif letters and an arched photo. For hotels and inns by the sea."
+      },
+      "SWELL": {
+        "name": "Swell",
+        "description": "Fast and sporty, condensed italics, diagonal cuts and waves. For water sports."
+      },
+      "BUDDY": {
+        "name": "Buddy",
+        "description": "Round and playful, sticker cards and paw prints. For pet shops."
+      },
+      "ARCADE": {
+        "name": "Arcade",
+        "description": "Neon and retro, pixel letters and scanlines. For games."
+      },
+      "MARE": {
+        "name": "Maré",
+        "description": "Calm and natural, in sand, clay and sea blue: soft serif with italics, an arched photo and mosaics. For home, decor and handmade stores."
       }
     },
     "editor": {
@@ -2421,7 +2448,8 @@
         "about": "About",
         "pages": "Pages",
         "chat": "Chat",
-        "blocks": "Blocks"
+        "blocks": "Blocks",
+        "builder": "Build"
       },
       "colors": {
         "primary": "Main color",
@@ -2467,6 +2495,14 @@
         "show": "Show the running strip",
         "items": "Phrases",
         "itemsHint": "One short phrase per line, up to 8."
+      },
+      "catalog": {
+        "heading": "What each product shows",
+        "isNameShown": "Name",
+        "isPriceShown": "Price",
+        "isDescriptionShown": "Description",
+        "isSearchShown": "Search on the products page",
+        "hint": "With the price hidden, it still shows in the cart."
       },
       "products": {
         "add": "Add a product",
@@ -2802,6 +2838,16 @@
           "STEPS": {
             "title": "Step title",
             "text": "Description"
+          },
+          "IMAGE": {
+            "imageUrl": "Image",
+            "text": "Caption (optional)"
+          },
+          "BOX": {
+            "imageUrl": "Image (optional)",
+            "title": "Title",
+            "text": "Text",
+            "button": "Show a button"
           }
         },
         "icons": {
@@ -2968,6 +3014,159 @@
             "subtitle": "Get in touch and ask us anything.",
             "button": "See products"
           }
+        }
+      },
+      "builder": {
+        "page": "Page",
+        "hint": "Drag a piece onto the preview or click to add it. On the preview, hover a section to move, duplicate, hide or remove it.",
+        "groups": {
+          "pieces": "Pieces",
+          "blocks": "Blocks",
+          "parts": "Site parts"
+        },
+        "onThisPage": "On this page",
+        "emptyPage": "Empty page. Drag pieces onto the preview.",
+        "pickHint": "Click a section on the preview or in the list to edit it.",
+        "alreadyOnPage": "This part is already on this page",
+        "removeConfirm": "Remove this section?",
+        "editPart": "Edit its content",
+        "partNotes": {
+          "MARQUEE": "Shows the phrases of the Marquee tab.",
+          "CARDS": "Shows the cards of the Sections tab.",
+          "PRODUCTS": "Shows the products chosen in the Products tab.",
+          "ABOUT": "Shows the text and media of the About tab.",
+          "PAGE_BODY": "Shows this page’s content, edited in the Pages tab."
+        },
+        "frame": {
+          "hidden": "hidden",
+          "drag": "Drag",
+          "up": "Move up",
+          "down": "Move down",
+          "duplicate": "Duplicate",
+          "hide": "Hide",
+          "show": "Show",
+          "remove": "Remove",
+          "removeConfirm": "Remove?",
+          "dropHere": "Drop here",
+          "dragHere": "Drag pieces here",
+          "empty": "Still empty: fill it in the panel"
+        },
+        "fields": {
+          "variant": "Style",
+          "videoSource": "Video from",
+          "videoLink": "YouTube or Vimeo link",
+          "videoLinkHint": "Paste the video address.",
+          "videoFile": "Video file",
+          "button": "Button",
+          "addButton": "Add button"
+        },
+        "variants": {
+          "PRIMARY": "Main",
+          "OUTLINE": "Outline"
+        },
+        "videoSources": {
+          "VIDEO": "File",
+          "EMBED": "YouTube/Vimeo"
+        },
+        "options": {
+          "align": "Alignment",
+          "width": "Width",
+          "tone": "Background",
+          "height": "Height",
+          "divider": "Style"
+        },
+        "values": {
+          "align": {
+            "LEFT": "Left",
+            "CENTER": "Center"
+          },
+          "width": {
+            "NARROW": "Narrow",
+            "WIDE": "Wide",
+            "FULL": "Full width"
+          },
+          "tone": {
+            "NONE": "None",
+            "SOFT": "Soft",
+            "STRONG": "Strong"
+          },
+          "divider": {
+            "LINE": "Line",
+            "DOTS": "Dots",
+            "WAVE": "Wave"
+          }
+        },
+        "samples": {
+          "TEXT": {
+            "kicker": "About us",
+            "title": "A title for this part",
+            "text": "Write here whatever you want to tell. Each line becomes a paragraph."
+          },
+          "BUTTONS": {
+            "first": "See products",
+            "second": "Talk to us"
+          },
+          "BOX": {
+            "title": "Why choose us",
+            "items": [
+              {
+                "title": "Quality",
+                "text": "Carefully chosen materials."
+              },
+              {
+                "title": "Service",
+                "text": "We answer fast."
+              },
+              {
+                "title": "Delivery",
+                "text": "On the agreed date."
+              }
+            ]
+          }
+        },
+        "types": {
+          "MARQUEE": "Marquee",
+          "CARDS": "Sections",
+          "PRODUCTS": "Products",
+          "ABOUT": "About",
+          "PAGE_BODY": "Page content",
+          "TEXT": "Text",
+          "BUTTONS": "Buttons",
+          "IMAGE": "Image",
+          "VIDEO": "Video",
+          "BOX": "Box",
+          "SPACER": "Spacer",
+          "DIVIDER": "Divider",
+          "FEATURES": "Features",
+          "TESTIMONIALS": "Testimonials",
+          "TEAM": "Team",
+          "LOGOS": "Logos",
+          "STATS": "Numbers",
+          "STEPS": "Steps",
+          "FAQ": "FAQ",
+          "CTA": "Call to action"
+        },
+        "hints": {
+          "MARQUEE": "The running strip of phrases (Marquee tab)",
+          "CARDS": "The cards with images (Sections tab)",
+          "PRODUCTS": "The products for sale (Products tab)",
+          "ABOUT": "The store story (About tab)",
+          "PAGE_BODY": "This page’s own content (Pages tab)",
+          "TEXT": "A title and a text",
+          "BUTTONS": "Up to 3 buttons side by side",
+          "IMAGE": "One image with a caption",
+          "VIDEO": "An uploaded or YouTube/Vimeo video",
+          "BOX": "1 to 3 columns with image, text and button",
+          "SPACER": "Empty space between sections",
+          "DIVIDER": "A line, dots or a wave",
+          "FEATURES": "Cards with icon, title and text",
+          "TESTIMONIALS": "What customers say, with stars",
+          "TEAM": "Photos, names and roles",
+          "LOGOS": "Logos of brands or tools",
+          "STATS": "Big numbers that count up",
+          "STEPS": "How it works, in steps",
+          "FAQ": "Questions that open and close",
+          "CTA": "A banner with an action button"
         }
       }
     },

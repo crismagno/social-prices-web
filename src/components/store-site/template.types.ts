@@ -1,6 +1,7 @@
 import { ComponentType } from "react";
 
 import { IStoreSitePage } from "../../shared/business/store-sites/store-site-pages";
+import { ISectionBuilderHooks } from "./shared/blocks/builder-types";
 import { IStoreSiteTheme } from "../../shared/business/store-sites/store-site.interface";
 import {
   IPublicSiteProduct,
@@ -30,9 +31,11 @@ export interface IStoreSiteTemplateProps {
     | "sizes"
     | "footer"
     | "signIn"
+    | "catalog"
     | "about"
     | "pages"
     | "blocks"
+    | "isLayoutCustom"
     | "hero"
     | "sections"
     | "marquee"
@@ -47,6 +50,8 @@ export interface IStoreSiteTemplateProps {
   cart: ISiteCartApi;
   /** The page shown; none is the home, which shows everything. */
   page?: IStoreSitePage | null;
+  /** The editor's builder: sections can be picked, moved and dropped. */
+  builder?: ISectionBuilderHooks;
   /** Opens the details of a product. Absent in the editor, where nothing opens. */
   onProductOpen?: (productId: string) => void;
 }

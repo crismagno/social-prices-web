@@ -429,6 +429,55 @@
   transform: translate(6px, 6px);
 }
 
+/* ================= Riviera: serif title, arched window ================= */
+.riviera .title {
+  font-weight: 500;
+}
+
+.riviera .frame {
+  border-radius: 999px 999px 12px 12px;
+}
+
+/* ================= Swell: italic capitals, cut corner ================= */
+.swell .title {
+  font-style: italic;
+  font-weight: 800;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.swell .frame {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 34px),
+    calc(100% - 34px) 100%,
+    0 100%
+  );
+}
+
+/* ================= Buddy: a sticker with a hard shadow ================= */
+.buddy .title {
+  font-weight: 900;
+}
+
+.buddy .frame {
+  border: 3px solid var(--site-text);
+  border-radius: 28px;
+  box-shadow: 8px 8px 0 var(--site-text);
+}
+
+/* ================= Arcade: square and glowing ================= */
+.arcade .title {
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.arcade .frame {
+  border: 2px solid var(--site-primary);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--site-primary) 40%, transparent);
+}
+
 /* ---------- Movements ---------- */
 @keyframes itemIn {
   from {
@@ -557,4 +606,24 @@
   .aurora .media {
     transform: none;
   }
+}
+
+/* ================= Maré: sand panel, arched photo, italic serif ================= */
+.mare .layout {
+  padding: clamp(24px, 4vw, 48px);
+  border-radius: 32px;
+  background: var(--site-accent);
+}
+
+.mare .frame {
+  border-radius: 999px 999px 24px 24px;
+}
+
+.mare .title {
+  font-family: var(--site-fraunces), Georgia, serif;
+  font-weight: 300;
+}
+
+.mare .title::after {
+  background: var(--site-primary);
 }

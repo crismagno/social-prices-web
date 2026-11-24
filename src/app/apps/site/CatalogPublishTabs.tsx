@@ -12,6 +12,7 @@ import {
   List,
   Select,
   Space,
+  Switch,
   Tag,
 } from "antd";
 
@@ -27,6 +28,10 @@ import {
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import { IProduct } from "../../../shared/business/products/products.interface";
+import {
+  IStoreSiteCatalog,
+  siteCatalogOf,
+} from "../../../shared/business/store-sites/store-site-catalog";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import SizeFields from "./SizeFields";
@@ -37,6 +42,14 @@ interface Props {
   editor: IStoreSiteEditor;
   storeId: string;
 }
+
+// What a product may show, in the order the choices are listed.
+const CATALOG_CHOICES: (keyof IStoreSiteCatalog)[] = [
+  "isNameShown",
+  "isPriceShown",
+  "isDescriptionShown",
+  "isSearchShown",
+];
 
 /** Which products the site sells, in the order they are shown. */
 export const ProductsTab = ({ editor }: Omit<Props, "storeId">) => {
@@ -59,6 +72,8 @@ export const ProductsTab = ({ editor }: Omit<Props, "storeId">) => {
 
   const { productIds } = editor.draft;
 
+  const catalog: IStoreSiteCatalog = siteCatalogOf(editor.draft.catalog);
+
   const productById: Map<string, IProduct> = new Map(
     editor.storeProducts.map((product: IProduct) => [product._id, product]),
   );
@@ -75,6 +90,27 @@ export const ProductsTab = ({ editor }: Omit<Props, "storeId">) => {
 
   return (
     <Space direction="vertical" className="w-full">
+      <Card size="small" title={t("storeSite.editor.catalog.heading")}>
+        <Space direction="vertical" className="w-full">
+          {CATALOG_CHOICES.map((choice: keyof IStoreSiteCatalog) => (
+            <label
+              key={choice}
+              className="flex items-center justify-between gap-3"
+            >
+              <span>{t(`storeSite.editor.catalog.${choice}`)}</span>
+              <Switch
+                checked={catalog[choice]}
+                onChange={(isOn: boolean) =>
+                  editor.update({ catalog: { ...catalog, [choice]: isOn } })
+                }
+              />
+            </label>
+          ))}
+          <span className="text-xs opacity-60">
+            {t("storeSite.editor.catalog.hint")}
+          </span>
+        </Space>
+      </Card>
       <Card size="small" title={t("storeSite.editor.sizes.productsHeading")}>
         <SizeFields
           editor={editor}

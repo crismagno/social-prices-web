@@ -1,20 +1,30 @@
 "use client";
 
-import { Form, Input, Rate } from "antd";
+import { Form, Input, Rate, Switch } from "antd";
 
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import {
   BLOCK_LIMITS,
   IStoreSiteBlockItem,
+  newBlockButton,
 } from "../../../shared/business/store-sites/store-site-blocks";
+import { IStoreSitePage } from "../../../shared/business/store-sites/store-site-pages";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
+import ButtonFields from "./ButtonFields";
 import FeatureIconPicker from "./FeatureIconPicker";
 import ImageField from "./ImageField";
 
-type TField = "imageUrl" | "icon" | "rating" | "title" | "subtitle" | "text";
+type TField =
+  | "imageUrl"
+  | "icon"
+  | "rating"
+  | "title"
+  | "subtitle"
+  | "text"
+  | "button";
 
 /** The fields each kind of block asks of its items, in the order shown. */
-export const ITEM_FIELDS: Record<StoreSitesEnum.BlockType, TField[]> = {
+export const ITEM_FIELDS: Partial<Record<StoreSitesEnum.BlockType, TField[]>> = {
   [StoreSitesEnum.BlockType.TEAM]: ["imageUrl", "title", "subtitle", "text"],
   [StoreSitesEnum.BlockType.TESTIMONIALS]: [
     "text",
@@ -28,6 +38,8 @@ export const ITEM_FIELDS: Record<StoreSitesEnum.BlockType, TField[]> = {
   [StoreSitesEnum.BlockType.FAQ]: ["title", "text"],
   [StoreSitesEnum.BlockType.STATS]: ["title", "subtitle"],
   [StoreSitesEnum.BlockType.STEPS]: ["title", "text"],
+  [StoreSitesEnum.BlockType.IMAGE]: ["imageUrl", "text"],
+  [StoreSitesEnum.BlockType.BOX]: ["imageUrl", "title", "text", "button"],
   [StoreSitesEnum.BlockType.CTA]: [],
 };
 
@@ -35,12 +47,14 @@ interface Props {
   type: StoreSitesEnum.BlockType;
   item: IStoreSiteBlockItem;
   storeId: string;
+  /** Where a button can lead. */
+  pages: IStoreSitePage[];
   /** Applied to the item as it is then: an upload may finish later. */
   onChange: (patch: Partial<IStoreSiteBlockItem>) => void;
 }
 
 /** One item of a block: only the fields its kind of block shows. */
-const BlockItemFields = ({ type, item, storeId, onChange }: Props) => {
+const BlockItemFields = ({ type, item, storeId, pages, onChange }: Props) => {
   const { t } = useLanguageData();
 
   const label = (field: TField): string =>
@@ -48,7 +62,7 @@ const BlockItemFields = ({ type, item, storeId, onChange }: Props) => {
 
   return (
     <Form layout="vertical">
-      {ITEM_FIELDS[type].map((field: TField) => {
+      {(ITEM_FIELDS[type] ?? []).map((field: TField) => {
         switch (field) {
           case "imageUrl":
             return (
@@ -80,6 +94,29 @@ const BlockItemFields = ({ type, item, storeId, onChange }: Props) => {
                   onChange={(rating: number) => onChange({ rating })}
                 />
               </Form.Item>
+            );
+          case "button":
+            return (
+              <div key={field}>
+                <Form.Item label={label(field)}>
+                  <Switch
+                    checked={!!item.button}
+                    onChange={(isOn: boolean) =>
+                      onChange({ button: isOn ? newBlockButton() : null })
+                    }
+                  />
+                </Form.Item>
+                {item.button && (
+                  <ButtonFields
+                    button={item.button}
+                    pages={pages}
+                    withVariant
+                    onChange={(patch) =>
+                      onChange({ button: newBlockButton({ ...item.button, ...patch }) })
+                    }
+                  />
+                )}
+              </div>
             );
           case "text":
             return (

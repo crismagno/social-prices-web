@@ -1,0 +1,526 @@
+/* ---------- structure: where each part of the page sits ---------- */
+.page {
+  font-size: 16px;
+}
+
+.hero {
+  position: relative;
+  min-height: var(--sz-hero-h, min(92vh, 780px));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+}
+
+.navWrap {
+  position: relative;
+  z-index: 5;
+  padding: 18px clamp(14px, 4vw, 40px) 0;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 0;
+  font-size: 14px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(100%, var(--sz-brand-w, 100%));
+  width: var(--sz-brand-w, auto);
+  height: var(--sz-brand-h, auto);
+  overflow-wrap: anywhere;
+}
+
+.brand img {
+  width: var(--sz-logo-w, 32px);
+  height: var(--sz-logo-h, 32px);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 2vw, 24px);
+}
+
+.bag {
+  transition:
+    transform 0.25s,
+    background 0.25s,
+    color 0.25s;
+}
+
+.heroBody {
+  position: relative;
+  z-index: 3;
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(20px, 4vw, 50px);
+  align-items: center;
+  padding: 30px clamp(18px, 5vw, 56px) 70px;
+}
+
+.heroBodyAlone {
+  grid-template-columns: minmax(0, 820px);
+}
+
+.copy {
+  animation: rise 1s ease both;
+}
+
+.title {
+  margin: 12px 0 18px;
+  overflow-wrap: anywhere;
+  max-width: var(--sz-title-w, none);
+}
+
+.subtitle {
+  font-size: var(--sz-subtitle, 18px);
+  max-width: var(--sz-subtitle-w, 46ch);
+  margin: 0 0 26px;
+  opacity: 0.85;
+}
+
+.cta {
+  display: inline-block;
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s;
+}
+
+.featured {
+  position: relative;
+  justify-self: center;
+  width: min(100%, var(--sz-featured-w, 340px));
+}
+
+/* Holds the featured images, each filling it. */
+.featuredPhoto {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: var(--sz-featured-ratio, 4 / 5);
+  height: var(--sz-featured-h, auto);
+  background-size: cover;
+  background-position: center;
+}
+
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marqueeTrack {
+  display: inline-block;
+  animation: marquee 26s linear infinite;
+}
+
+.marqueeTrack span {
+  margin: 0 16px;
+}
+
+.block {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: center;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 80px clamp(18px, 5vw, 56px) 0;
+}
+
+.blockFlip .blockPhotoWrap {
+  order: 2;
+}
+
+.blockAlone {
+  grid-template-columns: minmax(0, 760px);
+  justify-content: center;
+}
+
+.blockPhotoWrap {
+  width: min(100%, var(--sz-section-img-w, 100%));
+  margin-inline: auto;
+}
+
+.blockPhoto {
+  aspect-ratio: var(--sz-section-img-ratio, 4 / 3);
+  height: var(--sz-section-img-h, auto);
+  background-size: cover;
+  background-position: center;
+}
+
+.blockTitle {
+  font-size: var(--sz-section-title, clamp(28px, 4vw, 46px));
+  line-height: 1.05;
+  margin: 0 0 14px;
+}
+
+.blockText {
+  margin: 0;
+  font-size: var(--sz-section-text, 17px);
+  opacity: 0.85;
+  white-space: pre-line;
+}
+
+.productsTitle {
+  text-align: center;
+  font-size: clamp(30px, 4.4vw, 48px);
+  margin: 0;
+  padding: 90px 18px 0;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--sz-product-w, 200px)), var(--sz-product-w, 260px))
+  );
+  justify-content: center;
+  gap: 20px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 36px clamp(18px, 5vw, 56px) 80px;
+}
+
+.empty {
+  text-align: center;
+  padding: 40px 18px 80px;
+  opacity: 0.7;
+}
+
+.product {
+  height: 100%;
+  transition:
+    transform 0.3s,
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.productInner {
+  height: 100%;
+  overflow: hidden;
+}
+
+.productPhotoClip {
+  overflow: hidden;
+}
+
+.productPhoto {
+  aspect-ratio: var(--sz-product-img-ratio, 1);
+  height: var(--sz-product-img-h, auto);
+  background: color-mix(in srgb, var(--site-primary) 22%, var(--site-bg))
+    center / cover no-repeat;
+  transition: transform 0.5s;
+}
+
+.product:hover .productPhoto {
+  transform: scale(1.08);
+}
+
+.productBody {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  padding: 14px;
+}
+
+.productName {
+  display: block;
+  overflow-wrap: anywhere;
+  font-size: var(--sz-product-name, inherit);
+}
+
+.price {
+  display: block;
+}
+
+.add {
+  flex-shrink: 0;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 14px;
+  font-size: 13px;
+  transition:
+    transform 0.25s,
+    background 0.25s,
+    color 0.25s;
+}
+
+.soldOut .productPhoto {
+  filter: grayscale(0.9);
+  opacity: 0.5;
+}
+
+.soldOut .add {
+  opacity: 0.5;
+}
+
+/* ---------- Riviera: serif, arches, plenty of air ---------- */
+.hero {
+  background: color-mix(in srgb, var(--site-accent) 55%, var(--site-bg));
+}
+
+/* The photo stays behind a veil of the page's color, so the words read. */
+.veil {
+  background: linear-gradient(
+    90deg,
+    var(--site-bg) 0%,
+    color-mix(in srgb, var(--site-bg) 82%, transparent) 45%,
+    color-mix(in srgb, var(--site-bg) 30%, transparent) 100%
+  );
+}
+
+.veilSolid {
+  background: radial-gradient(
+    circle at 85% 20%,
+    color-mix(in srgb, var(--site-secondary) 35%, transparent),
+    transparent 55%
+  );
+}
+
+.nav {
+  padding-bottom: 16px;
+  border-bottom: 1px solid color-mix(in srgb, var(--site-text) 18%, transparent);
+}
+
+.brand {
+  font-family: var(--site-serif), Georgia, serif;
+  font-size: var(--sz-brand, 26px);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.links {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.bag {
+  padding: 8px 18px;
+  border-radius: 99px;
+  border: 1px solid var(--site-text);
+}
+
+.bag:hover {
+  background: var(--site-text);
+  color: var(--site-bg);
+}
+
+.tag {
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--site-primary);
+}
+
+.title {
+  font-family: var(--site-serif), Georgia, serif;
+  font-weight: 500;
+  font-size: var(--sz-title, clamp(44px, 7vw, 88px));
+  line-height: 0.98;
+  letter-spacing: -0.01em;
+}
+
+.subtitle {
+  line-height: 1.7;
+}
+
+.cta {
+  padding: 16px 34px;
+  border-radius: 99px;
+  background: var(--site-primary);
+  color: var(--site-on-primary);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.cta:hover {
+  transform: translateY(-3px);
+}
+
+/* An arched window, with a thin line drawn around it. */
+.featuredPhoto {
+  border-radius: 999px 999px 12px 12px;
+  box-shadow: 0 30px 60px color-mix(in srgb, var(--site-text) 18%, transparent);
+}
+
+.featured::after {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  border: 1px solid color-mix(in srgb, var(--site-primary) 50%, transparent);
+  border-radius: 999px 999px 20px 20px;
+  pointer-events: none;
+}
+
+/* The entrance ends in a wave of the page's own color. */
+.wave {
+  position: relative;
+  z-index: 2;
+  display: block;
+  flex-shrink: 0;
+  width: 100%;
+  height: 60px;
+  color: var(--site-bg);
+}
+
+.marquee {
+  padding: 15px 0;
+  background: var(--site-accent);
+  font-family: var(--site-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 21px;
+}
+
+.blockPhoto {
+  border-radius: 999px 999px 12px 12px;
+}
+
+.blockTitle {
+  font-family: var(--site-serif), Georgia, serif;
+  font-weight: 500;
+}
+
+.blockText {
+  line-height: 1.7;
+}
+
+.productsTitle {
+  font-family: var(--site-serif), Georgia, serif;
+  font-weight: 500;
+}
+
+.product {
+  border: 1px solid color-mix(in srgb, var(--site-text) 14%, transparent);
+  border-radius: 10px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--site-bg) 90%, #ffffff);
+}
+
+.product:hover {
+  transform: translateY(-6px);
+}
+
+.productName {
+  font-family: var(--site-serif), Georgia, serif;
+  font-weight: 600;
+  font-size: var(--sz-product-name, 20px);
+}
+
+.price {
+  margin-top: 4px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--site-primary);
+}
+
+.add {
+  width: 100%;
+  border: 1px solid var(--site-primary);
+  border-radius: 99px;
+  color: var(--site-primary);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.add:hover:not(:disabled) {
+  background: var(--site-primary);
+  color: var(--site-on-primary);
+}
+
+/* ---------- movements ---------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 767px) {
+  .links a {
+    display: none;
+  }
+
+  .heroBody {
+    grid-template-columns: minmax(0, 1fr);
+    padding-bottom: 50px;
+  }
+
+  .featured {
+    width: min(64%, 240px);
+  }
+
+  .block,
+  .blockFlip {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 54px;
+  }
+
+  .blockFlip .blockPhotoWrap {
+    order: 0;
+  }
+
+  .products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+/* Whoever asked for less movement gets a still page. */
+@media (prefers-reduced-motion: reduce) {
+  .hero *,
+  .hero *::before,
+  .marqueeTrack {
+    animation: none;
+  }
+}
+
+/* The sign-in button beside the cart: same button, with its icon. */
+.signIn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+@media (max-width: 767px) {
+  .links .signIn {
+    display: inline-flex;
+  }
+}

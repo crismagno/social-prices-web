@@ -1,5 +1,6 @@
 "use client";
 
+import { sitePageView } from "../../../components/store-site/shared/site-page-view";
 import { useState } from "react";
 
 import ScrollProgress from "../../../components/store-site/shared/ScrollProgress";
@@ -25,9 +26,6 @@ interface Props {
   pageSlug?: string;
 }
 
-/** How tall the top of a page other than the home is. */
-const PAGE_TOP_HEIGHT = 440;
-
 /**
  * Picks the template of the site and gives it the visitor's cart. On a page
  * other than the home, its top says the page's own title: shorter, and
@@ -48,23 +46,11 @@ const SiteClient = ({ data, pageSlug }: Props) => {
       ) ?? null)
     : null;
 
-  const site: TPublicSite = page
-    ? {
-        ...data.site,
-        hero: {
-          ...data.site.hero,
-          tagline: null,
-          title: page.title?.trim() || labelOf(page),
-          subtitle: page.intro,
-          featuredImageUrl: null,
-          featuredImageUrls: [],
-        },
-        sizes: { ...data.site.sizes, heroHeight: PAGE_TOP_HEIGHT },
-        // The strip and the blocks belong to the home.
-        sections: [],
-        marquee: { ...data.site.marquee, isActive: false },
-      }
-    : data.site;
+  const site: TPublicSite = sitePageView(
+    data.site,
+    page,
+    page ? labelOf(page) : "",
+  );
 
   const { Component } = getTemplateEntry(site.templateId);
 
@@ -87,6 +73,7 @@ const SiteClient = ({ data, pageSlug }: Props) => {
           ) ?? null
         }
         theme={site.theme}
+        catalog={site.catalog}
         cart={cart}
         onClose={() => setOpenProductId(null)}
       />

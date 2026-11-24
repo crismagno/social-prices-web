@@ -5,6 +5,11 @@ namespace StoreSitesEnum {
     ATELIER = "ATELIER",
     GARDEN = "GARDEN",
     STUDIO = "STUDIO",
+    RIVIERA = "RIVIERA",
+    MARE = "MARE",
+    SWELL = "SWELL",
+    BUDDY = "BUDDY",
+    ARCADE = "ARCADE",
   }
 
   /** What a link of the footer leads to: it decides its icon and how it opens. */
@@ -113,6 +118,81 @@ namespace StoreSitesEnum {
     STATS = "STATS",
     STEPS = "STEPS",
     CTA = "CTA",
+    // The template's own parts: they draw what their own tab edits.
+    MARQUEE = "MARQUEE",
+    CARDS = "CARDS",
+    PRODUCTS = "PRODUCTS",
+    ABOUT = "ABOUT",
+    PAGE_BODY = "PAGE_BODY",
+    // Simple pieces of a page.
+    TEXT = "TEXT",
+    BUTTONS = "BUTTONS",
+    IMAGE = "IMAGE",
+    VIDEO = "VIDEO",
+    SPACER = "SPACER",
+    DIVIDER = "DIVIDER",
+    BOX = "BOX",
+  }
+
+  /** The template's own parts: each at most once on a page. */
+  export const PART_TYPES: BlockType[] = [
+    BlockType.MARQUEE,
+    BlockType.CARDS,
+    BlockType.PRODUCTS,
+    BlockType.ABOUT,
+    BlockType.PAGE_BODY,
+  ];
+
+  /** The simple pieces, in the order the palette shows them. */
+  export const PIECE_TYPES: BlockType[] = [
+    BlockType.TEXT,
+    BlockType.BUTTONS,
+    BlockType.IMAGE,
+    BlockType.VIDEO,
+    BlockType.BOX,
+    BlockType.SPACER,
+    BlockType.DIVIDER,
+  ];
+
+  /** The content blocks, in the order the palette shows them. */
+  export const CONTENT_BLOCK_TYPES: BlockType[] = [
+    BlockType.FEATURES,
+    BlockType.TESTIMONIALS,
+    BlockType.TEAM,
+    BlockType.LOGOS,
+    BlockType.STATS,
+    BlockType.STEPS,
+    BlockType.FAQ,
+    BlockType.CTA,
+  ];
+
+  export enum SectionAlign {
+    LEFT = "LEFT",
+    CENTER = "CENTER",
+  }
+
+  export enum SectionWidth {
+    NARROW = "NARROW",
+    WIDE = "WIDE",
+    FULL = "FULL",
+  }
+
+  /** The background of a section, from the site's own colours. */
+  export enum SectionTone {
+    NONE = "NONE",
+    SOFT = "SOFT",
+    STRONG = "STRONG",
+  }
+
+  export enum DividerStyle {
+    LINE = "LINE",
+    DOTS = "DOTS",
+    WAVE = "WAVE",
+  }
+
+  export enum ButtonVariant {
+    PRIMARY = "PRIMARY",
+    OUTLINE = "OUTLINE",
   }
 
   /** Where the button of a call-to-action block goes. */

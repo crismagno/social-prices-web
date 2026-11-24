@@ -801,6 +801,523 @@
   border-left-color: var(--site-on-primary, #fff);
 }
 
+/* ================= Riviera: serif, thin lines ================= */
+.riviera .title,
+.riviera .statValue {
+  font-family: var(--site-serif), Georgia, serif;
+  font-weight: 500;
+}
+
+.riviera .card,
+.riviera .faqItem {
+  border-radius: 10px;
+}
+
+.riviera .siteButton {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ================= Swell: condensed italics, cut corners ================= */
+.swell .title,
+.swell .statValue {
+  font-family: var(--site-condensed), Impact, sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.swell .title {
+  font-size: clamp(34px, 5vw, 60px);
+  line-height: 0.95;
+}
+
+.swell .card,
+.swell .faqItem {
+  border-radius: 0;
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%);
+}
+
+.swell .featureIcon,
+.swell .stepNumber,
+.swell .siteButton {
+  border-radius: 0;
+}
+
+.swell .siteButton {
+  font-family: var(--site-condensed), Impact, sans-serif;
+  font-size: 19px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ================= Buddy: stickers with a hard shadow ================= */
+.buddy .title {
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.buddy .card,
+.buddy .faqItem {
+  border: 3px solid var(--site-text);
+  border-radius: 28px;
+  box-shadow: 6px 6px 0 var(--site-text);
+}
+
+.buddy .featureIcon {
+  border-radius: 50%;
+}
+
+.buddy .siteButton {
+  border-color: var(--site-text);
+  box-shadow: 0 5px 0 var(--site-text);
+  font-weight: 900;
+}
+
+/* ================= Arcade: pixel titles, square and neon ================= */
+.arcade .title {
+  font-family: var(--site-pixel), monospace;
+  font-size: clamp(16px, 2.4vw, 26px);
+  line-height: 1.5;
+  color: var(--site-primary);
+  text-transform: uppercase;
+}
+
+.arcade .card,
+.arcade .faqItem,
+.arcade .featureIcon,
+.arcade .stepNumber,
+.arcade .siteButton {
+  border-radius: 0;
+}
+
+.arcade .card,
+.arcade .faqItem {
+  border-width: 2px;
+}
+
+.arcade .card:hover {
+  border-color: var(--site-primary);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--site-primary) 40%, transparent);
+}
+
+.arcade .statValue {
+  color: var(--site-accent);
+}
+
+.arcade .siteButton {
+  box-shadow: 4px 4px 0 var(--site-secondary);
+  text-transform: uppercase;
+}
+
+/* ================= Pieces of the page builder ================= */
+/* A text: the heading is the whole piece, the body keeps its lines. */
+.block[data-type="TEXT"] .heading {
+  max-width: 820px;
+  margin-bottom: 0;
+}
+
+.block[data-type="TEXT"] .subtitle {
+  font-size: 18px;
+  line-height: 1.75;
+}
+
+.block[data-align="LEFT"] .heading {
+  margin-left: 0;
+  text-align: left;
+}
+
+.block[data-align="LEFT"] .buttonRow,
+.block[data-align="LEFT"] .picture {
+  justify-content: flex-start;
+  margin-left: 0;
+}
+
+/* Background tones from the site's own colours, edge to edge. */
+.block[data-tone="SOFT"],
+.block[data-tone="STRONG"] {
+  max-width: none;
+  padding-inline: max(clamp(18px, 5vw, 56px), calc((100% - 1140px) / 2));
+}
+
+.block[data-tone="SOFT"] {
+  background: color-mix(in srgb, var(--site-primary) 8%, var(--site-bg));
+}
+
+.block[data-tone="STRONG"] {
+  background: var(--site-primary);
+  color: var(--site-on-primary, #fff);
+}
+
+.block[data-tone="STRONG"] .kicker {
+  color: inherit;
+  opacity: 0.85;
+}
+
+/* A spacer or a divider: just itself. */
+.bare {
+  padding-block: 0;
+}
+
+.spacer {
+  width: 100%;
+}
+
+/* ---------- Buttons ---------- */
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+
+.siteButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 28px;
+  border-radius: 99px;
+  border: 2px solid var(--site-primary);
+  background: var(--site-primary);
+  color: var(--site-on-primary, #fff);
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 12px 26px
+    color-mix(in srgb, var(--site-primary) 28%, transparent);
+  transition:
+    translate 0.3s cubic-bezier(0.2, 1.6, 0.4, 1),
+    box-shadow 0.3s,
+    background 0.25s,
+    color 0.25s;
+}
+
+.siteButton:hover {
+  translate: 0 -3px;
+  box-shadow: 0 18px 36px
+    color-mix(in srgb, var(--site-primary) 36%, transparent);
+}
+
+.siteButton.outline {
+  background: transparent;
+  color: var(--site-primary);
+  box-shadow: none;
+}
+
+.siteButton.outline:hover {
+  background: var(--site-primary);
+  color: var(--site-on-primary, #fff);
+}
+
+.block[data-tone="STRONG"] .siteButton {
+  background: var(--site-bg);
+  border-color: var(--site-bg);
+  color: var(--site-primary);
+}
+
+.block[data-tone="STRONG"] .siteButton.outline {
+  background: transparent;
+  color: var(--site-on-primary, #fff);
+}
+
+/* ---------- Image and video ---------- */
+.picture {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 0 auto;
+}
+
+.pictureFrame {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  border-radius: 24px;
+  box-shadow: 0 24px 60px
+    color-mix(in srgb, var(--site-primary) 20%, transparent);
+}
+
+.pictureFrame img {
+  display: block;
+  width: 100%;
+  max-height: 640px;
+  object-fit: cover;
+  transition: scale 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.picture:hover .pictureFrame img {
+  scale: 1.04;
+}
+
+.picture figcaption {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.videoFrame {
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+  aspect-ratio: 16 / 9;
+  border-radius: 24px;
+  background: #000;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
+}
+
+.videoFrame iframe,
+.videoFrame video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.block[data-width="NARROW"] .picture,
+.block[data-width="NARROW"] .videoFrame,
+.block[data-width="NARROW"] .box {
+  max-width: 560px;
+}
+
+.block[data-width="FULL"] {
+  max-width: none;
+  padding-inline: 0;
+}
+
+.block[data-width="FULL"] .pictureFrame,
+.block[data-width="FULL"] .videoFrame {
+  border-radius: 0;
+}
+
+.block[data-width="FULL"] .heading {
+  padding-inline: clamp(18px, 5vw, 56px);
+}
+
+/* ---------- Divider ---------- */
+.divider {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+  color: var(--site-primary);
+}
+
+.divider span {
+  display: block;
+  width: min(100%, 720px);
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    currentColor 20%,
+    currentColor 80%,
+    transparent
+  );
+  transform-origin: center;
+}
+
+.divider[data-divider="DOTS"] span {
+  height: 8px;
+  width: min(100%, 220px);
+  background: radial-gradient(circle, currentColor 3px, transparent 4px) 0 0 /
+    24px 8px repeat-x;
+}
+
+.divider svg {
+  width: min(100%, 720px);
+  height: 24px;
+  overflow: visible;
+}
+
+.divider path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.block[data-phase="shown"] .divider span {
+  animation: lineIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* ---------- Box: one to three columns ---------- */
+.box {
+  display: grid;
+  grid-template-columns: repeat(var(--box-columns, 3), minmax(0, 1fr));
+  gap: 24px;
+  margin: 0 auto;
+}
+
+.boxColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  text-align: center;
+  padding: 26px;
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--site-text) 4%, var(--site-bg));
+  border: 1px solid color-mix(in srgb, var(--site-text) 10%, transparent);
+  transition:
+    translate 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.35s;
+}
+
+.boxColumn:hover {
+  translate: 0 -6px;
+  box-shadow: 0 22px 44px
+    color-mix(in srgb, var(--site-primary) 18%, transparent);
+}
+
+.block[data-align="LEFT"] .boxColumn {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.boxColumn .siteButton {
+  margin-top: auto;
+}
+
+.boxImage {
+  overflow: hidden;
+  width: 100%;
+  border-radius: 16px;
+}
+
+.boxImage img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  transition: scale 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.boxColumn:hover .boxImage img {
+  scale: 1.06;
+}
+
+.block[data-tone="STRONG"] .boxColumn {
+  background: color-mix(in srgb, #fff 12%, transparent);
+  border-color: color-mix(in srgb, #fff 25%, transparent);
+}
+
+/* ---------- Each template's character on the pieces ---------- */
+.atelier .siteButton,
+.garden .siteButton {
+  border-radius: 99px;
+}
+
+.atelier .pictureFrame,
+.atelier .boxColumn {
+  border-radius: 36px;
+}
+
+.atelier .pictureFrame {
+  border: 7px solid #fff;
+}
+
+.garden .pictureFrame,
+.garden .boxImage {
+  border-radius: 999px 999px 24px 24px;
+}
+
+.garden .boxColumn {
+  background: color-mix(in srgb, var(--site-secondary) 14%, var(--site-bg));
+}
+
+.studio .siteButton {
+  border-radius: 14px;
+  border-color: var(--site-text);
+  box-shadow: 5px 5px 0 var(--site-accent);
+}
+
+.studio .siteButton:hover {
+  translate: -2px -2px;
+  box-shadow: 8px 8px 0 var(--site-secondary);
+}
+
+.studio .pictureFrame,
+.studio .boxColumn,
+.studio .videoFrame {
+  border: 2px solid var(--site-text);
+  box-shadow: 10px 10px 0 var(--site-accent);
+}
+
+.aurora .siteButton {
+  background: linear-gradient(
+    135deg,
+    var(--site-primary),
+    var(--site-secondary),
+    var(--site-accent)
+  );
+  background-size: 200% 200%;
+  border-color: transparent;
+  animation: sweep 6s ease infinite;
+}
+
+.aurora .siteButton.outline {
+  background: transparent;
+  border-color: var(--site-primary);
+  animation: none;
+}
+
+.aurora .boxColumn {
+  background: color-mix(in srgb, var(--site-text) 6%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+.impact .siteButton {
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  clip-path: polygon(0 0, 100% 0, 100% 72%, 90% 100%, 0 100%);
+}
+
+.impact .pictureFrame,
+.impact .boxColumn,
+.impact .videoFrame {
+  border-radius: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 90%, 94% 100%, 0 100%);
+}
+
+/* ================= Maré: rounded sand cards, italic serif, clay buttons ================= */
+.mare .title,
+.mare .statValue {
+  font-family: var(--site-fraunces), Georgia, serif;
+  font-weight: 300;
+}
+
+.mare .card,
+.mare .faqItem,
+.mare .boxColumn {
+  border-radius: 24px;
+  border-color: transparent;
+  background: var(--site-accent);
+}
+
+.mare .photo,
+.mare .pictureFrame,
+.mare .boxImage {
+  border-radius: 999px 999px 22px 22px;
+}
+
+.mare .featureIcon,
+.mare .stepNumber {
+  background: var(--site-secondary);
+  color: var(--site-accent);
+}
+
+.mare .statValue {
+  color: var(--site-secondary);
+}
+
+.mare .ctaBox {
+  border-radius: 36px;
+  background: var(--site-secondary);
+  animation: none;
+}
+
 /* ---------- Phones ---------- */
 @media (max-width: 720px) {
   .block {
@@ -826,6 +1343,10 @@
 
   .stepItem:not(:last-child)::after {
     display: none;
+  }
+
+  .box {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -900,6 +1421,8 @@
   .ctaGlow,
   .stepItem::after,
   .aurora .title,
+  .aurora .siteButton,
+  .divider span,
   .aurora .statValue {
     animation: none !important;
   }

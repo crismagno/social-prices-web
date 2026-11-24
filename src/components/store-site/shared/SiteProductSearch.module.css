@@ -1,0 +1,76 @@
+.search {
+  position: relative;
+  width: min(100% - 36px, 440px);
+  margin: 26px auto 0;
+}
+
+.input {
+  width: 100%;
+  height: 48px;
+  padding: 0 46px;
+  border: 1px solid color-mix(in srgb, var(--site-text) 22%, transparent);
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--site-text) 4%, transparent);
+  color: inherit;
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.input::placeholder {
+  color: inherit;
+  opacity: 0.55;
+}
+
+.input:focus {
+  border-color: var(--site-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--site-primary) 22%, transparent);
+}
+
+.icon,
+.clear svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  left: 17px;
+  width: 18px;
+  height: 18px;
+  translate: 0 -50%;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.clear {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  translate: 0 -50%;
+  opacity: 0.65;
+  transition:
+    opacity 0.2s,
+    background 0.2s;
+}
+
+.clear:hover {
+  background: color-mix(in srgb, var(--site-text) 10%, transparent);
+  opacity: 1;
+}
+
+.clear svg {
+  width: 14px;
+  height: 14px;
+}

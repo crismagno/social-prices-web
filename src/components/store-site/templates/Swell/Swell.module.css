@@ -1,0 +1,567 @@
+/* ---------- structure: where each part of the page sits ---------- */
+.page {
+  font-size: 16px;
+}
+
+.hero {
+  position: relative;
+  min-height: var(--sz-hero-h, min(92vh, 780px));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+}
+
+.navWrap {
+  position: relative;
+  z-index: 5;
+  padding: 18px clamp(14px, 4vw, 40px) 0;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 0;
+  font-size: 14px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(100%, var(--sz-brand-w, 100%));
+  width: var(--sz-brand-w, auto);
+  height: var(--sz-brand-h, auto);
+  overflow-wrap: anywhere;
+}
+
+.brand img {
+  width: var(--sz-logo-w, 32px);
+  height: var(--sz-logo-h, 32px);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 2vw, 24px);
+}
+
+.bag {
+  transition:
+    transform 0.25s,
+    background 0.25s,
+    color 0.25s;
+}
+
+.heroBody {
+  position: relative;
+  z-index: 3;
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(20px, 4vw, 50px);
+  align-items: center;
+  padding: 30px clamp(18px, 5vw, 56px) 70px;
+}
+
+.heroBodyAlone {
+  grid-template-columns: minmax(0, 820px);
+}
+
+.copy {
+  animation: rise 1s ease both;
+}
+
+.title {
+  margin: 12px 0 18px;
+  overflow-wrap: anywhere;
+  max-width: var(--sz-title-w, none);
+}
+
+.subtitle {
+  font-size: var(--sz-subtitle, 18px);
+  max-width: var(--sz-subtitle-w, 46ch);
+  margin: 0 0 26px;
+  opacity: 0.85;
+}
+
+.cta {
+  display: inline-block;
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s;
+}
+
+.featured {
+  position: relative;
+  justify-self: center;
+  width: min(100%, var(--sz-featured-w, 340px));
+}
+
+/* Holds the featured images, each filling it. */
+.featuredPhoto {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: var(--sz-featured-ratio, 4 / 5);
+  height: var(--sz-featured-h, auto);
+  background-size: cover;
+  background-position: center;
+}
+
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marqueeTrack {
+  display: inline-block;
+  animation: marquee 26s linear infinite;
+}
+
+.marqueeTrack span {
+  margin: 0 16px;
+}
+
+.block {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: center;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 80px clamp(18px, 5vw, 56px) 0;
+}
+
+.blockFlip .blockPhotoWrap {
+  order: 2;
+}
+
+.blockAlone {
+  grid-template-columns: minmax(0, 760px);
+  justify-content: center;
+}
+
+.blockPhotoWrap {
+  width: min(100%, var(--sz-section-img-w, 100%));
+  margin-inline: auto;
+}
+
+.blockPhoto {
+  aspect-ratio: var(--sz-section-img-ratio, 4 / 3);
+  height: var(--sz-section-img-h, auto);
+  background-size: cover;
+  background-position: center;
+}
+
+.blockTitle {
+  font-size: var(--sz-section-title, clamp(28px, 4vw, 46px));
+  line-height: 1.05;
+  margin: 0 0 14px;
+}
+
+.blockText {
+  margin: 0;
+  font-size: var(--sz-section-text, 17px);
+  opacity: 0.85;
+  white-space: pre-line;
+}
+
+.productsTitle {
+  text-align: center;
+  font-size: clamp(30px, 4.4vw, 48px);
+  margin: 0;
+  padding: 90px 18px 0;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--sz-product-w, 200px)), var(--sz-product-w, 260px))
+  );
+  justify-content: center;
+  gap: 20px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 36px clamp(18px, 5vw, 56px) 80px;
+}
+
+.empty {
+  text-align: center;
+  padding: 40px 18px 80px;
+  opacity: 0.7;
+}
+
+.product {
+  height: 100%;
+  transition:
+    transform 0.3s,
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.productInner {
+  height: 100%;
+  overflow: hidden;
+}
+
+.productPhotoClip {
+  overflow: hidden;
+}
+
+.productPhoto {
+  aspect-ratio: var(--sz-product-img-ratio, 1);
+  height: var(--sz-product-img-h, auto);
+  background: color-mix(in srgb, var(--site-primary) 22%, var(--site-bg))
+    center / cover no-repeat;
+  transition: transform 0.5s;
+}
+
+.product:hover .productPhoto {
+  transform: scale(1.08);
+}
+
+.productBody {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  padding: 14px;
+}
+
+.productName {
+  display: block;
+  overflow-wrap: anywhere;
+  font-size: var(--sz-product-name, inherit);
+}
+
+.price {
+  display: block;
+}
+
+.add {
+  flex-shrink: 0;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 14px;
+  font-size: 13px;
+  transition:
+    transform 0.25s,
+    background 0.25s,
+    color 0.25s;
+}
+
+.soldOut .productPhoto {
+  filter: grayscale(0.9);
+  opacity: 0.5;
+}
+
+.soldOut .add {
+  opacity: 0.5;
+}
+
+/* ---------- Swell: condensed italics, diagonal cuts, rolling water ---------- */
+.hero {
+  background: linear-gradient(
+    180deg,
+    var(--site-bg),
+    color-mix(in srgb, var(--site-primary) 28%, var(--site-bg))
+  );
+}
+
+.bg {
+  inset: -4%;
+  animation: drift 16s ease-in-out infinite alternate;
+}
+
+.veil {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--site-bg) 74%, transparent),
+    color-mix(in srgb, var(--site-bg) 46%, transparent) 55%,
+    color-mix(in srgb, var(--site-primary) 30%, var(--site-bg))
+  );
+}
+
+.veilSolid {
+  background: none;
+}
+
+.brand {
+  font-family: var(--site-condensed), Impact, sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: var(--sz-brand, 28px);
+  text-transform: uppercase;
+}
+
+.links {
+  font-family: var(--site-condensed), Impact, sans-serif;
+  font-size: 17px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.bag {
+  padding: 6px 16px;
+  background: var(--site-secondary);
+  color: var(--site-bg);
+  font-weight: 700;
+  transform: skewX(-10deg);
+}
+
+.bag:hover {
+  transform: skewX(-10deg) scale(1.05);
+}
+
+.tag {
+  display: inline-block;
+  padding: 4px 12px;
+  background: var(--site-accent);
+  font-family: var(--site-condensed), Impact, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transform: skewX(-10deg);
+}
+
+.title {
+  font-family: var(--site-condensed), Impact, sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: var(--sz-title, clamp(58px, 11vw, 140px));
+  line-height: 0.86;
+  text-transform: uppercase;
+  text-shadow: 4px 4px 0 color-mix(in srgb, var(--site-primary) 70%, transparent);
+}
+
+.cta {
+  padding: 13px 36px;
+  background: var(--site-primary);
+  color: var(--site-on-primary);
+  font-family: var(--site-condensed), Impact, sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transform: skewX(-10deg);
+}
+
+.cta:hover {
+  transform: skewX(-10deg) translateY(-3px);
+}
+
+/* The photo leans forward, with its shadow in the second color. */
+.featured::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--site-secondary);
+  clip-path: polygon(14% 0, 100% 0, 86% 100%, 0 100%);
+  transform: translate(14px, 14px);
+}
+
+.featuredPhoto {
+  aspect-ratio: var(--sz-featured-ratio, 1);
+  clip-path: polygon(14% 0, 100% 0, 86% 100%, 0 100%);
+}
+
+/* Twice the width and sliding half of it: the water never stops. */
+.wave {
+  position: relative;
+  z-index: 2;
+  display: block;
+  flex-shrink: 0;
+  width: 200%;
+  max-width: none;
+  height: 70px;
+  color: var(--site-bg);
+  animation: marquee 14s linear infinite;
+}
+
+.marquee {
+  padding: 9px 0;
+  background: var(--site-secondary);
+  color: var(--site-bg);
+  font-family: var(--site-condensed), Impact, sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 24px;
+  text-transform: uppercase;
+  transform: rotate(-1.2deg) scale(1.03);
+}
+
+.blockNumber {
+  display: block;
+  font-family: var(--site-condensed), Impact, sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 64px;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--site-secondary);
+}
+
+.blockPhoto {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 34px),
+    calc(100% - 34px) 100%,
+    0 100%
+  );
+}
+
+.blockTitle {
+  font-family: var(--site-condensed), Impact, sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: var(--sz-section-title, clamp(34px, 5vw, 60px));
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.productsTitle {
+  font-family: var(--site-condensed), Impact, sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: clamp(40px, 6vw, 68px);
+  text-transform: uppercase;
+}
+
+.product {
+  background: color-mix(in srgb, var(--site-bg) 88%, var(--site-text));
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%);
+}
+
+.product:hover {
+  transform: translateY(-6px);
+}
+
+.productName {
+  font-family: var(--site-condensed), Impact, sans-serif;
+  font-weight: 700;
+  font-size: var(--sz-product-name, 21px);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.price {
+  font-family: var(--site-condensed), Impact, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--site-secondary);
+}
+
+.add {
+  width: 100%;
+  background: var(--site-primary);
+  color: var(--site-on-primary);
+  font-family: var(--site-condensed), Impact, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.add:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+@keyframes drift {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08) translate(-1.5%, 1%);
+  }
+}
+
+/* ---------- movements ---------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 767px) {
+  .links a {
+    display: none;
+  }
+
+  .heroBody {
+    grid-template-columns: minmax(0, 1fr);
+    padding-bottom: 50px;
+  }
+
+  .featured {
+    width: min(64%, 240px);
+  }
+
+  .block,
+  .blockFlip {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 54px;
+  }
+
+  .blockFlip .blockPhotoWrap {
+    order: 0;
+  }
+
+  .products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+/* Whoever asked for less movement gets a still page. */
+@media (prefers-reduced-motion: reduce) {
+  .hero *,
+  .hero *::before,
+  .marqueeTrack {
+    animation: none;
+  }
+}
+
+/* The sign-in button beside the cart: same button, with its icon. */
+.signIn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+@media (max-width: 767px) {
+  .links .signIn {
+    display: inline-flex;
+  }
+}

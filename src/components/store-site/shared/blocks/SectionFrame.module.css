@@ -1,0 +1,276 @@
+/*
+ * The editor's handles on the sections of the preview. They speak the
+ * editor's language, not the template's: one blue for every site.
+ */
+.frame {
+  --builder-blue: #4f6bff;
+  position: relative;
+  cursor: pointer;
+  transition: opacity 0.25s;
+}
+
+.frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.frame:hover::after {
+  border-color: color-mix(in srgb, var(--builder-blue) 60%, transparent);
+}
+
+.frame[data-selected]::after {
+  border-color: var(--builder-blue);
+  box-shadow: inset 0 0 0 1px var(--builder-blue);
+}
+
+.frame[data-hidden] > :not(.chip):not(.toolbar) {
+  opacity: 0.35;
+  filter: grayscale(0.6);
+}
+
+/* A part that draws nothing still needs a place to be picked and moved. */
+.frame:not(:has(> :not([data-frame-tool])))::before {
+  content: attr(data-empty-label);
+  display: grid;
+  place-items: center;
+  min-height: 72px;
+  margin: 8px 24px;
+  border-radius: 14px;
+  background: rgba(79, 107, 255, 0.06);
+  color: #4f6bff;
+  font:
+    500 13px system-ui,
+    sans-serif;
+}
+
+.frame[data-dragging] {
+  opacity: 0.4;
+}
+
+.chip,
+.toolbar {
+  position: absolute;
+  z-index: 31;
+  top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  translate: 0 -4px;
+  transition:
+    opacity 0.2s,
+    translate 0.2s;
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+}
+
+.frame:hover > .chip,
+.frame:hover > .toolbar,
+.frame[data-selected] > .chip,
+.frame[data-selected] > .toolbar {
+  opacity: 1;
+  translate: none;
+}
+
+.chip {
+  left: 8px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: var(--builder-blue);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  pointer-events: none;
+  box-shadow: 0 6px 16px rgba(79, 107, 255, 0.35);
+}
+
+.hiddenTag {
+  font-style: normal;
+  padding: 1px 6px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.toolbar {
+  right: 8px;
+  padding: 3px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(20, 30, 70, 0.18);
+}
+
+.toolbar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  min-width: 30px;
+  padding: 0 7px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #2a2f45;
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    scale 0.15s;
+}
+
+.toolbar button:hover:not(:disabled) {
+  background: #eef1ff;
+  color: var(--builder-blue);
+}
+
+.toolbar button:active:not(:disabled) {
+  scale: 0.92;
+}
+
+.toolbar button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.toolbar .handle {
+  cursor: grab;
+}
+
+.toolbar .handle:active {
+  cursor: grabbing;
+}
+
+.toolbar .danger:hover:not(:disabled),
+.toolbar .confirming {
+  background: #fff1f0;
+  color: #cf1322;
+}
+
+.confirming span {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Where a dragged section will land: the page opens a gap with a line. */
+.dropLine {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 0;
+  overflow: visible;
+  transition: height 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.dropLine[data-open] {
+  height: 64px;
+}
+
+.dropLine::before {
+  content: "";
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 50%;
+  height: 4px;
+  border-radius: 4px;
+  background: #4f6bff;
+  box-shadow: 0 0 0 4px rgba(79, 107, 255, 0.18);
+  opacity: 0;
+  scale: 0.6 1;
+  transition:
+    opacity 0.2s,
+    scale 0.25s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+
+.dropLine[data-open]::before {
+  opacity: 1;
+  scale: 1 1;
+}
+
+.dropPill {
+  position: relative;
+  z-index: 1;
+  padding: 5px 14px;
+  border-radius: 99px;
+  background: #4f6bff;
+  color: #fff;
+  font:
+    600 12px system-ui,
+    sans-serif;
+  opacity: 0;
+  scale: 0.7;
+  transition:
+    opacity 0.2s,
+    scale 0.25s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+
+.dropLine[data-open] .dropPill {
+  opacity: 1;
+  scale: 1;
+}
+
+/* The end of the page: always a place to drop, big when the page is empty. */
+.dropEnd {
+  display: grid;
+  place-items: center;
+  margin: 16px 24px;
+  min-height: 56px;
+  border: 2px dashed rgba(79, 107, 255, 0.35);
+  border-radius: 16px;
+  color: #4f6bff;
+  font:
+    600 13px system-ui,
+    sans-serif;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    min-height 0.25s;
+}
+
+.dropEnd[data-empty] {
+  min-height: 220px;
+  font-size: 16px;
+}
+
+.dropEnd[data-open] {
+  background: rgba(79, 107, 255, 0.08);
+  border-color: #4f6bff;
+}
+
+/* A section with nothing to show yet: what it is and where to fill it. */
+.placeholder {
+  display: grid;
+  place-items: center;
+  gap: 4px;
+  min-height: 120px;
+  margin: 12px 24px;
+  border-radius: 16px;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(79, 107, 255, 0.05),
+    rgba(79, 107, 255, 0.05) 10px,
+    rgba(79, 107, 255, 0.09) 10px,
+    rgba(79, 107, 255, 0.09) 20px
+  );
+  color: #4f6bff;
+  font:
+    500 13px system-ui,
+    sans-serif;
+  text-align: center;
+  padding: 16px;
+}
+
+.placeholder strong {
+  font-size: 15px;
+}

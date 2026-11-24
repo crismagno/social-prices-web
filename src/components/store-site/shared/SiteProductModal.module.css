@@ -1,128 +1,527 @@
-.layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 24px;
-  color: var(--site-text, inherit);
+/* The window is only a frame: the site's own colors fill it edge to edge. */
+.modal :global(.ant-modal-content) {
+  padding: 0;
+  overflow: hidden;
+  border-radius: 22px;
+  background: transparent;
 }
 
-.photo {
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: 16px;
-  background: color-mix(in srgb, var(--site-primary) 10%, #fff) center / contain
-    no-repeat;
+.layout {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  height: min(84vh, 640px);
+  background: var(--site-bg, #ffffff);
+  color: var(--site-text, #222222);
+}
+
+.layout *,
+.layout *::before {
+  box-sizing: border-box;
+}
+
+.layout button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.layout :focus-visible {
+  outline: 3px solid var(--site-primary);
+  outline-offset: 2px;
+}
+
+.close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--site-text) 8%, var(--site-bg));
+  color: inherit;
+  transition:
+    background 0.2s,
+    rotate 0.3s;
+}
+
+.close:hover {
+  background: color-mix(in srgb, var(--site-text) 16%, var(--site-bg));
+  rotate: 90deg;
+}
+
+.close svg,
+.arrow svg,
+.zoomHint svg,
+.lightbox svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- pictures: a rail to pick from, a stage to look at ---------- */
+.gallery {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 14px;
+  min-height: 0;
+  padding: 20px;
+  background: color-mix(in srgb, var(--site-primary) 9%, var(--site-bg));
+}
+
+.galleryAlone {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .thumbs {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  padding: 3px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.thumbs::-webkit-scrollbar {
+  display: none;
 }
 
 .thumb {
-  width: 56px;
-  height: 56px;
+  flex-shrink: 0;
+  width: 100%;
+  aspect-ratio: 1;
   padding: 0;
-  border: 2px solid transparent;
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--site-primary) 10%, #fff) center / cover
-    no-repeat;
-  cursor: pointer;
+  border: 2px solid var(--site-bg);
+  border-radius: 14px;
+  background: var(--site-bg) center / cover no-repeat;
+  opacity: 0.6;
+  transition:
+    opacity 0.2s,
+    box-shadow 0.2s,
+    scale 0.2s;
 }
 
+.thumb:hover {
+  opacity: 1;
+  scale: 1.04;
+}
+
+/* The one on show: a ring in the site's color, a breath away from it. */
 .thumbActive {
-  border-color: var(--site-primary);
+  opacity: 1;
+  box-shadow: 0 0 0 2px var(--site-primary);
 }
 
+.stage {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--site-bg);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--site-text) 10%, transparent);
+}
+
+.photo {
+  position: absolute;
+  inset: 0;
+  background: center / contain no-repeat;
+  animation: photoIn 0.35s ease both;
+}
+
+.arrow {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--site-bg) 88%, transparent);
+  color: inherit;
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--site-text) 18%, transparent);
+  translate: 0 -50%;
+  opacity: 0;
+  transition:
+    opacity 0.2s,
+    scale 0.2s;
+}
+
+.stage:hover .arrow,
+.arrow:focus-visible {
+  opacity: 1;
+}
+
+.arrow:hover {
+  scale: 1.1;
+}
+
+.arrowPrevious {
+  left: 12px;
+}
+
+.arrowNext {
+  right: 12px;
+}
+
+.counter {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  padding: 4px 11px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--site-text) 72%, transparent);
+  color: var(--site-bg);
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The whole picture is the way in to its large view. */
+.zoom {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: zoom-in !important;
+}
+
+.zoomHint {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--site-bg) 88%, transparent);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--site-text) 18%, transparent);
+  opacity: 0.75;
+  transition:
+    opacity 0.2s,
+    scale 0.2s;
+}
+
+.zoom:hover .zoomHint {
+  opacity: 1;
+  scale: 1.1;
+}
+
+/* ---------- the picture alone, as large as the screen allows ---------- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 2100;
+  background: rgba(8, 8, 12, 0.92);
+  color: #ffffff;
+  cursor: zoom-out;
+  animation: lightboxIn 0.25s ease both;
+}
+
+.lightbox button {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  color: inherit;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    scale 0.2s;
+}
+
+.lightbox button:hover {
+  background: rgba(255, 255, 255, 0.28);
+  scale: 1.08;
+}
+
+.lightbox :focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.lightboxPhoto {
+  position: absolute;
+  inset: clamp(56px, 8vh, 80px) clamp(14px, 7vw, 96px);
+  background: center / contain no-repeat;
+  animation: photoIn 0.3s ease both;
+}
+
+.lightbox .lightboxClose {
+  top: 16px;
+  right: 16px;
+}
+
+.lightbox .lightboxArrow {
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.lightboxCounter {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  padding: 5px 14px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.14);
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  translate: -50% 0;
+}
+
+@keyframes lightboxIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------- words: they scroll, the button stays ---------- */
 .info {
   display: flex;
   flex-direction: column;
-  gap: 12px;
   min-width: 0;
+  min-height: 0;
+}
+
+.scroll {
+  flex: 1;
+  min-height: 0;
+  padding: 30px 28px 8px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--site-text) 25%, transparent)
+    transparent;
+}
+
+.head {
+  padding: 0 40px 22px 0;
 }
 
 .brand {
+  margin-bottom: 8px;
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  opacity: 0.65;
+  color: var(--site-primary);
 }
 
 .name {
   margin: 0;
-  font-size: 22px;
+  font-size: clamp(22px, 2.6vw, 30px);
   font-weight: 800;
-  line-height: 1.2;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
   overflow-wrap: anywhere;
 }
 
+.priceRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0 0;
+}
+
 .price {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 26px;
+  font-weight: 800;
   color: var(--site-primary);
 }
 
 .soldOut {
-  font-size: 13px;
-  font-weight: 600;
-  opacity: 0.7;
+  padding: 4px 12px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--site-text) 10%, transparent);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.head .text {
+  margin-top: 16px;
 }
 
 .text {
   margin: 0;
-  font-size: 14px;
-  line-height: 1.55;
+  font-size: 15px;
+  line-height: 1.65;
+  opacity: 0.85;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
 
+/* Each part of what the store filled in, under its own thin line. */
+.part {
+  padding: 20px 0;
+  border-top: 1px solid color-mix(in srgb, var(--site-text) 12%, transparent);
+}
+
 .label {
-  margin: 0 0 6px;
-  font-size: 12px;
+  margin: 0 0 12px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  opacity: 0.65;
+  opacity: 0.6;
 }
 
 .colors {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 12px;
+  padding: 3px;
 }
 
+/* A gap of the page's color, then a ring: a pale color still shows. */
 .color {
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  box-shadow:
+    0 0 0 2px var(--site-bg),
+    0 0 0 3px color-mix(in srgb, var(--site-text) 28%, transparent);
 }
 
 .measures {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 4px 16px;
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+  gap: 10px;
   margin: 0;
-  font-size: 14px;
 }
 
-.measures dt {
-  opacity: 0.7;
+.measure {
+  padding: 11px 13px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--site-text) 5%, transparent);
 }
 
-.measures dd {
-  margin: 0;
-  font-weight: 600;
+.measure dt {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  opacity: 0.65;
+}
+
+.measure dd {
+  margin: 2px 0 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.foot {
+  padding: 16px 28px 22px;
+  border-top: 1px solid color-mix(in srgb, var(--site-text) 12%, transparent);
 }
 
 .add {
-  margin-top: auto;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--site-primary);
+  color: var(--site-on-primary, #ffffff);
+  font-size: 16px;
+  font-weight: 800;
+  transition:
+    translate 0.2s,
+    box-shadow 0.2s,
+    filter 0.2s;
 }
 
-@media (max-width: 640px) {
+.add:hover:not(:disabled) {
+  translate: 0 -2px;
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--site-primary) 40%, transparent);
+  filter: brightness(1.05);
+}
+
+.add:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@keyframes photoIn {
+  from {
+    opacity: 0;
+    scale: 1.03;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* On a phone: pictures on top, their rail lying under them, words below. */
+@media (max-width: 760px) {
   .layout {
     grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    height: min(88vh, 760px);
+  }
+
+  .gallery,
+  .galleryAlone {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 14px;
+  }
+
+  .stage {
+    height: min(42vh, 320px);
+  }
+
+  .thumbs {
+    flex-direction: row;
+    order: 2;
+    overflow: auto hidden;
+  }
+
+  .thumb {
+    width: 58px;
+  }
+
+  .arrow {
+    opacity: 1;
+  }
+
+  .scroll {
+    padding: 22px 18px 4px;
+  }
+
+  .head {
+    padding-right: 0;
+  }
+
+  .foot {
+    padding: 12px 18px 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo,
+  .lightbox,
+  .lightboxPhoto {
+    animation: none;
   }
 }

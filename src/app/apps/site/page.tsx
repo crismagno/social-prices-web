@@ -15,6 +15,7 @@ import { IPublicSiteProduct } from "../../../shared/business/store-sites/store-s
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import EditorPanel from "./EditorPanel";
 import SitePreview from "./SitePreview";
+import useSiteBuilder from "./useSiteBuilder";
 import useStoreSiteEditor from "./useStoreSiteEditor";
 
 /** Where the owner builds the public site of a store. */
@@ -59,6 +60,8 @@ export default function AppSitePage() {
   );
 
   const editor = useStoreSiteEditor(store);
+
+  const builder = useSiteBuilder(editor);
 
   const { isDirty } = editor;
 
@@ -118,8 +121,18 @@ export default function AppSitePage() {
         about: store.about,
       },
       products,
+      page: builder.page,
+      // Sections are framed and can be dropped only while the builder is open.
+      builder: builder.isActive ? { selectedKey: builder.selectedKey } : null,
     };
-  }, [editor.draft, editor.storeProducts, store]);
+  }, [
+    editor.draft,
+    editor.storeProducts,
+    store,
+    builder.page,
+    builder.isActive,
+    builder.selectedKey,
+  ]);
 
   const [isSideBySide, setIsSideBySide] = useState<boolean>(false);
 
@@ -156,8 +169,11 @@ export default function AppSitePage() {
                 storeId={storeId}
                 onStoreChange={setStoreId}
                 isSideBySide={isSideBySide}
+                builder={builder}
               />
-              {preview && <SitePreview data={preview} />}
+              {preview && (
+                <SitePreview data={preview} onBuilderAction={builder.apply} />
+              )}
             </div>
           )}
         </>

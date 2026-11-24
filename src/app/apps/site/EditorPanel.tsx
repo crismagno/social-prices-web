@@ -32,14 +32,16 @@ import { ProductsTab, PublishTab } from "./CatalogPublishTabs";
 import { HeroTab, MarqueeTab, SectionsTab } from "./ContentTabs";
 import { ColorsTab, TemplateTab } from "./DesignTabs";
 import AboutTab from "./AboutTab";
-import BlocksTab from "./BlocksTab";
+import BuilderTab from "./BuilderTab";
 import ChatTab from "./ChatTab";
 import FooterTab from "./FooterTab";
 import PagesTab from "./PagesTab";
 import useAvailableHeight from "./useAvailableHeight";
+import { ISiteBuilder } from "./useSiteBuilder";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
 
 type TTab =
+  | "builder"
   | "template"
   | "colors"
   | "hero"
@@ -47,7 +49,6 @@ type TTab =
   | "marquee"
   | "products"
   | "about"
-  | "blocks"
   | "pages"
   | "chat"
   | "footer"
@@ -60,9 +61,12 @@ interface Props {
   onStoreChange: (storeId: string) => void;
   /** Side by side with the preview: the panel is as tall as the window allows. */
   isSideBySide: boolean;
+  /** The page builder, shared with the preview. */
+  builder: ISiteBuilder;
 }
 
 const TABS: { key: TTab; icon: ReactNode }[] = [
+  { key: "builder", icon: <AppstoreAddOutlined /> },
   { key: "template", icon: <AppstoreOutlined /> },
   { key: "colors", icon: <BgColorsOutlined /> },
   { key: "hero", icon: <PictureOutlined /> },
@@ -70,7 +74,6 @@ const TABS: { key: TTab; icon: ReactNode }[] = [
   { key: "marquee", icon: <NotificationOutlined /> },
   { key: "products", icon: <ShoppingOutlined /> },
   { key: "about", icon: <ReadOutlined /> },
-  { key: "blocks", icon: <AppstoreAddOutlined /> },
   { key: "pages", icon: <FileTextOutlined /> },
   { key: "chat", icon: <CommentOutlined /> },
   { key: "footer", icon: <BorderBottomOutlined /> },
@@ -88,6 +91,7 @@ const EditorPanel = ({
   storeId,
   onStoreChange,
   isSideBySide,
+  builder,
 }: Props) => {
   const { t } = useLanguageData();
   const { modal } = App.useApp();
@@ -114,7 +118,7 @@ const EditorPanel = ({
     });
   };
 
-  const [tab, setTab] = useState<TTab>("template");
+  const [tab, setTab] = useState<TTab>("builder");
 
   const { ref, height } = useAvailableHeight<HTMLDivElement>(420);
 
@@ -139,7 +143,7 @@ const EditorPanel = ({
     marquee: false,
     products: false,
     about: false,
-    blocks: false,
+    builder: false,
     pages: invalidPageKeys(draft.pages).length > 0,
     chat: false,
     footer: false,
@@ -158,6 +162,14 @@ const EditorPanel = ({
       : null;
 
   const content: Record<TTab, ReactNode> = {
+    builder: (
+      <BuilderTab
+        editor={editor}
+        builder={builder}
+        storeId={storeId}
+        onOpenTab={(next: string) => setTab(next as TTab)}
+      />
+    ),
     template: <TemplateTab editor={editor} />,
     colors: <ColorsTab editor={editor} />,
     hero: (
@@ -177,7 +189,6 @@ const EditorPanel = ({
         storeAbout={currentStore?.about ?? null}
       />
     ),
-    blocks: <BlocksTab editor={editor} storeId={storeId} />,
     pages: <PagesTab editor={editor} storeId={storeId} />,
     chat: <ChatTab editor={editor} />,
     footer: <FooterTab editor={editor} storeId={storeId} />,

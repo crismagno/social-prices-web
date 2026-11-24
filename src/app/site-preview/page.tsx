@@ -1,13 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   IPreviewData,
   IPreviewMessage,
+  PREVIEW_BUILDER,
   PREVIEW_DATA,
   PREVIEW_READY,
 } from "../../components/store-site/preview-channel";
+import { usePageLabel } from "../../components/store-site/shared/SiteMenu";
+import {
+  ISectionBuilderHooks,
+  TBuilderAction,
+} from "../../components/store-site/shared/blocks/builder-types";
+import { sitePageView } from "../../components/store-site/shared/site-page-view";
+import useSiteT from "../../components/store-site/shared/useSiteT";
+import StoreSitesEnum from "../../shared/business/store-sites/store-sites.enum";
 import { getTemplateEntry } from "../../components/store-site/template-registry";
 import { ISiteCartApi } from "../../components/store-site/template.types";
 
@@ -24,6 +33,33 @@ const NO_CART: ISiteCartApi = {
  */
 export default function SitePreviewPage() {
   const [data, setData] = useState<IPreviewData | null>(null);
+
+  const t = useSiteT();
+  const labelOfPage = usePageLabel();
+
+  // What the owner does on a section goes to the editor, which owns the draft.
+  const send = useCallback((action: TBuilderAction): void => {
+    window.parent?.postMessage(
+      { type: PREVIEW_BUILDER, action } as IPreviewMessage,
+      window.location.origin,
+    );
+  }, []);
+
+  const selectedKey: string | null = data?.builder?.selectedKey ?? null;
+  const isBuilding: boolean = !!data?.builder;
+
+  const builder: ISectionBuilderHooks | undefined = useMemo(
+    () =>
+      isBuilding
+        ? {
+            selectedKey,
+            send,
+            labelOf: (type: StoreSitesEnum.BlockType) =>
+              t(`storeSite.editor.builder.types.${type}`),
+          }
+        : undefined,
+    [isBuilding, selectedKey, send, t],
+  );
 
   useEffect(() => {
     const onMessage = (event: MessageEvent<IPreviewMessage>): void => {
@@ -52,9 +88,13 @@ export default function SitePreviewPage() {
 
   const { Component } = getTemplateEntry(data.site.templateId);
 
+  const page = data.page ?? null;
+
   return (
     <Component
-      site={data.site}
+      site={sitePageView(data.site, page, page ? labelOfPage(page) : "")}
+      page={page}
+      builder={builder}
       store={data.store}
       products={data.products}
       mode="preview"

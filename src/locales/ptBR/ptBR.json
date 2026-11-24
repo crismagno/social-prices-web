@@ -2293,6 +2293,10 @@
     "product": {
       "open": "Ver os detalhes",
       "photo": "Foto {number}",
+      "zoom": "Ver a foto ampliada",
+      "previous": "Foto anterior",
+      "next": "Próxima foto",
+      "close": "Fechar",
       "details": "Detalhes",
       "colors": "Cores",
       "measures": "Medidas",
@@ -2310,6 +2314,9 @@
     },
     "public": {
       "noProducts": "Os produtos aparecem aqui em breve.",
+      "noProductsFound": "Nenhum produto encontrado para a sua busca.",
+      "searchProducts": "Buscar produtos",
+      "clearSearch": "Limpar a busca",
       "unavailable": "Indisponível",
       "add": "Adicionar",
       "cart": "Carrinho",
@@ -2387,6 +2394,26 @@
       "IMPACT": {
         "name": "Impacto",
         "description": "Escuro e forte, título gigante com contorno."
+      },
+      "RIVIERA": {
+        "name": "Riviera",
+        "description": "Sereno e editorial, letra serifada e foto em arco. Para hotéis e pousadas à beira-mar."
+      },
+      "SWELL": {
+        "name": "Swell",
+        "description": "Veloz e esportivo, itálico condensado, cortes diagonais e ondas. Para esportes de mar."
+      },
+      "BUDDY": {
+        "name": "Buddy",
+        "description": "Redondo e divertido, cartões-adesivo e patinhas. Para pet shops."
+      },
+      "ARCADE": {
+        "name": "Arcade",
+        "description": "Neon e retrô, letra pixel e linhas de tela. Para games."
+      },
+      "MARE": {
+        "name": "Maré",
+        "description": "Calmo e natural, em areia, argila e azul-mar: serifa suave com itálico, foto em arco e mosaicos. Para lojas de casa, decoração e feito à mão."
       }
     },
     "editor": {
@@ -2424,7 +2451,8 @@
         "about": "Sobre",
         "pages": "Páginas",
         "chat": "Chat",
-        "blocks": "Blocos"
+        "blocks": "Blocos",
+        "builder": "Construir"
       },
       "colors": {
         "primary": "Cor principal",
@@ -2470,6 +2498,14 @@
         "show": "Mostrar a faixa rolando",
         "items": "Frases",
         "itemsHint": "Uma frase curta por linha, até 8."
+      },
+      "catalog": {
+        "heading": "O que cada produto mostra",
+        "isNameShown": "Nome",
+        "isPriceShown": "Preço",
+        "isDescriptionShown": "Descrição",
+        "isSearchShown": "Busca na página de produtos",
+        "hint": "Com o preço escondido, ele ainda aparece no carrinho."
       },
       "products": {
         "add": "Adicionar um produto",
@@ -2805,6 +2841,16 @@
           "STEPS": {
             "title": "Título da etapa",
             "text": "Descrição"
+          },
+          "IMAGE": {
+            "imageUrl": "Imagem",
+            "text": "Legenda (opcional)"
+          },
+          "BOX": {
+            "imageUrl": "Imagem (opcional)",
+            "title": "Título",
+            "text": "Texto",
+            "button": "Mostrar um botão"
           }
         },
         "icons": {
@@ -2971,6 +3017,159 @@
             "subtitle": "Fale com a gente e tire suas dúvidas.",
             "button": "Ver produtos"
           }
+        }
+      },
+      "builder": {
+        "page": "Página",
+        "hint": "Arraste uma peça para a pré-visualização ou clique para adicionar. Na pré-visualização, passe o mouse numa faixa para mover, duplicar, esconder ou apagar.",
+        "groups": {
+          "pieces": "Peças",
+          "blocks": "Blocos",
+          "parts": "Partes do site"
+        },
+        "onThisPage": "Nesta página",
+        "emptyPage": "Página vazia. Arraste peças para a pré-visualização.",
+        "pickHint": "Clique numa faixa da pré-visualização ou da lista para editar.",
+        "alreadyOnPage": "Esta parte já está nesta página",
+        "removeConfirm": "Apagar esta faixa?",
+        "editPart": "Editar o conteúdo",
+        "partNotes": {
+          "MARQUEE": "Mostra as frases da aba Faixa.",
+          "CARDS": "Mostra os cartões da aba Seções.",
+          "PRODUCTS": "Mostra os produtos escolhidos na aba Produtos.",
+          "ABOUT": "Mostra o texto e a mídia da aba Sobre.",
+          "PAGE_BODY": "Mostra o conteúdo desta página, editado na aba Páginas."
+        },
+        "frame": {
+          "hidden": "escondida",
+          "drag": "Arrastar",
+          "up": "Subir",
+          "down": "Descer",
+          "duplicate": "Duplicar",
+          "hide": "Esconder",
+          "show": "Mostrar",
+          "remove": "Apagar",
+          "removeConfirm": "Apagar?",
+          "dropHere": "Soltar aqui",
+          "dragHere": "Arraste peças para cá",
+          "empty": "Ainda vazia: preencha no painel"
+        },
+        "fields": {
+          "variant": "Estilo",
+          "videoSource": "Vídeo de",
+          "videoLink": "Link do YouTube ou Vimeo",
+          "videoLinkHint": "Cole o endereço do vídeo.",
+          "videoFile": "Arquivo de vídeo",
+          "button": "Botão",
+          "addButton": "Adicionar botão"
+        },
+        "variants": {
+          "PRIMARY": "Principal",
+          "OUTLINE": "Contorno"
+        },
+        "videoSources": {
+          "VIDEO": "Arquivo",
+          "EMBED": "YouTube/Vimeo"
+        },
+        "options": {
+          "align": "Alinhamento",
+          "width": "Largura",
+          "tone": "Fundo",
+          "height": "Altura",
+          "divider": "Estilo"
+        },
+        "values": {
+          "align": {
+            "LEFT": "Esquerda",
+            "CENTER": "Centro"
+          },
+          "width": {
+            "NARROW": "Estreita",
+            "WIDE": "Larga",
+            "FULL": "Tela toda"
+          },
+          "tone": {
+            "NONE": "Nenhum",
+            "SOFT": "Suave",
+            "STRONG": "Forte"
+          },
+          "divider": {
+            "LINE": "Linha",
+            "DOTS": "Pontos",
+            "WAVE": "Onda"
+          }
+        },
+        "samples": {
+          "TEXT": {
+            "kicker": "Sobre nós",
+            "title": "Um título para esta parte",
+            "text": "Escreva aqui o que quiser contar. Cada linha vira um parágrafo."
+          },
+          "BUTTONS": {
+            "first": "Ver produtos",
+            "second": "Fale com a gente"
+          },
+          "BOX": {
+            "title": "Por que nos escolher",
+            "items": [
+              {
+                "title": "Qualidade",
+                "text": "Materiais escolhidos com cuidado."
+              },
+              {
+                "title": "Atendimento",
+                "text": "A gente responde rápido."
+              },
+              {
+                "title": "Entrega",
+                "text": "No prazo combinado."
+              }
+            ]
+          }
+        },
+        "types": {
+          "MARQUEE": "Faixa de frases",
+          "CARDS": "Seções",
+          "PRODUCTS": "Produtos",
+          "ABOUT": "Sobre",
+          "PAGE_BODY": "Conteúdo da página",
+          "TEXT": "Texto",
+          "BUTTONS": "Botões",
+          "IMAGE": "Imagem",
+          "VIDEO": "Vídeo",
+          "BOX": "Caixa",
+          "SPACER": "Espaçador",
+          "DIVIDER": "Divisor",
+          "FEATURES": "Diferenciais",
+          "TESTIMONIALS": "Depoimentos",
+          "TEAM": "Equipe",
+          "LOGOS": "Logos",
+          "STATS": "Números",
+          "STEPS": "Passo a passo",
+          "FAQ": "Perguntas",
+          "CTA": "Chamada final"
+        },
+        "hints": {
+          "MARQUEE": "A faixa que corre com frases (aba Faixa)",
+          "CARDS": "Os cartões com imagem (aba Seções)",
+          "PRODUCTS": "Os produtos à venda (aba Produtos)",
+          "ABOUT": "A história da loja (aba Sobre)",
+          "PAGE_BODY": "O conteúdo próprio desta página (aba Páginas)",
+          "TEXT": "Um título e um texto",
+          "BUTTONS": "Até 3 botões lado a lado",
+          "IMAGE": "Uma imagem com legenda",
+          "VIDEO": "Um vídeo enviado ou do YouTube/Vimeo",
+          "BOX": "1 a 3 colunas com imagem, texto e botão",
+          "SPACER": "Espaço vazio entre faixas",
+          "DIVIDER": "Uma linha, pontos ou onda",
+          "FEATURES": "Cards com ícone, título e texto",
+          "TESTIMONIALS": "O que os clientes dizem, com estrelas",
+          "TEAM": "Fotos, nomes e cargos",
+          "LOGOS": "Logos de marcas ou ferramentas",
+          "STATS": "Números grandes que contam",
+          "STEPS": "Como funciona, em etapas",
+          "FAQ": "Perguntas que abrem e fecham",
+          "CTA": "Um banner com botão de ação"
         }
       }
     },

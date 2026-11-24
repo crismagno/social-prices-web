@@ -1,10 +1,15 @@
 import StoreSitesEnum from "../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteTemplateEntry } from "./template.types";
+import Arcade from "./templates/Arcade/Arcade";
 import Atelier from "./templates/Atelier/Atelier";
 import Aurora from "./templates/Aurora/Aurora";
+import Buddy from "./templates/Buddy/Buddy";
 import Garden from "./templates/Garden/Garden";
 import Impact from "./templates/Impact/Impact";
+import Mare from "./templates/Mare/Mare";
+import Riviera from "./templates/Riviera/Riviera";
 import Studio from "./templates/Studio/Studio";
+import Swell from "./templates/Swell/Swell";
 
 /**
  * Every template of the site app. Adding one is a new folder under
@@ -37,6 +42,18 @@ export const TEMPLATE_REGISTRY: Record<
     },
     labelKey: "storeSite.templates.GARDEN.name",
     descriptionKey: "storeSite.templates.GARDEN.description",
+  },
+  [StoreSitesEnum.Template.MARE]: {
+    Component: Mare,
+    defaultTheme: {
+      primary: "#b8633f",
+      secondary: "#1d3a4a",
+      accent: "#efe6d8",
+      background: "#f8f4ee",
+      text: "#2a2622",
+    },
+    labelKey: "storeSite.templates.MARE.name",
+    descriptionKey: "storeSite.templates.MARE.description",
   },
   [StoreSitesEnum.Template.STUDIO]: {
     Component: Studio,
@@ -73,6 +90,54 @@ export const TEMPLATE_REGISTRY: Record<
     },
     labelKey: "storeSite.templates.IMPACT.name",
     descriptionKey: "storeSite.templates.IMPACT.description",
+  },
+  [StoreSitesEnum.Template.RIVIERA]: {
+    Component: Riviera,
+    defaultTheme: {
+      primary: "#1f6f78",
+      secondary: "#e9a178",
+      accent: "#f3e3c8",
+      background: "#fbf7ef",
+      text: "#2e3d3f",
+    },
+    labelKey: "storeSite.templates.RIVIERA.name",
+    descriptionKey: "storeSite.templates.RIVIERA.description",
+  },
+  [StoreSitesEnum.Template.SWELL]: {
+    Component: Swell,
+    defaultTheme: {
+      primary: "#00c2d1",
+      secondary: "#ffd23f",
+      accent: "#ff5a36",
+      background: "#061a2b",
+      text: "#ffffff",
+    },
+    labelKey: "storeSite.templates.SWELL.name",
+    descriptionKey: "storeSite.templates.SWELL.description",
+  },
+  [StoreSitesEnum.Template.BUDDY]: {
+    Component: Buddy,
+    defaultTheme: {
+      primary: "#ff8a3d",
+      secondary: "#3fb8af",
+      accent: "#ffe2b8",
+      background: "#fff9f1",
+      text: "#3b2f2a",
+    },
+    labelKey: "storeSite.templates.BUDDY.name",
+    descriptionKey: "storeSite.templates.BUDDY.description",
+  },
+  [StoreSitesEnum.Template.ARCADE]: {
+    Component: Arcade,
+    defaultTheme: {
+      primary: "#00f0ff",
+      secondary: "#ff2e88",
+      accent: "#ffe600",
+      background: "#0d0221",
+      text: "#f2f2ff",
+    },
+    labelKey: "storeSite.templates.ARCADE.name",
+    descriptionKey: "storeSite.templates.ARCADE.description",
   },
 };
 
