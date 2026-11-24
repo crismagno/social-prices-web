@@ -1,5 +1,6 @@
 "use client";
 
+import SiteStickyBar from "../../components/store-site/shared/SiteStickyBar";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
@@ -91,6 +92,13 @@ export default function SitePreviewPage() {
   const page = data.page ?? null;
 
   return (
+    <>
+      <SiteStickyBar
+          site={data.site}
+          store={data.store}
+          cart={NO_CART}
+          page={page}
+        />
     <Component
       site={sitePageView(data.site, page, page ? labelOfPage(page) : "")}
       page={page}
@@ -100,5 +108,6 @@ export default function SitePreviewPage() {
       mode="preview"
       cart={NO_CART}
     />
+    </>
   );
 }

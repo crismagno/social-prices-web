@@ -2475,7 +2475,9 @@
         "featuredSlides": {
           "label": "More featured images",
           "hint": "With more than one, the featured image changes from one to the next, like a slider. Up to 5 besides the first."
-        }
+        },
+        "fixedHeader": "Fixed menu at the top",
+        "fixedHeaderHint": "While scrolling, the menu with the name, the pages and the cart stays at the top of the screen."
       },
       "sections": {
         "block": "Block",

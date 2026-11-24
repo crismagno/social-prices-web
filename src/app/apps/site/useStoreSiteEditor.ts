@@ -14,6 +14,7 @@ import { siteFooterOf } from "../../../shared/business/store-sites/store-site-fo
 import { siteAboutOf } from "../../../shared/business/store-sites/store-site-about";
 import { siteBlocksOf } from "../../../shared/business/store-sites/store-site-blocks";
 import { siteChatOf } from "../../../shared/business/store-sites/store-site-chat";
+import { siteHeaderOf } from "../../../shared/business/store-sites/store-site-header";
 import { sitePagesOf } from "../../../shared/business/store-sites/store-site-pages";
 import { siteCatalogOf } from "../../../shared/business/store-sites/store-site-catalog";
 import { siteSignInOf } from "../../../shared/business/store-sites/store-site-sign-in";
@@ -93,6 +94,7 @@ const toDraft = (site: IStoreSite): ISaveStoreSite => ({
   // A site saved before blocks existed has none.
   blocks: siteBlocksOf(site.blocks),
   isLayoutCustom: site.isLayoutCustom === true,
+  header: siteHeaderOf(site.header),
   hero: { ...site.hero },
   sections: site.sections.map((section) => ({ ...section })),
   marquee: { isActive: site.marquee.isActive, items: [...site.marquee.items] },
@@ -118,6 +120,7 @@ const newDraft = (store: IStore): ISaveStoreSite => ({
   chat: siteChatOf(null),
   blocks: [],
   isLayoutCustom: false,
+  header: siteHeaderOf(null),
   hero: {
     tagline: null,
     title: store.name,

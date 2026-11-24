@@ -2,6 +2,7 @@ import { IStoreSiteAbout } from "./store-site-about";
 import { IStoreSiteBlock } from "./store-site-blocks";
 import { IStoreSiteCatalog } from "./store-site-catalog";
 import { IStoreSiteChat } from "./store-site-chat";
+import { IStoreSiteHeader } from "./store-site-header";
 import { IStoreSiteFooter } from "./store-site-footer";
 import { IStoreSitePage } from "./store-site-pages";
 import { IStoreSiteSignIn } from "./store-site-sign-in";
@@ -72,6 +73,8 @@ export interface ISaveStoreSite {
   pages: IStoreSitePage[];
   chat: IStoreSiteChat;
   blocks: IStoreSiteBlock[];
+  /** How the top behaves while the visitor scrolls. */
+  header: IStoreSiteHeader;
   /** The owner arranged the pages: only the blocks list says what shows where. */
   isLayoutCustom: boolean;
   hero: IStoreSiteHero;

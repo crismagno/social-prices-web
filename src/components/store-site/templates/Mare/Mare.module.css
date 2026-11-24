@@ -18,7 +18,7 @@
 
 /* ---------- A light bar that stays on top ---------- */
 .bar {
-  position: sticky;
+  position: relative;
   top: 0;
   z-index: 40;
   display: flex;

@@ -108,6 +108,19 @@ export const HeroTab = ({ editor, storeId, storeName }: IHeroTabProps) => {
 
   return (
     <Form layout="vertical">
+      <Form.Item
+        label={t("storeSite.editor.hero.fixedHeader")}
+        extra={t("storeSite.editor.hero.fixedHeaderHint")}
+      >
+        <Switch
+          checked={editor.draft.header.isFixed}
+          onChange={(isFixed: boolean) =>
+            editor.update((draft) => ({
+              header: { ...draft.header, isFixed },
+            }))
+          }
+        />
+      </Form.Item>
       <Form.Item label={t("storeSite.editor.hero.tagline")}>
         <Input
           maxLength={80}

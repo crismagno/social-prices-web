@@ -36,6 +36,7 @@ export interface IStoreSiteTemplateProps {
     | "pages"
     | "blocks"
     | "isLayoutCustom"
+    | "header"
     | "hero"
     | "sections"
     | "marquee"

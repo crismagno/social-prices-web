@@ -2478,7 +2478,9 @@
         "featuredSlides": {
           "label": "Mais imagens em destaque",
           "hint": "Com mais de uma, a imagem em destaque vai trocando de uma para a outra, como um slider. Até 5 além da primeira."
-        }
+        },
+        "fixedHeader": "Menu fixo no topo",
+        "fixedHeaderHint": "Ao rolar a página, o menu com o nome, as páginas e a sacola fica preso no alto da tela."
       },
       "sections": {
         "block": "Bloco",

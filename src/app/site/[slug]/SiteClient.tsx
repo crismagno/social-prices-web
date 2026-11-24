@@ -1,5 +1,6 @@
 "use client";
 
+import SiteStickyBar from "../../../components/store-site/shared/SiteStickyBar";
 import { sitePageView } from "../../../components/store-site/shared/site-page-view";
 import { useState } from "react";
 
@@ -66,6 +67,7 @@ const SiteClient = ({ data, pageSlug }: Props) => {
         page={page}
         onProductOpen={setOpenProductId}
       />
+      <SiteStickyBar site={site} store={store} cart={cart} page={page} />
       <SiteProductModal
         product={
           products.find(
