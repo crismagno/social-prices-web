@@ -2075,6 +2075,7 @@
     "back": "Back",
     "openCustomer": "Open customer",
     "reply": {
+      "emoji": "Emojis",
       "placeholder": "Write a reply...",
       "send": "Send",
       "via": "Send via",
@@ -2147,6 +2148,8 @@
     "lastUsedAt": "Last used",
     "confirmDelete": "Deactivate this quick message?",
     "confirmActivate": "Reactivate this quick message?",
+    "preview": "Preview",
+    "previewHelp": "This is how the message arrives in the chat, one block at a time. Fields in braces are replaced with the customer and employee data when sent.",
     "saved": "Quick message saved",
     "forbidden": "Only the owner and ADMIN or MASTER employees manage quick messages.",
     "disabled": "Quick messages are not active for this account.",
@@ -2357,7 +2360,11 @@
       "district": "District",
       "city": "City",
       "state": "State",
-      "note": "Note to the store (optional)",
+      "note": "Note to the store",
+      "optional": "(optional)",
+      "addressOptionalHint": "Delivery address (optional). If you fill it in, complete every field.",
+      "doneNote": "The store got your order and will get in touch.",
+      "fieldsChanged": "The store changed what it asks. Refresh the page and send again.",
       "required": "Required",
       "invalidEmail": "Enter a valid email",
       "send": "Send order",
@@ -2408,6 +2415,10 @@
         "name": "Arcade",
         "description": "Neon and retro, pixel letters and scanlines. For games."
       },
+      "ATLAS": {
+        "name": "Atlas",
+        "description": "Sober and solid, squared corners and thin lines. For any business that wants a neutral look."
+      },
       "MARE": {
         "name": "Maré",
         "description": "Calm and natural, in sand, clay and sea blue: soft serif with italics, an arched photo and mosaics. For home, decor and handmade stores."
@@ -2443,6 +2454,7 @@
         "sections": "Blocks",
         "marquee": "Strip",
         "products": "Products",
+        "cart": "Bag",
         "publish": "Address",
         "footer": "Footer",
         "about": "About",
@@ -2450,6 +2462,31 @@
         "chat": "Chat",
         "blocks": "Blocks",
         "builder": "Build"
+      },
+      "images": {
+        "places": {
+          "product": "Photo shape",
+          "section": "Block shape",
+          "block": "Image shape"
+        },
+        "shape": "Shape",
+        "ratio": "Proportion",
+        "template": "Template",
+        "shapes": {
+          "TEMPLATE": "Template",
+          "SQUARE": "Square",
+          "SOFT": "Soft corners",
+          "ROUNDED": "Rounded",
+          "ARCH": "Arch",
+          "CIRCLE": "Circle",
+          "LEAF": "Leaf"
+        },
+        "circleHint": "A circle is always 1:1.",
+        "hints": {
+          "product": "Applies to the photos of every product on the site.",
+          "section": "Applies to every block with a photo: the whole block takes the shape, not just the image.",
+          "block": "Applies to every builder image: image pieces, columns and team photos."
+        }
       },
       "colors": {
         "primary": "Main color",
@@ -2476,8 +2513,67 @@
           "label": "More featured images",
           "hint": "With more than one, the featured image changes from one to the next, like a slider. Up to 5 besides the first."
         },
+        "options": {
+          "showOnHome": "Show the entrance on the home page",
+          "showOnHomeHint": "Off, the home page starts with the menu and the first section. To move the entrance, or hide it on other pages, use the Build tab.",
+          "pieces": {
+            "title": "What shows",
+            "isTaglineVisible": "Top line",
+            "isSubtitleVisible": "Subtitle",
+            "isButtonVisible": "Main button",
+            "isFeaturedVisible": "Featured image"
+          },
+          "colors": {
+            "title": "Colours of the entrance",
+            "hint": "They apply to the entrance only. Empty uses the template's colour.",
+            "background": "Background",
+            "text": "Title and texts",
+            "button": "Button"
+          },
+          "more": {
+            "title": "More texts and buttons",
+            "extraText": "Extra paragraph",
+            "extraTextHint": "Shown under the subtitle, on the home page only.",
+            "buttonTarget": "Where the main button leads",
+            "buttonTargetHint": "The words of the button are the button text field, further down.",
+            "toProducts": "Products",
+            "toOther": "Another destination",
+            "secondButton": "Second button"
+          }
+        },
         "fixedHeader": "Fixed menu at the top",
-        "fixedHeaderHint": "While scrolling, the menu with the name, the pages and the cart stays at the top of the screen."
+        "fixedHeaderHint": "While scrolling, the menu with the name, the pages and the cart stays at the top of the screen.",
+        "cart": {
+          "title": "Cart",
+          "show": "Show the cart",
+          "showHint": "Turn it off if the site sells nothing: the cart and the products' add buttons go away.",
+          "button": "Button at the top of the site",
+          "icon": "Icon",
+          "icons": {
+            "NONE": "None",
+            "BAG": "Bag",
+            "CART": "Cart"
+          },
+          "label": "Text",
+          "labelHint": "Empty uses the template's text.",
+          "onlyIcon": "Show only the icon",
+          "size": "Size",
+          "sizes": {
+            "SMALL": "Small",
+            "MEDIUM": "Medium",
+            "LARGE": "Large"
+          },
+          "fields": {
+            "title": "Order fields",
+            "hint": "What the bag asks before the order is sent. The name is always asked. Without an email, the customer gets no invite to follow the order and each order creates a new customer; without an address, the order comes in as pickup.",
+            "names": {
+              "EMAIL": "Email",
+              "PHONE": "Phone",
+              "ADDRESS": "Delivery address",
+              "NOTE": "Note to the store"
+            }
+          }
+        }
       },
       "sections": {
         "block": "Block",
@@ -2496,7 +2592,35 @@
       "marquee": {
         "show": "Show the running strip",
         "items": "Phrases",
-        "itemsHint": "One short phrase per line, up to 8."
+        "itemsHint": "One short phrase per line, up to 8.",
+        "style": {
+          "title": "Strip style",
+          "speed": "Speed",
+          "speeds": {
+            "SLOW": "Slow",
+            "NORMAL": "Template's",
+            "FAST": "Fast"
+          },
+          "direction": "Direction",
+          "directions": {
+            "LEFT": "To the left",
+            "RIGHT": "To the right"
+          },
+          "separator": "Separator",
+          "separatorHint": "The symbol between the phrases.",
+          "templateSeparator": "Template's",
+          "ownSeparator": "Other",
+          "size": "Text size",
+          "sizes": {
+            "SMALL": "Small",
+            "MEDIUM": "Template's",
+            "LARGE": "Large"
+          },
+          "background": "Background colour",
+          "color": "Text colour",
+          "colorHint": "Empty uses the template's colour.",
+          "pause": "Pause under the pointer"
+        }
       },
       "catalog": {
         "heading": "What each product shows",
@@ -2504,7 +2628,12 @@
         "isPriceShown": "Price",
         "isDescriptionShown": "Description",
         "isSearchShown": "Search on the products page",
-        "hint": "With the price hidden, it still shows in the cart."
+        "isTitleShown": "Products section title",
+        "isAddButtonShown": "Add-to-bag button",
+        "isDetailsOpened": "Open details when a product is clicked",
+        "title": "Title text",
+        "addLabel": "Button text",
+        "hint": "With the price hidden, it still shows in the cart. Without the add button, products are only for display. Empty texts use the site's own."
       },
       "products": {
         "add": "Add a product",
@@ -2546,7 +2675,9 @@
         "footer": "The foot of the site: a few words, your links and the button to sign in to the app.",
         "about": "The about section: a title, your texts and an image or a video.",
         "pages": "The pages of the site besides its home, in the order of the menu. Add your own.",
-        "chat": "A chat window on the site: visitors write, you answer in Chats."
+        "chat": "A chat window on the site: visitors write, you answer in Chats.",
+        "builder": "Build each page: drag pieces onto the preview, move the sections around and click one to edit it.",
+        "cart": "The bag button at the top of the site and what is asked before an order is sent."
       },
       "problems": {
         "hero": "The entrance needs a title.",
@@ -2623,7 +2754,8 @@
           "add": "Add section",
           "textIn": "Name and text go in",
           "loginIn": "Sign-in button goes in",
-          "linkIn": "Shown in"
+          "linkIn": "Shown in",
+          "drag": "Drag to change the order"
         },
         "logo": "Show a logo in the footer",
         "logoHint": "Shown beside the name, in the shape of the logo at the top of the site.",
@@ -2690,6 +2822,8 @@
         "title": "Title at the top of the page",
         "titleHint": "Empty shows the name in the menu.",
         "intro": "Line under the title",
+        "contentTitle": "Title above the texts",
+        "contentTitleHint": "Shown as a highlight, in the look of the template, like the title of the About section. Only shown when the page has a text, an image or a video. Empty shows no title.",
         "productsHint": "This page shows the products chosen in the Products tab.",
         "contactHint": "This page has a form (name, email, phone and message). What visitors send arrives in your Chats, on the Site channel. It also lists the WhatsApp, email, phone and Telegram links of the footer.",
         "aboutHint": "This page shows what you wrote in the About tab.",
@@ -2726,11 +2860,19 @@
         "titleHint": "Empty shows the name of the site.",
         "greeting": "First message",
         "asked": "What is asked before the conversation",
-        "askedHint": "The name is always asked.",
+        "askedHint": "The name is always asked, first.",
         "modes": {
           "REQUIRED": "Required",
           "OPTIONAL": "Optional",
           "HIDDEN": "Not asked"
+        },
+        "sessionMinutes": "Chat time",
+        "sessionMinutesHint": "After this long without the visitor writing, the site window starts a new chat. The old one stays here in Chats.",
+        "minutes": "min",
+        "extra": {
+          "title": "Customer fields",
+          "hint": "Choose which details to ask before the chat, required or optional, in the order you want. The answers arrive as the first message in Chats.",
+          "add": "Add field"
         }
       },
       "blocks": {
@@ -3033,6 +3175,7 @@
         "removeConfirm": "Remove this section?",
         "editPart": "Edit its content",
         "partNotes": {
+          "HERO": "Shows what the Entrance tab edits. It can be moved or hidden, but not deleted.",
           "MARQUEE": "Shows the phrases of the Marquee tab.",
           "CARDS": "Shows the cards of the Sections tab.",
           "PRODUCTS": "Shows the products chosen in the Products tab.",
@@ -3127,6 +3270,7 @@
           }
         },
         "types": {
+          "HERO": "Entrance",
           "MARQUEE": "Marquee",
           "CARDS": "Sections",
           "PRODUCTS": "Products",
@@ -3149,6 +3293,7 @@
           "CTA": "Call to action"
         },
         "hints": {
+          "HERO": "The top with the title, button and image (Entrance tab)",
           "MARQUEE": "The running strip of phrases (Marquee tab)",
           "CARDS": "The cards with images (Sections tab)",
           "PRODUCTS": "The products for sale (Products tab)",
@@ -3255,6 +3400,7 @@
       "tooMany": "Too many messages. Wait a moment and try again.",
       "failed": "It could not be sent. Try again.",
       "attach": "Send a file",
+      "emoji": "Emojis",
       "record": "Record audio",
       "recording": "Recording",
       "preparing": "Preparing the audio…",
@@ -3262,7 +3408,24 @@
       "sendRecording": "Send the recording",
       "microphoneDenied": "Allow the microphone to record audio.",
       "tooLarge": "The file is too big. The limit is 16 MB.",
-      "download": "Download"
+      "download": "Download",
+      "storeTyping": "The store is typing",
+      "requiredField": "Fill in the field \"{field}\".",
+      "invalidField": "Check the field \"{field}\".",
+      "fields": {
+        "EMAIL": "Email",
+        "PHONE": "Phone",
+        "BIRTH_DATE": "Birth date",
+        "GENDER": "Gender",
+        "CPF": "CPF",
+        "ID_NUMBER": "ID number",
+        "ADDRESS": "Address"
+      },
+      "genders": {
+        "FEMALE": "Female",
+        "MALE": "Male",
+        "OTHER": "Other"
+      }
     },
     "blocks": {
       "rating": "{count} out of 5 stars",
@@ -3270,5 +3433,26 @@
       "next": "Next",
       "ctaButton": "Contact us"
     }
+  },
+  "imageEditor": {
+    "title": "Edit image",
+    "free": "Free",
+    "square": "Square",
+    "rotateLeft": "Rotate left",
+    "rotateRight": "Rotate right",
+    "flip": "Mirror",
+    "reset": "Undo all",
+    "cancel": "Cancel",
+    "save": "Apply",
+    "edit": "Edit image",
+    "useOriginal": "Use without editing",
+    "hint": "Drag the clear area to move the crop and the corners to resize it.",
+    "loadFailed": "The image could not be opened for editing."
+  },
+  "filePreview": {
+    "open": "Preview",
+    "download": "Download",
+    "close": "Close",
+    "noPreview": "This kind of file has no preview. Download it to open."
   }
 }

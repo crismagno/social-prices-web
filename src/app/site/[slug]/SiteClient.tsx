@@ -1,5 +1,12 @@
 "use client";
 
+import { siteImageStyleProps } from "../../../components/store-site/shared/site-image-style";
+import base from "../../../components/store-site/shared/site-base.module.css";
+import { siteCartButtonOf } from "../../../shared/business/store-sites/store-site-cart-button";
+import {
+  IStoreSiteCatalog,
+  siteCatalogOf,
+} from "../../../shared/business/store-sites/store-site-catalog";
 import SiteStickyBar from "../../../components/store-site/shared/SiteStickyBar";
 import { sitePageView } from "../../../components/store-site/shared/site-page-view";
 import { useState } from "react";
@@ -55,8 +62,18 @@ const SiteClient = ({ data, pageSlug }: Props) => {
 
   const { Component } = getTemplateEntry(site.templateId);
 
+  // A site that sells nothing hides every "add" button with its cart.
+  // Products can be only shown: then no "add" button either.
+  const view: IStoreSiteCatalog = siteCatalogOf(site.catalog);
+  const sells: boolean =
+    siteCartButtonOf(site.cartButton).isVisible && view.isAddButtonShown;
+  const images = siteImageStyleProps(site.imageStyle);
+
   return (
-    <>
+    <div className={`${base.salesWrap} ${sells ? "" : base.salesOff} ${
+        view.isTitleShown ? "" : base.productsTitleOff
+      } ${images.className}`}
+      style={images.style}>
       <ScrollProgress color={site.theme.primary} />
       <Component
         site={site}
@@ -65,7 +82,7 @@ const SiteClient = ({ data, pageSlug }: Props) => {
         mode="live"
         cart={cart}
         page={page}
-        onProductOpen={setOpenProductId}
+        onProductOpen={view.isDetailsOpened ? setOpenProductId : undefined}
       />
       <SiteStickyBar site={site} store={store} cart={cart} page={page} />
       <SiteProductModal
@@ -90,8 +107,9 @@ const SiteClient = ({ data, pageSlug }: Props) => {
         theme={site.theme}
         products={products}
         cart={cart}
+        checkout={site.checkout}
       />
-    </>
+    </div>
   );
 };
 

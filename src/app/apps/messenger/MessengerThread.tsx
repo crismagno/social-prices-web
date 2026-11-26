@@ -32,8 +32,11 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 
+import { useImageEditStep } from "../../../components/common/ImageEditor/useImageEditStep";
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
 import ScrollToBottomButton from "../../../components/common/ScrollToBottomButton/ScrollToBottomButton";
+import EmojiPickerButton from "../../../components/common/EmojiPicker/EmojiPickerButton";
+import { insertEmoji } from "../../../components/common/EmojiPicker/insert-emoji";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import InboxEnum from "../../../shared/business/inbox/inbox.enum";
 import { useTypingSignal } from "../../../shared/hooks/useTypingSignal";
@@ -131,6 +134,9 @@ export default function MessengerThread({
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  // Pictures are cropped and turned before they are attached.
+  const { editIfImage, editor: imageEditor } = useImageEditStep();
+
   const [file, setFile] = useState<File | null>(null);
 
   // A recording goes as WAV: it is what Messenger plays.
@@ -155,6 +161,15 @@ export default function MessengerThread({
 
   const canSend: boolean =
     chat.canReply && (text.trim().length > 0 || !!file) && !isSending;
+
+  const pickEmoji = (emoji: string): void =>
+    insertEmoji(
+      inputRef.current?.resizableTextArea?.textArea,
+      text,
+      emoji,
+      MAX_LENGTH,
+      setText,
+    );
 
   const pickFile = (picked: File | undefined): void => {
     if (!picked) {
@@ -684,11 +699,16 @@ export default function MessengerThread({
                 type="file"
                 hidden
                 onChange={(event) => {
-                  pickFile(event.target.files?.[0]);
+                  const picked: File | undefined = event.target.files?.[0];
                   // The same file can be picked again after it was removed.
                   event.target.value = "";
+                  // A picture passes through the image editor first.
+                  if (picked) {
+                    editIfImage(picked).then(pickFile);
+                  }
                 }}
               />
+              {imageEditor}
 
               <Button
                 type="text"
@@ -698,6 +718,12 @@ export default function MessengerThread({
                 disabled={isSending || !chat.canReply}
                 onClick={() => fileInputRef.current?.click()}
                 aria-label={t("apps.messenger.media.attach")}
+              />
+
+              <EmojiPickerButton
+                label={t("chats.reply.emoji")}
+                disabled={isSending || !chat.canReply}
+                onPick={pickEmoji}
               />
 
               <Input.TextArea

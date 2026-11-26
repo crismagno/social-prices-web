@@ -1,0 +1,93 @@
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+/* A checkered floor, so transparent pictures show their edges. */
+.area {
+  display: grid;
+  place-items: center;
+  min-height: 240px;
+  padding: 16px;
+  border-radius: 12px;
+  background:
+    repeating-conic-gradient(#e9ebf2 0% 25%, #f6f7fa 0% 50%) 0 0 / 20px 20px;
+}
+
+.stage {
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* The crop: what is outside it is darkened. */
+.box {
+  position: absolute;
+  cursor: move;
+  border: 2px solid #fff;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.35),
+    0 0 0 9999px rgba(10, 14, 30, 0.55);
+}
+
+/* Thirds, to frame the picture. */
+.grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to right, transparent 33.2%, rgba(255, 255, 255, 0.55) 33.3%, transparent 33.5%, transparent 66.5%, rgba(255, 255, 255, 0.55) 66.6%, transparent 66.8%),
+    linear-gradient(to bottom, transparent 33.2%, rgba(255, 255, 255, 0.55) 33.3%, transparent 33.5%, transparent 66.5%, rgba(255, 255, 255, 0.55) 66.6%, transparent 66.8%);
+}
+
+.handle {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #4f6bff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.nw {
+  left: -9px;
+  top: -9px;
+  cursor: nwse-resize;
+}
+
+.ne {
+  right: -9px;
+  top: -9px;
+  cursor: nesw-resize;
+}
+
+.sw {
+  left: -9px;
+  bottom: -9px;
+  cursor: nesw-resize;
+}
+
+.se {
+  right: -9px;
+  bottom: -9px;
+  cursor: nwse-resize;
+}
+
+.hint {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
+}

@@ -14,6 +14,14 @@ import {
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
 import SiteAbout, { siteHasAbout } from "../../shared/SiteAbout";
 import SiteSections from "../../shared/blocks/SiteSections";
+import {
+  SiteHeroButtons,
+  SiteHeroExtraText,
+  heroColorProps,
+  heroViewOf,
+} from "../../shared/SiteHero";
+import { SiteTopBar } from "../../shared/SiteStickyBar";
+import SiteCartButton from "../../shared/SiteCartButton";
 import SiteFooter from "../../shared/SiteFooter";
 import SiteMenu from "../../shared/SiteMenu";
 import SitePageBody from "../../shared/SitePageBody";
@@ -36,9 +44,12 @@ import {
 } from "../../../../shared/business/store-sites/store-site-blocks";
 import {
   TPartType,
+  TTemplatePartType,
+  isHeroOnTop,
   pageSections,
   visiblePageSections,
 } from "../../../../shared/business/store-sites/store-site-layout";
+import { siteMarqueeStyleOf } from "../../../../shared/business/store-sites/store-site-marquee-style";
 import StoreSitesEnum from "../../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteTemplateProps } from "../../template.types";
 import styles from "./Impact.module.css";
@@ -67,6 +78,11 @@ const Impact = ({
   builder,
 }: IStoreSiteTemplateProps) => {
   const t = useSiteT();
+
+  // The symbol between the phrases of the strip: the owner's, else the template's.
+  const marqueeSeparator: string | null = siteMarqueeStyleOf(
+    site.marqueeStyle,
+  ).separator;
 
   // What each product shows, and the ones the visitor's search left.
   const catalog: ISiteCatalog = useSiteCatalog({
@@ -120,7 +136,8 @@ const Impact = ({
         "produtos",
       );
 
-  const { hero } = site;
+  // The entrance as the owner wants it read: hidden lines are not there.
+  const hero = heroViewOf(site.hero);
 
   const { sections, marqueeItems, backgroundImage, logo, brandName } =
     getSiteContent({
@@ -134,173 +151,186 @@ const Impact = ({
     "storeSite.public.seeProducts",
   )} • `.toUpperCase();
 
-
   // The template's own parts, drawn wherever the page's sections put them.
-  const parts: Record<TPartType, ReactNode> = {
+  const parts: Record<TTemplatePartType, ReactNode> = {
     [StoreSitesEnum.BlockType.MARQUEE]: (
       <>
-{marqueeItems.length > 0 && (
-        <div className={styles.marquee} aria-hidden="true">
-          <div className={styles.marqueeTrack}>
-            {repeatForMarquee(marqueeItems).map(
-              (item: string, index: number) => (
-                <span key={index}>{item} —</span>
-              ),
-            )}
+        {marqueeItems.length > 0 && (
+          <div className={styles.marquee} aria-hidden="true">
+            <div className={styles.marqueeTrack}>
+              {repeatForMarquee(marqueeItems).map(
+                (item: string, index: number) => (
+                  <span key={index}>
+                    {item} {marqueeSeparator ?? "—"}
+                  </span>
+                ),
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
       </>
     ),
     [StoreSitesEnum.BlockType.CARDS]: (
       <>
-{sections.length > 0 && (
-        <section className={styles.tiles}>
-          {sections.map((section: IStoreSiteSection, index: number) => (
-            <Reveal key={section.key} delay={index * 0.1} effect="zoom">
-              <article data-card className={styles.tile}>
-                {section.imageUrl && (
-                  <div
-                    className={styles.tilePhoto}
-                    style={{ backgroundImage: cssUrl(section.imageUrl) }}
-                  />
-                )}
-                <div className={styles.tileShade} />
-                <div className={styles.tileBody}>
-                  <h2 className={styles.tileTitle} data-part="1">
-                    {section.title}
-                  </h2>
-                  {section.description && (
-                    <p className={styles.tileText} data-part="2">
-                      {section.description}
-                    </p>
+        {sections.length > 0 && (
+          <section className={styles.tiles}>
+            {sections.map((section: IStoreSiteSection, index: number) => (
+              <Reveal key={section.key} delay={index * 0.1} effect="zoom">
+                <article data-card data-photo="section" className={styles.tile}>
+                  {section.imageUrl && (
+                    <div
+                      className={styles.tilePhoto}
+                      style={{ backgroundImage: cssUrl(section.imageUrl) }}
+                    />
                   )}
-                </div>
-              </article>
-            </Reveal>
-          ))}
-        </section>
-      )}
+                  <div className={styles.tileShade} />
+                  <div className={styles.tileBody}>
+                    <h2 className={styles.tileTitle} data-part="1">
+                      {section.title}
+                    </h2>
+                    {section.description && (
+                      <p className={styles.tileText} data-part="2">
+                        {section.description}
+                      </p>
+                    )}
+                  </div>
+                </article>
+              </Reveal>
+            ))}
+          </section>
+        )}
       </>
     ),
     [StoreSitesEnum.BlockType.PRODUCTS]: (
       <>
-{(
-        <section id="produtos">
-          <Reveal effect="blur">
-            <h2 className={styles.productsTitle}>
-              {t("storeSite.public.products")}
-            </h2>
-          </Reveal>
+        {
+          <section id="produtos">
+            <Reveal effect="blur">
+              <h2 data-products-title className={styles.productsTitle}>
+                {catalog.view.title ?? t("storeSite.public.products")}
+              </h2>
+            </Reveal>
 
-          {catalog.search}
+            {catalog.search}
 
-          {catalog.products.length === 0 ? (
-            <p className={styles.empty}>{catalog.emptyLabel}</p>
-          ) : (
-            <div className={styles.products}>
-              {catalog.products.map((product: IPublicSiteProduct, index: number) => (
-                <Reveal key={product._id} delay={(index % 4) * 0.07}>
-                  <article
-                    data-card
-                    className={`${styles.product} ${
-                      product.isAvailable ? "" : styles.soldOut
-                    }`}
-                  >
-                    <div
-                      className={styles.productPhoto}
-                      data-part="0"
-                      data-shine
-                      style={{ backgroundImage: cssUrl(product.mainUrl) }}
-                      role="img"
-                      aria-label={product.name}
-                      {...productPhotoOpenProps(
-                        product,
-                        onProductOpen,
-                        t("storeSite.product.open"),
-                      )}
-                    />
-                    <div className={styles.productBody}>
-                      {catalog.view.isNameShown && (
-                        <span
-                          className={styles.productName}
-                          data-part="1"
-                          {...productNameOpenProps(product, onProductOpen)}
-                        >
-                          {product.name}
-                        </span>
-                      )}
-                      {catalog.view.isPriceShown && (
-                        <span className={styles.price} data-part="2">
-                          {formatSiteMoney(product.price)}
-                        </span>
-                      )}
-                      {catalog.view.isDescriptionShown && product.description && (
-                        <span className={base.productDescription}>
-                          {product.description}
-                        </span>
-                      )}
-                      <button
-                        type="button"
-                        className={styles.add}
-                        data-part="3"
-                        disabled={!product.isAvailable}
-                        onClick={() => cart.add(product._id)}
+            {catalog.products.length === 0 ? (
+              <p className={styles.empty}>{catalog.emptyLabel}</p>
+            ) : (
+              <div className={styles.products}>
+                {catalog.products.map(
+                  (product: IPublicSiteProduct, index: number) => (
+                    <Reveal key={product._id} delay={(index % 4) * 0.07}>
+                      <article
+                        data-card
+                        className={`${styles.product} ${
+                          product.isAvailable ? "" : styles.soldOut
+                        }`}
                       >
-                        {addLabel(product, cart, t)}
-                      </button>
-                    </div>
-                  </article>
-                </Reveal>
-              ))}
-            </div>
-          )}
-        </section>
-      )}
+                        <div
+                          className={styles.productPhoto}
+                          data-part="0"
+                          data-photo="product"
+                          data-shine
+                          style={{ backgroundImage: cssUrl(product.mainUrl) }}
+                          role="img"
+                          aria-label={product.name}
+                          {...productPhotoOpenProps(
+                            product,
+                            onProductOpen,
+                            t("storeSite.product.open"),
+                          )}
+                        />
+                        <div className={styles.productBody}>
+                          {catalog.view.isNameShown && (
+                            <span
+                              className={styles.productName}
+                              data-part="1"
+                              {...productNameOpenProps(product, onProductOpen)}
+                            >
+                              {product.name}
+                            </span>
+                          )}
+                          {catalog.view.isPriceShown && (
+                            <span className={styles.price} data-part="2">
+                              {formatSiteMoney(product.price)}
+                            </span>
+                          )}
+                          {catalog.view.isDescriptionShown &&
+                            product.description && (
+                              <span className={base.productDescription}>
+                                {product.description}
+                              </span>
+                            )}
+                          <button
+                            data-cart-add
+                            type="button"
+                            className={styles.add}
+                            data-part="3"
+                            disabled={!product.isAvailable}
+                            onClick={() => cart.add(product._id)}
+                          >
+                            {addLabel(product, cart, t, catalog.view.addLabel)}
+                          </button>
+                        </div>
+                      </article>
+                    </Reveal>
+                  ),
+                )}
+              </div>
+            )}
+          </section>
+        }
       </>
     ),
     [StoreSitesEnum.BlockType.ABOUT]: (
       <>
-{(
-        <SiteAbout
-          about={site.about}
-          storeAbout={store.about}
-          defaultTitle={t("storeSite.public.ourStory")}
-          kicker={brandName}
-          variant="impact"
-        />
-      )}
+        {
+          <SiteAbout
+            about={site.about}
+            storeAbout={store.about}
+            defaultTitle={t("storeSite.public.ourStory")}
+            kicker={brandName}
+            variant="impact"
+          />
+        }
       </>
     ),
     [StoreSitesEnum.BlockType.PAGE_BODY]: (
       <>
-{page && (
-        <SitePageBody
-          page={page}
-          variant="impact"
-          footer={site.footer}
-          slug={site.slug}
-          isPreview={mode === "preview"}
-        />
-      )}
+        {page && (
+          <SitePageBody
+            page={page}
+            variant="impact"
+            footer={site.footer}
+            slug={site.slug}
+            isPreview={mode === "preview"}
+          />
+        )}
       </>
     ),
   };
 
-  return (
-    <SiteThemeVars
-      theme={site.theme}
-      sizes={site.sizes}
-      className={`${base.root} ${mode === "preview" ? base.preview : ""} ${
-        styles.page
-      }`}
-    >
-      <header className={styles.hero}>
-        <HeroBackground hero={hero} className={styles.bg} />
-        <div
-          className={`${styles.cut} ${backgroundImage ? "" : styles.cutSolid}`}
-        />
+  // A page that starts with its entrance has the menu inside it, as the
+  // template draws it; any other page gets the menu as a bar of its own.
+  const isHeroFirst: boolean = isHeroOnTop(
+    builder
+      ? pageSections(
+          siteBlocksOf(site.blocks),
+          page ?? null,
+          site.isLayoutCustom === true,
+        )
+      : shownSections,
+  );
 
+  // The entrance, drawn wherever the page's sections put it.
+  const heroPart: ReactNode = (
+    <header {...heroColorProps(hero, styles.hero)}>
+      <HeroBackground hero={hero} className={styles.bg} />
+      <div
+        className={`${styles.cut} ${backgroundImage ? "" : styles.cutSolid}`}
+      />
+
+      {isHeroFirst && (
         <nav className={styles.nav}>
           <a href={homeHref} className={styles.brand}>
             {logo && <img src={logo} alt="" />}
@@ -322,73 +352,97 @@ const Impact = ({
                 isCompact
               />
             )}
-            <button type="button" className={styles.bag} onClick={cart.open}>
-              {t("storeSite.public.cart")} ({cart.count})
-            </button>
+            <SiteCartButton
+              settings={site.cartButton}
+              cart={cart}
+              className={styles.bag}
+              defaultLabelKey="storeSite.public.cart"
+              countFormat="paren"
+            />
           </span>
         </nav>
+      )}
 
-        <a
-          href={productsHref}
-          className={styles.badge}
-          aria-hidden="true"
-          tabIndex={-1}
-        >
-          <svg viewBox="0 0 100 100">
-            <defs>
-              <path
-                id="impact-badge"
-                d="M50,50 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0"
-              />
-            </defs>
-            <text
-              fill="var(--site-text)"
-              fontSize="9"
-              fontWeight="700"
-              letterSpacing="2"
-            >
-              <textPath href="#impact-badge" textLength="246">
-                {badgeText}
-              </textPath>
-            </text>
-          </svg>
-          <span className={styles.badgeDot}>↓</span>
-        </a>
+      <a
+        href={productsHref}
+        className={styles.badge}
+        aria-hidden="true"
+        tabIndex={-1}
+      >
+        <svg viewBox="0 0 100 100">
+          <defs>
+            <path
+              id="impact-badge"
+              d="M50,50 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0"
+            />
+          </defs>
+          <text
+            fill="var(--site-text)"
+            fontSize="9"
+            fontWeight="700"
+            letterSpacing="2"
+          >
+            <textPath href="#impact-badge" textLength="246">
+              {badgeText}
+            </textPath>
+          </text>
+        </svg>
+        <span className={styles.badgeDot}>↓</span>
+      </a>
 
-        <div className={styles.heroBody}>
-          <div className={styles.copy}>
-            {hero.tagline && (
-              <div className={styles.tag} data-intro="0">
-                {hero.tagline}
-              </div>
-            )}
-            <h1 className={styles.title} data-intro="1">
-              {lead}
-              {last && (
-                <>
-                  {" "}
-                  <span className={styles.titleOutline}>{last}</span>
-                </>
-              )}
-            </h1>
-            {hero.subtitle && (
-              <p className={styles.subtitle} data-intro="2">
-                {hero.subtitle}
-              </p>
-            )}
-            <div className={styles.buttons} data-intro="3">
-              <a href={productsHref} className={styles.cta} data-shine>
-                {hero.ctaLabel || t("storeSite.public.seeProducts")}
-              </a>
-              {hasAbout && (
-                <a href={aboutHref} className={styles.ctaGhost}>
-                  {t("storeSite.public.ourStory")}
-                </a>
-              )}
+      <div className={styles.heroBody}>
+        <div className={styles.copy}>
+          {hero.tagline && (
+            <div className={styles.tag} data-intro="0">
+              {hero.tagline}
             </div>
+          )}
+          <h1 className={styles.title} data-intro="1">
+            {lead}
+            {last && (
+              <>
+                {" "}
+                <span className={styles.titleOutline}>{last}</span>
+              </>
+            )}
+          </h1>
+          {hero.subtitle && (
+            <p className={styles.subtitle} data-intro="2">
+              {hero.subtitle}
+            </p>
+          )}
+          <SiteHeroExtraText hero={hero} className={styles.subtitle} />
+          <div className={styles.buttons} data-intro="3">
+            <SiteHeroButtons
+              hero={hero}
+              className={styles.cta}
+              productsHref={productsHref}
+              siteSlug={site.slug}
+              pages={site.pages}
+              mode={mode}
+            />
+            {hasAbout && (
+              <a href={aboutHref} className={styles.ctaGhost}>
+                {t("storeSite.public.ourStory")}
+              </a>
+            )}
           </div>
         </div>
-      </header>
+      </div>
+    </header>
+  );
+
+  return (
+    <SiteThemeVars
+      theme={site.theme}
+      sizes={site.sizes}
+      className={`${base.root} ${mode === "preview" ? base.preview : ""} ${
+        styles.page
+      }`}
+    >
+      {!isHeroFirst && (
+        <SiteTopBar site={site} store={store} cart={cart} page={page ?? null} />
+      )}
 
       <SiteSections
         sections={
@@ -401,7 +455,10 @@ const Impact = ({
             : shownSections
         }
         builder={builder}
-        renderPart={(type: TPartType) => parts[type]}
+        marqueeStyle={site.marqueeStyle}
+        renderPart={(type: TPartType) =>
+          type === StoreSitesEnum.BlockType.HERO ? heroPart : parts[type]
+        }
         pages={site.pages}
         siteSlug={site.slug}
         variant="impact"

@@ -2,8 +2,13 @@ import { IStoreSiteAbout } from "./store-site-about";
 import { IStoreSiteBlock } from "./store-site-blocks";
 import { IStoreSiteCatalog } from "./store-site-catalog";
 import { IStoreSiteChat } from "./store-site-chat";
+import { IStoreSiteCartButton } from "./store-site-cart-button";
+import { IStoreSiteImageStyle } from "./store-site-image-style";
+import { IStoreSiteCheckout } from "./store-site-checkout";
 import { IStoreSiteHeader } from "./store-site-header";
+import { IStoreSiteMarqueeStyle } from "./store-site-marquee-style";
 import { IStoreSiteFooter } from "./store-site-footer";
+import { IStoreSiteHeroOptions } from "./store-site-hero";
 import { IStoreSitePage } from "./store-site-pages";
 import { IStoreSiteSignIn } from "./store-site-sign-in";
 import { TStoreSiteSizes } from "./store-site-sizes";
@@ -33,6 +38,8 @@ export interface IStoreSiteHero {
   /** Seconds each featured image stays, when there is more than one. */
   featuredSlideSeconds?: number;
   ctaLabel: string | null;
+  /** What the owner changed of how the entrance looks and what it says. */
+  options?: Partial<IStoreSiteHeroOptions>;
 }
 
 export interface IStoreSiteSection {
@@ -75,6 +82,14 @@ export interface ISaveStoreSite {
   blocks: IStoreSiteBlock[];
   /** How the top behaves while the visitor scrolls. */
   header: IStoreSiteHeader;
+  /** The cart button, or none for a site that sells nothing. */
+  cartButton: IStoreSiteCartButton;
+  /** The shape and proportion of the images, by place. */
+  imageStyle: IStoreSiteImageStyle;
+  /** What the bag asks before an order is sent. */
+  checkout: IStoreSiteCheckout;
+  /** How the strip of phrases looks and runs. */
+  marqueeStyle: IStoreSiteMarqueeStyle;
   /** The owner arranged the pages: only the blocks list says what shows where. */
   isLayoutCustom: boolean;
   hero: IStoreSiteHero;

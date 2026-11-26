@@ -109,3 +109,15 @@
     transition: none;
   }
 }
+
+/* The same bar, in the page itself: the top of a page with no entrance there. */
+.topBar {
+  position: relative;
+  z-index: 5;
+}
+
+/* Narrow screens: the menu goes under the name instead of off the page. */
+.topBar .inner {
+  flex-wrap: wrap;
+  row-gap: 8px;
+}

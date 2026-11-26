@@ -9,6 +9,7 @@ import {
   FieldNumberOutlined,
   FileTextOutlined,
   FontSizeOutlined,
+  LayoutOutlined,
   LineOutlined,
   NotificationOutlined,
   OrderedListOutlined,
@@ -28,6 +29,7 @@ const T = StoreSitesEnum.BlockType;
 
 /** The icon of each kind of section, in the editor. */
 export const SECTION_ICONS: Record<StoreSitesEnum.BlockType, ReactNode> = {
+  [T.HERO]: <LayoutOutlined />,
   [T.MARQUEE]: <NotificationOutlined />,
   [T.CARDS]: <BlockOutlined />,
   [T.PRODUCTS]: <ShoppingOutlined />,

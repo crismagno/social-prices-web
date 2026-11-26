@@ -259,4 +259,23 @@ export default class StoreSitesServiceMethods extends ServiceMethodsBase {
 
     return response.data;
   }
+
+  /** The visitor is writing: the store's inbox shows it. Best effort. */
+  public async sendChatTyping(slug: string, token: string): Promise<void> {
+    await this._fetchAxios.post(
+      this._url(StoreSitesServiceEnum.Methods.PUBLIC_CHAT_TYPING, { slug }),
+      {},
+      { headers: { [SITE_CHAT_TOKEN_HEADER]: token } },
+    );
+  }
+
+  /** Whether the store is writing to this visitor right now. */
+  public async isStoreTyping(slug: string, token: string): Promise<boolean> {
+    const response = await this._fetchAxios.get<{ isStoreTyping: boolean }>(
+      this._url(StoreSitesServiceEnum.Methods.PUBLIC_CHAT_TYPING, { slug }),
+      { headers: { [SITE_CHAT_TOKEN_HEADER]: token } },
+    );
+
+    return response.data?.isStoreTyping === true;
+  }
 }

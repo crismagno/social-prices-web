@@ -1,7 +1,19 @@
 "use client";
 
+import { siteImageStyleProps } from "../../components/store-site/shared/site-image-style";
+import {
+  IStoreSitePage,
+  sitePagePath,
+  sitePagesOf,
+} from "../../shared/business/store-sites/store-site-pages";
+import base from "../../components/store-site/shared/site-base.module.css";
+import { siteCartButtonOf } from "../../shared/business/store-sites/store-site-cart-button";
+import {
+  IStoreSiteCatalog,
+  siteCatalogOf,
+} from "../../shared/business/store-sites/store-site-catalog";
 import SiteStickyBar from "../../components/store-site/shared/SiteStickyBar";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   IPreviewData,
@@ -91,8 +103,50 @@ export default function SitePreviewPage() {
 
   const page = data.page ?? null;
 
+  // Products can be only shown: then no "add" button either.
+  const view: IStoreSiteCatalog = siteCatalogOf(data.site.catalog);
+  const sells: boolean =
+    siteCartButtonOf(data.site.cartButton).isVisible && view.isAddButtonShown;
+  const images = siteImageStyleProps(data.site.imageStyle);
+
+  // A link to a page of the site never leaves the editor: the editor shows
+  // that page in the preview instead.
+  const followPageLink = (event: MouseEvent<HTMLDivElement>): void => {
+    const link = (event.target as HTMLElement).closest?.("a");
+    const href: string | null = link?.getAttribute("href") ?? null;
+    const home: string = sitePagePath(data.site.slug);
+
+    if (!href || !(href === home || href.startsWith(`${home}/`))) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const pageSlug: string = decodeURIComponent(
+      href.slice(home.length).replace(/^\//, "").split(/[/?#]/)[0] ?? "",
+    );
+
+    const target: IStoreSitePage | undefined = pageSlug
+      ? sitePagesOf(data.site.pages).find(
+          (candidate: IStoreSitePage) => candidate.slug === pageSlug,
+        )
+      : undefined;
+
+    if (pageSlug && !target) {
+      return;
+    }
+
+    send({ kind: "page", pageKey: target?.key ?? null });
+  };
+
   return (
-    <>
+    <div
+      className={`${base.salesWrap} ${sells ? "" : base.salesOff} ${
+        view.isTitleShown ? "" : base.productsTitleOff
+      } ${images.className}`}
+      style={images.style}
+      onClickCapture={followPageLink}
+    >
       <SiteStickyBar
           site={data.site}
           store={data.store}
@@ -108,6 +162,6 @@ export default function SitePreviewPage() {
       mode="preview"
       cart={NO_CART}
     />
-    </>
+    </div>
   );
 }

@@ -6,6 +6,7 @@ import { Button, Space } from "antd";
 
 import { DeleteOutlined, UploadOutlined } from "@ant-design/icons";
 
+import { useImageEditStep } from "../../../components/common/ImageEditor/useImageEditStep";
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
@@ -25,6 +26,9 @@ const ImageField = ({ storeId, value, disabled, onChange }: Props) => {
   const { t } = useLanguageData();
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // A picture is cropped and turned before it is sent.
+  const { editIfImage, editor } = useImageEditStep();
 
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
@@ -73,8 +77,17 @@ const ImageField = ({ storeId, value, disabled, onChange }: Props) => {
         type="file"
         accept="image/png,image/jpeg,image/webp,image/gif"
         hidden
-        onChange={(event) => upload(event.target.files?.[0])}
+        onChange={(event) => {
+          const picked: File | undefined = event.target.files?.[0];
+
+          event.target.value = "";
+
+          if (picked) {
+            editIfImage(picked).then(upload);
+          }
+        }}
       />
+      {editor}
       <Button
         icon={<UploadOutlined />}
         loading={isUploading}

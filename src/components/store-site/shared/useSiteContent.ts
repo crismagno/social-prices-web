@@ -1,3 +1,4 @@
+import { heroOptionsOf } from "../../../shared/business/store-sites/store-site-hero";
 import { IStoreSiteSection } from "../../../shared/business/store-sites/store-site.interface";
 import { IPublicSiteProduct } from "../../../shared/business/store-sites/store-sites.types";
 import { ISiteCartApi, IStoreSiteTemplateProps } from "../template.types";
@@ -30,7 +31,10 @@ export const getSiteContent = ({
     ? site.marquee.items.filter((item: string) => item.trim())
     : [],
   backgroundImage: cssUrl(heroSlideKeys(site.hero)[0]),
-  featuredImage: cssUrl(featuredSlideKeys(site.hero)[0]),
+  // Hidden by the owner: the entrance is drawn as one without a picture.
+  featuredImage: heroOptionsOf(site.hero.options).isFeaturedVisible
+    ? cssUrl(featuredSlideKeys(site.hero)[0])
+    : undefined,
   logo: siteLogo(site.logo, store.logo),
   brandName: site.displayName?.trim() || store.name,
 });
@@ -40,6 +44,8 @@ export const addLabel = (
   product: IPublicSiteProduct,
   cart: ISiteCartApi,
   t: TSiteTranslate,
+  /** The owner's own text of the button, when they wrote one. */
+  ownLabel?: string | null,
 ): string => {
   if (!product.isAvailable) {
     return t("storeSite.public.unavailable");
@@ -49,7 +55,7 @@ export const addLabel = (
 
   return inCart > 0
     ? t("storeSite.public.inCart", { count: inCart })
-    : t("storeSite.public.add");
+    : ownLabel || t("storeSite.public.add");
 };
 
 /** The phrases of the strip, repeated enough to fill and loop seamlessly. */

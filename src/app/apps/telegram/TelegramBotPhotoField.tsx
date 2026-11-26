@@ -10,6 +10,7 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 
+import { useImageEditStep } from "../../../components/common/ImageEditor/useImageEditStep";
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
@@ -71,6 +72,9 @@ export default function TelegramBotPhotoField({ photoUrl, onChange }: Props) {
   const { t } = useLanguageData();
 
   const { message } = App.useApp();
+
+  // The bot's photo is square on Telegram: the editor starts square.
+  const { editIfImage, editor } = useImageEditStep("1:1");
 
   const [isBusy, setIsBusy] = useState<boolean>(false);
 
@@ -144,7 +148,7 @@ export default function TelegramBotPhotoField({ photoUrl, onChange }: Props) {
             accept="image/jpeg,image/png,image/webp"
             showUploadList={false}
             beforeUpload={(file) => {
-              handlePick(file);
+              editIfImage(file).then(handlePick);
               // The upload is done by hand, after the conversion.
               return false;
             }}
@@ -154,6 +158,7 @@ export default function TelegramBotPhotoField({ photoUrl, onChange }: Props) {
               {t("apps.telegram.profile.photoChange")}
             </Button>
           </Upload>
+          {editor}
 
           {photoUrl && (
             <Popconfirm

@@ -13,6 +13,7 @@ import {
   moveSection,
   newSection,
   pageSections,
+  withEveryPage,
 } from "../../../shared/business/store-sites/store-site-layout";
 import {
   IStoreSitePage,
@@ -48,8 +49,10 @@ export interface ISiteBuilder {
 }
 
 /** The layout the owner arranges: the site's own the first time they touch it. */
-const arranged = (draft: ISaveStoreSite): IStoreSiteBlock[] =>
-  draft.isLayoutCustom ? draft.blocks : materializeLayout(draft.blocks, draft.pages);
+export const arrangedBlocks = (draft: ISaveStoreSite): IStoreSiteBlock[] =>
+  draft.isLayoutCustom
+    ? withEveryPage(draft.blocks, draft.pages)
+    : materializeLayout(draft.blocks, draft.pages);
 
 /**
  * The page builder of the editor: which page is built, which section is
@@ -75,8 +78,7 @@ const useSiteBuilder = (editor: IStoreSiteEditor): ISiteBuilder => {
   );
 
   const sections: IStoreSiteBlock[] = useMemo(
-    () =>
-      draft ? pageSections(draft.blocks, page, draft.isLayoutCustom) : [],
+    () => (draft ? pageSections(draft.blocks, page, draft.isLayoutCustom) : []),
     [draft, page],
   );
 
@@ -93,7 +95,7 @@ const useSiteBuilder = (editor: IStoreSiteEditor): ISiteBuilder => {
   const change = useCallback(
     (next: (blocks: IStoreSiteBlock[]) => IStoreSiteBlock[]): void =>
       editor.update((current: ISaveStoreSite) => ({
-        blocks: next(arranged(current)),
+        blocks: next(arrangedBlocks(current)),
         isLayoutCustom: true,
       })),
     [editor],
@@ -101,14 +103,7 @@ const useSiteBuilder = (editor: IStoreSiteEditor): ISiteBuilder => {
 
   const canAddType = useCallback(
     (type: StoreSitesEnum.BlockType): boolean =>
-      !!draft &&
-      canAdd(
-        type,
-        page?.key ?? null,
-        draft.isLayoutCustom
-          ? draft.blocks
-          : materializeLayout(draft.blocks, draft.pages),
-      ),
+      !!draft && canAdd(type, page?.key ?? null, arrangedBlocks(draft)),
     [draft, page],
   );
 
@@ -134,6 +129,9 @@ const useSiteBuilder = (editor: IStoreSiteEditor): ISiteBuilder => {
         case "select":
           setSelectedKey(action.key);
           return;
+        case "page":
+          setPageKey(action.pageKey);
+          return;
         case "insert":
           insert(action.type, action.atIndex);
           return;
@@ -155,7 +153,13 @@ const useSiteBuilder = (editor: IStoreSiteEditor): ISiteBuilder => {
           return;
         case "remove":
           change((blocks) =>
-            blocks.filter((block: IStoreSiteBlock) => block.key !== action.key),
+            blocks.filter(
+              (block: IStoreSiteBlock) =>
+                block.key !== action.key ||
+                // The entrance is hidden, never removed: a page without one
+                // in its list is one arranged before it could be moved.
+                block.type === StoreSitesEnum.BlockType.HERO,
+            ),
           );
           setSelectedKey((current: string | null) =>
             current === action.key ? null : current,
@@ -163,7 +167,7 @@ const useSiteBuilder = (editor: IStoreSiteEditor): ISiteBuilder => {
           return;
       }
     },
-    [change, insert],
+    [change, insert, setPageKey],
   );
 
   const add = useCallback(

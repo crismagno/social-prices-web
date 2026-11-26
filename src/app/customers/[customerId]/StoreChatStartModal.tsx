@@ -14,6 +14,7 @@ import {
   SendOutlined,
 } from "@ant-design/icons";
 
+import { useImageEditStep } from "../../../components/common/ImageEditor/useImageEditStep";
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
@@ -128,6 +129,9 @@ function StoreChatStartComposer({
   const inputRef = useRef<TextAreaRef | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // Pictures are cropped and turned before they are attached.
+  const { editIfImage, editor: imageEditor } = useImageEditStep();
 
   // Set at once on click: two quick clicks must not send the message twice.
   const isSendingRef = useRef<boolean>(false);
@@ -463,11 +467,16 @@ function StoreChatStartComposer({
                 type="file"
                 hidden
                 onChange={(event) => {
-                  pickFile(event.target.files?.[0]);
+                  const picked: File | undefined = event.target.files?.[0];
                   // The same file can be picked again after it was removed.
                   event.target.value = "";
+                  // A picture passes through the image editor first.
+                  if (picked) {
+                    editIfImage(picked).then(pickFile);
+                  }
                 }}
               />
+              {imageEditor}
 
               <Button
                 type="text"

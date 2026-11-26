@@ -1,10 +1,31 @@
 "use client";
 
-import { Alert, Form, Input, Segmented, Select, Switch } from "antd";
+import {
+  ArrowDownOutlined,
+  ArrowUpOutlined,
+  DeleteOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
+import {
+  Alert,
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Segmented,
+  Select,
+  Space,
+  Switch,
+} from "antd";
 
 import SiteChatIcon from "../../../components/store-site/shared/SiteChatIcon";
 import useLanguageData from "../../../data/context/language/useLanguageData";
-import { IStoreSiteChat } from "../../../shared/business/store-sites/store-site-chat";
+import {
+  chatFieldModeOf,
+  ISiteChatExtraField,
+  IStoreSiteChat,
+  SESSION_MINUTES_LIMITS,
+} from "../../../shared/business/store-sites/store-site-chat";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
 
@@ -26,15 +47,51 @@ const ChatTab = ({ editor }: Props) => {
   const { chat } = editor.draft;
 
   // From the draft as it is when applied, like every change of the editor.
+  // The customer fields asked, changed from the chat as it is when applied;
+  // how the email and phone are asked follows the list.
+  const setFields = (
+    change: (fields: ISiteChatExtraField[]) => ISiteChatExtraField[],
+  ): void =>
+    editor.update((draft) => {
+      const extraFields: ISiteChatExtraField[] = change(draft.chat.extraFields);
+
+      return {
+        chat: {
+          ...draft.chat,
+          extraFields,
+          emailField: chatFieldModeOf(
+            extraFields,
+            StoreSitesEnum.ChatCustomerField.EMAIL,
+          ),
+          phoneField: chatFieldModeOf(
+            extraFields,
+            StoreSitesEnum.ChatCustomerField.PHONE,
+          ),
+        },
+      };
+    });
+
+  // The customer fields not asked yet: what can still be added.
+  const unasked: StoreSitesEnum.ChatCustomerField[] = Object.values(
+    StoreSitesEnum.ChatCustomerField,
+  ).filter(
+    (field: StoreSitesEnum.ChatCustomerField) =>
+      !(editor.draft?.chat.extraFields ?? []).some(
+        (asked: ISiteChatExtraField) => asked.field === field,
+      ),
+  );
+
+  const moveField = (from: number, to: number): void =>
+    setFields((fields) => {
+      const next: ISiteChatExtraField[] = [...fields];
+
+      next.splice(to, 0, next.splice(from, 1)[0]);
+
+      return next;
+    });
+
   const set = (patch: Partial<IStoreSiteChat>): void =>
     editor.update((draft) => ({ chat: { ...draft.chat, ...patch } }));
-
-  const modes = Object.values(StoreSitesEnum.ChatFieldMode).map(
-    (mode: StoreSitesEnum.ChatFieldMode) => ({
-      value: mode,
-      label: t(`storeSite.editor.chat.modes.${mode}`),
-    }),
-  );
 
   return (
     <Form layout="vertical">
@@ -129,21 +186,125 @@ const ChatTab = ({ editor }: Props) => {
           <p className="text-xs opacity-70 mb-3">
             {t("storeSite.editor.chat.askedHint")}
           </p>
-          <Form.Item label={t("storeSite.chat.email")}>
-            <Select
-              value={chat.emailField}
-              options={modes}
-              onChange={(emailField: StoreSitesEnum.ChatFieldMode) =>
-                set({ emailField })
-              }
-            />
+          <Form.Item
+            label={t("storeSite.editor.chat.extra.title")}
+            extra={t("storeSite.editor.chat.extra.hint")}
+          >
+            <Space direction="vertical" className="w-full" size={8}>
+              {chat.extraFields.map(
+                (asked: ISiteChatExtraField, index: number) => (
+                  <Space.Compact key={asked.field} className="w-full">
+                    <Select<StoreSitesEnum.ChatCustomerField>
+                      className="w-full"
+                      value={asked.field}
+                      onChange={(field) =>
+                        setFields((fields) =>
+                          fields.map((each) =>
+                            each.field === asked.field ? { ...each, field } : each,
+                          ),
+                        )
+                      }
+                      // A field already asked cannot be picked twice.
+                      options={Object.values(
+                        StoreSitesEnum.ChatCustomerField,
+                      ).map((field: StoreSitesEnum.ChatCustomerField) => ({
+                        value: field,
+                        label: t(`storeSite.chat.fields.${field}`),
+                        disabled:
+                          field !== asked.field &&
+                          chat.extraFields.some((each) => each.field === field),
+                      }))}
+                    />
+                    <Select<string>
+                      style={{ width: 140 }}
+                      value={asked.isRequired ? "REQUIRED" : "OPTIONAL"}
+                      onChange={(value) =>
+                        setFields((fields) =>
+                          fields.map((each) =>
+                            each.field === asked.field
+                              ? { ...each, isRequired: value === "REQUIRED" }
+                              : each,
+                          ),
+                        )
+                      }
+                      options={[
+                        {
+                          value: "REQUIRED",
+                          label: t("storeSite.editor.chat.modes.REQUIRED"),
+                        },
+                        {
+                          value: "OPTIONAL",
+                          label: t("storeSite.editor.chat.modes.OPTIONAL"),
+                        },
+                      ]}
+                    />
+                    <Button
+                      icon={<ArrowUpOutlined />}
+                      disabled={index === 0}
+                      aria-label={t("storeSite.editor.moveUp")}
+                      onClick={() => moveField(index, index - 1)}
+                    />
+                    <Button
+                      icon={<ArrowDownOutlined />}
+                      disabled={index === chat.extraFields.length - 1}
+                      aria-label={t("storeSite.editor.moveDown")}
+                      onClick={() => moveField(index, index + 1)}
+                    />
+                    <Button
+                      danger
+                      type="primary"
+                      icon={<DeleteOutlined />}
+                      aria-label={t("storeSite.editor.remove")}
+                      onClick={() =>
+                        setFields((fields) =>
+                          fields.filter((each) => each.field !== asked.field),
+                        )
+                      }
+                    />
+                  </Space.Compact>
+                ),
+              )}
+              {unasked.length > 0 && (
+                <Select<StoreSitesEnum.ChatCustomerField>
+                  className="w-full"
+                  value={null}
+                  placeholder={
+                    <span>
+                      <PlusOutlined /> {t("storeSite.editor.chat.extra.add")}
+                    </span>
+                  }
+                  onChange={(field) =>
+                    setFields((fields) => [
+                      ...fields,
+                      { field, isRequired: false },
+                    ])
+                  }
+                  options={unasked.map(
+                    (field: StoreSitesEnum.ChatCustomerField) => ({
+                      value: field,
+                      label: t(`storeSite.chat.fields.${field}`),
+                    }),
+                  )}
+                />
+              )}
+            </Space>
           </Form.Item>
-          <Form.Item label={t("storeSite.chat.phone")}>
-            <Select
-              value={chat.phoneField}
-              options={modes}
-              onChange={(phoneField: StoreSitesEnum.ChatFieldMode) =>
-                set({ phoneField })
+
+          <Form.Item
+            label={t("storeSite.editor.chat.sessionMinutes")}
+            extra={t("storeSite.editor.chat.sessionMinutesHint")}
+          >
+            <InputNumber
+              min={SESSION_MINUTES_LIMITS.min}
+              max={SESSION_MINUTES_LIMITS.max}
+              step={5}
+              precision={0}
+              value={chat.sessionMinutes}
+              addonAfter={t("storeSite.editor.chat.minutes")}
+              onChange={(value: number | null) =>
+                set({
+                  sessionMinutes: value ?? SESSION_MINUTES_LIMITS.initial,
+                })
               }
             />
           </Form.Item>

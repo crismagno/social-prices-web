@@ -911,6 +911,28 @@
   text-transform: uppercase;
 }
 
+/* ================= Atlas: sober, squared, thin lines ================= */
+.atlas .title {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.atlas .card,
+.atlas .faqItem,
+.atlas .featureIcon,
+.atlas .stepNumber {
+  border-radius: 6px;
+}
+
+.atlas .featureIcon {
+  background: var(--site-primary);
+}
+
+.atlas .siteButton {
+  border-radius: 4px;
+  font-weight: 600;
+}
+
 /* ================= Pieces of the page builder ================= */
 /* A text: the heading is the whole piece, the body keeps its lines. */
 .block[data-type="TEXT"] .heading {

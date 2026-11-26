@@ -23,7 +23,8 @@ export type TSiteAboutVariant =
   | "mare"
   | "swell"
   | "buddy"
-  | "arcade";
+  | "arcade"
+  | "atlas";
 
 interface Props {
   about: Partial<IStoreSiteAbout> | null | undefined;

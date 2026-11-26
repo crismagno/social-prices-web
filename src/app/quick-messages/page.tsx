@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import {
   DeleteOutlined,
   EditOutlined,
+  EyeOutlined,
   FileOutlined,
   PlusOutlined,
   UndoOutlined,
@@ -34,6 +35,7 @@ import Urls from "../../shared/common/routes-app/routes-app";
 import DatesEnum from "../../shared/utils/dates/dates.enum";
 import { createTableState } from "../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../shared/utils/table/table-state.interface";
+import QuickMessagePreviewModal from "./QuickMessagePreviewModal";
 import QuickMessagesAccess from "./QuickMessagesAccess";
 import { useFindQuickMessagesByUserTableState } from "./useFindQuickMessagesByUserTableState";
 
@@ -56,6 +58,8 @@ export default function QuickMessagesPage() {
   const [tableStateRequest, setTableStateRequest] = useState<
     ITableStateRequest<IQuickMessage> | undefined
   >(createTableState({ sort: { field: "name", order: "ascend" } }));
+
+  const [previewing, setPreviewing] = useState<IQuickMessage | null>(null);
 
   const { isLoading, quickMessages, total, refetch } =
     useFindQuickMessagesByUserTableState(tableStateRequest);
@@ -200,6 +204,12 @@ export default function QuickMessagesPage() {
 
                   return (
                     <Space size={4}>
+                      <Tooltip title={t("quickMessages.preview")}>
+                        <Button
+                          icon={<EyeOutlined />}
+                          onClick={() => setPreviewing(row)}
+                        />
+                      </Tooltip>
                       <Tooltip title={t("common.edit")}>
                         <Button
                           type="primary"
@@ -243,6 +253,11 @@ export default function QuickMessagesPage() {
             tableStateRequest={tableStateRequest}
             setTableStateRequest={setTableStateRequest}
             total={total}
+          />
+
+          <QuickMessagePreviewModal
+            quickMessage={previewing}
+            onClose={() => setPreviewing(null)}
           />
         </Card>
       </QuickMessagesAccess>

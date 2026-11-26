@@ -116,6 +116,3 @@ export const mediaSummary = (message: IQuickMessageAvailable): string => {
     .map(([kind, count]) => `${icons[kind]} ${count}`)
     .join(" · ");
 };
-
-export const firstText = (message: IQuickMessageAvailable): string =>
-  textsOf(message).find((text: string) => text.trim()) ?? "";

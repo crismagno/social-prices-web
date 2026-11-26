@@ -34,6 +34,7 @@ import UsersEnum from "../../../shared/business/users/users.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import AppsEnum from "../../../shared/business/apps/apps.enum";
 import { IAppCatalogItem } from "../../../shared/business/apps/apps.types";
+import { unreadShownInApps } from "../../../shared/business/apps/apps-unread";
 import { APP_URLS } from "../../../shared/common/routes-app/apps-urls";
 import AppIcon from "../../common/AppIcon/AppIcon";
 import { getItem, MenuItem } from "../../utils/navigation/navigation.util";
@@ -139,7 +140,9 @@ export const useSidebarMenuItems = (
       app.id === AppsEnum.App.TELEGRAM ||
       app.id === AppsEnum.App.FACEBOOK ||
       app.id === AppsEnum.App.INSTAGRAM ||
-      app.id === AppsEnum.App.WHATSAPP,
+      app.id === AppsEnum.App.WHATSAPP ||
+      // The site's chat: its visitors' messages arrive in the same inbox.
+      app.id === AppsEnum.App.SITE,
   );
 
   // The store chat is the platform's own channel: it needs no app, so Chats is
@@ -170,7 +173,7 @@ export const useSidebarMenuItems = (
     );
 
   const unreadInApps: number = connectedApps.reduce(
-    (sum: number, app: IAppCatalogItem) => sum + app.unreadCount,
+    (sum: number, app: IAppCatalogItem) => sum + unreadShownInApps(app),
     0,
   );
 
@@ -261,12 +264,12 @@ export const useSidebarMenuItems = (
               ...connectedApps.map((app: IAppCatalogItem) =>
                 getItem(
                   isCollapsed
-                    ? app.unreadCount > 0
-                      ? `${t(`apps.names.${app.id}`)} (${app.unreadCount})`
+                    ? unreadShownInApps(app) > 0
+                      ? `${t(`apps.names.${app.id}`)} (${unreadShownInApps(app)})`
                       : t(`apps.names.${app.id}`)
                     : labelWithCount(
                         t(`apps.names.${app.id}`),
-                        app.unreadCount,
+                        unreadShownInApps(app),
                       ),
                   APP_URLS[app.id],
                   <AppIcon app={app.id as AppsEnum.App} />,

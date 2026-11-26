@@ -110,6 +110,14 @@
   box-shadow: 0 8px 24px rgba(20, 30, 70, 0.18);
 }
 
+/*
+ * The preview turns off every button of the site so nothing navigates; the
+ * builder's own buttons must still work (a stronger rule than the preview's).
+ */
+.frame .toolbar button {
+  pointer-events: auto;
+}
+
 .toolbar button {
   display: inline-flex;
   align-items: center;

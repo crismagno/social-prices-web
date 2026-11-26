@@ -14,11 +14,18 @@ import StoreSitesEnum from "./store-sites.enum";
 
 /** The template's own parts a section can be. */
 export type TPartType =
+  | StoreSitesEnum.BlockType.HERO
   | StoreSitesEnum.BlockType.MARQUEE
   | StoreSitesEnum.BlockType.CARDS
   | StoreSitesEnum.BlockType.PRODUCTS
   | StoreSitesEnum.BlockType.ABOUT
   | StoreSitesEnum.BlockType.PAGE_BODY;
+
+/** The parts each template draws its own way; the entrance it draws apart. */
+export type TTemplatePartType = Exclude<
+  TPartType,
+  StoreSitesEnum.BlockType.HERO
+>;
 
 type TTranslate = (key: string) => string;
 
@@ -26,25 +33,26 @@ const T = StoreSitesEnum.BlockType;
 
 /**
  * The parts a page showed before the owner arranged it, in the templates'
- * order: the home shows them all; the products and about pages their own
- * part and then their content; any other page only its content.
+ * order, always under the entrance: the home shows them all; the products and
+ * about pages their own part and then their content; any other page only its
+ * content.
  */
 export const defaultPartsFor = (
   page: Pick<IStoreSitePage, "type"> | null | undefined,
 ): TPartType[] => {
   if (!page) {
-    return [T.MARQUEE, T.CARDS, T.PRODUCTS, T.ABOUT];
+    return [T.HERO, T.MARQUEE, T.CARDS, T.PRODUCTS, T.ABOUT];
   }
 
   if (page.type === StoreSitesEnum.SitePageType.PRODUCTS) {
-    return [T.PRODUCTS, T.PAGE_BODY];
+    return [T.HERO, T.PRODUCTS, T.PAGE_BODY];
   }
 
   if (page.type === StoreSitesEnum.SitePageType.ABOUT) {
-    return [T.ABOUT, T.PAGE_BODY];
+    return [T.HERO, T.ABOUT, T.PAGE_BODY];
   }
 
-  return [T.PAGE_BODY];
+  return [T.HERO, T.PAGE_BODY];
 };
 
 /**
@@ -92,8 +100,13 @@ export const pageSections = (
     (block: IStoreSiteBlock) => block.pageKey === pageKey,
   );
 
+  // A page added after the owner arranged the site has no sections yet: it
+  // shows its own parts (its texts, at least) until the owner arranges it.
   if (isLayoutCustom) {
-    return own;
+    return withHero(
+      own.length || pageKey === null ? own : defaultSectionsOf(page),
+      pageKey,
+    );
   }
 
   return [
@@ -106,6 +119,26 @@ export const pageSections = (
   ];
 };
 
+/**
+ * The sections of a page with its entrance among them. A page arranged before
+ * the entrance could be moved has none in its list: it gets one at the top,
+ * where it always was. That is why the entrance is hidden, never removed.
+ */
+const withHero = (
+  sections: IStoreSiteBlock[],
+  pageKey: string | null,
+): IStoreSiteBlock[] =>
+  sections.some((section: IStoreSiteBlock) => section.type === T.HERO)
+    ? sections
+    : [
+        { ...newPart(T.HERO, pageKey), key: defaultPartKey(pageKey, T.HERO) },
+        ...sections,
+      ];
+
+/** Whether the page starts with its entrance, which then carries the menu. */
+export const isHeroOnTop = (sections: IStoreSiteBlock[]): boolean =>
+  sections[0]?.type === T.HERO && sections[0].isActive;
+
 /** What visitors see of a page: active sections with something to show. */
 export const visiblePageSections = (
   blocks: IStoreSiteBlock[],
@@ -116,6 +149,51 @@ export const visiblePageSections = (
     .filter((block: IStoreSiteBlock) => block.isActive)
     .map(showableSection)
     .filter((block: IStoreSiteBlock | null) => !!block) as IStoreSiteBlock[];
+
+/** The parts a page shows by default, with the keys they keep once arranged. */
+const defaultSectionsOf = (page: IStoreSitePage | null): IStoreSiteBlock[] =>
+  defaultPartsFor(page).map((type: TPartType) => ({
+    ...newPart(type, page?.key ?? null),
+    key: defaultPartKey(page?.key ?? null, type),
+  }));
+
+/**
+ * An arranged site with every page in it: a page with no section yet (added
+ * after the owner arranged the site) gets its own parts, as it shows them.
+ */
+export const withEveryPage = (
+  blocks: IStoreSiteBlock[],
+  pages: IStoreSitePage[] | null | undefined,
+): IStoreSiteBlock[] => {
+  const all: IStoreSiteBlock[] = [
+    ...blocks,
+    ...sitePagesOf(pages)
+      .filter(
+        (page: IStoreSitePage) =>
+          !blocks.some((block: IStoreSiteBlock) => block.pageKey === page.key),
+      )
+      .flatMap(defaultSectionsOf),
+  ];
+
+  // A page arranged before the entrance could be moved gets it at its top.
+  return [null, ...sitePagesOf(pages).map((page: IStoreSitePage) => page.key)]
+    .filter(
+      (pageKey: string | null) =>
+        !all.some(
+          (block: IStoreSiteBlock) =>
+            block.pageKey === pageKey && block.type === T.HERO,
+        ),
+    )
+    .reduce(
+      (result: IStoreSiteBlock[], pageKey: string | null) =>
+        insertSection(
+          result,
+          { ...newPart(T.HERO, pageKey), key: defaultPartKey(pageKey, T.HERO) },
+          0,
+        ),
+      all,
+    );
+};
 
 /**
  * The layout the owner starts arranging from: every page with the parts it
@@ -264,7 +342,9 @@ export const insertSection = (
   }
 
   const anchor: string =
-    clamped < pageKeys.length ? pageKeys[clamped] : pageKeys[pageKeys.length - 1];
+    clamped < pageKeys.length
+      ? pageKeys[clamped]
+      : pageKeys[pageKeys.length - 1];
   const at: number = blocks.findIndex(
     (block: IStoreSiteBlock) => block.key === anchor,
   );

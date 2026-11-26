@@ -9,6 +9,7 @@ import {
   PaperClipOutlined,
   PlusOutlined,
   SendOutlined,
+  SmileOutlined,
 } from "@ant-design/icons";
 
 import {
@@ -16,9 +17,13 @@ import {
   useVoiceRecorder,
 } from "../../../app/apps/telegram/useVoiceRecorder";
 
+import EmojiPanel from "../../common/EmojiPicker/EmojiPanel";
+import { insertEmoji } from "../../common/EmojiPicker/insert-emoji";
+import { useTypingSignal } from "../../../shared/hooks/useTypingSignal";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import {
   ISiteChatAttachment,
+  ISiteChatExtraField,
   ISiteChatMessage,
   IStoreSiteChat,
   SITE_CHAT_MAX_UPLOAD_BYTES,
@@ -32,6 +37,9 @@ import styles from "./SiteChatWidget.module.css";
 import SiteThemeVars from "./SiteThemeVars";
 import useSiteT from "./useSiteT";
 
+// The most one message of the site chat takes.
+const SITE_CHAT_MAX_TEXT_LENGTH: number = 2000;
+
 interface Props {
   slug: string;
   chat: Partial<IStoreSiteChat> | null | undefined;
@@ -41,11 +49,15 @@ interface Props {
 }
 
 const OPEN_POLL_MS = 5000;
+// While the window is open: how often it asks whether the store is writing.
+const TYPING_POLL_MS = 2500;
 const CLOSED_POLL_MS = 20000;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const tokenKey = (slug: string): string => `site-chat:${slug}`;
 const seenKey = (slug: string): string => `site-chat-seen:${slug}`;
+// When the visitor last wrote: past the owner's minutes the chat starts over.
+const activeKey = (slug: string): string => `site-chat-active:${slug}`;
 const whoKey = (slug: string): string => `site-chat-who:${slug}`;
 
 /** Who the visitor said they are, for them to see whose conversation this is. */
@@ -123,14 +135,36 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
   const [messages, setMessages] = useState<ISiteChatMessage[]>([]);
   const [hasUnread, setHasUnread] = useState<boolean>(false);
   const [text, setText] = useState<string>("");
+  const [isStoreTyping, setIsStoreTyping] = useState<boolean>(false);
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   // Asked before leaving a conversation: here it cannot be opened again.
   const [isAskingNew, setIsAskingNew] = useState<boolean>(false);
 
   const endRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const textRef = useRef<HTMLTextAreaElement>(null);
+  const emojisRef = useRef<HTMLDivElement>(null);
+  const [isPickingEmoji, setIsPickingEmoji] = useState<boolean>(false);
+
+  // A click anywhere else puts the emojis away.
+  useEffect(() => {
+    if (!isPickingEmoji) {
+      return;
+    }
+
+    const onDown = (event: MouseEvent): void => {
+      if (!emojisRef.current?.contains(event.target as Node)) {
+        setIsPickingEmoji(false);
+      }
+    };
+
+    document.addEventListener("mousedown", onDown);
+
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [isPickingEmoji]);
 
   const onMicrophoneError = useCallback(
     () => setError(t("storeSite.chat.microphoneDenied")),
@@ -139,9 +173,46 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
 
   const recorder = useVoiceRecorder(onMicrophoneError);
 
+  const forget = useCallback((): void => {
+    write(tokenKey(slug), null);
+    write(whoKey(slug), null);
+    write(activeKey(slug), null);
+    setToken(null);
+    setWho(null);
+    setMessages([]);
+  }, [slug]);
+
+  const sessionMs: number = settings.sessionMinutes * 60 * 1000;
+
+  /** The visitor wrote: the chat is theirs for the owner's minutes again. */
+  const touch = useCallback(
+    (): void => write(activeKey(slug), String(Date.now())),
+    [slug],
+  );
+
+  // A chat left alone for longer than the owner allows starts over: the API
+  // refuses it too, this only spares showing an old conversation.
+  const isExpired = useCallback((): boolean => {
+    const at: number = Number(read(activeKey(slug)));
+
+    return at > 0 && Date.now() - at > sessionMs;
+  }, [slug, sessionMs]);
+
   useEffect(() => {
     const adopt = (): void => {
-      setToken(read(tokenKey(slug)));
+      const stored: string | null = read(tokenKey(slug));
+
+      if (stored && isExpired()) {
+        forget();
+        return;
+      }
+
+      // A chat from before this rule (or just adopted) starts its time now.
+      if (stored && !read(activeKey(slug))) {
+        touch();
+      }
+
+      setToken(stored);
       setWho(readWho(slug));
     };
 
@@ -149,16 +220,18 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
 
     window.addEventListener(FOLLOW_EVENT, adopt);
 
-    return () => window.removeEventListener(FOLLOW_EVENT, adopt);
-  }, [slug]);
+    // Left open without writing: it ends on time too.
+    const timer: number = window.setInterval(() => {
+      if (read(tokenKey(slug)) && isExpired()) {
+        forget();
+      }
+    }, 60 * 1000);
 
-  const forget = useCallback((): void => {
-    write(tokenKey(slug), null);
-    write(whoKey(slug), null);
-    setToken(null);
-    setWho(null);
-    setMessages([]);
-  }, [slug]);
+    return () => {
+      window.removeEventListener(FOLLOW_EVENT, adopt);
+      window.clearInterval(timer);
+    };
+  }, [slug, isExpired, forget, touch]);
 
   const load = useCallback(async (): Promise<void> => {
     if (!token) {
@@ -188,6 +261,62 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
       }
     }
   }, [slug, token, forget]);
+
+  // The visitor is writing: the store sees "typing…" in its inbox, and the
+  // chat stays the visitor's for the owner's minutes again.
+  useTypingSignal(text, isOpen && !!token, async () => {
+    if (!token) {
+      return;
+    }
+
+    touch();
+
+    await serviceMethodsInstance.storeSitesServiceMethods.sendChatTyping(
+      slug,
+      token,
+    );
+  });
+
+  // The store is writing: dots in the window, and its message as soon as
+  // the writing stops.
+  useEffect(() => {
+    if (!isOpen || !token) {
+      setIsStoreTyping(false);
+      return;
+    }
+
+    let wasTyping: boolean = false;
+
+    const ask = async (): Promise<void> => {
+      if (document.visibilityState !== "visible") {
+        return;
+      }
+
+      try {
+        const isTyping: boolean =
+          await serviceMethodsInstance.storeSitesServiceMethods.isStoreTyping(
+            slug,
+            token,
+          );
+
+        setIsStoreTyping(isTyping);
+
+        if (wasTyping && !isTyping) {
+          load();
+        }
+
+        wasTyping = isTyping;
+      } catch {
+        setIsStoreTyping(false);
+      }
+    };
+
+    ask();
+
+    const timer: number = window.setInterval(ask, TYPING_POLL_MS);
+
+    return () => window.clearInterval(timer);
+  }, [isOpen, token, slug, load]);
 
   useEffect(() => {
     if (!token) {
@@ -270,6 +399,24 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
       return;
     }
 
+    // The owner's own fields: the required ones need an answer.
+    const missing: ISiteChatExtraField | undefined = settings.extraFields.find(
+      (asked: ISiteChatExtraField) =>
+        asked.isRequired &&
+        asked.field !== StoreSitesEnum.ChatCustomerField.EMAIL &&
+        asked.field !== StoreSitesEnum.ChatCustomerField.PHONE &&
+        !answers[asked.field]?.trim(),
+    );
+
+    if (missing) {
+      setError(
+        t("storeSite.chat.requiredField", {
+          field: t(`storeSite.chat.fields.${missing.field}`),
+        }),
+      );
+      return;
+    }
+
     try {
       setIsBusy(true);
       setError(null);
@@ -279,20 +426,42 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
           name,
           email: email || null,
           phone: phone || null,
+          answers,
         });
 
       const newWho: ISiteChatWho = { name, email: email || null };
 
       write(tokenKey(slug), newToken);
+      touch();
       write(whoKey(slug), JSON.stringify(newWho));
       setToken(newToken);
       setWho(newWho);
     } catch (caught: any) {
-      setError(describeError(caught));
+      // The API names the field it refused when it is one of the owner's.
+      const refused: ISiteChatExtraField | undefined =
+        settings.extraFields.find(
+          (asked: ISiteChatExtraField) =>
+            asked.field === caught?.response?.data?.error?.field ||
+            asked.field === caught?.response?.data?.field,
+        );
+
+      setError(
+        refused
+          ? t("storeSite.chat.invalidField", {
+              field: t(`storeSite.chat.fields.${refused.field}`),
+            })
+          : describeError(caught),
+      );
     } finally {
       setIsBusy(false);
     }
   };
+
+  const setAnswer = (key: string, value: string): void =>
+    setAnswers((current: Record<string, string>) => ({
+      ...current,
+      [key]: value,
+    }));
 
   const send = async (): Promise<void> => {
     const message: string = text.trim();
@@ -313,6 +482,7 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
         );
 
       setMessages((current: ISiteChatMessage[]) => [...current, sent]);
+      touch();
       setText("");
     } catch (caught: any) {
       if (caught?.response?.status === 401) {
@@ -351,6 +521,7 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
         );
 
       setMessages((current: ISiteChatMessage[]) => [...current, sent]);
+      touch();
 
       if (caption) {
         setText("");
@@ -399,10 +570,6 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
   const time = (at: string): string =>
     new Date(at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-  const askEmail: boolean =
-    settings.emailField !== StoreSitesEnum.ChatFieldMode.HIDDEN;
-  const askPhone: boolean =
-    settings.phoneField !== StoreSitesEnum.ChatFieldMode.HIDDEN;
 
   const optional = (mode: StoreSitesEnum.ChatFieldMode): string =>
     mode === StoreSitesEnum.ChatFieldMode.OPTIONAL
@@ -510,36 +677,111 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
                     setForm({ ...form, name: event.target.value })
                   }
                 />
-                {askEmail && (
-                  <input
-                    className={styles.field}
-                    type="email"
-                    inputMode="email"
-                    autoComplete="email"
-                    placeholder={`${t("storeSite.chat.email")}${optional(settings.emailField)}`}
-                    aria-label={t("storeSite.chat.email")}
-                    maxLength={160}
-                    value={form.email}
-                    onChange={(event) =>
-                      setForm({ ...form, email: event.target.value })
-                    }
-                  />
-                )}
-                {askPhone && (
-                  <input
-                    className={styles.field}
-                    type="tel"
-                    inputMode="tel"
-                    autoComplete="tel"
-                    placeholder={`${t("storeSite.chat.phone")}${optional(settings.phoneField)}`}
-                    aria-label={t("storeSite.chat.phone")}
-                    maxLength={30}
-                    value={form.phone}
-                    onChange={(event) =>
-                      setForm({ ...form, phone: event.target.value })
-                    }
-                  />
-                )}
+                {settings.extraFields.map((asked: ISiteChatExtraField) => {
+                  const name: string = t(`storeSite.chat.fields.${asked.field}`);
+                  const label: string = asked.isRequired
+                    ? name
+                    : `${name} ${t("storeSite.chat.optional")}`;
+                  const value: string = answers[asked.field] ?? "";
+                  const F = StoreSitesEnum.ChatCustomerField;
+
+                  // Email and phone keep their own inputs, where the owner put them.
+                  if (asked.field === F.EMAIL) {
+                    return (
+                      <input
+                        key={asked.field}
+                        className={styles.field}
+                        type="email"
+                        inputMode="email"
+                        autoComplete="email"
+                        placeholder={`${t("storeSite.chat.email")}${optional(settings.emailField)}`}
+                        aria-label={t("storeSite.chat.email")}
+                        maxLength={160}
+                        value={form.email}
+                        onChange={(event) =>
+                          setForm({ ...form, email: event.target.value })
+                        }
+                      />
+                    );
+                  }
+
+                  if (asked.field === F.PHONE) {
+                    return (
+                      <input
+                        key={asked.field}
+                        className={styles.field}
+                        type="tel"
+                        inputMode="tel"
+                        autoComplete="tel"
+                        placeholder={`${t("storeSite.chat.phone")}${optional(settings.phoneField)}`}
+                        aria-label={t("storeSite.chat.phone")}
+                        maxLength={30}
+                        value={form.phone}
+                        onChange={(event) =>
+                          setForm({ ...form, phone: event.target.value })
+                        }
+                      />
+                    );
+                  }
+
+                  if (asked.field === F.GENDER) {
+                    return (
+                      <select
+                        key={asked.field}
+                        className={styles.field}
+                        aria-label={name}
+                        value={value}
+                        onChange={(event) =>
+                          setAnswer(asked.field, event.target.value)
+                        }
+                      >
+                        <option value="">{label}</option>
+                        {["FEMALE", "MALE", "OTHER"].map((gender: string) => (
+                          <option key={gender} value={gender}>
+                            {t(`storeSite.chat.genders.${gender}`)}
+                          </option>
+                        ))}
+                      </select>
+                    );
+                  }
+
+                  if (asked.field === F.BIRTH_DATE) {
+                    return (
+                      <label key={asked.field} className={styles.fieldLabel}>
+                        <span>{label}</span>
+                        <input
+                          className={styles.field}
+                          type="date"
+                          aria-label={name}
+                          max={new Date().toISOString().slice(0, 10)}
+                          value={value}
+                          onChange={(event) =>
+                            setAnswer(asked.field, event.target.value)
+                          }
+                        />
+                      </label>
+                    );
+                  }
+
+                  return (
+                    <input
+                      key={asked.field}
+                      className={styles.field}
+                      type="text"
+                      inputMode={asked.field === F.CPF ? "numeric" : undefined}
+                      autoComplete={
+                        asked.field === F.ADDRESS ? "street-address" : undefined
+                      }
+                      maxLength={asked.field === F.ADDRESS ? 160 : 30}
+                      placeholder={label}
+                      aria-label={name}
+                      value={value}
+                      onChange={(event) =>
+                        setAnswer(asked.field, event.target.value)
+                      }
+                    />
+                  );
+                })}
                 {error && <p className={styles.error}>{error}</p>}
                 <button
                   type="submit"
@@ -549,6 +791,16 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
                   {t("storeSite.chat.start")}
                 </button>
               </form>
+            )}
+            {token && isStoreTyping && !isBusy && (
+              <div
+                className={`${styles.bubble} ${styles.fromStore} ${styles.typing}`}
+                aria-label={t("storeSite.chat.storeTyping")}
+              >
+                <span />
+                <span />
+                <span />
+              </div>
             )}
             {token && isBusy && (
               <div
@@ -647,10 +899,39 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
               >
                 <PaperClipOutlined />
               </button>
+              <div ref={emojisRef} className={styles.emojis}>
+                <button
+                  type="button"
+                  className={styles.tool}
+                  aria-label={t("storeSite.chat.emoji")}
+                  title={t("storeSite.chat.emoji")}
+                  aria-expanded={isPickingEmoji}
+                  disabled={isBusy}
+                  onClick={() => setIsPickingEmoji((open: boolean) => !open)}
+                >
+                  <SmileOutlined />
+                </button>
+                {isPickingEmoji && (
+                  <div className={styles.emojisPopup}>
+                    <EmojiPanel
+                      onPick={(emoji: string) =>
+                        insertEmoji(
+                          textRef.current,
+                          text,
+                          emoji,
+                          SITE_CHAT_MAX_TEXT_LENGTH,
+                          setText,
+                        )
+                      }
+                    />
+                  </div>
+                )}
+              </div>
               <textarea
+                ref={textRef}
                 className={styles.field}
                 rows={1}
-                maxLength={2000}
+                maxLength={SITE_CHAT_MAX_TEXT_LENGTH}
                 placeholder={t("storeSite.chat.placeholder")}
                 aria-label={t("storeSite.chat.placeholder")}
                 value={text}

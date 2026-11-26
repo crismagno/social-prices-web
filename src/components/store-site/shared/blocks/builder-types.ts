@@ -7,7 +7,9 @@ export type TBuilderAction =
   | { kind: "move"; key: string; toIndex: number }
   | { kind: "remove"; key: string }
   | { kind: "duplicate"; key: string }
-  | { kind: "toggle"; key: string };
+  | { kind: "toggle"; key: string }
+  /** A link to a page of the site was clicked: the preview shows that page. */
+  | { kind: "page"; pageKey: string | null };
 
 /** The drag data a palette item or a section's handle carries. */
 export const SECTION_DRAG_TYPE = "application/x-site-section";

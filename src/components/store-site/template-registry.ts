@@ -2,6 +2,7 @@ import StoreSitesEnum from "../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteTemplateEntry } from "./template.types";
 import Arcade from "./templates/Arcade/Arcade";
 import Atelier from "./templates/Atelier/Atelier";
+import Atlas from "./templates/Atlas/Atlas";
 import Aurora from "./templates/Aurora/Aurora";
 import Buddy from "./templates/Buddy/Buddy";
 import Garden from "./templates/Garden/Garden";
@@ -138,6 +139,18 @@ export const TEMPLATE_REGISTRY: Record<
     },
     labelKey: "storeSite.templates.ARCADE.name",
     descriptionKey: "storeSite.templates.ARCADE.description",
+  },
+  [StoreSitesEnum.Template.ATLAS]: {
+    Component: Atlas,
+    defaultTheme: {
+      primary: "#1e3a5f",
+      secondary: "#64748b",
+      accent: "#e2e8f0",
+      background: "#ffffff",
+      text: "#111827",
+    },
+    labelKey: "storeSite.templates.ATLAS.name",
+    descriptionKey: "storeSite.templates.ATLAS.description",
   },
 };
 

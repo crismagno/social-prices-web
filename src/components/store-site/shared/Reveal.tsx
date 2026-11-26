@@ -16,6 +16,8 @@ interface Props {
   /** How the block comes in: rising (default), from a side, growing, or out of a blur. */
   effect?: TRevealEffect;
   id?: string;
+  /** Marks it as the photo of a place, when the whole of it is: see siteImageStyleProps. */
+  photo?: "product" | "section" | "block";
 }
 
 /**
@@ -30,6 +32,7 @@ const Reveal = ({
   style,
   id,
   effect = "up",
+  photo,
 }: Props) => {
   const { ref, phase } = useReveal<HTMLDivElement>();
 
@@ -38,6 +41,7 @@ const Reveal = ({
       ref={ref}
       id={id}
       data-effect={effect}
+      data-photo={photo}
       className={`${phase === "waiting" ? base.waiting : ""} ${
         phase === "shown" ? base.shown : ""
       } ${className ?? ""}`}

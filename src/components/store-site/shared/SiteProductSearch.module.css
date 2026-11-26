@@ -1,76 +1,187 @@
+/*
+ * The product search: a wide, soft card in the site's colors. It lifts and
+ * glows while in use; the lens sits in a circle of the site's main color.
+ */
 .search {
-  position: relative;
-  width: min(100% - 36px, 440px);
-  margin: 26px auto 0;
+  width: min(100% - 32px, 640px);
+  margin: 34px auto 6px;
+  animation: searchIn 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 60px;
+  padding: 0 10px 0 8px;
+  border: 1px solid color-mix(in srgb, var(--site-text) 14%, transparent);
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--site-bg) 92%, var(--site-text));
+  box-shadow: 0 14px 36px
+    color-mix(in srgb, var(--site-primary) 12%, transparent);
+  cursor: text;
+  transition:
+    translate 0.35s cubic-bezier(0.2, 1.4, 0.4, 1),
+    border-color 0.25s,
+    box-shadow 0.3s,
+    background 0.25s;
+}
+
+.field:hover {
+  border-color: color-mix(in srgb, var(--site-primary) 45%, transparent);
+}
+
+.field:focus-within {
+  translate: 0 -2px;
+  border-color: var(--site-primary);
+  background: var(--site-bg);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--site-primary) 18%, transparent),
+    0 20px 44px color-mix(in srgb, var(--site-primary) 20%, transparent);
+}
+
+.lens {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--site-primary);
+  color: var(--site-on-primary, #fff);
+  transition: rotate 0.4s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+
+.field:focus-within .lens {
+  rotate: -12deg;
+}
+
+.lens svg,
+.clear svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+.lens svg {
+  width: 20px;
+  height: 20px;
 }
 
 .input {
-  width: 100%;
-  height: 48px;
-  padding: 0 46px;
-  border: 1px solid color-mix(in srgb, var(--site-text) 22%, transparent);
-  border-radius: 99px;
-  background: color-mix(in srgb, var(--site-text) 4%, transparent);
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: transparent;
   color: inherit;
   font: inherit;
-  font-size: 15px;
+  font-size: 17px;
   outline: none;
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
+}
+
+/* The whole field shows the focus with its ring: no second box inside it. */
+.field .input:focus-visible {
+  outline: none;
 }
 
 .input::placeholder {
   color: inherit;
-  opacity: 0.55;
-}
-
-.input:focus {
-  border-color: var(--site-primary);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--site-primary) 22%, transparent);
-}
-
-.icon,
-.clear svg {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-}
-
-.icon {
-  position: absolute;
-  top: 50%;
-  left: 17px;
-  width: 18px;
-  height: 18px;
-  translate: 0 -50%;
-  opacity: 0.6;
-  pointer-events: none;
+  opacity: 0.5;
 }
 
 .clear {
-  position: absolute;
-  top: 50%;
-  right: 8px;
+  flex-shrink: 0;
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
+  width: 38px;
+  height: 38px;
+  border: 0;
   border-radius: 50%;
-  translate: 0 -50%;
-  opacity: 0.65;
+  background: color-mix(in srgb, var(--site-text) 8%, transparent);
+  color: inherit;
+  cursor: pointer;
+  animation: clearIn 0.3s cubic-bezier(0.2, 1.6, 0.4, 1) both;
   transition:
-    opacity 0.2s,
-    background 0.2s;
+    background 0.2s,
+    rotate 0.3s;
 }
 
 .clear:hover {
-  background: color-mix(in srgb, var(--site-text) 10%, transparent);
-  opacity: 1;
+  background: color-mix(in srgb, var(--site-text) 16%, transparent);
+  rotate: 90deg;
 }
 
 .clear svg {
-  width: 14px;
-  height: 14px;
+  width: 15px;
+  height: 15px;
+}
+
+/* "/" puts the cursor here: shown on screens with a keyboard. */
+.hint {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  min-width: 30px;
+  height: 30px;
+  margin-right: 6px;
+  border: 1px solid color-mix(in srgb, var(--site-text) 18%, transparent);
+  border-bottom-width: 2px;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 14px;
+  opacity: 0.55;
+  transition: opacity 0.2s;
+}
+
+.field:focus-within .hint {
+  opacity: 0;
+}
+
+@media (hover: none), (max-width: 600px) {
+  .hint {
+    display: none;
+  }
+
+  .field {
+    height: 54px;
+  }
+
+  .lens {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@keyframes searchIn {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+  to {
+    translate: none;
+  }
+}
+
+@keyframes clearIn {
+  from {
+    opacity: 0;
+    scale: 0.5;
+  }
+  to {
+    scale: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search,
+  .clear {
+    animation: none;
+  }
+
+  .field,
+  .lens {
+    transition: none;
+  }
 }

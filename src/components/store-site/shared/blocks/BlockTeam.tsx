@@ -20,7 +20,7 @@ const BlockTeam = ({ block, step }: IBlockProps) => (
         className={`${styles.card} ${styles.person} ${styles.item}`}
         style={step(index)}
       >
-        <div className={styles.photo}>
+        <div className={styles.photo} data-photo="block">
           {item.imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={getImageUrl(item.imageUrl)} alt="" loading="lazy" />

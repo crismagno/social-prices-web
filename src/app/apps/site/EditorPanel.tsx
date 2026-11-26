@@ -20,6 +20,7 @@ import {
   PictureOutlined,
   SaveOutlined,
   UndoOutlined,
+  ShoppingCartOutlined,
   ShoppingOutlined,
 } from "@ant-design/icons";
 
@@ -33,6 +34,7 @@ import { HeroTab, MarqueeTab, SectionsTab } from "./ContentTabs";
 import { ColorsTab, TemplateTab } from "./DesignTabs";
 import AboutTab from "./AboutTab";
 import BuilderTab from "./BuilderTab";
+import CartTab from "./CartTab";
 import ChatTab from "./ChatTab";
 import FooterTab from "./FooterTab";
 import PagesTab from "./PagesTab";
@@ -48,6 +50,7 @@ type TTab =
   | "sections"
   | "marquee"
   | "products"
+  | "cart"
   | "about"
   | "pages"
   | "chat"
@@ -73,6 +76,7 @@ const TABS: { key: TTab; icon: ReactNode }[] = [
   { key: "sections", icon: <BlockOutlined /> },
   { key: "marquee", icon: <NotificationOutlined /> },
   { key: "products", icon: <ShoppingOutlined /> },
+  { key: "cart", icon: <ShoppingCartOutlined /> },
   { key: "about", icon: <ReadOutlined /> },
   { key: "pages", icon: <FileTextOutlined /> },
   { key: "chat", icon: <CommentOutlined /> },
@@ -142,6 +146,7 @@ const EditorPanel = ({
     sections: draft.sections.some((section) => !section.title.trim()),
     marquee: false,
     products: false,
+    cart: false,
     about: false,
     builder: false,
     pages: invalidPageKeys(draft.pages).length > 0,
@@ -182,6 +187,7 @@ const EditorPanel = ({
     sections: <SectionsTab editor={editor} storeId={storeId} />,
     marquee: <MarqueeTab editor={editor} />,
     products: <ProductsTab editor={editor} />,
+    cart: <CartTab editor={editor} />,
     about: (
       <AboutTab
         editor={editor}

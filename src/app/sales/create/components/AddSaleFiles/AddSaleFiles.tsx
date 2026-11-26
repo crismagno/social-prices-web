@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Upload, UploadFile, UploadProps } from "antd";
 import { map } from "lodash";
 
+import ImageEditUpload from "../../../../../components/common/ImageEditor/ImageEditUpload";
 import useLanguageData from "../../../../../data/context/language/useLanguageData";
 import { ISale } from "../../../../../shared/business/sales/sale.interface";
 import FilesEnum from "../../../../../shared/utils/files/files.enum";
@@ -73,6 +74,7 @@ export const AddSaleFiles: React.FC<Props> = ({ sale, onSetFileList }) => {
       <label>{t("sales.files")}</label>
 
       <div className="mt-2">
+        <ImageEditUpload initialAspect="free">
         <Upload
           action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
           accept={FilesEnum.AcceptFileType}
@@ -102,6 +104,7 @@ export const AddSaleFiles: React.FC<Props> = ({ sale, onSetFileList }) => {
         >
           {fileList.length < 10 && `+ ${t("common.upload")}`}
         </Upload>
+        </ImageEditUpload>
       </div>
     </div>
   );

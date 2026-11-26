@@ -13,6 +13,7 @@ import {
 } from "@ant-design/icons";
 
 import { IStoreSiteBlock } from "../../../../shared/business/store-sites/store-site-blocks";
+import StoreSitesEnum from "../../../../shared/business/store-sites/store-sites.enum";
 import useSiteT from "../useSiteT";
 import styles from "./SectionFrame.module.css";
 import {
@@ -61,7 +62,8 @@ const SectionFrame = ({
       action();
     };
 
-  const label = (key: string): string => t(`storeSite.editor.builder.frame.${key}`);
+  const label = (key: string): string =>
+    t(`storeSite.editor.builder.frame.${key}`);
 
   return (
     <div
@@ -90,7 +92,9 @@ const SectionFrame = ({
 
         const box: DOMRect = event.currentTarget.getBoundingClientRect();
 
-        onDragOverAt(event.clientY < box.top + box.height / 2 ? index : index + 1);
+        onDragOverAt(
+          event.clientY < box.top + box.height / 2 ? index : index + 1,
+        );
       }}
       onDrop={onDrop}
     >
@@ -134,7 +138,11 @@ const SectionFrame = ({
           aria-label={label("up")}
           disabled={index === 0}
           onClick={act(() =>
-            builder.send({ kind: "move", key: section.key, toIndex: index - 1 }),
+            builder.send({
+              kind: "move",
+              key: section.key,
+              toIndex: index - 1,
+            }),
           )}
         >
           <ArrowUpOutlined />
@@ -145,7 +153,11 @@ const SectionFrame = ({
           aria-label={label("down")}
           disabled={index === count - 1}
           onClick={act(() =>
-            builder.send({ kind: "move", key: section.key, toIndex: index + 1 }),
+            builder.send({
+              kind: "move",
+              key: section.key,
+              toIndex: index + 1,
+            }),
           )}
         >
           <ArrowDownOutlined />
@@ -166,29 +178,33 @@ const SectionFrame = ({
           type="button"
           title={label(section.isActive ? "hide" : "show")}
           aria-label={label(section.isActive ? "hide" : "show")}
-          onClick={act(() => builder.send({ kind: "toggle", key: section.key }))}
+          onClick={act(() =>
+            builder.send({ kind: "toggle", key: section.key }),
+          )}
         >
           {section.isActive ? <EyeOutlined /> : <EyeInvisibleOutlined />}
         </button>
-        <button
-          type="button"
-          className={`${styles.danger} ${isConfirming ? styles.confirming : ""}`}
-          title={label("remove")}
-          aria-label={label(isConfirming ? "removeConfirm" : "remove")}
-          onMouseLeave={() => setIsConfirming(false)}
-          onClick={act(() => {
-            // Asks once: a second click removes it.
-            if (isConfirming) {
-              setIsConfirming(false);
-              builder.send({ kind: "remove", key: section.key });
-            } else {
-              setIsConfirming(true);
-            }
-          })}
-        >
-          <DeleteOutlined />
-          {isConfirming && <span>{label("removeConfirm")}</span>}
-        </button>
+        {section.type !== StoreSitesEnum.BlockType.HERO && (
+          <button
+            type="button"
+            className={`${styles.danger} ${isConfirming ? styles.confirming : ""}`}
+            title={label("remove")}
+            aria-label={label(isConfirming ? "removeConfirm" : "remove")}
+            onMouseLeave={() => setIsConfirming(false)}
+            onClick={act(() => {
+              // Asks once: a second click removes it.
+              if (isConfirming) {
+                setIsConfirming(false);
+                builder.send({ kind: "remove", key: section.key });
+              } else {
+                setIsConfirming(true);
+              }
+            })}
+          >
+            <DeleteOutlined />
+            {isConfirming && <span>{label("removeConfirm")}</span>}
+          </button>
+        )}
       </div>
 
       {children}

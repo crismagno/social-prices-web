@@ -253,12 +253,22 @@
 /* ---------- demonstration blocks: photo and words, side by side ---------- */
 .story {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  /* The photo's column is at least as wide as the width asked for it. */
+  grid-template-columns:
+    minmax(min(var(--sz-section-img-w, 0px), calc(100% - 300px)), 1fr)
+    minmax(0, 1fr);
   gap: clamp(24px, 5vw, 70px);
   align-items: center;
-  max-width: 1100px;
+  /* A wide photo widens the block with it, as far as the screen goes. */
+  max-width: max(1100px, calc(var(--sz-section-img-w, 0px) + 560px));
   margin: 0 auto;
   padding: 70px clamp(18px, 5vw, 56px) 0;
+}
+
+.storyFlip {
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(min(var(--sz-section-img-w, 0px), calc(100% - 300px)), 1fr);
 }
 
 .storyFlip .storyPhotoWrap {

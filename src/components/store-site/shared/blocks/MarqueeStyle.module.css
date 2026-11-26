@@ -1,0 +1,41 @@
+/*
+ * The strip of every template is built the same way: the strip, the track
+ * that runs inside it, the phrases inside the track. The owner's choices
+ * speak to those three, so they work over any template.
+ */
+.wrap {
+  display: contents;
+}
+
+.wrap[data-speed="SLOW"] > * > * {
+  animation-duration: 70s !important;
+}
+
+.wrap[data-speed="FAST"] > * > * {
+  animation-duration: 14s !important;
+}
+
+.wrap[data-direction="RIGHT"] > * > * {
+  animation-direction: reverse !important;
+}
+
+.wrap[data-pause] > *:hover > * {
+  animation-play-state: paused !important;
+}
+
+.wrap[data-size="SMALL"] > * > * > * {
+  zoom: 0.8;
+}
+
+.wrap[data-size="LARGE"] > * > * > * {
+  zoom: 1.3;
+}
+
+.wrap[data-bg] > * {
+  background: var(--mq-bg) !important;
+}
+
+.wrap[data-color] > *,
+.wrap[data-color] > * > * > * {
+  color: var(--mq-color) !important;
+}

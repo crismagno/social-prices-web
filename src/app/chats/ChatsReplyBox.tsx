@@ -14,7 +14,10 @@ import {
   SendOutlined,
 } from "@ant-design/icons";
 
+import { useImageEditStep } from "../../components/common/ImageEditor/useImageEditStep";
 import ChannelIcon from "../../components/common/ChannelIcon/ChannelIcon";
+import EmojiPickerButton from "../../components/common/EmojiPicker/EmojiPickerButton";
+import { insertEmoji } from "../../components/common/EmojiPicker/insert-emoji";
 import handleClientError from "../../components/common/HandleClientError/HandleClientError";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
@@ -70,6 +73,9 @@ export default function ChatsReplyBox({ chat, onSent }: Props) {
   const inputRef = useRef<TextAreaRef | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // Pictures are cropped and turned before they are attached.
+  const { editIfImage, editor: imageEditor } = useImageEditStep();
 
   const quickMessages = useQuickMessages();
 
@@ -147,6 +153,15 @@ export default function ChatsReplyBox({ chat, onSent }: Props) {
     setFile(picked);
     inputRef.current?.focus();
   };
+
+  const pickEmoji = (emoji: string): void =>
+    insertEmoji(
+      inputRef.current?.resizableTextArea?.textArea,
+      text,
+      emoji,
+      MAX_LENGTH,
+      setText,
+    );
 
   const send = async (): Promise<void> => {
     if (!canSend) {
@@ -385,11 +400,16 @@ export default function ChatsReplyBox({ chat, onSent }: Props) {
               type="file"
               hidden
               onChange={(event) => {
-                pickFile(event.target.files?.[0]);
+                const picked: File | undefined = event.target.files?.[0];
                 // The same file can be picked again after it was removed.
                 event.target.value = "";
+                // A picture passes through the image editor first.
+                if (picked) {
+                  editIfImage(picked).then(pickFile);
+                }
               }}
             />
+            {imageEditor}
 
             <Button
               type="text"
@@ -400,6 +420,12 @@ export default function ChatsReplyBox({ chat, onSent }: Props) {
               title={takesFile ? undefined : t("chats.media.noMedia")}
               onClick={() => fileInputRef.current?.click()}
               aria-label={t("chats.media.attach")}
+            />
+
+            <EmojiPickerButton
+              label={t("chats.reply.emoji")}
+              disabled={isSending || !target.canReply}
+              onPick={pickEmoji}
             />
 
             <Input.TextArea

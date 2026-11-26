@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import {
   Button,
   Card,
@@ -16,6 +18,7 @@ import {
   ArrowDownOutlined,
   ArrowUpOutlined,
   DeleteOutlined,
+  HolderOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
 
@@ -45,6 +48,11 @@ const TYPES: StoreSitesEnum.FooterLinkType[] = Object.values(
  */
 const FooterTab = ({ editor, storeId }: Props) => {
   const { t } = useLanguageData();
+
+  // Dragging a section by its handle: which one, and where it would land
+  // (the place before which it goes; the last place is the end).
+  const [dragFrom, setDragFrom] = useState<number | null>(null);
+  const [dropAt, setDropAt] = useState<number | null>(null);
 
   if (!editor.draft) {
     return null;
@@ -169,6 +177,24 @@ const FooterTab = ({ editor, storeId }: Props) => {
     set({ sections });
   };
 
+  const endDrag = (): void => {
+    setDragFrom(null);
+    setDropAt(null);
+  };
+
+  const dropSection = (): void => {
+    if (dragFrom !== null && dropAt !== null) {
+      // Counted without the section being moved.
+      const to: number = dropAt > dragFrom ? dropAt - 1 : dropAt;
+
+      if (to !== dragFrom) {
+        moveSection(dragFrom, to);
+      }
+    }
+
+    endDrag();
+  };
+
   const canAddSection: boolean =
     footer.sections.length < StoreSitesEnum.MAX_FOOTER_SECTIONS;
 
@@ -195,7 +221,65 @@ const FooterTab = ({ editor, storeId }: Props) => {
           <Space direction="vertical" className="w-full mb-5">
             {footer.sections.map(
               (section: IStoreSiteFooterSection, index: number) => (
-                <Space.Compact key={section.key} className="w-full">
+                <div
+                  key={section.key}
+                  className="w-full rounded transition-opacity"
+                  style={{
+                    opacity: dragFrom === index ? 0.4 : 1,
+                    // A line where the dragged section would land.
+                    boxShadow:
+                      dragFrom === null || dropAt === null
+                        ? undefined
+                        : dropAt === index
+                          ? "0 -3px 0 0 #4f6bff"
+                          : dropAt === index + 1 &&
+                              index === footer.sections.length - 1
+                            ? "0 3px 0 0 #4f6bff"
+                            : undefined,
+                  }}
+                  onDragOver={(event) => {
+                    if (dragFrom === null) {
+                      return;
+                    }
+
+                    event.preventDefault();
+
+                    const box: DOMRect =
+                      event.currentTarget.getBoundingClientRect();
+
+                    setDropAt(
+                      event.clientY < box.top + box.height / 2
+                        ? index
+                        : index + 1,
+                    );
+                  }}
+                  onDrop={(event) => {
+                    event.preventDefault();
+                    dropSection();
+                  }}
+                >
+                <Space.Compact className="w-full">
+                  <Button
+                    icon={<HolderOutlined />}
+                    className="cursor-grab"
+                    draggable
+                    title={t("storeSite.editor.footer.sections.drag")}
+                    aria-label={t("storeSite.editor.footer.sections.drag")}
+                    onDragStart={(event) => {
+                      event.dataTransfer.effectAllowed = "move";
+                      event.dataTransfer.setData("text/plain", section.key);
+
+                      // The whole row follows the pointer, not just the handle.
+                      const row = event.currentTarget.closest("div");
+
+                      if (row) {
+                        event.dataTransfer.setDragImage(row, 16, 16);
+                      }
+
+                      setDragFrom(index);
+                    }}
+                    onDragEnd={endDrag}
+                  />
                   <Input
                     maxLength={40}
                     addonBefore={index + 1}
@@ -230,6 +314,7 @@ const FooterTab = ({ editor, storeId }: Props) => {
                     onClick={() => removeSection(section.key)}
                   />
                 </Space.Compact>
+                </div>
               ),
             )}
             <Button

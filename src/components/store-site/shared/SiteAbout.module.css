@@ -478,6 +478,17 @@
   box-shadow: 0 0 24px color-mix(in srgb, var(--site-primary) 40%, transparent);
 }
 
+/* ================= Atlas: squared, a thin line around ================= */
+.atlas .title {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.atlas .frame {
+  border: 1px solid color-mix(in srgb, var(--site-text) 12%, transparent);
+  border-radius: 6px;
+}
+
 /* ---------- Movements ---------- */
 @keyframes itemIn {
   from {

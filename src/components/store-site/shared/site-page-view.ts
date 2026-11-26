@@ -1,3 +1,4 @@
+import { heroOptionsOf } from "../../../shared/business/store-sites/store-site-hero";
 import { IStoreSiteTemplateProps } from "../template.types";
 
 /** How tall the top of a page other than the home is. */
@@ -25,6 +26,13 @@ export const sitePageView = <S extends TSite>(
           subtitle: page.intro,
           featuredImageUrl: null,
           featuredImageUrls: [],
+          // Only the home says more and leads elsewhere; the colours stay.
+          options: {
+            ...heroOptionsOf(site.hero.options),
+            isSubtitleVisible: true,
+            extraText: null,
+            secondButton: null,
+          },
         },
         sizes: { ...site.sizes, heroHeight: PAGE_TOP_HEIGHT },
       }

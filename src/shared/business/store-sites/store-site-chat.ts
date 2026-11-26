@@ -2,8 +2,8 @@ import StoreSitesEnum from "./store-sites.enum";
 
 /**
  * The chat of the site: a button that opens a conversation with the store,
- * which answers it in its inbox. The visitor gives a name (always) and an
- * email and a phone as the owner asks.
+ * which answers it in its inbox. The visitor gives a name (always) and the
+ * customer fields the owner lists, email and phone among them.
  */
 export interface IStoreSiteChat {
   isActive: boolean;
@@ -16,9 +16,30 @@ export interface IStoreSiteChat {
   title: string | null;
   /** The first words the visitor reads. */
   greeting: string | null;
+  /** How the email is asked, read from `extraFields`. */
   emailField: StoreSitesEnum.ChatFieldMode;
+  /** How the phone is asked, read from `extraFields`. */
   phoneField: StoreSitesEnum.ChatFieldMode;
+  /** Minutes a chat stays the visitor's after they last wrote; then they start again. */
+  sessionMinutes: number;
+  /** The fields asked after the name, email and phone among them, in order. */
+  extraFields: ISiteChatExtraField[];
+  /** 2 once email and phone live in `extraFields`. */
+  fieldsVersion: number;
 }
+
+/** A field of the customer record the owner asks in the chat's form. */
+export interface ISiteChatExtraField {
+  field: StoreSitesEnum.ChatCustomerField;
+  isRequired: boolean;
+}
+
+/** Every customer field can be asked once. */
+export const CHAT_EXTRA_FIELDS_MAX: number = Object.values(
+  StoreSitesEnum.ChatCustomerField,
+).length;
+
+export const SESSION_MINUTES_LIMITS = { min: 5, max: 24 * 60, initial: 60 } as const;
 
 /** The largest file or recording the chat takes, as the API says. */
 export const SITE_CHAT_MAX_UPLOAD_BYTES: number = 16 * 1024 * 1024;
@@ -46,6 +67,8 @@ export interface ISiteChatVisitor {
   name: string;
   email: string | null;
   phone: string | null;
+  /** The answers to the owner's own fields, by the key of each field. */
+  answers?: Record<string, string>;
 }
 
 /** What the form of the contact page sends. */
@@ -53,31 +76,102 @@ export interface ISiteContactForm extends ISiteChatVisitor {
   message: string;
 }
 
+const FIELDS_VERSION = 2;
+
+const Mode = StoreSitesEnum.ChatFieldMode;
+const Customer = StoreSitesEnum.ChatCustomerField;
+
+const modeOf = (
+  value: unknown,
+  fallback: StoreSitesEnum.ChatFieldMode,
+): StoreSitesEnum.ChatFieldMode =>
+  Object.values(Mode).includes(value as StoreSitesEnum.ChatFieldMode)
+    ? (value as StoreSitesEnum.ChatFieldMode)
+    : fallback;
+
+/** Known customer fields only, each once, in the owner's order. */
+const knownFieldsOf = (fields: unknown): ISiteChatExtraField[] =>
+  (Array.isArray(fields) ? (fields as Partial<ISiteChatExtraField>[]) : [])
+    .filter(
+      (field, index, all) =>
+        Object.values(Customer).includes(
+          field?.field as StoreSitesEnum.ChatCustomerField,
+        ) && all.findIndex((other) => other?.field === field.field) === index,
+    )
+    .map((field) => ({
+      field: field.field as StoreSitesEnum.ChatCustomerField,
+      isRequired: field.isRequired === true,
+    }));
+
+/** An older chat asked email and phone by modes; they go first in its list. */
+const fieldsOf = (
+  chat: Partial<IStoreSiteChat> | null | undefined,
+): ISiteChatExtraField[] => {
+  if (chat?.fieldsVersion === FIELDS_VERSION) {
+    return knownFieldsOf(chat.extraFields);
+  }
+
+  const email = modeOf(chat?.emailField, Mode.REQUIRED);
+  const phone = modeOf(chat?.phoneField, Mode.OPTIONAL);
+
+  return [
+    ...(email === Mode.HIDDEN
+      ? []
+      : [{ field: Customer.EMAIL, isRequired: email === Mode.REQUIRED }]),
+    ...(phone === Mode.HIDDEN
+      ? []
+      : [{ field: Customer.PHONE, isRequired: phone === Mode.REQUIRED }]),
+    ...knownFieldsOf(chat?.extraFields).filter(
+      ({ field }) => field !== Customer.EMAIL && field !== Customer.PHONE,
+    ),
+  ];
+};
+
+/** How a field of the list is asked; not in it, it is not asked. */
+export const chatFieldModeOf = (
+  fields: ISiteChatExtraField[],
+  wanted: StoreSitesEnum.ChatCustomerField,
+): StoreSitesEnum.ChatFieldMode => {
+  const found = fields.find(({ field }) => field === wanted);
+
+  if (!found) {
+    return Mode.HIDDEN;
+  }
+
+  return found.isRequired ? Mode.REQUIRED : Mode.OPTIONAL;
+};
+
 /** The chat of a site, also for one saved before it existed: off. */
 export const siteChatOf = (
   chat: Partial<IStoreSiteChat> | null | undefined,
-): IStoreSiteChat => ({
-  isActive: chat?.isActive === true,
-  position:
-    chat?.position === StoreSitesEnum.ChatPosition.LEFT
-      ? StoreSitesEnum.ChatPosition.LEFT
-      : StoreSitesEnum.ChatPosition.RIGHT,
-  icon: Object.values(StoreSitesEnum.ChatIcon).includes(
-    chat?.icon as StoreSitesEnum.ChatIcon,
-  )
-    ? (chat?.icon as StoreSitesEnum.ChatIcon)
-    : StoreSitesEnum.ChatIcon.MESSAGE,
-  buttonLabel: chat?.buttonLabel?.trim() || null,
-  title: chat?.title?.trim() || null,
-  greeting: chat?.greeting?.trim() || null,
-  emailField: Object.values(StoreSitesEnum.ChatFieldMode).includes(
-    chat?.emailField as StoreSitesEnum.ChatFieldMode,
-  )
-    ? (chat?.emailField as StoreSitesEnum.ChatFieldMode)
-    : StoreSitesEnum.ChatFieldMode.REQUIRED,
-  phoneField: Object.values(StoreSitesEnum.ChatFieldMode).includes(
-    chat?.phoneField as StoreSitesEnum.ChatFieldMode,
-  )
-    ? (chat?.phoneField as StoreSitesEnum.ChatFieldMode)
-    : StoreSitesEnum.ChatFieldMode.OPTIONAL,
-});
+): IStoreSiteChat => {
+  const extraFields = fieldsOf(chat);
+
+  return {
+    isActive: chat?.isActive === true,
+    position:
+      chat?.position === StoreSitesEnum.ChatPosition.LEFT
+        ? StoreSitesEnum.ChatPosition.LEFT
+        : StoreSitesEnum.ChatPosition.RIGHT,
+    icon: Object.values(StoreSitesEnum.ChatIcon).includes(
+      chat?.icon as StoreSitesEnum.ChatIcon,
+    )
+      ? (chat?.icon as StoreSitesEnum.ChatIcon)
+      : StoreSitesEnum.ChatIcon.MESSAGE,
+    buttonLabel: chat?.buttonLabel?.trim() || null,
+    title: chat?.title?.trim() || null,
+    greeting: chat?.greeting?.trim() || null,
+    emailField: chatFieldModeOf(extraFields, Customer.EMAIL),
+    phoneField: chatFieldModeOf(extraFields, Customer.PHONE),
+    sessionMinutes:
+      typeof chat?.sessionMinutes === "number" &&
+      Number.isFinite(chat.sessionMinutes)
+        ? Math.min(
+            SESSION_MINUTES_LIMITS.max,
+            Math.max(SESSION_MINUTES_LIMITS.min, Math.round(chat.sessionMinutes)),
+          )
+        : SESSION_MINUTES_LIMITS.initial,
+    extraFields,
+    fieldsVersion: FIELDS_VERSION,
+  };
+};

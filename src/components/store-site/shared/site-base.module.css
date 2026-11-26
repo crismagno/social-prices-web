@@ -47,6 +47,11 @@
   pointer-events: none;
 }
 
+/* A link to another page of the site works in the preview: it shows that page. */
+.preview a[href^="/site/"] {
+  pointer-events: auto;
+}
+
 /* The short description of a product, the same letters in every template. */
 .productDescription {
   display: -webkit-box;
@@ -281,5 +286,155 @@
   .waiting,
   .waiting [data-part] {
     opacity: 1;
+  }
+}
+
+/* A site that sells nothing: no "add" buttons anywhere (the cart is off too). */
+.salesOff [data-cart-add] {
+  display: none !important;
+}
+
+/* The images the owner reshaped, by place: see siteImageStyleProps. */
+.imgProductShape [data-photo="product"],
+.imgProductShape [data-photo-card="product"] {
+  border-radius: var(--img-product-radius) !important;
+}
+
+/* What draws the picture inside takes the same outline, frame and all. */
+.imgProductShape [data-photo="product"] > img,
+.imgProductShape [data-photo="product"] > [style*="background-image"] {
+  border-radius: inherit !important;
+}
+
+.imgProductRatio [data-photo="product"] {
+  height: auto !important;
+  min-height: 0 !important;
+  aspect-ratio: var(--img-product-ratio) !important;
+}
+
+.imgProductRatio [data-photo="product"] > img,
+.imgProductRatio [data-photo="product"] > [style*="background-image"] {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+.imgSectionShape [data-photo="section"],
+.imgSectionShape [data-photo-card="section"] {
+  border-radius: var(--img-section-radius) !important;
+}
+
+/* What draws the picture inside takes the same outline, frame and all. */
+.imgSectionShape [data-photo="section"] > img,
+.imgSectionShape [data-photo="section"] > [style*="background-image"] {
+  border-radius: inherit !important;
+}
+
+.imgSectionRatio [data-photo="section"] {
+  height: auto !important;
+  min-height: 0 !important;
+  aspect-ratio: var(--img-section-ratio) !important;
+}
+
+.imgSectionRatio [data-photo="section"] > img,
+.imgSectionRatio [data-photo="section"] > [style*="background-image"] {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+.imgBlockShape [data-photo="block"],
+.imgBlockShape [data-photo-card="block"] {
+  border-radius: var(--img-block-radius) !important;
+}
+
+/* What draws the picture inside takes the same outline, frame and all. */
+.imgBlockShape [data-photo="block"] > img,
+.imgBlockShape [data-photo="block"] > [style*="background-image"] {
+  border-radius: inherit !important;
+}
+
+.imgBlockRatio [data-photo="block"] {
+  height: auto !important;
+  min-height: 0 !important;
+  aspect-ratio: var(--img-block-ratio) !important;
+}
+
+.imgBlockRatio [data-photo="block"] > img,
+.imgBlockRatio [data-photo="block"] > [style*="background-image"] {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+/* The owner hid the heading of the products section. */
+.productsTitleOff [data-products-title] {
+  display: none !important;
+}
+
+/* The wrapper that says so takes no room of its own. */
+.salesWrap {
+  display: contents;
+}
+
+/*
+ * The entrance, wherever the page puts it. The owner's own colours for it
+ * win over the template's, whichever template draws it: each rule applies
+ * only when that colour was set.
+ */
+.heroPart[data-hero-colors~="bg"] {
+  background: var(--hero-bg) !important;
+}
+
+.heroPart[data-hero-colors~="bg"] [data-hero="veil"] {
+  background: color-mix(in srgb, var(--hero-bg) 68%, transparent) !important;
+}
+
+.heroPart[data-hero-colors~="text"] {
+  color: var(--hero-text) !important;
+}
+
+.heroPart[data-hero-colors~="text"]
+  :is(h1, h1 *, p, div[data-intro], span[data-intro]) {
+  color: var(--hero-text) !important;
+  -webkit-text-fill-color: var(--hero-text) !important;
+  background-image: none !important;
+}
+
+.heroPart[data-hero-colors~="btn"] [data-hero="cta"] {
+  background: var(--hero-btn) !important;
+  border-color: var(--hero-btn) !important;
+  color: var(--hero-btn-text) !important;
+  -webkit-text-fill-color: var(--hero-btn-text) !important;
+}
+
+.heroPart[data-hero-colors~="btn"] [data-hero="cta-outline"] {
+  border-color: var(--hero-btn) !important;
+  color: var(--hero-btn) !important;
+  -webkit-text-fill-color: var(--hero-btn) !important;
+}
+
+/* The paragraph the owner added: a little apart from the subtitle. */
+.heroExtraText {
+  margin-top: 12px;
+  white-space: pre-line;
+}
+
+/* The second button of the entrance, beside the main one. */
+.heroSecond {
+  margin-left: 12px;
+}
+
+.heroSecondOutline {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 1.5px solid currentColor !important;
+  color: inherit !important;
+}
+
+@media (max-width: 520px) {
+  .heroSecond {
+    margin-left: 0;
+    margin-top: 10px;
   }
 }

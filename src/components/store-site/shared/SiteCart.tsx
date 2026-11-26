@@ -17,6 +17,10 @@ import {
 
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import {
+  IStoreSiteCheckout,
+  siteCheckoutOf,
+} from "../../../shared/business/store-sites/store-site-checkout";
+import {
   ICreateSiteOrder,
   IPublicSiteProduct,
 } from "../../../shared/business/store-sites/store-sites.types";
@@ -36,22 +40,37 @@ interface Props {
   theme: IStoreSiteTheme;
   products: IPublicSiteProduct[];
   cart: ISiteCart;
+  /** What the owner asks before an order is sent. */
+  checkout: Partial<IStoreSiteCheckout> | null | undefined;
 }
 
 type TStep = "cart" | "checkout" | "done";
 
+// Only the name is always there: the rest is as the owner set the bag.
 interface ICheckoutValues {
   name: string;
-  email: string;
-  phoneNumber: string;
-  zip: string;
-  address1: string;
+  email?: string;
+  phoneNumber?: string;
+  zip?: string;
+  address1?: string;
   address2?: string;
-  district: string;
-  city: string;
-  stateCode: string;
+  district?: string;
+  city?: string;
+  stateCode?: string;
   note?: string;
 }
+
+const Field = StoreSitesEnum.CheckoutField;
+const Mode = StoreSitesEnum.ChatFieldMode;
+
+const ADDRESS_NAMES: (keyof ICheckoutValues)[] = [
+  "zip",
+  "address1",
+  "address2",
+  "district",
+  "city",
+  "stateCode",
+];
 
 const STATES: { code: string; name: string }[] = brazilStates as {
   code: string;
@@ -59,10 +78,27 @@ const STATES: { code: string; name: string }[] = brazilStates as {
 }[];
 
 /** The cart, the checkout and the confirmation: the same for every template. */
-const SiteCart = ({ slug, theme, products, cart }: Props) => {
+const SiteCart = ({ slug, theme, products, cart, checkout }: Props) => {
   const t = useSiteT();
 
   const [form] = Form.useForm<ICheckoutValues>();
+
+  const modes = siteCheckoutOf(checkout).fields;
+
+  const typed: Partial<ICheckoutValues> | undefined = Form.useWatch([], form);
+
+  // An address that may be skipped is all or nothing: once any of it is
+  // typed, the rest is needed, so the store never gets half an address.
+  const isAddressStarted: boolean = ADDRESS_NAMES.some(
+    (name: keyof ICheckoutValues) => !!typed?.[name]?.trim(),
+  );
+
+  const isAddressNeeded: boolean =
+    modes[Field.ADDRESS] === Mode.REQUIRED ||
+    (modes[Field.ADDRESS] === Mode.OPTIONAL && isAddressStarted);
+
+  // Whether the order went with an email: only then is there an invite to read.
+  const [hasSentEmail, setHasSentEmail] = useState<boolean>(false);
 
   const [step, setStep] = useState<TStep>("cart");
   const [isSending, setIsSending] = useState<boolean>(false);
@@ -113,26 +149,34 @@ const SiteCart = ({ slug, theme, products, cart }: Props) => {
       (candidate: { code: string }) => candidate.code === values.stateCode,
     );
 
+    const asked = (field: StoreSitesEnum.CheckoutField): boolean =>
+      modes[field] !== Mode.HIDDEN;
+
+    const email: string | null =
+      (asked(Field.EMAIL) && values.email?.trim().toLowerCase()) || null;
+
     const order: ICreateSiteOrder = {
       buyer: {
         name: values.name.trim(),
-        email: values.email.trim().toLowerCase(),
-        phoneNumber: values.phoneNumber.trim(),
-        address: {
-          address1: values.address1.trim(),
-          address2: values.address2?.trim() || null,
-          district: values.district.trim(),
-          city: values.city.trim(),
-          stateCode: values.stateCode,
-          stateName: state?.name ?? values.stateCode,
-          zip: values.zip.trim(),
-        },
+        email,
+        phoneNumber: (asked(Field.PHONE) && values.phoneNumber?.trim()) || null,
+        address: isAddressNeeded
+          ? {
+              address1: values.address1?.trim() ?? "",
+              address2: values.address2?.trim() || null,
+              district: values.district?.trim() ?? "",
+              city: values.city?.trim() ?? "",
+              stateCode: values.stateCode ?? "",
+              stateName: state?.name ?? values.stateCode ?? "",
+              zip: values.zip?.trim() ?? "",
+            }
+          : null,
       },
       items: orderableLines.map((line: ISiteCartLine) => ({
         productId: line.product._id,
         quantity: line.quantity,
       })),
-      note: values.note?.trim() || null,
+      note: (asked(Field.NOTE) && values.note?.trim()) || null,
     };
 
     try {
@@ -145,6 +189,7 @@ const SiteCart = ({ slug, theme, products, cart }: Props) => {
         );
 
       setOrderNumber(created.number);
+      setHasSentEmail(!!email);
       setRefusedIds([]);
       setStep("done");
       cart.clear();
@@ -155,6 +200,11 @@ const SiteCart = ({ slug, theme, products, cart }: Props) => {
       if (body?.code === StoreSitesEnum.ErrorCodes.ORDER_ITEMS_UNAVAILABLE) {
         setRefusedIds(Array.isArray(body.productIds) ? body.productIds : []);
         setStep("cart");
+      } else if (
+        body?.code === StoreSitesEnum.ErrorCodes.ORDER_FIELDS_MISSING
+      ) {
+        // The store changed what it asks while this page was open.
+        handleClientError(t("storeSite.checkout.fieldsChanged"), 6);
       } else if (error?.response?.status === 429) {
         handleClientError(t("storeSite.checkout.tooManyAttempts"), 4);
       } else if (!error?.response) {
@@ -169,8 +219,23 @@ const SiteCart = ({ slug, theme, products, cart }: Props) => {
   };
 
   const required = [
-    { required: true, message: t("storeSite.checkout.required") },
+    {
+      required: true,
+      whitespace: true,
+      message: t("storeSite.checkout.required"),
+    },
   ];
+
+  const rulesOf = (field: StoreSitesEnum.CheckoutField) =>
+    modes[field] === Mode.REQUIRED ? required : [];
+
+  // A field the visitor may skip says so.
+  const labelOf = (field: StoreSitesEnum.CheckoutField, key: string): string =>
+    modes[field] === Mode.OPTIONAL
+      ? `${t(key)} ${t("storeSite.checkout.optional")}`
+      : t(key);
+
+  const addressRules = isAddressNeeded ? required : [];
 
   const title: string =
     step === "cart"
@@ -331,79 +396,112 @@ const SiteCart = ({ slug, theme, products, cart }: Props) => {
               >
                 <Input maxLength={120} autoComplete="name" />
               </Form.Item>
-              <Form.Item
-                name="email"
-                label={t("storeSite.checkout.email")}
-                rules={[
-                  ...required,
-                  {
-                    type: "email",
-                    message: t("storeSite.checkout.invalidEmail"),
-                  },
-                ]}
-              >
-                <Input maxLength={160} autoComplete="email" inputMode="email" />
-              </Form.Item>
-              <Form.Item
-                name="phoneNumber"
-                label={t("storeSite.checkout.phone")}
-                rules={required}
-              >
-                <Input maxLength={30} autoComplete="tel" inputMode="tel" />
-              </Form.Item>
-              <Form.Item
-                name="zip"
-                label={t("storeSite.checkout.zip")}
-                rules={required}
-              >
-                <Input maxLength={16} autoComplete="postal-code" />
-              </Form.Item>
-              <Form.Item
-                name="address1"
-                label={t("storeSite.checkout.address1")}
-                rules={required}
-              >
-                <Input maxLength={160} autoComplete="address-line1" />
-              </Form.Item>
-              <Form.Item
-                name="address2"
-                label={t("storeSite.checkout.address2")}
-              >
-                <Input maxLength={160} autoComplete="address-line2" />
-              </Form.Item>
-              <Form.Item
-                name="district"
-                label={t("storeSite.checkout.district")}
-                rules={required}
-              >
-                <Input maxLength={80} />
-              </Form.Item>
-              <Form.Item
-                name="city"
-                label={t("storeSite.checkout.city")}
-                rules={required}
-              >
-                <Input maxLength={80} autoComplete="address-level2" />
-              </Form.Item>
-              <Form.Item
-                name="stateCode"
-                label={t("storeSite.checkout.state")}
-                rules={required}
-              >
-                <Select
-                  showSearch
-                  optionFilterProp="label"
-                  options={STATES.map(
-                    (state: { code: string; name: string }) => ({
-                      value: state.code,
-                      label: `${state.name} (${state.code})`,
-                    }),
+              {modes[Field.EMAIL] !== Mode.HIDDEN && (
+                <Form.Item
+                  name="email"
+                  label={labelOf(Field.EMAIL, "storeSite.checkout.email")}
+                  rules={[
+                    ...rulesOf(Field.EMAIL),
+                    {
+                      type: "email",
+                      message: t("storeSite.checkout.invalidEmail"),
+                    },
+                  ]}
+                >
+                  <Input
+                    maxLength={160}
+                    autoComplete="email"
+                    inputMode="email"
+                  />
+                </Form.Item>
+              )}
+              {modes[Field.PHONE] !== Mode.HIDDEN && (
+                <Form.Item
+                  name="phoneNumber"
+                  label={labelOf(Field.PHONE, "storeSite.checkout.phone")}
+                  rules={rulesOf(Field.PHONE)}
+                >
+                  <Input maxLength={30} autoComplete="tel" inputMode="tel" />
+                </Form.Item>
+              )}
+              {modes[Field.ADDRESS] !== Mode.HIDDEN && (
+                <>
+                  {modes[Field.ADDRESS] === Mode.OPTIONAL && (
+                    <div className={styles.note}>
+                      {t("storeSite.checkout.addressOptionalHint")}
+                    </div>
                   )}
-                />
-              </Form.Item>
-              <Form.Item name="note" label={t("storeSite.checkout.note")}>
-                <Input.TextArea maxLength={600} rows={3} />
-              </Form.Item>
+                  <Form.Item
+                    name="zip"
+                    label={t("storeSite.checkout.zip")}
+                    rules={addressRules}
+                  >
+                    <Input maxLength={16} autoComplete="postal-code" />
+                  </Form.Item>
+                  <Form.Item
+                    name="address1"
+                    label={t("storeSite.checkout.address1")}
+                    rules={addressRules}
+                  >
+                    <Input maxLength={160} autoComplete="address-line1" />
+                  </Form.Item>
+                  <Form.Item
+                    name="address2"
+                    label={t("storeSite.checkout.address2")}
+                  >
+                    <Input maxLength={160} autoComplete="address-line2" />
+                  </Form.Item>
+                  <Form.Item
+                    name="district"
+                    label={t("storeSite.checkout.district")}
+                    rules={addressRules}
+                  >
+                    <Input maxLength={80} />
+                  </Form.Item>
+                  <Form.Item
+                    name="city"
+                    label={t("storeSite.checkout.city")}
+                    rules={addressRules}
+                  >
+                    <Input maxLength={80} autoComplete="address-level2" />
+                  </Form.Item>
+                  <Form.Item
+                    name="stateCode"
+                    label={t("storeSite.checkout.state")}
+                    rules={
+                      isAddressNeeded
+                        ? [
+                            {
+                              required: true,
+                              message: t("storeSite.checkout.required"),
+                            },
+                          ]
+                        : []
+                    }
+                  >
+                    <Select
+                      showSearch
+                      allowClear
+                      optionFilterProp="label"
+                      options={STATES.map(
+                        (state: { code: string; name: string }) => ({
+                          value: state.code,
+                          label: `${state.name} (${state.code})`,
+                        }),
+                      )}
+                    />
+                  </Form.Item>
+                </>
+              )}
+              {modes[Field.NOTE] !== Mode.HIDDEN && (
+                <Form.Item
+                  name="note"
+                  label={labelOf(Field.NOTE, "storeSite.checkout.note")}
+                  rules={rulesOf(Field.NOTE)}
+                >
+                  <Input.TextArea maxLength={600} rows={3} />
+                </Form.Item>
+              )}
 
               <div className={styles.summary}>
                 <span>{t("storeSite.cart.subtotal")}</span>
@@ -439,17 +537,23 @@ const SiteCart = ({ slug, theme, products, cart }: Props) => {
               <div className={styles.doneMark}>✓</div>
               <div>{t("storeSite.checkout.doneLabel")}</div>
               <div className={styles.doneNumber}>#{orderNumber}</div>
-              <p>{t("storeSite.checkout.inviteNote")}</p>
-              <Button
-                block
-                type="primary"
-                className={styles.primary}
-                href={Urls.LOGIN}
-                target="_blank"
-                rel="noopener"
-              >
-                {t("storeSite.checkout.followOrder")}
-              </Button>
+              {hasSentEmail ? (
+                <>
+                  <p>{t("storeSite.checkout.inviteNote")}</p>
+                  <Button
+                    block
+                    type="primary"
+                    className={styles.primary}
+                    href={Urls.LOGIN}
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {t("storeSite.checkout.followOrder")}
+                  </Button>
+                </>
+              ) : (
+                <p>{t("storeSite.checkout.doneNote")}</p>
+              )}
               <Button
                 block
                 type="text"

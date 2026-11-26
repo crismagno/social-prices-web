@@ -6,13 +6,13 @@ import { siteHeaderOf } from "../../../shared/business/store-sites/store-site-he
 import { IStoreSitePage } from "../../../shared/business/store-sites/store-site-pages";
 import { IPublicSiteStore } from "../../../shared/business/store-sites/store-sites.types";
 import { ISiteCartApi, IStoreSiteTemplateProps } from "../template.types";
+import SiteCartButton from "./SiteCartButton";
 import SiteMenu from "./SiteMenu";
 import SiteSignIn from "./SiteSignIn";
 import styles from "./SiteStickyBar.module.css";
 import SiteThemeVars from "./SiteThemeVars";
 import { siteHasAbout } from "./SiteAbout";
 import { getSiteContent } from "./useSiteContent";
-import useSiteT from "./useSiteT";
 import { sitePagePath } from "../../../shared/business/store-sites/store-site-pages";
 
 interface Props {
@@ -22,6 +22,50 @@ interface Props {
   page: IStoreSitePage | null;
 }
 
+interface IBarNavProps extends Props {
+  /** Out of sight: nothing in it is read or reached. */
+  isHidden?: boolean;
+}
+
+/** The name, the menu, the sign-in and the cart, as both bars show them. */
+const SiteBarNav = ({ site, store, cart, page, isHidden }: IBarNavProps) => {
+  const { logo, brandName } = getSiteContent({ site, store });
+
+  return (
+    <nav className={styles.inner} aria-hidden={isHidden || undefined}>
+      <a href={sitePagePath(site.slug)} className={styles.brand}>
+        {logo && <img src={logo} alt="" />}
+        <span>{brandName}</span>
+      </a>
+      <span className={styles.links}>
+        <SiteMenu
+          pages={site.pages}
+          siteSlug={site.slug}
+          currentKey={page?.key}
+          hasAbout={siteHasAbout(site.about, store.about)}
+        />
+      </span>
+      <span className={styles.end}>
+        {site.signIn?.isVisible !== false && (
+          <SiteSignIn
+            signIn={site.signIn}
+            storeId={site.storeId}
+            className={styles.signIn}
+            isCompact
+          />
+        )}
+        <SiteCartButton
+          settings={site.cartButton}
+          cart={cart}
+          className={styles.cart}
+          defaultLabelKey="storeSite.public.cart"
+          countFormat="badge"
+        />
+      </span>
+    </nav>
+  );
+};
+
 /**
  * The menu that stays on screen, for a site whose owner wants the top fixed:
  * once the visitor scrolls past the top it slides down with the name, the
@@ -29,7 +73,6 @@ interface Props {
  * over every template, whose own top stays as it is.
  */
 const SiteStickyBar = ({ site, store, cart, page }: Props) => {
-  const t = useSiteT();
   const [isShown, setIsShown] = useState<boolean>(false);
 
   const isFixed: boolean = siteHeaderOf(site.header).isFixed;
@@ -54,43 +97,37 @@ const SiteStickyBar = ({ site, store, cart, page }: Props) => {
     return null;
   }
 
-  const { logo, brandName } = getSiteContent({ site, store });
-
   return (
     <SiteThemeVars
       theme={site.theme}
       sizes={site.sizes}
       className={`${styles.bar} ${isShown ? styles.shown : ""}`}
     >
-      <nav className={styles.inner} aria-hidden={!isShown}>
-        <a href={sitePagePath(site.slug)} className={styles.brand}>
-          {logo && <img src={logo} alt="" />}
-          <span>{brandName}</span>
-        </a>
-        <span className={styles.links}>
-          <SiteMenu
-            pages={site.pages}
-            siteSlug={site.slug}
-            currentKey={page?.key}
-            hasAbout={siteHasAbout(site.about, store.about)}
-          />
-        </span>
-        <span className={styles.end}>
-          {site.signIn?.isVisible !== false && (
-            <SiteSignIn
-              signIn={site.signIn}
-              storeId={site.storeId}
-              className={styles.signIn}
-              isCompact
-            />
-          )}
-          <button type="button" className={styles.cart} onClick={cart.open}>
-            {t("storeSite.public.cart")} <b>{cart.count}</b>
-          </button>
-        </span>
-      </nav>
+      <SiteBarNav
+        site={site}
+        store={store}
+        cart={cart}
+        page={page}
+        isHidden={!isShown}
+      />
     </SiteThemeVars>
   );
 };
+
+/**
+ * The menu as a bar of its own at the top of a page that does not start with
+ * the entrance (moved down, or hidden): the same bar as the fixed menu, always
+ * there. A page that starts with the entrance has its menu inside it, in the
+ * template's own look.
+ */
+export const SiteTopBar = ({ site, store, cart, page }: Props) => (
+  <SiteThemeVars
+    theme={site.theme}
+    sizes={site.sizes}
+    className={styles.topBar}
+  >
+    <SiteBarNav site={site} store={store} cart={cart} page={page} />
+  </SiteThemeVars>
+);
 
 export default SiteStickyBar;

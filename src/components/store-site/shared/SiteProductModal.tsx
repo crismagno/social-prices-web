@@ -85,7 +85,8 @@ const SiteProductModal = ({
     }
   }, [product]);
 
-  const isPriceShown: boolean = siteCatalogOf(catalog).isPriceShown;
+  const view = siteCatalogOf(catalog);
+  const isPriceShown: boolean = view.isPriceShown;
 
   const photos: string[] = shown
     ? Array.from(
@@ -329,6 +330,7 @@ const SiteProductModal = ({
 
             <footer className={styles.foot}>
               <button
+ data-cart-add
                 type="button"
                 className={styles.add}
                 disabled={!shown.isAvailable}
@@ -337,7 +339,7 @@ const SiteProductModal = ({
                   onClose();
                 }}
               >
-                {addLabel(shown, cart, t)}
+                {addLabel(shown, cart, t, view.addLabel)}
               </button>
             </footer>
           </div>

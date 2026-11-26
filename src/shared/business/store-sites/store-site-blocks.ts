@@ -232,7 +232,9 @@ const mediaOf = (raw: unknown): IStoreSiteAboutMedia | null => {
   if (source.type === StoreSitesEnum.AboutMediaType.EMBED) {
     const embed: string | null = isKnownPlayer(url) ? url : embedUrlOf(url);
 
-    return embed ? { type: StoreSitesEnum.AboutMediaType.EMBED, url: embed } : null;
+    return embed
+      ? { type: StoreSitesEnum.AboutMediaType.EMBED, url: embed }
+      : null;
   }
 
   return source.type === StoreSitesEnum.AboutMediaType.VIDEO && url
@@ -493,19 +495,22 @@ export const newBlock = (
     kicker: t(`${base}.kicker`),
     title: t(`${base}.title`),
     subtitle: t(`${base}.subtitle`),
-    items: Array.from({ length: SAMPLE_ITEMS[type] ?? 0 }, (_, index: number) => {
-      const item: IStoreSiteBlockItem = newBlockItem(type);
+    items: Array.from(
+      { length: SAMPLE_ITEMS[type] ?? 0 },
+      (_, index: number) => {
+        const item: IStoreSiteBlockItem = newBlockItem(type);
 
-      (SAMPLE_FIELDS[type] ?? []).forEach((field) => {
-        item[field] = t(`${base}.items.${index}.${field}`);
-      });
+        (SAMPLE_FIELDS[type] ?? []).forEach((field) => {
+          item[field] = t(`${base}.items.${index}.${field}`);
+        });
 
-      if (type === StoreSitesEnum.BlockType.FEATURES) {
-        item.icon = SAMPLE_ICONS[index % SAMPLE_ICONS.length];
-      }
+        if (type === StoreSitesEnum.BlockType.FEATURES) {
+          item.icon = SAMPLE_ICONS[index % SAMPLE_ICONS.length];
+        }
 
-      return item;
-    }),
+        return item;
+      },
+    ),
     button:
       type === StoreSitesEnum.BlockType.CTA
         ? newBlockButton({ label: t(`${base}.button`) })
@@ -514,3 +519,7 @@ export const newBlock = (
     settings: blockSettingsOf(type, {}),
   };
 };
+
+/** A button as the API keeps it, whatever was stored or typed. */
+export const blockButtonOf = (raw: unknown): IStoreSiteBlockButton =>
+  buttonOf(raw);

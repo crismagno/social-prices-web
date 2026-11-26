@@ -14,7 +14,11 @@ import { siteFooterOf } from "../../../shared/business/store-sites/store-site-fo
 import { siteAboutOf } from "../../../shared/business/store-sites/store-site-about";
 import { siteBlocksOf } from "../../../shared/business/store-sites/store-site-blocks";
 import { siteChatOf } from "../../../shared/business/store-sites/store-site-chat";
+import { siteCartButtonOf } from "../../../shared/business/store-sites/store-site-cart-button";
+import { siteImageStyleOf } from "../../../shared/business/store-sites/store-site-image-style";
+import { siteCheckoutOf } from "../../../shared/business/store-sites/store-site-checkout";
 import { siteHeaderOf } from "../../../shared/business/store-sites/store-site-header";
+import { siteMarqueeStyleOf } from "../../../shared/business/store-sites/store-site-marquee-style";
 import { sitePagesOf } from "../../../shared/business/store-sites/store-site-pages";
 import { siteCatalogOf } from "../../../shared/business/store-sites/store-site-catalog";
 import { siteSignInOf } from "../../../shared/business/store-sites/store-site-sign-in";
@@ -95,6 +99,11 @@ const toDraft = (site: IStoreSite): ISaveStoreSite => ({
   blocks: siteBlocksOf(site.blocks),
   isLayoutCustom: site.isLayoutCustom === true,
   header: siteHeaderOf(site.header),
+  cartButton: siteCartButtonOf(site.cartButton),
+  // A site saved before the option keeps each template's own images.
+  imageStyle: siteImageStyleOf(site.imageStyle),
+  checkout: siteCheckoutOf(site.checkout),
+  marqueeStyle: siteMarqueeStyleOf(site.marqueeStyle),
   hero: { ...site.hero },
   sections: site.sections.map((section) => ({ ...section })),
   marquee: { isActive: site.marquee.isActive, items: [...site.marquee.items] },
@@ -121,6 +130,10 @@ const newDraft = (store: IStore): ISaveStoreSite => ({
   blocks: [],
   isLayoutCustom: false,
   header: siteHeaderOf(null),
+  cartButton: siteCartButtonOf(null),
+  imageStyle: siteImageStyleOf(null),
+  checkout: siteCheckoutOf(null),
+  marqueeStyle: siteMarqueeStyleOf(null),
   hero: {
     tagline: null,
     title: store.name,

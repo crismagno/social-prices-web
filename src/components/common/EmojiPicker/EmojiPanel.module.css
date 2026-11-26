@@ -1,0 +1,51 @@
+/* Colors come from the text around it, so it fits the panel and any store site. */
+.panel {
+  width: 288px;
+  max-width: 80vw;
+}
+
+.tabs {
+  display: flex;
+  gap: 2px;
+}
+
+.tab,
+.emoji {
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.tab {
+  flex: 1;
+  padding: 6px 0;
+  font-size: 16px;
+  opacity: 0.55;
+}
+
+.tab[aria-pressed="true"] {
+  opacity: 1;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 2px;
+  max-height: 208px;
+  margin-top: 8px;
+  overflow-y: auto;
+}
+
+.emoji {
+  padding: 4px;
+  font-size: 20px;
+}
+
+.tab:hover,
+.emoji:hover {
+  opacity: 1;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}

@@ -9,6 +9,8 @@ export interface IStoreSiteFaqItem {
 
 /** What a page shows below its title: texts and an image or a video. */
 export interface IStoreSitePageContent {
+  /** A heading over the texts, in the look of the template; empty, none. */
+  title: string | null;
   texts: string[];
   media: IStoreSiteAboutMedia | null;
   mediaPosition: StoreSitesEnum.AboutMediaPosition;
@@ -55,6 +57,7 @@ const READY_PAGES: {
 ];
 
 export const emptyPageContent = (): IStoreSitePageContent => ({
+  title: null,
   texts: [],
   media: null,
   mediaPosition: StoreSitesEnum.AboutMediaPosition.LEFT,
@@ -93,7 +96,8 @@ export const sitePagesOf = (
     .filter((page: IStoreSitePage) => !!page && typeof page.type === "string")
     .map((page: IStoreSitePage) => ({
       ...page,
-      content: page.content ?? emptyPageContent(),
+      // A page saved before the heading existed has none.
+      content: { ...emptyPageContent(), ...(page.content ?? {}) },
       faq: page.faq ?? [],
     }));
 };

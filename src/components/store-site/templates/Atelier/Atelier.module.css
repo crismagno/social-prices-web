@@ -263,10 +263,17 @@
 /* ---------- demonstration blocks ---------- */
 .sections {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  /* A card is at least as wide as the photo asked for, plus its own padding. */
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(
+      min(100%, max(240px, calc(var(--sz-section-img-w, 0px) + 36px))),
+      1fr
+    )
+  );
   gap: 22px;
   padding: 56px clamp(18px, 5vw, 56px) 10px;
-  max-width: 1240px;
+  max-width: max(1240px, calc(var(--sz-section-img-w, 0px) + 150px));
   margin: 0 auto;
 }
 

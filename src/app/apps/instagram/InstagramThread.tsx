@@ -30,6 +30,8 @@ import {
 
 import handleClientError from "../../../components/common/HandleClientError/HandleClientError";
 import ScrollToBottomButton from "../../../components/common/ScrollToBottomButton/ScrollToBottomButton";
+import EmojiPickerButton from "../../../components/common/EmojiPicker/EmojiPickerButton";
+import { insertEmoji } from "../../../components/common/EmojiPicker/insert-emoji";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import InboxEnum from "../../../shared/business/inbox/inbox.enum";
 import { useTypingSignal } from "../../../shared/hooks/useTypingSignal";
@@ -124,6 +126,15 @@ export default function InstagramThread({
 
   const canSend: boolean =
     chat.canReply && text.trim().length > 0 && !isSending;
+
+  const pickEmoji = (emoji: string): void =>
+    insertEmoji(
+      inputRef.current?.resizableTextArea?.textArea,
+      text,
+      emoji,
+      MAX_LENGTH,
+      setText,
+    );
 
   // A quick message went by the inbox: what was typed only searched for it.
   const handleQuickMessageSent = (): void => {
@@ -507,12 +518,18 @@ export default function InstagramThread({
         />
 
         <div
-          className="flex items-end gap-2 rounded-3xl py-1 pl-4 pr-1"
+          className="flex items-end gap-2 rounded-3xl py-1 pl-1 pr-1"
           style={{
             border: `1px solid ${token.colorBorder}`,
             background: token.colorBgContainer,
           }}
         >
+          <EmojiPickerButton
+            label={t("chats.reply.emoji")}
+            disabled={isSending || !chat.canReply}
+            onPick={pickEmoji}
+          />
+
           <Input.TextArea
             ref={inputRef}
             variant="borderless"

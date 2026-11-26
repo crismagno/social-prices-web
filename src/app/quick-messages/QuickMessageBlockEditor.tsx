@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { App, Button, Card, Input, Space, Tooltip, Typography } from "antd";
 import type { TextAreaRef } from "antd/es/input/TextArea";
@@ -9,11 +9,17 @@ import {
   ArrowDownOutlined,
   ArrowUpOutlined,
   DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
   FileOutlined,
   FontSizeOutlined,
   PaperClipOutlined,
 } from "@ant-design/icons";
 
+import FilePreviewModal from "../../components/common/FilePreview/FilePreviewModal";
+import ImageEditorModal, {
+  isEditableImage,
+} from "../../components/common/ImageEditor/ImageEditorModal";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import QuickMessagesEnum from "../../shared/business/quick-messages/quick-messages.enum";
 import {
@@ -132,8 +138,76 @@ export default function QuickMessageBlockEditor({
 
   const hasFile: boolean = !!block.file || !!block.kept;
 
+  // The picture being edited, and whether it was just picked (then leaving
+  // the editor keeps it as it is).
+  const [editing, setEditing] = useState<File | null>(null);
+  const [isFreshPick, setIsFreshPick] = useState<boolean>(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false);
+
+  const source: string | null = fileUrl
+    ? fileUrl
+    : block.kept
+      ? getImageUrl(block.kept.fileKey)
+      : null;
+  const mimeType: string = block.file?.type ?? block.kept?.mimeType ?? "";
+  const fileName: string = block.file?.name ?? block.kept?.fileName ?? "";
+  const fileSize: number = block.file?.size ?? block.kept?.size ?? 0;
+
+  const canEdit: boolean =
+    mimeType.startsWith("image/") &&
+    mimeType !== "image/gif" &&
+    mimeType !== "image/svg+xml";
+
+  const attach = (file: File): void => {
+    if (file.size > QuickMessagesEnum.MAX_FILE_BYTES) {
+      message.error(
+        t("quickMessages.fileTooLarge").replace(
+          "{size}",
+          formatFileSize(QuickMessagesEnum.MAX_FILE_BYTES),
+        ),
+      );
+
+      return;
+    }
+
+    onChange({ ...block, file, kept: null });
+  };
+
+  // The stored picture is brought into the page to be edited as a new file.
+  const editCurrent = async (): Promise<void> => {
+    if (block.file) {
+      setIsFreshPick(false);
+      setEditing(block.file);
+
+      return;
+    }
+
+    if (!source) {
+      return;
+    }
+
+    try {
+      const blob: Blob = await (await fetch(source)).blob();
+
+      setIsFreshPick(false);
+      setEditing(
+        new File([blob], fileName || "image", { type: blob.type || mimeType }),
+      );
+    } catch {
+      message.error(t("imageEditor.loadFailed"));
+    }
+  };
+
   const pickFile = (picked: File | undefined): void => {
     if (!picked) {
+      return;
+    }
+
+    // A picture opens in the editor first.
+    if (isEditableImage(picked)) {
+      setIsFreshPick(true);
+      setEditing(picked);
+
       return;
     }
 
@@ -226,14 +300,73 @@ export default function QuickMessageBlockEditor({
             }}
           />
 
-          {hasFile && mediaPreview(block, fileUrl)}
+          {hasFile && (
+            <div
+              role="button"
+              tabIndex={0}
+              className="cursor-zoom-in w-fit"
+              title={t("filePreview.open")}
+              onClick={() => setIsPreviewOpen(true)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  setIsPreviewOpen(true);
+                }
+              }}
+            >
+              {mediaPreview(block, fileUrl)}
+            </div>
+          )}
 
-          <Button
-            icon={<PaperClipOutlined />}
-            onClick={() => fileInputRef.current?.click()}
-          >
-            {t(hasFile ? "quickMessages.changeFile" : "quickMessages.pickFile")}
-          </Button>
+          <Space wrap>
+            <Button
+              icon={<PaperClipOutlined />}
+              onClick={() => fileInputRef.current?.click()}
+            >
+              {t(
+                hasFile ? "quickMessages.changeFile" : "quickMessages.pickFile",
+              )}
+            </Button>
+            {hasFile && (
+              <Button
+                icon={<EyeOutlined />}
+                onClick={() => setIsPreviewOpen(true)}
+              >
+                {t("filePreview.open")}
+              </Button>
+            )}
+            {hasFile && canEdit && (
+              <Button icon={<EditOutlined />} onClick={editCurrent}>
+                {t("imageEditor.edit")}
+              </Button>
+            )}
+          </Space>
+
+          <ImageEditorModal
+            file={editing}
+            cancelLabel={
+              isFreshPick ? t("imageEditor.useOriginal") : undefined
+            }
+            onCancel={() => {
+              if (isFreshPick && editing) {
+                attach(editing);
+              }
+
+              setEditing(null);
+            }}
+            onSave={(edited: File) => {
+              attach(edited);
+              setEditing(null);
+            }}
+          />
+
+          <FilePreviewModal
+            open={isPreviewOpen}
+            source={source}
+            mimeType={mimeType}
+            name={fileName}
+            sizeLabel={fileSize ? formatFileSize(fileSize) : undefined}
+            onClose={() => setIsPreviewOpen(false)}
+          />
 
           <Input.TextArea
             ref={captionRef}

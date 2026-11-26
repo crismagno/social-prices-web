@@ -17,7 +17,7 @@ import {
   UploadFile,
   UploadProps,
 } from "antd";
-import ImgCrop from "antd-img-crop";
+import ImageEditUpload from "../../../../components/common/ImageEditor/ImageEditUpload";
 import { RcFile } from "antd/es/upload";
 import { isArray, isObject } from "class-validator";
 import { filter, map } from "lodash";
@@ -480,7 +480,7 @@ export const ProductItemDetail: React.FC<Props> = ({
           <label className={`text-sm`}>{t("products.images")}</label>
 
           <div className="mt-2 w-full overflow-auto">
-            <ImgCrop rotationSlider>
+            <ImageEditUpload>
               <Upload
                 action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
                 listType="picture-card"
@@ -492,7 +492,7 @@ export const ProductItemDetail: React.FC<Props> = ({
               >
                 {fileList.length < 10 && !isReadonly && `+ ${t("common.upload")}`}
               </Upload>
-            </ImgCrop>
+            </ImageEditUpload>
 
             <Modal
               open={previewOpen}

@@ -80,7 +80,7 @@ const SitePageBody = ({
       <SiteAbout
         about={{
           isActive: true,
-          title: null,
+          title: page.content.title ?? null,
           texts: page.content.texts,
           media: page.content.media,
           mediaPosition: page.content.mediaPosition,
@@ -89,8 +89,8 @@ const SitePageBody = ({
         defaultTitle={page.title ?? page.label ?? ""}
         variant={variant}
         titleClassName={titleClassName}
-        // The top of the page already says it.
-        isTitleHidden
+        // The top of the page already names it: only the owner's own heading.
+        isTitleHidden={!page.content.title?.trim()}
       />
 
       {isSupport && (page.faq.length > 0 || contacts.length > 0) && (

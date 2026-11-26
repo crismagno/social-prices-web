@@ -912,3 +912,43 @@
     animation: none;
   }
 }
+
+/* Emojis: the window opens over the conversation, inside the chat. */
+.emojis {
+  display: flex;
+  align-self: flex-end;
+}
+
+.composer {
+  position: relative;
+}
+
+.emojisPopup {
+  position: absolute;
+  z-index: 2;
+  left: 12px;
+  bottom: calc(100% + 6px);
+  max-width: calc(100% - 24px);
+  padding: 10px;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--site-text) 12%, transparent);
+  background: var(--site-bg);
+  color: var(--site-text);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+}
+
+/* A date field says what it asks above it: the box shows only the date. */
+.fieldLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fieldLabel span {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+select.field {
+  appearance: auto;
+}

@@ -57,9 +57,10 @@ export interface ISiteOrderAddress {
 
 export interface ISiteOrderBuyer {
   name: string;
-  email: string;
-  phoneNumber: string;
-  address: ISiteOrderAddress;
+  /** Email, phone and address: null when the site does not ask or it was skipped. */
+  email: string | null;
+  phoneNumber: string | null;
+  address: ISiteOrderAddress | null;
 }
 
 export interface ISiteCartItem {

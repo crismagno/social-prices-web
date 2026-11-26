@@ -1,14 +1,14 @@
 "use client";
 
-import { Button, Tooltip, theme } from "antd";
+import { Button, Popover, Typography, theme } from "antd";
 
 import { ThunderboltOutlined } from "@ant-design/icons";
 
 import useLanguageData from "../../data/context/language/useLanguageData";
 import { IQuickMessageAvailable } from "../../shared/business/quick-messages/quick-messages.types";
+import QuickMessageBubbles from "../quick-messages/QuickMessageBubbles";
 import {
   QuickMessageTarget,
-  firstText,
   mediaSummary,
   rankQuickMessages,
   unavailableReason,
@@ -23,7 +23,7 @@ interface Props {
 }
 
 // The strip of quick messages above the answer box. What is typed narrows it to
-// the closest ones; one click sends the whole message.
+// the closest ones; hovering one shows what it sends, one click sends it all.
 export default function ChatsQuickMessages({
   list,
   query,
@@ -53,12 +53,25 @@ export default function ChatsQuickMessages({
 
         const summary: string = mediaSummary(message);
 
-        const preview: string = firstText(message);
-
         return (
-          <Tooltip
+          <Popover
             key={message._id}
-            title={reason ? t(reason) : preview || undefined}
+            title={message.name}
+            mouseEnterDelay={0.3}
+            content={
+              <div className="w-72 max-w-[80vw]">
+                {reason && (
+                  <Typography.Paragraph type="warning" className="!mb-2">
+                    {t(reason)}
+                  </Typography.Paragraph>
+                )}
+
+                <QuickMessageBubbles
+                  blocks={message.blocks}
+                  className="max-h-72"
+                />
+              </div>
+            }
           >
             <Button
               size="small"
@@ -75,7 +88,7 @@ export default function ChatsQuickMessages({
                 </span>
               )}
             </Button>
-          </Tooltip>
+          </Popover>
         );
       })}
     </div>

@@ -18,6 +18,7 @@ import {
   isPartType,
   showableSection,
 } from "../../../../shared/business/store-sites/store-site-blocks";
+import { IStoreSiteMarqueeStyle } from "../../../../shared/business/store-sites/store-site-marquee-style";
 import { TPartType } from "../../../../shared/business/store-sites/store-site-layout";
 import { IStoreSitePage } from "../../../../shared/business/store-sites/store-site-pages";
 import StoreSitesEnum from "../../../../shared/business/store-sites/store-sites.enum";
@@ -31,6 +32,7 @@ import BlockStats from "./BlockStats";
 import BlockSteps from "./BlockSteps";
 import BlockTeam from "./BlockTeam";
 import BlockTestimonials from "./BlockTestimonials";
+import MarqueeStyle from "./MarqueeStyle";
 import SectionFrame from "./SectionFrame";
 import frameStyles from "./SectionFrame.module.css";
 import styles from "./SiteBlocks.module.css";
@@ -60,6 +62,8 @@ interface Props {
   mode: "live" | "preview";
   /** The editor's builder: sections are framed, picked and dropped. */
   builder?: ISectionBuilderHooks;
+  /** The owner's choices for the strip of phrases. */
+  marqueeStyle?: Partial<IStoreSiteMarqueeStyle> | null;
 }
 
 /** The kinds of section drawn by a component of their own (not a part, not a CTA). */
@@ -82,7 +86,7 @@ export const SECTION_COMPONENTS: Partial<
 };
 
 interface IBlockSectionProps
-  extends Omit<Props, "sections" | "renderPart" | "builder"> {
+  extends Omit<Props, "sections" | "renderPart" | "builder" | "marqueeStyle"> {
   block: IStoreSiteBlock;
 }
 
@@ -198,6 +202,18 @@ const BlockSection = ({
   );
 };
 
+/** A part of the template, the strip of phrases with the owner's choices on it. */
+const drawPart = (
+  type: TPartType,
+  renderPart: (type: TPartType) => ReactNode,
+  marqueeStyle: Partial<IStoreSiteMarqueeStyle> | null | undefined,
+): ReactNode =>
+  type === StoreSitesEnum.BlockType.MARQUEE ? (
+    <MarqueeStyle style={marqueeStyle}>{renderPart(type)}</MarqueeStyle>
+  ) : (
+    renderPart(type)
+  );
+
 /** What a dragged thing is, read when it is dropped. */
 const dragOf = (event: DragEvent<HTMLElement>): TSectionDrag | null => {
   try {
@@ -216,6 +232,7 @@ const BuilderSections = ({
   sections,
   renderPart,
   builder,
+  marqueeStyle,
   ...rest
 }: Props & { builder: ISectionBuilderHooks }) => {
   const t = useSiteT();
@@ -284,7 +301,7 @@ const BuilderSections = ({
           : showableSection(section);
 
         const content: ReactNode = isPart
-          ? renderPart(section.type as TPartType)
+          ? drawPart(section.type as TPartType, renderPart, marqueeStyle)
           : shown && <BlockSection block={shown} {...rest} />;
 
         return (
@@ -328,12 +345,19 @@ const BuilderSections = ({
  * put them. The template draws its own parts; everything else is drawn here,
  * in the template's look.
  */
-const SiteSections = ({ sections, renderPart, builder, ...rest }: Props) =>
+const SiteSections = ({
+  sections,
+  renderPart,
+  builder,
+  marqueeStyle,
+  ...rest
+}: Props) =>
   builder ? (
     <BuilderSections
       sections={sections}
       renderPart={renderPart}
       builder={builder}
+      marqueeStyle={marqueeStyle}
       {...rest}
     />
   ) : (
@@ -341,7 +365,7 @@ const SiteSections = ({ sections, renderPart, builder, ...rest }: Props) =>
     {sections.map((section: IStoreSiteBlock) =>
       isPartType(section.type) ? (
         <Fragment key={section.key}>
-          {renderPart(section.type as TPartType)}
+          {drawPart(section.type as TPartType, renderPart, marqueeStyle)}
         </Fragment>
       ) : (
         <BlockSection key={section.key} block={section} {...rest} />

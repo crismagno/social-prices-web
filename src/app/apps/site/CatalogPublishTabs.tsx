@@ -29,11 +29,14 @@ import useLanguageData from "../../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import { IProduct } from "../../../shared/business/products/products.interface";
 import {
+  CATALOG_ADD_LABEL_MAX,
+  CATALOG_TITLE_MAX,
   IStoreSiteCatalog,
   siteCatalogOf,
 } from "../../../shared/business/store-sites/store-site-catalog";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
+import ImageLookCard from "./ImageLookCard";
 import SizeFields from "./SizeFields";
 import useDragReorder from "./useDragReorder";
 import { IStoreSiteEditor, slugify } from "./useStoreSiteEditor";
@@ -44,10 +47,17 @@ interface Props {
 }
 
 // What a product may show, in the order the choices are listed.
-const CATALOG_CHOICES: (keyof IStoreSiteCatalog)[] = [
+type TCatalogSwitch = {
+  [K in keyof IStoreSiteCatalog]: IStoreSiteCatalog[K] extends boolean ? K : never;
+}[keyof IStoreSiteCatalog];
+
+const CATALOG_CHOICES: TCatalogSwitch[] = [
+  "isTitleShown",
   "isNameShown",
   "isPriceShown",
   "isDescriptionShown",
+  "isAddButtonShown",
+  "isDetailsOpened",
   "isSearchShown",
 ];
 
@@ -92,7 +102,7 @@ export const ProductsTab = ({ editor }: Omit<Props, "storeId">) => {
     <Space direction="vertical" className="w-full">
       <Card size="small" title={t("storeSite.editor.catalog.heading")}>
         <Space direction="vertical" className="w-full">
-          {CATALOG_CHOICES.map((choice: keyof IStoreSiteCatalog) => (
+          {CATALOG_CHOICES.map((choice: TCatalogSwitch) => (
             <label
               key={choice}
               className="flex items-center justify-between gap-3"
@@ -106,6 +116,43 @@ export const ProductsTab = ({ editor }: Omit<Props, "storeId">) => {
               />
             </label>
           ))}
+          {catalog.isTitleShown && (
+            <Form.Item
+              className="mb-0"
+              label={t("storeSite.editor.catalog.title")}
+            >
+              <Input
+                maxLength={CATALOG_TITLE_MAX}
+                placeholder={t("storeSite.public.products")}
+                value={catalog.title ?? ""}
+                onChange={(event) =>
+                  editor.update({
+                    catalog: { ...catalog, title: event.target.value || null },
+                  })
+                }
+              />
+            </Form.Item>
+          )}
+          {catalog.isAddButtonShown && (
+            <Form.Item
+              className="mb-0"
+              label={t("storeSite.editor.catalog.addLabel")}
+            >
+              <Input
+                maxLength={CATALOG_ADD_LABEL_MAX}
+                placeholder={t("storeSite.public.add")}
+                value={catalog.addLabel ?? ""}
+                onChange={(event) =>
+                  editor.update({
+                    catalog: {
+                      ...catalog,
+                      addLabel: event.target.value || null,
+                    },
+                  })
+                }
+              />
+            </Form.Item>
+          )}
           <span className="text-xs opacity-60">
             {t("storeSite.editor.catalog.hint")}
           </span>
@@ -118,6 +165,7 @@ export const ProductsTab = ({ editor }: Omit<Props, "storeId">) => {
           sizes={["productWidth", "productImageHeight", "productNameSize"]}
         />
       </Card>
+      <ImageLookCard editor={editor} place="product" />
       {editor.storeProducts.length === 0 && (
         <Alert
           type="info"

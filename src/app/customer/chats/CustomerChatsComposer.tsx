@@ -13,6 +13,7 @@ import {
   SendOutlined,
 } from "@ant-design/icons";
 
+import { useImageEditStep } from "../../../components/common/ImageEditor/useImageEditStep";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import {
   STORE_CHAT_MAX_TEXT,
@@ -59,6 +60,9 @@ export default function CustomerChatsComposer({
   const inputRef = useRef<TextAreaRef | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // Pictures are cropped and turned before they are attached.
+  const { editIfImage, editor: imageEditor } = useImageEditStep();
 
   const recorder = useVoiceRecorder((error: unknown) => {
     message.error(t("chats.media.microphoneDenied"));
@@ -208,11 +212,16 @@ export default function CustomerChatsComposer({
               type="file"
               hidden
               onChange={(event) => {
-                pickFile(event.target.files?.[0]);
+                const picked: File | undefined = event.target.files?.[0];
                 // The same file can be picked again after it was removed.
                 event.target.value = "";
+                // A picture passes through the image editor first.
+                if (picked) {
+                  editIfImage(picked).then(pickFile);
+                }
               }}
             />
+            {imageEditor}
 
             <Button
               type="text"

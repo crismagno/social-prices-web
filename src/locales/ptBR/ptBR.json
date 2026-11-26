@@ -2078,6 +2078,7 @@
     "back": "Voltar",
     "openCustomer": "Abrir cliente",
     "reply": {
+      "emoji": "Emojis",
       "placeholder": "Escreva uma resposta...",
       "send": "Enviar",
       "via": "Enviar por",
@@ -2150,6 +2151,8 @@
     "lastUsedAt": "Último uso",
     "confirmDelete": "Desativar esta mensagem rápida?",
     "confirmActivate": "Reativar esta mensagem rápida?",
+    "preview": "Pré-visualizar",
+    "previewHelp": "É assim que a mensagem chega no chat, um bloco por vez. Os campos entre chaves são trocados pelos dados do cliente e do funcionário no envio.",
     "saved": "Mensagem rápida salva",
     "forbidden": "Só o dono e funcionários ADMIN ou MASTER gerenciam mensagens rápidas.",
     "disabled": "As mensagens rápidas não estão ativas para esta conta.",
@@ -2360,7 +2363,11 @@
       "district": "Bairro",
       "city": "Cidade",
       "state": "Estado",
-      "note": "Observação para a loja (opcional)",
+      "note": "Observação para a loja",
+      "optional": "(opcional)",
+      "addressOptionalHint": "Endereço de entrega (opcional). Se preencher, complete todos os campos.",
+      "doneNote": "A loja recebeu seu pedido e vai entrar em contato.",
+      "fieldsChanged": "A loja mudou os dados pedidos. Atualize a página e envie de novo.",
       "required": "Obrigatório",
       "invalidEmail": "Informe um e-mail válido",
       "send": "Enviar pedido",
@@ -2411,6 +2418,10 @@
         "name": "Arcade",
         "description": "Neon e retrô, letra pixel e linhas de tela. Para games."
       },
+      "ATLAS": {
+        "name": "Atlas",
+        "description": "Sóbrio e sólido, cantos retos e linhas finas. Para qualquer negócio que queira um visual neutro."
+      },
       "MARE": {
         "name": "Maré",
         "description": "Calmo e natural, em areia, argila e azul-mar: serifa suave com itálico, foto em arco e mosaicos. Para lojas de casa, decoração e feito à mão."
@@ -2446,6 +2457,7 @@
         "sections": "Blocos",
         "marquee": "Faixa",
         "products": "Produtos",
+        "cart": "Sacola",
         "publish": "Endereço",
         "footer": "Rodapé",
         "about": "Sobre",
@@ -2453,6 +2465,31 @@
         "chat": "Chat",
         "blocks": "Blocos",
         "builder": "Construir"
+      },
+      "images": {
+        "places": {
+          "product": "Formato das fotos",
+          "section": "Formato dos blocos",
+          "block": "Formato das imagens"
+        },
+        "shape": "Formato",
+        "ratio": "Proporção",
+        "template": "Do template",
+        "shapes": {
+          "TEMPLATE": "Do template",
+          "SQUARE": "Quadrado",
+          "SOFT": "Cantos suaves",
+          "ROUNDED": "Arredondado",
+          "ARCH": "Arco",
+          "CIRCLE": "Círculo",
+          "LEAF": "Folha"
+        },
+        "circleHint": "O círculo é sempre 1:1.",
+        "hints": {
+          "product": "Vale para as fotos de todos os produtos do site.",
+          "section": "Vale para todos os blocos com foto: o bloco inteiro segue o formato, não só a imagem.",
+          "block": "Vale para todas as imagens do construtor: peças de imagem, colunas e fotos da equipe."
+        }
       },
       "colors": {
         "primary": "Cor principal",
@@ -2479,8 +2516,67 @@
           "label": "Mais imagens em destaque",
           "hint": "Com mais de uma, a imagem em destaque vai trocando de uma para a outra, como um slider. Até 5 além da primeira."
         },
+        "options": {
+          "showOnHome": "Mostrar a entrada na página inicial",
+          "showOnHomeHint": "Desligada, a página inicial começa pelo menu e pela primeira seção. Para mudar a entrada de lugar, ou escondê-la em outras páginas, use a aba Construir.",
+          "pieces": {
+            "title": "O que aparece",
+            "isTaglineVisible": "Linha de cima",
+            "isSubtitleVisible": "Subtítulo",
+            "isButtonVisible": "Botão principal",
+            "isFeaturedVisible": "Imagem em destaque"
+          },
+          "colors": {
+            "title": "Cores da entrada",
+            "hint": "Valem só para a entrada. Vazio usa a cor do template.",
+            "background": "Fundo",
+            "text": "Título e textos",
+            "button": "Botão"
+          },
+          "more": {
+            "title": "Mais textos e botões",
+            "extraText": "Parágrafo extra",
+            "extraTextHint": "Aparece abaixo do subtítulo, só na página inicial.",
+            "buttonTarget": "Para onde o botão principal leva",
+            "buttonTargetHint": "O texto do botão é o campo \"Texto do botão\", mais abaixo.",
+            "toProducts": "Produtos",
+            "toOther": "Outro destino",
+            "secondButton": "Segundo botão"
+          }
+        },
         "fixedHeader": "Menu fixo no topo",
-        "fixedHeaderHint": "Ao rolar a página, o menu com o nome, as páginas e a sacola fica preso no alto da tela."
+        "fixedHeaderHint": "Ao rolar a página, o menu com o nome, as páginas e a sacola fica preso no alto da tela.",
+        "cart": {
+          "title": "Sacola",
+          "show": "Mostrar a sacola",
+          "showHint": "Desligue se o site não vende: some a sacola e os botões de adicionar dos produtos.",
+          "button": "Botão no topo do site",
+          "icon": "Ícone",
+          "icons": {
+            "NONE": "Nenhum",
+            "BAG": "Sacola",
+            "CART": "Carrinho"
+          },
+          "label": "Texto",
+          "labelHint": "Vazio usa o texto do template.",
+          "onlyIcon": "Mostrar só o ícone",
+          "size": "Tamanho",
+          "sizes": {
+            "SMALL": "Pequeno",
+            "MEDIUM": "Médio",
+            "LARGE": "Grande"
+          },
+          "fields": {
+            "title": "Campos do pedido",
+            "hint": "O que a sacola pede antes de enviar o pedido. O nome é sempre pedido. Sem e-mail, o cliente não recebe o convite para acompanhar o pedido e cada pedido cria um cliente novo; sem endereço, o pedido entra como retirada.",
+            "names": {
+              "EMAIL": "E-mail",
+              "PHONE": "Telefone",
+              "ADDRESS": "Endereço de entrega",
+              "NOTE": "Observação para a loja"
+            }
+          }
+        }
       },
       "sections": {
         "block": "Bloco",
@@ -2499,7 +2595,35 @@
       "marquee": {
         "show": "Mostrar a faixa rolando",
         "items": "Frases",
-        "itemsHint": "Uma frase curta por linha, até 8."
+        "itemsHint": "Uma frase curta por linha, até 8.",
+        "style": {
+          "title": "Estilo da faixa",
+          "speed": "Velocidade",
+          "speeds": {
+            "SLOW": "Lenta",
+            "NORMAL": "Do template",
+            "FAST": "Rápida"
+          },
+          "direction": "Direção",
+          "directions": {
+            "LEFT": "Para a esquerda",
+            "RIGHT": "Para a direita"
+          },
+          "separator": "Separador",
+          "separatorHint": "O símbolo entre as frases.",
+          "templateSeparator": "Do template",
+          "ownSeparator": "Outro",
+          "size": "Tamanho do texto",
+          "sizes": {
+            "SMALL": "Pequeno",
+            "MEDIUM": "Do template",
+            "LARGE": "Grande"
+          },
+          "background": "Cor de fundo",
+          "color": "Cor do texto",
+          "colorHint": "Vazio usa a cor do template.",
+          "pause": "Pausar ao passar o mouse"
+        }
       },
       "catalog": {
         "heading": "O que cada produto mostra",
@@ -2507,7 +2631,12 @@
         "isPriceShown": "Preço",
         "isDescriptionShown": "Descrição",
         "isSearchShown": "Busca na página de produtos",
-        "hint": "Com o preço escondido, ele ainda aparece no carrinho."
+        "isTitleShown": "Título da seção de produtos",
+        "isAddButtonShown": "Botão de adicionar à sacola",
+        "isDetailsOpened": "Abrir os detalhes ao clicar no produto",
+        "title": "Texto do título",
+        "addLabel": "Texto do botão",
+        "hint": "Com o preço escondido, ele ainda aparece no carrinho. Sem o botão de adicionar, os produtos ficam só de apresentação. Textos vazios usam os do site."
       },
       "products": {
         "add": "Adicionar um produto",
@@ -2549,7 +2678,9 @@
         "footer": "O pé do site: algumas palavras, seus links e o botão de entrar no app.",
         "about": "A seção Sobre: um título, seus textos e uma imagem ou um vídeo.",
         "pages": "As páginas do site além da inicial, na ordem do menu. Adicione as suas.",
-        "chat": "Uma janela de chat no site: o visitante escreve e você responde em Conversas."
+        "chat": "Uma janela de chat no site: o visitante escreve e você responde em Conversas.",
+        "builder": "Monte cada página: arraste peças para a pré-visualização, mude as faixas de lugar e clique numa delas para editar.",
+        "cart": "O botão da sacola no topo do site e o que é pedido antes de enviar um pedido."
       },
       "problems": {
         "hero": "A entrada precisa de um título.",
@@ -2626,7 +2757,8 @@
           "add": "Adicionar seção",
           "textIn": "Nome e texto ficam em",
           "loginIn": "Botão de entrar fica em",
-          "linkIn": "Aparece em"
+          "linkIn": "Aparece em",
+          "drag": "Arraste para mudar a ordem"
         },
         "logo": "Mostrar logo no rodapé",
         "logoHint": "Aparece ao lado do nome, no formato do logo do topo do site.",
@@ -2693,6 +2825,8 @@
         "title": "Título no topo da página",
         "titleHint": "Vazio mostra o nome do menu.",
         "intro": "Linha abaixo do título",
+        "contentTitle": "Título acima dos textos",
+        "contentTitleHint": "Aparece em destaque, no estilo do template, como o título da seção Sobre. Só é mostrado quando a página tem texto, imagem ou vídeo. Vazio não mostra título.",
         "productsHint": "Esta página mostra os produtos escolhidos na aba Produtos.",
         "contactHint": "Esta página tem um formulário (nome, e-mail, telefone e mensagem). O que os visitantes enviam chega nos seus Chats, no canal Site. Ela também lista os links de WhatsApp, e-mail, telefone e Telegram do rodapé.",
         "aboutHint": "Esta página mostra o que você escreveu na aba Sobre.",
@@ -2729,11 +2863,19 @@
         "titleHint": "Vazio mostra o nome do site.",
         "greeting": "Primeira mensagem",
         "asked": "O que é pedido antes da conversa",
-        "askedHint": "O nome é sempre pedido.",
+        "askedHint": "O nome é sempre pedido, em primeiro.",
         "modes": {
           "REQUIRED": "Obrigatório",
           "OPTIONAL": "Opcional",
           "HIDDEN": "Não pedir"
+        },
+        "sessionMinutes": "Tempo da conversa",
+        "sessionMinutesHint": "Depois desse tempo sem o visitante escrever, a janela do site começa uma conversa nova. A conversa antiga continua aqui em Conversas.",
+        "minutes": "min",
+        "extra": {
+          "title": "Campos do cliente",
+          "hint": "Escolha quais dados pedir antes da conversa, obrigatórios ou opcionais, na ordem que quiser. As respostas chegam como primeira mensagem em Conversas.",
+          "add": "Adicionar campo"
         }
       },
       "blocks": {
@@ -3036,6 +3178,7 @@
         "removeConfirm": "Apagar esta faixa?",
         "editPart": "Editar o conteúdo",
         "partNotes": {
+          "HERO": "Mostra o que a aba Entrada edita. Pode ser movida ou escondida, mas não apagada.",
           "MARQUEE": "Mostra as frases da aba Faixa.",
           "CARDS": "Mostra os cartões da aba Seções.",
           "PRODUCTS": "Mostra os produtos escolhidos na aba Produtos.",
@@ -3130,6 +3273,7 @@
           }
         },
         "types": {
+          "HERO": "Entrada",
           "MARQUEE": "Faixa de frases",
           "CARDS": "Seções",
           "PRODUCTS": "Produtos",
@@ -3152,6 +3296,7 @@
           "CTA": "Chamada final"
         },
         "hints": {
+          "HERO": "O topo com título, botão e imagem (aba Entrada)",
           "MARQUEE": "A faixa que corre com frases (aba Faixa)",
           "CARDS": "Os cartões com imagem (aba Seções)",
           "PRODUCTS": "Os produtos à venda (aba Produtos)",
@@ -3258,6 +3403,7 @@
       "tooMany": "Muitas mensagens. Aguarde um pouco e tente de novo.",
       "failed": "Não foi possível enviar. Tente de novo.",
       "attach": "Enviar arquivo",
+      "emoji": "Emojis",
       "record": "Gravar áudio",
       "recording": "Gravando",
       "preparing": "Preparando o áudio…",
@@ -3265,7 +3411,24 @@
       "sendRecording": "Enviar a gravação",
       "microphoneDenied": "Permita o microfone para gravar áudio.",
       "tooLarge": "O arquivo é grande demais. O limite é 16 MB.",
-      "download": "Baixar"
+      "download": "Baixar",
+      "storeTyping": "A loja está digitando",
+      "requiredField": "Preencha o campo \"{field}\".",
+      "invalidField": "Confira o campo \"{field}\".",
+      "fields": {
+        "EMAIL": "E-mail",
+        "PHONE": "Telefone",
+        "BIRTH_DATE": "Data de nascimento",
+        "GENDER": "Gênero",
+        "CPF": "CPF",
+        "ID_NUMBER": "Documento",
+        "ADDRESS": "Endereço"
+      },
+      "genders": {
+        "FEMALE": "Feminino",
+        "MALE": "Masculino",
+        "OTHER": "Outro"
+      }
     },
     "blocks": {
       "rating": "{count} de 5 estrelas",
@@ -3273,5 +3436,26 @@
       "next": "Próximo",
       "ctaButton": "Fale com a gente"
     }
+  },
+  "imageEditor": {
+    "title": "Editar imagem",
+    "free": "Livre",
+    "square": "Quadrado",
+    "rotateLeft": "Girar para a esquerda",
+    "rotateRight": "Girar para a direita",
+    "flip": "Espelhar",
+    "reset": "Desfazer tudo",
+    "cancel": "Cancelar",
+    "save": "Aplicar",
+    "edit": "Editar imagem",
+    "useOriginal": "Usar sem editar",
+    "hint": "Arraste a área clara para mover o corte e os cantos para mudar o tamanho.",
+    "loadFailed": "Não foi possível abrir a imagem para editar."
+  },
+  "filePreview": {
+    "open": "Pré-visualizar",
+    "download": "Baixar",
+    "close": "Fechar",
+    "noPreview": "Este tipo de arquivo não tem pré-visualização. Baixe para abrir."
   }
 }

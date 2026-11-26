@@ -10,6 +10,7 @@ namespace StoreSitesEnum {
     SWELL = "SWELL",
     BUDDY = "BUDDY",
     ARCADE = "ARCADE",
+    ATLAS = "ATLAS",
   }
 
   /** What a link of the footer leads to: it decides its icon and how it opens. */
@@ -96,6 +97,61 @@ namespace StoreSitesEnum {
     LEFT = "LEFT",
   }
 
+  /** How fast the strip of phrases runs; NORMAL is the template's own. */
+  export enum MarqueeSpeed {
+    SLOW = "SLOW",
+    NORMAL = "NORMAL",
+    FAST = "FAST",
+  }
+
+  /** Which way the strip of phrases runs. */
+  export enum MarqueeDirection {
+    LEFT = "LEFT",
+    RIGHT = "RIGHT",
+  }
+
+  /** How big the words of the strip are; MEDIUM is the template's own. */
+  export enum MarqueeSize {
+    SMALL = "SMALL",
+    MEDIUM = "MEDIUM",
+    LARGE = "LARGE",
+  }
+
+  /** The icon beside the words of the cart button. */
+  export enum CartButtonIcon {
+    NONE = "NONE",
+    BAG = "BAG",
+    CART = "CART",
+  }
+
+  /** How big the cart button is, next to the template's own size. */
+  /** The outline of the images of a site; TEMPLATE keeps the template's own. */
+  export enum ImageShape {
+    TEMPLATE = "TEMPLATE",
+    SQUARE = "SQUARE",
+    SOFT = "SOFT",
+    ROUNDED = "ROUNDED",
+    ARCH = "ARCH",
+    CIRCLE = "CIRCLE",
+    LEAF = "LEAF",
+  }
+
+  /** Width to height of the images of a site; TEMPLATE keeps the template's own. */
+  export enum ImageRatio {
+    TEMPLATE = "TEMPLATE",
+    SQUARE = "SQUARE",
+    PORTRAIT = "PORTRAIT",
+    TALL = "TALL",
+    LANDSCAPE = "LANDSCAPE",
+    WIDE = "WIDE",
+  }
+
+  export enum CartButtonSize {
+    SMALL = "SMALL",
+    MEDIUM = "MEDIUM",
+    LARGE = "LARGE",
+  }
+
   /** The ready icons the owner can pick for the chat button. */
   export enum ChatIcon {
     MESSAGE = "MESSAGE",
@@ -119,6 +175,7 @@ namespace StoreSitesEnum {
     STEPS = "STEPS",
     CTA = "CTA",
     // The template's own parts: they draw what their own tab edits.
+    HERO = "HERO",
     MARQUEE = "MARQUEE",
     CARDS = "CARDS",
     PRODUCTS = "PRODUCTS",
@@ -136,6 +193,7 @@ namespace StoreSitesEnum {
 
   /** The template's own parts: each at most once on a page. */
   export const PART_TYPES: BlockType[] = [
+    BlockType.HERO,
     BlockType.MARQUEE,
     BlockType.CARDS,
     BlockType.PRODUCTS,
@@ -225,10 +283,29 @@ namespace StoreSitesEnum {
   }
 
   /** How the chat asks a field before it starts. */
+  /** A field of the customer record the chat's form can ask. */
+  export enum ChatCustomerField {
+    EMAIL = "EMAIL",
+    PHONE = "PHONE",
+    BIRTH_DATE = "BIRTH_DATE",
+    GENDER = "GENDER",
+    CPF = "CPF",
+    ID_NUMBER = "ID_NUMBER",
+    ADDRESS = "ADDRESS",
+  }
+
   export enum ChatFieldMode {
     REQUIRED = "REQUIRED",
     OPTIONAL = "OPTIONAL",
     HIDDEN = "HIDDEN",
+  }
+
+  /** What the bag may ask besides the name; the address is one whole. */
+  export enum CheckoutField {
+    EMAIL = "EMAIL",
+    PHONE = "PHONE",
+    ADDRESS = "ADDRESS",
+    NOTE = "NOTE",
   }
 
   /** Lowercase letters, digits and hyphens, 3 to 40 characters. */
@@ -250,6 +327,7 @@ namespace StoreSitesEnum {
     ORDER_ITEMS_UNAVAILABLE = "SITE_ORDER_ITEMS_UNAVAILABLE",
     ORDER_TOO_MANY_ATTEMPTS = "SITE_ORDER_TOO_MANY_ATTEMPTS",
     ORDER_FAILED = "SITE_ORDER_FAILED",
+    ORDER_FIELDS_MISSING = "SITE_ORDER_FIELDS_MISSING",
   }
 }
 

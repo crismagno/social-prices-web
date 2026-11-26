@@ -20,10 +20,18 @@ interface Props {
   onChange: (patch: Partial<IStoreSiteBlockButton>) => void;
   /** Main or outline: for rows of buttons and boxes. */
   withVariant?: boolean;
+  /** Only where it goes: its words are written somewhere else. */
+  withoutLabel?: boolean;
 }
 
 /** One button: its words, where it goes and, where asked, its style. */
-const ButtonFields = ({ button, pages, onChange, withVariant }: Props) => {
+const ButtonFields = ({
+  button,
+  pages,
+  onChange,
+  withVariant,
+  withoutLabel,
+}: Props) => {
   const { t } = useLanguageData();
 
   const target: StoreSitesEnum.BlockButtonTarget =
@@ -39,14 +47,16 @@ const ButtonFields = ({ button, pages, onChange, withVariant }: Props) => {
 
   return (
     <>
-      <Form.Item label={t("storeSite.editor.blocks.button.label")}>
-        <Input
-          maxLength={BLOCK_LIMITS.buttonLabel}
-          placeholder={t("storeSite.blocks.ctaButton")}
-          value={button?.label ?? ""}
-          onChange={(event) => onChange({ label: event.target.value })}
-        />
-      </Form.Item>
+      {!withoutLabel && (
+        <Form.Item label={t("storeSite.editor.blocks.button.label")}>
+          <Input
+            maxLength={BLOCK_LIMITS.buttonLabel}
+            placeholder={t("storeSite.blocks.ctaButton")}
+            value={button?.label ?? ""}
+            onChange={(event) => onChange({ label: event.target.value })}
+          />
+        </Form.Item>
+      )}
       {withVariant && (
         <Form.Item label={t("storeSite.editor.builder.fields.variant")}>
           <Segmented<StoreSitesEnum.ButtonVariant>

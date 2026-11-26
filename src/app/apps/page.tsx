@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { unreadShownInApps } from "../../shared/business/apps/apps-unread";
 
 import { Badge, Card, Empty, Spin, Tag, Tooltip } from "antd";
 
@@ -93,14 +94,14 @@ export default function AppsPage() {
                         )}
                       </div>
 
-                      {app.enabled && app.unreadCount > 0 && (
+                      {app.enabled && unreadShownInApps(app) > 0 && (
                         <Badge
                           className="ml-auto"
-                          count={app.unreadCount}
+                          count={unreadShownInApps(app)}
                           overflowCount={99}
                           title={t("apps.unread").replace(
                             "{count}",
-                            String(app.unreadCount),
+                            String(unreadShownInApps(app)),
                           )}
                         />
                       )}

@@ -40,6 +40,7 @@ import {
 } from "../../../shared/business/store-sites/store-site-pages";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import BlockFields from "./BlockFields";
+import ImageLookCard from "./ImageLookCard";
 import styles from "./BuilderTab.module.css";
 import PieceFields from "./PieceFields";
 import { SECTION_ICONS } from "./section-icons";
@@ -50,6 +51,7 @@ const T = StoreSitesEnum.BlockType;
 
 /** The tab that edits what a part of the template shows. */
 export const PART_TABS: Partial<Record<StoreSitesEnum.BlockType, string>> = {
+  [T.HERO]: "hero",
   [T.MARQUEE]: "marquee",
   [T.CARDS]: "sections",
   [T.PRODUCTS]: "products",
@@ -58,6 +60,13 @@ export const PART_TABS: Partial<Record<StoreSitesEnum.BlockType, string>> = {
 };
 
 /** Pieces edited with the block fields too: a heading, and items for some. */
+// The pieces whose images follow the look of the builder's images.
+const WITH_IMAGE_LOOK: StoreSitesEnum.BlockType[] = [
+  StoreSitesEnum.BlockType.IMAGE,
+  StoreSitesEnum.BlockType.BOX,
+  StoreSitesEnum.BlockType.TEAM,
+];
+
 const WITH_BLOCK_FIELDS: StoreSitesEnum.BlockType[] = [
   ...StoreSitesEnum.CONTENT_BLOCK_TYPES,
   T.TEXT,
@@ -96,7 +105,10 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
   // A section picked on the preview: its fields come into view.
   useEffect(() => {
     if (builder.selectedKey) {
-      fieldsRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      fieldsRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
     }
   }, [builder.selectedKey]);
 
@@ -160,7 +172,9 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
   return (
     <div className={styles.builder}>
       <div className={styles.pageRow}>
-        <Typography.Text strong>{t("storeSite.editor.builder.page")}</Typography.Text>
+        <Typography.Text strong>
+          {t("storeSite.editor.builder.page")}
+        </Typography.Text>
         <Select
           className={styles.pageSelect}
           value={builder.pageKey ?? HOME}
@@ -181,12 +195,18 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
         {t("storeSite.editor.builder.hint")} ({total}/{MAX_BLOCKS})
       </Typography.Paragraph>
 
-      {group(t("storeSite.editor.builder.groups.pieces"), StoreSitesEnum.PIECE_TYPES)}
+      {group(
+        t("storeSite.editor.builder.groups.pieces"),
+        StoreSitesEnum.PIECE_TYPES,
+      )}
       {group(
         t("storeSite.editor.builder.groups.blocks"),
         StoreSitesEnum.CONTENT_BLOCK_TYPES,
       )}
-      {group(t("storeSite.editor.builder.groups.parts"), StoreSitesEnum.PART_TYPES)}
+      {group(
+        t("storeSite.editor.builder.groups.parts"),
+        StoreSitesEnum.PART_TYPES,
+      )}
 
       <div className={styles.group}>
         <Typography.Text type="secondary" className={styles.groupTitle}>
@@ -204,11 +224,16 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
                 <button
                   type="button"
                   className={styles.row}
-                  data-selected={section.key === builder.selectedKey || undefined}
+                  data-selected={
+                    section.key === builder.selectedKey || undefined
+                  }
                   data-hidden={!section.isActive || undefined}
                   draggable
                   onDragStart={(event: DragEvent<HTMLButtonElement>) => {
-                    const data: TSectionDrag = { kind: "move", key: section.key };
+                    const data: TSectionDrag = {
+                      kind: "move",
+                      key: section.key,
+                    };
 
                     event.dataTransfer.setData(
                       SECTION_DRAG_TYPE,
@@ -219,7 +244,9 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
                   onClick={() => builder.select(section.key)}
                 >
                   <HolderOutlined className={styles.rowHandle} />
-                  <span className={styles.rowIcon}>{SECTION_ICONS[section.type]}</span>
+                  <span className={styles.rowIcon}>
+                    {SECTION_ICONS[section.type]}
+                  </span>
                   <span className={styles.rowName}>
                     {!isPartType(section.type) && section.title?.trim()
                       ? section.title
@@ -258,7 +285,11 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
                   disabled={index <= 0}
                   aria-label={t("storeSite.editor.moveUp")}
                   onClick={() =>
-                    builder.apply({ kind: "move", key: selected.key, toIndex: index - 1 })
+                    builder.apply({
+                      kind: "move",
+                      key: selected.key,
+                      toIndex: index - 1,
+                    })
                   }
                 />
                 <Button
@@ -268,7 +299,11 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
                   disabled={index >= builder.sections.length - 1}
                   aria-label={t("storeSite.editor.moveDown")}
                   onClick={() =>
-                    builder.apply({ kind: "move", key: selected.key, toIndex: index + 1 })
+                    builder.apply({
+                      kind: "move",
+                      key: selected.key,
+                      toIndex: index + 1,
+                    })
                   }
                 />
                 {!isPartType(selected.type) && (
@@ -285,29 +320,41 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
                 <Button
                   type="text"
                   size="small"
-                  icon={selected.isActive ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+                  icon={
+                    selected.isActive ? (
+                      <EyeOutlined />
+                    ) : (
+                      <EyeInvisibleOutlined />
+                    )
+                  }
                   aria-label={t(
                     selected.isActive
                       ? "storeSite.editor.builder.frame.hide"
                       : "storeSite.editor.builder.frame.show",
                   )}
-                  onClick={() => builder.apply({ kind: "toggle", key: selected.key })}
+                  onClick={() =>
+                    builder.apply({ kind: "toggle", key: selected.key })
+                  }
                 />
-                <Popconfirm
-                  title={t("storeSite.editor.builder.removeConfirm")}
-                  okText={t("storeSite.editor.remove")}
-                  okButtonProps={{ danger: true }}
-                  onConfirm={() => builder.apply({ kind: "remove", key: selected.key })}
-                >
-                  <Button
-                    type="primary"
-                    danger
-                    size="small"
-                    icon={<DeleteOutlined />}
-                    aria-label={t("storeSite.editor.remove")}
-                    style={{ marginLeft: 4 }}
-                  />
-                </Popconfirm>
+                {selected.type !== T.HERO && (
+                  <Popconfirm
+                    title={t("storeSite.editor.builder.removeConfirm")}
+                    okText={t("storeSite.editor.remove")}
+                    okButtonProps={{ danger: true }}
+                    onConfirm={() =>
+                      builder.apply({ kind: "remove", key: selected.key })
+                    }
+                  >
+                    <Button
+                      type="primary"
+                      danger
+                      size="small"
+                      icon={<DeleteOutlined />}
+                      aria-label={t("storeSite.editor.remove")}
+                      style={{ marginLeft: 4 }}
+                    />
+                  </Popconfirm>
+                )}
               </Space>
             }
           >
@@ -318,7 +365,9 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
                 </Typography.Text>
                 <Button
                   icon={<EditOutlined />}
-                  onClick={() => onOpenTab(PART_TABS[selected.type] ?? "template")}
+                  onClick={() =>
+                    onOpenTab(PART_TABS[selected.type] ?? "template")
+                  }
                 >
                   {t("storeSite.editor.builder.editPart")}
                 </Button>
@@ -331,15 +380,24 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
                     pages={pages}
                     storeId={storeId}
                     showItems={selected.type !== T.TEXT}
-                    onChange={(change) => builder.updateSection(selected.key, change)}
+                    onChange={(change) =>
+                      builder.updateSection(selected.key, change)
+                    }
                   />
                 )}
                 <PieceFields
                   section={selected}
                   pages={pages}
                   storeId={storeId}
-                  onChange={(change) => builder.updateSection(selected.key, change)}
+                  onChange={(change) =>
+                    builder.updateSection(selected.key, change)
+                  }
                 />
+                {WITH_IMAGE_LOOK.includes(selected.type) && (
+                  <div className="mt-3">
+                    <ImageLookCard editor={editor} place="block" />
+                  </div>
+                )}
               </>
             )}
           </Card>

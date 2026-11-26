@@ -3,7 +3,7 @@ import "./styles.scss";
 import React, { useEffect, useState } from "react";
 
 import { App, Button, Modal, Upload } from "antd";
-import ImgCrop from "antd-img-crop";
+import ImageEditUpload from "../ImageEditor/ImageEditUpload";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
 
@@ -145,7 +145,7 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
       destroyOnHidden
     >
       <div className="content-edit-avatar-modal">
-        <ImgCrop rotationSlider modalTitle={t("common.editImage")}>
+        <ImageEditUpload>
           <Upload
             action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
             listType="picture-circle"
@@ -158,7 +158,7 @@ const EditAvatarModal: React.FC<Props> = ({ isVisible, onCancel, onOk }) => {
           >
             {fileList.length === 1 ? null : uploadButton}
           </Upload>
-        </ImgCrop>
+        </ImageEditUpload>
 
         <div className="flex mt-8">
           <Button

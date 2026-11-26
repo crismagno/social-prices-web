@@ -36,7 +36,7 @@ export const PieceImage = ({ block, step }: IBlockProps) => {
 
   return (
     <figure className={`${styles.picture} ${styles.item}`} style={step(0)}>
-      <div className={styles.pictureFrame} data-shine>
+      <div className={styles.pictureFrame} data-photo="block" data-shine>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={getImageUrl(image.imageUrl)} alt={image.text ?? ""} loading="lazy" />
       </div>
@@ -123,7 +123,7 @@ export const PieceBox = ({ block, step, context }: IBlockProps) => (
         style={step(index)}
       >
         {column.imageUrl && (
-          <div className={styles.boxImage} data-shine>
+          <div className={styles.boxImage} data-photo="block" data-shine>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={getImageUrl(column.imageUrl)} alt="" loading="lazy" />
           </div>

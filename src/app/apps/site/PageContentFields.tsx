@@ -32,7 +32,7 @@ interface Props {
 
 type TMediaChoice = "NONE" | StoreSitesEnum.AboutMediaType;
 
-/** The texts of a page and the image or video beside them. */
+/** The heading and texts of a page, and the image or video beside them. */
 const PageContentFields = ({ storeId, content, update }: Props) => {
   const { t } = useLanguageData();
 
@@ -56,6 +56,20 @@ const PageContentFields = ({ storeId, content, update }: Props) => {
 
   return (
     <>
+      <Form.Item
+        label={t("storeSite.editor.pages.contentTitle")}
+        extra={t("storeSite.editor.pages.contentTitleHint")}
+      >
+        <Input
+          maxLength={80}
+          allowClear
+          value={content.title ?? ""}
+          onChange={(event) =>
+            update(() => ({ title: event.target.value || null }))
+          }
+        />
+      </Form.Item>
+
       <div className="font-medium mb-2">
         {t("storeSite.editor.about.texts")}
       </div>
