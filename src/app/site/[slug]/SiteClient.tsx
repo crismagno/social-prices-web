@@ -108,6 +108,7 @@ const SiteClient = ({ data, pageSlug }: Props) => {
         products={products}
         cart={cart}
         checkout={site.checkout}
+        onProductOpen={setOpenProductId}
       />
     </div>
   );

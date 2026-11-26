@@ -10,7 +10,13 @@ import {
   IStoreSiteCartButton,
   siteCartButtonOf,
 } from "../../../shared/business/store-sites/store-site-cart-button";
-import { siteCheckoutOf } from "../../../shared/business/store-sites/store-site-checkout";
+import {
+  CART_BUTTON_LABEL_MAX as CHECKOUT_BUTTON_LABEL_MAX,
+  CART_SHIPPING_NOTE_MAX,
+  CART_TITLE_MAX,
+  IStoreSiteCartLook,
+  siteCheckoutOf,
+} from "../../../shared/business/store-sites/store-site-checkout";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
 
@@ -37,7 +43,29 @@ const CartTab = ({ editor }: Props) => {
       cartButton: siteCartButtonOf({ ...draft.cartButton, ...patch }),
     }));
 
-  const checkoutFields = siteCheckoutOf(editor.draft.checkout).fields;
+  const { fields: checkoutFields, look } = siteCheckoutOf(
+    editor.draft.checkout,
+  );
+
+  // From the draft as it is when applied, like every change of the editor.
+  const setLook = (patch: Partial<IStoreSiteCartLook>): void =>
+    editor.update((draft) => {
+      const checkout = siteCheckoutOf(draft.checkout);
+
+      return {
+        checkout: { ...checkout, look: { ...checkout.look, ...patch } },
+      };
+    });
+
+  // What the window shows of each product, each one on or off.
+  const LOOK_SWITCHES: (keyof IStoreSiteCartLook)[] = [
+    "isPhotoShown",
+    "isBrandShown",
+    "isDescriptionShown",
+    "isTagsShown",
+    "isProductOpened",
+    "isShippingNoteShown",
+  ];
 
   // From the draft as it is when applied, like every change of the editor.
   const setCheckoutField = (
@@ -125,6 +153,90 @@ const CartTab = ({ editor }: Props) => {
                   label: t(`storeSite.editor.hero.cart.sizes.${size}`),
                 }),
               )}
+            />
+          </Form.Item>
+          <Divider orientation="left" plain>
+            {t("storeSite.editor.hero.cart.window.title")}
+          </Divider>
+          <p className="text-xs opacity-70 mb-3">
+            {t("storeSite.editor.hero.cart.window.hint")}
+          </p>
+          <Form.Item label={t("storeSite.editor.hero.cart.window.name")}>
+            <Input
+              maxLength={CART_TITLE_MAX}
+              placeholder={t("storeSite.cart.title")}
+              value={look.title ?? ""}
+              onChange={(event) =>
+                setLook({ title: event.target.value || null })
+              }
+            />
+          </Form.Item>
+          <div className="flex flex-wrap gap-x-6">
+            <Form.Item label={t("storeSite.editor.hero.cart.window.width")}>
+              <Segmented<StoreSitesEnum.CartWidth>
+                value={look.width}
+                onChange={(width) => setLook({ width })}
+                options={Object.values(StoreSitesEnum.CartWidth).map(
+                  (width: StoreSitesEnum.CartWidth) => ({
+                    value: width,
+                    label: t(
+                      `storeSite.editor.hero.cart.window.widths.${width}`,
+                    ),
+                  }),
+                )}
+              />
+            </Form.Item>
+            <Form.Item label={t("storeSite.editor.hero.cart.window.side")}>
+              <Segmented<StoreSitesEnum.CartSide>
+                value={look.side}
+                onChange={(side) => setLook({ side })}
+                options={Object.values(StoreSitesEnum.CartSide).map(
+                  (side: StoreSitesEnum.CartSide) => ({
+                    value: side,
+                    label: t(`storeSite.editor.hero.cart.window.sides.${side}`),
+                  }),
+                )}
+              />
+            </Form.Item>
+          </div>
+          <div className="flex flex-col gap-2 mb-4">
+            {LOOK_SWITCHES.map((key: keyof IStoreSiteCartLook) => (
+              <div
+                key={key}
+                className="flex items-center justify-between gap-2"
+              >
+                <span>{t(`storeSite.editor.hero.cart.window.${key}`)}</span>
+                <Switch
+                  size="small"
+                  checked={look[key] === true}
+                  onChange={(checked: boolean) => setLook({ [key]: checked })}
+                />
+              </div>
+            ))}
+          </div>
+          {look.isShippingNoteShown && (
+            <Form.Item
+              label={t("storeSite.editor.hero.cart.window.shippingNote")}
+            >
+              <Input.TextArea
+                rows={2}
+                maxLength={CART_SHIPPING_NOTE_MAX}
+                placeholder={t("storeSite.cart.shippingNote")}
+                value={look.shippingNote ?? ""}
+                onChange={(event) =>
+                  setLook({ shippingNote: event.target.value || null })
+                }
+              />
+            </Form.Item>
+          )}
+          <Form.Item label={t("storeSite.editor.hero.cart.window.buttonLabel")}>
+            <Input
+              maxLength={CHECKOUT_BUTTON_LABEL_MAX}
+              placeholder={t("storeSite.cart.checkout")}
+              value={look.buttonLabel ?? ""}
+              onChange={(event) =>
+                setLook({ buttonLabel: event.target.value || null })
+              }
             />
           </Form.Item>
           <Divider orientation="left" plain>

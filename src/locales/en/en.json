@@ -2347,7 +2347,16 @@
       "clearCancel": "Keep",
       "unavailable": "No longer available",
       "unavailableHint": "Remove what is no longer available to continue.",
-      "removedProduct": "Product removed"
+      "removedProduct": "Product removed",
+      "each": "{price} each",
+      "items": "{count} items",
+      "oneItem": "1 item",
+      "details": "See details",
+      "increase": "Add one more",
+      "decrease": "Take one out",
+      "size": "Size",
+      "colors": "Colors",
+      "total": "Products total"
     },
     "checkout": {
       "title": "Your details",
@@ -2572,6 +2581,30 @@
               "ADDRESS": "Delivery address",
               "NOTE": "Note to the store"
             }
+          },
+          "window": {
+            "title": "Cart window",
+            "hint": "How the cart looks to visitors and what it shows of each product.",
+            "name": "Window title",
+            "width": "Width",
+            "side": "Opens from the",
+            "widths": {
+              "NARROW": "Narrow",
+              "NORMAL": "Normal",
+              "WIDE": "Wide"
+            },
+            "sides": {
+              "RIGHT": "Right",
+              "LEFT": "Left"
+            },
+            "isPhotoShown": "Show the product photo",
+            "isBrandShown": "Show the brand",
+            "isDescriptionShown": "Show the description",
+            "isTagsShown": "Show size and colors",
+            "isProductOpened": "Open the details when a product is clicked",
+            "isShippingNoteShown": "Show the shipping note",
+            "shippingNote": "Shipping note text",
+            "buttonLabel": "Continue button text"
           }
         }
       },

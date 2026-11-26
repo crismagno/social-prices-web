@@ -308,6 +308,19 @@ namespace StoreSitesEnum {
     NOTE = "NOTE",
   }
 
+  /** How wide the cart window opens. */
+  export enum CartWidth {
+    NARROW = "NARROW",
+    NORMAL = "NORMAL",
+    WIDE = "WIDE",
+  }
+
+  /** The side of the screen the cart window comes from. */
+  export enum CartSide {
+    RIGHT = "RIGHT",
+    LEFT = "LEFT",
+  }
+
   /** Lowercase letters, digits and hyphens, 3 to 40 characters. */
   export const SLUG_REGEX = /^[a-z0-9][a-z0-9-]{1,38}[a-z0-9]$/;
 

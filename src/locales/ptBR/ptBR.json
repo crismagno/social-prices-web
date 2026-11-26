@@ -2350,7 +2350,16 @@
       "clearCancel": "Manter",
       "unavailable": "Não está mais disponível",
       "unavailableHint": "Remova o que não está mais disponível para continuar.",
-      "removedProduct": "Produto removido"
+      "removedProduct": "Produto removido",
+      "each": "{price} cada",
+      "items": "{count} itens",
+      "oneItem": "1 item",
+      "details": "Ver detalhes",
+      "increase": "Adicionar mais um",
+      "decrease": "Tirar um",
+      "size": "Tamanho",
+      "colors": "Cores",
+      "total": "Total dos produtos"
     },
     "checkout": {
       "title": "Seus dados",
@@ -2575,6 +2584,30 @@
               "ADDRESS": "Endereço de entrega",
               "NOTE": "Observação para a loja"
             }
+          },
+          "window": {
+            "title": "Janela do carrinho",
+            "hint": "Como o carrinho aparece para o visitante e o que mostra de cada produto.",
+            "name": "Título da janela",
+            "width": "Largura",
+            "side": "Abre pela",
+            "widths": {
+              "NARROW": "Estreita",
+              "NORMAL": "Normal",
+              "WIDE": "Larga"
+            },
+            "sides": {
+              "RIGHT": "Direita",
+              "LEFT": "Esquerda"
+            },
+            "isPhotoShown": "Mostrar a foto do produto",
+            "isBrandShown": "Mostrar a marca",
+            "isDescriptionShown": "Mostrar a descrição",
+            "isTagsShown": "Mostrar tamanho e cores",
+            "isProductOpened": "Abrir os detalhes ao clicar no produto",
+            "isShippingNoteShown": "Mostrar o aviso de frete",
+            "shippingNote": "Texto do aviso de frete",
+            "buttonLabel": "Texto do botão para continuar"
           }
         }
       },

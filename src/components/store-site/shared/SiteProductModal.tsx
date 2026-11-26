@@ -157,6 +157,8 @@ const SiteProductModal = ({
       footer={null}
       width={980}
       centered
+      // Above the cart, which can open it too.
+      zIndex={1100}
       closable={false}
       keyboard={!isZoomed}
       className={styles.modal}

@@ -17,6 +17,7 @@ import {
 
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import {
+  CART_WIDTH_PX,
   IStoreSiteCheckout,
   siteCheckoutOf,
 } from "../../../shared/business/store-sites/store-site-checkout";
@@ -42,6 +43,8 @@ interface Props {
   cart: ISiteCart;
   /** What the owner asks before an order is sent. */
   checkout: Partial<IStoreSiteCheckout> | null | undefined;
+  /** Shows a product of the cart in full, over the cart. */
+  onProductOpen: (productId: string) => void;
 }
 
 type TStep = "cart" | "checkout" | "done";
@@ -78,12 +81,26 @@ const STATES: { code: string; name: string }[] = brazilStates as {
 }[];
 
 /** The cart, the checkout and the confirmation: the same for every template. */
-const SiteCart = ({ slug, theme, products, cart, checkout }: Props) => {
+const SiteCart = ({
+  slug,
+  theme,
+  products,
+  cart,
+  checkout,
+  onProductOpen,
+}: Props) => {
   const t = useSiteT();
 
   const [form] = Form.useForm<ICheckoutValues>();
 
-  const modes = siteCheckoutOf(checkout).fields;
+  const { fields: modes, look } = siteCheckoutOf(checkout);
+
+  // The owner may keep the cart to a list: then a product does not open.
+  const openProduct = look.isProductOpened ? onProductOpen : undefined;
+
+  const shippingNote: string | null = look.isShippingNoteShown
+    ? (look.shippingNote ?? t("storeSite.cart.shippingNote"))
+    : null;
 
   const typed: Partial<ICheckoutValues> | undefined = Form.useWatch([], form);
 
@@ -123,6 +140,11 @@ const SiteCart = ({ slug, theme, products, cart, checkout }: Props) => {
 
   const orderableLines: ISiteCartLine[] = cart.lines.filter(
     (line: ISiteCartLine) => !refusedIds.includes(line.product._id),
+  );
+
+  const itemCount: number = orderableLines.reduce(
+    (total: number, line: ISiteCartLine) => total + line.quantity,
+    0,
   );
 
   const canCheckout: boolean =
@@ -239,7 +261,7 @@ const SiteCart = ({ slug, theme, products, cart, checkout }: Props) => {
 
   const title: string =
     step === "cart"
-      ? t("storeSite.cart.title")
+      ? (look.title ?? t("storeSite.cart.title"))
       : step === "checkout"
         ? t("storeSite.checkout.title")
         : t("storeSite.checkout.doneTitle");
@@ -269,7 +291,10 @@ const SiteCart = ({ slug, theme, products, cart, checkout }: Props) => {
             </Popconfirm>
           )
         }
-        width={440}
+        width={`min(${CART_WIDTH_PX[look.width]}px, 100vw)`}
+        placement={
+          look.side === StoreSitesEnum.CartSide.LEFT ? "left" : "right"
+        }
         destroyOnClose={false}
       >
         <SiteThemeVars theme={theme}>
@@ -279,35 +304,150 @@ const SiteCart = ({ slug, theme, products, cart, checkout }: Props) => {
                 <Empty description={t("storeSite.cart.empty")} />
               ) : (
                 <div className={styles.lines}>
-                  {orderableLines.map((line: ISiteCartLine) => (
-                    <div key={line.product._id} className={styles.line}>
+                  {orderableLines.map((line: ISiteCartLine) => {
+                    const { product } = line;
+                    const size: string | undefined = product.dimensions?.size;
+                    const colors: string[] = product.colors ?? [];
+
+                    return (
                       <div
-                        className={styles.thumb}
-                        style={{
-                          backgroundImage: cssUrl(line.product.mainUrl),
-                        }}
-                      />
-                      <div>
-                        <div className={styles.name}>{line.product.name}</div>
-                        <div className={styles.muted}>
-                          {formatSiteMoney(line.product.price)}
+                        key={product._id}
+                        className={`${styles.line} ${
+                          look.isPhotoShown ? "" : styles.noPhoto
+                        }`}
+                      >
+                        {look.isPhotoShown && (
+                          <button
+                            type="button"
+                            className={styles.thumb}
+                            style={{
+                              backgroundImage: cssUrl(product.mainUrl),
+                            }}
+                            disabled={!openProduct}
+                            aria-label={`${t("storeSite.cart.details")}: ${product.name}`}
+                            onClick={() => openProduct?.(product._id)}
+                          />
+                        )}
+                        <div className={styles.info}>
+                          {look.isBrandShown && product.brand && (
+                            <div className={styles.brand}>{product.brand}</div>
+                          )}
+                          {openProduct ? (
+                            <button
+                              type="button"
+                              className={styles.name}
+                              title={t("storeSite.cart.details")}
+                              onClick={() => openProduct(product._id)}
+                            >
+                              {product.name}
+                            </button>
+                          ) : (
+                            <div className={styles.name}>{product.name}</div>
+                          )}
+                          {look.isDescriptionShown && product.description && (
+                            <div className={styles.description}>
+                              {product.description}
+                            </div>
+                          )}
+                          {look.isTagsShown && (size || colors.length > 0) && (
+                            <div className={styles.tags}>
+                              {size && (
+                                <span className={styles.tag}>
+                                  {t("storeSite.cart.size")}: {size}
+                                </span>
+                              )}
+                              {colors.length > 0 && (
+                                <span
+                                  className={styles.swatches}
+                                  title={t("storeSite.cart.colors")}
+                                >
+                                  {colors.slice(0, 6).map((color: string) => (
+                                    <span
+                                      key={color}
+                                      className={styles.swatch}
+                                      style={{ background: color }}
+                                    />
+                                  ))}
+                                  {colors.length > 6 && (
+                                    <span className={styles.muted}>
+                                      +{colors.length - 6}
+                                    </span>
+                                  )}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                          <div className={styles.lineFoot}>
+                            <div className={styles.stepper}>
+                              <button
+                                type="button"
+                                aria-label={t("storeSite.cart.decrease")}
+                                onClick={() =>
+                                  cart.setQuantity(
+                                    product._id,
+                                    line.quantity - 1,
+                                  )
+                                }
+                              >
+                                −
+                              </button>
+                              <InputNumber
+                                size="small"
+                                variant="borderless"
+                                controls={false}
+                                min={0}
+                                max={StoreSitesEnum.MAX_ORDER_ITEM_QUANTITY}
+                                value={line.quantity}
+                                aria-label={t("storeSite.cart.quantity")}
+                                onChange={(value: number | null) =>
+                                  cart.setQuantity(product._id, value ?? 0)
+                                }
+                              />
+                              <button
+                                type="button"
+                                aria-label={t("storeSite.cart.increase")}
+                                disabled={
+                                  line.quantity >=
+                                  StoreSitesEnum.MAX_ORDER_ITEM_QUANTITY
+                                }
+                                onClick={() =>
+                                  cart.setQuantity(
+                                    product._id,
+                                    line.quantity + 1,
+                                  )
+                                }
+                              >
+                                +
+                              </button>
+                            </div>
+                            <div className={styles.prices}>
+                              <div className={styles.lineTotal}>
+                                {formatSiteMoney(line.lineTotal)}
+                              </div>
+                              {line.quantity > 1 && (
+                                <div className={styles.muted}>
+                                  {t("storeSite.cart.each", {
+                                    price: formatSiteMoney(product.price),
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                        <InputNumber
-                          size="small"
-                          min={0}
-                          max={StoreSitesEnum.MAX_ORDER_ITEM_QUANTITY}
-                          value={line.quantity}
-                          aria-label={t("storeSite.cart.quantity")}
-                          onChange={(value: number | null) =>
-                            cart.setQuantity(line.product._id, value ?? 0)
-                          }
-                        />
+                        <button
+                          type="button"
+                          className={styles.removeLine}
+                          aria-label={t("storeSite.cart.remove")}
+                          title={t("storeSite.cart.remove")}
+                          onClick={() => cart.remove(product._id)}
+                        >
+                          <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M6 6l12 12M18 6L6 18" />
+                          </svg>
+                        </button>
                       </div>
-                      <div className={styles.lineTotal}>
-                        {formatSiteMoney(line.lineTotal)}
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
 
                   {unavailableIds.map((productId: string) => (
                     <div
@@ -350,20 +490,30 @@ const SiteCart = ({ slug, theme, products, cart, checkout }: Props) => {
                     />
                   )}
 
-                  <div className={styles.summary}>
-                    <span>{t("storeSite.cart.subtotal")}</span>
-                    <span>
-                      {formatSiteMoney(
-                        orderableLines.reduce(
-                          (total: number, line: ISiteCartLine) =>
-                            total + line.lineTotal,
-                          0,
-                        ),
-                      )}
-                    </span>
-                  </div>
-                  <div className={styles.note}>
-                    {t("storeSite.cart.shippingNote")}
+                  <div className={styles.summaryCard}>
+                    <div className={styles.summaryRow}>
+                      <span>{t("storeSite.cart.total")}</span>
+                      <span>
+                        {itemCount === 1
+                          ? t("storeSite.cart.oneItem")
+                          : t("storeSite.cart.items", { count: itemCount })}
+                      </span>
+                    </div>
+                    <div className={styles.summary}>
+                      <span>{t("storeSite.cart.subtotal")}</span>
+                      <span>
+                        {formatSiteMoney(
+                          orderableLines.reduce(
+                            (total: number, line: ISiteCartLine) =>
+                              total + line.lineTotal,
+                            0,
+                          ),
+                        )}
+                      </span>
+                    </div>
+                    {shippingNote && (
+                      <div className={styles.note}>{shippingNote}</div>
+                    )}
                   </div>
 
                   <Button
@@ -374,7 +524,7 @@ const SiteCart = ({ slug, theme, products, cart, checkout }: Props) => {
                     disabled={!canCheckout}
                     onClick={() => setStep("checkout")}
                   >
-                    {t("storeSite.cart.checkout")}
+                    {look.buttonLabel ?? t("storeSite.cart.checkout")}
                   </Button>
                 </>
               )}
@@ -507,9 +657,9 @@ const SiteCart = ({ slug, theme, products, cart, checkout }: Props) => {
                 <span>{t("storeSite.cart.subtotal")}</span>
                 <span>{formatSiteMoney(cart.subtotal)}</span>
               </div>
-              <div className={styles.note}>
-                {t("storeSite.cart.shippingNote")}
-              </div>
+              {shippingNote && (
+                <div className={styles.note}>{shippingNote}</div>
+              )}
 
               <Button
                 type="primary"
