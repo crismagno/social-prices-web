@@ -2992,6 +2992,9 @@
           "sizesHint": "Title, line under it and picture. One left empty follows the site."
         },
         "inMenu": "Show in the menu",
+        "icon": "Icon in the menu",
+        "iconNone": "None",
+        "iconHint": "Shown before the name of the page in the menu.",
         "label": "Name in the menu",
         "labelHint": "Empty shows the name of the kind of page.",
         "slug": "Address of the page",
@@ -3202,7 +3205,15 @@
           "TEAM": "Team",
           "GLOBAL": "World",
           "LOCK": "Lock",
-          "CUSTOMER_SERVICE": "Support"
+          "CUSTOMER_SERVICE": "Support",
+          "HOME": "Home",
+          "SHOP": "Shop",
+          "BAG": "Bag",
+          "TAG": "Tag",
+          "INFO": "Info",
+          "QUESTION": "Question",
+          "PHONE": "Phone",
+          "MAIL": "Mail"
         },
         "samples": {
           "TEAM": {

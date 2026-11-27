@@ -2995,6 +2995,9 @@
           "sizesHint": "Título, linha abaixo dele e foto. O que ficar vazio segue o site."
         },
         "inMenu": "Mostrar no menu",
+        "icon": "Ícone no menu",
+        "iconNone": "Nenhum",
+        "iconHint": "Aparece antes do nome da página no menu.",
         "label": "Nome no menu",
         "labelHint": "Vazio mostra o nome do tipo de página.",
         "slug": "Endereço da página",
@@ -3205,7 +3208,15 @@
           "TEAM": "Equipe",
           "GLOBAL": "Mundo",
           "LOCK": "Cadeado",
-          "CUSTOMER_SERVICE": "Atendimento"
+          "CUSTOMER_SERVICE": "Atendimento",
+          "HOME": "Casa",
+          "SHOP": "Loja",
+          "BAG": "Sacola",
+          "TAG": "Etiqueta",
+          "INFO": "Informação",
+          "QUESTION": "Pergunta",
+          "PHONE": "Telefone",
+          "MAIL": "E-mail"
         },
         "samples": {
           "TEAM": {

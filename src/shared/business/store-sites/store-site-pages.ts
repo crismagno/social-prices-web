@@ -30,6 +30,8 @@ export interface IStoreSitePage {
   /** The name in the menu; empty, the site names it by its kind. */
   label: string | null;
   isInMenu: boolean;
+  /** The icon beside its name in the menu; empty, none. */
+  icon: StoreSitesEnum.FeatureIcon | null;
   /** The title at the top of the page; empty, the name in the menu. */
   title: string | null;
   /** A line under the title. */
@@ -81,6 +83,7 @@ const readyPage = (
   ],
   label: null,
   isInMenu,
+  icon: null,
   title: null,
   intro: null,
   content: emptyPageContent(),
@@ -105,6 +108,8 @@ export const sitePagesOf = (
     .filter((page: IStoreSitePage) => !!page && typeof page.type === "string")
     .map((page: IStoreSitePage) => ({
       ...page,
+      // A page saved before the icon existed has none.
+      icon: page.icon ?? null,
       // A page saved before the heading existed has none.
       content: { ...emptyPageContent(), ...(page.content ?? {}) },
       faq: page.faq ?? [],

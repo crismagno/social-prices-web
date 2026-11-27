@@ -394,6 +394,14 @@ namespace StoreSitesEnum {
     GLOBAL = "GLOBAL",
     LOCK = "LOCK",
     CUSTOMER_SERVICE = "CUSTOMER_SERVICE",
+    HOME = "HOME",
+    SHOP = "SHOP",
+    BAG = "BAG",
+    TAG = "TAG",
+    INFO = "INFO",
+    QUESTION = "QUESTION",
+    PHONE = "PHONE",
+    MAIL = "MAIL",
   }
 
   /** How the chat asks a field before it starts. */

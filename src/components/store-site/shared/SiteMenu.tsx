@@ -10,6 +10,7 @@ import {
   sitePagesOf,
 } from "../../../shared/business/store-sites/store-site-pages";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
+import FeatureIcon from "./blocks/FeatureIcon";
 import styles from "./SiteMenu.module.css";
 import useSiteT from "./useSiteT";
 
@@ -75,6 +76,11 @@ const SiteMenu = ({ pages, siteSlug, currentKey, hasAbout }: Props) => {
       aria-current={page.key === currentKey ? "page" : undefined}
       {...extra}
     >
+      {page.icon && (
+        <span className={styles.icon} aria-hidden="true">
+          <FeatureIcon icon={page.icon} />
+        </span>
+      )}
       {labelOf(page)}
     </a>
   );
