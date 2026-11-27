@@ -38,7 +38,11 @@ export const PieceImage = ({ block, step }: IBlockProps) => {
     <figure className={`${styles.picture} ${styles.item}`} style={step(0)}>
       <div className={styles.pictureFrame} data-photo="block" data-shine>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={getImageUrl(image.imageUrl)} alt={image.text ?? ""} loading="lazy" />
+        <img
+          src={getImageUrl(image.imageUrl)}
+          alt={image.text ?? ""}
+          loading="lazy"
+        />
       </div>
       {image.text && <figcaption>{image.text}</figcaption>}
     </figure>
@@ -111,10 +115,20 @@ export const PieceDivider = ({ block, step }: IBlockProps) => {
 };
 
 /** One to three columns side by side: a picture, a title, words, a button. */
+// How many boxes go side by side: all of them up to four, then rows of four
+// when they fill them evenly and of three when they do not.
+const boxColumnsOf = (count: number): number =>
+  count <= 4 ? count : count % 4 === 0 ? 4 : 3;
+
 export const PieceBox = ({ block, step, context }: IBlockProps) => (
   <div
     className={styles.box}
-    style={{ "--box-columns": block.items.length } as React.CSSProperties}
+    style={
+      {
+        "--box-columns": boxColumnsOf(block.items.length),
+      } as React.CSSProperties
+    }
+    data-columns={boxColumnsOf(block.items.length)}
   >
     {block.items.map((column: IStoreSiteBlockItem, index: number) => (
       <article

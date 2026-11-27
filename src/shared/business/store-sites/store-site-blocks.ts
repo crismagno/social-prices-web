@@ -103,7 +103,7 @@ export interface IStoreSiteBlock {
 
 /** Sections of the whole site, every page together. */
 export const MAX_BLOCKS: number = 60;
-export const MAX_SECTION_BUTTONS: number = 3;
+export const MAX_SECTION_BUTTONS: number = 20;
 /** The most sections one item of a menu of tabs shows. */
 export const MAX_TAB_SECTIONS: number = 12;
 export const SPACER_LIMITS = { min: 8, max: 240, initial: 48 } as const;
@@ -140,7 +140,7 @@ export const maxItemsOf = (type: StoreSitesEnum.BlockType): number => {
     case StoreSitesEnum.BlockType.FAQ:
       return 20;
     case StoreSitesEnum.BlockType.BOX:
-      return 3;
+      return 20;
     case StoreSitesEnum.BlockType.IMAGE:
       return 1;
     case StoreSitesEnum.BlockType.ABOUT:
