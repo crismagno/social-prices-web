@@ -203,12 +203,16 @@ const Riviera = ({
                   (product: IPublicSiteProduct, index: number) => (
                     <Reveal key={product._id} delay={(index % 4) * 0.08}>
                       <article
+                        data-photo-card="product"
                         data-card
                         className={`${styles.product} ${
                           product.isAvailable ? "" : styles.soldOut
                         }`}
                       >
-                        <div className={styles.productInner}>
+                        <div
+                          data-photo-card="product"
+                          className={styles.productInner}
+                        >
                           <div
                             className={styles.productPhotoClip}
                             data-part="0"

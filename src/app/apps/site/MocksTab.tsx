@@ -111,7 +111,7 @@ const MocksTab = ({ editor, storeId }: Props) => {
       run(mock._id, async () => {
         const full: IStoreSiteMock = await methods.findMock(mock._id);
 
-        editor.openContent(full.content ?? {});
+        editor.openContent(full.content ?? {}, mock.name);
         message.success(t("storeSite.editor.mocks.opened"));
       });
 

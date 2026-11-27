@@ -239,6 +239,7 @@ const Mare = ({
               (product: IPublicSiteProduct, index: number) => (
                 <Reveal key={product._id} delay={(index % 4) * 0.08}>
                   <article
+                    data-photo-card="product"
                     data-card
                     className={`${styles.item} ${
                       product.isAvailable ? "" : styles.soldOut

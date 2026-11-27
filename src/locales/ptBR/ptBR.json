@@ -3490,7 +3490,7 @@
         "empty": "Nenhum modelo guardado ainda.",
         "full": "Você já guardou {limit} modelos, o limite da sua conta. Exclua um ou peça ao suporte para aumentar.",
         "open": "Abrir no editor",
-        "opened": "Modelo aberto no editor. Salve para colocá-lo no site.",
+        "opened": "Modelo aberto no editor. Salve para colocá-lo no site, ou volte ao anterior.",
         "openConfirm": "Abrir o modelo no editor?",
         "openConfirmHint": "As mudanças ainda não salvas no editor serão substituídas pelo modelo.",
         "overwrite": "Atualizar",
@@ -3501,7 +3501,10 @@
         "remove": "Excluir",
         "removeConfirm": "Excluir este modelo?",
         "cancel": "Cancelar",
-        "updatedAt": "Atualizado em {date}"
+        "updatedAt": "Atualizado em {date}",
+        "openedBanner": "O modelo “{name}” está aberto no editor.",
+        "undo": "Voltar ao anterior",
+        "keep": "Manter modelo"
       }
     },
     "footer": {

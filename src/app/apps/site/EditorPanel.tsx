@@ -328,6 +328,37 @@ const EditorPanel = ({
 
       {/* Saving, always within reach. */}
       <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700">
+        {/* A mock was opened over what the editor had: the way back stays in
+            sight, whatever tab is open, until the owner keeps the mock. */}
+        {editor.openedMockName && (
+          <Alert
+            className="mb-3"
+            type="info"
+            showIcon
+            message={t("storeSite.editor.mocks.openedBanner").replace(
+              "{name}",
+              editor.openedMockName,
+            )}
+            action={
+              <div className="flex flex-col gap-1">
+                <Button
+                  size="small"
+                  icon={<UndoOutlined />}
+                  onClick={editor.undoOpenContent}
+                >
+                  {t("storeSite.editor.mocks.undo")}
+                </Button>
+                <Button
+                  size="small"
+                  type="text"
+                  onClick={editor.keepOpenContent}
+                >
+                  {t("storeSite.editor.mocks.keep")}
+                </Button>
+              </div>
+            }
+          />
+        )}
         {firstProblem && (
           <Alert
             className="mb-3"

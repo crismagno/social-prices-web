@@ -3487,7 +3487,7 @@
         "empty": "No mock saved yet.",
         "full": "You already keep {limit} mocks, your account's limit. Delete one or ask support to raise it.",
         "open": "Open in the editor",
-        "opened": "Mock opened in the editor. Save to put it on the site.",
+        "opened": "Mock opened in the editor. Save to put it on the site, or go back.",
         "openConfirm": "Open the mock in the editor?",
         "openConfirmHint": "Changes not saved in the editor will be replaced by the mock.",
         "overwrite": "Update",
@@ -3498,7 +3498,10 @@
         "remove": "Delete",
         "removeConfirm": "Delete this mock?",
         "cancel": "Cancel",
-        "updatedAt": "Updated {date}"
+        "updatedAt": "Updated {date}",
+        "openedBanner": "The mock “{name}” is open in the editor.",
+        "undo": "Go back",
+        "keep": "Keep mock"
       }
     },
     "footer": {

@@ -13,6 +13,8 @@ import {
   SendOutlined,
 } from "@ant-design/icons";
 
+import EmojiPickerButton from "../../../components/common/EmojiPicker/EmojiPickerButton";
+import { insertEmoji } from "../../../components/common/EmojiPicker/insert-emoji";
 import { useImageEditStep } from "../../../components/common/ImageEditor/useImageEditStep";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import {
@@ -98,6 +100,16 @@ export default function CustomerChatsComposer({
     setFile(picked);
     inputRef.current?.focus();
   };
+
+  // The emoji lands where the cursor is, over what is selected.
+  const pickEmoji = (emoji: string): void =>
+    insertEmoji(
+      inputRef.current?.resizableTextArea?.textArea,
+      text,
+      emoji,
+      STORE_CHAT_MAX_TEXT,
+      setText,
+    );
 
   const send = async (): Promise<void> => {
     if (!canSend) {
@@ -232,6 +244,12 @@ export default function CustomerChatsComposer({
               onClick={() => fileInputRef.current?.click()}
               aria-label={t("chats.media.attach")}
               title={t("chats.media.attach")}
+            />
+
+            <EmojiPickerButton
+              label={t("chats.reply.emoji")}
+              disabled={isSending}
+              onPick={pickEmoji}
             />
 
             <Input.TextArea

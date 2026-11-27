@@ -61,7 +61,13 @@ export interface IStoreSiteEditor {
    * Puts a saved mock in the editor. The address stays, and so does whether
    * the site is online: nothing changes on the site until the owner saves.
    */
-  openContent: (content: Partial<ISaveStoreSite>) => void;
+  openContent: (content: Partial<ISaveStoreSite>, mockName: string) => void;
+  /** The mock open in the editor, while what was there before can come back. */
+  openedMockName: string | null;
+  /** Puts back what the editor had before the first mock was opened. */
+  undoOpenContent: () => void;
+  /** Keeps the mock: the way back is no longer offered. */
+  keepOpenContent: () => void;
   changeTemplate: (
     templateId: StoreSitesEnum.Template,
     useDefaultColors: boolean,
@@ -166,6 +172,11 @@ const useStoreSiteEditor = (store: IStore | null): IStoreSiteEditor => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [slugError, setSlugError] = useState<string | null>(null);
+  // What the editor had before a mock was opened, to go back to it.
+  const [beforeMock, setBeforeMock] = useState<{
+    draft: ISaveStoreSite;
+    mockName: string;
+  } | null>(null);
 
   const storeId: string | null = store?._id ?? null;
 
@@ -175,6 +186,7 @@ const useStoreSiteEditor = (store: IStore | null): IStoreSiteEditor => {
     setSaved(null);
     setStoreProducts([]);
     setSlugError(null);
+    setBeforeMock(null);
 
     if (!store || !storeId) {
       return;
@@ -262,21 +274,40 @@ const useStoreSiteEditor = (store: IStore | null): IStoreSiteEditor => {
     // Depends on the store itself: its name is the default title.
   }, [store]);
 
-  const openContent = useCallback((content: Partial<ISaveStoreSite>) => {
-    setDraft((current: ISaveStoreSite | null) =>
-      current
-        ? {
-            // Checked as a loaded site is; what the mock lacks comes from the
-            // draft, so a mock saved before an option still opens whole.
-            ...toDraft({
-              ...current,
-              ...content,
-              slug: current.slug,
-            } as unknown as IStoreSite),
-          }
-        : current,
-    );
-  }, []);
+  const openContent = useCallback(
+    (content: Partial<ISaveStoreSite>, mockName: string) => {
+      if (!draft) {
+        return;
+      }
+
+      // Opening one mock after another still goes back to what was there
+      // before the first.
+      setBeforeMock((previous) => ({
+        draft: previous?.draft ?? draft,
+        mockName,
+      }));
+
+      setDraft(
+        // Checked as a loaded site is; what the mock lacks comes from the
+        // draft, so a mock saved before an option still opens whole.
+        toDraft({
+          ...draft,
+          ...content,
+          slug: draft.slug,
+        } as unknown as IStoreSite),
+      );
+    },
+    [draft],
+  );
+
+  const undoOpenContent = useCallback(() => {
+    if (beforeMock) {
+      setDraft(beforeMock.draft);
+      setBeforeMock(null);
+    }
+  }, [beforeMock]);
+
+  const keepOpenContent = useCallback(() => setBeforeMock(null), []);
 
   const changeTemplate = useCallback(
     (templateId: StoreSitesEnum.Template, useDefaultColors: boolean) =>
@@ -393,6 +424,9 @@ const useStoreSiteEditor = (store: IStore | null): IStoreSiteEditor => {
     update,
     resetToDefaults,
     openContent,
+    openedMockName: beforeMock?.mockName ?? null,
+    undoOpenContent,
+    keepOpenContent,
     changeTemplate,
     save,
     publish: useCallback(() => setPublished(true), [setPublished]),

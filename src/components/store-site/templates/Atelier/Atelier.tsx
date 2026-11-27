@@ -168,7 +168,11 @@ const Atelier = ({
           <section className={styles.sections}>
             {sections.map((section: IStoreSiteSection, index: number) => (
               <Reveal key={section.key} delay={index * 0.12} effect="zoom">
-                <article data-card data-photo-card="section" className={styles.step}>
+                <article
+                  data-card
+                  data-photo-card="section"
+                  className={styles.step}
+                >
                   {section.imageUrl && (
                     <div
                       data-photo="section"
@@ -219,6 +223,7 @@ const Atelier = ({
                   (product: IPublicSiteProduct, index: number) => (
                     <Reveal key={product._id} delay={(index % 4) * 0.08}>
                       <article
+                        data-photo-card="product"
                         data-card
                         className={`${styles.product} ${
                           product.isAvailable ? "" : styles.soldOut

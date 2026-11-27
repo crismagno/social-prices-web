@@ -303,6 +303,11 @@
   border-radius: var(--img-product-radius) !important;
 }
 
+/* The whole product card takes the shape: what is inside it is cut to it. */
+.imgProductShape [data-photo-card="product"] {
+  overflow: hidden !important;
+}
+
 /* What draws the picture inside takes the same outline, frame and all. */
 .imgProductShape [data-photo="product"] > img,
 .imgProductShape [data-photo="product"] > [style*="background-image"] {
