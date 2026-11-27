@@ -50,6 +50,7 @@ import { IInboxConversation } from "../../../shared/business/inbox/inbox.types";
 import { conversationAppUrl } from "../../chats/chats-links";
 import StoreChatStartModal from "./StoreChatStartModal";
 import { useCustomerChats } from "./useCustomerChats";
+import CustomerNotesTab from "./CustomerNotesTab";
 import CustomerProductsTable from "./CustomerProductsTable";
 import InviteCustomerButton from "./InviteCustomerButton";
 
@@ -603,6 +604,16 @@ export default function CustomerPage() {
               key: "3",
               label: t("customers.productsBought"),
               children: <CustomerProductsTable customerId={customerId} />,
+            },
+            {
+              key: "4",
+              label: t("notes.title"),
+              children: (
+                <CustomerNotesTab
+                  customerId={customerId}
+                  customerName={customer.name ?? ""}
+                />
+              ),
             },
           ]}
         />

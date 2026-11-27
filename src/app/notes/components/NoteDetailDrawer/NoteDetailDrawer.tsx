@@ -46,7 +46,10 @@ const buildFormSchema = (t: (key: string) => string) =>
 
 type TFormSchema = z.infer<ReturnType<typeof buildFormSchema>>;
 
-const initialValues = (note: INote | null): TFormSchema => ({
+const initialValues = (
+  note: INote | null,
+  defaultCustomerIds: string[] = [],
+): TFormSchema => ({
   title: note?.title ?? "",
   text: note?.text ?? "",
   color: note?.color ?? null,
@@ -54,7 +57,7 @@ const initialValues = (note: INote | null): TFormSchema => ({
   status: note?.status ?? NotesEnum.Status.PENDING,
   tagsIds: note?.tagsIds ?? [],
   categoriesIds: note?.categoriesIds ?? [],
-  customerIds: note?.customerIds ?? [],
+  customerIds: note?.customerIds ?? defaultCustomerIds,
   saleIds: note?.saleIds ?? [],
   storeIds: note?.storeIds ?? [],
 });
@@ -65,6 +68,8 @@ interface Props {
   tags: ITag[];
   categories: ICategory[];
   stores: IStore[];
+  /** The customers a new note starts linked to: the one whose page opened it. */
+  defaultCustomerIds?: string[];
   onClose: () => void;
   onOk: (note: INote) => void;
 }
@@ -75,6 +80,7 @@ export const NoteDetailDrawer: React.FC<Props> = ({
   tags,
   categories,
   stores,
+  defaultCustomerIds,
   onClose,
   onOk,
 }) => {
@@ -100,8 +106,10 @@ export const NoteDetailDrawer: React.FC<Props> = ({
 
   useEffect(() => {
     if (isOpen) {
-      reset(initialValues(note));
+      reset(initialValues(note, defaultCustomerIds));
     }
+    // The defaults are read when the drawer opens, not followed after.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, note, reset]);
 
   // Customers reuse the same SelectCustomer used on the sale creation screen
