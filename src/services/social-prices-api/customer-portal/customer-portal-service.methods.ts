@@ -3,6 +3,7 @@
 import {
   ICustomerPortalDashboard,
   ICustomerPortalSale,
+  ICustomerPortalSite,
   ICustomerPortalStore,
 } from "../../../shared/business/customer-portal/customer-portal.types";
 import {
@@ -52,6 +53,16 @@ export default class CustomerPortalServiceMethods extends ServiceMethodsBase {
     const response = await this._fetchAxios.get<ICustomerPortalStore[]>(
       `${this._socialPricesApiV1}${CustomerPortalServiceEnum.Methods.STORES}`,
       { headers: this._headers() },
+    );
+
+    return response.data;
+  }
+
+  // The sites that are online, narrowed by what was typed.
+  public async findSites(search?: string): Promise<ICustomerPortalSite[]> {
+    const response = await this._fetchAxios.get<ICustomerPortalSite[]>(
+      `${this._socialPricesApiV1}${CustomerPortalServiceEnum.Methods.SITES}`,
+      { headers: this._headers(), params: search ? { search } : undefined },
     );
 
     return response.data;

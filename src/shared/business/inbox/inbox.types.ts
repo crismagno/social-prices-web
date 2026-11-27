@@ -36,6 +36,8 @@ export interface IInboxChat {
   lastMessageChannel: InboxEnum.Channel;
   lastMessageDirection: InboxEnum.Direction;
   unreadCount: number;
+  // Set aside by the user: shown apart, until the person writes again.
+  isInLimbo: boolean;
 }
 
 export interface IInboxAttachment {

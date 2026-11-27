@@ -158,7 +158,8 @@
     "chats": "Chats",
     "quickMessages": "Quick messages",
     "myPurchases": "My purchases",
-    "conversations": "Conversations"
+    "conversations": "Conversations",
+    "sites": "Sites"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -2116,7 +2117,19 @@
       "editedAt": "Edited on"
     },
     "pickHint": "Telegram, Messenger and Instagram, together by customer.",
-    "openInApp": "Open in {app}"
+    "openInApp": "Open in {app}",
+    "limbo": {
+      "active": "Active",
+      "tab": "Limbo",
+      "tabHint": "Chats set aside. They come back by themselves when the person writes again.",
+      "send": "Limbo",
+      "sendHint": "Set this chat aside: it leaves the main list and stops counting as unread. It comes back by itself if the person writes again.",
+      "restore": "Resume",
+      "restoreHint": "Bring this chat back to the main list.",
+      "sent": "Chat moved to the limbo.",
+      "restored": "Chat back in the main list.",
+      "empty": "No chat in the limbo."
+    }
   },
   "quickMessages": {
     "title": "Quick messages",
@@ -2268,7 +2281,19 @@
     "totalSpentHint": "On completed purchases",
     "openAmountHint": "Still to pay",
     "nothingOpen": "All paid",
-    "noPurchasesHint": "When a store registers a purchase for you, it shows up here."
+    "noPurchasesHint": "When a store registers a purchase for you, it shows up here.",
+    "sites": {
+      "title": "Sites",
+      "subtitle": "Stores with a site online to visit and buy from",
+      "search": "Search by the name of the store or the site",
+      "none": "No site is online right now.",
+      "noneFound": "No site found for this search.",
+      "onlyShows": "Showcase only",
+      "visitAndBuy": "Visit and buy",
+      "visit": "See the site",
+      "heading": "Sites to visit",
+      "count": "{count} site(s) online"
+    }
   },
   "accountMode": {
     "hint": "See your account as a customer (your purchases) or as a company (your sales)",

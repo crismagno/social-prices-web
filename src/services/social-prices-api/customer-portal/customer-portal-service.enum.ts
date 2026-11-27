@@ -4,6 +4,7 @@ namespace CustomerPortalServiceEnum {
     SALE = "/customer-portal/sales/:saleId",
     DASHBOARD = "/customer-portal/dashboard",
     STORES = "/customer-portal/stores",
+    SITES = "/customer-portal/sites",
   }
 }
 

@@ -4,6 +4,7 @@ namespace InboxServiceEnum {
     MESSAGES = "/inbox/messages",
     MESSAGE = "/inbox/messages/:messageId",
     READ = "/inbox/read",
+    LIMBO = "/inbox/limbo",
     CONVERSATION_CUSTOMER = "/inbox/conversations/:conversationId/customer",
     CONVERSATION_CUSTOMER_CREATE = "/inbox/conversations/:conversationId/customer/create",
     CONVERSATION_TYPING = "/inbox/conversations/:conversationId/typing",

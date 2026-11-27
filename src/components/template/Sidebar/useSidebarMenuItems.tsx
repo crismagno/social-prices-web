@@ -313,6 +313,7 @@ export const useSidebarMenuItems = (
       Urls.CUSTOMER_PURCHASES,
       <ShoppingCartOutlined />,
     ),
+    getItem(t("navigation.sites"), Urls.CUSTOMER_SITES, <ShopOutlined />),
     getItem(
       labelWithCount(t("navigation.chats"), unreadInStoreChat),
       Urls.CUSTOMER_CHATS,
@@ -335,6 +336,7 @@ export const useSidebarMenuItems = (
     Urls.CUSTOMER_DASHBOARD,
     Urls.CUSTOMER_PURCHASES,
     Urls.CUSTOMER_CHATS,
+    Urls.CUSTOMER_SITES,
     Urls.SETTINGS,
     Urls.SUPPORT,
     Urls.TRANSACTIONS,

@@ -11,6 +11,8 @@ import {
   DeleteOutlined,
   ExportOutlined,
   EditOutlined,
+  InboxOutlined,
+  RollbackOutlined,
   ThunderboltOutlined,
   TeamOutlined,
   UserAddOutlined,
@@ -66,6 +68,8 @@ interface Props {
   channel?: InboxEnum.Channel;
   // Removing a message needs an admin or master employee (the API enforces it too).
   canDelete: boolean;
+  // The chat was set aside or brought back.
+  onLimboChanged: (isInLimbo: boolean) => void;
 }
 
 // The longest text each channel that can change a message takes: a caption is
@@ -84,10 +88,39 @@ export default function ChatsThread({
   onSent,
   canDelete,
   channel,
+  onLimboChanged,
 }: Props) {
   const { t } = useLanguageData();
 
   const { message } = App.useApp();
+
+  const [isMovingLimbo, setIsMovingLimbo] = useState<boolean>(false);
+
+  // All of the chat at once: every conversation of the customer (of this
+  // channel, on an app's page), or the one conversation of a person alone.
+  const toggleLimbo = async (): Promise<void> => {
+    const isInLimbo: boolean = !chat.isInLimbo;
+
+    try {
+      setIsMovingLimbo(true);
+
+      await serviceMethodsInstance.inboxServiceMethods.setLimbo(
+        chat.customerId
+          ? { customerId: chat.customerId, channel }
+          : { conversationId: chat.conversations[0]._id },
+        isInLimbo,
+      );
+
+      message.success(
+        t(isInLimbo ? "chats.limbo.sent" : "chats.limbo.restored"),
+      );
+      onLimboChanged(isInLimbo);
+    } catch (error: any) {
+      handleClientError(error);
+    } finally {
+      setIsMovingLimbo(false);
+    }
+  };
 
   const { token } = theme.useToken();
 
@@ -380,6 +413,27 @@ export default function ChatsThread({
               </Button>
             </Tooltip>
           )}
+
+          <Tooltip
+            title={t(
+              chat.isInLimbo
+                ? "chats.limbo.restoreHint"
+                : "chats.limbo.sendHint",
+            )}
+          >
+            <Button
+              size="small"
+              icon={chat.isInLimbo ? <RollbackOutlined /> : <InboxOutlined />}
+              loading={isMovingLimbo}
+              onClick={toggleLimbo}
+              aria-label={t(
+                chat.isInLimbo ? "chats.limbo.restore" : "chats.limbo.send",
+              )}
+            >
+              {!isCompact &&
+                t(chat.isInLimbo ? "chats.limbo.restore" : "chats.limbo.send")}
+            </Button>
+          </Tooltip>
 
           <Tooltip title={t("chats.actions.manage")}>
             <Button

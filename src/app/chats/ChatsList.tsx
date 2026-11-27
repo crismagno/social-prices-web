@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 
 import { Avatar, Badge, Checkbox, Input, Segmented, Spin, theme } from "antd";
 
-import { SearchOutlined } from "@ant-design/icons";
+import { InboxOutlined, SearchOutlined } from "@ant-design/icons";
 
 import ChannelIcon from "../../components/common/ChannelIcon/ChannelIcon";
 import useLanguageData from "../../data/context/language/useLanguageData";
@@ -61,22 +61,38 @@ export default function ChatsList({
   // Only the people nobody has tied to a customer yet, to go through them.
   const [onlyUnlinked, setOnlyUnlinked] = useState<boolean>(false);
 
-  const unlinkedCount: number = useMemo(
-    () => chats.filter((chat: IInboxChat) => !chat.customerId).length,
+  // The chats set aside live apart, out of the way until wanted again.
+  const [view, setView] = useState<"ACTIVE" | "LIMBO">("ACTIVE");
+
+  const limboCount: number = useMemo(
+    () => chats.filter((chat: IInboxChat) => chat.isInLimbo).length,
     [chats],
+  );
+
+  const inView: IInboxChat[] = useMemo(
+    () =>
+      chats.filter((chat: IInboxChat) =>
+        view === "LIMBO" ? chat.isInLimbo : !chat.isInLimbo,
+      ),
+    [chats, view],
+  );
+
+  const unlinkedCount: number = useMemo(
+    () => inView.filter((chat: IInboxChat) => !chat.customerId).length,
+    [inView],
   );
 
   const unnamed: string = t("chats.unnamed");
 
   const visible: IInboxChat[] = useMemo(
     () =>
-      chats.filter(
+      inView.filter(
         (chat: IInboxChat) =>
           (!onlyUnlinked || !chat.customerId) &&
           (channel === "ALL" || chat.channels.includes(channel)) &&
           chatMatches(chat, chatName(chat, unnamed), search),
       ),
-    [chats, channel, onlyUnlinked, search, unnamed],
+    [inView, channel, onlyUnlinked, search, unnamed],
   );
 
   // A message with a file and no text shows what the file is, in the user's language.
@@ -98,6 +114,23 @@ export default function ChatsList({
         className="flex flex-col gap-2 p-3"
         style={{ borderBottom: `1px solid ${token.colorBorderSecondary}` }}
       >
+        <Segmented
+          block
+          value={view}
+          onChange={(value) => setView(value as "ACTIVE" | "LIMBO")}
+          options={[
+            { value: "ACTIVE", label: t("chats.limbo.active") },
+            {
+              value: "LIMBO",
+              label: (
+                <span title={t("chats.limbo.tabHint")}>
+                  <InboxOutlined /> {t("chats.limbo.tab")} ({limboCount})
+                </span>
+              ),
+            },
+          ]}
+        />
+
         <Input
           allowClear
           prefix={<SearchOutlined style={{ color: token.colorTextTertiary }} />}
@@ -146,7 +179,7 @@ export default function ChatsList({
             className="p-6 text-center text-sm"
             style={{ color: token.colorTextTertiary }}
           >
-            {t("chats.empty.title")}
+            {view === "LIMBO" ? t("chats.limbo.empty") : t("chats.empty.title")}
           </div>
         ) : (
           visible.map((chat: IInboxChat) => {

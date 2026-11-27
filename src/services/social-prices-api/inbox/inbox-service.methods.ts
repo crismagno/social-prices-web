@@ -73,6 +73,16 @@ export default class InboxServiceMethods extends ServiceMethodsBase {
     );
   }
 
+  // Sets a chat aside, or brings it back. It also comes back by itself when
+  // the person writes again.
+  public async setLimbo(scope: IInboxScope, isInLimbo: boolean): Promise<void> {
+    await this._fetchAxios.post(
+      this._url(InboxServiceEnum.Methods.LIMBO),
+      { ...scope, isInLimbo },
+      { headers: this._headers() },
+    );
+  }
+
   public async markRead(scope: IInboxScope): Promise<void> {
     await this._fetchAxios.post(
       this._url(InboxServiceEnum.Methods.READ),

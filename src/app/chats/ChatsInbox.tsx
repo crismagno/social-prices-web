@@ -135,6 +135,17 @@ export default function ChatsInbox({ channel }: Props) {
       canDelete={employee?.level !== EmployeesEnum.Level.EMPLOYEE}
       onBack={isNarrow ? () => setSelectedKey(null) : undefined}
       onSent={() => refetchChats(true)}
+      onLimboChanged={(isInLimbo: boolean) => {
+        // Set aside, it leaves the main list: nothing stays open in its place.
+        if (isInLimbo) {
+          setSelectedKey(null);
+        }
+
+        refetchChats(true);
+
+        // What it had unread no longer counts in the menu.
+        fetchApps(true);
+      }}
       onChanged={(row?: IInboxChat) => {
         // The conversation may now belong to another row: follow it.
         if (row) {

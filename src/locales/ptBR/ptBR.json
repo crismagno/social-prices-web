@@ -158,7 +158,8 @@
     "chats": "Chats",
     "quickMessages": "Mensagens rápidas",
     "myPurchases": "Minhas compras",
-    "conversations": "Conversas"
+    "conversations": "Conversas",
+    "sites": "Sites"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -2119,7 +2120,19 @@
       "editedAt": "Editada em"
     },
     "pickHint": "Telegram, Messenger e Instagram, juntos por cliente.",
-    "openInApp": "Abrir no {app}"
+    "openInApp": "Abrir no {app}",
+    "limbo": {
+      "active": "Ativos",
+      "tab": "Limbo",
+      "tabHint": "Chats deixados de lado. Voltam sozinhos quando a pessoa escrever de novo.",
+      "send": "Limbo",
+      "sendHint": "Deixar este chat de lado: sai da lista principal e não conta como não lido. Volta sozinho se a pessoa escrever de novo.",
+      "restore": "Retomar",
+      "restoreHint": "Trazer este chat de volta para a lista principal.",
+      "sent": "Chat movido para o limbo.",
+      "restored": "Chat de volta à lista principal.",
+      "empty": "Nenhum chat no limbo."
+    }
   },
   "quickMessages": {
     "title": "Mensagens rápidas",
@@ -2271,7 +2284,19 @@
     "totalSpentHint": "Em compras concluídas",
     "openAmountHint": "Ainda a pagar",
     "nothingOpen": "Tudo pago",
-    "noPurchasesHint": "Quando uma loja registrar uma compra para você, ela aparece aqui."
+    "noPurchasesHint": "Quando uma loja registrar uma compra para você, ela aparece aqui.",
+    "sites": {
+      "title": "Sites",
+      "subtitle": "Lojas com site no ar para visitar e comprar",
+      "search": "Buscar por nome da loja ou do site",
+      "none": "Nenhum site no ar no momento.",
+      "noneFound": "Nenhum site encontrado para essa busca.",
+      "onlyShows": "Só vitrine",
+      "visitAndBuy": "Visitar e comprar",
+      "visit": "Ver o site",
+      "heading": "Sites para visitar",
+      "count": "{count} site(s) no ar"
+    }
   },
   "accountMode": {
     "hint": "Veja sua conta como cliente (suas compras) ou como empresa (suas vendas)",
