@@ -1906,6 +1906,15 @@
     }
   },
   "notes": {
+    "views": {
+      "year": "Ano",
+      "month": "Mês",
+      "week": "Semana",
+      "day": "Dia",
+      "today": "Hoje",
+      "previous": "Anterior",
+      "next": "Próximo"
+    },
     "title": "Notas",
     "subtitle": "Lembretes do que importa",
     "note": "Nota",

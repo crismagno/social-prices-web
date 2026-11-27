@@ -54,6 +54,7 @@ import { IStore } from '../../shared/business/stores/stores.interface';
 import TagsEnum from '../../shared/business/tags/tags.enum';
 import { ITag } from '../../shared/business/tags/tags.interface';
 import DatesEnum from '../../shared/utils/dates/dates.enum';
+import { richTextToPlain } from '../../shared/utils/rich-text/rich-text';
 import { createTableState } from '../../shared/utils/table/table-state';
 import {
   ITableStateRequest,
@@ -140,9 +141,15 @@ export default function NotesPage() {
     refetch: refetchCalendar,
   } = useNotesCalendarMarkers(calendarRequest);
 
-  const [drawer, setDrawer] = useState<{ isOpen: boolean; note: INote | null }>(
-    { isOpen: false, note: null },
-  );
+  const [drawer, setDrawer] = useState<{
+    isOpen: boolean;
+    note: INote | null;
+    // A new note started from a moment of the calendar.
+    date?: Dayjs | null;
+  }>({ isOpen: false, note: null });
+
+  // Bumped when notes change, so the hours of the calendar are asked again.
+  const [calendarReloadKey, setCalendarReloadKey] = useState<number>(0);
 
   const [viewedNote, setViewedNote] = useState<INote | null>(null);
 
@@ -180,6 +187,8 @@ export default function NotesPage() {
     useCustomersByIds(visibleCustomerIds);
 
   const refreshAll = async (): Promise<void> => {
+    setCalendarReloadKey((key: number) => key + 1);
+
     await Promise.all([refetchGrid(), refetchCalendar()]);
   };
 
@@ -226,6 +235,13 @@ export default function NotesPage() {
           selectedDate={selectedDate}
           onSelectDate={setSelectedDate}
           onPanelChange={setCalendarMonth}
+          search={tableStateRequest?.search}
+          filters={combinedFilters}
+          reloadKey={calendarReloadKey}
+          onOpenNote={setViewedNote}
+          onCreateAt={(date: Dayjs) =>
+            setDrawer({ isOpen: true, note: null, date })
+          }
         />
       </div>
 
@@ -286,7 +302,7 @@ export default function NotesPage() {
                     <span>{title}</span>
 
                     <span className="text-[11px] leading-tight italic text-gray-400 dark:text-gray-500 truncate max-w-xs">
-                      {note.text}
+                      {richTextToPlain(note.text)}
                     </span>
                   </div>
                 </div>
@@ -447,6 +463,7 @@ export default function NotesPage() {
         tags={tags}
         categories={categories}
         stores={stores}
+        defaultDate={drawer.date ?? null}
         onClose={() => setDrawer({ isOpen: false, note: null })}
         onOk={async () => {
           setDrawer({ isOpen: false, note: null });

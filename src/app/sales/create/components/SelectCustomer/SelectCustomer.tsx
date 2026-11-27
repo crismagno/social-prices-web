@@ -9,6 +9,7 @@ import ImagesEnum from "../../../../../shared/utils/images/images.enum";
 import { createTableState } from "../../../../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../../../../shared/utils/table/table-state.interface";
 import { useFindCustomersByOwnerOfUserTableState } from "../../../../customers/useFindCustomersByOwnerOfUserTableState";
+import { useCustomersByIds } from "../../../../notes/useCustomersByIds";
 
 const containerHeight: number = 260;
 
@@ -52,6 +53,17 @@ export const SelectCustomer: React.FC<Props> = ({
 
   const { customers } =
     useFindCustomersByOwnerOfUserTableState(tableStateRequest);
+
+  // The customers already picked that the loaded page does not list: without
+  // an option of their own, the select would show their ids.
+  const unlistedIds: string[] = isMultiple
+    ? (value ?? []).filter(
+        (id: string) =>
+          !customers?.some((customer: ICustomer) => customer._id === id),
+      )
+    : [];
+
+  const unlistedNames: Record<string, string> = useCustomersByIds(unlistedIds);
 
   const onSearch = (searchValue: string) => {
     setTableStateRequest({
@@ -149,7 +161,9 @@ export const SelectCustomer: React.FC<Props> = ({
                     : ImagesEnum.FilesNames.DefaultAvatarImage
                 }
                 // Shown by antd when the image fails to load.
-                icon={<img src={ImagesEnum.FilesNames.DefaultAvatarImage} alt="" />}
+                icon={
+                  <img src={ImagesEnum.FilesNames.DefaultAvatarImage} alt="" />
+                }
                 size={"small"}
                 className="mr-2"
               />
@@ -157,6 +171,19 @@ export const SelectCustomer: React.FC<Props> = ({
             </div>
           </Select.Option>
         )}
+
+      {unlistedIds.map((id: string) => (
+        <Select.Option key={id} value={id}>
+          <div className="flex items-center">
+            <Avatar
+              src={ImagesEnum.FilesNames.DefaultAvatarImage}
+              size={"small"}
+              className="mr-2"
+            />
+            <span>{unlistedNames[id] ?? "…"}</span>
+          </div>
+        </Select.Option>
+      ))}
 
       {customers?.map((customer: ICustomer) => (
         <Select.Option key={customer._id} value={customer._id}>
@@ -168,7 +195,9 @@ export const SelectCustomer: React.FC<Props> = ({
                   : ImagesEnum.FilesNames.DefaultAvatarImage
               }
               // Shown by antd when the image fails to load.
-              icon={<img src={ImagesEnum.FilesNames.DefaultAvatarImage} alt="" />}
+              icon={
+                <img src={ImagesEnum.FilesNames.DefaultAvatarImage} alt="" />
+              }
               size={"small"}
               className="mr-2"
             />

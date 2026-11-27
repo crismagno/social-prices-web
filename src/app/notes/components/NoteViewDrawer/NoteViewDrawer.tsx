@@ -6,6 +6,7 @@ import moment from "moment";
 import useLanguageData from "../../../../data/context/language/useLanguageData";
 import { INote } from "../../../../shared/business/notes/note.interface";
 import NotesEnum from "../../../../shared/business/notes/notes.enum";
+import RichTextView from "../../../../components/common/RichText/RichTextView";
 import DatesEnum from "../../../../shared/utils/dates/dates.enum";
 
 interface Props {
@@ -93,7 +94,7 @@ export const NoteViewDrawer: React.FC<Props> = ({
 
           <h3 className="mt-5 mb-2 font-semibold">{t("notes.text")}</h3>
 
-          <p className="whitespace-pre-wrap break-words">{note.text}</p>
+          <RichTextView value={note.text} />
         </>
       )}
     </Drawer>

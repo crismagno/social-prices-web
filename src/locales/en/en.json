@@ -1903,6 +1903,15 @@
     }
   },
   "notes": {
+    "views": {
+      "year": "Year",
+      "month": "Month",
+      "week": "Week",
+      "day": "Day",
+      "today": "Today",
+      "previous": "Previous",
+      "next": "Next"
+    },
     "title": "Notes",
     "subtitle": "Reminders for what matters",
     "note": "Note",

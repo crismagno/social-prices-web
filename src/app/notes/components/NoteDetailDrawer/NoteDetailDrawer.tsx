@@ -14,12 +14,13 @@ import HrCustom from "../../../../components/common/HrCustom/HrCustom";
 import { ColorPickerCustomAntd } from "../../../../components/custom/antd/ColorPickerCustomAntd/ColorPickerCustomAntd";
 import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
-import { TextareaCustomAntd } from "../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
+import { RichTextCustomAntd } from "../../../../components/custom/antd/RichTextCustomAntd/RichTextCustomAntd";
 import useLanguageData from "../../../../data/context/language/useLanguageData";
 import CreateNoteDto from "../../../../services/social-prices-api/notes/dto/createNote.dto";
 import { serviceMethodsInstance } from "../../../../services/social-prices-api/service-methods";
 import { ICategory } from "../../../../shared/business/categories/categories.interface";
 import { parseColorPickerToHexString } from "../../../../shared/utils/antd/color-picker/color-picker";
+import { richTextToPlain } from "../../../../shared/utils/rich-text/rich-text";
 import { INote } from "../../../../shared/business/notes/note.interface";
 import NotesEnum from "../../../../shared/business/notes/notes.enum";
 import { ISale } from "../../../../shared/business/sales/sale.interface";
@@ -33,7 +34,13 @@ import { SelectCustomer } from "../../../sales/create/components/SelectCustomer/
 const buildFormSchema = (t: (key: string) => string) =>
   z.object({
     title: z.string().trim().nonempty(t("notes.enterTitle")),
-    text: z.string().trim().nonempty(t("notes.enterText")),
+    // Formatted text: what counts is that it has words.
+    text: z
+      .string()
+      .refine(
+        (value: string) => !!richTextToPlain(value).trim(),
+        t("notes.enterText"),
+      ),
     color: z.any().nullable(),
     date: z.any().refine((value) => !!value, t("notes.date")),
     status: z.string().nonempty(),
@@ -49,11 +56,12 @@ type TFormSchema = z.infer<ReturnType<typeof buildFormSchema>>;
 const initialValues = (
   note: INote | null,
   defaultCustomerIds: string[] = [],
+  defaultDate: Dayjs | null = null,
 ): TFormSchema => ({
   title: note?.title ?? "",
   text: note?.text ?? "",
   color: note?.color ?? null,
-  date: note ? dayjs(note.date) : null,
+  date: note ? dayjs(note.date) : defaultDate,
   status: note?.status ?? NotesEnum.Status.PENDING,
   tagsIds: note?.tagsIds ?? [],
   categoriesIds: note?.categoriesIds ?? [],
@@ -70,6 +78,8 @@ interface Props {
   stores: IStore[];
   /** The customers a new note starts linked to: the one whose page opened it. */
   defaultCustomerIds?: string[];
+  /** The moment a new note starts at: the one picked on the calendar. */
+  defaultDate?: Dayjs | null;
   onClose: () => void;
   onOk: (note: INote) => void;
 }
@@ -81,6 +91,7 @@ export const NoteDetailDrawer: React.FC<Props> = ({
   categories,
   stores,
   defaultCustomerIds,
+  defaultDate,
   onClose,
   onOk,
 }) => {
@@ -106,7 +117,7 @@ export const NoteDetailDrawer: React.FC<Props> = ({
 
   useEffect(() => {
     if (isOpen) {
-      reset(initialValues(note, defaultCustomerIds));
+      reset(initialValues(note, defaultCustomerIds, defaultDate));
     }
     // The defaults are read when the drawer opens, not followed after.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -173,12 +184,10 @@ export const NoteDetailDrawer: React.FC<Props> = ({
           </Col>
 
           <Col xs={24}>
-            <TextareaCustomAntd
+            <RichTextCustomAntd
               controller={{ control, name: "text" }}
               label={t("notes.text")}
               placeholder={t("notes.enterText")}
-              rows={4}
-              maxLength={4000}
               errorMessage={errors.text?.message}
             />
           </Col>

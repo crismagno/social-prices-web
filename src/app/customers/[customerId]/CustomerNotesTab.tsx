@@ -21,6 +21,7 @@ import { INote } from "../../../shared/business/notes/note.interface";
 import NotesEnum from "../../../shared/business/notes/notes.enum";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
+import { richTextToPlain } from "../../../shared/utils/rich-text/rich-text";
 import { createTableState } from "../../../shared/utils/table/table-state";
 import { ITableStateRequest } from "../../../shared/utils/table/table-state.interface";
 import { useFindCategoriesByType } from "../../categories/useFindCategoriesByType";
@@ -157,7 +158,7 @@ export default function CustomerNotesTab({ customerId, customerName }: Props) {
                   <span>{title}</span>
 
                   <span className="text-[11px] leading-tight italic text-gray-400 dark:text-gray-500 truncate max-w-xs">
-                    {note.text}
+                    {richTextToPlain(note.text)}
                   </span>
                 </div>
               </div>
