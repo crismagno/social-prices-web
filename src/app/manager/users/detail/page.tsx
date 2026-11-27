@@ -28,6 +28,7 @@ import {
   FEATURE_KEYS,
   TOGGLEABLE_FEATURE_KEYS,
   FeatureKey,
+  LIMITS_WHEN_UNSET,
 } from "../../../../shared/business/users/user-limits.interface";
 import UsersEnum from "../../../../shared/business/users/users.enum";
 import { useFindUserByManagerId } from "./useFindUserByManagerId";
@@ -316,7 +317,12 @@ export default function ManagerUserDetailPage() {
                           extra={
                             typeof limitsValues?.[key] === "number"
                               ? undefined
-                              : t("limits.unlimited")
+                              : typeof LIMITS_WHEN_UNSET[key] === "number"
+                                ? t("limits.whenUnset").replace(
+                                    "{limit}",
+                                    String(LIMITS_WHEN_UNSET[key]),
+                                  )
+                                : t("limits.unlimited")
                           }
                         >
                           <InputNumber

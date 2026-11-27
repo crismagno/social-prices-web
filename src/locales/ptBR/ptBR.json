@@ -1048,8 +1048,10 @@
       "stores": "Lojas",
       "categories": "Categorias",
       "tags": "Tags",
-      "quick-messages": "Mensagens rápidas"
-    }
+      "quick-messages": "Mensagens rápidas",
+      "site-mocks": "Modelos do site"
+    },
+    "whenUnset": "Padrão: {limit}"
   },
   "support": {
     "title": "Suporte",
@@ -2473,7 +2475,8 @@
         "pages": "Páginas",
         "chat": "Chat",
         "blocks": "Blocos",
-        "builder": "Construir"
+        "builder": "Construir",
+        "mocks": "Modelos"
       },
       "images": {
         "places": {
@@ -2713,7 +2716,8 @@
         "pages": "As páginas do site além da inicial, na ordem do menu. Adicione as suas.",
         "chat": "Uma janela de chat no site: o visitante escreve e você responde em Conversas.",
         "builder": "Monte cada página: arraste peças para a pré-visualização, mude as faixas de lugar e clique numa delas para editar.",
-        "cart": "O botão da sacola no topo do site e o que é pedido antes de enviar um pedido."
+        "cart": "O botão da sacola no topo do site e o que é pedido antes de enviar um pedido.",
+        "mocks": "Guarde o site como está no editor para ter um exemplo pronto. Depois abra o modelo para continuar mudando: o site no ar só muda quando você salvar."
       },
       "problems": {
         "hero": "A entrada precisa de um título.",
@@ -3230,7 +3234,8 @@
           "removeConfirm": "Apagar?",
           "dropHere": "Soltar aqui",
           "dragHere": "Arraste peças para cá",
-          "empty": "Ainda vazia: preencha no painel"
+          "empty": "Ainda vazia: preencha no painel",
+          "tabsNote": "No site, o menu mostra as seções ligadas aos itens: uma por vez ou todas, com o menu rolando até cada uma."
         },
         "fields": {
           "variant": "Estilo",
@@ -3254,7 +3259,12 @@
           "width": "Largura",
           "tone": "Fundo",
           "height": "Altura",
-          "divider": "Estilo"
+          "divider": "Estilo",
+          "menuStyle": "Formato do menu",
+          "menuMode": "Como mostra as seções",
+          "menuSide": "Lado do menu lateral",
+          "menuLook": "Visual dos itens",
+          "menuEffect": "Animação das seções"
         },
         "values": {
           "align": {
@@ -3275,6 +3285,29 @@
             "LINE": "Linha",
             "DOTS": "Pontos",
             "WAVE": "Onda"
+          },
+          "menuStyle": {
+            "TABS": "Abas no topo",
+            "SIDE": "Menu lateral"
+          },
+          "menuMode": {
+            "SWITCH": "Uma por vez",
+            "SCROLL": "Todas, rolando"
+          },
+          "menuSide": {
+            "LEFT": "Esquerda",
+            "RIGHT": "Direita"
+          },
+          "menuLook": {
+            "PILL": "Pílula",
+            "UNDERLINE": "Sublinhado",
+            "BOX": "Caixa"
+          },
+          "menuEffect": {
+            "SLIDE": "Deslizar",
+            "FADE": "Aparecer",
+            "ZOOM": "Aproximar",
+            "NONE": "Nenhuma"
           }
         },
         "samples": {
@@ -3303,6 +3336,12 @@
                 "text": "No prazo combinado."
               }
             ]
+          },
+          "TABS": {
+            "items": [
+              "Primeiro item",
+              "Segundo item"
+            ]
           }
         },
         "types": {
@@ -3326,7 +3365,8 @@
           "STATS": "Números",
           "STEPS": "Passo a passo",
           "FAQ": "Perguntas",
-          "CTA": "Chamada final"
+          "CTA": "Chamada final",
+          "TABS": "Menu de abas"
         },
         "hints": {
           "HERO": "O topo com título, botão e imagem (aba Entrada)",
@@ -3349,8 +3389,40 @@
           "STATS": "Números grandes que contam",
           "STEPS": "Como funciona, em etapas",
           "FAQ": "Perguntas que abrem e fecham",
-          "CTA": "Um banner com botão de ação"
+          "CTA": "Um banner com botão de ação",
+          "TABS": "Itens que mostram, um de cada vez, outras seções desta página"
+        },
+        "tabs": {
+          "title": "Título acima do menu",
+          "items": "Itens do menu",
+          "hint": "Dê um nome a cada item e escolha a seção desta página que ele mostra. No site, só a seção do item escolhido aparece; cada seção vai em um item só.",
+          "namePlaceholder": "Nome do item",
+          "sectionPlaceholder": "Seção que este item mostra",
+          "noSections": "Adicione outras seções a esta página primeiro.",
+          "add": "Adicionar item"
         }
+      },
+      "mocks": {
+        "usage": "Modelos guardados",
+        "defaultName": "Modelo {number}",
+        "name": "Nome do modelo",
+        "save": "Guardar",
+        "created": "Modelo guardado.",
+        "empty": "Nenhum modelo guardado ainda.",
+        "full": "Você já guardou {limit} modelos, o limite da sua conta. Exclua um ou peça ao suporte para aumentar.",
+        "open": "Abrir no editor",
+        "opened": "Modelo aberto no editor. Salve para colocá-lo no site.",
+        "openConfirm": "Abrir o modelo no editor?",
+        "openConfirmHint": "As mudanças ainda não salvas no editor serão substituídas pelo modelo.",
+        "overwrite": "Atualizar",
+        "overwriteHint": "Troca o conteúdo do modelo pelo que está no editor agora.",
+        "overwriteConfirm": "Trocar o conteúdo do modelo pelo que está no editor?",
+        "updated": "Modelo atualizado.",
+        "rename": "Renomear",
+        "remove": "Excluir",
+        "removeConfirm": "Excluir este modelo?",
+        "cancel": "Cancelar",
+        "updatedAt": "Atualizado em {date}"
       }
     },
     "footer": {
@@ -3467,7 +3539,8 @@
       "rating": "{count} de 5 estrelas",
       "previous": "Anterior",
       "next": "Próximo",
-      "ctaButton": "Fale com a gente"
+      "ctaButton": "Fale com a gente",
+      "tabsLabel": "Escolha o que ver"
     }
   },
   "imageEditor": {

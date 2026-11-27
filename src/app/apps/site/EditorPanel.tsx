@@ -19,6 +19,7 @@ import {
   ReadOutlined,
   PictureOutlined,
   SaveOutlined,
+  SnippetsOutlined,
   UndoOutlined,
   ShoppingCartOutlined,
   ShoppingOutlined,
@@ -37,6 +38,7 @@ import BuilderTab from "./BuilderTab";
 import CartTab from "./CartTab";
 import ChatTab from "./ChatTab";
 import FooterTab from "./FooterTab";
+import MocksTab from "./MocksTab";
 import PagesTab from "./PagesTab";
 import useAvailableHeight from "./useAvailableHeight";
 import { ISiteBuilder } from "./useSiteBuilder";
@@ -55,7 +57,8 @@ type TTab =
   | "pages"
   | "chat"
   | "footer"
-  | "publish";
+  | "publish"
+  | "mocks";
 
 interface Props {
   editor: IStoreSiteEditor;
@@ -82,6 +85,7 @@ const TABS: { key: TTab; icon: ReactNode }[] = [
   { key: "chat", icon: <CommentOutlined /> },
   { key: "footer", icon: <BorderBottomOutlined /> },
   { key: "publish", icon: <LinkOutlined /> },
+  { key: "mocks", icon: <SnippetsOutlined /> },
 ];
 
 /**
@@ -153,6 +157,7 @@ const EditorPanel = ({
     chat: false,
     footer: false,
     publish: !isSlugValid || !!editor.slugError,
+    mocks: false,
   };
 
   const firstProblem: TTab | undefined = TABS.find(
@@ -199,6 +204,7 @@ const EditorPanel = ({
     chat: <ChatTab editor={editor} />,
     footer: <FooterTab editor={editor} storeId={storeId} />,
     publish: <PublishTab editor={editor} storeId={storeId} />,
+    mocks: <MocksTab editor={editor} storeId={storeId} />,
   };
 
   return (

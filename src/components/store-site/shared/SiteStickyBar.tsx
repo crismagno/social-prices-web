@@ -93,6 +93,19 @@ const SiteStickyBar = ({ site, store, cart, page }: Props) => {
     return () => window.removeEventListener("scroll", check);
   }, [isFixed]);
 
+  // Whatever sticks to the top of the page (a menu of tabs) stops under this
+  // bar while it shows.
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      "--site-sticky-top",
+      isShown ? "60px" : "0px",
+    );
+
+    return () => {
+      document.documentElement.style.removeProperty("--site-sticky-top");
+    };
+  }, [isShown]);
+
   if (!isFixed) {
     return null;
   }

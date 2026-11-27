@@ -19,7 +19,11 @@ import {
   showableSection,
 } from "../../../../shared/business/store-sites/store-site-blocks";
 import { IStoreSiteMarqueeStyle } from "../../../../shared/business/store-sites/store-site-marquee-style";
-import { TPartType } from "../../../../shared/business/store-sites/store-site-layout";
+import {
+  ITabsEntry,
+  TPartType,
+  tabsLayoutOf,
+} from "../../../../shared/business/store-sites/store-site-layout";
 import { IStoreSitePage } from "../../../../shared/business/store-sites/store-site-pages";
 import StoreSitesEnum from "../../../../shared/business/store-sites/store-sites.enum";
 import { TSiteAboutVariant } from "../SiteAbout";
@@ -34,6 +38,7 @@ import BlockTeam from "./BlockTeam";
 import BlockTestimonials from "./BlockTestimonials";
 import MarqueeStyle from "./MarqueeStyle";
 import SectionFrame from "./SectionFrame";
+import SiteTabs from "./SiteTabs";
 import frameStyles from "./SectionFrame.module.css";
 import styles from "./SiteBlocks.module.css";
 import {
@@ -85,8 +90,10 @@ export const SECTION_COMPONENTS: Partial<
   [StoreSitesEnum.BlockType.STEPS]: BlockSteps,
 };
 
-interface IBlockSectionProps
-  extends Omit<Props, "sections" | "renderPart" | "builder" | "marqueeStyle"> {
+interface IBlockSectionProps extends Omit<
+  Props,
+  "sections" | "renderPart" | "builder" | "marqueeStyle"
+> {
   block: IStoreSiteBlock;
 }
 
@@ -106,9 +113,11 @@ const BlockSection = ({
 
   // The order the parts come in, fixed while drawing so the server and the
   // browser agree: the heading's lines, then the items (or the button).
-  const headingLines: number = [block.kicker, block.title, block.subtitle].filter(
-    Boolean,
-  ).length;
+  const headingLines: number = [
+    block.kicker,
+    block.title,
+    block.subtitle,
+  ].filter(Boolean).length;
 
   const turn = (index: number): CSSProperties =>
     ({ "--i": index }) as CSSProperties;
@@ -150,7 +159,10 @@ const BlockSection = ({
         </h2>
       )}
       {block.subtitle && (
-        <p className={`${styles.subtitle} ${styles.item}`} style={headingTurn()}>
+        <p
+          className={`${styles.subtitle} ${styles.item}`}
+          style={headingTurn()}
+        >
           {block.subtitle}
         </p>
       )}
@@ -300,9 +312,25 @@ const BuilderSections = ({
           ? section
           : showableSection(section);
 
-        const content: ReactNode = isPart
-          ? drawPart(section.type as TPartType, renderPart, marqueeStyle)
-          : shown && <BlockSection block={shown} {...rest} />;
+        // A menu of tabs is only its menu here: its sections stay on the
+        // page, where they are picked and edited.
+        const tabs: ITabsEntry[] =
+          section.type === StoreSitesEnum.BlockType.TABS
+            ? section.items
+                .filter((item) => !!item.title?.trim())
+                .map((item) => ({
+                  key: item.key,
+                  label: item.title?.trim() ?? "",
+                  section: null,
+                }))
+            : [];
+
+        const content: ReactNode =
+          section.type === StoreSitesEnum.BlockType.TABS
+            ? tabs.length > 0 && <SiteTabs block={section} entries={tabs} />
+            : isPart
+              ? drawPart(section.type as TPartType, renderPart, marqueeStyle)
+              : shown && <BlockSection block={shown} {...rest} />;
 
         return (
           <Fragment key={section.key}>
@@ -351,27 +379,47 @@ const SiteSections = ({
   builder,
   marqueeStyle,
   ...rest
-}: Props) =>
-  builder ? (
-    <BuilderSections
-      sections={sections}
-      renderPart={renderPart}
-      builder={builder}
-      marqueeStyle={marqueeStyle}
-      {...rest}
-    />
-  ) : (
-  <>
-    {sections.map((section: IStoreSiteBlock) =>
-      isPartType(section.type) ? (
-        <Fragment key={section.key}>
-          {drawPart(section.type as TPartType, renderPart, marqueeStyle)}
-        </Fragment>
-      ) : (
-        <BlockSection key={section.key} block={section} {...rest} />
-      ),
-    )}
-  </>
-);
+}: Props) => {
+  if (builder) {
+    return (
+      <BuilderSections
+        sections={sections}
+        renderPart={renderPart}
+        builder={builder}
+        marqueeStyle={marqueeStyle}
+        {...rest}
+      />
+    );
+  }
+
+  const draw = (section: IStoreSiteBlock): ReactNode =>
+    isPartType(section.type) ? (
+      drawPart(section.type as TPartType, renderPart, marqueeStyle)
+    ) : (
+      <BlockSection block={section} {...rest} />
+    );
+
+  // A section a menu of tabs shows is drawn inside that menu only.
+  const { taken, entriesOf } = tabsLayoutOf(sections);
+
+  return (
+    <>
+      {sections
+        .filter((section: IStoreSiteBlock) => !taken.has(section.key))
+        .map((section: IStoreSiteBlock) =>
+          section.type === StoreSitesEnum.BlockType.TABS ? (
+            <SiteTabs
+              key={section.key}
+              block={section}
+              entries={entriesOf(section.key)}
+              draw={draw}
+            />
+          ) : (
+            <Fragment key={section.key}>{draw(section)}</Fragment>
+          ),
+        )}
+    </>
+  );
+};
 
 export default SiteSections;

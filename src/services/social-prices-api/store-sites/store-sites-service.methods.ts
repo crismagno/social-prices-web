@@ -13,6 +13,10 @@ import {
   ISiteChatVisitor,
   ISiteContactForm,
 } from "../../../shared/business/store-sites/store-site-chat";
+import {
+  IStoreSiteMock,
+  IStoreSiteMocksList,
+} from "../../../shared/business/store-sites/store-site-mock";
 import ServiceMethodsBase from "../service-methods.base";
 import StoreSitesServiceEnum from "./store-sites-service.enum";
 
@@ -60,6 +64,59 @@ export default class StoreSitesServiceMethods extends ServiceMethodsBase {
     );
 
     return response.data;
+  }
+
+  public async findMocks(storeId: string): Promise<IStoreSiteMocksList> {
+    const response = await this._fetchAxios.get<IStoreSiteMocksList>(
+      this._url(StoreSitesServiceEnum.Methods.MOCKS, { storeId }),
+      { headers: this._jsonHeaders() },
+    );
+
+    return response.data;
+  }
+
+  public async findMock(mockId: string): Promise<IStoreSiteMock> {
+    const response = await this._fetchAxios.get<IStoreSiteMock>(
+      this._url(StoreSitesServiceEnum.Methods.MOCK, { mockId }),
+      { headers: this._jsonHeaders() },
+    );
+
+    return response.data;
+  }
+
+  public async createMock(
+    storeId: string,
+    name: string,
+    content: ISaveStoreSite,
+  ): Promise<IStoreSiteMock> {
+    const response = await this._fetchAxios.post<IStoreSiteMock>(
+      this._url(StoreSitesServiceEnum.Methods.MOCKS, { storeId }),
+      { name, content },
+      { headers: this._jsonHeaders() },
+    );
+
+    return response.data;
+  }
+
+  /** A new name, a new content, or both. */
+  public async updateMock(
+    mockId: string,
+    change: { name?: string; content?: ISaveStoreSite },
+  ): Promise<IStoreSiteMock> {
+    const response = await this._fetchAxios.put<IStoreSiteMock>(
+      this._url(StoreSitesServiceEnum.Methods.MOCK, { mockId }),
+      change,
+      { headers: this._jsonHeaders() },
+    );
+
+    return response.data;
+  }
+
+  public async removeMock(mockId: string): Promise<void> {
+    await this._fetchAxios.delete(
+      this._url(StoreSitesServiceEnum.Methods.MOCK, { mockId }),
+      { headers: this._jsonHeaders() },
+    );
   }
 
   public async isSlugAvailable(

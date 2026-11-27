@@ -7,6 +7,8 @@ namespace StoreSitesServiceEnum {
     UNPUBLISH = "/store-sites/store/:storeId/unpublish",
     UPLOAD_IMAGE = "/store-sites/store/:storeId/images",
     UPLOAD_VIDEO = "/store-sites/store/:storeId/videos",
+    MOCKS = "/store-sites/store/:storeId/mocks",
+    MOCK = "/store-sites/mocks/:mockId",
     PUBLIC_FIND_BY_SLUG = "/public/store-sites/:slug",
     PUBLIC_CREATE_ORDER = "/public/store-sites/:slug/orders",
     PUBLIC_CHAT_START = "/public/store-sites/:slug/chat",

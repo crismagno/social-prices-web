@@ -139,6 +139,55 @@ const withHero = (
 export const isHeroOnTop = (sections: IStoreSiteBlock[]): boolean =>
   sections[0]?.type === T.HERO && sections[0].isActive;
 
+/** One item of a menu of tabs, with the section it shows when it has one. */
+export interface ITabsEntry {
+  key: string;
+  label: string;
+  section: IStoreSiteBlock | null;
+}
+
+/** A menu of tabs shows any section but the entrance and another menu. */
+export const canBeTab = (section: IStoreSiteBlock): boolean =>
+  section.type !== T.HERO && section.type !== T.TABS;
+
+/**
+ * What the menus of tabs of a page show. Each item with a name takes the
+ * section it points to, when that section is on the page and no item before
+ * it took it; a taken section is drawn only inside its menu, so the page
+ * leaves it out of its own order.
+ */
+export const tabsLayoutOf = (
+  sections: IStoreSiteBlock[],
+): { taken: Set<string>; entriesOf: (tabsKey: string) => ITabsEntry[] } => {
+  const taken: Set<string> = new Set();
+  const entries: Map<string, ITabsEntry[]> = new Map();
+
+  sections
+    .filter((section: IStoreSiteBlock) => section.type === T.TABS)
+    .forEach((tabs: IStoreSiteBlock) => {
+      const own: ITabsEntry[] = [];
+
+      tabs.items.forEach((item) => {
+        const label: string = item.title?.trim() ?? "";
+        const section: IStoreSiteBlock | undefined = sections.find(
+          (each: IStoreSiteBlock) =>
+            each.key === item.sectionKey &&
+            canBeTab(each) &&
+            !taken.has(each.key),
+        );
+
+        if (label && section) {
+          taken.add(section.key);
+          own.push({ key: item.key, label, section });
+        }
+      });
+
+      entries.set(tabs.key, own);
+    });
+
+  return { taken, entriesOf: (tabsKey: string) => entries.get(tabsKey) ?? [] };
+};
+
 /** What visitors see of a page: active sections with something to show. */
 export const visiblePageSections = (
   blocks: IStoreSiteBlock[],
@@ -311,6 +360,16 @@ export const newSection = (
       };
     case T.IMAGE:
       return { ...base, settings, items: [newBlockItem(T.IMAGE)] };
+    case T.TABS:
+      // Two items to name and point at sections of this page.
+      return {
+        ...base,
+        settings,
+        items: [0, 1].map((index: number) => ({
+          ...newBlockItem(T.TABS),
+          title: t(`${SAMPLE}.TABS.items.${index}`),
+        })),
+      };
     default:
       // A video, a spacer or a divider: nothing to say yet.
       return { ...base, settings };

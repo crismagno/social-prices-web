@@ -1,0 +1,413 @@
+/*
+ * A menu of tabs, in the site's own colours whatever the template. Two
+ * layouts (a row on top, a menu down the side) and two ways (one section at
+ * a time, or all of them to scroll to).
+ */
+.wrap {
+  /* How far from the top things stick: under the fixed menu when it shows. */
+  --tabs-top: var(--site-sticky-top, 0px);
+}
+
+.menu {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 44px clamp(16px, 5vw, 56px) 0;
+  text-align: center;
+}
+
+.title {
+  margin: 0 0 18px;
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.15;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.tab {
+  padding: 10px 20px;
+  border-radius: 99px;
+  border: 1px solid color-mix(in srgb, var(--site-text) 18%, transparent);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.tab:hover {
+  border-color: var(--site-primary);
+}
+
+.tab[aria-selected="true"] {
+  background: var(--site-primary);
+  border-color: var(--site-primary);
+  color: var(--site-on-primary, #fff);
+}
+
+.tab:focus-visible,
+.select:focus-visible {
+  outline: 2px solid var(--site-primary);
+  outline-offset: 2px;
+}
+
+/* The same items as a list to pick from: only on a narrow screen. */
+.select {
+  display: none;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--site-text) 22%, transparent);
+  background: var(--site-bg);
+  color: var(--site-text);
+  font: inherit;
+  font-size: 16px;
+}
+
+.note {
+  margin: 12px 0 0;
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+.panels {
+  min-width: 0;
+}
+
+/* Scrolled to: the section stops under whatever sticks to the top. */
+.panel {
+  scroll-margin-top: calc(var(--tabs-top) + 84px);
+}
+
+/* Scrolling with the tabs on top: the menu follows the visitor down. */
+.wrap[data-mode="scroll"][data-style="tabs"]:not([data-builder]) .menu {
+  position: sticky;
+  top: var(--tabs-top);
+  z-index: 40;
+  max-width: none;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background: color-mix(in srgb, var(--site-bg) 92%, transparent);
+  backdrop-filter: blur(12px);
+  transition: top 0.3s;
+}
+
+.wrap[data-mode="scroll"][data-style="tabs"]:not([data-builder]) .title {
+  display: none;
+}
+
+/* The menu down the side, the sections beside it. */
+@media (min-width: 861px) {
+  .wrap[data-style="side"]:not([data-builder]) {
+    display: grid;
+    grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+    align-items: start;
+    max-width: 1360px;
+    margin: 0 auto;
+    padding-left: clamp(16px, 3vw, 40px);
+  }
+
+  .wrap[data-style="side"]:not([data-builder]) .menu {
+    position: sticky;
+    top: calc(var(--tabs-top) + 24px);
+    margin: 0;
+    padding: 56px 0 24px;
+    text-align: left;
+    transition: top 0.3s;
+  }
+
+  .wrap[data-style="side"] .list {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 4px;
+  }
+
+  .wrap[data-style="side"] .tab {
+    width: 100%;
+    border-radius: 12px;
+    border-color: transparent;
+    text-align: left;
+  }
+
+  .wrap[data-style="side"] .tab:hover {
+    background: color-mix(in srgb, var(--site-primary) 10%, transparent);
+  }
+
+  .wrap[data-style="side"] .tab[aria-selected="true"]:hover {
+    background: var(--site-primary);
+  }
+
+  /* In the builder only the menu is drawn: a narrow column, as on the site. */
+  .wrap[data-style="side"][data-builder] .menu {
+    max-width: 320px;
+    margin-left: clamp(16px, 5vw, 56px);
+    text-align: left;
+  }
+}
+
+/* A narrow screen: a list to pick from, whichever layout was chosen. */
+@media (max-width: 860px) {
+  .wrap[data-style="side"] .list {
+    display: none;
+  }
+
+  .wrap[data-style="side"] .select {
+    display: block;
+  }
+
+  .wrap[data-style="side"][data-mode="scroll"]:not([data-builder]) .menu {
+    position: sticky;
+    top: var(--tabs-top);
+    z-index: 40;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background: color-mix(in srgb, var(--site-bg) 92%, transparent);
+    backdrop-filter: blur(12px);
+  }
+
+  .wrap[data-style="side"][data-mode="scroll"]:not([data-builder]) .title {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .list {
+    display: none;
+  }
+
+  .select {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrap .menu {
+    transition: none;
+  }
+}
+
+/* ---- The owner's choices for the menu ---- */
+
+/* The row of tabs to the left instead of the middle. */
+.wrap[data-style="tabs"][data-align="LEFT"] .menu {
+  text-align: left;
+}
+
+.wrap[data-style="tabs"][data-align="LEFT"] .list {
+  justify-content: flex-start;
+}
+
+/* A background behind the menu, from the site's main colour. */
+.wrap[data-tone="SOFT"] .menu {
+  background: color-mix(in srgb, var(--site-primary) 9%, var(--site-bg));
+}
+
+.wrap[data-tone="STRONG"] .menu {
+  background: var(--site-primary);
+  color: var(--site-on-primary, #fff);
+}
+
+.wrap[data-tone="SOFT"] .menu,
+.wrap[data-tone="STRONG"] .menu {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.wrap[data-tone="STRONG"] .tab {
+  border-color: color-mix(in srgb, currentColor 35%, transparent);
+}
+
+.wrap[data-tone="STRONG"] .tab[aria-selected="true"] {
+  background: var(--site-on-primary, #fff);
+  border-color: var(--site-on-primary, #fff);
+  color: var(--site-primary);
+}
+
+/* Items underlined: no shape, a line under the chosen one. */
+.wrap[data-look="UNDERLINE"] .tab {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding-inline: 12px;
+}
+
+.wrap[data-look="UNDERLINE"] .tab:hover {
+  background: transparent;
+  border-bottom-color: color-mix(in srgb, currentColor 40%, transparent);
+}
+
+.wrap[data-look="UNDERLINE"] .tab[aria-selected="true"],
+.wrap[data-look="UNDERLINE"] .tab[aria-selected="true"]:hover {
+  background: transparent;
+  border-bottom-color: currentColor;
+  color: var(--site-primary);
+  font-weight: 700;
+}
+
+.wrap[data-look="UNDERLINE"][data-tone="STRONG"] .tab[aria-selected="true"] {
+  color: inherit;
+}
+
+/* Items as boxes: squarer, filled a little even when not chosen. */
+.wrap[data-look="BOX"] .tab {
+  border-radius: 10px;
+  border-color: transparent;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+
+.wrap[data-look="BOX"] .tab[aria-selected="true"] {
+  background: var(--site-primary);
+  color: var(--site-on-primary, #fff);
+}
+
+.wrap[data-look="BOX"][data-tone="STRONG"] .tab[aria-selected="true"] {
+  background: var(--site-on-primary, #fff);
+  color: var(--site-primary);
+}
+
+@media (min-width: 861px) {
+  /* A menu down the side with a background: a card, not a band. */
+  .wrap[data-style="side"]:not([data-builder])[data-tone="SOFT"] .menu,
+  .wrap[data-style="side"]:not([data-builder])[data-tone="STRONG"] .menu {
+    margin-top: 56px;
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  /* The menu on the right: the sections first, the menu after them. */
+  .wrap[data-style="side"][data-side="RIGHT"]:not([data-builder]) {
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 240px);
+    padding-left: 0;
+    padding-right: clamp(16px, 3vw, 40px);
+  }
+
+  .wrap[data-style="side"][data-side="RIGHT"]:not([data-builder]) .menu {
+    order: 2;
+  }
+
+  /* Underlined down the side: the line goes beside the item. */
+  .wrap[data-style="side"][data-look="UNDERLINE"] .tab,
+  .wrap[data-style="side"][data-look="UNDERLINE"] .tab:hover {
+    border-bottom: 0;
+    border-left: 2px solid transparent;
+  }
+
+  .wrap[data-style="side"][data-look="UNDERLINE"] .tab[aria-selected="true"],
+  .wrap[data-style="side"][data-look="UNDERLINE"]
+    .tab[aria-selected="true"]:hover {
+    border-left-color: currentColor;
+  }
+}
+
+/* ---- How a section comes in ---- */
+
+.tab:active {
+  transform: scale(0.96);
+}
+
+.tab {
+  transition:
+    background 0.25s,
+    border-color 0.25s,
+    color 0.25s,
+    transform 0.15s;
+}
+
+@keyframes tabsFade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes tabsSlideForward {
+  from {
+    opacity: 0;
+    transform: translateX(48px);
+  }
+}
+
+@keyframes tabsSlideBack {
+  from {
+    opacity: 0;
+    transform: translateX(-48px);
+  }
+}
+
+@keyframes tabsRise {
+  from {
+    opacity: 0;
+    transform: translateY(36px);
+  }
+}
+
+@keyframes tabsZoom {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+/* One at a time: the picked section comes in, from the side the pick went. */
+.wrap[data-effect="FADE"] .panel[data-enter] {
+  animation: tabsFade 0.45s ease both;
+}
+
+.wrap[data-effect="SLIDE"] .panel[data-enter] {
+  animation: tabsSlideForward 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.wrap[data-effect="SLIDE"][data-direction="back"] .panel[data-enter] {
+  animation-name: tabsSlideBack;
+}
+
+.wrap[data-effect="ZOOM"] .panel[data-enter] {
+  animation: tabsZoom 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.1) both;
+  transform-origin: 50% 20%;
+}
+
+/* Sliding in from the side must not widen the page meanwhile. */
+.wrap[data-mode="switch"][data-effect="SLIDE"] .panels {
+  overflow-x: clip;
+}
+
+/*
+ * Scrolling: each section waits out of sight and comes in when it reaches
+ * the screen. Only once the page is alive, so without scripts all is shown.
+ */
+.wrap[data-mode="scroll"][data-alive]:not([data-effect="NONE"])
+  .panel:not([data-seen]) {
+  opacity: 0;
+}
+
+.wrap[data-mode="scroll"][data-alive][data-effect="FADE"] .panel[data-seen] {
+  animation: tabsFade 0.6s ease both;
+}
+
+.wrap[data-mode="scroll"][data-alive][data-effect="SLIDE"] .panel[data-seen] {
+  animation: tabsRise 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.wrap[data-mode="scroll"][data-alive][data-effect="ZOOM"] .panel[data-seen] {
+  animation: tabsZoom 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrap .panel,
+  .wrap .panel[data-enter],
+  .wrap[data-alive] .panel[data-seen] {
+    animation: none;
+  }
+
+  .wrap[data-mode="scroll"][data-alive] .panel:not([data-seen]) {
+    opacity: 1;
+  }
+
+  .tab:active {
+    transform: none;
+  }
+}

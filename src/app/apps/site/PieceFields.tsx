@@ -45,6 +45,15 @@ const OPTIONS: Partial<
   [T.IMAGE]: ["width", "align"],
   [T.VIDEO]: ["width"],
   [T.BOX]: ["tone", "align", "width"],
+  [T.TABS]: [
+    "menuStyle",
+    "menuSide",
+    "menuMode",
+    "menuEffect",
+    "menuLook",
+    "align",
+    "tone",
+  ],
   [T.SPACER]: ["height"],
   [T.DIVIDER]: ["divider"],
 };
@@ -54,6 +63,11 @@ const VALUES: Record<string, string[]> = {
   width: Object.values(StoreSitesEnum.SectionWidth),
   tone: Object.values(StoreSitesEnum.SectionTone),
   divider: Object.values(StoreSitesEnum.DividerStyle),
+  menuStyle: Object.values(StoreSitesEnum.MenuStyle),
+  menuMode: Object.values(StoreSitesEnum.MenuMode),
+  menuSide: Object.values(StoreSitesEnum.MenuSide),
+  menuLook: Object.values(StoreSitesEnum.MenuLook),
+  menuEffect: Object.values(StoreSitesEnum.MenuEffect),
 };
 
 const move = <V,>(list: V[], from: number, to: number): V[] => {
@@ -80,8 +94,7 @@ const PieceFields = ({ section, pages, storeId, onChange }: Props) => {
   ): void => onChange((current) => ({ buttons: change(current.buttons) }));
 
   const media = section.settings.media;
-  const isEmbed: boolean =
-    media?.type === StoreSitesEnum.AboutMediaType.EMBED;
+  const isEmbed: boolean = media?.type === StoreSitesEnum.AboutMediaType.EMBED;
 
   return (
     <Form layout="vertical">
@@ -118,7 +131,9 @@ const PieceFields = ({ section, pages, storeId, onChange }: Props) => {
               label={t("storeSite.editor.builder.fields.videoLink")}
               extra={t("storeSite.editor.builder.fields.videoLinkHint")}
               validateStatus={
-                media?.url && !embedUrlOf(media.url) && !media.url.includes("/embed/")
+                media?.url &&
+                !embedUrlOf(media.url) &&
+                !media.url.includes("/embed/")
                   ? "warning"
                   : undefined
               }
@@ -156,57 +171,67 @@ const PieceFields = ({ section, pages, storeId, onChange }: Props) => {
 
       {section.type === T.BUTTONS && (
         <Space direction="vertical" size={10} style={{ width: "100%" }}>
-          {section.buttons.map((button: IStoreSiteBlockButton, index: number) => (
-            <Card
-              key={index}
-              size="small"
-              title={`${t("storeSite.editor.builder.fields.button")} ${index + 1}`}
-              extra={
-                <Space size={2}>
-                  <Button
-                    type="text"
-                    size="small"
-                    icon={<ArrowUpOutlined />}
-                    disabled={index === 0}
-                    aria-label={t("storeSite.editor.moveUp")}
-                    onClick={() => setButtons((list) => move(list, index, index - 1))}
-                  />
-                  <Button
-                    type="text"
-                    size="small"
-                    icon={<ArrowDownOutlined />}
-                    disabled={index === section.buttons.length - 1}
-                    aria-label={t("storeSite.editor.moveDown")}
-                    onClick={() => setButtons((list) => move(list, index, index + 1))}
-                  />
-                  <Button
-                    type="text"
-                    size="small"
-                    danger
-                    icon={<DeleteOutlined />}
-                    disabled={section.buttons.length === 1}
-                    aria-label={t("storeSite.editor.remove")}
-                    onClick={() =>
-                      setButtons((list) => list.filter((_, at) => at !== index))
-                    }
-                  />
-                </Space>
-              }
-            >
-              <ButtonFields
-                button={button}
-                pages={pages}
-                withVariant
-                onChange={(patch) =>
-                  setButtons((list) =>
-                    list.map((each, at) =>
-                      at === index ? newBlockButton({ ...each, ...patch }) : each,
-                    ),
-                  )
+          {section.buttons.map(
+            (button: IStoreSiteBlockButton, index: number) => (
+              <Card
+                key={index}
+                size="small"
+                title={`${t("storeSite.editor.builder.fields.button")} ${index + 1}`}
+                extra={
+                  <Space size={2}>
+                    <Button
+                      type="text"
+                      size="small"
+                      icon={<ArrowUpOutlined />}
+                      disabled={index === 0}
+                      aria-label={t("storeSite.editor.moveUp")}
+                      onClick={() =>
+                        setButtons((list) => move(list, index, index - 1))
+                      }
+                    />
+                    <Button
+                      type="text"
+                      size="small"
+                      icon={<ArrowDownOutlined />}
+                      disabled={index === section.buttons.length - 1}
+                      aria-label={t("storeSite.editor.moveDown")}
+                      onClick={() =>
+                        setButtons((list) => move(list, index, index + 1))
+                      }
+                    />
+                    <Button
+                      type="text"
+                      size="small"
+                      danger
+                      icon={<DeleteOutlined />}
+                      disabled={section.buttons.length === 1}
+                      aria-label={t("storeSite.editor.remove")}
+                      onClick={() =>
+                        setButtons((list) =>
+                          list.filter((_, at) => at !== index),
+                        )
+                      }
+                    />
+                  </Space>
                 }
-              />
-            </Card>
-          ))}
+              >
+                <ButtonFields
+                  button={button}
+                  pages={pages}
+                  withVariant
+                  onChange={(patch) =>
+                    setButtons((list) =>
+                      list.map((each, at) =>
+                        at === index
+                          ? newBlockButton({ ...each, ...patch })
+                          : each,
+                      ),
+                    )
+                  }
+                />
+              </Card>
+            ),
+          )}
           <Button
             block
             type="dashed"
@@ -215,7 +240,9 @@ const PieceFields = ({ section, pages, storeId, onChange }: Props) => {
             onClick={() =>
               setButtons((list) => [
                 ...list,
-                newBlockButton({ variant: StoreSitesEnum.ButtonVariant.OUTLINE }),
+                newBlockButton({
+                  variant: StoreSitesEnum.ButtonVariant.OUTLINE,
+                }),
               ])
             }
           >
@@ -227,7 +254,10 @@ const PieceFields = ({ section, pages, storeId, onChange }: Props) => {
 
       {(OPTIONS[section.type] ?? []).map((option) =>
         option === "height" ? (
-          <Form.Item key={option} label={t("storeSite.editor.builder.options.height")}>
+          <Form.Item
+            key={option}
+            label={t("storeSite.editor.builder.options.height")}
+          >
             <Slider
               min={SPACER_LIMITS.min}
               max={SPACER_LIMITS.max}
@@ -237,9 +267,14 @@ const PieceFields = ({ section, pages, storeId, onChange }: Props) => {
             />
           </Form.Item>
         ) : (
-          <Form.Item key={option} label={t(`storeSite.editor.builder.options.${option}`)}>
+          <Form.Item
+            key={option}
+            label={t(`storeSite.editor.builder.options.${option}`)}
+          >
             <Segmented<string>
-              value={(section.settings[option] as string | null) ?? VALUES[option][0]}
+              value={
+                (section.settings[option] as string | null) ?? VALUES[option][0]
+              }
               onChange={(value) => setSettings({ [option]: value })}
               options={VALUES[option].map((value: string) => ({
                 value,

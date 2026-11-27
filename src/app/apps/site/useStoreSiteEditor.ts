@@ -57,6 +57,11 @@ export interface IStoreSiteEditor {
    * is online. Nothing is saved: the owner still has to save, or can reload.
    */
   resetToDefaults: () => void;
+  /**
+   * Puts a saved mock in the editor. The address stays, and so does whether
+   * the site is online: nothing changes on the site until the owner saves.
+   */
+  openContent: (content: Partial<ISaveStoreSite>) => void;
   changeTemplate: (
     templateId: StoreSitesEnum.Template,
     useDefaultColors: boolean,
@@ -257,6 +262,22 @@ const useStoreSiteEditor = (store: IStore | null): IStoreSiteEditor => {
     // Depends on the store itself: its name is the default title.
   }, [store]);
 
+  const openContent = useCallback((content: Partial<ISaveStoreSite>) => {
+    setDraft((current: ISaveStoreSite | null) =>
+      current
+        ? {
+            // Checked as a loaded site is; what the mock lacks comes from the
+            // draft, so a mock saved before an option still opens whole.
+            ...toDraft({
+              ...current,
+              ...content,
+              slug: current.slug,
+            } as unknown as IStoreSite),
+          }
+        : current,
+    );
+  }, []);
+
   const changeTemplate = useCallback(
     (templateId: StoreSitesEnum.Template, useDefaultColors: boolean) =>
       setDraft((current: ISaveStoreSite | null) =>
@@ -371,6 +392,7 @@ const useStoreSiteEditor = (store: IStore | null): IStoreSiteEditor => {
     slugError,
     update,
     resetToDefaults,
+    openContent,
     changeTemplate,
     save,
     publish: useCallback(() => setPublished(true), [setPublished]),

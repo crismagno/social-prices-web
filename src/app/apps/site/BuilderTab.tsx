@@ -1,6 +1,6 @@
 "use client";
 
-import { DragEvent, useEffect, useRef } from "react";
+import { DragEvent, useEffect, useRef, useState } from "react";
 
 import {
   ArrowDownOutlined,
@@ -44,6 +44,7 @@ import ImageLookCard from "./ImageLookCard";
 import styles from "./BuilderTab.module.css";
 import PieceFields from "./PieceFields";
 import { SECTION_ICONS } from "./section-icons";
+import TabsFields from "./TabsFields";
 import { ISiteBuilder } from "./useSiteBuilder";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
 
@@ -93,6 +94,11 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
   const { t } = useLanguageData();
   const fieldsRef = useRef<HTMLDivElement>(null);
 
+  // Dragging over the list of the page: the place a drop would land, counted
+  // in its sections (0 is before the first), and the row being dragged.
+  const [dropAt, setDropAt] = useState<number | null>(null);
+  const [draggingKey, setDraggingKey] = useState<string | null>(null);
+
   const { setIsActive } = builder;
 
   // The preview frames sections only while this tab is open.
@@ -121,6 +127,64 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
     t(`storeSite.editor.builder.types.${type}`);
 
   const total: number = editor.draft.blocks.length;
+
+  /** Over the upper half of a row a drop lands before it; over the lower, after. */
+  const overRow = (event: DragEvent<HTMLLIElement>, at: number): void => {
+    if (!event.dataTransfer.types.includes(SECTION_DRAG_TYPE)) {
+      return;
+    }
+
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+
+    const box: DOMRect = event.currentTarget.getBoundingClientRect();
+
+    setDropAt(event.clientY < box.top + box.height / 2 ? at : at + 1);
+  };
+
+  /** A row of the list, or a piece of the palette, dropped on the list. */
+  const dropOnList = (event: DragEvent<HTMLElement>): void => {
+    const at: number | null = dropAt;
+
+    event.preventDefault();
+    setDropAt(null);
+    setDraggingKey(null);
+
+    if (at === null) {
+      return;
+    }
+
+    let data: TSectionDrag | null = null;
+
+    try {
+      data = JSON.parse(event.dataTransfer.getData(SECTION_DRAG_TYPE));
+    } catch {
+      return;
+    }
+
+    if (data?.kind === "new") {
+      builder.apply({ kind: "insert", type: data.type, atIndex: at });
+
+      return;
+    }
+
+    if (data?.kind !== "move") {
+      return;
+    }
+
+    const movedKey: string = data.key;
+
+    const from: number = builder.sections.findIndex(
+      (section: IStoreSiteBlock) => section.key === movedKey,
+    );
+
+    // Counted without the section being moved.
+    const toIndex: number = from >= 0 && from < at ? at - 1 : at;
+
+    if (from >= 0 && toIndex !== from) {
+      builder.apply({ kind: "move", key: movedKey, toIndex });
+    }
+  };
 
   const tile = (type: StoreSitesEnum.BlockType) => {
     const isAllowed: boolean = builder.canAdd(type);
@@ -218,9 +282,35 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
             description={t("storeSite.editor.builder.emptyPage")}
           />
         ) : (
-          <ol className={styles.outline}>
+          <ol
+            className={styles.outline}
+            onDragLeave={(event: DragEvent<HTMLOListElement>) => {
+              // Out of the list altogether: no line.
+              if (
+                !event.currentTarget.contains(
+                  event.relatedTarget as Node | null,
+                )
+              ) {
+                setDropAt(null);
+              }
+            }}
+            onDrop={dropOnList}
+          >
             {builder.sections.map((section: IStoreSiteBlock, at: number) => (
-              <li key={section.key}>
+              <li
+                key={section.key}
+                data-drop={
+                  dropAt === at
+                    ? "before"
+                    : dropAt === at + 1 && at === builder.sections.length - 1
+                      ? "after"
+                      : undefined
+                }
+                data-dragging={section.key === draggingKey || undefined}
+                onDragOver={(event: DragEvent<HTMLLIElement>) =>
+                  overRow(event, at)
+                }
+              >
                 <button
                   type="button"
                   className={styles.row}
@@ -240,6 +330,11 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
                       JSON.stringify(data),
                     );
                     event.dataTransfer.effectAllowed = "move";
+                    setDraggingKey(section.key);
+                  }}
+                  onDragEnd={() => {
+                    setDraggingKey(null);
+                    setDropAt(null);
                   }}
                   onClick={() => builder.select(section.key)}
                 >
@@ -380,6 +475,15 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
                     pages={pages}
                     storeId={storeId}
                     showItems={selected.type !== T.TEXT}
+                    onChange={(change) =>
+                      builder.updateSection(selected.key, change)
+                    }
+                  />
+                )}
+                {selected.type === T.TABS && (
+                  <TabsFields
+                    section={selected}
+                    pageSections={builder.sections}
                     onChange={(change) =>
                       builder.updateSection(selected.key, change)
                     }

@@ -10,6 +10,8 @@ import StoreSitesEnum from "./store-sites.enum";
 /** One entry of a block; which fields count depends on the block's type. */
 export interface IStoreSiteBlockItem {
   key: string;
+  /** An item of a menu of tabs only: the key of the section it shows. */
+  sectionKey: string | null;
   /** A name, a question, a number or a step. */
   title: string | null;
   /** A role, a place or a label. */
@@ -47,6 +49,16 @@ export interface IStoreSiteBlockSettings {
   divider: StoreSitesEnum.DividerStyle | null;
   /** A video piece: an uploaded video or a YouTube/Vimeo player. */
   media: IStoreSiteAboutMedia | null;
+  /** A menu of tabs: in a row on top, or down the side. */
+  menuStyle: StoreSitesEnum.MenuStyle | null;
+  /** A menu of tabs: one section at a time, or all of them to scroll to. */
+  menuMode: StoreSitesEnum.MenuMode | null;
+  /** A menu down the side: on the left or on the right. */
+  menuSide: StoreSitesEnum.MenuSide | null;
+  /** A menu of tabs: how its items look. */
+  menuLook: StoreSitesEnum.MenuLook | null;
+  /** A menu of tabs: how a section comes in when its item is chosen. */
+  menuEffect: StoreSitesEnum.MenuEffect | null;
 }
 
 /**
@@ -115,6 +127,7 @@ const WITH_ITEMS: StoreSitesEnum.BlockType[] = [
   StoreSitesEnum.BlockType.STEPS,
   StoreSitesEnum.BlockType.IMAGE,
   StoreSitesEnum.BlockType.BOX,
+  StoreSitesEnum.BlockType.TABS,
 ];
 
 type TRecord = Record<string, unknown>;
@@ -176,6 +189,10 @@ const itemOf = (
   return {
     key:
       typeof source.key === "string" && source.key ? source.key : newBlockKey(),
+    sectionKey:
+      type === StoreSitesEnum.BlockType.TABS
+        ? textOf(source.sectionKey, 40)
+        : null,
     title: textOf(source.title, BLOCK_LIMITS.itemTitle),
     subtitle: textOf(source.subtitle, BLOCK_LIMITS.itemSubtitle),
     text: textOf(source.text, BLOCK_LIMITS.itemText),
@@ -254,7 +271,7 @@ export const blockSettingsOf = (
   const height: unknown = source.height;
 
   return {
-    align: uses(T.TEXT, T.BUTTONS, T.IMAGE, T.BOX)
+    align: uses(T.TEXT, T.BUTTONS, T.IMAGE, T.BOX, T.TABS)
       ? (oneOf(source.align, Object.values(StoreSitesEnum.SectionAlign)) ??
         StoreSitesEnum.SectionAlign.CENTER)
       : null,
@@ -262,7 +279,7 @@ export const blockSettingsOf = (
       ? (oneOf(source.width, Object.values(StoreSitesEnum.SectionWidth)) ??
         StoreSitesEnum.SectionWidth.WIDE)
       : null,
-    tone: uses(T.TEXT, T.BOX)
+    tone: uses(T.TEXT, T.BOX, T.TABS)
       ? (oneOf(source.tone, Object.values(StoreSitesEnum.SectionTone)) ??
         StoreSitesEnum.SectionTone.NONE)
       : null,
@@ -279,6 +296,26 @@ export const blockSettingsOf = (
         StoreSitesEnum.DividerStyle.LINE)
       : null,
     media: uses(T.VIDEO) ? mediaOf(source.media) : null,
+    menuStyle: uses(T.TABS)
+      ? (oneOf(source.menuStyle, Object.values(StoreSitesEnum.MenuStyle)) ??
+        StoreSitesEnum.MenuStyle.TABS)
+      : null,
+    menuMode: uses(T.TABS)
+      ? (oneOf(source.menuMode, Object.values(StoreSitesEnum.MenuMode)) ??
+        StoreSitesEnum.MenuMode.SWITCH)
+      : null,
+    menuSide: uses(T.TABS)
+      ? (oneOf(source.menuSide, Object.values(StoreSitesEnum.MenuSide)) ??
+        StoreSitesEnum.MenuSide.LEFT)
+      : null,
+    menuLook: uses(T.TABS)
+      ? (oneOf(source.menuLook, Object.values(StoreSitesEnum.MenuLook)) ??
+        StoreSitesEnum.MenuLook.PILL)
+      : null,
+    menuEffect: uses(T.TABS)
+      ? (oneOf(source.menuEffect, Object.values(StoreSitesEnum.MenuEffect)) ??
+        StoreSitesEnum.MenuEffect.SLIDE)
+      : null,
   };
 };
 

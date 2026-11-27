@@ -1045,8 +1045,10 @@
       "stores": "Stores",
       "categories": "Categories",
       "tags": "Tags",
-      "quick-messages": "Quick messages"
-    }
+      "quick-messages": "Quick messages",
+      "site-mocks": "Site mocks"
+    },
+    "whenUnset": "Default: {limit}"
   },
   "support": {
     "title": "Support",
@@ -2470,7 +2472,8 @@
         "pages": "Pages",
         "chat": "Chat",
         "blocks": "Blocks",
-        "builder": "Build"
+        "builder": "Build",
+        "mocks": "Mocks"
       },
       "images": {
         "places": {
@@ -2710,7 +2713,8 @@
         "pages": "The pages of the site besides its home, in the order of the menu. Add your own.",
         "chat": "A chat window on the site: visitors write, you answer in Chats.",
         "builder": "Build each page: drag pieces onto the preview, move the sections around and click one to edit it.",
-        "cart": "The bag button at the top of the site and what is asked before an order is sent."
+        "cart": "The bag button at the top of the site and what is asked before an order is sent.",
+        "mocks": "Keep the site as it is in the editor to have a ready example. Open the mock later to keep changing it: the live site only changes when you save."
       },
       "problems": {
         "hero": "The entrance needs a title.",
@@ -3227,7 +3231,8 @@
           "removeConfirm": "Remove?",
           "dropHere": "Drop here",
           "dragHere": "Drag pieces here",
-          "empty": "Still empty: fill it in the panel"
+          "empty": "Still empty: fill it in the panel",
+          "tabsNote": "On the site, the menu shows the sections its items point to: one at a time, or all of them with the menu scrolling to each."
         },
         "fields": {
           "variant": "Style",
@@ -3251,7 +3256,12 @@
           "width": "Width",
           "tone": "Background",
           "height": "Height",
-          "divider": "Style"
+          "divider": "Style",
+          "menuStyle": "Menu layout",
+          "menuMode": "How it shows the sections",
+          "menuSide": "Side of the side menu",
+          "menuLook": "Look of the items",
+          "menuEffect": "Animation of the sections"
         },
         "values": {
           "align": {
@@ -3272,6 +3282,29 @@
             "LINE": "Line",
             "DOTS": "Dots",
             "WAVE": "Wave"
+          },
+          "menuStyle": {
+            "TABS": "Tabs on top",
+            "SIDE": "Side menu"
+          },
+          "menuMode": {
+            "SWITCH": "One at a time",
+            "SCROLL": "All, scrolling"
+          },
+          "menuSide": {
+            "LEFT": "Left",
+            "RIGHT": "Right"
+          },
+          "menuLook": {
+            "PILL": "Pill",
+            "UNDERLINE": "Underline",
+            "BOX": "Box"
+          },
+          "menuEffect": {
+            "SLIDE": "Slide",
+            "FADE": "Fade",
+            "ZOOM": "Zoom",
+            "NONE": "None"
           }
         },
         "samples": {
@@ -3300,6 +3333,12 @@
                 "text": "On the agreed date."
               }
             ]
+          },
+          "TABS": {
+            "items": [
+              "First item",
+              "Second item"
+            ]
           }
         },
         "types": {
@@ -3323,7 +3362,8 @@
           "STATS": "Numbers",
           "STEPS": "Steps",
           "FAQ": "FAQ",
-          "CTA": "Call to action"
+          "CTA": "Call to action",
+          "TABS": "Tabs menu"
         },
         "hints": {
           "HERO": "The top with the title, button and image (Entrance tab)",
@@ -3346,8 +3386,40 @@
           "STATS": "Big numbers that count up",
           "STEPS": "How it works, in steps",
           "FAQ": "Questions that open and close",
-          "CTA": "A banner with an action button"
+          "CTA": "A banner with an action button",
+          "TABS": "Items that show, one at a time, other sections of this page"
+        },
+        "tabs": {
+          "title": "Title above the menu",
+          "items": "Menu items",
+          "hint": "Name each item and choose the section of this page it shows. On the site, only the section of the chosen item shows; each section goes with one item only.",
+          "namePlaceholder": "Name of the item",
+          "sectionPlaceholder": "Section this item shows",
+          "noSections": "Add other sections to this page first.",
+          "add": "Add item"
         }
+      },
+      "mocks": {
+        "usage": "Saved mocks",
+        "defaultName": "Mock {number}",
+        "name": "Mock name",
+        "save": "Keep",
+        "created": "Mock saved.",
+        "empty": "No mock saved yet.",
+        "full": "You already keep {limit} mocks, your account's limit. Delete one or ask support to raise it.",
+        "open": "Open in the editor",
+        "opened": "Mock opened in the editor. Save to put it on the site.",
+        "openConfirm": "Open the mock in the editor?",
+        "openConfirmHint": "Changes not saved in the editor will be replaced by the mock.",
+        "overwrite": "Update",
+        "overwriteHint": "Replaces the mock's content with what is in the editor now.",
+        "overwriteConfirm": "Replace the mock's content with what is in the editor?",
+        "updated": "Mock updated.",
+        "rename": "Rename",
+        "remove": "Delete",
+        "removeConfirm": "Delete this mock?",
+        "cancel": "Cancel",
+        "updatedAt": "Updated {date}"
       }
     },
     "footer": {
@@ -3464,7 +3536,8 @@
       "rating": "{count} out of 5 stars",
       "previous": "Previous",
       "next": "Next",
-      "ctaButton": "Contact us"
+      "ctaButton": "Contact us",
+      "tabsLabel": "Choose what to see"
     }
   },
   "imageEditor": {
