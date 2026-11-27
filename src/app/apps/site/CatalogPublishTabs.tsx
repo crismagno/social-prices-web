@@ -10,13 +10,13 @@ import {
   Form,
   Input,
   List,
-  Select,
   Space,
   Switch,
   Tag,
 } from "antd";
 
 import {
+  AppstoreAddOutlined,
   ArrowDownOutlined,
   ArrowUpOutlined,
   CopyOutlined,
@@ -36,8 +36,10 @@ import {
 } from "../../../shared/business/store-sites/store-site-catalog";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
+import { getImageUrl } from "../../../shared/utils/images/images-url";
 import ImageLookCard from "./ImageLookCard";
 import ChoiceList from "./ChoiceList";
+import ProductPickerModal from "./ProductPickerModal";
 import SizeFields from "./SizeFields";
 import useDragReorder from "./useDragReorder";
 import { IStoreSiteEditor, slugify } from "./useStoreSiteEditor";
@@ -67,6 +69,8 @@ const CATALOG_CHOICES: TCatalogSwitch[] = [
 /** Which products the site sells, in the order they are shown. */
 export const ProductsTab = ({ editor }: Omit<Props, "storeId">) => {
   const { t } = useLanguageData();
+
+  const [isPicking, setIsPicking] = useState<boolean>(false);
 
   // From the draft as it is when the item is dropped.
   const drag = useDragReorder((from: number, to: number) =>
@@ -98,8 +102,6 @@ export const ProductsTab = ({ editor }: Omit<Props, "storeId">) => {
 
     editor.update({ productIds: next });
   };
-
-  const isFull: boolean = productIds.length >= StoreSitesEnum.MAX_PRODUCTS;
 
   return (
     <Space direction="vertical" className="w-full">
@@ -198,24 +200,27 @@ export const ProductsTab = ({ editor }: Omit<Props, "storeId">) => {
           message={t("storeSite.editor.products.none")}
         />
       )}
-      <Select
-        className="w-full"
-        showSearch
-        optionFilterProp="label"
-        value={null}
-        disabled={isFull}
-        placeholder={`${t("storeSite.editor.products.add")} (${productIds.length}/${
-          StoreSitesEnum.MAX_PRODUCTS
-        })`}
-        options={editor.storeProducts
-          .filter((product: IProduct) => !productIds.includes(product._id))
-          .map((product: IProduct) => ({
-            value: product._id,
-            label: product.name,
-          }))}
-        onChange={(productId: string | null) =>
-          productId && editor.update({ productIds: [...productIds, productId] })
-        }
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-sm opacity-70">
+          {t("storeSite.editor.products.count")
+            .replace("{count}", String(productIds.length))
+            .replace("{max}", String(StoreSitesEnum.MAX_PRODUCTS))}
+        </span>
+        <Button
+          type="primary"
+          icon={<AppstoreAddOutlined />}
+          disabled={!editor.storeProducts.length}
+          onClick={() => setIsPicking(true)}
+        >
+          {t("storeSite.editor.products.pick")}
+        </Button>
+      </div>
+      <ProductPickerModal
+        open={isPicking}
+        products={editor.storeProducts}
+        chosenIds={productIds}
+        onClose={() => setIsPicking(false)}
+        onApply={(next: string[]) => editor.update({ productIds: next })}
       />
       <List
         size="small"
@@ -270,7 +275,19 @@ export const ProductsTab = ({ editor }: Omit<Props, "storeId">) => {
                   title={t("storeSite.editor.dragToReorder")}
                 />
                 {product ? (
-                  <span className="truncate">{product.name}</span>
+                  <>
+                    <span
+                      className="w-8 h-8 shrink-0 rounded-md bg-gray-100 dark:bg-gray-800 bg-center bg-cover"
+                      style={
+                        product.mainUrl
+                          ? {
+                              backgroundImage: `url("${getImageUrl(product.mainUrl)}")`,
+                            }
+                          : undefined
+                      }
+                    />
+                    <span className="truncate">{product.name}</span>
+                  </>
                 ) : (
                   // Switched off or moved to another store since it was chosen.
                   <Tag color="warning">

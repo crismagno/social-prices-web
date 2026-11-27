@@ -2705,10 +2705,20 @@
         }
       },
       "products": {
-        "add": "Add a product",
         "empty": "No product chosen yet.",
         "none": "This store has no active products yet.",
-        "unavailable": "No longer available in this store"
+        "unavailable": "No longer available in this store",
+        "pick": "Choose products",
+        "pickTitle": "Choose the site's products",
+        "count": "{count} of {max} products on the site",
+        "selected": "{count} of {max} selected",
+        "search": "Search by name",
+        "selectAll": "Select all",
+        "clearAll": "Clear all",
+        "apply": "Apply",
+        "cancel": "Cancel",
+        "full": "Limit of {max} products reached",
+        "noMatch": "No product with that name."
       },
       "publish": {
         "slug": "Address of the site",
