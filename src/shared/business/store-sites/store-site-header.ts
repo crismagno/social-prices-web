@@ -34,7 +34,21 @@ export interface IStoreSiteHeader {
   actionsOrder: string[];
   /** The size of the owner's own buttons and of the sign-in. */
   buttonSize: StoreSitesEnum.CartButtonSize;
+  /**
+   * Where each part sits within its place; one left out sits as its place
+   * says (the start to the left, the middle centred, the end to the right).
+   */
+  aligns: Partial<
+    Record<StoreSitesEnum.HeaderPart, StoreSitesEnum.HeaderAlign>
+  >;
 }
+
+/** Where a place of the header puts its part when the owner did not say. */
+export const HEADER_SLOT_ALIGNS: StoreSitesEnum.HeaderAlign[] = [
+  StoreSitesEnum.HeaderAlign.LEFT,
+  StoreSitesEnum.HeaderAlign.CENTER,
+  StoreSitesEnum.HeaderAlign.RIGHT,
+];
 
 /** The place of one of the owner's buttons in the order of the header. */
 export const headerButtonToken = (index: number): string =>
@@ -145,5 +159,19 @@ export const siteHeaderOf = (
     )
       ? (header?.buttonSize as StoreSitesEnum.CartButtonSize)
       : StoreSitesEnum.CartButtonSize.MEDIUM,
+    aligns: PARTS.reduce(
+      (
+        kept: Partial<
+          Record<StoreSitesEnum.HeaderPart, StoreSitesEnum.HeaderAlign>
+        >,
+        part: StoreSitesEnum.HeaderPart,
+      ) =>
+        Object.values(StoreSitesEnum.HeaderAlign).includes(
+          header?.aligns?.[part] as StoreSitesEnum.HeaderAlign,
+        )
+          ? { ...kept, [part]: header?.aligns?.[part] }
+          : kept,
+      {},
+    ),
   };
 };

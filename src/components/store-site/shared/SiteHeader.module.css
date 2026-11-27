@@ -58,14 +58,19 @@
   gap: 10px;
   min-width: 0;
   font-weight: 700;
-  font-size: 17px;
+  /* The sizes the owner set for the name; empty, the header's own. */
+  font-size: var(--sz-brand, 17px);
+  max-width: min(100%, var(--sz-brand-w, 100%));
+  width: var(--sz-brand-w, auto);
+  height: var(--sz-brand-h, auto);
   color: inherit;
   text-decoration: none;
 }
 
 .brand img {
-  width: 32px;
-  height: 32px;
+  flex-shrink: 0;
+  width: var(--sz-logo-w, 32px);
+  height: var(--sz-logo-h, 32px);
   border-radius: 50%;
   object-fit: cover;
 }
@@ -128,12 +133,17 @@
   min-width: 0;
 }
 
-.slot[data-slot="1"] {
+.slot[data-align="CENTER"] {
   justify-content: center;
 }
 
-.slot[data-slot="2"] {
+.slot[data-align="RIGHT"] {
   justify-content: flex-end;
+}
+
+/* The middle part to one side: it gets the room between the other two. */
+.inner[data-middle="wide"] {
+  grid-template-columns: auto 1fr auto;
 }
 
 /* Words in the header's own colour, when the owner gave it one. */
@@ -237,13 +247,13 @@
   .header[data-site-header="RIGHT"] .brand {
     flex-direction: column;
     align-items: flex-start;
-    font-size: 20px;
+    font-size: var(--sz-brand, 20px);
   }
 
   .header[data-site-header="LEFT"] .brand img,
   .header[data-site-header="RIGHT"] .brand img {
-    width: 56px;
-    height: 56px;
+    width: var(--sz-logo-w, 56px);
+    height: var(--sz-logo-h, 56px);
   }
 
   .header[data-site-header="LEFT"] .brand span,
@@ -263,6 +273,18 @@
   .header[data-site-header="RIGHT"] .slot {
     justify-content: flex-start;
     align-items: flex-start;
+    width: 100%;
+  }
+
+  /* Down a side, a part sits to the left, the centre or the right of the column. */
+  .header[data-site-header="LEFT"] .slot[data-align="CENTER"],
+  .header[data-site-header="RIGHT"] .slot[data-align="CENTER"] {
+    justify-content: center;
+  }
+
+  .header[data-site-header="LEFT"] .slot[data-align="RIGHT"],
+  .header[data-site-header="RIGHT"] .slot[data-align="RIGHT"] {
+    justify-content: flex-end;
   }
 
   /* The last place goes to the foot of the column. */

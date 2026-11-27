@@ -3625,7 +3625,7 @@
           }
         },
         "order": "Onde fica cada parte",
-        "orderHint": "Arraste uma parte sobre outra para trocar de lugar, ou use as setas. No header lateral: em cima, no meio e no pé.",
+        "orderHint": "Arraste uma parte sobre outra para trocar de lugar, ou use as setas. Cada parte pode ficar à esquerda, ao centro ou à direita do seu lugar: o menu no meio alinhado à direita fica junto dos botões.",
         "slots": {
           "0": "Início",
           "1": "Meio",
@@ -3657,7 +3657,12 @@
           "CART": "Carrinho"
         },
         "buttonSize": "Tamanho dos botões",
-        "buttonSizeHint": "Vale para os seus botões e o entrar. O tamanho do botão do carrinho fica na aba Sacola."
+        "buttonSizeHint": "Vale para os seus botões e o entrar. O tamanho do botão do carrinho fica na aba Sacola.",
+        "aligns": {
+          "LEFT": "Alinhar à esquerda",
+          "CENTER": "Alinhar ao centro",
+          "RIGHT": "Alinhar à direita"
+        }
       }
     },
     "footer": {

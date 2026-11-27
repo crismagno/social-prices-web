@@ -3622,7 +3622,7 @@
           }
         },
         "order": "Where each part goes",
-        "orderHint": "Drag a part onto another to change its place, or use the arrows. In a side header: top, middle and foot.",
+        "orderHint": "Drag a part onto another to change its place, or use the arrows. Each part can sit to the left, the centre or the right of its place: the menu in the middle aligned right goes next to the buttons.",
         "slots": {
           "0": "Start",
           "1": "Middle",
@@ -3654,7 +3654,12 @@
           "CART": "Cart"
         },
         "buttonSize": "Size of the buttons",
-        "buttonSizeHint": "For your buttons and the sign-in. The size of the cart button is set in the Bag tab."
+        "buttonSizeHint": "For your buttons and the sign-in. The size of the cart button is set in the Bag tab.",
+        "aligns": {
+          "LEFT": "Align left",
+          "CENTER": "Align centre",
+          "RIGHT": "Align right"
+        }
       }
     },
     "footer": {

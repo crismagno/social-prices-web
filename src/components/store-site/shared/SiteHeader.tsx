@@ -14,6 +14,7 @@ import {
   siteBlocksOf,
 } from "../../../shared/business/store-sites/store-site-blocks";
 import {
+  HEADER_SLOT_ALIGNS,
   headerButtonIndex,
   siteHeaderOf,
 } from "../../../shared/business/store-sites/store-site-header";
@@ -63,7 +64,12 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
     buttons,
     actionsOrder,
     buttonSize,
+    aligns,
   } = siteHeaderOf(site.header);
+
+  // Where each place puts its part: as the owner said, else as the place does.
+  const alignOf = (slot: number): StoreSitesEnum.HeaderAlign =>
+    aligns[order[slot]] ?? HEADER_SLOT_ALIGNS[slot];
   const { logo, brandName } = getSiteContent({ site, store });
 
   const ref = useRef<HTMLElement>(null);
@@ -222,9 +228,20 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
         } as CSSProperties
       }
     >
-      <nav className={styles.inner}>
+      <nav
+        className={styles.inner}
+        // A middle part pushed to a side takes the room between the others.
+        data-middle={
+          alignOf(1) === StoreSitesEnum.HeaderAlign.CENTER ? undefined : "wide"
+        }
+      >
         {order.map((part: StoreSitesEnum.HeaderPart, slot: number) => (
-          <span key={part} className={styles.slot} data-slot={slot}>
+          <span
+            key={part}
+            className={styles.slot}
+            data-slot={slot}
+            data-align={alignOf(slot)}
+          >
             {parts[part]}
           </span>
         ))}

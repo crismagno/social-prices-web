@@ -15,6 +15,9 @@ import {
 } from "antd";
 
 import {
+  AlignCenterOutlined,
+  AlignLeftOutlined,
+  AlignRightOutlined,
   ArrowDownOutlined,
   ArrowUpOutlined,
   DeleteOutlined,
@@ -25,6 +28,7 @@ import {
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import {
   HEADER_HEIGHT_RANGE,
+  HEADER_SLOT_ALIGNS,
   HEADER_WIDTH_RANGE,
   headerButtonIndex,
   headerButtonToken,
@@ -187,6 +191,38 @@ const HeaderTab = ({ editor, storeId, storeName }: Props) => {
               <span className="flex-1 font-medium">
                 {t(`storeSite.editor.header.parts.${part}`)}
               </span>
+              <Segmented<StoreSitesEnum.HeaderAlign>
+                size="small"
+                value={header.aligns[part] ?? HEADER_SLOT_ALIGNS[slot]}
+                onChange={(align: StoreSitesEnum.HeaderAlign) =>
+                  editor.update((draft) => ({
+                    header: {
+                      ...draft.header,
+                      aligns: {
+                        ...siteHeaderOf(draft.header).aligns,
+                        [part]: align,
+                      },
+                    },
+                  }))
+                }
+                options={[
+                  {
+                    value: StoreSitesEnum.HeaderAlign.LEFT,
+                    icon: <AlignLeftOutlined />,
+                    title: t("storeSite.editor.header.aligns.LEFT"),
+                  },
+                  {
+                    value: StoreSitesEnum.HeaderAlign.CENTER,
+                    icon: <AlignCenterOutlined />,
+                    title: t("storeSite.editor.header.aligns.CENTER"),
+                  },
+                  {
+                    value: StoreSitesEnum.HeaderAlign.RIGHT,
+                    icon: <AlignRightOutlined />,
+                    title: t("storeSite.editor.header.aligns.RIGHT"),
+                  },
+                ]}
+              />
               <Button
                 type="text"
                 size="small"
