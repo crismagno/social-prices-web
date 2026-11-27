@@ -76,6 +76,8 @@ const formSchema = z.object({
   phoneNumbers: z.array(phoneNumberFormSchema),
   tagsIds: z.array(z.string()),
   about: z.string().trim().nullable(),
+  idNumber: z.string().trim(),
+  cpf: z.string().trim(),
   level: z.string().trim().nonempty("Level is required"),
   status: z.string().trim().nonempty("Status is required"),
 });
@@ -141,6 +143,8 @@ export const EmployeeEdit: React.FC<Props> = ({
 
     const values: TFormSchema = {
       about: employeeToEdit?.about ?? null,
+      idNumber: employeeToEdit?.idNumber ?? "",
+      cpf: employeeToEdit?.cpf ?? "",
       name: employeeToEdit?.name ?? "",
       email: employeeToEdit?.email ?? "",
       password: "",
@@ -224,6 +228,8 @@ export const EmployeeEdit: React.FC<Props> = ({
 
       const createEmployeeDto: CreateEmployeeDto = {
         about: data.about ?? "",
+        idNumber: data.idNumber,
+        cpf: data.cpf,
         addresses,
         birthDate: moment(data.birthDate).toDate(),
         email: data.email,
@@ -295,6 +301,8 @@ export const EmployeeEdit: React.FC<Props> = ({
 
       const updateEmployeeDto: UpdateEmployeeDto = {
         about: data.about ?? "",
+        idNumber: data.idNumber,
+        cpf: data.cpf,
         addresses,
         birthDate: moment(data.birthDate).toDate(),
         email: data.email,
@@ -450,6 +458,26 @@ export const EmployeeEdit: React.FC<Props> = ({
             type="date"
             placeholder={t("placeholders.enterBirthDate")}
             errorMessage={errors.birthDate?.message}
+          />
+        </Col>
+
+        <Col xs={24} md={8}>
+          <InputCustomAntd
+            controller={{ control, name: "idNumber" }}
+            label={t("common.idNumber")}
+            placeholder={t("placeholders.enterIdNumber")}
+            errorMessage={errors.idNumber?.message}
+            maxLength={50}
+          />
+        </Col>
+
+        <Col xs={24} md={8}>
+          <InputCustomAntd
+            controller={{ control, name: "cpf" }}
+            label={t("common.cpf")}
+            placeholder={t("placeholders.enterCpf")}
+            errorMessage={errors.cpf?.message}
+            maxLength={20}
           />
         </Col>
 

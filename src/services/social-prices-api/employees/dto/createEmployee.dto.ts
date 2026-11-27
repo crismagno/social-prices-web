@@ -12,5 +12,7 @@ export default class CreateEmployeeDto {
   phoneNumbers: any[] = [];
   tagsIds: string[] = [];
   about: string | null = null;
+  idNumber: string | null = null;
+  cpf: string | null = null;
   status: EmployeesEnum.Status | null = null;
 }

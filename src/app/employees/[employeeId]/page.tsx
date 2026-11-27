@@ -201,6 +201,14 @@ export default function EmployeePage() {
                         : "-"}
                     </Descriptions.Item>
 
+                    <Descriptions.Item label={t("common.idNumber")}>
+                      {employee.idNumber || "-"}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label={t("common.cpf")}>
+                      {employee.cpf || "-"}
+                    </Descriptions.Item>
+
                     <Descriptions.Item label={t("customers.gender")}>
                       <Tag
                         color={

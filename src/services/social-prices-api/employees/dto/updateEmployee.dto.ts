@@ -13,5 +13,7 @@ export default class UpdateEmployeeDto {
   phoneNumbers: any[] = [];
   tagsIds: string[] = [];
   about: string | null = null;
+  idNumber: string | null = null;
+  cpf: string | null = null;
   status: EmployeesEnum.Status = EmployeesEnum.Status.PENDING;
 }
