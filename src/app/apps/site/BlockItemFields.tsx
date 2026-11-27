@@ -1,6 +1,6 @@
 "use client";
 
-import { Form, Input, Rate, Switch } from "antd";
+import { Divider, Form, Input, Rate, Segmented, Select, Switch } from "antd";
 
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import {
@@ -8,6 +8,10 @@ import {
   IStoreSiteBlockItem,
   newBlockButton,
 } from "../../../shared/business/store-sites/store-site-blocks";
+import {
+  IStoreSiteCardLook,
+  siteCardLookOf,
+} from "../../../shared/business/store-sites/store-site-cards-style";
 import { IStoreSitePage } from "../../../shared/business/store-sites/store-site-pages";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import ButtonFields from "./ButtonFields";
@@ -47,11 +51,30 @@ interface Props {
   pages: IStoreSitePage[];
   /** Applied to the item as it is then: an upload may finish later. */
   onChange: (patch: Partial<IStoreSiteBlockItem>) => void;
+  /**
+   * Cards the owner lays out: how many places their line has. Then each card
+   * also asks how it is drawn. Absent, the template draws them all its way.
+   */
+  cardColumns?: number | null;
 }
 
+const CARD = "storeSite.editor.cards.card";
+
 /** One item of a block: only the fields its kind of block shows. */
-const BlockItemFields = ({ type, item, storeId, pages, onChange }: Props) => {
+const BlockItemFields = ({
+  type,
+  item,
+  storeId,
+  pages,
+  onChange,
+  cardColumns,
+}: Props) => {
   const { t } = useLanguageData();
+
+  const card: IStoreSiteCardLook = siteCardLookOf(item.card);
+
+  const setCard = (patch: Partial<IStoreSiteCardLook>): void =>
+    onChange({ card: { ...card, ...patch } });
 
   const label = (field: TField): string =>
     t(`storeSite.editor.blocks.fields.${type}.${field}`);
@@ -146,6 +169,70 @@ const BlockItemFields = ({ type, item, storeId, pages, onChange }: Props) => {
             );
         }
       })}
+      {type === StoreSitesEnum.BlockType.CARDS && !!cardColumns && (
+        <>
+          <Divider orientation="left" plain>
+            {t(`${CARD}.heading`)}
+          </Divider>
+
+          <Form.Item label={t(`${CARD}.imagePosition`)}>
+            <Select<StoreSitesEnum.CardsImagePosition>
+              value={card.imagePosition}
+              onChange={(imagePosition) => setCard({ imagePosition })}
+              options={Object.values(StoreSitesEnum.CardsImagePosition).map(
+                (position: StoreSitesEnum.CardsImagePosition) => ({
+                  value: position,
+                  label: t(`${CARD}.imagePositions.${position}`),
+                }),
+              )}
+            />
+          </Form.Item>
+
+          <Form.Item label={t(`${CARD}.textAlign`)}>
+            <Segmented<StoreSitesEnum.CardsAlign>
+              block
+              value={card.textAlign}
+              onChange={(textAlign) => setCard({ textAlign })}
+              options={Object.values(StoreSitesEnum.CardsAlign).map(
+                (align: StoreSitesEnum.CardsAlign) => ({
+                  value: align,
+                  label: t(`${CARD}.aligns.${align}`),
+                }),
+              )}
+            />
+          </Form.Item>
+
+          <Form.Item label={t(`${CARD}.look`)}>
+            <Segmented<StoreSitesEnum.CardsLook>
+              block
+              value={card.look}
+              onChange={(look) => setCard({ look })}
+              options={Object.values(StoreSitesEnum.CardsLook).map(
+                (look: StoreSitesEnum.CardsLook) => ({
+                  value: look,
+                  label: t(`${CARD}.looks.${look}`),
+                }),
+              )}
+            />
+          </Form.Item>
+
+          <Form.Item
+            className="mb-0"
+            label={t(`${CARD}.span`)}
+            extra={t(`${CARD}.spanHint`)}
+          >
+            <Segmented<number>
+              block
+              value={Math.min(card.span, cardColumns)}
+              onChange={(span) => setCard({ span })}
+              options={Array.from(
+                { length: cardColumns },
+                (_, index: number) => index + 1,
+              )}
+            />
+          </Form.Item>
+        </>
+      )}
     </Form>
   );
 };

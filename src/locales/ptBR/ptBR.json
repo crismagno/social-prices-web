@@ -2723,10 +2723,53 @@
         "image": "Logo do site",
         "imageHint": "Sem uma imagem aqui, o site mostra o logo da loja."
       },
+      "cards": {
+        "heading": "Layout dos cards",
+        "layouts": {
+          "TEMPLATE": "Do template",
+          "CUSTOM": "Personalizado"
+        },
+        "layoutHints": {
+          "TEMPLATE": "Os cards são desenhados do jeito deste template.",
+          "CUSTOM": "Aqui você define a linha, e cada card é configurado sozinho, igual em qualquer template."
+        },
+        "columns": "Espaços por linha",
+        "columnsHint": "Uma linha comporta essa quantidade de cards de um espaço; depois o próximo card começa uma nova linha. No celular eles ficam sempre um embaixo do outro.",
+        "gap": "Espaço entre os cards",
+        "gaps": {
+          "SMALL": "Pequeno",
+          "MEDIUM": "Médio",
+          "LARGE": "Grande"
+        },
+        "eachHint": "A imagem, o texto, a caixa e a largura são definidos card por card: abra um card abaixo.",
+        "card": {
+          "heading": "Aparência deste card",
+          "imagePosition": "Onde fica a imagem",
+          "imagePositions": {
+            "TOP": "Acima do texto",
+            "BOTTOM": "Abaixo do texto",
+            "LEFT": "À esquerda do texto",
+            "RIGHT": "À direita do texto"
+          },
+          "textAlign": "Texto",
+          "aligns": {
+            "LEFT": "Esquerda",
+            "CENTER": "Centro",
+            "RIGHT": "Direita"
+          },
+          "look": "Em volta deste card",
+          "looks": {
+            "PLAIN": "Nada",
+            "BOXED": "Uma caixa"
+          },
+          "span": "Largura deste card",
+          "spanHint": "Quantos espaços da linha ele ocupa. Se não couber no que sobrou da linha, ele começa a próxima."
+        }
+      },
       "marquee": {
         "show": "Mostrar a faixa rolando",
         "items": "Frases",
-        "itemsHint": "Uma frase curta por linha, até 12.",
+        "itemsHint": "Uma frase curta por linha, até 20.",
         "style": {
           "title": "Estilo da faixa",
           "speed": "Velocidade",

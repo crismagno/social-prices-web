@@ -294,6 +294,40 @@ namespace StoreSitesEnum {
     BlockType.CTA,
   ];
 
+  /** Who draws the cards: the template, its own way, or the owner"s choices. */
+  export enum CardsLayout {
+    TEMPLATE = "TEMPLATE",
+    CUSTOM = "CUSTOM",
+  }
+
+  /** Where the image of one card sits, beside or around its words. */
+  export enum CardsImagePosition {
+    TOP = "TOP",
+    BOTTOM = "BOTTOM",
+    LEFT = "LEFT",
+    RIGHT = "RIGHT",
+  }
+
+  export enum CardsAlign {
+    LEFT = "LEFT",
+    CENTER = "CENTER",
+    RIGHT = "RIGHT",
+  }
+
+  export enum CardsLook {
+    PLAIN = "PLAIN",
+    BOXED = "BOXED",
+  }
+
+  export enum CardsGap {
+    SMALL = "SMALL",
+    MEDIUM = "MEDIUM",
+    LARGE = "LARGE",
+  }
+
+  /** How many cards go side by side before the next line. */
+  export const CARDS_COLUMNS_RANGE: [number, number] = [1, 4];
+
   export enum SectionAlign {
     LEFT = "LEFT",
     CENTER = "CENTER",

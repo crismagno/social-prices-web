@@ -1392,6 +1392,169 @@
   }
 }
 
+/* ---------- Cards the owner laid out ---------- */
+.ownCards {
+  --cards-gap: 28px;
+  display: grid;
+  grid-template-columns: repeat(var(--cards-columns, 3), minmax(0, 1fr));
+  gap: var(--cards-gap);
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: clamp(40px, 7vw, 88px) clamp(18px, 5vw, 56px);
+}
+
+.ownCards[data-gap="SMALL"] {
+  --cards-gap: 14px;
+}
+
+.ownCards[data-gap="LARGE"] {
+  --cards-gap: 52px;
+}
+
+/* Each card fills its place, so a row of boxed ones ends on one line. */
+.ownCards > * {
+  display: flex;
+  min-width: 0;
+}
+
+.ownCard {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+
+.ownCard[data-side="BOTTOM"] {
+  flex-direction: column-reverse;
+}
+
+.ownCard[data-side="LEFT"],
+.ownCard[data-side="RIGHT"] {
+  flex-direction: row;
+  align-items: center;
+  gap: clamp(18px, 3vw, 36px);
+}
+
+.ownCard[data-side="RIGHT"] {
+  flex-direction: row-reverse;
+}
+
+.ownCardPhoto {
+  flex: none;
+  width: var(--sz-section-img-w, 100%);
+  max-width: 100%;
+  height: var(--sz-section-img-h, auto);
+  aspect-ratio: var(--sz-section-img-ratio, 4 / 3);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.ownCard[data-side="LEFT"] .ownCardPhoto,
+.ownCard[data-side="RIGHT"] .ownCardPhoto {
+  width: var(--sz-section-img-w, 44%);
+}
+
+.ownCardPhoto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ownCardBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.ownCard[data-align="CENTER"] .ownCardBody {
+  text-align: center;
+}
+
+.ownCard[data-align="RIGHT"] .ownCardBody {
+  text-align: right;
+}
+
+.ownCard[data-align="CENTER"] .ownCardPhoto {
+  margin-inline: auto;
+}
+
+.ownCard[data-align="RIGHT"] .ownCardPhoto {
+  margin-left: auto;
+}
+
+.ownCardTitle {
+  margin: 0;
+  font-size: var(--sz-section-title, clamp(20px, 2.2vw, 26px));
+  line-height: 1.2;
+}
+
+.ownCardText {
+  margin: 10px 0 0;
+  font-size: var(--sz-section-text, 16px);
+  line-height: 1.6;
+  opacity: 0.78;
+  white-space: pre-line;
+}
+
+.ownCard[data-look="BOXED"] {
+  padding: 22px;
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--site-text) 4%, var(--site-bg));
+  border: 1px solid color-mix(in srgb, var(--site-text) 10%, transparent);
+}
+
+/* A card that takes more than one place of the line. */
+.ownCardSpan2 {
+  grid-column: span 2;
+}
+
+.ownCardSpan3 {
+  grid-column: span 3;
+}
+
+.ownCardSpan4 {
+  grid-column: span 4;
+}
+
+@media (min-width: 721px) and (max-width: 1000px) {
+  /* Three or four places a line are too narrow here: two. */
+  .ownCards[data-columns="3"],
+  .ownCards[data-columns="4"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* And a card that took three or four of them takes the whole line. */
+  .ownCardSpan3,
+  .ownCardSpan4 {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 720px) {
+  .ownCards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ownCardSpan2,
+  .ownCardSpan3,
+  .ownCardSpan4 {
+    grid-column: auto;
+  }
+
+  /* No room for an image beside its words: it goes over them. */
+  .ownCard[data-side="LEFT"],
+  .ownCard[data-side="RIGHT"] {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ownCard[data-side="LEFT"] .ownCardPhoto,
+  .ownCard[data-side="RIGHT"] .ownCardPhoto {
+    width: var(--sz-section-img-w, 100%);
+  }
+}
+
 /* ---------- Movements ---------- */
 @keyframes itemIn {
   from {

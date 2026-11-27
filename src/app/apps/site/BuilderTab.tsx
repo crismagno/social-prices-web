@@ -46,6 +46,7 @@ import {
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import AboutFields from "./AboutFields";
 import BlockFields from "./BlockFields";
+import CardsLayoutFields from "./CardsLayoutFields";
 import { HeroTab } from "./ContentTabs";
 import PageHeroFields from "./PageHeroFields";
 import ImageLookCard from "./ImageLookCard";
@@ -518,6 +519,12 @@ const BuilderTab = ({
               />
             ) : selected.type === T.CARDS ? (
               <Space direction="vertical" className="w-full">
+                <CardsLayoutFields
+                  block={selected}
+                  onChange={(change) =>
+                    builder.updateSection(selected.key, change)
+                  }
+                />
                 <BlockFields
                   block={selected}
                   pages={pages}

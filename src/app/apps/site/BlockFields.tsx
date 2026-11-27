@@ -20,6 +20,10 @@ import {
 } from "../../../shared/business/store-sites/store-site-blocks";
 import { IStoreSitePage } from "../../../shared/business/store-sites/store-site-pages";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
+import {
+  IStoreSiteCardsStyle,
+  siteCardsStyleOf,
+} from "../../../shared/business/store-sites/store-site-cards-style";
 import BlockItemFields from "./BlockItemFields";
 import ButtonFields, { HOME_PAGE } from "./ButtonFields";
 
@@ -82,6 +86,16 @@ const BlockFields = ({
 
   const isCta: boolean = block.type === StoreSitesEnum.BlockType.CTA;
   const max: number = maxItemsOf(block.type);
+
+  // Cards the owner lays out: each one is then drawn its own way.
+  const cardsLine: IStoreSiteCardsStyle = siteCardsStyleOf(
+    block.settings.cards,
+  );
+  const cardColumns: number | null =
+    block.type === StoreSitesEnum.BlockType.CARDS &&
+    cardsLine.layout === StoreSitesEnum.CardsLayout.CUSTOM
+      ? cardsLine.columns
+      : null;
   const button: IStoreSiteBlockButton | null = block.button;
 
   return (
@@ -203,6 +217,7 @@ const BlockFields = ({
               }
             >
               <BlockItemFields
+                cardColumns={cardColumns}
                 type={block.type}
                 item={item}
                 storeId={storeId}

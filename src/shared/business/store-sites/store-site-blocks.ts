@@ -10,6 +10,12 @@ import {
   IStoreSiteMarqueeStyle,
   siteMarqueeStyleOf,
 } from "./store-site-marquee-style";
+import {
+  IStoreSiteCardLook,
+  IStoreSiteCardsStyle,
+  siteCardLookOf,
+  siteCardsStyleOf,
+} from "./store-site-cards-style";
 import StoreSitesEnum from "./store-sites.enum";
 
 /** One entry of a block; which fields count depends on the block's type. */
@@ -34,6 +40,8 @@ export interface IStoreSiteBlockItem {
   rating: number | null;
   /** A column of a box only. */
   button: IStoreSiteBlockButton | null;
+  /** A card only: how this one is drawn. */
+  card: IStoreSiteCardLook | null;
 }
 
 /** The button of a call-to-action block. */
@@ -78,6 +86,8 @@ export interface IStoreSiteBlockSettings {
   marquee: IStoreSiteMarqueeStyle | null;
   /** A text with media: the side its image or video is on. */
   mediaPosition: StoreSitesEnum.AboutMediaPosition | null;
+  /** Cards with content of their own: how they are laid out. */
+  cards: IStoreSiteCardsStyle | null;
 }
 
 /**
@@ -146,7 +156,7 @@ export const maxItemsOf = (type: StoreSitesEnum.BlockType): number => {
     case StoreSitesEnum.BlockType.ABOUT:
       return StoreSitesEnum.MAX_ABOUT_TEXTS;
     default:
-      return 12;
+      return 20;
   }
 };
 
@@ -264,6 +274,10 @@ const itemOf = (
     button:
       type === StoreSitesEnum.BlockType.BOX && source.button
         ? buttonOf(source.button)
+        : null,
+    card:
+      type === StoreSitesEnum.BlockType.CARDS
+        ? siteCardLookOf(source.card as Partial<IStoreSiteCardLook> | null)
         : null,
   };
 };
@@ -394,6 +408,11 @@ export const blockSettingsOf = (
         ? siteMarqueeStyleOf(
             source.marquee as Partial<IStoreSiteMarqueeStyle> | null,
           )
+        : null,
+    // The template draws the cards the site had before any of their own.
+    cards:
+      uses(T.CARDS) && source.isOwn === true
+        ? siteCardsStyleOf(source.cards as Partial<IStoreSiteCardsStyle> | null)
         : null,
   };
 };

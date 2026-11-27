@@ -2720,10 +2720,53 @@
         "image": "Logo of the site",
         "imageHint": "Without an image here, the site shows the logo of the store."
       },
+      "cards": {
+        "heading": "Layout of the cards",
+        "layouts": {
+          "TEMPLATE": "Template's",
+          "CUSTOM": "My own"
+        },
+        "layoutHints": {
+          "TEMPLATE": "The cards are drawn the way this template draws them.",
+          "CUSTOM": "You set the line here and each card on its own, the same in any template."
+        },
+        "columns": "Places per line",
+        "columnsHint": "A line holds this many cards of one place; then the next card starts a new line. On a phone they always go one under the other.",
+        "gap": "Room between the cards",
+        "gaps": {
+          "SMALL": "Small",
+          "MEDIUM": "Medium",
+          "LARGE": "Large"
+        },
+        "eachHint": "The image, the text, the box and the width are set card by card: open a card below.",
+        "card": {
+          "heading": "How this card looks",
+          "imagePosition": "Where the image goes",
+          "imagePositions": {
+            "TOP": "Above the text",
+            "BOTTOM": "Below the text",
+            "LEFT": "To the left of the text",
+            "RIGHT": "To the right of the text"
+          },
+          "textAlign": "Text",
+          "aligns": {
+            "LEFT": "Left",
+            "CENTER": "Centre",
+            "RIGHT": "Right"
+          },
+          "look": "Around this card",
+          "looks": {
+            "PLAIN": "Nothing",
+            "BOXED": "A box"
+          },
+          "span": "Width of this card",
+          "spanHint": "How many places of the line it takes. One that does not fit in what is left of a line starts the next."
+        }
+      },
       "marquee": {
         "show": "Show the running strip",
         "items": "Phrases",
-        "itemsHint": "One short phrase per line, up to 12.",
+        "itemsHint": "One short phrase per line, up to 20.",
         "style": {
           "title": "Strip style",
           "speed": "Speed",

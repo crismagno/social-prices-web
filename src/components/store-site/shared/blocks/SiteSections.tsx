@@ -54,6 +54,7 @@ import {
   PieceSpacer,
   PieceVideo,
 } from "./Pieces";
+import PieceCards, { hasOwnCardsLayout } from "./PieceCards";
 import { IBlockContext, IBlockProps } from "./blockTypes";
 
 interface Props {
@@ -227,6 +228,11 @@ const drawPart = (
   marqueeStyle: Partial<IStoreSiteMarqueeStyle> | null | undefined,
 ): ReactNode => {
   const type = section.type as TPartType;
+
+  // Cards the owner laid out are the same in every template.
+  if (hasOwnCardsLayout(section)) {
+    return <PieceCards block={section} />;
+  }
 
   return type === StoreSitesEnum.BlockType.MARQUEE ? (
     <MarqueeStyle
