@@ -53,6 +53,7 @@ import { CheckboxCustomAntd } from "../../../../components/custom/antd/CheckboxC
 import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { InputNumberCustomAntd } from "../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { RichTextCustomAntd } from "../../../../components/custom/antd/RichTextCustomAntd/RichTextCustomAntd";
 import { TextareaCustomAntd } from "../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import useLanguageData from "../../../../data/context/language/useLanguageData";
 import CreateProductItemDto from "../../../../services/social-prices-api/product-items/dto/createProductItem.dto";
@@ -140,7 +141,7 @@ export const ProductItemDetail: React.FC<Props> = ({
     useFindCategoriesByType(CategoriesEnum.Type.PRODUCT);
 
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
-    TagsEnum.Type.PRODUCT
+    TagsEnum.Type.PRODUCT,
   );
 
   const { productItem, isLoading } = useFindProductItemById(productItemId);
@@ -343,9 +344,9 @@ export const ProductItemDetail: React.FC<Props> = ({
           ? map(
               filter(
                 data.colors ?? [],
-                (c): c is { value: string } => !!c?.value
+                (c): c is { value: string } => !!c?.value,
               ),
-              (c) => parseColorPickerToHexString(c.value)
+              (c) => parseColorPickerToHexString(c.value),
             )
           : [],
         dimensions: data?.dimensions as any,
@@ -364,7 +365,7 @@ export const ProductItemDetail: React.FC<Props> = ({
 
       const productItem: IProductItem =
         await serviceMethodsInstance.productItemsServiceMethods.create(
-          formData
+          formData,
         );
 
       onCreate?.(productItem);
@@ -383,15 +384,15 @@ export const ProductItemDetail: React.FC<Props> = ({
       const deletedFilesUrl: string[] = productItem!.filesUrl.filter(
         (fileUrl: string) => {
           return !fileList.find(
-            (file) => file.name === fileUrl && !file.originFileObj
+            (file) => file.name === fileUrl && !file.originFileObj,
           );
-        }
+        },
       );
 
       const formData = new FormData();
 
       const fileListToUpload: UploadFile<any>[] = fileList.filter(
-        (file) => file.originFileObj
+        (file) => file.originFileObj,
       );
 
       for (var i = 0; i < fileListToUpload.length; i++) {
@@ -435,9 +436,9 @@ export const ProductItemDetail: React.FC<Props> = ({
           ? map(
               filter(
                 data.colors ?? [],
-                (c): c is { value: string } => !!c?.value
+                (c): c is { value: string } => !!c?.value,
               ),
-              (c) => parseColorPickerToHexString(c.value)
+              (c) => parseColorPickerToHexString(c.value),
             )
           : [],
         dimensions: data?.dimensions as any,
@@ -490,7 +491,9 @@ export const ProductItemDetail: React.FC<Props> = ({
                 multiple
                 disabled={isReadonly}
               >
-                {fileList.length < 10 && !isReadonly && `+ ${t("common.upload")}`}
+                {fileList.length < 10 &&
+                  !isReadonly &&
+                  `+ ${t("common.upload")}`}
               </Upload>
             </ImageEditUpload>
 
@@ -725,12 +728,11 @@ export const ProductItemDetail: React.FC<Props> = ({
 
         <Row className="mt-4">
           <Col xs={24}>
-            <TextareaCustomAntd
+            <RichTextCustomAntd
               controller={{ control, name: "description" }}
               label={t("common.description")}
-              placeholder={"Enter description"}
+              placeholder={t("common.description")}
               errorMessage={errors.description?.message}
-              rows={4}
               disabled={isReadonly}
             />
           </Col>
@@ -738,12 +740,11 @@ export const ProductItemDetail: React.FC<Props> = ({
 
         <Row gutter={[16, 16]} className="mt-4">
           <Col xs={24}>
-            <TextareaCustomAntd
+            <RichTextCustomAntd
               controller={{ control, name: "details" }}
               label={t("common.details")}
-              placeholder={"Enter details"}
+              placeholder={t("common.details")}
               errorMessage={errors.details?.message}
-              rows={4}
               disabled={isReadonly}
             />
           </Col>
@@ -861,7 +862,8 @@ export const ProductItemDetail: React.FC<Props> = ({
         <DynamicFields
           control={control}
           errors={errors}
-          setValue={setValue} disabled={isReadonly}
+          setValue={setValue}
+          disabled={isReadonly}
         />
 
         <HrCustom className="my-7" />

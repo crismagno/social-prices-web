@@ -52,6 +52,7 @@ import SalesTable from "../../sales/components/SalesTable/SalesTable";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindProductById } from "../detail/useFindProductById";
+import RichTextView from "../../../components/common/RichText/RichTextView";
 
 export default function ProductPage() {
   const { t } = useLanguageData();
@@ -233,14 +234,22 @@ export default function ProductPage() {
                 <Col xs={24}>
                   <Descriptions bordered column={1} size="small">
                     <Descriptions.Item label={t("common.description")}>
-                      <div className="max-h-20 overflow-y-auto">
-                        {product.description || "-"}
+                      <div className="max-h-48 overflow-y-auto">
+                        {product.description ? (
+                          <RichTextView value={product.description} />
+                        ) : (
+                          "-"
+                        )}
                       </div>
                     </Descriptions.Item>
 
                     <Descriptions.Item label={t("common.details")}>
-                      <div className="max-h-20 overflow-y-auto">
-                        {product.details || "-"}
+                      <div className="max-h-48 overflow-y-auto">
+                        {product.details ? (
+                          <RichTextView value={product.details} />
+                        ) : (
+                          "-"
+                        )}
                       </div>
                     </Descriptions.Item>
                   </Descriptions>
@@ -456,9 +465,7 @@ export default function ProductPage() {
 
                 {/* Dynamic Fields */}
                 <Col xs={24}>
-                  <DynamicFieldsView
-                    dynamicFields={product.dynamicFields}
-                  />
+                  <DynamicFieldsView dynamicFields={product.dynamicFields} />
                 </Col>
               </Row>
             </ContainerTitle>

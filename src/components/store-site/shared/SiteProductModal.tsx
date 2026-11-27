@@ -20,6 +20,7 @@ import styles from "./SiteProductModal.module.css";
 import SiteThemeVars from "./SiteThemeVars";
 import { addLabel } from "./useSiteContent";
 import useSiteT from "./useSiteT";
+import RichTextView from "../../common/RichText/RichTextView";
 
 interface Props {
   /** The product a visitor opened; none keeps the window closed. */
@@ -285,7 +286,10 @@ const SiteProductModal = ({
                 )}
 
                 {shown.description && (
-                  <p className={styles.text}>{shown.description}</p>
+                  <RichTextView
+                    className={styles.text}
+                    value={shown.description}
+                  />
                 )}
               </header>
 
@@ -294,7 +298,7 @@ const SiteProductModal = ({
                   <h3 className={styles.label}>
                     {t("storeSite.product.details")}
                   </h3>
-                  <p className={styles.text}>{shown.details}</p>
+                  <RichTextView className={styles.text} value={shown.details} />
                 </section>
               )}
 

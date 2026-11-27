@@ -16,6 +16,9 @@ import {
   PaperClipOutlined,
 } from "@ant-design/icons";
 
+import RichTextEditor, {
+  IRichTextEditorHandle,
+} from "../../components/common/RichText/RichTextEditor";
 import FilePreviewModal from "../../components/common/FilePreview/FilePreviewModal";
 import ImageEditorModal, {
   isEditableImage,
@@ -113,7 +116,7 @@ export default function QuickMessageBlockEditor({
 
   const { message } = App.useApp();
 
-  const textRef = useRef<TextAreaRef | null>(null);
+  const textRef = useRef<IRichTextEditorHandle | null>(null);
 
   const captionRef = useRef<TextAreaRef | null>(null);
 
@@ -267,25 +270,17 @@ export default function QuickMessageBlockEditor({
     >
       {isText ? (
         <Space direction="vertical" className="w-full">
-          <Input.TextArea
+          <RichTextEditor
             ref={textRef}
+            variant="chat"
             value={block.text}
-            onChange={(event) =>
-              onChange({ ...block, text: event.target.value })
-            }
+            onChange={(text: string) => onChange({ ...block, text })}
             maxLength={QuickMessagesEnum.MAX_TEXT_LENGTH}
-            showCount
-            autoSize={{ minRows: 3, maxRows: 10 }}
             placeholder={t("quickMessages.textPlaceholder")}
           />
           <InsertFieldButton
             fields={fields}
-            onInsert={(token: string) =>
-              onChange({
-                ...block,
-                text: insertAt(textRef.current, block.text, token),
-              })
-            }
+            onInsert={(token: string) => textRef.current?.insert(token)}
           />
         </Space>
       ) : (
@@ -343,9 +338,7 @@ export default function QuickMessageBlockEditor({
 
           <ImageEditorModal
             file={editing}
-            cancelLabel={
-              isFreshPick ? t("imageEditor.useOriginal") : undefined
-            }
+            cancelLabel={isFreshPick ? t("imageEditor.useOriginal") : undefined}
             onCancel={() => {
               if (isFreshPick && editing) {
                 attach(editing);

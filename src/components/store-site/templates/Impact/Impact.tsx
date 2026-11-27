@@ -53,6 +53,7 @@ import { siteMarqueeStyleOf } from "../../../../shared/business/store-sites/stor
 import StoreSitesEnum from "../../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteTemplateProps } from "../../template.types";
 import styles from "./Impact.module.css";
+import { richTextToPlain } from "../../../../shared/utils/rich-text/rich-text";
 
 /** The last word of the title is drawn as an outline; a one-word title is not split. */
 const splitTitle = (title: string): { lead: string; last: string | null } => {
@@ -259,7 +260,7 @@ const Impact = ({
                           {catalog.view.isDescriptionShown &&
                             product.description && (
                               <span className={base.productDescription}>
-                                {product.description}
+                                {richTextToPlain(product.description)}
                               </span>
                             )}
                           <button

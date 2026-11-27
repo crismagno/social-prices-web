@@ -54,6 +54,7 @@ import SalesTable from "../../sales/components/SalesTable/SalesTable";
 import { useFindStoresByUser } from "../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../tags/useFindTagsByType";
 import { useFindProductItemById } from "../useFindProductItemById";
+import RichTextView from "../../../components/common/RichText/RichTextView";
 
 export default function ProductItemPage() {
   const { t } = useLanguageData();
@@ -280,14 +281,22 @@ export default function ProductItemPage() {
                 <Col xs={24}>
                   <Descriptions bordered column={1} size="small">
                     <Descriptions.Item label={t("common.description")}>
-                      <div className="max-h-20 overflow-y-auto">
-                        {productItem.description || "-"}
+                      <div className="max-h-48 overflow-y-auto">
+                        {productItem.description ? (
+                          <RichTextView value={productItem.description} />
+                        ) : (
+                          "-"
+                        )}
                       </div>
                     </Descriptions.Item>
 
                     <Descriptions.Item label={t("common.details")}>
-                      <div className="max-h-20 overflow-y-auto">
-                        {productItem.details || "-"}
+                      <div className="max-h-48 overflow-y-auto">
+                        {productItem.details ? (
+                          <RichTextView value={productItem.details} />
+                        ) : (
+                          "-"
+                        )}
                       </div>
                     </Descriptions.Item>
                   </Descriptions>

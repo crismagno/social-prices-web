@@ -4,6 +4,7 @@ import {
   IQuickMessageAvailableMediaBlock,
 } from "../../shared/business/quick-messages/quick-messages.types";
 import { IInboxConversation } from "../../shared/business/inbox/inbox.types";
+import { richTextToPlain } from "../../shared/utils/rich-text/rich-text";
 
 // Lower case and without accents, so "preco" finds "Preço".
 export const normalize = (text: string): string =>
@@ -16,7 +17,7 @@ export const normalize = (text: string): string =>
 const textsOf = (message: IQuickMessageAvailable): string[] =>
   message.blocks.map((block) =>
     block.type === QuickMessagesEnum.BlockType.TEXT
-      ? block.text
+      ? richTextToPlain(block.text)
       : (block.caption ?? ""),
   );
 

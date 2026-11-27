@@ -55,6 +55,7 @@ import { siteMarqueeStyleOf } from "../../../../shared/business/store-sites/stor
 import StoreSitesEnum from "../../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteTemplateProps } from "../../template.types";
 import styles from "./Atelier.module.css";
+import { richTextToPlain } from "../../../../shared/utils/rich-text/rich-text";
 
 /**
  * Delicate and pastel, for handmade and personalised pieces: a watercolour
@@ -260,7 +261,7 @@ const Atelier = ({
                         {catalog.view.isDescriptionShown &&
                           product.description && (
                             <span className={base.productDescription}>
-                              {product.description}
+                              {richTextToPlain(product.description)}
                             </span>
                           )}
                         <div>

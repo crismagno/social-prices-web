@@ -1,4 +1,10 @@
-import { heroOptionsOf } from "../../../shared/business/store-sites/store-site-hero";
+import {
+  IStoreSiteHeroOptions,
+  IStoreSitePageHero,
+  heroOptionsOf,
+  pageHeroOf,
+} from "../../../shared/business/store-sites/store-site-hero";
+import { IStoreSiteHero } from "../../../shared/business/store-sites/store-site.interface";
 import { IStoreSiteTemplateProps } from "../template.types";
 
 /** How tall the top of a page other than the home is. */
@@ -6,34 +12,87 @@ export const PAGE_TOP_HEIGHT = 440;
 
 type TSite = IStoreSiteTemplateProps["site"];
 
+interface IPageTop {
+  title: string | null;
+  intro: string | null;
+  hero?: IStoreSitePageHero | null;
+}
+
+/**
+ * The entrance of a page that never got its own: the home's, shorter, without
+ * what only the home says. Its button and colours stay the home's.
+ */
+const followingHero = (hero: IStoreSiteHero): Partial<IStoreSiteHero> => ({
+  tagline: null,
+  featuredImageUrl: null,
+  featuredImageUrls: [],
+  options: {
+    ...heroOptionsOf(hero.options),
+    isSubtitleVisible: true,
+    extraText: null,
+    secondButton: null,
+  },
+});
+
+/**
+ * The entrance of a page that has its own: its line, button, pictures and
+ * colours. What it leaves empty (the picture behind, the words of the button,
+ * a colour) is the home's.
+ */
+const ownHero = (
+  hero: IStoreSiteHero,
+  own: IStoreSitePageHero,
+): Partial<IStoreSiteHero> => {
+  const home: IStoreSiteHeroOptions = heroOptionsOf(hero.options);
+
+  return {
+    tagline: own.tagline,
+    ctaLabel: own.ctaLabel?.trim() || hero.ctaLabel,
+    // Its own picture stays still; the home's keeps taking turns.
+    ...(own.backgroundImageUrl
+      ? { backgroundImageUrl: own.backgroundImageUrl, backgroundImageUrls: [] }
+      : {}),
+    featuredImageUrl: own.featuredImageUrl,
+    featuredImageUrls: [],
+    options: {
+      ...own.options,
+      // A line or picture the page does not want is simply left empty.
+      isTaglineVisible: true,
+      isSubtitleVisible: true,
+      isFeaturedVisible: true,
+      colors: {
+        background: own.options.colors.background ?? home.colors.background,
+        text: own.options.colors.text ?? home.colors.text,
+        button: own.options.colors.button ?? home.colors.button,
+      },
+    },
+  };
+};
+
 /**
  * The site as one of its pages shows it: the top says the page's own title,
- * shorter and without the featured picture. The home is the site as it is.
- * What the page shows below the top, its sections say.
+ * and is the page's own entrance when it has one. The home is the site as it
+ * is. What the page shows below the top, its sections say.
  */
 export const sitePageView = <S extends TSite>(
   site: S,
-  page: { title: string | null; intro: string | null } | null,
+  page: IPageTop | null,
   label: string,
-): S =>
-  page
-    ? {
-        ...site,
-        hero: {
-          ...site.hero,
-          tagline: null,
-          title: page.title?.trim() || label,
-          subtitle: page.intro,
-          featuredImageUrl: null,
-          featuredImageUrls: [],
-          // Only the home says more and leads elsewhere; the colours stay.
-          options: {
-            ...heroOptionsOf(site.hero.options),
-            isSubtitleVisible: true,
-            extraText: null,
-            secondButton: null,
-          },
-        },
-        sizes: { ...site.sizes, heroHeight: PAGE_TOP_HEIGHT },
-      }
-    : site;
+): S => {
+  if (!page) {
+    return site;
+  }
+
+  const own: IStoreSitePageHero | null = pageHeroOf(page.hero);
+
+  return {
+    ...site,
+    hero: {
+      ...site.hero,
+      ...(own ? ownHero(site.hero, own) : followingHero(site.hero)),
+      title: page.title?.trim() || label,
+      subtitle: page.intro,
+    },
+    sizes: { ...site.sizes, heroHeight: own?.height ?? PAGE_TOP_HEIGHT },
+  };
+};

@@ -1,6 +1,7 @@
 import { CART_PAGE_SLUG, PRODUCT_PAGE_SLUG } from "./store-site-checkout";
 import Urls from "../../common/routes-app/routes-app";
 import { IStoreSiteAboutMedia } from "./store-site-about";
+import { IStoreSitePageHero, pageHeroOf } from "./store-site-hero";
 import StoreSitesEnum from "./store-sites.enum";
 
 export interface IStoreSiteFaqItem {
@@ -35,6 +36,8 @@ export interface IStoreSitePage {
   content: IStoreSitePageContent;
   /** Questions and answers: only the support page has them. */
   faq: IStoreSiteFaqItem[];
+  /** The page's own entrance; none, it follows the home's. */
+  hero: IStoreSitePageHero | null;
 }
 
 export const PAGE_SLUG_REGEX = /^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]$/;
@@ -79,6 +82,7 @@ const readyPage = (
   intro: null,
   content: emptyPageContent(),
   faq: [],
+  hero: null,
 });
 
 /**
@@ -100,6 +104,7 @@ export const sitePagesOf = (
       // A page saved before the heading existed has none.
       content: { ...emptyPageContent(), ...(page.content ?? {}) },
       faq: page.faq ?? [],
+      hero: pageHeroOf(page.hero),
     }));
 };
 

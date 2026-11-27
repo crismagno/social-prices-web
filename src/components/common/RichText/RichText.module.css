@@ -1,0 +1,111 @@
+/* How a formatted text reads, in the editor and wherever it is shown. The
+   page resets lists and headings, so they get their look back here. */
+.rich {
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+}
+
+.rich p {
+  margin: 0 0 0.6em;
+}
+
+.rich > :last-child {
+  margin-bottom: 0;
+}
+
+.rich h2 {
+  margin: 0.8em 0 0.4em;
+  font-size: 1.35em;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.rich h3 {
+  margin: 0.8em 0 0.4em;
+  font-size: 1.15em;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.rich h4 {
+  margin: 0.8em 0 0.4em;
+  font-size: 1em;
+  font-weight: 700;
+}
+
+.rich ul,
+.rich ol {
+  margin: 0 0 0.6em;
+  padding-left: 1.5em;
+}
+
+.rich ul {
+  list-style: disc;
+}
+
+.rich ol {
+  list-style: decimal;
+}
+
+.rich li {
+  margin: 0.15em 0;
+}
+
+.rich li > p {
+  margin: 0;
+}
+
+.rich blockquote {
+  margin: 0 0 0.6em;
+  padding: 0.2em 0 0.2em 0.9em;
+  border-left: 3px solid currentColor;
+  opacity: 0.8;
+}
+
+.rich hr {
+  margin: 1em 0;
+  border: 0;
+  border-top: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+}
+
+.rich a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.rich mark {
+  padding: 0 0.15em;
+  border-radius: 3px;
+  background: #fde68a;
+  color: inherit;
+}
+
+.rich code {
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  font-size: 0.9em;
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.plain {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+/* The writing area of the editor. */
+.editable {
+  min-height: 120px;
+  max-height: 420px;
+  overflow-y: auto;
+  padding: 10px 12px;
+  outline: none;
+}
+
+.editable :global(p.is-editor-empty:first-child::before) {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  opacity: 0.4;
+}

@@ -55,6 +55,7 @@ import { siteMarqueeStyleOf } from "../../../../shared/business/store-sites/stor
 import StoreSitesEnum from "../../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteTemplateProps } from "../../template.types";
 import styles from "./Swell.module.css";
+import { richTextToPlain } from "../../../../shared/utils/rich-text/rich-text";
 
 /**
  * Fast and sporty: condensed italic capitals, diagonal cuts and a wave that
@@ -258,7 +259,7 @@ const Swell = ({
                               {catalog.view.isDescriptionShown &&
                                 product.description && (
                                   <span className={base.productDescription}>
-                                    {product.description}
+                                    {richTextToPlain(product.description)}
                                   </span>
                                 )}
                             </span>

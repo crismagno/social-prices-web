@@ -2578,6 +2578,7 @@
           "colors": {
             "title": "Colours of the entrance",
             "hint": "They apply to the entrance only. Empty uses the template's colour.",
+            "pageHint": "Only for the entrance of this page. Empty uses the colour of the home's entrance.",
             "background": "Background",
             "text": "Title and texts",
             "button": "Button"
@@ -2586,8 +2587,10 @@
             "title": "More texts and buttons",
             "extraText": "Extra paragraph",
             "extraTextHint": "Shown under the subtitle, on the home page only.",
+            "extraTextPageHint": "Shown below the line under the title.",
             "buttonTarget": "Where the main button leads",
             "buttonTargetHint": "The words of the button are the button text field, further down.",
+            "buttonTargetPageHint": "Where the button of this page's entrance leads.",
             "toProducts": "Products",
             "toOther": "Another destination",
             "secondButton": "Second button"
@@ -2919,6 +2922,21 @@
       },
       "pages": {
         "newPage": "New page",
+        "hero": {
+          "title": "Entrance of this page",
+          "show": "Show the entrance on this page",
+          "showHint": "Off, the page starts with the menu and its first section.",
+          "own": "Own entrance for this page",
+          "ownHint": "Off, the page follows the entrance of the home: same picture, button and colours. On, this page gets its own button, texts, pictures and colours.",
+          "tagline": "Line above the title",
+          "ctaLabel": "Text of the button",
+          "ctaLabelHint": "Empty uses the text of the home's button.",
+          "background": "Background image",
+          "backgroundHint": "Empty uses the background of the home.",
+          "featured": "Featured image",
+          "featuredHint": "Shown beside the texts. Empty shows none.",
+          "height": "Height of the entrance"
+        },
         "inMenu": "Show in the menu",
         "label": "Name in the menu",
         "labelHint": "Empty shows the name of the kind of page.",
@@ -3644,5 +3662,35 @@
     "download": "Download",
     "close": "Close",
     "noPreview": "This kind of file has no preview. Download it to open."
+  },
+  "richText": {
+    "toolbar": "Text formatting",
+    "undo": "Undo",
+    "redo": "Redo",
+    "block": "Paragraph type",
+    "paragraph": "Normal text",
+    "heading2": "Heading",
+    "heading3": "Subheading",
+    "heading4": "Small heading",
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "strike": "Strikethrough",
+    "highlight": "Highlight",
+    "code": "Code",
+    "bulletList": "Bulleted list",
+    "orderedList": "Numbered list",
+    "quote": "Quote",
+    "divider": "Divider line",
+    "alignLeft": "Align left",
+    "alignCenter": "Center",
+    "alignRight": "Align right",
+    "alignJustify": "Justify",
+    "link": "Link",
+    "linkPlaceholder": "https://…",
+    "apply": "Apply",
+    "removeLink": "Remove link",
+    "emoji": "Emojis",
+    "clear": "Clear formatting"
   }
 }

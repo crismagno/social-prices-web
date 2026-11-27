@@ -73,3 +73,62 @@ export const heroOptionsOf = (options: unknown): IStoreSiteHeroOptions => {
     },
   };
 };
+
+/**
+ * The entrance of one page, apart from the home's. Its title and the line
+ * under it are the page's own `title` and `intro`. Mirrors the API.
+ */
+export interface IStoreSitePageHero {
+  /** The line over the title; empty, none. */
+  tagline: string | null;
+  /** The words of the main button; empty, the home's. */
+  ctaLabel: string | null;
+  /** The picture behind; empty, the home's. */
+  backgroundImageUrl: string | null;
+  /** The picture beside the words; empty, none. */
+  featuredImageUrl: string | null;
+  /** How tall, in pixels; empty, the usual height of a page's top. */
+  height: number | null;
+  options: IStoreSiteHeroOptions;
+}
+
+export const PAGE_HERO_TEXT_MAX: number = 80;
+
+export const PAGE_HERO_HEIGHT_RANGE: [number, number] = [120, 1600];
+
+const textOf = (value: unknown): string | null =>
+  typeof value === "string" && value.trim() ? value : null;
+
+/** The entrance a page starts from when the owner gives it its own. */
+export const newPageHero = (): IStoreSitePageHero => ({
+  tagline: null,
+  ctaLabel: null,
+  backgroundImageUrl: null,
+  featuredImageUrl: null,
+  height: null,
+  options: heroOptionsOf(null),
+});
+
+/**
+ * The entrance of one page as it was stored; a page that never got its own
+ * has none, and follows the home's.
+ */
+export const pageHeroOf = (hero: unknown): IStoreSitePageHero | null => {
+  if (!hero || typeof hero !== "object" || Array.isArray(hero)) {
+    return null;
+  }
+
+  const source: Record<string, unknown> = hero as Record<string, unknown>;
+
+  return {
+    tagline: textOf(source.tagline),
+    ctaLabel: textOf(source.ctaLabel),
+    backgroundImageUrl: textOf(source.backgroundImageUrl),
+    featuredImageUrl: textOf(source.featuredImageUrl),
+    height:
+      typeof source.height === "number" && Number.isFinite(source.height)
+        ? source.height
+        : null,
+    options: heroOptionsOf(source.options),
+  };
+};

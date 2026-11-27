@@ -54,6 +54,7 @@ import { siteMarqueeStyleOf } from "../../../../shared/business/store-sites/stor
 import StoreSitesEnum from "../../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteTemplateProps } from "../../template.types";
 import styles from "./Atlas.module.css";
+import { richTextToPlain } from "../../../../shared/utils/rich-text/rich-text";
 
 /**
  * Sober and solid: a bar of its own at the top, squared corners, thin
@@ -254,7 +255,7 @@ const Atlas = ({
                               {catalog.view.isDescriptionShown &&
                                 product.description && (
                                   <span className={base.productDescription}>
-                                    {product.description}
+                                    {richTextToPlain(product.description)}
                                   </span>
                                 )}
                             </span>

@@ -19,6 +19,8 @@ import {
 } from "../../shared/business/quick-messages/quick-messages.types";
 import { getImageUrl } from "../../shared/utils/images/images-url";
 import { formatFileSize } from "../apps/telegram/telegram-display";
+import RichTextView from "../../components/common/RichText/RichTextView";
+import { isRichText } from "../../shared/utils/rich-text/rich-text";
 
 // A file block with where it is kept (the grid) or without it (the chat).
 type MediaBlock = IQuickMessageMediaBlock | IQuickMessageAvailableMediaBlock;
@@ -117,7 +119,13 @@ export default function QuickMessageBubbles({ blocks, className }: Props) {
                   block.type === QuickMessagesEnum.BlockType.MEDIA ? "mt-2" : ""
                 }`}
               >
-                {renderText(text, token.colorPrimary)}
+                {/* Written in the editor: shown formatted, as the chats that
+                    can show it will. */}
+                {isRichText(text) ? (
+                  <RichTextView value={text} />
+                ) : (
+                  renderText(text, token.colorPrimary)
+                )}
               </div>
             )}
           </div>

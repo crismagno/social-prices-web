@@ -11,6 +11,7 @@ import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enu
 import { IPublicSiteProduct } from "../../../shared/business/store-sites/store-sites.types";
 import SiteProductSearch from "./SiteProductSearch";
 import useSiteT from "./useSiteT";
+import { richTextToPlain } from "../../../shared/utils/rich-text/rich-text";
 
 interface Params {
   catalog: Partial<IStoreSiteCatalog> | null | undefined;
@@ -33,10 +34,7 @@ export interface ISiteCatalog {
 
 // Lowercase and without accents, so "cafe" finds "Café".
 const plain = (text: string): string =>
-  text
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase();
+  text.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
 /**
  * The owner's choices about the products, and the visitor's search among
@@ -65,7 +63,11 @@ const useSiteCatalog = ({ catalog, products, page }: Params): ISiteCatalog => {
       wanted
         ? products.filter((product: IPublicSiteProduct) =>
             plain(
-              [product.name, product.brand, product.description]
+              [
+                product.name,
+                product.brand,
+                richTextToPlain(product.description),
+              ]
                 .filter(Boolean)
                 .join(" "),
             ).includes(wanted),

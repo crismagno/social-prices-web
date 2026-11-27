@@ -55,6 +55,7 @@ import { siteMarqueeStyleOf } from "../../../../shared/business/store-sites/stor
 import StoreSitesEnum from "../../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteTemplateProps } from "../../template.types";
 import styles from "./Garden.module.css";
+import { richTextToPlain } from "../../../../shared/utils/rich-text/rich-text";
 
 const PETALS: { left: string; sway: string; delay: string }[] = [
   { left: "8%", sway: "60px", delay: "0s" },
@@ -275,7 +276,7 @@ const Garden = ({
                         {catalog.view.isDescriptionShown &&
                           product.description && (
                             <span className={base.productDescription}>
-                              {product.description}
+                              {richTextToPlain(product.description)}
                             </span>
                           )}
                         <div>

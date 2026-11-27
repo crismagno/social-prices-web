@@ -53,6 +53,7 @@ import { siteMarqueeStyleOf } from "../../../../shared/business/store-sites/stor
 import StoreSitesEnum from "../../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteTemplateProps } from "../../template.types";
 import styles from "./Mare.module.css";
+import { richTextToPlain } from "../../../../shared/utils/rich-text/rich-text";
 
 /** The title with its last word apart: that one is set in italics. */
 const splitLast = (title: string): { lead: string; last: string } => {
@@ -303,7 +304,7 @@ const Mare = ({
                       {catalog.view.isDescriptionShown &&
                         product.description && (
                           <span className={base.productDescription}>
-                            {product.description}
+                            {richTextToPlain(product.description)}
                           </span>
                         )}
                     </div>

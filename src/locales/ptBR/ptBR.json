@@ -2581,6 +2581,7 @@
           "colors": {
             "title": "Cores da entrada",
             "hint": "Valem só para a entrada. Vazio usa a cor do template.",
+            "pageHint": "Valem só para a entrada desta página. Vazio usa a cor da entrada da página inicial.",
             "background": "Fundo",
             "text": "Título e textos",
             "button": "Botão"
@@ -2589,8 +2590,10 @@
             "title": "Mais textos e botões",
             "extraText": "Parágrafo extra",
             "extraTextHint": "Aparece abaixo do subtítulo, só na página inicial.",
+            "extraTextPageHint": "Aparece abaixo da linha sob o título.",
             "buttonTarget": "Para onde o botão principal leva",
             "buttonTargetHint": "O texto do botão é o campo \"Texto do botão\", mais abaixo.",
+            "buttonTargetPageHint": "Para onde leva o botão da entrada desta página.",
             "toProducts": "Produtos",
             "toOther": "Outro destino",
             "secondButton": "Segundo botão"
@@ -2922,6 +2925,21 @@
       },
       "pages": {
         "newPage": "Nova página",
+        "hero": {
+          "title": "Entrada desta página",
+          "show": "Mostrar a entrada nesta página",
+          "showHint": "Desligada, a página começa pelo menu e pela primeira seção.",
+          "own": "Entrada própria para esta página",
+          "ownHint": "Desligada, a página segue a entrada da página inicial: mesma imagem, botão e cores. Ligada, esta página tem seu próprio botão, textos, imagens e cores.",
+          "tagline": "Linha acima do título",
+          "ctaLabel": "Texto do botão",
+          "ctaLabelHint": "Vazio usa o texto do botão da página inicial.",
+          "background": "Imagem de fundo",
+          "backgroundHint": "Vazio usa o fundo da página inicial.",
+          "featured": "Imagem em destaque",
+          "featuredHint": "Aparece ao lado dos textos. Vazio não mostra nenhuma.",
+          "height": "Altura da entrada"
+        },
         "inMenu": "Mostrar no menu",
         "label": "Nome no menu",
         "labelHint": "Vazio mostra o nome do tipo de página.",
@@ -3647,5 +3665,35 @@
     "download": "Baixar",
     "close": "Fechar",
     "noPreview": "Este tipo de arquivo não tem pré-visualização. Baixe para abrir."
+  },
+  "richText": {
+    "toolbar": "Formatação do texto",
+    "undo": "Desfazer",
+    "redo": "Refazer",
+    "block": "Tipo do parágrafo",
+    "paragraph": "Texto normal",
+    "heading2": "Título",
+    "heading3": "Subtítulo",
+    "heading4": "Título pequeno",
+    "bold": "Negrito",
+    "italic": "Itálico",
+    "underline": "Sublinhado",
+    "strike": "Tachado",
+    "highlight": "Destacar",
+    "code": "Código",
+    "bulletList": "Lista com marcadores",
+    "orderedList": "Lista numerada",
+    "quote": "Citação",
+    "divider": "Linha divisória",
+    "alignLeft": "Alinhar à esquerda",
+    "alignCenter": "Centralizar",
+    "alignRight": "Alinhar à direita",
+    "alignJustify": "Justificar",
+    "link": "Link",
+    "linkPlaceholder": "https://…",
+    "apply": "Aplicar",
+    "removeLink": "Remover link",
+    "emoji": "Emojis",
+    "clear": "Limpar formatação"
   }
 }

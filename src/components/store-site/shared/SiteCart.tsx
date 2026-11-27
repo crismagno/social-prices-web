@@ -45,6 +45,7 @@ import styles from "./SiteCart.module.css";
 import SiteThemeVars from "./SiteThemeVars";
 import { ISiteCart, ISiteCartLine } from "./useSiteCart";
 import useSiteT from "./useSiteT";
+import { richTextToPlain } from "../../../shared/utils/rich-text/rich-text";
 
 interface Props {
   slug: string;
@@ -408,7 +409,7 @@ const SiteCart = ({
                         )}
                         {look.isDescriptionShown && product.description && (
                           <div className={styles.description}>
-                            {product.description}
+                            {richTextToPlain(product.description)}
                           </div>
                         )}
                         {look.isTagsShown && (size || colors.length > 0) && (

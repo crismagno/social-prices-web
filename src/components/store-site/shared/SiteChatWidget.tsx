@@ -36,6 +36,7 @@ import SiteChatIcon from "./SiteChatIcon";
 import styles from "./SiteChatWidget.module.css";
 import SiteThemeVars from "./SiteThemeVars";
 import useSiteT from "./useSiteT";
+import RichTextView from "../../common/RichText/RichTextView";
 
 // The most one message of the site chat takes.
 const SITE_CHAT_MAX_TEXT_LENGTH: number = 2000;
@@ -570,7 +571,6 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
   const time = (at: string): string =>
     new Date(at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-
   const optional = (mode: StoreSitesEnum.ChatFieldMode): string =>
     mode === StoreSitesEnum.ChatFieldMode.OPTIONAL
       ? ` ${t("storeSite.chat.optional")}`
@@ -635,7 +635,11 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
 
           <div className={styles.body} aria-live="polite">
             <div className={`${styles.bubble} ${styles.fromStore}`}>
-              {settings.greeting ?? t("storeSite.chat.greeting")}
+              {settings.greeting ? (
+                <RichTextView value={settings.greeting} />
+              ) : (
+                t("storeSite.chat.greeting")
+              )}
             </div>
 
             {token ? (
@@ -678,7 +682,9 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
                   }
                 />
                 {settings.extraFields.map((asked: ISiteChatExtraField) => {
-                  const name: string = t(`storeSite.chat.fields.${asked.field}`);
+                  const name: string = t(
+                    `storeSite.chat.fields.${asked.field}`,
+                  );
                   const label: string = asked.isRequired
                     ? name
                     : `${name} ${t("storeSite.chat.optional")}`;

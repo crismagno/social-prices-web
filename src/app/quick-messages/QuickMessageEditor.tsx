@@ -20,6 +20,7 @@ import {
 import QuickMessageBlockEditor, {
   IEditorBlock,
 } from "./QuickMessageBlockEditor";
+import { richTextToPlain } from "../../shared/utils/rich-text/rich-text";
 
 interface Props {
   initial?: IQuickMessage;
@@ -56,7 +57,7 @@ const problemOf = (name: string, blocks: IEditorBlock[]): string | null => {
 
   const incomplete: boolean = blocks.some((block: IEditorBlock) =>
     block.type === QuickMessagesEnum.BlockType.TEXT
-      ? !block.text.trim()
+      ? !richTextToPlain(block.text).trim()
       : !block.file && !block.kept,
   );
 

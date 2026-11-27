@@ -8,6 +8,7 @@ import {
 } from "../../../../../shared/business/store-sites/store-sites.types";
 import { getImageUrl } from "../../../../../shared/utils/images/images-url";
 import SiteClient from "../../SiteClient";
+import { richTextToPlain } from "../../../../../shared/utils/rich-text/rich-text";
 
 interface Props {
   params: Promise<{ slug: string; productId: string }>;
@@ -40,7 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title: string = `${product.name} · ${brandName}`;
 
   const description: string | undefined =
-    product.description ?? product.details ?? undefined;
+    richTextToPlain(product.description ?? product.details) || undefined;
 
   return {
     title,

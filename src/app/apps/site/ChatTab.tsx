@@ -28,6 +28,7 @@ import {
 } from "../../../shared/business/store-sites/store-site-chat";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
+import RichTextEditor from "../../../components/common/RichText/RichTextEditor";
 
 interface Props {
   editor: IStoreSiteEditor;
@@ -169,13 +170,13 @@ const ChatTab = ({ editor }: Props) => {
             />
           </Form.Item>
           <Form.Item label={t("storeSite.editor.chat.greeting")}>
-            <Input.TextArea
-              autoSize={{ minRows: 2, maxRows: 5 }}
+            <RichTextEditor
+              variant="chat"
               maxLength={300}
               placeholder={t("storeSite.chat.greeting")}
               value={chat.greeting ?? ""}
-              onChange={(event) =>
-                set({ greeting: event.target.value || null })
+              onChange={(greeting: string) =>
+                set({ greeting: greeting || null })
               }
             />
           </Form.Item>
@@ -200,7 +201,9 @@ const ChatTab = ({ editor }: Props) => {
                       onChange={(field) =>
                         setFields((fields) =>
                           fields.map((each) =>
-                            each.field === asked.field ? { ...each, field } : each,
+                            each.field === asked.field
+                              ? { ...each, field }
+                              : each,
                           ),
                         )
                       }

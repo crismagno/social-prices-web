@@ -26,6 +26,7 @@ import {
 } from "../../../shared/business/store-sites/store-site-pages";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import PageContentFields from "./PageContentFields";
+import PageHeroFields from "./PageHeroFields";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
 
 interface Props {
@@ -93,6 +94,7 @@ const PagesTab = ({ editor, storeId }: Props) => {
           intro: null,
           content: emptyPageContent(),
           faq: [],
+          hero: null,
         },
       ],
     }));
@@ -268,6 +270,8 @@ const PagesTab = ({ editor, storeId }: Props) => {
                     }
                   />
                 </Form.Item>
+
+                <PageHeroFields editor={editor} storeId={storeId} page={page} />
 
                 {page.type === StoreSitesEnum.SitePageType.PRODUCTS && (
                   <Alert

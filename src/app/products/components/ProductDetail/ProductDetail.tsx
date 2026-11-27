@@ -54,6 +54,7 @@ import { CheckboxCustomAntd } from "../../../../components/custom/antd/CheckboxC
 import { InputCustomAntd } from "../../../../components/custom/antd/InputCustomAntd/InputCustomAntd";
 import { InputNumberCustomAntd } from "../../../../components/custom/antd/InputNumberCustomAntd/InputNumberCustomAntd";
 import { SelectCustomAntd } from "../../../../components/custom/antd/SelectCustomAntd/SelectCustomAntd";
+import { RichTextCustomAntd } from "../../../../components/custom/antd/RichTextCustomAntd/RichTextCustomAntd";
 import { TextareaCustomAntd } from "../../../../components/custom/antd/TextareaCustomAntd/TextareaCustomAntd";
 import useLanguageData from "../../../../data/context/language/useLanguageData";
 import CreateProductDto from "../../../../services/social-prices-api/products/dto/createProduct.dto";
@@ -731,24 +732,22 @@ export const ProductDetail: React.FC<Props> = ({
 
         <Row className="mt-4">
           <Col xs={24}>
-            <TextareaCustomAntd
+            <RichTextCustomAntd
               controller={{ control, name: "description" }}
               label={t("common.description")}
               placeholder={t("common.description")}
               errorMessage={errors.description?.message}
-              rows={4}
             />
           </Col>
         </Row>
 
         <Row className="mt-3">
           <Col xs={24}>
-            <TextareaCustomAntd
+            <RichTextCustomAntd
               controller={{ control, name: "details" }}
               label={t("common.details")}
               placeholder={t("common.details")}
               errorMessage={errors.details?.message}
-              rows={4}
             />
           </Col>
         </Row>
@@ -849,11 +848,7 @@ export const ProductDetail: React.FC<Props> = ({
 
         <MultiColors control={control} errors={errors} />
 
-        <DynamicFields
-          control={control}
-          errors={errors}
-          setValue={setValue}
-        />
+        <DynamicFields control={control} errors={errors} setValue={setValue} />
 
         <HrCustom className="my-7" />
 
