@@ -16,6 +16,7 @@ import handleClientError from "../../../components/common/HandleClientError/Hand
 import TypingBubble from "../../../components/common/TypingBubble/TypingBubble";
 import { useStoreChatTyping } from "../../../data/context/socket/useStoreChatTyping";
 import ScrollToBottomButton from "../../../components/common/ScrollToBottomButton/ScrollToBottomButton";
+import ChatText from "../../../components/common/ChatText/ChatText";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import {
   IStoreChatMessage,
@@ -363,16 +364,7 @@ export default function CustomerChatsThread({
                       onCancel={() => setEditingId(null)}
                     />
                   ) : (
-                    item.text && (
-                      <div
-                        style={{
-                          whiteSpace: "pre-wrap",
-                          wordBreak: "break-word",
-                        }}
-                      >
-                        {item.text}
-                      </div>
-                    )
+                    item.text && <ChatText text={item.text} isFormatted />
                   )}
 
                   <div

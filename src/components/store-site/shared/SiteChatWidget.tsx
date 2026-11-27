@@ -17,6 +17,7 @@ import {
   useVoiceRecorder,
 } from "../../../app/apps/telegram/useVoiceRecorder";
 
+import ChatText from "../../common/ChatText/ChatText";
 import EmojiPanel from "../../common/EmojiPicker/EmojiPanel";
 import { insertEmoji } from "../../common/EmojiPicker/insert-emoji";
 import { useTypingSignal } from "../../../shared/hooks/useTypingSignal";
@@ -663,7 +664,7 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
                       />
                     ),
                   )}
-                  {message.text}
+                  {message.text && <ChatText text={message.text} isFormatted />}
                   <span className={styles.time}>{time(message.sentAt)}</span>
                 </div>
               ))

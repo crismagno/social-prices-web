@@ -25,6 +25,7 @@ import { useStoreChatTyping } from "../../data/context/socket/useStoreChatTyping
 import EditCustomerDrawer from "../../components/common/EditCustomerDrawer/EditCustomerDrawer";
 import ChannelIcon from "../../components/common/ChannelIcon/ChannelIcon";
 import ScrollToBottomButton from "../../components/common/ScrollToBottomButton/ScrollToBottomButton";
+import ChatText from "../../components/common/ChatText/ChatText";
 import useLanguageData from "../../data/context/language/useLanguageData";
 import { serviceMethodsInstance } from "../../services/social-prices-api/service-methods";
 import InboxEnum from "../../shared/business/inbox/inbox.enum";
@@ -71,6 +72,13 @@ interface Props {
   // The chat was set aside or brought back.
   onLimboChanged: (isInLimbo: boolean) => void;
 }
+
+// The channels whose messages write bold, italic and the rest with marks.
+const FORMATTED_CHANNELS: Set<InboxEnum.Channel> = new Set([
+  InboxEnum.Channel.WHATSAPP,
+  InboxEnum.Channel.STORE,
+  InboxEnum.Channel.SITE,
+]);
 
 // The longest text each channel that can change a message takes: a caption is
 // shorter than a text in Telegram.
@@ -423,6 +431,10 @@ export default function ChatsThread({
           >
             <Button
               size="small"
+              // Setting a chat aside is the step to think twice about; bringing
+              // it back is not.
+              type={chat.isInLimbo ? "default" : "primary"}
+              danger={!chat.isInLimbo}
               icon={chat.isInLimbo ? <RollbackOutlined /> : <InboxOutlined />}
               loading={isMovingLimbo}
               onClick={toggleLimbo}
@@ -573,14 +585,10 @@ export default function ChatsThread({
                       />
                     ) : (
                       item.text && (
-                        <div
-                          style={{
-                            whiteSpace: "pre-wrap",
-                            wordBreak: "break-word",
-                          }}
-                        >
-                          {item.text}
-                        </div>
+                        <ChatText
+                          text={item.text}
+                          isFormatted={FORMATTED_CHANNELS.has(item.channel)}
+                        />
                       )
                     )}
 
