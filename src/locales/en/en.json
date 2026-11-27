@@ -2022,6 +2022,16 @@
     "no": "No"
   },
   "chats": {
+    "mediaComposer": {
+      "title": "Send files ({count})",
+      "chosen": "{count} of {total} chosen",
+      "sending": "Sending {sent} of {total}…",
+      "send": "Send ({count})",
+      "include": "Send this file",
+      "caption": "Add a caption…",
+      "edit": "Edit",
+      "add": "Add files"
+    },
     "actions": {
       "edit": "Edit the customer's data without leaving the conversation",
       "fastSale": "Make a fast sale for this customer",

@@ -2025,6 +2025,16 @@
     "no": "Não"
   },
   "chats": {
+    "mediaComposer": {
+      "title": "Enviar arquivos ({count})",
+      "chosen": "{count} de {total} escolhidos",
+      "sending": "Enviando {sent} de {total}…",
+      "send": "Enviar ({count})",
+      "include": "Enviar este arquivo",
+      "caption": "Adicione uma legenda…",
+      "edit": "Editar",
+      "add": "Adicionar arquivos"
+    },
     "actions": {
       "edit": "Editar os dados do cliente sem sair da conversa",
       "fastSale": "Fazer uma venda rápida para este cliente",

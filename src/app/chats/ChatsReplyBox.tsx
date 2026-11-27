@@ -8,13 +8,11 @@ import dayjs from "dayjs";
 
 import {
   AudioOutlined,
-  CloseOutlined,
   DeleteOutlined,
   PaperClipOutlined,
   SendOutlined,
 } from "@ant-design/icons";
 
-import { useImageEditStep } from "../../components/common/ImageEditor/useImageEditStep";
 import ChannelIcon from "../../components/common/ChannelIcon/ChannelIcon";
 import EmojiPickerButton from "../../components/common/EmojiPicker/EmojiPickerButton";
 import { insertEmoji } from "../../components/common/EmojiPicker/insert-emoji";
@@ -33,12 +31,12 @@ import {
   IInboxMessage,
 } from "../../shared/business/inbox/inbox.types";
 import { useTypingSignal } from "../../shared/hooks/useTypingSignal";
-import { formatFileSize } from "../apps/telegram/telegram-display";
 import {
   MAX_RECORDING_SECONDS,
   useVoiceRecorder,
 } from "../apps/telegram/useVoiceRecorder";
 import { conversationName } from "./chats-display";
+import ChatsMediaComposer from "./ChatsMediaComposer";
 import ChatsQuickMessages from "./ChatsQuickMessages";
 import { useQuickMessages } from "./useQuickMessages";
 
@@ -63,7 +61,10 @@ export default function ChatsReplyBox({ chat, onSent }: Props) {
 
   const [text, setText] = useState<string>("");
 
-  const [file, setFile] = useState<File | null>(null);
+  // The files picked, pasted or dropped, waiting in the composer to be sent.
+  const [mediaFiles, setMediaFiles] = useState<File[]>([]);
+
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const [isSending, setIsSending] = useState<boolean>(false);
 
@@ -73,9 +74,6 @@ export default function ChatsReplyBox({ chat, onSent }: Props) {
   const inputRef = useRef<TextAreaRef | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  // Pictures are cropped and turned before they are attached.
-  const { editIfImage, editor: imageEditor } = useImageEditStep();
 
   const quickMessages = useQuickMessages();
 
@@ -105,7 +103,7 @@ export default function ChatsReplyBox({ chat, onSent }: Props) {
   useEffect(() => {
     setChosenId(null);
     setText("");
-    setFile(null);
+    setMediaFiles([]);
   }, [chat.key]);
 
   // Another conversation, or leaving: a half-made recording is not sent anywhere.
@@ -130,28 +128,33 @@ export default function ChatsReplyBox({ chat, onSent }: Props) {
   const takesFile: boolean = target.canSendMedia;
 
   const canSend: boolean =
-    target.canReply &&
-    (text.trim().length > 0 || (!!file && takesFile)) &&
-    !isSending;
+    target.canReply && text.trim().length > 0 && !isSending;
 
-  const pickFile = (picked: File | undefined): void => {
-    if (!picked) {
+  const canAttach: boolean = target.canReply && takesFile && !isSending;
+
+  // Files go to the composer, to be seen and chosen before they are sent.
+  const pickFiles = (picked: File[]): void => {
+    if (!picked.length) {
       return;
     }
 
-    if (target.maxUploadBytes !== null && picked.size > target.maxUploadBytes) {
-      message.error(
-        t("chats.media.tooLarge").replace(
-          "{size}",
-          formatFileSize(target.maxUploadBytes),
-        ),
-      );
+    if (!canAttach) {
+      message.warning(t("chats.media.noMedia"));
 
       return;
     }
 
-    setFile(picked);
-    inputRef.current?.focus();
+    setMediaFiles(picked);
+  };
+
+  const sendOneFile = async (file: File, caption: string): Promise<void> => {
+    onSent(
+      await serviceMethodsInstance.inboxServiceMethods.sendMedia(
+        target._id,
+        file,
+        caption,
+      ),
+    );
   };
 
   const pickEmoji = (emoji: string): void =>
@@ -171,21 +174,15 @@ export default function ChatsReplyBox({ chat, onSent }: Props) {
     try {
       setIsSending(true);
 
-      const sent: IInboxMessage = file
-        ? await serviceMethodsInstance.inboxServiceMethods.sendMedia(
-            target._id,
-            file,
-            text,
-          )
-        : await serviceMethodsInstance.inboxServiceMethods.reply(
-            target._id,
-            text.trim(),
-          );
+      const sent: IInboxMessage =
+        await serviceMethodsInstance.inboxServiceMethods.reply(
+          target._id,
+          text.trim(),
+        );
 
       onSent(sent);
 
       setText("");
-      setFile(null);
     } catch (error: any) {
       // The server's words say what is wrong (window closed, file refused...).
       handleClientError(error);
@@ -218,7 +215,6 @@ export default function ChatsReplyBox({ chat, onSent }: Props) {
       result.messages.forEach(onSent);
 
       setText("");
-      setFile(null);
     } catch (error: any) {
       const data = error?.response?.data;
 
@@ -321,41 +317,49 @@ export default function ChatsReplyBox({ chat, onSent }: Props) {
         />
       )}
 
-      {file && (
-        <div
-          className="mb-2 flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm"
-          style={{ background: token.colorFillSecondary }}
-        >
-          <PaperClipOutlined />
+      <ChatsMediaComposer
+        files={mediaFiles}
+        initialCaption={text}
+        maxUploadBytes={target.maxUploadBytes}
+        sendOne={sendOneFile}
+        onClose={(isSent: boolean) => {
+          setMediaFiles([]);
 
-          <span className="min-w-0 flex-1 truncate">{file.name}</span>
+          // The words went as the first file's caption.
+          if (isSent) {
+            setText("");
+          }
 
-          {!takesFile && (
-            <span className="text-xs" style={{ color: token.colorError }}>
-              {t("chats.media.noMedia")}
-            </span>
-          )}
-
-          <span className="text-xs" style={{ color: token.colorTextSecondary }}>
-            {formatFileSize(file.size)}
-          </span>
-
-          <Button
-            type="text"
-            size="small"
-            icon={<CloseOutlined />}
-            disabled={isSending}
-            onClick={() => setFile(null)}
-            aria-label={t("chats.media.removeFile")}
-          />
-        </div>
-      )}
+          inputRef.current?.focus();
+        }}
+      />
 
       <div
         className="flex items-end gap-2 rounded-3xl py-1 pl-1 pr-1"
         style={{
-          border: `1px solid ${token.colorBorder}`,
-          background: token.colorBgContainer,
+          border: `1px ${isDragging ? "dashed" : "solid"} ${
+            isDragging ? token.colorPrimary : token.colorBorder
+          }`,
+          background: isDragging
+            ? token.colorPrimaryBg
+            : token.colorBgContainer,
+        }}
+        // Files dropped on the box open the composer, as picked ones do.
+        onDragOver={(event) => {
+          if (canAttach && event.dataTransfer.types.includes("Files")) {
+            event.preventDefault();
+            setIsDragging(true);
+          }
+        }}
+        onDragLeave={() => setIsDragging(false)}
+        onDrop={(event) => {
+          if (!event.dataTransfer.files.length) {
+            return;
+          }
+
+          event.preventDefault();
+          setIsDragging(false);
+          pickFiles(Array.from(event.dataTransfer.files));
         }}
       >
         {isRecording ? (
@@ -398,18 +402,15 @@ export default function ChatsReplyBox({ chat, onSent }: Props) {
             <input
               ref={fileInputRef}
               type="file"
+              multiple
               hidden
               onChange={(event) => {
-                const picked: File | undefined = event.target.files?.[0];
-                // The same file can be picked again after it was removed.
+                const picked: File[] = Array.from(event.target.files ?? []);
+                // The same files can be picked again after they were removed.
                 event.target.value = "";
-                // A picture passes through the image editor first.
-                if (picked) {
-                  editIfImage(picked).then(pickFile);
-                }
+                pickFiles(picked);
               }}
             />
-            {imageEditor}
 
             <Button
               type="text"
@@ -438,6 +439,15 @@ export default function ChatsReplyBox({ chat, onSent }: Props) {
               disabled={!target.canReply}
               readOnly={isSending}
               onChange={(event) => setText(event.target.value)}
+              // A picture pasted (a screenshot, say) opens the composer.
+              onPaste={(event) => {
+                const pasted: File[] = Array.from(event.clipboardData.files);
+
+                if (pasted.length) {
+                  event.preventDefault();
+                  pickFiles(pasted);
+                }
+              }}
               onPressEnter={(event) => {
                 // Enter sends; Shift+Enter keeps the line break.
                 if (!event.shiftKey) {

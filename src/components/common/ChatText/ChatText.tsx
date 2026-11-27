@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 
 interface Props {
   text: string;
@@ -67,14 +67,176 @@ const formatted = (text: string, path: string): ReactNode[] => {
   return nodes;
 };
 
+// How the API writes the editor's lists, quotes and rules in a chat message.
+const BULLET: RegExp = /^[•-] (.*)$/;
+const NUMBERED: RegExp = /^(\d{1,3})\. (.*)$/;
+const QUOTED: RegExp = /^> ?(.*)$/;
+const RULE: RegExp = /^———$/;
+
+// What follows an item on its next lines comes pushed in by three spaces.
+const CONTINUED: RegExp = /^ {3}/;
+
+const TEXT_STYLE: CSSProperties = {
+  whiteSpace: "pre-wrap",
+  wordBreak: "break-word",
+};
+
+const LIST_STYLE: CSSProperties = {
+  margin: "2px 0",
+  paddingLeft: "1.5em",
+};
+
+const QUOTE_STYLE: CSSProperties = {
+  ...TEXT_STYLE,
+  margin: "4px 0",
+  paddingLeft: 8,
+  borderLeft: "3px solid color-mix(in srgb, currentColor 45%, transparent)",
+  opacity: 0.9,
+};
+
+const RULE_STYLE: CSSProperties = {
+  margin: "6px 0",
+  border: 0,
+  borderTop: "1px solid color-mix(in srgb, currentColor 35%, transparent)",
+};
+
+interface IListItem {
+  number: number | null;
+  lines: string[];
+}
+
+/** The lines of a text made into lists, quotes and rules, the rest as words. */
+const blocks = (text: string, path: string): ReactNode[] => {
+  const lines: string[] = text.split("\n");
+  const nodes: ReactNode[] = [];
+
+  let words: string[] = [];
+  let index: number = 0;
+
+  // The words gathered so far, without the empty lines that only kept them
+  // apart from a list or a quote: those have room of their own.
+  const flushWords = (): void => {
+    while (words.length && !words[0].trim()) {
+      words.shift();
+    }
+
+    while (words.length && !words[words.length - 1].trim()) {
+      words.pop();
+    }
+
+    if (words.length) {
+      const key: string = `${path}-w${nodes.length}`;
+
+      nodes.push(
+        <div key={key} style={TEXT_STYLE}>
+          {formatted(words.join("\n"), key)}
+        </div>,
+      );
+    }
+
+    words = [];
+  };
+
+  while (index < lines.length) {
+    const line: string = lines[index];
+    const pattern: RegExp | null = BULLET.test(line)
+      ? BULLET
+      : NUMBERED.test(line)
+        ? NUMBERED
+        : null;
+
+    if (pattern) {
+      flushWords();
+
+      const isNumbered: boolean = pattern === NUMBERED;
+      const items: IListItem[] = [];
+
+      while (index < lines.length) {
+        const match: RegExpExecArray | null = pattern.exec(lines[index]);
+
+        if (match) {
+          items.push({
+            number: isNumbered ? Number(match[1]) : null,
+            lines: [match[isNumbered ? 2 : 1]],
+          });
+        } else if (CONTINUED.test(lines[index])) {
+          items[items.length - 1].lines.push(lines[index].slice(3));
+        } else {
+          break;
+        }
+
+        index++;
+      }
+
+      const key: string = `${path}-l${nodes.length}`;
+      const List = isNumbered ? "ol" : "ul";
+
+      nodes.push(
+        <List
+          key={key}
+          style={{
+            ...LIST_STYLE,
+            listStyleType: isNumbered ? "decimal" : "disc",
+          }}
+        >
+          {items.map((item: IListItem, itemIndex: number) => (
+            <li key={`${key}-${itemIndex}`} value={item.number ?? undefined}>
+              {blocks(item.lines.join("\n"), `${key}-${itemIndex}`)}
+            </li>
+          ))}
+        </List>,
+      );
+
+      continue;
+    }
+
+    if (QUOTED.test(line)) {
+      flushWords();
+
+      const quoted: string[] = [];
+
+      while (index < lines.length && QUOTED.test(lines[index])) {
+        quoted.push((QUOTED.exec(lines[index]) as RegExpExecArray)[1]);
+        index++;
+      }
+
+      const key: string = `${path}-q${nodes.length}`;
+
+      nodes.push(
+        <blockquote key={key} style={QUOTE_STYLE}>
+          {formatted(quoted.join("\n"), key)}
+        </blockquote>,
+      );
+
+      continue;
+    }
+
+    if (RULE.test(line)) {
+      flushWords();
+      nodes.push(<hr key={`${path}-r${nodes.length}`} style={RULE_STYLE} />);
+      index++;
+
+      continue;
+    }
+
+    words.push(line);
+    index++;
+  }
+
+  flushWords();
+
+  return nodes;
+};
+
 /**
  * The words of a chat message, with its lines kept. On the channels that use
- * marks, *bold*, _italic_, ~struck~ and `code` show as such.
+ * marks, *bold*, _italic_, ~struck~ and `code` show as such, and so do the
+ * lists, quotes and rules written in the editor.
  */
 export default function ChatText({ text, isFormatted = false }: Props) {
-  return (
-    <div style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
-      {isFormatted ? formatted(text, "m") : text}
-    </div>
+  return isFormatted ? (
+    <div style={{ wordBreak: "break-word" }}>{blocks(text, "m")}</div>
+  ) : (
+    <div style={TEXT_STYLE}>{text}</div>
   );
 }
