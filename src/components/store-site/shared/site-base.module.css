@@ -462,3 +462,12 @@
     gap: 10px;
   }
 }
+
+/*
+ * The typeface the owner chose for the titles: the headings, and what a
+ * template marks as written in its display face. See SiteFonts.
+ */
+.fontHeading.fontHeading :is(h1, h2, h3, h4),
+.fontHeading.fontHeading :global(.site-display) {
+  font-family: var(--site-font-heading);
+}

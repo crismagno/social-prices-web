@@ -40,6 +40,7 @@ export interface IStoreSiteTemplateProps {
     | "cartButton"
     | "imageStyle"
     | "marqueeStyle"
+    | "fonts"
     | "hero"
     | "sections"
     | "marquee"

@@ -1,3 +1,5 @@
+"use client";
+
 import { CSSProperties, ReactNode } from "react";
 
 import { IStoreSiteTheme } from "../../../shared/business/store-sites/store-site.interface";
@@ -6,6 +8,7 @@ import {
   TSiteSizeKey,
   TStoreSiteSizes,
 } from "../../../shared/business/store-sites/store-site-sizes";
+import { useSiteFontProps } from "./SiteFonts";
 
 interface Props {
   theme: IStoreSiteTheme;
@@ -96,6 +99,9 @@ const sizeVars = (
 const SiteThemeVars = ({ theme, sizes, className, children }: Props) => {
   const primary: string = safe(theme?.primary, "#6b7a5e");
 
+  // The typefaces the owner chose, if any: see SiteFonts.
+  const fonts = useSiteFontProps();
+
   const style = {
     "--site-primary": primary,
     "--site-on-primary": readableOver(primary),
@@ -104,10 +110,15 @@ const SiteThemeVars = ({ theme, sizes, className, children }: Props) => {
     "--site-bg": safe(theme?.background, "#ffffff"),
     "--site-text": safe(theme?.text, "#222222"),
     ...sizeVars(sizes),
+    ...fonts.style,
   } as CSSProperties;
 
   return (
-    <div className={className} style={style} data-site-root="">
+    <div
+      className={`${className ?? ""} ${fonts.className}`.trim() || undefined}
+      style={style}
+      data-site-root=""
+    >
       {children}
     </div>
   );

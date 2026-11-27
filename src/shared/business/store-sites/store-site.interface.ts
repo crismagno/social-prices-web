@@ -7,6 +7,7 @@ import { IStoreSiteImageStyle } from "./store-site-image-style";
 import { IStoreSiteCheckout } from "./store-site-checkout";
 import { IStoreSiteHeader } from "./store-site-header";
 import { IStoreSiteMarqueeStyle } from "./store-site-marquee-style";
+import { IStoreSiteFonts } from "./store-site-fonts";
 import { IStoreSiteFooter } from "./store-site-footer";
 import { IStoreSiteHeroOptions } from "./store-site-hero";
 import { IStoreSitePage } from "./store-site-pages";
@@ -90,6 +91,8 @@ export interface ISaveStoreSite {
   checkout: IStoreSiteCheckout;
   /** How the strip of phrases looks and runs. */
   marqueeStyle: IStoreSiteMarqueeStyle;
+  /** The typefaces, when the owner changed the template's. */
+  fonts: IStoreSiteFonts;
   /** The owner arranged the pages: only the blocks list says what shows where. */
   isLayoutCustom: boolean;
   hero: IStoreSiteHero;

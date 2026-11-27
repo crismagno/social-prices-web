@@ -1,6 +1,7 @@
 "use client";
 
 import { siteImageStyleProps } from "../../../components/store-site/shared/site-image-style";
+import SiteFonts from "../../../components/store-site/shared/SiteFonts";
 import base from "../../../components/store-site/shared/site-base.module.css";
 import { siteCartButtonOf } from "../../../shared/business/store-sites/store-site-cart-button";
 import {
@@ -144,82 +145,84 @@ const SiteClient = ({
   };
 
   return (
-    <div
-      className={`${base.salesWrap} ${sells ? "" : base.salesOff} ${
-        view.isTitleShown ? "" : base.productsTitleOff
-      } ${images.className}`}
-      style={images.style}
-    >
-      {!isOwnPage && <ScrollProgress color={site.theme.primary} />}
-      {pageProduct ? (
-        <SiteThemeVars theme={site.theme} className={pageStyles.page}>
-          <SitePageTop
+    <SiteFonts fonts={site.fonts}>
+      <div
+        className={`${base.salesWrap} ${sells ? "" : base.salesOff} ${
+          view.isTitleShown ? "" : base.productsTitleOff
+        } ${images.className}`}
+        style={images.style}
+      >
+        {!isOwnPage && <ScrollProgress color={site.theme.primary} />}
+        {pageProduct ? (
+          <SiteThemeVars theme={site.theme} className={pageStyles.page}>
+            <SitePageTop
+              homeUrl={homeUrl}
+              brandName={brandName}
+              backUrl={productsUrl}
+              backLabel={t("storeSite.cart.keepShopping")}
+              cart={sells ? cart : null}
+            />
+            <SiteProductModal
+              variant="page"
+              product={pageProduct}
+              theme={site.theme}
+              catalog={site.catalog}
+              cart={cart}
+              onClose={() => router.push(productsUrl)}
+            />
+          </SiteThemeVars>
+        ) : isCartPage ? (
+          <SiteCart
+            variant="page"
+            slug={site.slug}
+            theme={site.theme}
+            products={products}
+            cart={cart}
+            checkout={site.checkout}
+            onProductOpen={openProduct}
             homeUrl={homeUrl}
             brandName={brandName}
-            backUrl={productsUrl}
-            backLabel={t("storeSite.cart.keepShopping")}
-            cart={sells ? cart : null}
           />
-          <SiteProductModal
-            variant="page"
-            product={pageProduct}
-            theme={site.theme}
-            catalog={site.catalog}
+        ) : (
+          <Component
+            site={site}
+            store={store}
+            products={products}
+            mode="live"
             cart={cart}
-            onClose={() => router.push(productsUrl)}
+            page={page}
+            onProductOpen={view.isDetailsOpened ? openProduct : undefined}
           />
-        </SiteThemeVars>
-      ) : isCartPage ? (
-        <SiteCart
-          variant="page"
-          slug={site.slug}
+        )}
+        <SiteProductModal
+          product={
+            products.find(
+              (product: IPublicSiteProduct) => product._id === openProductId,
+            ) ?? null
+          }
           theme={site.theme}
-          products={products}
+          catalog={site.catalog}
           cart={cart}
-          checkout={site.checkout}
-          onProductOpen={openProduct}
-          homeUrl={homeUrl}
+          onClose={() => setOpenProductId(null)}
+        />
+        <SiteChatWidget
+          slug={site.slug}
+          chat={site.chat}
+          theme={site.theme}
           brandName={brandName}
         />
-      ) : (
-        <Component
-          site={site}
-          store={store}
-          products={products}
-          mode="live"
-          cart={cart}
-          page={page}
-          onProductOpen={view.isDetailsOpened ? openProduct : undefined}
-        />
-      )}
-      <SiteProductModal
-        product={
-          products.find(
-            (product: IPublicSiteProduct) => product._id === openProductId,
-          ) ?? null
-        }
-        theme={site.theme}
-        catalog={site.catalog}
-        cart={cart}
-        onClose={() => setOpenProductId(null)}
-      />
-      <SiteChatWidget
-        slug={site.slug}
-        chat={site.chat}
-        theme={site.theme}
-        brandName={brandName}
-      />
-      {!isCartPage && !isCartAPage && (
-        <SiteCart
-          slug={site.slug}
-          theme={site.theme}
-          products={products}
-          cart={cart}
-          checkout={site.checkout}
-          onProductOpen={openProduct}
-        />
-      )}
-    </div>
+        {!isCartPage && !isCartAPage && (
+          <SiteCart
+            slug={site.slug}
+            theme={site.theme}
+            products={products}
+            cart={cart}
+            checkout={site.checkout}
+            onProductOpen={openProduct}
+          />
+        )}
+      </div>
+    </SiteFonts>
   );
 };
 

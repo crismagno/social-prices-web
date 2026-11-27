@@ -15,6 +15,7 @@ import { siteAboutOf } from "../../../shared/business/store-sites/store-site-abo
 import { siteBlocksOf } from "../../../shared/business/store-sites/store-site-blocks";
 import { siteChatOf } from "../../../shared/business/store-sites/store-site-chat";
 import { siteCartButtonOf } from "../../../shared/business/store-sites/store-site-cart-button";
+import { siteFontsOf } from "../../../shared/business/store-sites/store-site-fonts";
 import { siteImageStyleOf } from "../../../shared/business/store-sites/store-site-image-style";
 import { siteCheckoutOf } from "../../../shared/business/store-sites/store-site-checkout";
 import { siteHeaderOf } from "../../../shared/business/store-sites/store-site-header";
@@ -115,6 +116,8 @@ const toDraft = (site: IStoreSite): ISaveStoreSite => ({
   imageStyle: siteImageStyleOf(site.imageStyle),
   checkout: siteCheckoutOf(site.checkout),
   marqueeStyle: siteMarqueeStyleOf(site.marqueeStyle),
+  // A site saved before the option keeps the template's typefaces.
+  fonts: siteFontsOf(site.fonts),
   hero: { ...site.hero },
   sections: site.sections.map((section) => ({ ...section })),
   marquee: { isActive: site.marquee.isActive, items: [...site.marquee.items] },
@@ -145,6 +148,7 @@ const newDraft = (store: IStore): ISaveStoreSite => ({
   imageStyle: siteImageStyleOf(null),
   checkout: siteCheckoutOf(null),
   marqueeStyle: siteMarqueeStyleOf(null),
+  fonts: siteFontsOf(null),
   hero: {
     tagline: null,
     title: store.name,

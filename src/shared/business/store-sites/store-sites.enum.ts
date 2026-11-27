@@ -468,6 +468,27 @@ namespace StoreSitesEnum {
     ORDER_FAILED = "SITE_ORDER_FAILED",
     ORDER_FIELDS_MISSING = "SITE_ORDER_FIELDS_MISSING",
   }
+
+  /** The typefaces an owner may give the site in place of the template's. */
+  export enum Font {
+    INTER = "INTER",
+    ROBOTO = "ROBOTO",
+    POPPINS = "POPPINS",
+    MONTSERRAT = "MONTSERRAT",
+    OPEN_SANS = "OPEN_SANS",
+    LATO = "LATO",
+    NUNITO = "NUNITO",
+    RALEWAY = "RALEWAY",
+    DM_SANS = "DM_SANS",
+    SPACE_GROTESK = "SPACE_GROTESK",
+    QUICKSAND = "QUICKSAND",
+    PLAYFAIR_DISPLAY = "PLAYFAIR_DISPLAY",
+    LORA = "LORA",
+    MERRIWEATHER = "MERRIWEATHER",
+    CORMORANT_GARAMOND = "CORMORANT_GARAMOND",
+    OSWALD = "OSWALD",
+    BEBAS_NEUE = "BEBAS_NEUE",
+  }
 }
 
 export default StoreSitesEnum;

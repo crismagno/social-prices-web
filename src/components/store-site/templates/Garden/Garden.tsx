@@ -12,7 +12,7 @@ import {
   productNameOpenProps,
   productPhotoOpenProps,
 } from "../../shared/site-product-open";
-import { siteSerif } from "../../shared/site-fonts";
+import { siteSerifClass } from "../../shared/site-fonts";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
 import SiteAbout from "../../shared/SiteAbout";
 import SiteSections from "../../shared/blocks/SiteSections";
@@ -133,7 +133,7 @@ const Garden = ({
       <>
         {marqueeItems.length > 0 && (
           <div
-            className={`${styles.marquee} ${siteSerif.className}`}
+            className={`${styles.marquee} ${siteSerifClass}`}
             aria-hidden="true"
           >
             <div className={styles.marqueeTrack}>
@@ -173,7 +173,7 @@ const Garden = ({
               )}
               <div>
                 <h2
-                  className={`${styles.storyTitle} ${siteSerif.className}`}
+                  className={`${styles.storyTitle} ${siteSerifClass}`}
                   data-part="1"
                 >
                   {section.title}
@@ -200,7 +200,7 @@ const Garden = ({
                 </div>
                 <h2
                   data-products-title
-                  className={`${styles.productsTitle} ${siteSerif.className}`}
+                  className={`${styles.productsTitle} ${siteSerifClass}`}
                 >
                   {catalog.view.title ?? t("storeSite.public.products")}
                 </h2>
@@ -245,7 +245,7 @@ const Garden = ({
                         />
                         {catalog.view.isNameShown && (
                           <span
-                            className={`${styles.productName} ${siteSerif.className}`}
+                            className={`${styles.productName} ${siteSerifClass}`}
                             data-part="1"
                             {...productNameOpenProps(product, onProductOpen)}
                           >
@@ -294,7 +294,7 @@ const Garden = ({
             defaultTitle={brandName}
             kicker={t("storeSite.public.ourStory")}
             variant="garden"
-            titleClassName={siteSerif.className}
+            titleClassName={siteSerifClass}
           />
         }
       </>
@@ -305,7 +305,7 @@ const Garden = ({
           <SitePageBody
             page={page}
             variant="garden"
-            titleClassName={siteSerif.className}
+            titleClassName={siteSerifClass}
             footer={site.footer}
             slug={site.slug}
             isPreview={mode === "preview"}
@@ -345,7 +345,7 @@ const Garden = ({
             {hero.tagline}
           </div>
         )}
-        <h1 className={`${styles.title} ${siteSerif.className}`} data-intro="1">
+        <h1 className={`${styles.title} ${siteSerifClass}`} data-intro="1">
           {hero.title}
         </h1>
         {hero.subtitle && (

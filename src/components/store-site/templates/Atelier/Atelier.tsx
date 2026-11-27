@@ -15,7 +15,7 @@ import {
   productNameOpenProps,
   productPhotoOpenProps,
 } from "../../shared/site-product-open";
-import { siteSerif } from "../../shared/site-fonts";
+import { siteSerifClass } from "../../shared/site-fonts";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
 import SiteAbout from "../../shared/SiteAbout";
 import SiteSections from "../../shared/blocks/SiteSections";
@@ -125,7 +125,7 @@ const Atelier = ({
       <>
         {marqueeItems.length > 0 && (
           <div
-            className={`${styles.marquee} ${siteSerif.className}`}
+            className={`${styles.marquee} ${siteSerifClass}`}
             aria-hidden="true"
           >
             <div className={styles.marqueeTrack}>
@@ -162,7 +162,7 @@ const Atelier = ({
                     />
                   )}
                   <h2
-                    className={`${styles.stepTitle} ${siteSerif.className}`}
+                    className={`${styles.stepTitle} ${siteSerifClass}`}
                     data-part="1"
                   >
                     {section.title}
@@ -186,7 +186,7 @@ const Atelier = ({
             <Reveal effect="blur">
               <h2
                 data-products-title
-                className={`${styles.productsTitle} ${siteSerif.className}`}
+                className={`${styles.productsTitle} ${siteSerifClass}`}
               >
                 {catalog.view.title ?? t("storeSite.public.products")}
               </h2>
@@ -224,7 +224,7 @@ const Atelier = ({
                         />
                         {catalog.view.isNameShown && (
                           <span
-                            className={`${styles.productName} ${siteSerif.className}`}
+                            className={`${styles.productName} ${siteSerifClass}`}
                             data-part="1"
                             {...productNameOpenProps(product, onProductOpen)}
                           >
@@ -279,7 +279,7 @@ const Atelier = ({
             storeAbout={store.about}
             defaultTitle={t("storeSite.public.about")}
             variant="atelier"
-            titleClassName={siteSerif.className}
+            titleClassName={siteSerifClass}
           />
         }
       </>
@@ -290,7 +290,7 @@ const Atelier = ({
           <SitePageBody
             page={page}
             variant="atelier"
-            titleClassName={siteSerif.className}
+            titleClassName={siteSerifClass}
             footer={site.footer}
             slug={site.slug}
             isPreview={mode === "preview"}
@@ -343,7 +343,7 @@ const Atelier = ({
             </div>
           )}
           <h1
-            className={`${styles.title} ${styles.serif} ${siteSerif.className}`}
+            className={`${styles.title} ${styles.serif} ${siteSerifClass}`}
             data-intro="1"
           >
             {hero.title}

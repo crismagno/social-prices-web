@@ -2540,6 +2540,7 @@
       "tabs": {
         "template": "Template",
         "colors": "Cores",
+        "fonts": "Fontes",
         "hero": "Entrada",
         "products": "Produtos",
         "cart": "Sacola",
@@ -2576,6 +2577,13 @@
           "section": "Vale para todos os blocos com foto: o bloco inteiro segue o formato, não só a imagem.",
           "block": "Vale para todas as imagens do construtor: peças de imagem, colunas e fotos da equipe."
         }
+      },
+      "fonts": {
+        "hint": "Escolha uma fonte para os títulos e outra para os textos. Deixando a do template, cada um mantém a fonte com que o template foi desenhado.",
+        "heading": "Títulos",
+        "body": "Textos",
+        "template": "A do template",
+        "reset": "Voltar às fontes do template"
       },
       "colors": {
         "primary": "Cor principal",

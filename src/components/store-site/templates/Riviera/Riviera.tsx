@@ -12,7 +12,7 @@ import {
   productNameOpenProps,
   productPhotoOpenProps,
 } from "../../shared/site-product-open";
-import { siteSerif } from "../../shared/site-fonts";
+import { siteSerif, siteSerifClass } from "../../shared/site-fonts";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
 import SiteAbout from "../../shared/SiteAbout";
 import SiteSections from "../../shared/blocks/SiteSections";
@@ -280,7 +280,7 @@ const Riviera = ({
             defaultTitle={brandName}
             kicker={t("storeSite.public.ourStory")}
             variant="riviera"
-            titleClassName={siteSerif.className}
+            titleClassName={siteSerifClass}
           />
         }
       </>
@@ -291,7 +291,7 @@ const Riviera = ({
           <SitePageBody
             page={page}
             variant="riviera"
-            titleClassName={siteSerif.className}
+            titleClassName={siteSerifClass}
             footer={site.footer}
             slug={site.slug}
             isPreview={mode === "preview"}

@@ -2537,6 +2537,7 @@
       "tabs": {
         "template": "Template",
         "colors": "Colors",
+        "fonts": "Fonts",
         "hero": "Entrance",
         "products": "Products",
         "cart": "Bag",
@@ -2573,6 +2574,13 @@
           "section": "Applies to every block with a photo: the whole block takes the shape, not just the image.",
           "block": "Applies to every builder image: image pieces, columns and team photos."
         }
+      },
+      "fonts": {
+        "hint": "Choose a typeface for the titles and another for the texts. Left as the template's, each keeps the one the template was drawn with.",
+        "heading": "Titles",
+        "body": "Texts",
+        "template": "The template's own",
+        "reset": "Back to the template's fonts"
       },
       "colors": {
         "primary": "Main color",

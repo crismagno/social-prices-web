@@ -6,6 +6,7 @@ import {
   sitePagePath,
   sitePagesOf,
 } from "../../shared/business/store-sites/store-site-pages";
+import SiteFonts from "../../components/store-site/shared/SiteFonts";
 import base from "../../components/store-site/shared/site-base.module.css";
 import { siteCartButtonOf } from "../../shared/business/store-sites/store-site-cart-button";
 import {
@@ -139,22 +140,24 @@ export default function SitePreviewPage() {
   };
 
   return (
-    <div
-      className={`${base.salesWrap} ${sells ? "" : base.salesOff} ${
-        view.isTitleShown ? "" : base.productsTitleOff
-      } ${images.className}`}
-      style={images.style}
-      onClickCapture={followPageLink}
-    >
-      <Component
-        site={sitePageView(data.site, page, page ? labelOfPage(page) : "")}
-        page={page}
-        builder={builder}
-        store={data.store}
-        products={data.products}
-        mode="preview"
-        cart={NO_CART}
-      />
-    </div>
+    <SiteFonts fonts={data.site.fonts}>
+      <div
+        className={`${base.salesWrap} ${sells ? "" : base.salesOff} ${
+          view.isTitleShown ? "" : base.productsTitleOff
+        } ${images.className}`}
+        style={images.style}
+        onClickCapture={followPageLink}
+      >
+        <Component
+          site={sitePageView(data.site, page, page ? labelOfPage(page) : "")}
+          page={page}
+          builder={builder}
+          store={data.store}
+          products={data.products}
+          mode="preview"
+          cart={NO_CART}
+        />
+      </div>
+    </SiteFonts>
   );
 }

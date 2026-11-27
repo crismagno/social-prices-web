@@ -14,6 +14,7 @@ import {
   CommentOutlined,
   ExportOutlined,
   FileTextOutlined,
+  FontSizeOutlined,
   LinkOutlined,
   PictureOutlined,
   SaveOutlined,
@@ -30,7 +31,7 @@ import { IStore } from "../../../shared/business/stores/stores.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import { ProductsTab, PublishTab } from "./CatalogPublishTabs";
 import { HeroTab } from "./ContentTabs";
-import { ColorsTab, TemplateTab } from "./DesignTabs";
+import { ColorsTab, FontsTab, TemplateTab } from "./DesignTabs";
 import BuilderTab from "./BuilderTab";
 import CartTab from "./CartTab";
 import ChatTab from "./ChatTab";
@@ -46,6 +47,7 @@ type TTab =
   | "builder"
   | "template"
   | "colors"
+  | "fonts"
   | "header"
   | "hero"
   | "products"
@@ -73,6 +75,7 @@ const TABS: { key: TTab; icon: ReactNode; isGroupStart?: boolean }[] = [
   { key: "builder", icon: <AppstoreAddOutlined /> },
   { key: "template", icon: <AppstoreOutlined /> },
   { key: "colors", icon: <BgColorsOutlined /> },
+  { key: "fonts", icon: <FontSizeOutlined /> },
   { key: "pages", icon: <FileTextOutlined />, isGroupStart: true },
   { key: "header", icon: <BorderTopOutlined /> },
   { key: "hero", icon: <PictureOutlined /> },
@@ -142,6 +145,7 @@ const EditorPanel = ({
   const problems: Record<TTab, boolean> = {
     template: false,
     colors: false,
+    fonts: false,
     header: false,
     hero: !draft.hero.title.trim(),
     products: false,
@@ -177,6 +181,7 @@ const EditorPanel = ({
     ),
     template: <TemplateTab editor={editor} />,
     colors: <ColorsTab editor={editor} />,
+    fonts: <FontsTab editor={editor} />,
     header: (
       <HeaderTab
         editor={editor}

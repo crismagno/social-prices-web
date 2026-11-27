@@ -12,7 +12,7 @@ import {
   productNameOpenProps,
   productPhotoOpenProps,
 } from "../../shared/site-product-open";
-import { siteCondensed } from "../../shared/site-fonts";
+import { siteCondensed, siteCondensedClass } from "../../shared/site-fonts";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
 import SiteAbout from "../../shared/SiteAbout";
 import SiteSections from "../../shared/blocks/SiteSections";
@@ -283,7 +283,7 @@ const Swell = ({
             defaultTitle={brandName}
             kicker={t("storeSite.public.ourStory")}
             variant="swell"
-            titleClassName={siteCondensed.className}
+            titleClassName={siteCondensedClass}
           />
         }
       </>
@@ -294,7 +294,7 @@ const Swell = ({
           <SitePageBody
             page={page}
             variant="swell"
-            titleClassName={siteCondensed.className}
+            titleClassName={siteCondensedClass}
             footer={site.footer}
             slug={site.slug}
             isPreview={mode === "preview"}
