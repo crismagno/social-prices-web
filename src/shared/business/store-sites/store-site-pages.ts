@@ -1,4 +1,4 @@
-import { CART_PAGE_SLUG } from "./store-site-checkout";
+import { CART_PAGE_SLUG, PRODUCT_PAGE_SLUG } from "./store-site-checkout";
 import Urls from "../../common/routes-app/routes-app";
 import { IStoreSiteAboutMedia } from "./store-site-about";
 import StoreSitesEnum from "./store-sites.enum";
@@ -186,6 +186,7 @@ export const invalidPageKeys = (pages: IStoreSitePage[]): string[] => {
         !PAGE_SLUG_REGEX.test(page.slug) ||
         ready.includes(page.slug) ||
         page.slug === CART_PAGE_SLUG ||
+        page.slug === PRODUCT_PAGE_SLUG ||
         seen.has(page.slug);
 
       seen.add(page.slug);

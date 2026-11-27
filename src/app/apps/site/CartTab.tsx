@@ -18,6 +18,7 @@ import {
   siteCheckoutOf,
 } from "../../../shared/business/store-sites/store-site-checkout";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
+import ChoiceList from "./ChoiceList";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
 
 interface Props {
@@ -171,19 +172,17 @@ const CartTab = ({ editor }: Props) => {
               }
             />
           </Form.Item>
-          <Form.Item
-            label={t("storeSite.editor.hero.cart.window.mode")}
-            extra={t(
-              `storeSite.editor.hero.cart.window.modeHints.${look.mode}`,
-            )}
-          >
-            <Segmented<StoreSitesEnum.CartMode>
+          <Form.Item label={t("storeSite.editor.hero.cart.window.mode")}>
+            <ChoiceList<StoreSitesEnum.CartMode>
               value={look.mode}
               onChange={(mode) => setLook({ mode })}
               options={Object.values(StoreSitesEnum.CartMode).map(
                 (mode: StoreSitesEnum.CartMode) => ({
                   value: mode,
                   label: t(`storeSite.editor.hero.cart.window.modes.${mode}`),
+                  hint: t(
+                    `storeSite.editor.hero.cart.window.modeHints.${mode}`,
+                  ),
                 }),
               )}
             />

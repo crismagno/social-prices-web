@@ -35,6 +35,9 @@ export const CART_TITLE_MAX = 40;
 
 /** The page of the site the cart opens on, when it has one of its own. */
 export const CART_PAGE_SLUG = "carrinho";
+
+/** Where a product's own pages live: /<site>/produto/<id>. */
+export const PRODUCT_PAGE_SLUG = "produto";
 export const CART_SHIPPING_NOTE_MAX = 200;
 export const CART_BUTTON_LABEL_MAX = 30;
 

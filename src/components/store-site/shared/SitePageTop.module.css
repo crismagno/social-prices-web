@@ -1,0 +1,66 @@
+.top {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  padding: 16px clamp(16px, 4vw, 48px);
+  border-bottom: 1px solid color-mix(in srgb, var(--site-text) 10%, transparent);
+}
+
+.back {
+  justify-self: start;
+  color: inherit;
+  opacity: 0.75;
+  font-size: 14px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.back:hover {
+  opacity: 1;
+  color: var(--site-primary);
+}
+
+.brand {
+  color: inherit;
+  font-weight: 700;
+  font-size: 18px;
+  text-decoration: none;
+  text-align: center;
+}
+
+.cart {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--site-on-primary, #fff);
+  background: var(--site-primary);
+}
+
+.cart:hover {
+  filter: brightness(1.08);
+}
+
+@media (max-width: 560px) {
+  .back {
+    font-size: 0;
+  }
+
+  .back::first-letter {
+    font-size: 20px;
+  }
+}
+
+/* The page around it: the site's own colors, edge to edge. */
+.page {
+  min-height: 100vh;
+  background: var(--site-bg);
+  color: var(--site-text);
+}

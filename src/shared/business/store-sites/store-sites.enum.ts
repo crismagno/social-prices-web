@@ -362,6 +362,12 @@ namespace StoreSitesEnum {
     WIDE = "WIDE",
   }
 
+  /** Where a product opens: a window over the page, or a page of its own. */
+  export enum ProductDetailsMode {
+    MODAL = "MODAL",
+    PAGE = "PAGE",
+  }
+
   /** Where the cart opens: a window over the page, or a page of its own. */
   export enum CartMode {
     DRAWER = "DRAWER",

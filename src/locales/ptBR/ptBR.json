@@ -2696,7 +2696,16 @@
         "isDetailsOpened": "Abrir os detalhes ao clicar no produto",
         "title": "Texto do título",
         "addLabel": "Texto do botão",
-        "hint": "Com o preço escondido, ele ainda aparece no carrinho. Sem o botão de adicionar, os produtos ficam só de apresentação. Textos vazios usam os do site."
+        "hint": "Com o preço escondido, ele ainda aparece no carrinho. Sem o botão de adicionar, os produtos ficam só de apresentação. Textos vazios usam os do site.",
+        "detailsMode": "Ao clicar no produto",
+        "detailsModes": {
+          "MODAL": "Abrir janela",
+          "PAGE": "Ir para a página"
+        },
+        "detailsModeHints": {
+          "MODAL": "Os detalhes abrem numa janela sobre a página.",
+          "PAGE": "Cada produto tem sua própria página, em /produto/…, que pode ser compartilhada. Nenhuma página sua pode usar o endereço produto."
+        }
       },
       "products": {
         "add": "Adicionar um produto",

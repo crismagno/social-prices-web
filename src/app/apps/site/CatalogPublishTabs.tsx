@@ -37,6 +37,7 @@ import {
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import ImageLookCard from "./ImageLookCard";
+import ChoiceList from "./ChoiceList";
 import SizeFields from "./SizeFields";
 import useDragReorder from "./useDragReorder";
 import { IStoreSiteEditor, slugify } from "./useStoreSiteEditor";
@@ -48,7 +49,9 @@ interface Props {
 
 // What a product may show, in the order the choices are listed.
 type TCatalogSwitch = {
-  [K in keyof IStoreSiteCatalog]: IStoreSiteCatalog[K] extends boolean ? K : never;
+  [K in keyof IStoreSiteCatalog]: IStoreSiteCatalog[K] extends boolean
+    ? K
+    : never;
 }[keyof IStoreSiteCatalog];
 
 const CATALOG_CHOICES: TCatalogSwitch[] = [
@@ -116,6 +119,28 @@ export const ProductsTab = ({ editor }: Omit<Props, "storeId">) => {
               />
             </label>
           ))}
+          {catalog.isDetailsOpened && (
+            <Form.Item
+              className="mb-0"
+              label={t("storeSite.editor.catalog.detailsMode")}
+            >
+              <ChoiceList<StoreSitesEnum.ProductDetailsMode>
+                value={catalog.detailsMode}
+                onChange={(detailsMode) =>
+                  editor.update({ catalog: { ...catalog, detailsMode } })
+                }
+                options={Object.values(StoreSitesEnum.ProductDetailsMode).map(
+                  (mode: StoreSitesEnum.ProductDetailsMode) => ({
+                    value: mode,
+                    label: t(`storeSite.editor.catalog.detailsModes.${mode}`),
+                    hint: t(
+                      `storeSite.editor.catalog.detailsModeHints.${mode}`,
+                    ),
+                  }),
+                )}
+              />
+            </Form.Item>
+          )}
           {catalog.isTitleShown && (
             <Form.Item
               className="mb-0"

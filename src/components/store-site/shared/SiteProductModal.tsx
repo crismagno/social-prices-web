@@ -29,6 +29,8 @@ interface Props {
   catalog?: Partial<IStoreSiteCatalog> | null;
   cart: ISiteCartApi;
   onClose: () => void;
+  /** A window over the page, or the product's own page. */
+  variant?: "modal" | "page";
 }
 
 // The unit each measure is kept in, as the product form asks for it.
@@ -64,7 +66,10 @@ const SiteProductModal = ({
   catalog,
   cart,
   onClose,
+  variant = "modal",
 }: Props) => {
+  const isPage: boolean = variant === "page";
+
   const t = useSiteT();
 
   // The one being shown stays while the window closes, so it does not empty out.
@@ -151,31 +156,25 @@ const SiteProductModal = ({
     return () => window.removeEventListener("keydown", onKey);
   }, [product, step]);
 
-  return (
-    <Modal
-      open={!!product}
-      footer={null}
-      width={980}
-      centered
-      // Above the cart, which can open it too.
-      zIndex={1100}
-      closable={false}
-      keyboard={!isZoomed}
-      className={styles.modal}
-      onCancel={onClose}
-    >
+  const body = (
+    <>
       {shown && (
-        <SiteThemeVars theme={theme} className={styles.layout}>
-          <button
-            type="button"
-            className={styles.close}
-            aria-label={t("storeSite.product.close")}
-            onClick={onClose}
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M6 6l12 12M18 6L6 18" />
-            </svg>
-          </button>
+        <SiteThemeVars
+          theme={theme}
+          className={`${styles.layout} ${isPage ? styles.pageLayout : ""}`}
+        >
+          {!isPage && (
+            <button
+              type="button"
+              className={styles.close}
+              aria-label={t("storeSite.product.close")}
+              onClick={onClose}
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+          )}
 
           <div
             className={`${styles.gallery} ${
@@ -264,7 +263,11 @@ const SiteProductModal = ({
                 {shown.brand && (
                   <div className={styles.brand}>{shown.brand}</div>
                 )}
-                <h2 className={styles.name}>{shown.name}</h2>
+                {isPage ? (
+                  <h1 className={styles.name}>{shown.name}</h1>
+                ) : (
+                  <h2 className={styles.name}>{shown.name}</h2>
+                )}
 
                 {(isPriceShown || !shown.isAvailable) && (
                   <div className={styles.priceRow}>
@@ -332,13 +335,17 @@ const SiteProductModal = ({
 
             <footer className={styles.foot}>
               <button
- data-cart-add
+                data-cart-add
                 type="button"
                 className={styles.add}
                 disabled={!shown.isAvailable}
                 onClick={() => {
                   cart.add(shown._id);
-                  onClose();
+
+                  // On its own page the product stays: only the window closes.
+                  if (!isPage) {
+                    onClose();
+                  }
                 }}
               >
                 {addLabel(shown, cart, t, view.addLabel)}
@@ -416,6 +423,27 @@ const SiteProductModal = ({
           </SiteThemeVars>,
           document.body,
         )}
+    </>
+  );
+
+  if (isPage) {
+    return body;
+  }
+
+  return (
+    <Modal
+      open={!!product}
+      footer={null}
+      width={980}
+      centered
+      // Above the cart, which can open it too.
+      zIndex={1100}
+      closable={false}
+      keyboard={!isZoomed}
+      className={styles.modal}
+      onCancel={onClose}
+    >
+      {body}
     </Modal>
   );
 };

@@ -1,3 +1,5 @@
+import StoreSitesEnum from "./store-sites.enum";
+
 /** What each product shows on the site, and whether they can be searched. */
 export interface IStoreSiteCatalog {
   isNameShown: boolean;
@@ -10,6 +12,8 @@ export interface IStoreSiteCatalog {
   isAddButtonShown: boolean;
   /** A click on a product opens its details. */
   isDetailsOpened: boolean;
+  /** The details open in a window, or on a page of their own. */
+  detailsMode: StoreSitesEnum.ProductDetailsMode;
   /** The heading of the products section. */
   isTitleShown: boolean;
   /** The owner's own heading; empty, the site says its own. */
@@ -34,6 +38,10 @@ export const siteCatalogOf = (
   isSearchShown: catalog?.isSearchShown !== false,
   isAddButtonShown: catalog?.isAddButtonShown !== false,
   isDetailsOpened: catalog?.isDetailsOpened !== false,
+  detailsMode:
+    catalog?.detailsMode === StoreSitesEnum.ProductDetailsMode.PAGE
+      ? StoreSitesEnum.ProductDetailsMode.PAGE
+      : StoreSitesEnum.ProductDetailsMode.MODAL,
   isTitleShown: catalog?.isTitleShown !== false,
   title: catalog?.title?.trim().slice(0, CATALOG_TITLE_MAX) || null,
   addLabel: catalog?.addLabel?.trim().slice(0, CATALOG_ADD_LABEL_MAX) || null,

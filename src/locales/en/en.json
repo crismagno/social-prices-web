@@ -2693,7 +2693,16 @@
         "isDetailsOpened": "Open details when a product is clicked",
         "title": "Title text",
         "addLabel": "Button text",
-        "hint": "With the price hidden, it still shows in the cart. Without the add button, products are only for display. Empty texts use the site's own."
+        "hint": "With the price hidden, it still shows in the cart. Without the add button, products are only for display. Empty texts use the site's own.",
+        "detailsMode": "When a product is clicked",
+        "detailsModes": {
+          "MODAL": "Open a window",
+          "PAGE": "Go to its page"
+        },
+        "detailsModeHints": {
+          "MODAL": "The details open in a window over the page.",
+          "PAGE": "Each product gets a page of its own, at /produto/…, that can be shared. None of your pages can use the address produto."
+        }
       },
       "products": {
         "add": "Add a product",
