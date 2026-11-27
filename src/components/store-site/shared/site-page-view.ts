@@ -93,6 +93,11 @@ export const sitePageView = <S extends TSite>(
       title: page.title?.trim() || label,
       subtitle: page.intro,
     },
-    sizes: { ...site.sizes, heroHeight: own?.height ?? PAGE_TOP_HEIGHT },
+    // Its own height, else the one the owner gave the entrance, else a top
+    // shorter than the home's.
+    sizes: {
+      ...site.sizes,
+      heroHeight: own?.height ?? site.sizes?.heroHeight ?? PAGE_TOP_HEIGHT,
+    },
   };
 };
