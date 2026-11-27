@@ -562,3 +562,8 @@
   align-items: center;
   gap: 8px;
 }
+
+/* Two buttons: the row takes the space the button had around it. */
+.hero :global([data-hero-buttons]) {
+  margin: 30px 0 120px;
+}

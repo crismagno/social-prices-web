@@ -157,7 +157,9 @@ export const SiteHeroButtons = ({
     ? blockButtonHref(second, siteSlug, pages)
     : null;
 
-  return (
+  const hasSecond: boolean = !!second && !!secondHref;
+
+  const buttons = (
     <>
       {options.isButtonVisible && (
         <a
@@ -191,5 +193,15 @@ export const SiteHeroButtons = ({
         </a>
       )}
     </>
+  );
+
+  // Two buttons go side by side, close together, wherever the template puts
+  // its own; one alone stays exactly as the template draws it.
+  return hasSecond ? (
+    <span className={base.heroButtons} data-hero-buttons>
+      {buttons}
+    </span>
+  ) : (
+    buttons
   );
 };

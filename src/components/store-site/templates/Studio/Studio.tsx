@@ -479,11 +479,6 @@ const Studio = ({
               pages={site.pages}
               mode={mode}
             />
-            {hasAbout && (
-              <a href={aboutHref} className={styles.ctaLight}>
-                {t("storeSite.public.about")}
-              </a>
-            )}
           </div>
         </div>
 

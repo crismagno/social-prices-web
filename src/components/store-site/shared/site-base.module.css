@@ -429,8 +429,25 @@
 }
 
 /* The second button of the entrance, beside the main one. */
+/* The two buttons of the entrance: one row, a small gap, as many lines as
+   the width needs. Inline, so it follows the template's own alignment. */
+.heroButtons {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+/* The template's own spacing around its button now belongs to the row:
+   a template that spaces its button spaces the row instead. */
+.heroButtons > a {
+  margin: 0 !important;
+}
+
 .heroSecond {
-  margin-left: 12px;
+  margin-left: 0;
 }
 
 .heroSecondOutline {
@@ -441,8 +458,7 @@
 }
 
 @media (max-width: 520px) {
-  .heroSecond {
-    margin-left: 0;
-    margin-top: 10px;
+  .heroButtons {
+    gap: 10px;
   }
 }
