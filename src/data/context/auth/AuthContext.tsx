@@ -308,7 +308,18 @@ export const AuthProvider = ({ children }: { children?: any }) => {
 
       return null;
     } catch (error: any) {
-      return null;
+      // The API could not be asked (starting up, no network): that says
+      // nothing about the session, so it stays as it was stored instead of
+      // leaving a signed in user on the login. A token that is really over is
+      // refused by the next request.
+      _settingSession({
+        authToken: authTokenParam,
+        employee:
+          localStorageMethodsInstance.localStorageEmployeeMethods.getEmployee(),
+        user: userParam,
+      });
+
+      return userParam;
     } finally {
       setIsLoading(false);
     }

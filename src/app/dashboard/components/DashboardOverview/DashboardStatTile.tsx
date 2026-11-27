@@ -27,6 +27,8 @@ interface Props {
   usage?: IFeatureUsage;
   usageLabel?: string;
   create?: IDashboardStatTileCreate;
+  /** How many still wait, said beside the total; none hides it. */
+  pending?: { count: number; label: string };
 }
 
 const getUsagePercent = (usage: IFeatureUsage): number => {
@@ -49,6 +51,7 @@ export const DashboardStatTile: React.FC<Props> = ({
   usage,
   usageLabel,
   create,
+  pending,
 }) => {
   const hasLimit: boolean = !!usage && usage.limit !== null;
 
@@ -66,7 +69,11 @@ export const DashboardStatTile: React.FC<Props> = ({
         hover:-translate-y-0.5 hover:shadow-md hover:border-blue-300
         dark:hover:border-blue-500"
     >
-      <Link href={href} className="flex flex-col h-full" aria-label={seeAllLabel}>
+      <Link
+        href={href}
+        className="flex flex-col h-full"
+        aria-label={seeAllLabel}
+      >
         <div className="flex items-center gap-3 pr-10">
           <span
             className={`flex items-center justify-center shrink-0
@@ -89,6 +96,19 @@ export const DashboardStatTile: React.FC<Props> = ({
                 text-slate-800 dark:text-white"
             >
               {count}
+            </span>
+          )}
+
+          {!isLoading && pending && (
+            <span
+              className={`ml-3 rounded-full px-2.5 py-1 text-xs font-medium
+                tabular-nums ${
+                  pending.count > 0
+                    ? "bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-300"
+                    : "bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400"
+                }`}
+            >
+              {pending.count} {pending.label}
             </span>
           )}
         </div>

@@ -140,6 +140,36 @@ export default class SalesServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
+  /** The sales not completed yet. */
+  public async countPendingByUser(): Promise<number> {
+    const response = await this._fetchAxios.get<number>(
+      `${this._socialPricesApiV1}${SalesServiceEnum.Methods.COUNT_PENDING_BY_USER}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      },
+    );
+
+    return response.data;
+  }
+
+  /** The units sold, over every sale that counts. */
+  public async countProductsSoldByUser(): Promise<number> {
+    const response = await this._fetchAxios.get<number>(
+      `${this._socialPricesApiV1}${SalesServiceEnum.Methods.COUNT_PRODUCTS_SOLD_BY_USER}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.formatAuthorizationWithToken(),
+        },
+      },
+    );
+
+    return response.data;
+  }
+
   public async deleteManual(saleId: string): Promise<ISale> {
     const response = await this._fetchAxios.delete<ISale>(
       `${

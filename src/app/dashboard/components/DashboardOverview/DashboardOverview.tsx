@@ -7,8 +7,7 @@ import Link from "next/link";
 
 import {
   AppstoreOutlined,
-  BlockOutlined,
-  ShopOutlined,
+  MessageOutlined,
   ShoppingCartOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
@@ -24,14 +23,18 @@ import { FeatureKey } from "../../../../shared/business/users/user-limits.interf
 import Urls from "../../../../shared/common/routes-app/routes-app";
 import { getLocale } from "../../../../shared/utils/locales/locales";
 import { getUserName } from "../../../../shared/utils/strings/string";
-import { useCountCategoriesByUser } from "../../../categories/useCountCategoriesByUser";
 import { useCountCustomersByUser } from "../../../customers/useCountCustomersByUser";
-import { useCountProductsByUser } from "../../../products/useCountProductsByUser";
-import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
+import {
+  useCountChats,
+  useCountProductsSold,
+  useCountSalesByUser,
+} from "./useDashboardCounts";
 import { DashboardStatTile } from "./DashboardStatTile";
 
 interface IOverviewTile {
-  feature: FeatureKey;
+  key: string;
+  /** The feature a plan limits; chats and sales have no limit. */
+  feature?: FeatureKey;
   label: string;
   count: number;
   isLoading: boolean;
@@ -42,6 +45,7 @@ interface IOverviewTile {
   seeAllLabel: string;
   createHref?: string;
   createTooltip?: string;
+  pending?: number;
 }
 
 const getGreetingKey = (hour: number): string => {
@@ -63,16 +67,22 @@ export const DashboardOverview: React.FC = () => {
 
   const { usage } = useFeaturesUsage();
 
-  const { isLoading: isLoadingStores, stores } = useFindStoresByUser();
-
   const { isLoading: isLoadingCustomers, count: customersCount } =
     useCountCustomersByUser();
 
-  const { isLoading: isLoadingProducts, count: productsCount } =
-    useCountProductsByUser();
+  const {
+    isLoading: isLoadingChats,
+    count: chatsCount,
+    pending: chatsPending,
+  } = useCountChats();
 
-  const { isLoading: isLoadingCategories, count: categoriesCount } =
-    useCountCategoriesByUser();
+  const {
+    isLoading: isLoadingSales,
+    count: salesCount,
+    pending: salesPending,
+  } = useCountSalesByUser();
+
+  const { isLoading: isLoadingSold, count: soldCount } = useCountProductsSold();
 
   const now: Date = new Date();
 
@@ -87,20 +97,7 @@ export const DashboardOverview: React.FC = () => {
 
   const tiles: IOverviewTile[] = [
     {
-      feature: "stores",
-      label: t("dashboard.stores"),
-      count: stores.length,
-      isLoading: isLoadingStores,
-      icon: <ShopOutlined />,
-      iconClassName:
-        "bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300",
-      barClassName: "bg-amber-500",
-      href: Urls.STORES,
-      seeAllLabel: t("dashboard.seeStores"),
-      createHref: Urls.NEW_STORE,
-      createTooltip: t("dashboard.createNewStore"),
-    },
-    {
+      key: "customers",
       feature: "customers",
       label: t("dashboard.customers"),
       count: customersCount,
@@ -115,30 +112,44 @@ export const DashboardOverview: React.FC = () => {
       createTooltip: t("dashboard.createNewCustomer"),
     },
     {
-      feature: "products",
-      label: t("dashboard.products"),
-      count: productsCount,
-      isLoading: isLoadingProducts,
-      icon: <AppstoreOutlined />,
+      key: "chats",
+      label: t("dashboard.chats"),
+      count: chatsCount,
+      pending: chatsPending,
+      isLoading: isLoadingChats,
+      icon: <MessageOutlined />,
       iconClassName:
         "bg-emerald-100 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300",
       barClassName: "bg-emerald-500",
-      href: Urls.PRODUCTS,
-      seeAllLabel: t("dashboard.seeProducts"),
-      createHref: Urls.NEW_PRODUCT,
-      createTooltip: t("dashboard.createNewProduct"),
+      href: Urls.CHATS,
+      seeAllLabel: t("dashboard.seeChats"),
     },
     {
-      feature: "categories",
-      label: t("dashboard.categories"),
-      count: categoriesCount,
-      isLoading: isLoadingCategories,
-      icon: <BlockOutlined />,
+      key: "sales",
+      label: t("dashboard.sales"),
+      count: salesCount,
+      pending: salesPending,
+      isLoading: isLoadingSales,
+      icon: <ShoppingCartOutlined />,
+      iconClassName:
+        "bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300",
+      barClassName: "bg-amber-500",
+      href: Urls.SALES,
+      seeAllLabel: t("dashboard.seeSales"),
+      createHref: Urls.SALES_CREATE,
+      createTooltip: t("sales.createSaleBtnCamelCase"),
+    },
+    {
+      key: "products-sold",
+      label: t("dashboard.productsSold"),
+      count: soldCount,
+      isLoading: isLoadingSold,
+      icon: <AppstoreOutlined />,
       iconClassName:
         "bg-violet-100 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300",
       barClassName: "bg-violet-500",
-      href: Urls.CATEGORIES,
-      seeAllLabel: t("dashboard.seeCategories"),
+      href: Urls.SALES,
+      seeAllLabel: t("dashboard.seeSales"),
     },
   ];
 
@@ -174,13 +185,11 @@ export const DashboardOverview: React.FC = () => {
 
       <Row gutter={[12, 12]} className="mt-3">
         {tiles.map((tile: IOverviewTile) => {
-          const isLimitReached: boolean = isFeatureLimitReached(
-            usage,
-            tile.feature
-          );
+          const isLimitReached: boolean =
+            !!tile.feature && isFeatureLimitReached(usage, tile.feature);
 
           return (
-            <Col key={tile.feature} xs={24} sm={12} lg={6}>
+            <Col key={tile.key} xs={24} sm={12} lg={6}>
               <DashboardStatTile
                 label={tile.label}
                 count={tile.count}
@@ -190,16 +199,22 @@ export const DashboardOverview: React.FC = () => {
                 barClassName={isLimitReached ? "bg-red-500" : tile.barClassName}
                 href={tile.href}
                 seeAllLabel={tile.seeAllLabel}
-                usage={usage?.[tile.feature]}
+                usage={tile.feature ? usage?.[tile.feature] : undefined}
                 usageLabel={t("dashboard.planUsage")}
+                pending={
+                  tile.pending === undefined
+                    ? undefined
+                    : { count: tile.pending, label: t("dashboard.pending") }
+                }
                 create={
                   tile.createHref && tile.createTooltip
                     ? {
                         href: tile.createHref,
                         tooltip: tile.createTooltip,
-                        disabledTooltip: isLimitReached
-                          ? formatFeatureLimitReached(t, tile.feature, usage)
-                          : undefined,
+                        disabledTooltip:
+                          isLimitReached && tile.feature
+                            ? formatFeatureLimitReached(t, tile.feature, usage)
+                            : undefined,
                       }
                     : undefined
                 }
