@@ -1,0 +1,496 @@
+/*
+ * Nebula: the page floats over its own photo. Nothing here paints a full
+ * background: the panels are glass, and SiteBackdrop is what shows through.
+ */
+.page {
+  font-size: 16px;
+  /* So the backdrop stays behind the content and above the plain colour. */
+  isolation: isolate;
+  --glass: color-mix(in srgb, var(--site-bg) 46%, transparent);
+  --glass-line: color-mix(in srgb, var(--site-text) 16%, transparent);
+  --glow: color-mix(in srgb, var(--site-primary) 55%, transparent);
+}
+
+.hero {
+  position: relative;
+  min-height: var(--sz-hero-h, min(100vh, 920px));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.heroBody {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 120px clamp(18px, 5vw, 56px) 110px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  border-radius: 99px;
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  backdrop-filter: blur(14px) saturate(1.4);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.tagDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--site-accent);
+  box-shadow: 0 0 0 0 var(--site-accent);
+  animation: pulse 2.2s ease-out infinite;
+}
+
+/* The title: light that keeps crossing the letters, which come out of a blur. */
+.title {
+  margin: 22px 0 20px;
+  max-width: var(--sz-title-w, 16ch);
+  font-size: var(--sz-title, clamp(46px, 9vw, 124px));
+  line-height: 0.94;
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  overflow-wrap: anywhere;
+  background: linear-gradient(
+    100deg,
+    var(--site-text) 0%,
+    var(--site-text) 30%,
+    color-mix(in srgb, var(--site-secondary) 70%, var(--site-text)) 45%,
+    color-mix(in srgb, var(--site-accent) 70%, var(--site-text)) 55%,
+    var(--site-text) 70%,
+    var(--site-text) 100%
+  );
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation:
+    titleIn 1.3s cubic-bezier(0.2, 0.8, 0.2, 1) both,
+    shimmer 7s linear infinite;
+}
+
+.subtitle {
+  margin: 0 0 30px;
+  max-width: var(--sz-subtitle-w, 52ch);
+  font-size: var(--sz-subtitle, clamp(16px, 1.6vw, 20px));
+  opacity: 0.86;
+}
+
+/* A glass button with a halo that breathes. */
+.cta {
+  display: inline-block;
+  padding: 16px 34px;
+  border-radius: 99px;
+  font-weight: 700;
+  color: var(--site-on-primary, #fff);
+  background: linear-gradient(
+    120deg,
+    var(--site-primary),
+    color-mix(in srgb, var(--site-secondary) 70%, var(--site-primary))
+  );
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, #fff 22%, transparent) inset,
+    0 14px 44px var(--glow);
+  animation: breathe 3.6s ease-in-out infinite;
+  transition:
+    translate 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+    scale 0.3s;
+}
+
+.cta:hover {
+  translate: 0 -3px;
+  scale: 1.03;
+}
+
+/* The featured picture: a pane of glass, leaning back, afloat. */
+.glass {
+  width: min(100%, var(--sz-featured-w, 720px));
+  margin-top: 64px;
+  padding: 10px;
+  border-radius: 28px;
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  backdrop-filter: blur(20px) saturate(1.5);
+  box-shadow:
+    0 50px 120px rgba(0, 0, 0, 0.5),
+    0 0 80px color-mix(in srgb, var(--site-secondary) 22%, transparent);
+  transform: perspective(1400px) rotateX(10deg);
+  transform-origin: 50% 100%;
+  animation:
+    paneIn 1.4s 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both,
+    afloat 7s 1.9s ease-in-out infinite;
+}
+
+.glassPhoto {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: var(--sz-featured-ratio, 16 / 9);
+  height: var(--sz-featured-h, auto);
+  border-radius: 20px;
+}
+
+/* A thin line that keeps falling: there is more below. */
+.scrollCue {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  width: 1px;
+  height: 54px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--site-text) 18%, transparent);
+}
+
+.scrollCue::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--site-text);
+  animation: fall 2.2s cubic-bezier(0.6, 0, 0.2, 1) infinite;
+}
+
+/* The strip: big hollow letters on a ribbon of glass. */
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 18px 0;
+  background: var(--glass);
+  border-block: 1px solid var(--glass-line);
+  backdrop-filter: blur(16px) saturate(1.4);
+  font-size: clamp(18px, 2.6vw, 30px);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.marqueeTrack {
+  display: inline-block;
+  animation: marquee 30s linear infinite;
+}
+
+.marqueeTrack span {
+  margin: 0 20px;
+}
+
+.marqueeTrack span:nth-child(even) {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--site-text);
+}
+
+/* ---------- cards: one pane of glass each ---------- */
+.block {
+  display: grid;
+  grid-template-columns:
+    minmax(min(var(--sz-section-img-w, 0px), calc(100% - 300px)), 1fr)
+    minmax(0, 1fr);
+  gap: clamp(22px, 4vw, 54px);
+  align-items: center;
+  max-width: max(1140px, calc(var(--sz-section-img-w, 0px) + 560px));
+  margin: 72px auto 0;
+  padding: clamp(18px, 3vw, 34px);
+  border-radius: 34px;
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  backdrop-filter: blur(22px) saturate(1.5);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.28);
+  width: calc(100% - 2 * clamp(14px, 4vw, 40px));
+}
+
+.blockFlip {
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(min(var(--sz-section-img-w, 0px), calc(100% - 300px)), 1fr);
+}
+
+.blockFlip .blockPhotoWrap {
+  order: 2;
+}
+
+.blockAlone {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 820px;
+  text-align: center;
+  padding: clamp(30px, 5vw, 60px);
+}
+
+.blockPhotoWrap {
+  width: min(100%, var(--sz-section-img-w, 100%));
+  margin-inline: auto;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.blockPhoto {
+  aspect-ratio: var(--sz-section-img-ratio, 4 / 3);
+  height: var(--sz-section-img-h, auto);
+  background-size: cover;
+  background-position: center;
+  transition: scale 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.block:hover .blockPhoto {
+  scale: 1.07;
+}
+
+.blockTitle {
+  margin: 0 0 14px;
+  font-size: var(--sz-section-title, clamp(28px, 4vw, 48px));
+  line-height: 1.02;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.blockText {
+  margin: 0;
+  font-size: var(--sz-section-text, 17px);
+  opacity: 0.84;
+  white-space: pre-line;
+}
+
+/* ---------- products ---------- */
+.productsTitle {
+  margin: 0;
+  padding: 100px 18px 0;
+  text-align: center;
+  font-size: clamp(32px, 5vw, 60px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--sz-product-w, 210px)), var(--sz-product-w, 270px))
+  );
+  justify-content: center;
+  gap: 20px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 40px clamp(18px, 5vw, 56px) 90px;
+}
+
+.empty {
+  text-align: center;
+  padding: 40px 18px 80px;
+  opacity: 0.7;
+}
+
+.product {
+  position: relative;
+  height: 100%;
+  border-radius: 24px;
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  backdrop-filter: blur(18px) saturate(1.5);
+  transition:
+    translate 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.45s,
+    border-color 0.45s;
+}
+
+.product:hover {
+  translate: 0 -10px;
+  border-color: color-mix(in srgb, var(--site-secondary) 60%, transparent);
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.35),
+    0 0 50px var(--glow);
+}
+
+.productInner {
+  height: 100%;
+  padding: 8px;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.productPhotoClip {
+  overflow: hidden;
+  border-radius: 17px;
+}
+
+.productPhoto {
+  aspect-ratio: var(--sz-product-img-ratio, 4 / 5);
+  height: var(--sz-product-img-h, auto);
+  background: color-mix(in srgb, var(--site-primary) 26%, transparent) center /
+    cover no-repeat;
+  transition: scale 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.product:hover .productPhoto {
+  scale: 1.1;
+}
+
+.productBody {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 8px 8px;
+}
+
+.productName {
+  display: block;
+  font-weight: 700;
+  font-size: var(--sz-product-name, inherit);
+  overflow-wrap: anywhere;
+}
+
+.price {
+  font-size: 14px;
+  opacity: 0.78;
+}
+
+.add {
+  flex-shrink: 0;
+  min-width: 42px;
+  height: 42px;
+  padding: 0 16px;
+  border-radius: 99px;
+  border: 1px solid var(--glass-line);
+  background: color-mix(in srgb, var(--site-text) 10%, transparent);
+  font-weight: 700;
+  font-size: 13px;
+  transition:
+    background 0.3s,
+    color 0.3s,
+    scale 0.3s;
+}
+
+.add:hover:not(:disabled) {
+  background: var(--site-text);
+  color: var(--site-bg);
+  scale: 1.06;
+}
+
+.soldOut .productPhoto {
+  filter: grayscale(0.9);
+  opacity: 0.5;
+}
+
+.soldOut .add {
+  opacity: 0.5;
+}
+
+@keyframes pulse {
+  to {
+    box-shadow: 0 0 0 12px transparent;
+  }
+}
+
+@keyframes titleIn {
+  from {
+    opacity: 0;
+    filter: blur(18px);
+    letter-spacing: 0.06em;
+    translate: 0 30px;
+  }
+  to {
+    filter: none;
+    translate: none;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -160% 0;
+  }
+}
+
+@keyframes breathe {
+  50% {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, #fff 22%, transparent) inset,
+      0 18px 70px var(--glow),
+      0 0 0 8px color-mix(in srgb, var(--site-primary) 14%, transparent);
+  }
+}
+
+@keyframes paneIn {
+  from {
+    opacity: 0;
+    scale: 0.9;
+    filter: blur(10px);
+  }
+  to {
+    scale: none;
+    filter: none;
+  }
+}
+
+@keyframes afloat {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -14px;
+  }
+}
+
+@keyframes fall {
+  from {
+    translate: 0 -100%;
+  }
+  to {
+    translate: 0 100%;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 767px) {
+  .heroBody {
+    padding: 96px 18px 90px;
+  }
+
+  .glass {
+    margin-top: 44px;
+    border-radius: 20px;
+    padding: 7px;
+  }
+
+  .glassPhoto {
+    border-radius: 14px;
+  }
+
+  .block,
+  .blockFlip {
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: 44px;
+    border-radius: 26px;
+  }
+
+  .blockFlip .blockPhotoWrap {
+    order: 0;
+  }
+
+  .products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .productBody {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

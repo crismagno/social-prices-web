@@ -7,7 +7,9 @@ import Aurora from "./templates/Aurora/Aurora";
 import Buddy from "./templates/Buddy/Buddy";
 import Garden from "./templates/Garden/Garden";
 import Impact from "./templates/Impact/Impact";
+import Lumen from "./templates/Lumen/Lumen";
 import Mare from "./templates/Mare/Mare";
+import Nebula from "./templates/Nebula/Nebula";
 import Riviera from "./templates/Riviera/Riviera";
 import Studio from "./templates/Studio/Studio";
 import Swell from "./templates/Swell/Swell";
@@ -151,6 +153,30 @@ export const TEMPLATE_REGISTRY: Record<
     },
     labelKey: "storeSite.templates.ATLAS.name",
     descriptionKey: "storeSite.templates.ATLAS.description",
+  },
+  [StoreSitesEnum.Template.NEBULA]: {
+    Component: Nebula,
+    defaultTheme: {
+      primary: "#7c5cff",
+      secondary: "#22d3ee",
+      accent: "#ff5fa2",
+      background: "#06070f",
+      text: "#f4f6ff",
+    },
+    labelKey: "storeSite.templates.NEBULA.name",
+    descriptionKey: "storeSite.templates.NEBULA.description",
+  },
+  [StoreSitesEnum.Template.LUMEN]: {
+    Component: Lumen,
+    defaultTheme: {
+      primary: "#ff6b4a",
+      secondary: "#7c6cff",
+      accent: "#ffd166",
+      background: "#f7f4ef",
+      text: "#1c1b22",
+    },
+    labelKey: "storeSite.templates.LUMEN.name",
+    descriptionKey: "storeSite.templates.LUMEN.description",
   },
 };
 

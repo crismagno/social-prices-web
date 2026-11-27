@@ -1,0 +1,248 @@
+/*
+ * The background of a whole page. It sticks to the screen and takes no room
+ * of its own, so the page scrolls over it. Sticky, not fixed: in the editor
+ * the page lives inside a frame, and it must stay inside that frame.
+ */
+.backdrop {
+  position: sticky;
+  top: 0;
+  z-index: -1;
+  height: 100vh;
+  height: 100lvh;
+  margin-bottom: -100vh;
+  margin-bottom: -100lvh;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--site-bg);
+}
+
+.backdrop > * {
+  position: absolute;
+  inset: 0;
+}
+
+/* The site's colours as soft lights that drift: the base of everything. */
+.mesh {
+  inset: -20%;
+  background:
+    radial-gradient(
+      42% 46% at 18% 22%,
+      color-mix(in srgb, var(--site-primary) 70%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      40% 44% at 82% 18%,
+      color-mix(in srgb, var(--site-secondary) 62%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      46% 50% at 62% 86%,
+      color-mix(in srgb, var(--site-accent) 58%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(
+      38% 42% at 12% 88%,
+      color-mix(in srgb, var(--site-secondary) 40%, transparent),
+      transparent 70%
+    );
+  animation: meshDrift 26s ease-in-out infinite alternate;
+}
+
+/* The photo, slowly travelling. Its opacity belongs to the slider. */
+.photo {
+  inset: -8%;
+  background-size: cover;
+  background-position: center;
+  animation: photoTravel 36s ease-in-out infinite alternate;
+}
+
+/* The colours crossing the photo. */
+.tint {
+  background: linear-gradient(
+    125deg,
+    var(--site-primary),
+    var(--site-secondary),
+    var(--site-accent),
+    var(--site-primary)
+  );
+  background-size: 320% 320%;
+  animation: tintSweep 18s ease-in-out infinite;
+}
+
+.orb {
+  inset: auto;
+  width: min(46vw, 560px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  filter: blur(90px);
+}
+
+.orbOne {
+  left: -8%;
+  top: 8%;
+  background: var(--site-secondary);
+  animation: orbWander 19s ease-in-out infinite;
+}
+
+.orbTwo {
+  right: -6%;
+  bottom: 4%;
+  background: var(--site-accent);
+  animation: orbWander 23s ease-in-out infinite reverse;
+}
+
+/* What keeps the words readable over whatever photo the owner chose. */
+.veil {
+  opacity: 0.78;
+}
+
+/* A fine grain, so the gradients do not look like plastic. */
+.grain {
+  opacity: 0.1;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ====== Nebula: the photo in the site's colours, deep and dark ====== */
+.nebula .mesh {
+  opacity: 0.55;
+}
+
+.nebula .photo {
+  filter: saturate(0.85) contrast(1.08);
+}
+
+/* The hues of the site over the light and shade of the photo. */
+.nebula .tint {
+  mix-blend-mode: color;
+  opacity: 0.62;
+}
+
+.nebula:not([data-photo-on]) .tint {
+  mix-blend-mode: normal;
+  opacity: 0.22;
+}
+
+.nebula .orb {
+  mix-blend-mode: screen;
+  opacity: 0.42;
+}
+
+.nebula .veil {
+  background:
+    radial-gradient(
+      120% 80% at 50% 0%,
+      transparent 0%,
+      color-mix(in srgb, var(--site-bg) 70%, transparent) 70%,
+      var(--site-bg) 100%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--site-bg) 30%, transparent),
+      color-mix(in srgb, var(--site-bg) 82%, transparent)
+    );
+}
+
+/* ====== Lumen: the photo painted in pastel light ====== */
+.lumen .mesh {
+  opacity: 0.9;
+}
+
+/* Only its light and shade: the colours under it are the site's. */
+.lumen .photo {
+  mix-blend-mode: luminosity;
+  filter: opacity(0.72) contrast(1.05);
+}
+
+.lumen .tint {
+  mix-blend-mode: soft-light;
+  opacity: 0.5;
+}
+
+.lumen .orb {
+  opacity: 0.34;
+}
+
+.lumen .veil {
+  opacity: 0.7;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--site-bg) 46%, transparent),
+    color-mix(in srgb, var(--site-bg) 78%, transparent)
+  );
+}
+
+/*
+ * Further down the page there is more to read: the veil closes as the page
+ * scrolls, so the photo is vivid at the entrance and calm under the rest.
+ */
+@supports (animation-timeline: scroll()) {
+  .veil {
+    animation: veilClose linear both;
+    animation-timeline: scroll(nearest block);
+    animation-range: 0px 900px;
+  }
+
+  .lumen .veil {
+    animation-name: veilCloseSoft;
+  }
+}
+
+@keyframes veilClose {
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 0.94;
+  }
+}
+
+@keyframes veilCloseSoft {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 0.92;
+  }
+}
+
+@keyframes meshDrift {
+  from {
+    transform: translate3d(-3%, -2%, 0) rotate(0deg) scale(1);
+  }
+  to {
+    transform: translate3d(4%, 3%, 0) rotate(8deg) scale(1.12);
+  }
+}
+
+@keyframes photoTravel {
+  from {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.14) translate3d(-2.5%, -2%, 0);
+  }
+}
+
+@keyframes tintSweep {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes orbWander {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(9vw, -5vh, 0) scale(1.18);
+  }
+  66% {
+    transform: translate3d(-6vw, 7vh, 0) scale(0.88);
+  }
+}

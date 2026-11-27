@@ -2509,6 +2509,14 @@
       "MARE": {
         "name": "Maré",
         "description": "Calm and natural, in sand, clay and sea blue: soft serif with italics, an arched photo and mosaics. For home, decor and handmade stores."
+      },
+      "NEBULA": {
+        "name": "Nebula",
+        "description": "Immersive and deep: the photo is the background of the whole page, blended with your colors, and everything floats over it as glass."
+      },
+      "LUMEN": {
+        "name": "Lumen",
+        "description": "Light and airy: the photo painted in pastel light behind the whole page, frosted tiles and a picture in a shape that keeps moving."
       }
     },
     "editor": {

@@ -2512,6 +2512,14 @@
       "MARE": {
         "name": "Maré",
         "description": "Calmo e natural, em areia, argila e azul-mar: serifa suave com itálico, foto em arco e mosaicos. Para lojas de casa, decoração e feito à mão."
+      },
+      "NEBULA": {
+        "name": "Nebula",
+        "description": "Imersivo e profundo: a foto vira o fundo da página inteira, mesclada com as suas cores, e tudo flutua sobre ela em vidro."
+      },
+      "LUMEN": {
+        "name": "Lumen",
+        "description": "Claro e leve: a foto pintada em luz pastel atrás da página inteira, blocos de vidro fosco e uma imagem em forma que não para de se mover."
       }
     },
     "editor": {

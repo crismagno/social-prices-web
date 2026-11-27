@@ -11,6 +11,8 @@ namespace StoreSitesEnum {
     BUDDY = "BUDDY",
     ARCADE = "ARCADE",
     ATLAS = "ATLAS",
+    NEBULA = "NEBULA",
+    LUMEN = "LUMEN",
   }
 
   /** What a link of the footer leads to: it decides its icon and how it opens. */
