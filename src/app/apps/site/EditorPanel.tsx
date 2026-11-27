@@ -67,18 +67,20 @@ interface Props {
   builder: ISiteBuilder;
 }
 
-const TABS: { key: TTab; icon: ReactNode }[] = [
+// Kept by what they change: the look, the parts of a page, the selling, and
+// where the site lives. The first of each group stands a little apart.
+const TABS: { key: TTab; icon: ReactNode; isGroupStart?: boolean }[] = [
   { key: "builder", icon: <AppstoreAddOutlined /> },
   { key: "template", icon: <AppstoreOutlined /> },
   { key: "colors", icon: <BgColorsOutlined /> },
+  { key: "pages", icon: <FileTextOutlined />, isGroupStart: true },
   { key: "header", icon: <BorderTopOutlined /> },
   { key: "hero", icon: <PictureOutlined /> },
-  { key: "products", icon: <ShoppingOutlined /> },
-  { key: "cart", icon: <ShoppingCartOutlined /> },
-  { key: "pages", icon: <FileTextOutlined /> },
-  { key: "chat", icon: <CommentOutlined /> },
   { key: "footer", icon: <BorderBottomOutlined /> },
-  { key: "publish", icon: <LinkOutlined /> },
+  { key: "products", icon: <ShoppingOutlined />, isGroupStart: true },
+  { key: "cart", icon: <ShoppingCartOutlined /> },
+  { key: "chat", icon: <CommentOutlined /> },
+  { key: "publish", icon: <LinkOutlined />, isGroupStart: true },
   { key: "mocks", icon: <SnippetsOutlined /> },
 ];
 
@@ -270,7 +272,7 @@ const EditorPanel = ({
         aria-label={t("storeSite.editor.title")}
         className="flex overflow-x-auto border-b border-gray-200 dark:border-gray-700"
       >
-        {TABS.map(({ key, icon }: { key: TTab; icon: ReactNode }) => {
+        {TABS.map(({ key, icon, isGroupStart }) => {
           const isActive: boolean = key === tab;
 
           return (
@@ -283,6 +285,10 @@ const EditorPanel = ({
               title={t(`storeSite.editor.tabs.${key}`)}
               onClick={() => setTab(key)}
               className={`flex-1 min-w-[58px] flex flex-col items-center gap-1 py-2.5 px-0.5 text-[11px] leading-none border-b-2 transition-colors ${
+                isGroupStart
+                  ? "border-l border-l-gray-200 dark:border-l-gray-700"
+                  : ""
+              } ${
                 isActive
                   ? "border-blue-500 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40"
                   : "border-transparent opacity-70 hover:opacity-100 hover:bg-gray-50 dark:hover:bg-gray-800"

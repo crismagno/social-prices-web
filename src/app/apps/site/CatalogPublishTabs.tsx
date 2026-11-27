@@ -10,6 +10,7 @@ import {
   Form,
   Input,
   List,
+  Segmented,
   Space,
   Switch,
   Tag,
@@ -38,7 +39,6 @@ import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enu
 import Urls from "../../../shared/common/routes-app/routes-app";
 import { getImageUrl } from "../../../shared/utils/images/images-url";
 import ImageLookCard from "./ImageLookCard";
-import ChoiceList from "./ChoiceList";
 import ProductPickerModal from "./ProductPickerModal";
 import SizeFields from "./SizeFields";
 import useDragReorder from "./useDragReorder";
@@ -122,11 +122,11 @@ export const ProductsTab = ({ editor }: Omit<Props, "storeId">) => {
             </label>
           ))}
           {catalog.isDetailsOpened && (
-            <Form.Item
-              className="mb-0"
-              label={t("storeSite.editor.catalog.detailsMode")}
-            >
-              <ChoiceList<StoreSitesEnum.ProductDetailsMode>
+            // The choices under their label: beside it, their words were cut.
+            <div className="flex flex-col gap-1.5">
+              <span>{t("storeSite.editor.catalog.detailsMode")}</span>
+              <Segmented<StoreSitesEnum.ProductDetailsMode>
+                block
                 value={catalog.detailsMode}
                 onChange={(detailsMode) =>
                   editor.update({ catalog: { ...catalog, detailsMode } })
@@ -135,13 +135,16 @@ export const ProductsTab = ({ editor }: Omit<Props, "storeId">) => {
                   (mode: StoreSitesEnum.ProductDetailsMode) => ({
                     value: mode,
                     label: t(`storeSite.editor.catalog.detailsModes.${mode}`),
-                    hint: t(
-                      `storeSite.editor.catalog.detailsModeHints.${mode}`,
-                    ),
                   }),
                 )}
               />
-            </Form.Item>
+              {/* Only what the chosen one does: the other is a click away. */}
+              <span className="text-xs opacity-60">
+                {t(
+                  `storeSite.editor.catalog.detailsModeHints.${catalog.detailsMode}`,
+                )}
+              </span>
+            </div>
           )}
           {catalog.isTitleShown && (
             <Form.Item
