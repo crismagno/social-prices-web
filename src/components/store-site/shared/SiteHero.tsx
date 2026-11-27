@@ -56,9 +56,16 @@ export const heroColorProps = (
 ): {
   className: string;
   "data-hero-colors"?: string;
+  "data-hero-title"?: "off";
   style?: CSSProperties;
 } => {
-  const { background, text, button } = heroOptionsOf(hero.options).colors;
+  const options: IStoreSiteHeroOptions = heroOptionsOf(hero.options);
+  const { background, text, button } = options.colors;
+
+  // A title the owner hid stays in the page, only out of sight.
+  const title: { "data-hero-title"?: "off" } = options.isTitleVisible
+    ? {}
+    : { "data-hero-title": "off" };
 
   const set: string[] = [
     background ? "bg" : "",
@@ -67,11 +74,12 @@ export const heroColorProps = (
   ].filter(Boolean);
 
   if (!set.length) {
-    return { className: `${className} ${base.heroPart}` };
+    return { className: `${className} ${base.heroPart}`, ...title };
   }
 
   return {
     className: `${className} ${base.heroPart}`,
+    ...title,
     "data-hero-colors": set.join(" "),
     style: {
       ...(background ? { "--hero-bg": background } : {}),

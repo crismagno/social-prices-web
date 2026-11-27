@@ -422,6 +422,22 @@
   -webkit-text-fill-color: var(--hero-btn) !important;
 }
 
+/*
+ * The title the owner hid: out of sight in whichever template draws it, and
+ * still read by a screen reader or a search engine.
+ */
+.heroPart[data-hero-title="off"] h1 {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
 /* The paragraph the owner added: a little apart from the subtitle. */
 .heroExtraText {
   margin-top: 12px;

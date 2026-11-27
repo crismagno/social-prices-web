@@ -32,6 +32,8 @@ const followingHero = (hero: IStoreSiteHero): Partial<IStoreSiteHero> => ({
   featuredImageUrls: [],
   options: {
     ...heroOptionsOf(hero.options),
+    // The title of a page is the page's own: hiding the home's does not hide it.
+    isTitleVisible: true,
     isSubtitleVisible: true,
     extraText: null,
     secondButton: null,
@@ -67,6 +69,7 @@ const ownHero = (
       ...own.options,
       // A line or picture the page does not want is simply left empty.
       isTaglineVisible: true,
+      isTitleVisible: true,
       isSubtitleVisible: true,
       isFeaturedVisible: true,
       colors: {

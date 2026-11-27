@@ -21,6 +21,7 @@ interface Props {
 
 const PIECES: THeroPiece[] = [
   "isTaglineVisible",
+  "isTitleVisible",
   "isSubtitleVisible",
   "isButtonVisible",
   "isFeaturedVisible",

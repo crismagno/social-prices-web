@@ -2613,6 +2613,7 @@
           "pieces": {
             "title": "What shows",
             "isTaglineVisible": "Top line",
+            "isTitleVisible": "Title",
             "isSubtitleVisible": "Subtitle",
             "isButtonVisible": "Main button",
             "isFeaturedVisible": "Featured image"

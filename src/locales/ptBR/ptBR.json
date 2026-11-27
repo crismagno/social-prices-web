@@ -2616,6 +2616,7 @@
           "pieces": {
             "title": "O que aparece",
             "isTaglineVisible": "Linha de cima",
+            "isTitleVisible": "Título",
             "isSubtitleVisible": "Subtítulo",
             "isButtonVisible": "Botão principal",
             "isFeaturedVisible": "Imagem em destaque"

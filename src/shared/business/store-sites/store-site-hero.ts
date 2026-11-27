@@ -14,6 +14,8 @@ export interface IStoreSiteHeroColors {
  */
 export interface IStoreSiteHeroOptions {
   isTaglineVisible: boolean;
+  /** Hidden, the title is still there for who reads the page without seeing it. */
+  isTitleVisible: boolean;
   isSubtitleVisible: boolean;
   isFeaturedVisible: boolean;
   isButtonVisible: boolean;
@@ -57,6 +59,7 @@ export const heroOptionsOf = (options: unknown): IStoreSiteHeroOptions => {
 
   return {
     isTaglineVisible: source.isTaglineVisible !== false,
+    isTitleVisible: source.isTitleVisible !== false,
     isSubtitleVisible: source.isSubtitleVisible !== false,
     isFeaturedVisible: source.isFeaturedVisible !== false,
     isButtonVisible: source.isButtonVisible !== false,

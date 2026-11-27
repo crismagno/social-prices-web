@@ -18,6 +18,7 @@ import ButtonFields from "./ButtonFields";
 
 export type THeroPiece =
   | "isTaglineVisible"
+  | "isTitleVisible"
   | "isSubtitleVisible"
   | "isButtonVisible"
   | "isFeaturedVisible";
