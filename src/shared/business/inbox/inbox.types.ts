@@ -36,6 +36,8 @@ export interface IInboxChat {
   lastMessageChannel: InboxEnum.Channel;
   lastMessageDirection: InboxEnum.Direction;
   unreadCount: number;
+  // Whether the store has ever written to this person, on any channel.
+  hasReplied: boolean;
   // Set aside by the user: shown apart, until the person writes again.
   isInLimbo: boolean;
 }

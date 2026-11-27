@@ -2030,10 +2030,14 @@
       "all": "Todos",
       "unlinked": "Só sem cliente"
     },
+    "notAnswered": "Sem resposta",
+    "notAnsweredHint": "Ninguém da loja escreveu para essa pessoa ainda.",
     "summary": {
       "total": "Chats",
       "pending": "Pendentes",
-      "pendingHint": "Chats com mensagens ainda não lidas. Clique para mostrar só eles."
+      "pendingHint": "Chats com mensagens ainda não lidas. Clique para mostrar só eles.",
+      "unanswered": "A responder",
+      "unansweredHint": "Chats cuja última mensagem veio da pessoa. Clique para mostrar só eles."
     },
     "loadOlder": "Carregar mensagens anteriores",
     "noMessages": "Nenhuma mensagem ainda",

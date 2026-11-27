@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 
 import { SearchOutlined, UserOutlined } from "@ant-design/icons";
 
+import ChatsCounts, { TChatsFocus } from "../../chats/ChatsCounts";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import TelegramEnum from "../../../shared/business/apps/telegram/telegram.enum";
 import { ITelegramChat } from "../../../shared/business/apps/telegram/telegram.types";
@@ -33,6 +34,10 @@ const formatWhen = (at: string): string => {
     : when.format("DD/MM");
 };
 
+// The chats whose last word is the person's: they still wait for an answer.
+const isUnanswered = (chat: ITelegramChat): boolean =>
+  chat.lastMessageDirection === TelegramEnum.Direction.IN;
+
 export default function TelegramChatList({
   chats,
   isLoading,
@@ -47,12 +52,25 @@ export default function TelegramChatList({
 
   const unnamed: string = t("apps.telegram.unnamed");
 
+  // Only the chats still waiting, to answer them one after another.
+  const [focus, setFocus] = useState<TChatsFocus>("ALL");
+
+  const unansweredCount: number = chats.filter(isUnanswered).length;
+
+  const pendingCount: number = useMemo(
+    () => chats.filter((chat: ITelegramChat) => chat.unreadCount > 0).length,
+    [chats],
+  );
+
   const visible: ITelegramChat[] = useMemo(
     () =>
-      chats.filter((chat: ITelegramChat) =>
-        chatMatchesSearch(chat, chatDisplayName(chat, unnamed), search),
+      chats.filter(
+        (chat: ITelegramChat) =>
+          (focus !== "PENDING" || chat.unreadCount > 0) &&
+          (focus !== "UNANSWERED" || isUnanswered(chat)) &&
+          chatMatchesSearch(chat, chatDisplayName(chat, unnamed), search),
       ),
-    [chats, search, unnamed],
+    [chats, focus, search, unnamed],
   );
 
   // The API keeps "[PHOTO]" for a message without text; show it in the user's language.
@@ -74,9 +92,17 @@ export default function TelegramChatList({
   return (
     <div className="flex h-full flex-col">
       <div
-        className="p-3"
+        className="flex flex-col gap-2 p-3"
         style={{ borderBottom: `1px solid ${token.colorBorderSecondary}` }}
       >
+        <ChatsCounts
+          total={chats.length}
+          pending={pendingCount}
+          unanswered={unansweredCount}
+          focus={focus}
+          onFocusChange={setFocus}
+        />
+
         <Input
           allowClear
           prefix={<SearchOutlined style={{ color: token.colorTextTertiary }} />}

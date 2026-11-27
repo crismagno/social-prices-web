@@ -24,6 +24,7 @@ import {
   formatWhen,
   seedOf,
 } from "./chats-display";
+import ChatsCounts, { TChatsFocus } from "./ChatsCounts";
 
 // Each choice of the channel filter: the word and the icons on one centred line.
 const CHANNEL_CELL: string =
@@ -40,6 +41,10 @@ interface Props {
 
 // The customers (and the people not tied to one yet), most recent first, each
 // with the channels they talked through.
+// The chats whose last word is the person's: they still wait for an answer.
+const isUnanswered = (chat: IInboxChat): boolean =>
+  chat.lastMessageDirection === InboxEnum.Direction.IN;
+
 export default function ChatsList({
   chats,
   isLoading,
@@ -93,7 +98,9 @@ export default function ChatsList({
   );
 
   // Only the chats still waiting, to answer them one after another.
-  const [onlyPending, setOnlyPending] = useState<boolean>(false);
+  const [focus, setFocus] = useState<TChatsFocus>("ALL");
+
+  const unansweredCount: number = inView.filter(isUnanswered).length;
 
   const unnamed: string = t("chats.unnamed");
 
@@ -102,11 +109,12 @@ export default function ChatsList({
       inView.filter(
         (chat: IInboxChat) =>
           (!onlyUnlinked || !chat.customerId) &&
-          (!onlyPending || chat.unreadCount > 0) &&
+          (focus !== "PENDING" || chat.unreadCount > 0) &&
+          (focus !== "UNANSWERED" || isUnanswered(chat)) &&
           (channel === "ALL" || chat.channels.includes(channel)) &&
           chatMatches(chat, chatName(chat, unnamed), search),
       ),
-    [inView, channel, onlyUnlinked, onlyPending, search, unnamed],
+    [inView, channel, onlyUnlinked, focus, search, unnamed],
   );
 
   // A message with a file and no text shows what the file is, in the user's language.
@@ -150,59 +158,13 @@ export default function ChatsList({
           ]}
         />
 
-        <div className="flex gap-2">
-          <button
-            type="button"
-            aria-pressed={!onlyPending}
-            onClick={() => setOnlyPending(false)}
-            className="flex flex-1 items-baseline justify-center gap-1.5 rounded-md px-2 py-0.5 transition-colors"
-            style={{
-              border: `1px solid ${
-                onlyPending ? token.colorBorderSecondary : token.colorPrimary
-              }`,
-              background: onlyPending ? undefined : token.colorPrimaryBg,
-            }}
-          >
-            <span className="text-sm font-semibold">
-              {inView.length}
-            </span>
-            <span
-              className="text-xs"
-              style={{ color: token.colorTextSecondary }}
-            >
-              {t("chats.summary.total")}
-            </span>
-          </button>
-          <button
-            type="button"
-            aria-pressed={onlyPending}
-            disabled={!pendingCount && !onlyPending}
-            onClick={() => setOnlyPending((current: boolean) => !current)}
-            title={t("chats.summary.pendingHint")}
-            className="flex flex-1 items-baseline justify-center gap-1.5 rounded-md px-2 py-0.5 transition-colors disabled:cursor-default"
-            style={{
-              border: `1px solid ${
-                onlyPending ? token.colorWarning : token.colorBorderSecondary
-              }`,
-              background: onlyPending ? token.colorWarningBg : undefined,
-            }}
-          >
-            <span
-              className="text-sm font-semibold"
-              style={{
-                color: pendingCount ? token.colorWarningText : undefined,
-              }}
-            >
-              {pendingCount}
-            </span>
-            <span
-              className="text-xs"
-              style={{ color: token.colorTextSecondary }}
-            >
-              {t("chats.summary.pending")}
-            </span>
-          </button>
-        </div>
+        <ChatsCounts
+          total={inView.length}
+          pending={pendingCount}
+          unanswered={unansweredCount}
+          focus={focus}
+          onFocusChange={setFocus}
+        />
 
         <Input
           allowClear
@@ -381,6 +343,20 @@ export default function ChatsList({
                     {!chat.customerId && (
                       <span style={{ color: token.colorTextTertiary }}>
                         · {t("chats.noCustomer")}
+                      </span>
+                    )}
+
+                    {chat.hasReplied === false && (
+                      <span
+                        className="ml-auto shrink-0 rounded px-1.5 py-px text-[11px] font-medium leading-4"
+                        title={t("chats.notAnsweredHint")}
+                        style={{
+                          color: token.colorWarningText,
+                          background: token.colorWarningBg,
+                          border: `1px solid ${token.colorWarningBorder}`,
+                        }}
+                      >
+                        {t("chats.notAnswered")}
                       </span>
                     )}
                   </div>

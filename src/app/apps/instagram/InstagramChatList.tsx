@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 
 import { SearchOutlined, UserOutlined } from "@ant-design/icons";
 
+import ChatsCounts, { TChatsFocus } from "../../chats/ChatsCounts";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import InstagramEnum from "../../../shared/business/apps/instagram/instagram.enum";
 import { IInstagramChat } from "../../../shared/business/apps/instagram/instagram.types";
@@ -38,6 +39,10 @@ const formatWhen = (at: string): string => {
 export const seedOf = (igsid: string): number =>
   Array.from(igsid).reduce((sum, char) => sum + char.charCodeAt(0), 0);
 
+// The chats whose last word is the person's: they still wait for an answer.
+const isUnanswered = (chat: IInstagramChat): boolean =>
+  chat.lastMessageDirection === InstagramEnum.Direction.IN;
+
 export default function InstagramChatList({
   chats,
   isLoading,
@@ -52,12 +57,25 @@ export default function InstagramChatList({
 
   const unnamed: string = t("apps.instagram.unnamed");
 
+  // Only the chats still waiting, to answer them one after another.
+  const [focus, setFocus] = useState<TChatsFocus>("ALL");
+
+  const unansweredCount: number = chats.filter(isUnanswered).length;
+
+  const pendingCount: number = useMemo(
+    () => chats.filter((chat: IInstagramChat) => chat.unreadCount > 0).length,
+    [chats],
+  );
+
   const visible: IInstagramChat[] = useMemo(
     () =>
-      chats.filter((chat: IInstagramChat) =>
-        chatMatchesSearch(chat, chatDisplayName(chat, unnamed), search),
+      chats.filter(
+        (chat: IInstagramChat) =>
+          (focus !== "PENDING" || chat.unreadCount > 0) &&
+          (focus !== "UNANSWERED" || isUnanswered(chat)) &&
+          chatMatchesSearch(chat, chatDisplayName(chat, unnamed), search),
       ),
-    [chats, search, unnamed],
+    [chats, focus, search, unnamed],
   );
 
   // A message with a file and no text shows what the file is, in the user's language.
@@ -76,9 +94,17 @@ export default function InstagramChatList({
   return (
     <div className="flex h-full flex-col">
       <div
-        className="p-3"
+        className="flex flex-col gap-2 p-3"
         style={{ borderBottom: `1px solid ${token.colorBorderSecondary}` }}
       >
+        <ChatsCounts
+          total={chats.length}
+          pending={pendingCount}
+          unanswered={unansweredCount}
+          focus={focus}
+          onFocusChange={setFocus}
+        />
+
         <Input
           allowClear
           prefix={<SearchOutlined style={{ color: token.colorTextTertiary }} />}

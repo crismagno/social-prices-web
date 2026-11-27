@@ -2027,10 +2027,14 @@
       "all": "All",
       "unlinked": "Only without customer"
     },
+    "notAnswered": "Not answered",
+    "notAnsweredHint": "Nobody from the store has written to this person yet.",
     "summary": {
       "total": "Chats",
       "pending": "Pending",
-      "pendingHint": "Chats with messages not read yet. Click to show only them."
+      "pendingHint": "Chats with messages not read yet. Click to show only them.",
+      "unanswered": "To answer",
+      "unansweredHint": "Chats whose last message came from the person. Click to show only them."
     },
     "loadOlder": "Load older messages",
     "noMessages": "No messages yet",
