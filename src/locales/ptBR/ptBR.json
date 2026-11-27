@@ -588,6 +588,8 @@
   "stores": {
     "editSite": "Editar site",
     "editSiteTooltip": "Abrir o editor do site desta loja",
+    "openSite": "Abrir site",
+    "openSiteTooltip": "Abrir o site publicado desta loja em uma nova aba",
     "copyChatLink": "Copiar link do chat",
     "copyChatLinkTooltip": "Copiar o link que os clientes abrem para falar com esta loja",
     "chatLinkCopied": "Link do chat copiado",

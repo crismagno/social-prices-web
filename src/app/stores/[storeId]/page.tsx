@@ -15,9 +15,11 @@ import moment from "moment";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import {
   EditOutlined,
+  ExportOutlined,
   GlobalOutlined,
   LinkOutlined,
   ShopOutlined,
@@ -32,6 +34,7 @@ import { TagTagsCustomAntd } from "../../../components/common/TagTagsCustomAntd/
 import Layout from "../../../components/template/Layout/Layout";
 import useAppData from "../../../data/context/app/useAppData";
 import useLanguageData from "../../../data/context/language/useLanguageData";
+import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import AppsEnum from "../../../shared/business/apps/apps.enum";
 import { IAppCatalogItem } from "../../../shared/business/apps/apps.types";
 import CategoriesEnum from "../../../shared/business/categories/categories.enum";
@@ -39,6 +42,7 @@ import AddressEnum from "../../../shared/business/shared/address/address.enum";
 import { IAddress } from "../../../shared/business/shared/address/address.interface";
 import PhoneNumberEnum from "../../../shared/business/shared/phone/phone-number.enum";
 import { IPhoneNumber } from "../../../shared/business/shared/phone/phone-number.interface";
+import { IStoreSite } from "../../../shared/business/store-sites/store-site.interface";
 import StoresEnum from "../../../shared/business/stores/stores.enum";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
@@ -78,6 +82,35 @@ export default function StorePage() {
   const { tags, isLoading: isLoadingTags } = useFindTagsByType(
     TagsEnum.Type.STORE,
   );
+
+  // The address of the store's site, once it is published.
+  const [siteSlug, setSiteSlug] = useState<string | null>(null);
+
+  const siteStoreId: string | undefined = store?._id;
+
+  useEffect(() => {
+    if (!siteStoreId || !canEditSite) {
+      setSiteSlug(null);
+
+      return;
+    }
+
+    let isCurrent: boolean = true;
+
+    serviceMethodsInstance.storeSitesServiceMethods
+      .findByStoreId(siteStoreId)
+      .then((site: IStoreSite | null) => {
+        if (isCurrent) {
+          setSiteSlug(site?.isPublished ? site.slug : null);
+        }
+      })
+      // No site to open: the button just stays out.
+      .catch(() => undefined);
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [siteStoreId, canEditSite]);
 
   if (isLoadingStore || !store || isLoadingCategories || isLoadingTags) {
     return <LoadingFull />;
@@ -183,6 +216,18 @@ export default function StorePage() {
                         }
                       >
                         {t("stores.editSite")}
+                      </Button>
+                    </Tooltip>
+                  )}
+                  {siteSlug && (
+                    <Tooltip title={t("stores.openSiteTooltip")}>
+                      <Button
+                        icon={<ExportOutlined />}
+                        href={Urls.SITE.replace(":slug", siteSlug)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {t("stores.openSite")}
                       </Button>
                     </Tooltip>
                   )}

@@ -585,6 +585,8 @@
   "stores": {
     "editSite": "Edit site",
     "editSiteTooltip": "Open the site editor on this store",
+    "openSite": "Open site",
+    "openSiteTooltip": "Open the published site of this store in a new tab",
     "copyChatLink": "Copy chat link",
     "copyChatLinkTooltip": "Copy the link customers open to talk to this store",
     "chatLinkCopied": "Chat link copied",
