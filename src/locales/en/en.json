@@ -2027,6 +2027,11 @@
       "all": "All",
       "unlinked": "Only without customer"
     },
+    "summary": {
+      "total": "Chats",
+      "pending": "Pending",
+      "pendingHint": "Chats with messages not read yet. Click to show only them."
+    },
     "loadOlder": "Load older messages",
     "noMessages": "No messages yet",
     "unnamed": "Unnamed",

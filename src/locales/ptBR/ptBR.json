@@ -2030,6 +2030,11 @@
       "all": "Todos",
       "unlinked": "Só sem cliente"
     },
+    "summary": {
+      "total": "Chats",
+      "pending": "Pendentes",
+      "pendingHint": "Chats com mensagens ainda não lidas. Clique para mostrar só eles."
+    },
     "loadOlder": "Carregar mensagens anteriores",
     "noMessages": "Nenhuma mensagem ainda",
     "unnamed": "Sem nome",

@@ -25,6 +25,10 @@ import {
   seedOf,
 } from "./chats-display";
 
+// Each choice of the channel filter: the word and the icons on one centred line.
+const CHANNEL_CELL: string =
+  "flex h-6 items-center justify-center leading-none";
+
 interface Props {
   chats: IInboxChat[];
   isLoading: boolean;
@@ -82,6 +86,15 @@ export default function ChatsList({
     [inView],
   );
 
+  // The chats with messages nobody has read yet: what still waits for an answer.
+  const pendingCount: number = useMemo(
+    () => inView.filter((chat: IInboxChat) => chat.unreadCount > 0).length,
+    [inView],
+  );
+
+  // Only the chats still waiting, to answer them one after another.
+  const [onlyPending, setOnlyPending] = useState<boolean>(false);
+
   const unnamed: string = t("chats.unnamed");
 
   const visible: IInboxChat[] = useMemo(
@@ -89,10 +102,11 @@ export default function ChatsList({
       inView.filter(
         (chat: IInboxChat) =>
           (!onlyUnlinked || !chat.customerId) &&
+          (!onlyPending || chat.unreadCount > 0) &&
           (channel === "ALL" || chat.channels.includes(channel)) &&
           chatMatches(chat, chatName(chat, unnamed), search),
       ),
-    [inView, channel, onlyUnlinked, search, unnamed],
+    [inView, channel, onlyUnlinked, onlyPending, search, unnamed],
   );
 
   // A message with a file and no text shows what the file is, in the user's language.
@@ -119,7 +133,12 @@ export default function ChatsList({
           value={view}
           onChange={(value) => setView(value as "ACTIVE" | "LIMBO")}
           options={[
-            { value: "ACTIVE", label: t("chats.limbo.active") },
+            {
+              value: "ACTIVE",
+              label: `${t("chats.limbo.active")} (${
+                chats.length - limboCount
+              })`,
+            },
             {
               value: "LIMBO",
               label: (
@@ -130,6 +149,60 @@ export default function ChatsList({
             },
           ]}
         />
+
+        <div className="flex gap-2">
+          <button
+            type="button"
+            aria-pressed={!onlyPending}
+            onClick={() => setOnlyPending(false)}
+            className="flex flex-1 items-baseline justify-center gap-1.5 rounded-md px-2 py-0.5 transition-colors"
+            style={{
+              border: `1px solid ${
+                onlyPending ? token.colorBorderSecondary : token.colorPrimary
+              }`,
+              background: onlyPending ? undefined : token.colorPrimaryBg,
+            }}
+          >
+            <span className="text-sm font-semibold">
+              {inView.length}
+            </span>
+            <span
+              className="text-xs"
+              style={{ color: token.colorTextSecondary }}
+            >
+              {t("chats.summary.total")}
+            </span>
+          </button>
+          <button
+            type="button"
+            aria-pressed={onlyPending}
+            disabled={!pendingCount && !onlyPending}
+            onClick={() => setOnlyPending((current: boolean) => !current)}
+            title={t("chats.summary.pendingHint")}
+            className="flex flex-1 items-baseline justify-center gap-1.5 rounded-md px-2 py-0.5 transition-colors disabled:cursor-default"
+            style={{
+              border: `1px solid ${
+                onlyPending ? token.colorWarning : token.colorBorderSecondary
+              }`,
+              background: onlyPending ? token.colorWarningBg : undefined,
+            }}
+          >
+            <span
+              className="text-sm font-semibold"
+              style={{
+                color: pendingCount ? token.colorWarningText : undefined,
+              }}
+            >
+              {pendingCount}
+            </span>
+            <span
+              className="text-xs"
+              style={{ color: token.colorTextSecondary }}
+            >
+              {t("chats.summary.pending")}
+            </span>
+          </button>
+        </div>
 
         <Input
           allowClear
@@ -146,12 +219,20 @@ export default function ChatsList({
             value={channel}
             onChange={(value) => setChannel(value as InboxEnum.Channel | "ALL")}
             options={[
-              { value: "ALL", label: t("chats.filter.all") },
+              {
+                value: "ALL",
+                label: (
+                  <span className={CHANNEL_CELL}>{t("chats.filter.all")}</span>
+                ),
+              },
               ...Object.values(InboxEnum.Channel).map((value) => ({
                 value,
                 label: (
-                  <span title={t(`chats.channels.${value}`)}>
-                    <ChannelIcon channel={value} />
+                  <span
+                    className={CHANNEL_CELL}
+                    title={t(`chats.channels.${value}`)}
+                  >
+                    <ChannelIcon channel={value} className="text-base" />
                   </span>
                 ),
               })),
