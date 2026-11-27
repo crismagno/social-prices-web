@@ -6,9 +6,15 @@ import {
   sitePagePath,
   sitePagesOf,
 } from "../../shared/business/store-sites/store-site-pages";
+import SiteBackdrop from "../../components/store-site/shared/SiteBackdrop";
 import SiteChatWidget from "../../components/store-site/shared/SiteChatWidget";
 import SiteFonts from "../../components/store-site/shared/SiteFonts";
 import base from "../../components/store-site/shared/site-base.module.css";
+import {
+  backdropOfPage,
+  hasBackdrop,
+  IStoreSiteBackdrop,
+} from "../../shared/business/store-sites/store-site-backdrop";
 import { siteCartButtonOf } from "../../shared/business/store-sites/store-site-cart-button";
 import {
   IStoreSiteCatalog,
@@ -28,7 +34,10 @@ import {
   ISectionBuilderHooks,
   TBuilderAction,
 } from "../../components/store-site/shared/blocks/builder-types";
-import { sitePageView } from "../../components/store-site/shared/site-page-view";
+import {
+  sitePageView,
+  withBackdropEntrance,
+} from "../../components/store-site/shared/site-page-view";
 import useSiteT from "../../components/store-site/shared/useSiteT";
 import StoreSitesEnum from "../../shared/business/store-sites/store-sites.enum";
 import { getTemplateEntry } from "../../components/store-site/template-registry";
@@ -110,6 +119,15 @@ export default function SitePreviewPage() {
     siteCartButtonOf(data.site.cartButton).isVisible && view.isAddButtonShown;
   const images = siteImageStyleProps(data.site.imageStyle);
 
+  // The page as it is drawn: its colours, and what lies behind it.
+  const pageView = sitePageView(data.site, page, page ? labelOfPage(page) : "");
+
+  const backdrop: IStoreSiteBackdrop = backdropOfPage(
+    data.site.backdrop,
+    page?.backdrop,
+  );
+  const showsBackdrop: boolean = hasBackdrop(backdrop);
+
   // A link to a page of the site never leaves the editor: the editor shows
   // that page in the preview instead.
   const followPageLink = (event: MouseEvent<HTMLDivElement>): void => {
@@ -145,12 +163,15 @@ export default function SitePreviewPage() {
       <div
         className={`${base.salesWrap} ${sells ? "" : base.salesOff} ${
           view.isTitleShown ? "" : base.productsTitleOff
-        } ${images.className}`}
+        } ${images.className} ${showsBackdrop ? base.backdropOn : ""}`}
         style={images.style}
         onClickCapture={followPageLink}
       >
+        {showsBackdrop && (
+          <SiteBackdrop backdrop={backdrop} color={pageView.theme.background} />
+        )}
         <Component
-          site={sitePageView(data.site, page, page ? labelOfPage(page) : "")}
+          site={showsBackdrop ? withBackdropEntrance(pageView, page) : pageView}
           page={page}
           builder={builder}
           store={data.store}

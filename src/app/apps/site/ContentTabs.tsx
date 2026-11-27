@@ -1,10 +1,15 @@
 "use client";
 
-import { Form, Input } from "antd";
+import { Form, Input, Segmented } from "antd";
 
 import useLanguageData from "../../../data/context/language/useLanguageData";
+import {
+  IStoreSiteBackdrop,
+  siteBackdropOf,
+} from "../../../shared/business/store-sites/store-site-backdrop";
 import { IStoreSiteHero } from "../../../shared/business/store-sites/store-site.interface";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
+import BackdropFields from "./BackdropFields";
 import ExtraImagesField from "./ExtraImagesField";
 import HeroOptionsFields from "./HeroOptionsFields";
 import ImageField from "./ImageField";
@@ -15,6 +20,14 @@ interface Props {
   editor: IStoreSiteEditor;
   storeId: string;
 }
+
+const MODE = "storeSite.editor.hero.backgroundMode";
+
+// Behind the whole site there is something to see: images or a video.
+const SITE_WIDE_TYPES: StoreSitesEnum.BackdropType[] = [
+  StoreSitesEnum.BackdropType.IMAGES,
+  StoreSitesEnum.BackdropType.VIDEO,
+];
 
 /** The entrance of the site: its photo and its first words. */
 export const HeroTab = ({ editor, storeId }: Props) => {
@@ -50,6 +63,42 @@ export const HeroTab = ({ editor, storeId }: Props) => {
           [field]: images
             .filter(Boolean)
             .slice(0, StoreSitesEnum.MAX_HERO_EXTRA_IMAGES),
+        },
+      };
+    });
+
+  const backdrop: IStoreSiteBackdrop = siteBackdropOf(editor.draft.backdrop);
+
+  // Images or a video behind the whole site, the entrance included.
+  const isSiteWide: boolean =
+    backdrop.type !== StoreSitesEnum.BackdropType.COLOR;
+
+  // Going behind the whole site starts from the images of the entrance, when
+  // none were chosen for it yet; coming back leaves both as they are.
+  const setSiteWide = (isOn: boolean): void =>
+    editor.update((draft) => {
+      const current: IStoreSiteBackdrop = siteBackdropOf(draft.backdrop);
+
+      if (!isOn) {
+        return {
+          backdrop: { ...current, type: StoreSitesEnum.BackdropType.COLOR },
+        };
+      }
+
+      const ofEntrance: string[] = [
+        draft.hero.backgroundImageUrl,
+        ...(draft.hero.backgroundImageUrls ?? []),
+      ].filter((key: string | null | undefined): key is string => !!key);
+
+      return {
+        backdrop: {
+          ...current,
+          type: current.videoUrl
+            ? StoreSitesEnum.BackdropType.VIDEO
+            : StoreSitesEnum.BackdropType.IMAGES,
+          imageUrls: current.imageUrls.length
+            ? current.imageUrls
+            : ofEntrance.slice(0, StoreSitesEnum.MAX_BACKDROP_IMAGES),
         },
       };
     });
@@ -101,28 +150,60 @@ export const HeroTab = ({ editor, storeId }: Props) => {
           onChange={(event) => set({ ctaLabel: event.target.value || null })}
         />
       </Form.Item>
+      {/* Behind the entrance alone, or behind the whole site. */}
       <Form.Item
-        label={t("storeSite.editor.hero.backgroundImage")}
-        extra={t("storeSite.editor.hero.backgroundImageHint")}
+        label={t(`${MODE}.label`)}
+        extra={t(`${MODE}.hints.${isSiteWide ? "SITE" : "ENTRANCE"}`)}
       >
-        <ImageField
-          storeId={storeId}
-          value={hero.backgroundImageUrl}
-          onChange={(backgroundImageUrl) => set({ backgroundImageUrl })}
+        <Segmented<boolean>
+          block
+          value={isSiteWide}
+          onChange={setSiteWide}
+          options={[
+            { value: false, label: t(`${MODE}.modes.ENTRANCE`) },
+            { value: true, label: t(`${MODE}.modes.SITE`) },
+          ]}
         />
       </Form.Item>
-      <ExtraImagesField
-        storeId={storeId}
-        images={hero.backgroundImageUrls ?? []}
-        hasFirst={!!hero.backgroundImageUrl}
-        seconds={hero.slideSeconds}
-        label={t("storeSite.editor.hero.slides.label")}
-        hint={t("storeSite.editor.hero.slides.hint")}
-        onImageChange={(index, imageKey) =>
-          setExtraImage("backgroundImageUrls", index, imageKey)
-        }
-        onSecondsChange={(slideSeconds) => set({ slideSeconds })}
-      />
+      {isSiteWide ? (
+        <BackdropFields
+          storeId={storeId}
+          backdrop={backdrop}
+          types={SITE_WIDE_TYPES}
+          onChange={(change) =>
+            editor.update((draft) => {
+              const current = siteBackdropOf(draft.backdrop);
+
+              return { backdrop: { ...current, ...change(current) } };
+            })
+          }
+        />
+      ) : (
+        <>
+          <Form.Item
+            label={t("storeSite.editor.hero.backgroundImage")}
+            extra={t("storeSite.editor.hero.backgroundImageHint")}
+          >
+            <ImageField
+              storeId={storeId}
+              value={hero.backgroundImageUrl}
+              onChange={(backgroundImageUrl) => set({ backgroundImageUrl })}
+            />
+          </Form.Item>
+          <ExtraImagesField
+            storeId={storeId}
+            images={hero.backgroundImageUrls ?? []}
+            hasFirst={!!hero.backgroundImageUrl}
+            seconds={hero.slideSeconds}
+            label={t("storeSite.editor.hero.slides.label")}
+            hint={t("storeSite.editor.hero.slides.hint")}
+            onImageChange={(index, imageKey) =>
+              setExtraImage("backgroundImageUrls", index, imageKey)
+            }
+            onSecondsChange={(slideSeconds) => set({ slideSeconds })}
+          />
+        </>
+      )}
       <SizeFields editor={editor} sizes={["heroHeight"]} />
       <Form.Item label={t("storeSite.editor.hero.featuredImage")}>
         <ImageField

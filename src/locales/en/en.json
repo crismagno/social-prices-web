@@ -2583,6 +2583,36 @@
           "block": "Applies to every builder image: image pieces, columns and team photos."
         }
       },
+      "backdrop": {
+        "types": {
+          "COLOR": "Colour",
+          "IMAGES": "Images",
+          "VIDEO": "Video"
+        },
+        "typeHints": {
+          "COLOR": "The colour of the site, as always.",
+          "IMAGES": "One image, or several that take turns like the slider of the entrance.",
+          "VIDEO": "A video that plays in a loop, without sound, behind everything."
+        },
+        "images": "Images",
+        "imagesHint": "Up to 6. With more than one, they fade from one to the next.",
+        "video": "Video",
+        "videoHint": "Short and light works best: it plays in a loop, without sound.",
+        "poster": "Image of the video",
+        "posterHint": "Shown on phones, where the video does not play, and while it loads.",
+        "veil": "Veil of the site's colour",
+        "veilHint": "How much of the site's background colour lies over it. More keeps the words easier to read.",
+        "blur": "Blur",
+        "blurs": {
+          "NONE": "None",
+          "SOFT": "Soft",
+          "STRONG": "Strong"
+        },
+        "animated": "Slow movement",
+        "animatedHint": "It drifts closer and farther, slowly. Off for who asked their device for less motion.",
+        "pageOwn": "This page has its own background",
+        "pageHint": "Off, the page shows what lies behind the site."
+      },
       "fonts": {
         "hint": "Choose a typeface for the titles and another for the texts. Left as the template's, each keeps the one the template was drawn with.",
         "heading": "Titles",
@@ -2603,6 +2633,17 @@
         "title": "Title",
         "subtitle": "Text below the title",
         "ctaLabel": "Button text",
+        "backgroundMode": {
+          "label": "Background",
+          "modes": {
+            "ENTRANCE": "Entrance only",
+            "SITE": "Whole site"
+          },
+          "hints": {
+            "ENTRANCE": "The image stays behind the entrance; below it the site has its colour.",
+            "SITE": "Images or a video behind the whole site, from the entrance to the footer, while the page scrolls over it. A page can have its own, in Pages."
+          }
+        },
         "backgroundImage": "Background image",
         "backgroundImageHint": "Fills the entrance of the site, under a veil of your colors.",
         "featuredImage": "Featured image",

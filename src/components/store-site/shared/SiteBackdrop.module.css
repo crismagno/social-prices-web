@@ -1,0 +1,72 @@
+/*
+ * What lies behind the whole site: held to the screen, under the page, which
+ * scrolls over it. Only looked at.
+ */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* A little larger than the screen, so neither the blur nor the slow move
+   ever shows an edge. */
+.media {
+  position: absolute;
+  inset: -4%;
+}
+
+.backdrop[data-blur="SOFT"] .media {
+  filter: blur(6px);
+}
+
+.backdrop[data-blur="STRONG"] .media {
+  filter: blur(18px);
+}
+
+.layer,
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.layer {
+  background-size: cover;
+  background-position: center;
+}
+
+.video {
+  object-fit: cover;
+}
+
+/* Closer and farther, slowly, for as long as the page is open. */
+.backdrop[data-animated] .layer,
+.backdrop[data-animated] .video {
+  animation: backdropDrift 36s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes backdropDrift {
+  from {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: scale(1.12) translate3d(-1.5%, -1.5%, 0);
+  }
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop[data-animated] .layer,
+  .backdrop[data-animated] .video {
+    animation: none;
+  }
+}

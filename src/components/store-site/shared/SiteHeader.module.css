@@ -43,7 +43,8 @@
   padding: 12px clamp(16px, 4vw, 48px);
   background: color-mix(
     in srgb,
-    var(--site-header-bg, var(--site-bg)) var(--site-header-alpha, 88%),
+    var(--site-header-bg, var(--site-bg-solid, var(--site-bg)))
+      var(--site-header-alpha, 88%),
     transparent
   );
   backdrop-filter: blur(14px);
@@ -178,7 +179,8 @@
 .header[data-scrolled] .inner {
   background: color-mix(
     in srgb,
-    var(--site-header-bg, var(--site-bg)) var(--site-header-alpha-scrolled, 96%),
+    var(--site-header-bg, var(--site-bg-solid, var(--site-bg)))
+      var(--site-header-alpha-scrolled, 96%),
     transparent
   );
   backdrop-filter: blur(14px);

@@ -57,15 +57,20 @@ export const heroColorProps = (
   className: string;
   "data-hero-colors"?: string;
   "data-hero-title"?: "off";
+  "data-hero-bare"?: "";
   style?: CSSProperties;
 } => {
   const options: IStoreSiteHeroOptions = heroOptionsOf(hero.options);
   const { background, text, button } = options.colors;
 
   // A title the owner hid stays in the page, only out of sight.
-  const title: { "data-hero-title"?: "off" } = options.isTitleVisible
-    ? {}
-    : { "data-hero-title": "off" };
+  const title: { "data-hero-title"?: "off"; "data-hero-bare"?: "" } = {
+    ...(options.isTitleVisible ? {} : { "data-hero-title": "off" as const }),
+    // No picture of its own behind it: a backdrop of the site shows through.
+    ...(hero.backgroundImageUrl || hero.backgroundImageUrls?.length
+      ? {}
+      : { "data-hero-bare": "" as const }),
+  };
 
   const set: string[] = [
     background ? "bg" : "",

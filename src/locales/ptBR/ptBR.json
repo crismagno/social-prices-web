@@ -2586,6 +2586,36 @@
           "block": "Vale para todas as imagens do construtor: peças de imagem, colunas e fotos da equipe."
         }
       },
+      "backdrop": {
+        "types": {
+          "COLOR": "Cor",
+          "IMAGES": "Imagens",
+          "VIDEO": "Vídeo"
+        },
+        "typeHints": {
+          "COLOR": "A cor do site, como sempre.",
+          "IMAGES": "Uma imagem, ou várias que se alternam como o slider da entrada.",
+          "VIDEO": "Um vídeo que toca em loop, sem som, atrás de tudo."
+        },
+        "images": "Imagens",
+        "imagesHint": "Até 6. Com mais de uma, elas passam de uma para a outra suavemente.",
+        "video": "Vídeo",
+        "videoHint": "Curto e leve funciona melhor: ele toca em loop, sem som.",
+        "poster": "Imagem do vídeo",
+        "posterHint": "Aparece no celular, onde o vídeo não toca, e enquanto ele carrega.",
+        "veil": "Véu da cor do site",
+        "veilHint": "Quanto da cor de fundo do site fica por cima. Mais deixa os textos mais fáceis de ler.",
+        "blur": "Desfoque",
+        "blurs": {
+          "NONE": "Nenhum",
+          "SOFT": "Suave",
+          "STRONG": "Forte"
+        },
+        "animated": "Movimento lento",
+        "animatedHint": "Ele se aproxima e se afasta devagar. Desligado para quem pediu menos movimento no aparelho.",
+        "pageOwn": "Esta página tem seu próprio fundo",
+        "pageHint": "Desligado, a página mostra o que fica atrás do site."
+      },
       "fonts": {
         "hint": "Escolha uma fonte para os títulos e outra para os textos. Deixando a do template, cada um mantém a fonte com que o template foi desenhado.",
         "heading": "Títulos",
@@ -2606,6 +2636,17 @@
         "title": "Título",
         "subtitle": "Texto abaixo do título",
         "ctaLabel": "Texto do botão",
+        "backgroundMode": {
+          "label": "Fundo",
+          "modes": {
+            "ENTRANCE": "Só na entrada",
+            "SITE": "Site inteiro"
+          },
+          "hints": {
+            "ENTRANCE": "A imagem fica atrás da entrada; abaixo dela o site tem a sua cor.",
+            "SITE": "Imagens ou um vídeo atrás do site inteiro, da entrada ao rodapé, enquanto a página rola por cima. Uma página pode ter o seu, em Páginas."
+          }
+        },
         "backgroundImage": "Imagem de fundo",
         "backgroundImageHint": "Ocupa a entrada do site, sob um véu das suas cores.",
         "featuredImage": "Imagem em destaque",

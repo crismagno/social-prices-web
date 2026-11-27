@@ -42,6 +42,7 @@ export interface IStoreSiteTemplateProps {
     | "imageStyle"
     | "marqueeStyle"
     | "fonts"
+    | "backdrop"
     | "hero"
     | "sections"
     | "marquee"

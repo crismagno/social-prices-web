@@ -487,3 +487,42 @@
 .fontHeading.fontHeading :global(.site-display) {
   font-family: var(--site-font-heading);
 }
+
+/*
+ * A backdrop behind the whole site (see SiteBackdrop): the page lets it
+ * show. Its own colour goes see-through, and so does everything the templates
+ * build from that colour, which become panes of it over the backdrop; what
+ * must stay whole reads `--site-bg-solid`.
+ */
+.backdropOn > .root {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  --site-bg: color-mix(
+    in srgb,
+    var(--site-bg-solid) var(--backdrop-pane, 62%),
+    transparent
+  ) !important;
+}
+
+/*
+ * An entrance with no image of its own shows the backdrop too, and nothing
+ * else over it: its veil, and whatever a template lays behind the words as
+ * decoration (washes of colour, a fade into the page), which are its empty
+ * layers. With them the entrance would look like a band of its own.
+ */
+.backdropOn .heroPart[data-hero-bare]:not([data-hero-colors~="bg"]),
+.backdropOn
+  .heroPart[data-hero-bare]:not([data-hero-colors~="bg"])
+  [data-hero="veil"] {
+  background: transparent !important;
+}
+
+.backdropOn .heroPart[data-hero-bare]:not([data-hero-colors~="bg"]) > :empty {
+  display: none !important;
+}
+
+.backdropOn .heroPart[data-hero-bare]:not([data-hero-colors~="bg"])::before,
+.backdropOn .heroPart[data-hero-bare]:not([data-hero-colors~="bg"])::after {
+  content: none !important;
+}

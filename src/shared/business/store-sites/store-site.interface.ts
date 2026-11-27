@@ -1,4 +1,5 @@
 import { IStoreSiteAbout } from "./store-site-about";
+import { IStoreSiteBackdrop } from "./store-site-backdrop";
 import { IStoreSiteBlock } from "./store-site-blocks";
 import { IStoreSiteCatalog } from "./store-site-catalog";
 import { IStoreSiteChat } from "./store-site-chat";
@@ -93,6 +94,8 @@ export interface ISaveStoreSite {
   marqueeStyle: IStoreSiteMarqueeStyle;
   /** The typefaces, when the owner changed the template's. */
   fonts: IStoreSiteFonts;
+  /** What lies behind the whole site; a page can have its own. */
+  backdrop: IStoreSiteBackdrop;
   /** The owner arranged the pages: only the blocks list says what shows where. */
   isLayoutCustom: boolean;
   hero: IStoreSiteHero;

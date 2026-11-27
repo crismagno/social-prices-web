@@ -108,6 +108,8 @@ const SiteThemeVars = ({ theme, sizes, className, children }: Props) => {
     "--site-secondary": safe(theme?.secondary, "#c98b72"),
     "--site-accent": safe(theme?.accent, "#dfe8d8"),
     "--site-bg": safe(theme?.background, "#ffffff"),
+    // The same colour, kept whole where a backdrop makes the other see-through.
+    "--site-bg-solid": safe(theme?.background, "#ffffff"),
     "--site-text": safe(theme?.text, "#222222"),
     ...sizeVars(sizes),
     ...fonts.style,

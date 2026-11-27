@@ -117,3 +117,24 @@ export const sitePageView = <S extends TSite>(
     },
   };
 };
+
+/**
+ * The site as it is drawn over a backdrop: its entrance has no picture of its
+ * own, so the backdrop shows behind it too. A page that was given a picture
+ * for its entrance keeps it.
+ */
+export const withBackdropEntrance = <S extends { hero: IStoreSiteHero }>(
+  site: S,
+  page:
+    { hero?: { backgroundImageUrl?: string | null } | null } | null | undefined,
+): S =>
+  page?.hero?.backgroundImageUrl
+    ? site
+    : {
+        ...site,
+        hero: {
+          ...site.hero,
+          backgroundImageUrl: null,
+          backgroundImageUrls: [],
+        },
+      };

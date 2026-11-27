@@ -3,6 +3,7 @@ import Urls from "../../common/routes-app/routes-app";
 import { IStoreSiteAboutMedia } from "./store-site-about";
 import { IStoreSitePageHero, pageHeroOf } from "./store-site-hero";
 import { IStoreSiteTheme } from "./store-site.interface";
+import { IStoreSiteBackdrop, siteBackdropOf } from "./store-site-backdrop";
 import StoreSitesEnum from "./store-sites.enum";
 
 export interface IStoreSiteFaqItem {
@@ -43,6 +44,8 @@ export interface IStoreSitePage {
   hero: IStoreSitePageHero | null;
   /** The page's own colours; one left out is the site's. */
   theme?: Partial<IStoreSiteTheme> | null;
+  /** What lies behind this page alone; none, what lies behind the site. */
+  backdrop: IStoreSiteBackdrop | null;
 }
 
 export const PAGE_SLUG_REGEX = /^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]$/;
@@ -90,6 +93,7 @@ const readyPage = (
   faq: [],
   hero: null,
   theme: null,
+  backdrop: null,
 });
 
 /**
@@ -115,6 +119,8 @@ export const sitePagesOf = (
       faq: page.faq ?? [],
       hero: pageHeroOf(page.hero),
       theme: page.theme ?? null,
+      // A page saved before the option follows the site.
+      backdrop: page.backdrop ? siteBackdropOf(page.backdrop) : null,
     }));
 };
 

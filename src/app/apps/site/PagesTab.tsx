@@ -34,8 +34,10 @@ import {
   IStoreSitePageContent,
   slugifyPage,
 } from "../../../shared/business/store-sites/store-site-pages";
+import { siteBackdropOf } from "../../../shared/business/store-sites/store-site-backdrop";
 import { IStoreSiteTheme } from "../../../shared/business/store-sites/store-site.interface";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
+import BackdropFields from "./BackdropFields";
 import FeatureIconPicker from "./FeatureIconPicker";
 import PageContentFields from "./PageContentFields";
 import PageHeroFields from "./PageHeroFields";
@@ -117,6 +119,7 @@ const PagesTab = ({ editor, storeId }: Props) => {
           faq: [],
           hero: null,
           theme: null,
+          backdrop: null,
         },
       ],
     }));
@@ -356,6 +359,40 @@ const PagesTab = ({ editor, storeId }: Props) => {
                     ))}
                   </div>
                 </Form.Item>
+
+                {/* Its own backdrop: without one, what lies behind the site. */}
+                <Form.Item
+                  className={page.backdrop ? "" : "mb-3"}
+                  extra={t("storeSite.editor.backdrop.pageHint")}
+                >
+                  <label className="flex items-center justify-between gap-3">
+                    <span>{t("storeSite.editor.backdrop.pageOwn")}</span>
+                    <Switch
+                      checked={!!page.backdrop}
+                      onChange={(isOwn: boolean) =>
+                        setPage(page.key, () => ({
+                          // It starts from what lies behind the site.
+                          backdrop: isOwn
+                            ? siteBackdropOf(editor.draft?.backdrop)
+                            : null,
+                        }))
+                      }
+                    />
+                  </label>
+                </Form.Item>
+                {page.backdrop && (
+                  <BackdropFields
+                    storeId={storeId}
+                    backdrop={page.backdrop}
+                    onChange={(change) =>
+                      setPage(page.key, (current) => {
+                        const own = siteBackdropOf(current.backdrop);
+
+                        return { backdrop: { ...own, ...change(own) } };
+                      })
+                    }
+                  />
+                )}
 
                 {page.type === StoreSitesEnum.SitePageType.PRODUCTS && (
                   <Alert

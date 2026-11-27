@@ -1,15 +1,22 @@
 "use client";
 
 import { siteImageStyleProps } from "../../../components/store-site/shared/site-image-style";
+import { withBackdropEntrance } from "../../../components/store-site/shared/site-page-view";
+import SiteBackdrop from "../../../components/store-site/shared/SiteBackdrop";
 import SiteFonts from "../../../components/store-site/shared/SiteFonts";
 import base from "../../../components/store-site/shared/site-base.module.css";
+import {
+  backdropOfPage,
+  hasBackdrop,
+  IStoreSiteBackdrop,
+} from "../../../shared/business/store-sites/store-site-backdrop";
 import { siteCartButtonOf } from "../../../shared/business/store-sites/store-site-cart-button";
 import {
   IStoreSiteCatalog,
   siteCatalogOf,
 } from "../../../shared/business/store-sites/store-site-catalog";
 import { sitePageView } from "../../../components/store-site/shared/site-page-view";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -107,13 +114,44 @@ const SiteClient = ({
       ) ?? null)
     : null;
 
-  const site: TPublicSite = sitePageView(
+  const ownSite: TPublicSite = sitePageView(
     data.site,
     page,
     page ? labelOf(page) : "",
   );
 
+  // A link can show the site as another template would draw it, in that
+  // template's own colours: "?template=NEBULA". Nothing is saved.
+  const [triedTemplate, setTriedTemplate] =
+    useState<StoreSitesEnum.Template | null>(null);
+
+  useEffect(() => {
+    const asked: string = (
+      new URLSearchParams(window.location.search).get("template") ?? ""
+    ).toUpperCase();
+
+    setTriedTemplate(
+      (Object.values(StoreSitesEnum.Template) as string[]).includes(asked)
+        ? (asked as StoreSitesEnum.Template)
+        : null,
+    );
+  }, []);
+
+  const site: TPublicSite = triedTemplate
+    ? {
+        ...ownSite,
+        templateId: triedTemplate,
+        theme: getTemplateEntry(triedTemplate).defaultTheme,
+      }
+    : ownSite;
+
   const { Component } = getTemplateEntry(site.templateId);
+
+  // What lies behind this page: its own, else the site's.
+  const backdrop: IStoreSiteBackdrop = backdropOfPage(
+    data.site.backdrop,
+    page?.backdrop,
+  );
 
   const brandName: string = site.displayName?.trim() || store.name;
 
@@ -133,6 +171,9 @@ const SiteClient = ({
     siteCartButtonOf(site.cartButton).isVisible && view.isAddButtonShown;
   const images = siteImageStyleProps(site.imageStyle);
 
+  // Behind the pages a template draws; a product or the bag keep their own.
+  const showsBackdrop: boolean = !isOwnPage && hasBackdrop(backdrop);
+
   // Products with pages of their own are opened by going there.
   const openProduct = (id: string): void => {
     if (view.detailsMode === StoreSitesEnum.ProductDetailsMode.PAGE) {
@@ -149,9 +190,12 @@ const SiteClient = ({
       <div
         className={`${base.salesWrap} ${sells ? "" : base.salesOff} ${
           view.isTitleShown ? "" : base.productsTitleOff
-        } ${images.className}`}
+        } ${images.className} ${showsBackdrop ? base.backdropOn : ""}`}
         style={images.style}
       >
+        {showsBackdrop && (
+          <SiteBackdrop backdrop={backdrop} color={site.theme.background} />
+        )}
         {!isOwnPage && <ScrollProgress color={site.theme.primary} />}
         {pageProduct ? (
           <SiteThemeVars theme={site.theme} className={pageStyles.page}>
@@ -185,7 +229,7 @@ const SiteClient = ({
           />
         ) : (
           <Component
-            site={site}
+            site={showsBackdrop ? withBackdropEntrance(site, page) : site}
             store={store}
             products={products}
             mode="live"
