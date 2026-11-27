@@ -4,6 +4,7 @@ import { DragEvent, useEffect, useRef, useState } from "react";
 
 import {
   ArrowDownOutlined,
+  ArrowLeftOutlined,
   ArrowUpOutlined,
   CopyOutlined,
   DeleteOutlined,
@@ -43,6 +44,10 @@ import BlockFields from "./BlockFields";
 import ImageLookCard from "./ImageLookCard";
 import styles from "./BuilderTab.module.css";
 import PieceFields from "./PieceFields";
+import {
+  ITabOwner,
+  tabOwnersOf,
+} from "../../../shared/business/store-sites/store-site-layout";
 import { SECTION_ICONS } from "./section-icons";
 import TabsFields from "./TabsFields";
 import { ISiteBuilder } from "./useSiteBuilder";
@@ -127,6 +132,13 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
     t(`storeSite.editor.builder.types.${type}`);
 
   const total: number = editor.draft.blocks.length;
+
+  // The sections a menu of tabs shows say so in the list, and lead back to it.
+  const tabOwners: Map<string, ITabOwner> = tabOwnersOf(builder.sections);
+
+  const selectedOwner: ITabOwner | undefined = builder.selected
+    ? tabOwners.get(builder.selected.key)
+    : undefined;
 
   /** Over the upper half of a row a drop lands before it; over the lower, after. */
   const overRow = (event: DragEvent<HTMLLIElement>, at: number): void => {
@@ -347,6 +359,12 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
                       ? section.title
                       : name(section.type)}
                   </span>
+                  {tabOwners.has(section.key) && (
+                    <Tag className={styles.rowTag} color="blue">
+                      {tabOwners.get(section.key)?.label ||
+                        name(StoreSitesEnum.BlockType.TABS)}
+                    </Tag>
+                  )}
                   {!section.isActive && (
                     <Tag className={styles.rowTag}>
                       {t("storeSite.editor.builder.frame.hidden")}
@@ -453,6 +471,20 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
               </Space>
             }
           >
+            {selectedOwner && (
+              <Button
+                size="small"
+                className="mb-3"
+                icon={<ArrowLeftOutlined />}
+                onClick={() => builder.select(selectedOwner.tabsKey)}
+              >
+                {t("storeSite.editor.builder.tabs.back").replace(
+                  "{item}",
+                  selectedOwner.label ||
+                    t("storeSite.editor.builder.types.TABS"),
+                )}
+              </Button>
+            )}
             {isPartType(selected.type) ? (
               <Space direction="vertical">
                 <Typography.Text type="secondary">
@@ -481,13 +513,7 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
                   />
                 )}
                 {selected.type === T.TABS && (
-                  <TabsFields
-                    section={selected}
-                    pageSections={builder.sections}
-                    onChange={(change) =>
-                      builder.updateSection(selected.key, change)
-                    }
-                  />
+                  <TabsFields section={selected} builder={builder} />
                 )}
                 <PieceFields
                   section={selected}

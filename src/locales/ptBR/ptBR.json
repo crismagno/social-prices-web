@@ -3264,7 +3264,8 @@
           "menuMode": "Como mostra as seções",
           "menuSide": "Lado do menu lateral",
           "menuLook": "Visual dos itens",
-          "menuEffect": "Animação das seções"
+          "menuEffect": "Animação das seções",
+          "menuPlace": "Posição ao rolar"
         },
         "values": {
           "align": {
@@ -3308,6 +3309,11 @@
             "FADE": "Aparecer",
             "ZOOM": "Aproximar",
             "NONE": "Nenhuma"
+          },
+          "menuPlace": {
+            "INLINE": "No lugar",
+            "FIXED": "Fixo",
+            "FLOATING": "Flutuante"
           }
         },
         "samples": {
@@ -3395,11 +3401,16 @@
         "tabs": {
           "title": "Título acima do menu",
           "items": "Itens do menu",
-          "hint": "Dê um nome a cada item e escolha a seção desta página que ele mostra. No site, só a seção do item escolhido aparece; cada seção vai em um item só.",
+          "hint": "Cada item tem um nome e o que ele mostra: conteúdo criado aqui (texto, imagem, blocos, o que quiser) e seções que já estão nesta página. Dá para misturar quantos quiser. O conteúdo de um item aparece na ordem em que está na página.",
           "namePlaceholder": "Nome do item",
-          "sectionPlaceholder": "Seção que este item mostra",
-          "noSections": "Adicione outras seções a esta página primeiro.",
-          "add": "Adicionar item"
+          "sectionPlaceholder": "Ligar seção desta página",
+          "noSections": "Nenhuma seção livre nesta página.",
+          "add": "Adicionar item",
+          "empty": "Este item ainda não mostra nada. Crie um conteúdo ou ligue uma seção da página.",
+          "create": "Criar conteúdo",
+          "editSection": "Editar este conteúdo",
+          "unlink": "Tirar deste item (continua na página)",
+          "back": "Voltar ao menu: {item}"
         }
       },
       "mocks": {
@@ -3540,7 +3551,9 @@
       "previous": "Anterior",
       "next": "Próximo",
       "ctaButton": "Fale com a gente",
-      "tabsLabel": "Escolha o que ver"
+      "tabsLabel": "Escolha o que ver",
+      "tabsOpen": "Abrir o menu",
+      "tabsClose": "Fechar o menu"
     }
   },
   "imageEditor": {

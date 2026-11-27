@@ -41,6 +41,16 @@ export interface ISiteBuilder {
   add: (type: StoreSitesEnum.BlockType) => void;
   /** Applies what the owner did in the preview, or in the panel. */
   apply: (action: TBuilderAction) => void;
+  /**
+   * A new section made for one item of a menu of tabs: it goes on the page
+   * right after what that item already shows (or after the menu), the item
+   * shows it, and it is picked so the owner fills it in.
+   */
+  addToTab: (
+    tabsKey: string,
+    itemKey: string,
+    type: StoreSitesEnum.BlockType,
+  ) => void;
   /** Changes one section, from the section as it is when applied. */
   updateSection: (
     key: string,
@@ -181,6 +191,57 @@ const useSiteBuilder = (editor: IStoreSiteEditor): ISiteBuilder => {
     [insert, sections, selectedKey],
   );
 
+  const addToTab = useCallback(
+    (
+      tabsKey: string,
+      itemKey: string,
+      type: StoreSitesEnum.BlockType,
+    ): void => {
+      if (!canAddType(type)) {
+        return;
+      }
+
+      const section: IStoreSiteBlock = newSection(type, page?.key ?? null, t);
+
+      change((blocks: IStoreSiteBlock[]) => {
+        const own: IStoreSiteBlock[] = blocks.filter(
+          (block: IStoreSiteBlock) => block.pageKey === section.pageKey,
+        );
+
+        const shown: string[] =
+          own
+            .find((block: IStoreSiteBlock) => block.key === tabsKey)
+            ?.items.find((item) => item.key === itemKey)?.sectionKeys ?? [];
+
+        // After the last section the item shows; with none, after the menu.
+        const after: number = own.reduce(
+          (last: number, block: IStoreSiteBlock, at: number) =>
+            block.key === tabsKey || shown.includes(block.key) ? at : last,
+          own.length - 1,
+        );
+
+        return insertSection(blocks, section, after + 1).map(
+          (block: IStoreSiteBlock) =>
+            block.key === tabsKey
+              ? {
+                  ...block,
+                  items: block.items.map((item) =>
+                    item.key === itemKey
+                      ? {
+                          ...item,
+                          sectionKeys: [...item.sectionKeys, section.key],
+                        }
+                      : item,
+                  ),
+                }
+              : block,
+        );
+      });
+      setSelectedKey(section.key);
+    },
+    [canAddType, change, page, t],
+  );
+
   const updateSection = useCallback(
     (
       key: string,
@@ -207,6 +268,7 @@ const useSiteBuilder = (editor: IStoreSiteEditor): ISiteBuilder => {
     canAdd: canAddType,
     add,
     apply,
+    addToTab,
     updateSection,
   };
 };

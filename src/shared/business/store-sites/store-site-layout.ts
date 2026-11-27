@@ -139,11 +139,18 @@ const withHero = (
 export const isHeroOnTop = (sections: IStoreSiteBlock[]): boolean =>
   sections[0]?.type === T.HERO && sections[0].isActive;
 
-/** One item of a menu of tabs, with the section it shows when it has one. */
+/** One item of a menu of tabs, with the sections of the page it shows. */
 export interface ITabsEntry {
   key: string;
   label: string;
-  section: IStoreSiteBlock | null;
+  sections: IStoreSiteBlock[];
+}
+
+/** The item of a menu of tabs a section is shown by. */
+export interface ITabOwner {
+  tabsKey: string;
+  itemKey: string;
+  label: string;
 }
 
 /** A menu of tabs shows any section but the entrance and another menu. */
@@ -151,39 +158,78 @@ export const canBeTab = (section: IStoreSiteBlock): boolean =>
   section.type !== T.HERO && section.type !== T.TABS;
 
 /**
- * What the menus of tabs of a page show. Each item with a name takes the
- * section it points to, when that section is on the page and no item before
- * it took it; a taken section is drawn only inside its menu, so the page
- * leaves it out of its own order.
+ * Which item of which menu of tabs shows each section of a page. A section
+ * goes with the first item that points to it, and the menu and the section
+ * must both be on the page.
+ */
+export const tabOwnersOf = (
+  sections: IStoreSiteBlock[],
+): Map<string, ITabOwner> => {
+  const owners: Map<string, ITabOwner> = new Map();
+
+  sections
+    .filter((section: IStoreSiteBlock) => section.type === T.TABS)
+    .forEach((tabs: IStoreSiteBlock) =>
+      tabs.items.forEach((item) =>
+        item.sectionKeys.forEach((sectionKey: string) => {
+          const section: IStoreSiteBlock | undefined = sections.find(
+            (each: IStoreSiteBlock) => each.key === sectionKey,
+          );
+
+          if (section && canBeTab(section) && !owners.has(sectionKey)) {
+            owners.set(sectionKey, {
+              tabsKey: tabs.key,
+              itemKey: item.key,
+              label: item.title?.trim() ?? "",
+            });
+          }
+        }),
+      ),
+    );
+
+  return owners;
+};
+
+/**
+ * What the menus of tabs of a page show. Each item with a name shows its
+ * sections, in the order the page has them; a section an item shows is drawn
+ * only inside its menu, so the page leaves it out of its own order.
  */
 export const tabsLayoutOf = (
   sections: IStoreSiteBlock[],
 ): { taken: Set<string>; entriesOf: (tabsKey: string) => ITabsEntry[] } => {
+  const owners: Map<string, ITabOwner> = tabOwnersOf(sections);
   const taken: Set<string> = new Set();
   const entries: Map<string, ITabsEntry[]> = new Map();
 
   sections
     .filter((section: IStoreSiteBlock) => section.type === T.TABS)
-    .forEach((tabs: IStoreSiteBlock) => {
-      const own: ITabsEntry[] = [];
+    .forEach((tabs: IStoreSiteBlock) =>
+      entries.set(
+        tabs.key,
+        tabs.items
+          .map((item) => ({
+            key: item.key,
+            label: item.title?.trim() ?? "",
+            sections: sections.filter(
+              (each: IStoreSiteBlock) =>
+                owners.get(each.key)?.tabsKey === tabs.key &&
+                owners.get(each.key)?.itemKey === item.key,
+            ),
+          }))
+          .filter((entry: ITabsEntry) => {
+            const isShown: boolean = !!entry.label && entry.sections.length > 0;
 
-      tabs.items.forEach((item) => {
-        const label: string = item.title?.trim() ?? "";
-        const section: IStoreSiteBlock | undefined = sections.find(
-          (each: IStoreSiteBlock) =>
-            each.key === item.sectionKey &&
-            canBeTab(each) &&
-            !taken.has(each.key),
-        );
+            if (isShown) {
+              entry.sections.forEach((each: IStoreSiteBlock) =>
+                taken.add(each.key),
+              );
+            }
 
-        if (label && section) {
-          taken.add(section.key);
-          own.push({ key: item.key, label, section });
-        }
-      });
-
-      entries.set(tabs.key, own);
-    });
+            return isShown;
+          }),
+      ),
+    );
 
   return { taken, entriesOf: (tabsKey: string) => entries.get(tabsKey) ?? [] };
 };

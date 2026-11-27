@@ -4,6 +4,9 @@
   color: var(--site-text);
   min-height: 100vh;
   overflow-x: hidden;
+  /* Clipped, not scrolled: a scrolling box here would stop anything inside
+     the page from sticking to the screen (a fixed or floating menu of tabs). */
+  overflow-x: clip;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }

@@ -284,6 +284,17 @@ namespace StoreSitesEnum {
     NONE = "NONE",
   }
 
+  /**
+   * Where a menu of tabs stays while the visitor scrolls what it shows: where
+   * the page put it, stuck to the top (or the side), or as a small floating
+   * button that brings its items back once the menu is out of sight.
+   */
+  export enum MenuPlace {
+    INLINE = "INLINE",
+    FIXED = "FIXED",
+    FLOATING = "FLOATING",
+  }
+
   export enum ButtonVariant {
     PRIMARY = "PRIMARY",
     OUTLINE = "OUTLINE",

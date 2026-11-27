@@ -321,7 +321,7 @@ const BuilderSections = ({
                 .map((item) => ({
                   key: item.key,
                   label: item.title?.trim() ?? "",
-                  section: null,
+                  sections: [],
                 }))
             : [];
 

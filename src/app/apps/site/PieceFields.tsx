@@ -49,6 +49,7 @@ const OPTIONS: Partial<
     "menuStyle",
     "menuSide",
     "menuMode",
+    "menuPlace",
     "menuEffect",
     "menuLook",
     "align",
@@ -68,6 +69,7 @@ const VALUES: Record<string, string[]> = {
   menuSide: Object.values(StoreSitesEnum.MenuSide),
   menuLook: Object.values(StoreSitesEnum.MenuLook),
   menuEffect: Object.values(StoreSitesEnum.MenuEffect),
+  menuPlace: Object.values(StoreSitesEnum.MenuPlace),
 };
 
 const move = <V,>(list: V[], from: number, to: number): V[] => {

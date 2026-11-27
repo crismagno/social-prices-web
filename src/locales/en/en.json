@@ -3261,7 +3261,8 @@
           "menuMode": "How it shows the sections",
           "menuSide": "Side of the side menu",
           "menuLook": "Look of the items",
-          "menuEffect": "Animation of the sections"
+          "menuEffect": "Animation of the sections",
+          "menuPlace": "Place while scrolling"
         },
         "values": {
           "align": {
@@ -3305,6 +3306,11 @@
             "FADE": "Fade",
             "ZOOM": "Zoom",
             "NONE": "None"
+          },
+          "menuPlace": {
+            "INLINE": "In place",
+            "FIXED": "Fixed",
+            "FLOATING": "Floating"
           }
         },
         "samples": {
@@ -3392,11 +3398,16 @@
         "tabs": {
           "title": "Title above the menu",
           "items": "Menu items",
-          "hint": "Name each item and choose the section of this page it shows. On the site, only the section of the chosen item shows; each section goes with one item only.",
+          "hint": "Each item has a name and what it shows: content made here (a text, an image, blocks, anything) and sections already on this page. Mix as many as you want. What an item shows comes in the order it has on the page.",
           "namePlaceholder": "Name of the item",
-          "sectionPlaceholder": "Section this item shows",
-          "noSections": "Add other sections to this page first.",
-          "add": "Add item"
+          "sectionPlaceholder": "Link a section of this page",
+          "noSections": "No free section on this page.",
+          "add": "Add item",
+          "empty": "This item shows nothing yet. Create content or link a section of the page.",
+          "create": "Create content",
+          "editSection": "Edit this content",
+          "unlink": "Take out of this item (it stays on the page)",
+          "back": "Back to the menu: {item}"
         }
       },
       "mocks": {
@@ -3537,7 +3548,9 @@
       "previous": "Previous",
       "next": "Next",
       "ctaButton": "Contact us",
-      "tabsLabel": "Choose what to see"
+      "tabsLabel": "Choose what to see",
+      "tabsOpen": "Open the menu",
+      "tabsClose": "Close the menu"
     }
   },
   "imageEditor": {

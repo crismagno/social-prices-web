@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { Fragment, ReactNode, useEffect, useRef, useState } from "react";
 
 import { IStoreSiteBlock } from "../../../../shared/business/store-sites/store-site-blocks";
 import { ITabsEntry } from "../../../../shared/business/store-sites/store-site-layout";
@@ -10,14 +10,14 @@ import styles from "./SiteTabs.module.css";
 
 interface Props {
   block: IStoreSiteBlock;
-  /** The items that have a name and a section of this page to show. */
+  /** The items that have a name and sections of this page to show. */
   entries: ITabsEntry[];
-  /** Draws the section of an item; absent in the builder. */
+  /** Draws one section of an item; absent in the builder. */
   draw?: (section: IStoreSiteBlock) => ReactNode;
 }
 
 /**
- * A menu whose items each show one other section of the page. The owner
+ * A menu whose items each show other sections of the page. The owner
  * chooses how it is laid (tabs in a row on top, or a menu down the side) and
  * what it does: show only the chosen section, or draw them all and scroll to
  * the chosen one. On a narrow screen the items are a list to pick from. In
@@ -38,6 +38,65 @@ const SiteTabs = ({ block, entries, draw }: Props) => {
   const [seenKeys, setSeenKeys] = useState<string[]>([]);
 
   const panelsRef = useRef<HTMLDivElement | null>(null);
+  const menuRef = useRef<HTMLElement | null>(null);
+  const floatRef = useRef<HTMLDivElement | null>(null);
+
+  // Floating: the button shows only while the menu itself is out of sight,
+  // and its list is open only while the visitor is choosing.
+  const [isMenuOnScreen, setIsMenuOnScreen] = useState<boolean>(true);
+  const [isFloatOpen, setIsFloatOpen] = useState<boolean>(false);
+
+  const isFloating: boolean =
+    block.settings.menuPlace === StoreSitesEnum.MenuPlace.FLOATING && !!draw;
+
+  useEffect(() => {
+    const menu: HTMLElement | null = menuRef.current;
+
+    if (!isFloating || !menu) {
+      return;
+    }
+
+    const observer: IntersectionObserver = new IntersectionObserver(
+      ([seen]: IntersectionObserverEntry[]) => {
+        setIsMenuOnScreen(seen.isIntersecting);
+
+        if (seen.isIntersecting) {
+          setIsFloatOpen(false);
+        }
+      },
+    );
+
+    observer.observe(menu);
+
+    return () => observer.disconnect();
+  }, [isFloating]);
+
+  // The open list closes on Escape and on a click anywhere else.
+  useEffect(() => {
+    if (!isFloatOpen) {
+      return;
+    }
+
+    const onKey = (event: KeyboardEvent): void => {
+      if (event.key === "Escape") {
+        setIsFloatOpen(false);
+      }
+    };
+
+    const onDown = (event: MouseEvent): void => {
+      if (!floatRef.current?.contains(event.target as Node)) {
+        setIsFloatOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onDown);
+
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onDown);
+    };
+  }, [isFloatOpen]);
 
   const isScroll: boolean =
     block.settings.menuMode === StoreSitesEnum.MenuMode.SCROLL;
@@ -121,6 +180,17 @@ const SiteTabs = ({ block, entries, draw }: Props) => {
     }
   };
 
+  // Picked from the floating button: the new section starts where the old
+  // one did, not wherever the visitor had scrolled to in it.
+  const pickFloating = (key: string): void => {
+    setIsFloatOpen(false);
+    pick(key);
+
+    if (!isScroll) {
+      panelsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   const label: string = block.title ?? t("storeSite.blocks.tabsLabel");
 
   return (
@@ -133,11 +203,12 @@ const SiteTabs = ({ block, entries, draw }: Props) => {
       data-align={block.settings.align ?? undefined}
       data-tone={block.settings.tone ?? undefined}
       data-effect={block.settings.menuEffect ?? undefined}
+      data-place={block.settings.menuPlace ?? undefined}
       data-direction={direction}
       data-alive={isAlive || undefined}
       data-builder={!draw || undefined}
     >
-      <section className={styles.menu} data-type={block.type}>
+      <section ref={menuRef} className={styles.menu} data-type={block.type}>
         {block.title && <h2 className={styles.title}>{block.title}</h2>}
 
         <div className={styles.list} role="tablist" aria-label={label}>
@@ -177,25 +248,70 @@ const SiteTabs = ({ block, entries, draw }: Props) => {
 
       {draw && (
         <div ref={panelsRef} className={styles.panels}>
-          {(isScroll ? entries : [chosen]).map(
-            (entry: ITabsEntry) =>
-              entry.section && (
-                // One at a time: a new panel for each item, so the section
-                // comes in as it does on a page.
-                <div
-                  key={entry.key}
-                  role="tabpanel"
-                  data-tab={entry.key}
-                  // One at a time: only a section the visitor picked comes
-                  // in, not the one the page opens with.
-                  data-enter={(!isScroll && chosenKey !== null) || undefined}
-                  data-seen={seenKeys.includes(entry.key) || undefined}
-                  className={styles.panel}
-                >
-                  {draw(entry.section)}
-                </div>
-              ),
-          )}
+          {(isScroll ? entries : [chosen]).map((entry: ITabsEntry) => (
+            // One at a time: a new panel for each item, so its sections
+            // come in as they do on a page.
+            <div
+              key={entry.key}
+              role="tabpanel"
+              data-tab={entry.key}
+              // Only what the visitor picked comes in, not what the page
+              // opens with.
+              data-enter={(!isScroll && chosenKey !== null) || undefined}
+              data-seen={seenKeys.includes(entry.key) || undefined}
+              className={styles.panel}
+            >
+              {entry.sections.map((section: IStoreSiteBlock) => (
+                <Fragment key={section.key}>{draw(section)}</Fragment>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {isFloating && (
+        // Last in the menu's own stretch of the page: it rides the bottom of
+        // the screen only while that stretch is on it, and takes no room.
+        <div
+          ref={floatRef}
+          className={styles.float}
+          data-shown={!isMenuOnScreen || undefined}
+        >
+          <div className={styles.floatBox}>
+            {isFloatOpen && (
+              <div className={styles.floatList} role="menu" aria-label={label}>
+                {entries.map((entry: ITabsEntry) => (
+                  <button
+                    key={entry.key}
+                    type="button"
+                    role="menuitemradio"
+                    aria-checked={entry.key === chosen.key}
+                    className={styles.floatItem}
+                    onClick={() => pickFloating(entry.key)}
+                  >
+                    {entry.label}
+                  </button>
+                ))}
+              </div>
+            )}
+            <button
+              type="button"
+              className={styles.floatButton}
+              aria-haspopup="menu"
+              aria-expanded={isFloatOpen}
+              aria-label={t(
+                isFloatOpen
+                  ? "storeSite.blocks.tabsClose"
+                  : "storeSite.blocks.tabsOpen",
+              )}
+              // Out of sight: not reached with the keyboard either.
+              tabIndex={isMenuOnScreen ? -1 : 0}
+              onClick={() => setIsFloatOpen((open: boolean) => !open)}
+            >
+              <span className={styles.floatBars} aria-hidden />
+              <span className={styles.floatLabel}>{chosen.label}</span>
+            </button>
+          </div>
         </div>
       )}
     </div>

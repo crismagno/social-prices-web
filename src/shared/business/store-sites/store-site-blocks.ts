@@ -10,8 +10,11 @@ import StoreSitesEnum from "./store-sites.enum";
 /** One entry of a block; which fields count depends on the block's type. */
 export interface IStoreSiteBlockItem {
   key: string;
-  /** An item of a menu of tabs only: the key of the section it shows. */
-  sectionKey: string | null;
+  /**
+   * An item of a menu of tabs only: the keys of the sections of its page it
+   * shows, one or several (a text, an image, a block...), in the page's order.
+   */
+  sectionKeys: string[];
   /** A name, a question, a number or a step. */
   title: string | null;
   /** A role, a place or a label. */
@@ -59,6 +62,8 @@ export interface IStoreSiteBlockSettings {
   menuLook: StoreSitesEnum.MenuLook | null;
   /** A menu of tabs: how a section comes in when its item is chosen. */
   menuEffect: StoreSitesEnum.MenuEffect | null;
+  /** A menu of tabs: where it stays while the visitor scrolls its sections. */
+  menuPlace: StoreSitesEnum.MenuPlace | null;
 }
 
 /**
@@ -85,6 +90,8 @@ export interface IStoreSiteBlock {
 /** Sections of the whole site, every page together. */
 export const MAX_BLOCKS: number = 60;
 export const MAX_SECTION_BUTTONS: number = 3;
+/** The most sections one item of a menu of tabs shows. */
+export const MAX_TAB_SECTIONS: number = 12;
 export const SPACER_LIMITS = { min: 8, max: 240, initial: 48 } as const;
 
 export const isPartType = (type: StoreSitesEnum.BlockType): boolean =>
@@ -175,6 +182,22 @@ export const isUsableItem = (
   }
 };
 
+/**
+ * The sections an item of a menu of tabs shows: keys, no blanks, no repeats.
+ * An item saved when it showed one section only had it as `sectionKey`.
+ */
+const sectionKeysOf = (source: TRecord): string[] => {
+  const given: unknown[] = Array.isArray(source.sectionKeys)
+    ? source.sectionKeys
+    : [source.sectionKey];
+
+  const keys: string[] = given
+    .map((key: unknown) => textOf(key, 40))
+    .filter((key: string | null): key is string => !!key);
+
+  return Array.from(new Set(keys)).slice(0, MAX_TAB_SECTIONS);
+};
+
 const itemOf = (
   type: StoreSitesEnum.BlockType,
   raw: unknown,
@@ -189,10 +212,8 @@ const itemOf = (
   return {
     key:
       typeof source.key === "string" && source.key ? source.key : newBlockKey(),
-    sectionKey:
-      type === StoreSitesEnum.BlockType.TABS
-        ? textOf(source.sectionKey, 40)
-        : null,
+    sectionKeys:
+      type === StoreSitesEnum.BlockType.TABS ? sectionKeysOf(source) : [],
     title: textOf(source.title, BLOCK_LIMITS.itemTitle),
     subtitle: textOf(source.subtitle, BLOCK_LIMITS.itemSubtitle),
     text: textOf(source.text, BLOCK_LIMITS.itemText),
@@ -315,6 +336,10 @@ export const blockSettingsOf = (
     menuEffect: uses(T.TABS)
       ? (oneOf(source.menuEffect, Object.values(StoreSitesEnum.MenuEffect)) ??
         StoreSitesEnum.MenuEffect.SLIDE)
+      : null,
+    menuPlace: uses(T.TABS)
+      ? (oneOf(source.menuPlace, Object.values(StoreSitesEnum.MenuPlace)) ??
+        StoreSitesEnum.MenuPlace.FIXED)
       : null,
   };
 };
