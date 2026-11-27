@@ -49,6 +49,7 @@
   backdrop-filter: blur(14px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   border-bottom: 1px solid color-mix(in srgb, var(--site-text) 8%, transparent);
+  transition: background-color 0.2s ease;
 }
 
 .brand {
@@ -158,6 +159,19 @@
   backdrop-filter: none;
   box-shadow: none;
   border-color: transparent;
+}
+
+/*
+ * With the page rolling under it, the header closes: nearly solid and frosted
+ * again, however see-through the owner made it, so its words stay readable.
+ */
+.header[data-scrolled] .inner {
+  background: color-mix(
+    in srgb,
+    var(--site-header-bg, var(--site-bg)) var(--site-header-alpha-scrolled, 96%),
+    transparent
+  );
+  backdrop-filter: blur(14px);
 }
 
 .header[data-clean][data-site-header="TOP"] {

@@ -1,6 +1,13 @@
 "use client";
 
-import { CSSProperties, Fragment, ReactNode, useEffect, useRef } from "react";
+import {
+  CSSProperties,
+  Fragment,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import {
   IStoreSiteBlock,
@@ -32,6 +39,10 @@ interface Props {
   page: IStoreSitePage | null;
 }
 
+// How far the page moves before the header closes, and how closed it gets.
+const SCROLLED_AFTER: number = 8;
+const SCROLLED_ALPHA: number = 96;
+
 /**
  * The header of the site: its name, its menu, the sign-in and the cart. It is
  * the site's, not a page's: the same on every page, apart from the entrance,
@@ -56,6 +67,19 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
   const { logo, brandName } = getSiteContent({ site, store });
 
   const ref = useRef<HTMLElement>(null);
+
+  // Once the page has moved under it, the header closes its background: what
+  // passes behind a see-through one makes its words hard to read.
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
+
+  useEffect(() => {
+    const read = (): void => setIsScrolled(window.scrollY > SCROLLED_AFTER);
+
+    read();
+    window.addEventListener("scroll", read, { passive: true });
+
+    return () => window.removeEventListener("scroll", read);
+  }, []);
 
   // Whatever sticks to the screen (a menu of tabs, the chat button) keeps
   // clear of the header while it is there.
@@ -180,6 +204,7 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
       data-site-header={position}
       data-fixed={isFixed || undefined}
       data-clean={transparency > 0 || undefined}
+      data-scrolled={isScrolled || undefined}
       data-button-size={buttonSize}
       style={
         {
@@ -188,6 +213,11 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
           ...(background ? { "--site-header-bg": background } : {}),
           // How much of the background is left.
           "--site-header-alpha": `${100 - transparency}%`,
+          // And how much once the page is rolling under it: never less.
+          "--site-header-alpha-scrolled": `${Math.max(
+            100 - transparency,
+            SCROLLED_ALPHA,
+          )}%`,
           ...(height ? { "--site-header-h": `${height}px` } : {}),
         } as CSSProperties
       }
