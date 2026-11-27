@@ -9,7 +9,9 @@ import {
 } from "../../../shared/business/store-sites/store-site-catalog";
 import SiteStickyBar from "../../../components/store-site/shared/SiteStickyBar";
 import { sitePageView } from "../../../components/store-site/shared/site-page-view";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+
+import { useRouter } from "next/navigation";
 
 import ScrollProgress from "../../../components/store-site/shared/ScrollProgress";
 import SiteCart from "../../../components/store-site/shared/SiteCart";
@@ -20,8 +22,14 @@ import useSiteCart from "../../../components/store-site/shared/useSiteCart";
 import { getTemplateEntry } from "../../../components/store-site/template-registry";
 import {
   IStoreSitePage,
+  sitePagePath,
   sitePagesOf,
 } from "../../../shared/business/store-sites/store-site-pages";
+import {
+  CART_PAGE_SLUG,
+  siteCheckoutOf,
+} from "../../../shared/business/store-sites/store-site-checkout";
+import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import {
   IPublicSiteProduct,
   IPublicStoreSite,
@@ -32,6 +40,8 @@ interface Props {
   data: IPublicStoreSite;
   /** The page asked for; none is the home. */
   pageSlug?: string;
+  /** The cart's own page, for a site whose cart is not a window. */
+  isCartPage?: boolean;
 }
 
 /**
@@ -39,12 +49,33 @@ interface Props {
  * other than the home, its top says the page's own title: shorter, and
  * without the featured picture.
  */
-const SiteClient = ({ data, pageSlug }: Props) => {
+const SiteClient = ({ data, pageSlug, isCartPage = false }: Props) => {
   const { store, products } = data;
 
   const labelOf = usePageLabel();
 
-  const cart = useSiteCart(data.site.slug, products);
+  const router = useRouter();
+
+  const storedCart = useSiteCart(data.site.slug, products);
+
+  const isCartAPage: boolean =
+    siteCheckoutOf(data.site.checkout).look.mode ===
+    StoreSitesEnum.CartMode.PAGE;
+
+  const homeUrl: string = sitePagePath(data.site.slug);
+
+  // A cart with a page of its own is opened by going there.
+  const cart = useMemo(
+    () =>
+      isCartAPage
+        ? {
+            ...storedCart,
+            open: () =>
+              router.push(sitePagePath(data.site.slug, CART_PAGE_SLUG)),
+          }
+        : storedCart,
+    [isCartAPage, storedCart, router, data.site.slug],
+  );
 
   const [openProductId, setOpenProductId] = useState<string | null>(null);
 
@@ -70,21 +101,39 @@ const SiteClient = ({ data, pageSlug }: Props) => {
   const images = siteImageStyleProps(site.imageStyle);
 
   return (
-    <div className={`${base.salesWrap} ${sells ? "" : base.salesOff} ${
+    <div
+      className={`${base.salesWrap} ${sells ? "" : base.salesOff} ${
         view.isTitleShown ? "" : base.productsTitleOff
       } ${images.className}`}
-      style={images.style}>
-      <ScrollProgress color={site.theme.primary} />
-      <Component
-        site={site}
-        store={store}
-        products={products}
-        mode="live"
-        cart={cart}
-        page={page}
-        onProductOpen={view.isDetailsOpened ? setOpenProductId : undefined}
-      />
-      <SiteStickyBar site={site} store={store} cart={cart} page={page} />
+      style={images.style}
+    >
+      {!isCartPage && <ScrollProgress color={site.theme.primary} />}
+      {isCartPage ? (
+        <SiteCart
+          variant="page"
+          slug={site.slug}
+          theme={site.theme}
+          products={products}
+          cart={cart}
+          checkout={site.checkout}
+          onProductOpen={setOpenProductId}
+          homeUrl={homeUrl}
+          brandName={site.displayName?.trim() || store.name}
+        />
+      ) : (
+        <Component
+          site={site}
+          store={store}
+          products={products}
+          mode="live"
+          cart={cart}
+          page={page}
+          onProductOpen={view.isDetailsOpened ? setOpenProductId : undefined}
+        />
+      )}
+      {!isCartPage && (
+        <SiteStickyBar site={site} store={store} cart={cart} page={page} />
+      )}
       <SiteProductModal
         product={
           products.find(
@@ -102,14 +151,16 @@ const SiteClient = ({ data, pageSlug }: Props) => {
         theme={site.theme}
         brandName={site.displayName?.trim() || store.name}
       />
-      <SiteCart
-        slug={site.slug}
-        theme={site.theme}
-        products={products}
-        cart={cart}
-        checkout={site.checkout}
-        onProductOpen={setOpenProductId}
-      />
+      {!isCartPage && !isCartAPage && (
+        <SiteCart
+          slug={site.slug}
+          theme={site.theme}
+          products={products}
+          cart={cart}
+          checkout={site.checkout}
+          onProductOpen={setOpenProductId}
+        />
+      )}
     </div>
   );
 };

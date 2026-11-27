@@ -309,3 +309,310 @@ button.name:hover {
 .primary:global(.ant-btn-primary):not(:disabled):hover {
   filter: brightness(1.08);
 }
+
+/* The cart as a page of its own: the list beside what it adds up to. */
+.cartAside {
+  display: block;
+}
+
+.page {
+  min-height: 100vh;
+  background: var(--site-bg);
+  color: var(--site-text);
+}
+
+.pageTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px clamp(16px, 4vw, 48px);
+  border-bottom: 1px solid color-mix(in srgb, var(--site-text) 10%, transparent);
+}
+
+.pageBack {
+  color: inherit;
+  opacity: 0.75;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.pageBack:hover {
+  opacity: 1;
+  color: var(--site-primary);
+}
+
+.pageBrand {
+  color: inherit;
+  font-weight: 700;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.pageBody {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 32px clamp(16px, 4vw, 48px) 64px;
+}
+
+.pageHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.pageHead h1 {
+  margin: 0;
+  font-size: clamp(26px, 4vw, 36px);
+  font-weight: 800;
+}
+
+/* The forms of the order stay narrow enough to read on a wide screen. */
+.pageBody :global(.ant-form),
+.pageBody .done {
+  max-width: 560px;
+}
+
+@media (min-width: 900px) {
+  .page .cartLayout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 28px;
+    align-items: start;
+  }
+
+  .page .cartAside {
+    position: sticky;
+    top: 24px;
+  }
+
+  .page .cartAside .summaryCard {
+    margin-top: 0;
+  }
+}
+
+/* Where the visitor is: the cart, their details, the confirmation. */
+.steps {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+  font-size: 12px;
+}
+
+.steps li {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 3px solid
+    color-mix(in srgb, var(--site-text, #222) 12%, transparent);
+  opacity: 0.55;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.steps li span {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--site-text, #222) 10%, transparent);
+}
+
+.steps .stepActive,
+.steps .stepDone {
+  opacity: 1;
+  border-top-color: var(--site-primary);
+}
+
+.steps .stepActive {
+  font-weight: 600;
+}
+
+.steps .stepActive span,
+.steps .stepDone span {
+  background: var(--site-primary);
+  color: var(--site-on-primary, #fff);
+}
+
+/* The order form: numbered parts, fields side by side where they fit. */
+.formMain {
+  container: cartform / inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.formSection {
+  padding: 16px 16px 2px;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--site-text, #222) 10%, transparent);
+  background: color-mix(in srgb, var(--site-primary) 3%, #fff);
+}
+
+.formSectionHead {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.formSectionHead h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.formSectionHead p {
+  margin: 2px 0 0;
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+.formSectionNumber {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--site-on-primary, #fff);
+  background: var(--site-primary);
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: 12px;
+}
+
+@container cartform (min-width: 420px) {
+  .fieldRow {
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  }
+}
+
+.fieldIcon {
+  opacity: 0.45;
+  margin-right: 4px;
+}
+
+.checkoutForm :global(.ant-form-item-label > label) {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.checkoutForm :global(.ant-input-affix-wrapper),
+.checkoutForm :global(.ant-input),
+.checkoutForm :global(.ant-select-selector) {
+  background: #fff !important;
+}
+
+.checkoutForm :global(.ant-input-affix-wrapper:focus-within),
+.checkoutForm :global(.ant-input:focus) {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--site-primary) 18%, transparent) !important;
+}
+
+/* What is being ordered, with the button that sends it. */
+.orderCard {
+  margin-top: 14px;
+  padding: 16px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--site-primary) 8%, #fff);
+}
+
+.orderTitle {
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.orderLines {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed
+    color-mix(in srgb, var(--site-text, #222) 18%, transparent);
+}
+
+.orderLine {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+}
+
+.orderThumb {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--site-primary) 14%, #fff) center / cover
+    no-repeat;
+}
+
+.orderThumb b {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  font-size: 11px;
+  color: var(--site-on-primary, #fff);
+  background: var(--site-primary);
+}
+
+.orderName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orderCard .summary {
+  margin-top: 0;
+}
+
+.privacy {
+  margin-top: 10px;
+  font-size: 11px;
+  text-align: center;
+  opacity: 0.6;
+}
+
+@media (min-width: 900px) {
+  .page .orderCard {
+    margin-top: 0;
+  }
+
+  /* The form has room for its own column beside the order. */
+  .pageBody .checkoutForm {
+    max-width: none;
+  }
+}
+
+.checkoutForm :global(.ant-form-item) {
+  margin-bottom: 14px;
+}
+
+.checkoutForm :global(.ant-form-item-label) {
+  padding-bottom: 4px;
+}

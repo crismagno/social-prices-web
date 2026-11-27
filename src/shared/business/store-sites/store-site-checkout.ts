@@ -14,6 +14,7 @@ export interface IStoreSiteCheckout {
 export interface IStoreSiteCartLook {
   /** Its own title; null keeps the default one. */
   title: string | null;
+  mode: StoreSitesEnum.CartMode;
   width: StoreSitesEnum.CartWidth;
   side: StoreSitesEnum.CartSide;
   isPhotoShown: boolean;
@@ -31,6 +32,9 @@ export interface IStoreSiteCartLook {
 }
 
 export const CART_TITLE_MAX = 40;
+
+/** The page of the site the cart opens on, when it has one of its own. */
+export const CART_PAGE_SLUG = "carrinho";
 export const CART_SHIPPING_NOTE_MAX = 200;
 export const CART_BUTTON_LABEL_MAX = 30;
 
@@ -55,6 +59,11 @@ export const cartLookOf = (
   look: Partial<IStoreSiteCartLook> | null | undefined,
 ): IStoreSiteCartLook => ({
   title: textOf(look?.title, CART_TITLE_MAX),
+  mode: oneOf(
+    Object.values(StoreSitesEnum.CartMode),
+    look?.mode,
+    StoreSitesEnum.CartMode.DRAWER,
+  ),
   width: oneOf(
     Object.values(StoreSitesEnum.CartWidth),
     look?.width,

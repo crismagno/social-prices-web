@@ -2358,7 +2358,8 @@
       "decrease": "Take one out",
       "size": "Size",
       "colors": "Colors",
-      "total": "Products total"
+      "total": "Products total",
+      "keepShopping": "Keep shopping"
     },
     "checkout": {
       "title": "Your details",
@@ -2387,7 +2388,21 @@
       "inviteNote": "We sent you an email to create your account and follow this order. Already have an account? Just sign in.",
       "followOrder": "Sign in to follow the order",
       "keepBrowsing": "Keep browsing",
-      "failed": "The order could not be sent. Try again in a moment, or contact the store."
+      "failed": "The order could not be sent. Try again in a moment, or contact the store.",
+      "sections": {
+        "contact": "Contact",
+        "contactHint": "So the store can reach you about the order.",
+        "address": "Delivery",
+        "addressHint": "Where the order should arrive.",
+        "noteHint": "Anything the store should know?",
+        "order": "Your order"
+      },
+      "steps": {
+        "cart": "Cart",
+        "checkout": "Your details",
+        "done": "Confirmation"
+      },
+      "privacy": "Your details go only to the store."
     },
     "templates": {
       "ATELIER": {
@@ -2607,7 +2622,16 @@
             "isProductOpened": "Open the details when a product is clicked",
             "isShippingNoteShown": "Show the shipping note",
             "shippingNote": "Shipping note text",
-            "buttonLabel": "Continue button text"
+            "buttonLabel": "Continue button text",
+            "mode": "When the cart is clicked",
+            "modes": {
+              "DRAWER": "Open a window",
+              "PAGE": "Go to a page"
+            },
+            "modeHints": {
+              "DRAWER": "The cart opens in a side window, without leaving the page.",
+              "PAGE": "The cart opens on a page of its own, at /carrinho. None of your pages can use that address."
+            }
           }
         }
       },

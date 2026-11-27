@@ -171,34 +171,55 @@ const CartTab = ({ editor }: Props) => {
               }
             />
           </Form.Item>
-          <div className="flex flex-wrap gap-x-6">
-            <Form.Item label={t("storeSite.editor.hero.cart.window.width")}>
-              <Segmented<StoreSitesEnum.CartWidth>
-                value={look.width}
-                onChange={(width) => setLook({ width })}
-                options={Object.values(StoreSitesEnum.CartWidth).map(
-                  (width: StoreSitesEnum.CartWidth) => ({
-                    value: width,
-                    label: t(
-                      `storeSite.editor.hero.cart.window.widths.${width}`,
-                    ),
-                  }),
-                )}
-              />
-            </Form.Item>
-            <Form.Item label={t("storeSite.editor.hero.cart.window.side")}>
-              <Segmented<StoreSitesEnum.CartSide>
-                value={look.side}
-                onChange={(side) => setLook({ side })}
-                options={Object.values(StoreSitesEnum.CartSide).map(
-                  (side: StoreSitesEnum.CartSide) => ({
-                    value: side,
-                    label: t(`storeSite.editor.hero.cart.window.sides.${side}`),
-                  }),
-                )}
-              />
-            </Form.Item>
-          </div>
+          <Form.Item
+            label={t("storeSite.editor.hero.cart.window.mode")}
+            extra={t(
+              `storeSite.editor.hero.cart.window.modeHints.${look.mode}`,
+            )}
+          >
+            <Segmented<StoreSitesEnum.CartMode>
+              value={look.mode}
+              onChange={(mode) => setLook({ mode })}
+              options={Object.values(StoreSitesEnum.CartMode).map(
+                (mode: StoreSitesEnum.CartMode) => ({
+                  value: mode,
+                  label: t(`storeSite.editor.hero.cart.window.modes.${mode}`),
+                }),
+              )}
+            />
+          </Form.Item>
+          {look.mode === StoreSitesEnum.CartMode.DRAWER && (
+            <div className="flex flex-wrap gap-x-6">
+              <Form.Item label={t("storeSite.editor.hero.cart.window.width")}>
+                <Segmented<StoreSitesEnum.CartWidth>
+                  value={look.width}
+                  onChange={(width) => setLook({ width })}
+                  options={Object.values(StoreSitesEnum.CartWidth).map(
+                    (width: StoreSitesEnum.CartWidth) => ({
+                      value: width,
+                      label: t(
+                        `storeSite.editor.hero.cart.window.widths.${width}`,
+                      ),
+                    }),
+                  )}
+                />
+              </Form.Item>
+              <Form.Item label={t("storeSite.editor.hero.cart.window.side")}>
+                <Segmented<StoreSitesEnum.CartSide>
+                  value={look.side}
+                  onChange={(side) => setLook({ side })}
+                  options={Object.values(StoreSitesEnum.CartSide).map(
+                    (side: StoreSitesEnum.CartSide) => ({
+                      value: side,
+                      label: t(
+                        `storeSite.editor.hero.cart.window.sides.${side}`,
+                      ),
+                    }),
+                  )}
+                />
+              </Form.Item>
+            </div>
+          )}
           <div className="flex flex-col gap-2 mb-4">
             {LOOK_SWITCHES.map((key: keyof IStoreSiteCartLook) => (
               <div

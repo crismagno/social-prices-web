@@ -362,6 +362,12 @@ namespace StoreSitesEnum {
     WIDE = "WIDE",
   }
 
+  /** Where the cart opens: a window over the page, or a page of its own. */
+  export enum CartMode {
+    DRAWER = "DRAWER",
+    PAGE = "PAGE",
+  }
+
   /** The side of the screen the cart window comes from. */
   export enum CartSide {
     RIGHT = "RIGHT",

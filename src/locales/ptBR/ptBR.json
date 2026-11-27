@@ -2361,7 +2361,8 @@
       "decrease": "Tirar um",
       "size": "Tamanho",
       "colors": "Cores",
-      "total": "Total dos produtos"
+      "total": "Total dos produtos",
+      "keepShopping": "Continuar comprando"
     },
     "checkout": {
       "title": "Seus dados",
@@ -2390,7 +2391,21 @@
       "inviteNote": "Enviamos um e-mail para você criar sua conta e acompanhar este pedido. Já tem conta? É só entrar.",
       "followOrder": "Entrar para acompanhar o pedido",
       "keepBrowsing": "Continuar navegando",
-      "failed": "Não foi possível enviar o pedido. Tente de novo em instantes ou fale com a loja."
+      "failed": "Não foi possível enviar o pedido. Tente de novo em instantes ou fale com a loja.",
+      "sections": {
+        "contact": "Contato",
+        "contactHint": "Para a loja falar com você sobre o pedido.",
+        "address": "Entrega",
+        "addressHint": "Onde o pedido deve chegar.",
+        "noteHint": "Algo que a loja precisa saber?",
+        "order": "Seu pedido"
+      },
+      "steps": {
+        "cart": "Carrinho",
+        "checkout": "Seus dados",
+        "done": "Confirmação"
+      },
+      "privacy": "Seus dados vão apenas para a loja."
     },
     "templates": {
       "ATELIER": {
@@ -2610,7 +2625,16 @@
             "isProductOpened": "Abrir os detalhes ao clicar no produto",
             "isShippingNoteShown": "Mostrar o aviso de frete",
             "shippingNote": "Texto do aviso de frete",
-            "buttonLabel": "Texto do botão para continuar"
+            "buttonLabel": "Texto do botão para continuar",
+            "mode": "Ao clicar no carrinho",
+            "modes": {
+              "DRAWER": "Abrir janela",
+              "PAGE": "Ir para a página"
+            },
+            "modeHints": {
+              "DRAWER": "O carrinho abre numa janela ao lado, sem sair da página.",
+              "PAGE": "O carrinho abre numa página própria, em /carrinho. Nenhuma página sua pode usar esse endereço."
+            }
           }
         }
       },
