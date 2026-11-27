@@ -15,6 +15,7 @@ namespace StoreSitesServiceEnum {
     PUBLIC_CHAT_CONTACT = "/public/store-sites/:slug/chat/contact",
     PUBLIC_CHAT_MESSAGES = "/public/store-sites/:slug/chat/messages",
     PUBLIC_CHAT_MEDIA = "/public/store-sites/:slug/chat/media",
+    PUBLIC_CHAT_MESSAGE = "/public/store-sites/:slug/chat/messages/:messageId",
     PUBLIC_CHAT_TYPING = "/public/store-sites/:slug/chat/typing",
     PUBLIC_CHAT_ATTACHMENT = "/public/store-sites/:slug/chat/messages/:messageId/attachments/:index",
   }

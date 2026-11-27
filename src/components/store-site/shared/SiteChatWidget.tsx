@@ -145,6 +145,14 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
   // Asked before leaving a conversation: here it cannot be opened again.
   const [isAskingNew, setIsAskingNew] = useState<boolean>(false);
 
+  // A message of the visitor being rewritten, and its new words.
+  const [editing, setEditing] = useState<{ id: string; text: string } | null>(
+    null,
+  );
+
+  // A message of the visitor waiting for "yes, remove it".
+  const [removingId, setRemovingId] = useState<string | null>(null);
+
   const endRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const textRef = useRef<HTMLTextAreaElement>(null);
@@ -497,6 +505,76 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
     }
   };
 
+  // The new words take the place of the old ones; the store sees them too.
+  const saveEdit = async (): Promise<void> => {
+    const words: string = editing?.text.trim() ?? "";
+
+    if (!editing || !words || !token || isBusy) {
+      return;
+    }
+
+    try {
+      setIsBusy(true);
+      setError(null);
+
+      const edited: ISiteChatMessage =
+        await serviceMethodsInstance.storeSitesServiceMethods.editChatMessage(
+          slug,
+          token,
+          editing.id,
+          words,
+        );
+
+      setMessages((current: ISiteChatMessage[]) =>
+        current.map((item: ISiteChatMessage) =>
+          item.id === edited.id ? { ...item, ...edited } : item,
+        ),
+      );
+      setEditing(null);
+      touch();
+    } catch (caught: any) {
+      if (caught?.response?.status === 401) {
+        forget();
+      }
+
+      setError(describeError(caught));
+    } finally {
+      setIsBusy(false);
+    }
+  };
+
+  // Gone for both sides, files included.
+  const remove = async (id: string): Promise<void> => {
+    if (!token || isBusy) {
+      return;
+    }
+
+    try {
+      setIsBusy(true);
+      setError(null);
+
+      await serviceMethodsInstance.storeSitesServiceMethods.deleteChatMessage(
+        slug,
+        token,
+        id,
+      );
+
+      setMessages((current: ISiteChatMessage[]) =>
+        current.filter((item: ISiteChatMessage) => item.id !== id),
+      );
+      setRemovingId(null);
+      touch();
+    } catch (caught: any) {
+      if (caught?.response?.status === 401) {
+        forget();
+      }
+
+      setError(describeError(caught));
+    } finally {
+      setIsBusy(false);
+    }
+  };
+
   /** A file or a recording, with what is written as its words. */
   const sendFile = async (file: File, voice: boolean): Promise<void> => {
     if (!token || isBusy) {
@@ -664,8 +742,117 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
                       />
                     ),
                   )}
-                  {message.text && <ChatText text={message.text} isFormatted />}
-                  <span className={styles.time}>{time(message.sentAt)}</span>
+                  {editing?.id === message.id ? (
+                    <div className={styles.editBox}>
+                      <textarea
+                        className={styles.editField}
+                        aria-label={t("storeSite.chat.editMessage")}
+                        value={editing.text}
+                        maxLength={SITE_CHAT_MAX_TEXT_LENGTH}
+                        rows={Math.min(5, editing.text.split("\n").length + 1)}
+                        autoFocus
+                        disabled={isBusy}
+                        onChange={(event) =>
+                          setEditing({
+                            id: message.id,
+                            text: event.target.value,
+                          })
+                        }
+                        onKeyDown={(event) => {
+                          // Enter saves, Shift+Enter breaks the line, Esc leaves.
+                          if (event.key === "Enter" && !event.shiftKey) {
+                            event.preventDefault();
+                            saveEdit();
+                          }
+
+                          if (event.key === "Escape") {
+                            setEditing(null);
+                          }
+                        }}
+                      />
+                      <span className={styles.messageActions}>
+                        <button
+                          type="button"
+                          className={styles.messageAction}
+                          disabled={isBusy}
+                          onClick={() => setEditing(null)}
+                        >
+                          {t("storeSite.chat.cancelEdit")}
+                        </button>
+                        <button
+                          type="button"
+                          className={`${styles.messageAction} ${styles.messageActionStrong}`}
+                          disabled={isBusy || !editing.text.trim()}
+                          onClick={saveEdit}
+                        >
+                          {t("storeSite.chat.saveEdit")}
+                        </button>
+                      </span>
+                    </div>
+                  ) : (
+                    message.text && <ChatText text={message.text} isFormatted />
+                  )}
+                  <span className={styles.time}>
+                    {time(message.sentAt)}
+                    {message.editedAt && ` · ${t("storeSite.chat.edited")}`}
+                  </span>
+
+                  {/* What the visitor wrote, they can change or take back. */}
+                  {!message.fromStore && editing?.id !== message.id && (
+                    <span className={styles.messageActions}>
+                      {removingId === message.id ? (
+                        <>
+                          <span>{t("storeSite.chat.removeConfirm")}</span>
+                          <button
+                            type="button"
+                            className={styles.messageAction}
+                            disabled={isBusy}
+                            onClick={() => setRemovingId(null)}
+                          >
+                            {t("storeSite.chat.no")}
+                          </button>
+                          <button
+                            type="button"
+                            className={`${styles.messageAction} ${styles.messageActionStrong}`}
+                            disabled={isBusy}
+                            onClick={() => remove(message.id)}
+                          >
+                            {t("storeSite.chat.yesRemove")}
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          {message.text && (
+                            <button
+                              type="button"
+                              className={styles.messageAction}
+                              disabled={isBusy}
+                              onClick={() => {
+                                setRemovingId(null);
+                                setEditing({
+                                  id: message.id,
+                                  text: message.text ?? "",
+                                });
+                              }}
+                            >
+                              {t("storeSite.chat.editMessage")}
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            className={styles.messageAction}
+                            disabled={isBusy}
+                            onClick={() => {
+                              setEditing(null);
+                              setRemovingId(message.id);
+                            }}
+                          >
+                            {t("storeSite.chat.removeMessage")}
+                          </button>
+                        </>
+                      )}
+                    </span>
+                  )}
                 </div>
               ))
             ) : (

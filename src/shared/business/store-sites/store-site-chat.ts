@@ -39,7 +39,11 @@ export const CHAT_EXTRA_FIELDS_MAX: number = Object.values(
   StoreSitesEnum.ChatCustomerField,
 ).length;
 
-export const SESSION_MINUTES_LIMITS = { min: 5, max: 24 * 60, initial: 60 } as const;
+export const SESSION_MINUTES_LIMITS = {
+  min: 5,
+  max: 24 * 60,
+  initial: 60,
+} as const;
 
 /** The largest file or recording the chat takes, as the API says. */
 export const SITE_CHAT_MAX_UPLOAD_BYTES: number = 16 * 1024 * 1024;
@@ -61,6 +65,8 @@ export interface ISiteChatMessage {
   text: string | null;
   attachments?: ISiteChatAttachment[];
   sentAt: string;
+  /** When its words were last changed; null when they never were. */
+  editedAt?: string | null;
 }
 
 export interface ISiteChatVisitor {
@@ -168,7 +174,10 @@ export const siteChatOf = (
       Number.isFinite(chat.sessionMinutes)
         ? Math.min(
             SESSION_MINUTES_LIMITS.max,
-            Math.max(SESSION_MINUTES_LIMITS.min, Math.round(chat.sessionMinutes)),
+            Math.max(
+              SESSION_MINUTES_LIMITS.min,
+              Math.round(chat.sessionMinutes),
+            ),
           )
         : SESSION_MINUTES_LIMITS.initial,
     extraFields,

@@ -270,6 +270,45 @@ export default class StoreSitesServiceMethods extends ServiceMethodsBase {
     return response.data;
   }
 
+  /** New words for a message the visitor wrote. */
+  public async editChatMessage(
+    slug: string,
+    token: string,
+    messageId: string,
+    text: string,
+  ): Promise<ISiteChatMessage> {
+    const response = await this._fetchAxios.patch<ISiteChatMessage>(
+      this._url(StoreSitesServiceEnum.Methods.PUBLIC_CHAT_MESSAGE, {
+        slug,
+        messageId,
+      }),
+      { text },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          [SITE_CHAT_TOKEN_HEADER]: token,
+        },
+      },
+    );
+
+    return response.data;
+  }
+
+  /** Removes a message the visitor wrote, for the store too. */
+  public async deleteChatMessage(
+    slug: string,
+    token: string,
+    messageId: string,
+  ): Promise<void> {
+    await this._fetchAxios.delete(
+      this._url(StoreSitesServiceEnum.Methods.PUBLIC_CHAT_MESSAGE, {
+        slug,
+        messageId,
+      }),
+      { headers: { [SITE_CHAT_TOKEN_HEADER]: token } },
+    );
+  }
+
   /** A file or a recording of the visitor, with its words when there are any. */
   public async sendChatMedia(
     slug: string,

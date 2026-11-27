@@ -370,6 +370,84 @@
   opacity: 0.6;
 }
 
+/* Edit and remove, under the visitor's own messages: shown on hover or focus. */
+.messageActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px 10px;
+  margin-top: 4px;
+  font-size: 11px;
+}
+
+.bubble .messageActions {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition:
+    opacity 0.15s ease,
+    max-height 0.15s ease;
+}
+
+.bubble:hover .messageActions,
+.bubble:focus-within .messageActions,
+.editBox .messageActions {
+  opacity: 1;
+  max-height: 60px;
+}
+
+/* On touch screens there is no hover: the actions stay at hand. */
+@media (hover: none) {
+  .bubble .messageActions {
+    opacity: 0.85;
+    max-height: 60px;
+  }
+}
+
+.messageAction {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  opacity: 0.85;
+  cursor: pointer;
+}
+
+.messageAction:hover:not(:disabled) {
+  opacity: 1;
+}
+
+.messageAction:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.messageActionStrong {
+  font-weight: 700;
+}
+
+.editBox {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+}
+
+.editField {
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #1f1f1f;
+  font: inherit;
+  resize: none;
+  outline: none;
+}
+
 .form {
   display: flex;
   flex-direction: column;
