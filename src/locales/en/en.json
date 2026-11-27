@@ -2583,6 +2583,49 @@
           "block": "Applies to every builder image: image pieces, columns and team photos."
         }
       },
+      "contactForm": {
+        "heading": "Form of this page",
+        "title": "Heading over the form",
+        "fields": "What the form asks",
+        "fieldsHint": "Each field with its kind, in the order shown. Open one to name it and say whether it must be filled.",
+        "type": "Kind",
+        "types": {
+          "NAME": "Name",
+          "EMAIL": "Email",
+          "PHONE": "Phone",
+          "TEXT": "Short text",
+          "TEXTAREA": "Long text",
+          "SELECT": "Choice among options"
+        },
+        "label": "Name of the field",
+        "placeholder": "Example inside the field",
+        "options": "Options",
+        "optionsHint": "One per line, up to 12.",
+        "required": "Must be filled",
+        "addField": "Add field",
+        "buttonLabel": "Words of the button",
+        "successMessage": "What is said once it was sent",
+        "successMessageHint": "Empty says the usual, according to where the form goes.",
+        "destination": "Where the form is sent",
+        "destinations": {
+          "INBOX": "My inbox here (Social Prices)",
+          "EMAIL": "An email address",
+          "WHATSAPP": "WhatsApp",
+          "WEBHOOK": "Another system (webhook)"
+        },
+        "destinationHints": {
+          "INBOX": "It arrives in Chats as a conversation of the site, and you answer from there.",
+          "EMAIL": "Every answer arrives as an email. Replying to it writes to who filled the form, when the form asks an email.",
+          "WHATSAPP": "The visitor's WhatsApp opens with the answers already written, for them to send to your number. Nothing is kept here.",
+          "WEBHOOK": "The answers are sent as data (JSON, by POST) to an address of yours: an automation tool, your CRM, a spreadsheet. Nothing is kept here."
+        },
+        "email": "Email that receives it",
+        "whatsapp": "WhatsApp number",
+        "whatsappHint": "With the country code and the area code, digits only.",
+        "webhookUrl": "Address that receives it",
+        "webhookUrlHint": "It must start with https:// and be out on the internet. It receives the site, the store, the time and each field with its answer.",
+        "missingAddress": "Until this is filled in, the form keeps going to your inbox here, so no message is lost."
+      },
       "backdrop": {
         "types": {
           "COLOR": "Colour",
@@ -3836,6 +3879,13 @@
       "sent": "Message sent",
       "sentChat": "The answer will show up in the chat of this site, in the corner of the page.",
       "sentEmail": "The store will answer you by the email you gave.",
+      "text": "Text",
+      "choice": "Choice",
+      "choose": "Choose…",
+      "requiredField": "Fill in: {field}.",
+      "openedWhatsapp": "WhatsApp opened",
+      "sentWhatsapp": "Your message is written there: send it to finish.",
+      "sentOther": "The store received your message.",
       "again": "Send another message"
     },
     "support": {

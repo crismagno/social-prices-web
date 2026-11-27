@@ -3,40 +3,122 @@
 import { FormEvent, useState } from "react";
 
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
+import {
+  CONTACT_ANSWER_MAX,
+  IStoreSiteContactField,
+  IStoreSiteContactForm,
+  siteContactFormOf,
+} from "../../../shared/business/store-sites/store-site-contact";
+import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import { followSiteChat } from "./SiteChatWidget";
 import styles from "./SitePageBody.module.css";
 import useSiteT from "./useSiteT";
 
 interface Props {
   slug: string;
+  /** What the owner made of the form; none, the usual one. */
+  contact: Partial<IStoreSiteContactForm> | null | undefined;
   /** The editor: the form is there to be seen, and sends nothing. */
   isPreview: boolean;
 }
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const EMPTY = { name: "", email: "", phone: "", message: "" };
+const Type = StoreSitesEnum.ContactFieldType;
+const Destination = StoreSitesEnum.ContactDestination;
 
-type TSent = "chat" | "email" | null;
+/** How it went: followed in the chat, answered by e-mail, opened elsewhere. */
+type TSent = "chat" | "email" | "whatsapp" | "sent" | null;
+
+// The name of a kind of field when the owner gave it none.
+const USUAL_LABEL: Record<StoreSitesEnum.ContactFieldType, string> = {
+  [Type.NAME]: "storeSite.contact.name",
+  [Type.EMAIL]: "storeSite.contact.email",
+  [Type.PHONE]: "storeSite.contact.phone",
+  [Type.TEXT]: "storeSite.contact.text",
+  [Type.TEXTAREA]: "storeSite.contact.message",
+  [Type.SELECT]: "storeSite.contact.choice",
+};
+
+// What the browser is told each kind of field is, to fill it by itself.
+const INPUT_PROPS: Partial<
+  Record<
+    StoreSitesEnum.ContactFieldType,
+    {
+      type?: string;
+      inputMode?: "email" | "tel";
+      autoComplete?: string;
+    }
+  >
+> = {
+  [Type.NAME]: { autoComplete: "name" },
+  [Type.EMAIL]: { type: "email", inputMode: "email", autoComplete: "email" },
+  [Type.PHONE]: { type: "tel", inputMode: "tel", autoComplete: "tel" },
+};
 
 /**
- * The form of the contact page. What is sent lands in the store's inbox as a
- * conversation of the site. Where the site has its chat on, the chat window
- * takes the conversation over, so the answer shows up there; otherwise the
- * store answers by the e-mail the visitor gave.
+ * The form of the contact page, as the owner made it: what it asks, the
+ * words of its button, and where it goes. To the store's inbox it becomes a
+ * conversation of the site: where the site has its chat on, the chat window
+ * takes it over and the answer shows up there; otherwise the store answers
+ * by the e-mail that was given. To an e-mail or to an address of the owner's
+ * it is sent and that is all. To WhatsApp it opens the conversation with the
+ * answers already written, for the visitor to send.
  */
-const SiteContactForm = ({ slug, isPreview }: Props) => {
+const SiteContactForm = ({ slug, contact, isPreview }: Props) => {
   const t = useSiteT();
 
-  const [form, setForm] = useState(EMPTY);
+  const settings: IStoreSiteContactForm = siteContactFormOf(contact);
+
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isSending, setIsSending] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [sent, setSent] = useState<TSent>(null);
 
+  const labelOf = (asked: IStoreSiteContactField): string =>
+    asked.label?.trim() || t(USUAL_LABEL[asked.type]);
+
+  const valueOf = (asked: IStoreSiteContactField): string =>
+    (answers[asked.key] ?? "").trim();
+
   const set =
-    (field: keyof typeof EMPTY) =>
+    (key: string) =>
     (event: { target: { value: string } }): void =>
-      setForm((current) => ({ ...current, [field]: event.target.value }));
+      setAnswers((current) => ({ ...current, [key]: event.target.value }));
+
+  // What is wrong with what was filled, in the visitor's words; null, nothing.
+  const problem = (): string | null => {
+    for (const asked of settings.fields) {
+      const value: string = valueOf(asked);
+
+      if (!value) {
+        if (asked.isRequired) {
+          return t("storeSite.contact.requiredField").replace(
+            "{field}",
+            labelOf(asked),
+          );
+        }
+
+        continue;
+      }
+
+      if (asked.type === Type.EMAIL && !EMAIL.test(value)) {
+        return t("storeSite.contact.invalidEmail");
+      }
+    }
+
+    return null;
+  };
+
+  // Every answer on a line of its own, named: what WhatsApp opens with.
+  const written = (): string =>
+    settings.fields
+      .filter((asked: IStoreSiteContactField) => !!valueOf(asked))
+      .map(
+        (asked: IStoreSiteContactField) =>
+          `${labelOf(asked)}: ${valueOf(asked)}`,
+      )
+      .join("\n");
 
   const send = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
@@ -45,20 +127,31 @@ const SiteContactForm = ({ slug, isPreview }: Props) => {
       return;
     }
 
-    const name: string = form.name.trim();
-    const email: string = form.email.trim();
-    const phone: string = form.phone.trim();
-    const message: string = form.message.trim();
+    const wrong: string | null = problem();
 
-    if (!name || !email || !message) {
-      setError(t("storeSite.contact.required"));
+    if (wrong) {
+      setError(wrong);
       return;
     }
 
-    if (!EMAIL.test(email)) {
-      setError(t("storeSite.contact.invalidEmail"));
+    if (settings.destination === Destination.WHATSAPP && settings.whatsapp) {
+      window.open(
+        `https://wa.me/${settings.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(written())}`,
+        "_blank",
+        "noopener,noreferrer",
+      );
+
+      setError(null);
+      setSent("whatsapp");
+      setAnswers({});
       return;
     }
+
+    const filled: Record<string, string> = Object.fromEntries(
+      settings.fields
+        .map((asked: IStoreSiteContactField) => [asked.key, valueOf(asked)])
+        .filter(([, value]) => !!value),
+    );
 
     try {
       setIsSending(true);
@@ -67,15 +160,35 @@ const SiteContactForm = ({ slug, isPreview }: Props) => {
       const token: string | null =
         await serviceMethodsInstance.storeSitesServiceMethods.sendContact(
           slug,
-          { name, email, phone: phone || null, message },
+          { answers: filled },
         );
 
+      const first = (type: StoreSitesEnum.ContactFieldType): string | null => {
+        const asked: IStoreSiteContactField | undefined = settings.fields.find(
+          (each: IStoreSiteContactField) =>
+            each.type === type && !!valueOf(each),
+        );
+
+        return asked ? valueOf(asked) : null;
+      };
+
+      const email: string | null = first(Type.EMAIL);
+
       if (token) {
-        followSiteChat(slug, token, { name, email });
+        followSiteChat(slug, token, {
+          name: first(Type.NAME) ?? email ?? "",
+          email,
+        });
       }
 
-      setSent(token ? "chat" : "email");
-      setForm(EMPTY);
+      setSent(
+        token
+          ? "chat"
+          : settings.destination === Destination.INBOX && email
+            ? "email"
+            : "sent",
+      );
+      setAnswers({});
     } catch (caught: any) {
       const status: number | undefined = caught?.response?.status;
 
@@ -97,13 +210,24 @@ const SiteContactForm = ({ slug, isPreview }: Props) => {
         <div className={styles.contactDoneMark} aria-hidden>
           ✓
         </div>
-        <p className={styles.contactDoneTitle}>{t("storeSite.contact.sent")}</p>
-        <p>
+        <p className={styles.contactDoneTitle}>
           {t(
-            sent === "chat"
-              ? "storeSite.contact.sentChat"
-              : "storeSite.contact.sentEmail",
+            sent === "whatsapp"
+              ? "storeSite.contact.openedWhatsapp"
+              : "storeSite.contact.sent",
           )}
+        </p>
+        <p>
+          {settings.successMessage?.trim() ||
+            t(
+              sent === "chat"
+                ? "storeSite.contact.sentChat"
+                : sent === "email"
+                  ? "storeSite.contact.sentEmail"
+                  : sent === "whatsapp"
+                    ? "storeSite.contact.sentWhatsapp"
+                    : "storeSite.contact.sentOther",
+            )}
         </p>
         <button
           type="button"
@@ -118,54 +242,50 @@ const SiteContactForm = ({ slug, isPreview }: Props) => {
 
   return (
     <form className={styles.contactForm} onSubmit={send} noValidate>
-      <label className={styles.contactField}>
-        <span>{t("storeSite.contact.name")}</span>
-        <input
-          autoComplete="name"
-          maxLength={80}
-          value={form.name}
-          onChange={set("name")}
-        />
-      </label>
-
-      <div className={styles.contactRow}>
-        <label className={styles.contactField}>
-          <span>{t("storeSite.contact.email")}</span>
-          <input
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            maxLength={160}
-            value={form.email}
-            onChange={set("email")}
-          />
-        </label>
-
-        <label className={styles.contactField}>
+      {settings.fields.map((asked: IStoreSiteContactField) => (
+        <label key={asked.key} className={styles.contactField}>
           <span>
-            {t("storeSite.contact.phone")}{" "}
-            <small>{t("storeSite.contact.optional")}</small>
+            {labelOf(asked)}
+            {!asked.isRequired && (
+              <>
+                {" "}
+                <small>{t("storeSite.contact.optional")}</small>
+              </>
+            )}
           </span>
-          <input
-            type="tel"
-            inputMode="tel"
-            autoComplete="tel"
-            maxLength={30}
-            value={form.phone}
-            onChange={set("phone")}
-          />
+          {asked.type === Type.TEXTAREA ? (
+            <textarea
+              rows={5}
+              maxLength={CONTACT_ANSWER_MAX[asked.type]}
+              placeholder={asked.placeholder ?? undefined}
+              value={answers[asked.key] ?? ""}
+              onChange={set(asked.key)}
+            />
+          ) : asked.type === Type.SELECT ? (
+            <select value={answers[asked.key] ?? ""} onChange={set(asked.key)}>
+              <option value="">
+                {asked.placeholder ?? t("storeSite.contact.choose")}
+              </option>
+              {asked.options
+                // A line still being written in the editor has no words yet.
+                .filter((option: string) => !!option.trim())
+                .map((option: string) => (
+                  <option key={option} value={option.trim()}>
+                    {option.trim()}
+                  </option>
+                ))}
+            </select>
+          ) : (
+            <input
+              {...(INPUT_PROPS[asked.type] ?? {})}
+              maxLength={CONTACT_ANSWER_MAX[asked.type]}
+              placeholder={asked.placeholder ?? undefined}
+              value={answers[asked.key] ?? ""}
+              onChange={set(asked.key)}
+            />
+          )}
         </label>
-      </div>
-
-      <label className={styles.contactField}>
-        <span>{t("storeSite.contact.message")}</span>
-        <textarea
-          rows={5}
-          maxLength={2000}
-          value={form.message}
-          onChange={set("message")}
-        />
-      </label>
+      ))}
 
       {error && (
         <p className={styles.contactError} role="alert">
@@ -178,7 +298,9 @@ const SiteContactForm = ({ slug, isPreview }: Props) => {
         className={styles.contactSend}
         disabled={isSending || isPreview}
       >
-        {t(isSending ? "storeSite.contact.sending" : "storeSite.contact.send")}
+        {isSending
+          ? t("storeSite.contact.sending")
+          : settings.buttonLabel?.trim() || t("storeSite.contact.send")}
       </button>
     </form>
   );

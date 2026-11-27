@@ -121,6 +121,7 @@
 }
 
 .contactField input,
+.contactField select,
 .contactField textarea {
   width: 100%;
   padding: 12px 14px;
@@ -141,6 +142,7 @@
 }
 
 .contactField input:focus,
+.contactField select:focus,
 .contactField textarea:focus {
   outline: none;
   border-color: var(--site-primary);

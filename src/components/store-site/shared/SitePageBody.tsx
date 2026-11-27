@@ -136,9 +136,13 @@ const SitePageBody = ({
         <section className={styles.support}>
           <Reveal effect="up">
             <h2 className={`${styles.heading} ${titleClassName ?? ""}`}>
-              {t("storeSite.contact.formTitle")}
+              {page.contact?.title?.trim() || t("storeSite.contact.formTitle")}
             </h2>
-            <SiteContactForm slug={slug} isPreview={isPreview} />
+            <SiteContactForm
+              slug={slug}
+              contact={page.contact}
+              isPreview={isPreview}
+            />
           </Reveal>
 
           {contacts.length > 0 && (

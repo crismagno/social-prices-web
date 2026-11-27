@@ -2586,6 +2586,49 @@
           "block": "Vale para todas as imagens do construtor: peças de imagem, colunas e fotos da equipe."
         }
       },
+      "contactForm": {
+        "heading": "Formulário desta página",
+        "title": "Título acima do formulário",
+        "fields": "O que o formulário pergunta",
+        "fieldsHint": "Cada campo com o seu tipo, na ordem em que aparece. Abra um para dar nome e dizer se é obrigatório.",
+        "type": "Tipo",
+        "types": {
+          "NAME": "Nome",
+          "EMAIL": "E-mail",
+          "PHONE": "Telefone",
+          "TEXT": "Texto curto",
+          "TEXTAREA": "Texto longo",
+          "SELECT": "Escolha entre opções"
+        },
+        "label": "Nome do campo",
+        "placeholder": "Exemplo dentro do campo",
+        "options": "Opções",
+        "optionsHint": "Uma por linha, até 12.",
+        "required": "Obrigatório",
+        "addField": "Adicionar campo",
+        "buttonLabel": "Texto do botão",
+        "successMessage": "O que é dito depois de enviar",
+        "successMessageHint": "Vazio diz o texto padrão, conforme o destino do formulário.",
+        "destination": "Para onde o formulário é enviado",
+        "destinations": {
+          "INBOX": "Minha caixa de entrada aqui (Social Prices)",
+          "EMAIL": "Um endereço de e-mail",
+          "WHATSAPP": "WhatsApp",
+          "WEBHOOK": "Outro sistema (webhook)"
+        },
+        "destinationHints": {
+          "INBOX": "Chega em Chats como uma conversa do site, e você responde por lá.",
+          "EMAIL": "Cada resposta chega como um e-mail. Ao responder, você escreve para quem preencheu, quando o formulário pede um e-mail.",
+          "WHATSAPP": "O WhatsApp do visitante abre com as respostas já escritas, para ele enviar ao seu número. Nada fica guardado aqui.",
+          "WEBHOOK": "As respostas são enviadas como dados (JSON, por POST) para um endereço seu: uma ferramenta de automação, seu CRM, uma planilha. Nada fica guardado aqui."
+        },
+        "email": "E-mail que recebe",
+        "whatsapp": "Número do WhatsApp",
+        "whatsappHint": "Com o código do país e o DDD, só números.",
+        "webhookUrl": "Endereço que recebe",
+        "webhookUrlHint": "Precisa começar com https:// e estar na internet. Recebe o site, a loja, a hora e cada campo com a resposta.",
+        "missingAddress": "Enquanto isto não for preenchido, o formulário continua indo para a sua caixa de entrada aqui, para nenhuma mensagem se perder."
+      },
       "backdrop": {
         "types": {
           "COLOR": "Cor",
@@ -3839,6 +3882,13 @@
       "sent": "Mensagem enviada",
       "sentChat": "A resposta vai aparecer no chat deste site, no canto da página.",
       "sentEmail": "A loja vai responder pelo e-mail que você informou.",
+      "text": "Texto",
+      "choice": "Opção",
+      "choose": "Escolha…",
+      "requiredField": "Preencha: {field}.",
+      "openedWhatsapp": "WhatsApp aberto",
+      "sentWhatsapp": "Sua mensagem já está escrita lá: envie para concluir.",
+      "sentOther": "A loja recebeu sua mensagem.",
       "again": "Enviar outra mensagem"
     },
     "support": {

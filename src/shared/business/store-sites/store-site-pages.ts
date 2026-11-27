@@ -4,6 +4,7 @@ import { IStoreSiteAboutMedia } from "./store-site-about";
 import { IStoreSitePageHero, pageHeroOf } from "./store-site-hero";
 import { IStoreSiteTheme } from "./store-site.interface";
 import { IStoreSiteBackdrop, siteBackdropOf } from "./store-site-backdrop";
+import { IStoreSiteContactForm, siteContactFormOf } from "./store-site-contact";
 import StoreSitesEnum from "./store-sites.enum";
 
 export interface IStoreSiteFaqItem {
@@ -46,6 +47,8 @@ export interface IStoreSitePage {
   theme?: Partial<IStoreSiteTheme> | null;
   /** What lies behind this page alone; none, what lies behind the site. */
   backdrop: IStoreSiteBackdrop | null;
+  /** The form of the contact page: only that page has one. */
+  contact: IStoreSiteContactForm | null;
 }
 
 export const PAGE_SLUG_REGEX = /^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]$/;
@@ -94,6 +97,10 @@ const readyPage = (
   hero: null,
   theme: null,
   backdrop: null,
+  contact:
+    type === StoreSitesEnum.SitePageType.CONTACT
+      ? siteContactFormOf(null)
+      : null,
 });
 
 /**
@@ -121,6 +128,11 @@ export const sitePagesOf = (
       theme: page.theme ?? null,
       // A page saved before the option follows the site.
       backdrop: page.backdrop ? siteBackdropOf(page.backdrop) : null,
+      // A contact page saved before its form could change asks the usual.
+      contact:
+        page.type === StoreSitesEnum.SitePageType.CONTACT
+          ? siteContactFormOf(page.contact)
+          : null,
     }));
 };
 

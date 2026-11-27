@@ -35,9 +35,11 @@ import {
   slugifyPage,
 } from "../../../shared/business/store-sites/store-site-pages";
 import { siteBackdropOf } from "../../../shared/business/store-sites/store-site-backdrop";
+import { siteContactFormOf } from "../../../shared/business/store-sites/store-site-contact";
 import { IStoreSiteTheme } from "../../../shared/business/store-sites/store-site.interface";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import BackdropFields from "./BackdropFields";
+import ContactFormFields from "./ContactFormFields";
 import FeatureIconPicker from "./FeatureIconPicker";
 import PageContentFields from "./PageContentFields";
 import PageHeroFields from "./PageHeroFields";
@@ -120,6 +122,7 @@ const PagesTab = ({ editor, storeId }: Props) => {
           hero: null,
           theme: null,
           backdrop: null,
+          contact: null,
         },
       ],
     }));
@@ -359,6 +362,19 @@ const PagesTab = ({ editor, storeId }: Props) => {
                     ))}
                   </div>
                 </Form.Item>
+
+                {page.type === StoreSitesEnum.SitePageType.CONTACT && (
+                  <ContactFormFields
+                    contact={siteContactFormOf(page.contact)}
+                    onChange={(change) =>
+                      setPage(page.key, (current) => {
+                        const form = siteContactFormOf(current.contact);
+
+                        return { contact: { ...form, ...change(form) } };
+                      })
+                    }
+                  />
+                )}
 
                 {/* Its own backdrop: without one, what lies behind the site. */}
                 <Form.Item

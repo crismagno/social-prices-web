@@ -94,11 +94,6 @@ export interface ISiteChatVisitor {
   answers?: Record<string, string>;
 }
 
-/** What the form of the contact page sends. */
-export interface ISiteContactForm extends ISiteChatVisitor {
-  message: string;
-}
-
 const FIELDS_VERSION = 2;
 
 const Mode = StoreSitesEnum.ChatFieldMode;

@@ -11,8 +11,8 @@ import {
 import {
   ISiteChatMessage,
   ISiteChatVisitor,
-  ISiteContactForm,
 } from "../../../shared/business/store-sites/store-site-chat";
+import { ISiteContactAnswers } from "../../../shared/business/store-sites/store-site-contact";
 import {
   IStoreSiteMock,
   IStoreSiteMocksList,
@@ -227,7 +227,7 @@ export default class StoreSitesServiceMethods extends ServiceMethodsBase {
    */
   public async sendContact(
     slug: string,
-    form: ISiteContactForm,
+    form: ISiteContactAnswers,
   ): Promise<string | null> {
     const response = await this._fetchAxios.post<{ token: string | null }>(
       this._url(StoreSitesServiceEnum.Methods.PUBLIC_CHAT_CONTACT, { slug }),
