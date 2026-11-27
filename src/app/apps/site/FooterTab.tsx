@@ -258,62 +258,62 @@ const FooterTab = ({ editor, storeId }: Props) => {
                     dropSection();
                   }}
                 >
-                <Space.Compact className="w-full">
-                  <Button
-                    icon={<HolderOutlined />}
-                    className="cursor-grab"
-                    draggable
-                    title={t("storeSite.editor.footer.sections.drag")}
-                    aria-label={t("storeSite.editor.footer.sections.drag")}
-                    onDragStart={(event) => {
-                      event.dataTransfer.effectAllowed = "move";
-                      event.dataTransfer.setData("text/plain", section.key);
+                  <Space.Compact className="w-full">
+                    <Button
+                      icon={<HolderOutlined />}
+                      className="cursor-grab"
+                      draggable
+                      title={t("storeSite.editor.footer.sections.drag")}
+                      aria-label={t("storeSite.editor.footer.sections.drag")}
+                      onDragStart={(event) => {
+                        event.dataTransfer.effectAllowed = "move";
+                        event.dataTransfer.setData("text/plain", section.key);
 
-                      // The whole row follows the pointer, not just the handle.
-                      const row = event.currentTarget.closest("div");
+                        // The whole row follows the pointer, not just the handle.
+                        const row = event.currentTarget.closest("div");
 
-                      if (row) {
-                        event.dataTransfer.setDragImage(row, 16, 16);
+                        if (row) {
+                          event.dataTransfer.setDragImage(row, 16, 16);
+                        }
+
+                        setDragFrom(index);
+                      }}
+                      onDragEnd={endDrag}
+                    />
+                    <Input
+                      maxLength={40}
+                      addonBefore={index + 1}
+                      placeholder={t(
+                        "storeSite.editor.footer.sections.titlePlaceholder",
+                      )}
+                      value={section.title ?? ""}
+                      onChange={(event) =>
+                        setSection(section.key, {
+                          title: event.target.value || null,
+                        })
                       }
-
-                      setDragFrom(index);
-                    }}
-                    onDragEnd={endDrag}
-                  />
-                  <Input
-                    maxLength={40}
-                    addonBefore={index + 1}
-                    placeholder={t(
-                      "storeSite.editor.footer.sections.titlePlaceholder",
-                    )}
-                    value={section.title ?? ""}
-                    onChange={(event) =>
-                      setSection(section.key, {
-                        title: event.target.value || null,
-                      })
-                    }
-                  />
-                  <Button
-                    icon={<ArrowUpOutlined />}
-                    disabled={index === 0}
-                    aria-label={t("storeSite.editor.moveUp")}
-                    onClick={() => moveSection(index, index - 1)}
-                  />
-                  <Button
-                    icon={<ArrowDownOutlined />}
-                    disabled={index === footer.sections.length - 1}
-                    aria-label={t("storeSite.editor.moveDown")}
-                    onClick={() => moveSection(index, index + 1)}
-                  />
-                  <Button
-                    danger
-                    type="primary"
-                    icon={<DeleteOutlined />}
-                    disabled={footer.sections.length <= 1}
-                    aria-label={t("storeSite.editor.remove")}
-                    onClick={() => removeSection(section.key)}
-                  />
-                </Space.Compact>
+                    />
+                    <Button
+                      icon={<ArrowUpOutlined />}
+                      disabled={index === 0}
+                      aria-label={t("storeSite.editor.moveUp")}
+                      onClick={() => moveSection(index, index - 1)}
+                    />
+                    <Button
+                      icon={<ArrowDownOutlined />}
+                      disabled={index === footer.sections.length - 1}
+                      aria-label={t("storeSite.editor.moveDown")}
+                      onClick={() => moveSection(index, index + 1)}
+                    />
+                    <Button
+                      danger
+                      type="primary"
+                      icon={<DeleteOutlined />}
+                      disabled={footer.sections.length <= 1}
+                      aria-label={t("storeSite.editor.remove")}
+                      onClick={() => removeSection(section.key)}
+                    />
+                  </Space.Compact>
                 </div>
               ),
             )}

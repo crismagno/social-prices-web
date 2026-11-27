@@ -1,15 +1,22 @@
 import {
   IStoreSiteBlock,
+  IStoreSiteBlockItem,
   MAX_BLOCKS,
   blockSettingsOf,
+  isOwnPartType,
   isPartType,
+  isUniquePartType,
   newBlock,
   newBlockButton,
   newBlockItem,
   newBlockKey,
   showableSection,
 } from "./store-site-blocks";
+import { IStoreSiteAbout, siteAboutOf } from "./store-site-about";
+import { siteMarqueeStyleOf } from "./store-site-marquee-style";
 import { IStoreSitePage, sitePagesOf } from "./store-site-pages";
+import { IStoreSiteMarquee, IStoreSiteSection } from "./store-site.interface";
+import { IStoreSiteMarqueeStyle } from "./store-site-marquee-style";
 import StoreSitesEnum from "./store-sites.enum";
 
 /** The template's own parts a section can be. */
@@ -338,7 +345,7 @@ export const canAdd = (
     return false;
   }
 
-  if (!isPartType(type)) {
+  if (!isUniquePartType(type)) {
     return true;
   }
 
@@ -360,6 +367,39 @@ export const newSection = (
   pageKey: string | null,
   t: TTranslate,
 ): IStoreSiteBlock => {
+  // A strip or cards start with sample content of their own.
+  if (type === T.MARQUEE) {
+    return {
+      ...newPart(type, pageKey),
+      items: [0, 1, 2].map((index: number) => ({
+        ...newBlockItem(type),
+        title: t(`${SAMPLE}.MARQUEE.items.${index}`),
+      })),
+      settings: blockSettingsOf(type, { isOwn: true }),
+    };
+  }
+
+  if (type === T.CARDS) {
+    return {
+      ...newPart(type, pageKey),
+      items: [0, 1].map((index: number) => ({
+        ...newBlockItem(type),
+        title: t(`${SAMPLE}.CARDS.items.${index}.title`),
+        text: t(`${SAMPLE}.CARDS.items.${index}.text`),
+      })),
+      settings: blockSettingsOf(type, { isOwn: true }),
+    };
+  }
+
+  if (type === T.ABOUT) {
+    return {
+      ...newPart(type, pageKey),
+      title: t(`${SAMPLE}.ABOUT.title`),
+      items: [{ ...newBlockItem(type), text: t(`${SAMPLE}.ABOUT.text`) }],
+      settings: blockSettingsOf(type, { isOwn: true }),
+    };
+  }
+
   if (isPartType(type)) {
     return newPart(type as TPartType, pageKey);
   }
@@ -479,7 +519,7 @@ export const moveSection = (
   return insertSection(without, moving, toIndex);
 };
 
-/** A copy right after the original, with keys of its own. Parts are unique. */
+/** A copy right after the original, with keys of its own. Unique parts stay one. */
 export const duplicateSection = (
   blocks: IStoreSiteBlock[],
   key: string,
@@ -488,7 +528,11 @@ export const duplicateSection = (
     (block: IStoreSiteBlock) => block.key === key,
   );
 
-  if (!original || isPartType(original.type) || blocks.length >= MAX_BLOCKS) {
+  if (
+    !original ||
+    isUniquePartType(original.type) ||
+    blocks.length >= MAX_BLOCKS
+  ) {
     return blocks;
   }
 
@@ -501,4 +545,82 @@ export const duplicateSection = (
   const at: number = blocks.indexOf(original);
 
   return [...blocks.slice(0, at + 1), copy, ...blocks.slice(at + 1)];
+};
+
+/** What a site had for every strip and every set of cards, before each had its own. */
+export interface ISharedPartContent {
+  sections: IStoreSiteSection[];
+  marquee: IStoreSiteMarquee;
+  marqueeStyle?: Partial<IStoreSiteMarqueeStyle> | null;
+  about?: Partial<IStoreSiteAbout> | null;
+}
+
+/**
+ * A strip or cards with content of its own. One placed before they had any
+ * takes a copy of what the site had for all of them, so nothing changes on
+ * the page, and from then on it is only its own.
+ */
+export const ownPartOf = (
+  block: IStoreSiteBlock,
+  shared: ISharedPartContent,
+): IStoreSiteBlock => {
+  if (!isOwnPartType(block.type) || block.settings.isOwn === true) {
+    return block;
+  }
+
+  const item = (patch: Partial<IStoreSiteBlockItem>): IStoreSiteBlockItem => ({
+    ...newBlockItem(block.type),
+    ...patch,
+  });
+
+  if (block.type === T.MARQUEE) {
+    return {
+      ...block,
+      // A strip the owner had switched off stays hidden.
+      isActive: block.isActive && shared.marquee.isActive !== false,
+      items: shared.marquee.items
+        .filter((phrase: string) => phrase.trim())
+        .map((phrase: string) => item({ title: phrase.trim() })),
+      settings: {
+        ...block.settings,
+        isOwn: true,
+        marquee: siteMarqueeStyleOf(shared.marqueeStyle),
+      },
+    };
+  }
+
+  if (block.type === T.ABOUT) {
+    const about: IStoreSiteAbout = siteAboutOf(shared.about);
+
+    return {
+      ...block,
+      // An about the owner had switched off stays hidden.
+      isActive: block.isActive && about.isActive,
+      title: about.title,
+      items: about.texts
+        .filter((text: string) => text.trim())
+        .map((text: string) => item({ text })),
+      settings: {
+        ...block.settings,
+        isOwn: true,
+        media: about.media,
+        mediaPosition: about.mediaPosition,
+      },
+    };
+  }
+
+  return {
+    ...block,
+    items: shared.sections
+      .filter((section: IStoreSiteSection) => section.isActive)
+      .map((section: IStoreSiteSection) =>
+        item({
+          key: section.key.slice(0, 40),
+          title: section.title,
+          text: section.description,
+          imageUrl: section.imageUrl,
+        }),
+      ),
+    settings: { ...block.settings, isOwn: true },
+  };
 };

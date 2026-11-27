@@ -16,13 +16,24 @@ interface Props {
   context: IBlockContext;
   className?: string;
   style?: React.CSSProperties;
+  /**
+   * Without words of its own the button says nothing, instead of the usual
+   * "learn more": with nothing to say, it is not drawn.
+   */
+  hasNoDefaultLabel?: boolean;
 }
 
 /**
  * One button of a section, in the template's main or outline style. A button
  * that goes nowhere safe is not drawn; in the editor's preview none navigates.
  */
-const SiteButton = ({ button, context, className, style }: Props) => {
+const SiteButton = ({
+  button,
+  context,
+  className,
+  style,
+  hasNoDefaultLabel,
+}: Props) => {
   const t = useSiteT();
 
   const href: string | null = blockButtonHref(
@@ -32,6 +43,10 @@ const SiteButton = ({ button, context, className, style }: Props) => {
   );
 
   if (!button || href === null) {
+    return null;
+  }
+
+  if (hasNoDefaultLabel && !button.label?.trim()) {
     return null;
   }
 

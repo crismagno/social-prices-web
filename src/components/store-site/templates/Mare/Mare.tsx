@@ -14,7 +14,7 @@ import {
 } from "../../shared/site-product-open";
 import { siteFraunces } from "../../shared/site-fonts";
 import { cssUrl, formatSiteMoney } from "../../shared/site-format";
-import SiteAbout, { siteHasAbout } from "../../shared/SiteAbout";
+import SiteAbout from "../../shared/SiteAbout";
 import SiteSections from "../../shared/blocks/SiteSections";
 import {
   SiteHeroButtons,
@@ -22,12 +22,11 @@ import {
   heroColorProps,
   heroViewOf,
 } from "../../shared/SiteHero";
-import SiteCartButton from "../../shared/SiteCartButton";
 import SiteFooter from "../../shared/SiteFooter";
-import SiteMenu from "../../shared/SiteMenu";
+import SiteHeader from "../../shared/SiteHeader";
 import SitePageBody from "../../shared/SitePageBody";
-import SiteSignIn from "../../shared/SiteSignIn";
 import SiteThemeVars from "../../shared/SiteThemeVars";
+import { ISitePartView, sitePartView } from "../../shared/useSiteContent";
 import {
   addLabel,
   getSiteContent,
@@ -35,10 +34,7 @@ import {
 } from "../../shared/useSiteContent";
 import useSiteCatalog, { ISiteCatalog } from "../../shared/useSiteCatalog";
 import useSiteT from "../../shared/useSiteT";
-import {
-  readyPageHref,
-  sitePagePath,
-} from "../../../../shared/business/store-sites/store-site-pages";
+import { readyPageHref } from "../../../../shared/business/store-sites/store-site-pages";
 import {
   IStoreSiteBlock,
   siteBlocksOf,
@@ -49,7 +45,6 @@ import {
   pageSections,
   visiblePageSections,
 } from "../../../../shared/business/store-sites/store-site-layout";
-import { siteMarqueeStyleOf } from "../../../../shared/business/store-sites/store-site-marquee-style";
 import StoreSitesEnum from "../../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteTemplateProps } from "../../template.types";
 import styles from "./Mare.module.css";
@@ -100,20 +95,12 @@ const Mare = ({
 }: IStoreSiteTemplateProps) => {
   const t = useSiteT();
 
-  // The symbol between the phrases of the strip: the owner's, else the template's.
-  const marqueeSeparator: string | null = siteMarqueeStyleOf(
-    site.marqueeStyle,
-  ).separator;
-
   // What each product shows, and the ones the visitor's search left.
   const catalog: ISiteCatalog = useSiteCatalog({
     catalog: site.catalog,
     products,
     page,
   });
-
-  // The menus link to the about section only when the site shows one.
-  const hasAbout: boolean = siteHasAbout(site.about, store.about);
 
   // The sections of this page, in the order the owner put them.
   const shownSections: IStoreSiteBlock[] = visiblePageSections(
@@ -130,8 +117,6 @@ const Mare = ({
     ),
   };
 
-  const homeHref: string = sitePagePath(site.slug);
-
   // "See the products" leads to them, on this page or on theirs.
   const productsHref: string = shows.products
     ? "#produtos"
@@ -145,19 +130,20 @@ const Mare = ({
   // The entrance as the owner wants it read: hidden lines are not there.
   const hero = heroViewOf(site.hero);
 
-  const {
-    sections,
-    marqueeItems,
-    backgroundImage,
-    featuredImage,
-    logo,
-    brandName,
-  } = getSiteContent({ site, store });
+  const { backgroundImage, featuredImage, logo, brandName } = getSiteContent({
+    site,
+    store,
+  });
 
   const { lead, last } = splitLast(hero.title);
 
   // The template's own parts, drawn wherever the page's sections put them.
-  const parts: Record<TTemplatePartType, ReactNode> = {
+  const partsOf = ({
+    sections,
+    marqueeItems,
+    marqueeSeparator,
+    about,
+  }: ISitePartView): Record<TTemplatePartType, ReactNode> => ({
     [StoreSitesEnum.BlockType.MARQUEE]: marqueeItems.length > 0 && (
       <div className={styles.marquee} aria-hidden="true">
         <div className={styles.marqueeTrack}>
@@ -318,7 +304,7 @@ const Mare = ({
     ),
     [StoreSitesEnum.BlockType.ABOUT]: (
       <SiteAbout
-        about={site.about}
+        about={about}
         storeAbout={store.about}
         defaultTitle={brandName}
         kicker={t("storeSite.public.ourStory")}
@@ -336,7 +322,7 @@ const Mare = ({
         isPreview={mode === "preview"}
       />
     ),
-  };
+  });
 
   // The entrance, drawn wherever the page's sections put it.
   const heroPart: ReactNode = (
@@ -409,39 +395,7 @@ const Mare = ({
         styles.page
       } ${siteFraunces.variable}`}
     >
-      <nav className={styles.bar}>
-        <a href={homeHref} className={styles.brand}>
-          <span className={styles.brandMark}>
-            {logo ? <img src={logo} alt="" /> : "≈"}
-          </span>
-          {brandName}
-        </a>
-        <span className={styles.links}>
-          <SiteMenu
-            pages={site.pages}
-            siteSlug={site.slug}
-            currentKey={page?.key}
-            hasAbout={hasAbout}
-          />
-        </span>
-        <span className={styles.barEnd}>
-          {site.signIn?.isVisible !== false && (
-            <SiteSignIn
-              signIn={site.signIn}
-              storeId={site.storeId}
-              className={styles.signIn}
-              isCompact
-            />
-          )}
-          <SiteCartButton
-            settings={site.cartButton}
-            cart={cart}
-            className={styles.bag}
-            defaultLabelKey="storeSite.public.cart"
-            countFormat="badge"
-          />
-        </span>
-      </nav>
+      <SiteHeader site={site} store={store} cart={cart} page={page ?? null} />
 
       <SiteSections
         sections={
@@ -455,8 +409,10 @@ const Mare = ({
         }
         builder={builder}
         marqueeStyle={site.marqueeStyle}
-        renderPart={(type: TPartType) =>
-          type === StoreSitesEnum.BlockType.HERO ? heroPart : parts[type]
+        renderPart={(type: TPartType, section: IStoreSiteBlock) =>
+          type === StoreSitesEnum.BlockType.HERO
+            ? heroPart
+            : partsOf(sitePartView(site, section))[type]
         }
         pages={site.pages}
         siteSlug={site.slug}

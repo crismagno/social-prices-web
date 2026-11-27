@@ -5,8 +5,10 @@ import { Divider, Form, Input, InputNumber, Switch } from "antd";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import { IStoreSiteBlock } from "../../../shared/business/store-sites/store-site-blocks";
 import {
+  HERO_SIZE_KEYS,
   IStoreSiteHeroOptions,
   IStoreSitePageHero,
+  THeroSizeKey,
   PAGE_HERO_HEIGHT_RANGE,
   PAGE_HERO_TEXT_MAX,
   newPageHero,
@@ -20,7 +22,9 @@ import {
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import { PAGE_TOP_HEIGHT } from "../../../components/store-site/shared/site-page-view";
 import HeroOptionsControls, { THeroPiece } from "./HeroOptionsControls";
+import ExtraImagesField from "./ExtraImagesField";
 import ImageField from "./ImageField";
+import SizeFields from "./SizeFields";
 import { arrangedBlocks } from "./useSiteBuilder";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
 
@@ -88,6 +92,29 @@ const PageHeroFields = ({ editor, storeId, page }: Props) => {
 
   const patch = (values: Partial<IStoreSitePageHero>): void =>
     setHero((current) => ({ ...current, ...values }));
+
+  // An emptied field removes its picture; the others keep their order.
+  const setExtraImage = (
+    field: "backgroundImageUrls" | "featuredImageUrls",
+    index: number,
+    imageKey: string | null,
+  ): void =>
+    setHero((current) => {
+      const images: string[] = [...current[field]];
+
+      if (imageKey) {
+        images[index] = imageKey;
+      } else {
+        images.splice(index, 1);
+      }
+
+      return {
+        ...current,
+        [field]: images
+          .filter(Boolean)
+          .slice(0, StoreSitesEnum.MAX_HERO_EXTRA_IMAGES),
+      };
+    });
 
   const setOptions = (
     change: (current: IStoreSiteHeroOptions) => Partial<IStoreSiteHeroOptions>,
@@ -160,6 +187,18 @@ const PageHeroFields = ({ editor, storeId, page }: Props) => {
             />
           </Form.Item>
 
+          <ExtraImagesField
+            storeId={storeId}
+            images={own.backgroundImageUrls}
+            hasFirst={!!own.backgroundImageUrl}
+            seconds={own.slideSeconds}
+            label={t("storeSite.editor.hero.slides.label")}
+            hint={t("storeSite.editor.hero.slides.hint")}
+            onImageChange={(index, imageKey) =>
+              setExtraImage("backgroundImageUrls", index, imageKey)
+            }
+            onSecondsChange={(slideSeconds) => patch({ slideSeconds })}
+          />
           <Form.Item
             label={t(`${KEY}.featured`)}
             extra={t(`${KEY}.featuredHint`)}
@@ -168,6 +207,43 @@ const PageHeroFields = ({ editor, storeId, page }: Props) => {
               storeId={storeId}
               value={own.featuredImageUrl}
               onChange={(featuredImageUrl) => patch({ featuredImageUrl })}
+            />
+          </Form.Item>
+          <ExtraImagesField
+            storeId={storeId}
+            images={own.featuredImageUrls}
+            hasFirst={!!own.featuredImageUrl}
+            seconds={own.featuredSlideSeconds}
+            label={t("storeSite.editor.hero.featuredSlides.label")}
+            hint={t("storeSite.editor.hero.featuredSlides.hint")}
+            onImageChange={(index, imageKey) =>
+              setExtraImage("featuredImageUrls", index, imageKey)
+            }
+            onSecondsChange={(featuredSlideSeconds) =>
+              patch({ featuredSlideSeconds })
+            }
+          />
+
+          {/* Its own sizes: one left empty is the site's. */}
+          <Form.Item label={t(`${KEY}.sizes`)} extra={t(`${KEY}.sizesHint`)}>
+            <SizeFields
+              editor={editor}
+              className=""
+              sizes={HERO_SIZE_KEYS}
+              values={own.sizes}
+              onSizeChange={(key, value) =>
+                setHero((current) => {
+                  const sizes = { ...current.sizes };
+
+                  if (value === null) {
+                    delete sizes[key as THeroSizeKey];
+                  } else {
+                    sizes[key as THeroSizeKey] = value;
+                  }
+
+                  return { ...current, sizes };
+                })
+              }
             />
           </Form.Item>
 

@@ -2,7 +2,17 @@
 
 import { useState } from "react";
 
-import { Alert, Button, Card, Form, Input, Space, Switch, Tag } from "antd";
+import {
+  Alert,
+  Button,
+  Card,
+  ColorPicker,
+  Form,
+  Input,
+  Space,
+  Switch,
+  Tag,
+} from "antd";
 
 import {
   ArrowDownOutlined,
@@ -24,6 +34,7 @@ import {
   IStoreSitePageContent,
   slugifyPage,
 } from "../../../shared/business/store-sites/store-site-pages";
+import { IStoreSiteTheme } from "../../../shared/business/store-sites/store-site.interface";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import PageContentFields from "./PageContentFields";
 import PageHeroFields from "./PageHeroFields";
@@ -33,6 +44,14 @@ interface Props {
   editor: IStoreSiteEditor;
   storeId: string;
 }
+
+const COLOR_KEYS: (keyof IStoreSiteTheme)[] = [
+  "primary",
+  "secondary",
+  "accent",
+  "background",
+  "text",
+];
 
 /**
  * The pages of the site besides its home, in the order of its menu: the ready
@@ -95,6 +114,7 @@ const PagesTab = ({ editor, storeId }: Props) => {
           content: emptyPageContent(),
           faq: [],
           hero: null,
+          theme: null,
         },
       ],
     }));
@@ -273,6 +293,54 @@ const PagesTab = ({ editor, storeId }: Props) => {
 
                 <PageHeroFields editor={editor} storeId={storeId} page={page} />
 
+                {/* Its own colours: one left alone is the site's. */}
+                <Form.Item
+                  label={t("storeSite.editor.pages.colors")}
+                  extra={t("storeSite.editor.pages.colorsHint")}
+                >
+                  <div className="flex flex-wrap gap-3">
+                    {COLOR_KEYS.map((key: keyof IStoreSiteTheme) => (
+                      <div key={key} className="flex flex-col gap-1">
+                        <span className="text-xs opacity-70">
+                          {t(`storeSite.editor.colors.${key}`)}
+                        </span>
+                        <ColorPicker
+                          size="small"
+                          disabledAlpha
+                          allowClear
+                          value={page.theme?.[key] ?? editor.draft?.theme[key]}
+                          showText={() =>
+                            page.theme?.[key]
+                              ? page.theme[key]
+                              : t("storeSite.editor.pages.colorOfSite")
+                          }
+                          onChangeComplete={(color) =>
+                            setPage(page.key, (current) => ({
+                              theme: {
+                                ...(current.theme ?? {}),
+                                [key]: color.toHexString().slice(0, 7),
+                              },
+                            }))
+                          }
+                          onClear={() =>
+                            setPage(page.key, (current) => {
+                              const rest: Partial<IStoreSiteTheme> = {
+                                ...(current.theme ?? {}),
+                              };
+
+                              delete rest[key];
+
+                              return {
+                                theme: Object.keys(rest).length ? rest : null,
+                              };
+                            })
+                          }
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </Form.Item>
+
                 {page.type === StoreSitesEnum.SitePageType.PRODUCTS && (
                   <Alert
                     type="info"
@@ -416,11 +484,11 @@ const PagesTab = ({ editor, storeId }: Props) => {
 
       <Button
         icon={<PlusOutlined />}
-        disabled={customCount >= StoreSitesEnum.MAX_CUSTOM_PAGES}
+        disabled={pages.length >= StoreSitesEnum.MAX_PAGES}
         onClick={addPage}
       >
-        {t("storeSite.editor.pages.add")} ({customCount}/
-        {StoreSitesEnum.MAX_CUSTOM_PAGES})
+        {t("storeSite.editor.pages.add")} ({pages.length}/
+        {StoreSitesEnum.MAX_PAGES})
       </Button>
     </Space>
   );

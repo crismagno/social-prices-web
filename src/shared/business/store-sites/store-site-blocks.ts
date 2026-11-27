@@ -2,9 +2,14 @@ import {
   IStoreSiteAboutMedia,
   embedUrlOf,
   isKnownPlayer,
+  siteAboutOf,
 } from "./store-site-about";
 import { IStoreSitePage, sitePagePath, sitePagesOf } from "./store-site-pages";
 import { completeFooterUrl, isSafeFooterUrl } from "./store-site-footer";
+import {
+  IStoreSiteMarqueeStyle,
+  siteMarqueeStyleOf,
+} from "./store-site-marquee-style";
 import StoreSitesEnum from "./store-sites.enum";
 
 /** One entry of a block; which fields count depends on the block's type. */
@@ -64,6 +69,15 @@ export interface IStoreSiteBlockSettings {
   menuEffect: StoreSitesEnum.MenuEffect | null;
   /** A menu of tabs: where it stays while the visitor scrolls its sections. */
   menuPlace: StoreSitesEnum.MenuPlace | null;
+  /**
+   * A strip or cards: true once it has content of its own (its items). One
+   * placed before they had any still shows what the site had for all of them.
+   */
+  isOwn: boolean | null;
+  /** A strip with content of its own: how it looks and runs. */
+  marquee: IStoreSiteMarqueeStyle | null;
+  /** A text with media: the side its image or video is on. */
+  mediaPosition: StoreSitesEnum.AboutMediaPosition | null;
 }
 
 /**
@@ -97,6 +111,16 @@ export const SPACER_LIMITS = { min: 8, max: 240, initial: 48 } as const;
 export const isPartType = (type: StoreSitesEnum.BlockType): boolean =>
   StoreSitesEnum.PART_TYPES.includes(type);
 
+/** A part a page has at most once: the others can be added again and copied. */
+export const isUniquePartType = (type: StoreSitesEnum.BlockType): boolean =>
+  StoreSitesEnum.UNIQUE_PART_TYPES.includes(type);
+
+/** A strip, cards or a text with media: components with content of their own. */
+export const isOwnPartType = (type: StoreSitesEnum.BlockType): boolean =>
+  type === StoreSitesEnum.BlockType.MARQUEE ||
+  type === StoreSitesEnum.BlockType.CARDS ||
+  type === StoreSitesEnum.BlockType.ABOUT;
+
 /** Sizes the API cuts texts to: the editor stops there too. */
 export const BLOCK_LIMITS = {
   kicker: 40,
@@ -106,6 +130,7 @@ export const BLOCK_LIMITS = {
   itemTitle: 80,
   itemSubtitle: 80,
   itemText: 600,
+  paragraph: 1500,
   buttonLabel: 30,
   buttonValue: 300,
 } as const;
@@ -118,6 +143,8 @@ export const maxItemsOf = (type: StoreSitesEnum.BlockType): number => {
       return 3;
     case StoreSitesEnum.BlockType.IMAGE:
       return 1;
+    case StoreSitesEnum.BlockType.ABOUT:
+      return StoreSitesEnum.MAX_ABOUT_TEXTS;
     default:
       return 12;
   }
@@ -135,6 +162,11 @@ const WITH_ITEMS: StoreSitesEnum.BlockType[] = [
   StoreSitesEnum.BlockType.IMAGE,
   StoreSitesEnum.BlockType.BOX,
   StoreSitesEnum.BlockType.TABS,
+  // Components with content of their own: the phrases, the cards.
+  StoreSitesEnum.BlockType.MARQUEE,
+  StoreSitesEnum.BlockType.CARDS,
+  // A text with media: its paragraphs.
+  StoreSitesEnum.BlockType.ABOUT,
 ];
 
 type TRecord = Record<string, unknown>;
@@ -216,7 +248,12 @@ const itemOf = (
       type === StoreSitesEnum.BlockType.TABS ? sectionKeysOf(source) : [],
     title: textOf(source.title, BLOCK_LIMITS.itemTitle),
     subtitle: textOf(source.subtitle, BLOCK_LIMITS.itemSubtitle),
-    text: textOf(source.text, BLOCK_LIMITS.itemText),
+    text: textOf(
+      source.text,
+      type === StoreSitesEnum.BlockType.ABOUT
+        ? BLOCK_LIMITS.paragraph
+        : BLOCK_LIMITS.itemText,
+    ),
     imageUrl: textOf(source.imageUrl, 600),
     icon:
       type === StoreSitesEnum.BlockType.FEATURES
@@ -316,7 +353,11 @@ export const blockSettingsOf = (
       ? (oneOf(source.divider, Object.values(StoreSitesEnum.DividerStyle)) ??
         StoreSitesEnum.DividerStyle.LINE)
       : null,
-    media: uses(T.VIDEO) ? mediaOf(source.media) : null,
+    media: uses(T.VIDEO)
+      ? mediaOf(source.media)
+      : uses(T.ABOUT) && source.isOwn === true
+        ? siteAboutOf({ media: source.media as IStoreSiteAboutMedia }).media
+        : null,
     menuStyle: uses(T.TABS)
       ? (oneOf(source.menuStyle, Object.values(StoreSitesEnum.MenuStyle)) ??
         StoreSitesEnum.MenuStyle.TABS)
@@ -341,6 +382,19 @@ export const blockSettingsOf = (
       ? (oneOf(source.menuPlace, Object.values(StoreSitesEnum.MenuPlace)) ??
         StoreSitesEnum.MenuPlace.FIXED)
       : null,
+    isOwn: uses(T.MARQUEE, T.CARDS, T.ABOUT) ? source.isOwn === true : null,
+    mediaPosition: uses(T.ABOUT)
+      ? (oneOf(
+          source.mediaPosition,
+          Object.values(StoreSitesEnum.AboutMediaPosition),
+        ) ?? StoreSitesEnum.AboutMediaPosition.LEFT)
+      : null,
+    marquee:
+      uses(T.MARQUEE) && source.isOwn === true
+        ? siteMarqueeStyleOf(
+            source.marquee as Partial<IStoreSiteMarqueeStyle> | null,
+          )
+        : null,
   };
 };
 

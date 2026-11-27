@@ -17,6 +17,8 @@ import {
   Button,
   Card,
   Empty,
+  Form,
+  Input,
   Popconfirm,
   Select,
   Space,
@@ -33,15 +35,22 @@ import useLanguageData from "../../../data/context/language/useLanguageData";
 import {
   IStoreSiteBlock,
   MAX_BLOCKS,
+  isOwnPartType,
   isPartType,
+  isUniquePartType,
 } from "../../../shared/business/store-sites/store-site-blocks";
 import {
   IStoreSitePage,
   sitePagesOf,
 } from "../../../shared/business/store-sites/store-site-pages";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
+import AboutFields from "./AboutFields";
 import BlockFields from "./BlockFields";
+import { HeroTab } from "./ContentTabs";
+import PageHeroFields from "./PageHeroFields";
 import ImageLookCard from "./ImageLookCard";
+import MarqueeFields from "./MarqueeFields";
+import SizeFields from "./SizeFields";
 import styles from "./BuilderTab.module.css";
 import PieceFields from "./PieceFields";
 import {
@@ -57,11 +66,7 @@ const T = StoreSitesEnum.BlockType;
 
 /** The tab that edits what a part of the template shows. */
 export const PART_TABS: Partial<Record<StoreSitesEnum.BlockType, string>> = {
-  [T.HERO]: "hero",
-  [T.MARQUEE]: "marquee",
-  [T.CARDS]: "sections",
   [T.PRODUCTS]: "products",
-  [T.ABOUT]: "about",
   [T.PAGE_BODY]: "pages",
 };
 
@@ -88,6 +93,8 @@ interface Props {
   storeId: string;
   /** Opens the tab that edits a part's own content. */
   onOpenTab: (tab: string) => void;
+  /** The store's own description: what a text with media shows when empty. */
+  storeAbout: string | null;
 }
 
 /**
@@ -95,7 +102,13 @@ interface Props {
  * to add), the sections of the page in order, and the fields of the one
  * picked here or on the preview.
  */
-const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
+const BuilderTab = ({
+  editor,
+  builder,
+  storeId,
+  onOpenTab,
+  storeAbout,
+}: Props) => {
   const { t } = useLanguageData();
   const fieldsRef = useRef<HTMLDivElement>(null);
 
@@ -241,6 +254,14 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
   );
 
   const selected: IStoreSiteBlock | null = builder.selected;
+
+  // The page being built, changed from the draft as it is when applied.
+  const setPage = (patch: Partial<IStoreSitePage>): void =>
+    editor.update((draft) => ({
+      pages: draft.pages.map((page: IStoreSitePage) =>
+        page.key === builder.pageKey ? { ...page, ...patch } : page,
+      ),
+    }));
   const index: number = builder.sections.findIndex(
     (section: IStoreSiteBlock) => section.key === selected?.key,
   );
@@ -357,7 +378,10 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
                   <span className={styles.rowName}>
                     {!isPartType(section.type) && section.title?.trim()
                       ? section.title
-                      : name(section.type)}
+                      : isOwnPartType(section.type) &&
+                          section.items[0]?.title?.trim()
+                        ? `${name(section.type)} · ${section.items[0].title}`
+                        : name(section.type)}
                   </span>
                   {tabOwners.has(section.key) && (
                     <Tag className={styles.rowTag} color="blue">
@@ -419,7 +443,7 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
                     })
                   }
                 />
-                {!isPartType(selected.type) && (
+                {!isUniquePartType(selected.type) && (
                   <Button
                     type="text"
                     size="small"
@@ -485,7 +509,92 @@ const BuilderTab = ({ editor, builder, storeId, onOpenTab }: Props) => {
                 )}
               </Button>
             )}
-            {isPartType(selected.type) ? (
+            {selected.type === T.MARQUEE ? (
+              <MarqueeFields
+                block={selected}
+                onChange={(change) =>
+                  builder.updateSection(selected.key, change)
+                }
+              />
+            ) : selected.type === T.CARDS ? (
+              <Space direction="vertical" className="w-full">
+                <BlockFields
+                  block={selected}
+                  pages={pages}
+                  storeId={storeId}
+                  showHeading={false}
+                  onChange={(change) =>
+                    builder.updateSection(selected.key, (current) => ({
+                      ...change(current),
+                      settings: { ...current.settings, isOwn: true },
+                    }))
+                  }
+                />
+                <Card
+                  size="small"
+                  title={t("storeSite.editor.sizes.blocksHeading")}
+                >
+                  <SizeFields
+                    editor={editor}
+                    className=""
+                    sizes={[
+                      "sectionImageWidth",
+                      "sectionImageHeight",
+                      "sectionTitleSize",
+                      "sectionTextSize",
+                    ]}
+                  />
+                </Card>
+                <ImageLookCard editor={editor} place="section" />
+              </Space>
+            ) : selected.type === T.ABOUT ? (
+              <AboutFields
+                editor={editor}
+                storeId={storeId}
+                storeAbout={storeAbout}
+                block={selected}
+                onChange={(change) =>
+                  builder.updateSection(selected.key, change)
+                }
+              />
+            ) : selected.type === T.HERO ? (
+              // The entrance is this page's own: the home's, or the one of
+              // the page being built, edited right here.
+              builder.page ? (
+                <Form layout="vertical">
+                  <Form.Item
+                    label={t("storeSite.editor.pages.title")}
+                    extra={t("storeSite.editor.pages.titleHint")}
+                  >
+                    <Input
+                      maxLength={80}
+                      allowClear
+                      value={builder.page.title ?? ""}
+                      onChange={(event) =>
+                        setPage({ title: event.target.value || null })
+                      }
+                    />
+                  </Form.Item>
+                  <Form.Item label={t("storeSite.editor.pages.intro")}>
+                    <Input.TextArea
+                      autoSize={{ minRows: 2, maxRows: 4 }}
+                      maxLength={300}
+                      value={builder.page.intro ?? ""}
+                      onChange={(event) =>
+                        setPage({ intro: event.target.value || null })
+                      }
+                    />
+                  </Form.Item>
+                  <PageHeroFields
+                    editor={editor}
+                    storeId={storeId}
+                    page={builder.page}
+                  />
+                </Form>
+              ) : (
+                <HeroTab editor={editor} storeId={storeId} />
+              )
+            ) : isPartType(selected.type) ? (
               <Space direction="vertical">
                 <Typography.Text type="secondary">
                   {t(`storeSite.editor.builder.partNotes.${selected.type}`)}

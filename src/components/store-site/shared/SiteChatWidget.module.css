@@ -2,7 +2,7 @@
 .dock {
   position: fixed;
   z-index: 65;
-  bottom: 20px;
+  bottom: calc(20px + var(--site-bottom-bar, 0px));
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -769,7 +769,7 @@
 
 @media (max-width: 479px) {
   .dock {
-    bottom: 14px;
+    bottom: calc(14px + var(--site-bottom-bar, 0px));
   }
 
   .right {

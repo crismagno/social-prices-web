@@ -13,14 +13,26 @@ export interface IStoreSiteMarqueeStyle {
 }
 
 /** Ready separators the owner can pick; any other of up to 3 characters too. */
-export const MARQUEE_SEPARATORS: string[] = ["•", "✦", "★", "❀", "≈", "|", "—", "/"];
+export const MARQUEE_SEPARATORS: string[] = [
+  "•",
+  "✦",
+  "★",
+  "❀",
+  "≈",
+  "|",
+  "—",
+  "/",
+];
 
 export const MARQUEE_SEPARATOR_MAX: number = 3;
 
 const HEX: RegExp = /^#[0-9a-fA-F]{6}$/;
 
-const oneOf = <T extends string>(value: unknown, options: T[], fallback: T): T =>
-  options.includes(value as T) ? (value as T) : fallback;
+const oneOf = <T extends string>(
+  value: unknown,
+  options: T[],
+  fallback: T,
+): T => (options.includes(value as T) ? (value as T) : fallback);
 
 /** The look of the strip, also for one saved before the options: the template's. */
 export const siteMarqueeStyleOf = (
@@ -37,14 +49,17 @@ export const siteMarqueeStyleOf = (
     StoreSitesEnum.MarqueeDirection.LEFT,
   ),
   separator: style?.separator?.trim()
-    ? Array.from(style.separator.trim()).slice(0, MARQUEE_SEPARATOR_MAX).join("")
+    ? Array.from(style.separator.trim())
+        .slice(0, MARQUEE_SEPARATOR_MAX)
+        .join("")
     : null,
   size: oneOf(
     style?.size,
     Object.values(StoreSitesEnum.MarqueeSize),
     StoreSitesEnum.MarqueeSize.MEDIUM,
   ),
-  background: style?.background && HEX.test(style.background) ? style.background : null,
+  background:
+    style?.background && HEX.test(style.background) ? style.background : null,
   color: style?.color && HEX.test(style.color) ? style.color : null,
   pauseOnHover: style?.pauseOnHover === true,
 });

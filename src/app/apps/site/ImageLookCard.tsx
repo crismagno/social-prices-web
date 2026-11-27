@@ -108,13 +108,15 @@ const ImageLookCard = ({ editor, place }: Props) => {
         value={look.ratio}
         disabled={look.shape === Shape.CIRCLE}
         onChange={(ratio) => set({ ratio })}
-        options={Object.values(Ratio).map((ratio: StoreSitesEnum.ImageRatio) => ({
-          value: ratio,
-          label:
-            ratio === Ratio.TEMPLATE
-              ? t("storeSite.editor.images.template")
-              : IMAGE_RATIO_VALUE[ratio].replace(/ /g, ""),
-        }))}
+        options={Object.values(Ratio).map(
+          (ratio: StoreSitesEnum.ImageRatio) => ({
+            value: ratio,
+            label:
+              ratio === Ratio.TEMPLATE
+                ? t("storeSite.editor.images.template")
+                : IMAGE_RATIO_VALUE[ratio].replace(/ /g, ""),
+          }),
+        )}
       />
       {look.shape === Shape.CIRCLE && (
         <p className="text-xs opacity-60 mt-2 mb-0">

@@ -20,13 +20,11 @@ import {
   heroColorProps,
   heroViewOf,
 } from "../../shared/SiteHero";
-import { SiteTopBar } from "../../shared/SiteStickyBar";
-import SiteCartButton from "../../shared/SiteCartButton";
+import SiteHeader from "../../shared/SiteHeader";
 import SiteFooter from "../../shared/SiteFooter";
-import SiteMenu from "../../shared/SiteMenu";
 import SitePageBody from "../../shared/SitePageBody";
-import SiteSignIn from "../../shared/SiteSignIn";
 import SiteThemeVars from "../../shared/SiteThemeVars";
+import { ISitePartView, sitePartView } from "../../shared/useSiteContent";
 import {
   addLabel,
   getSiteContent,
@@ -34,10 +32,7 @@ import {
 } from "../../shared/useSiteContent";
 import useSiteCatalog, { ISiteCatalog } from "../../shared/useSiteCatalog";
 import useSiteT from "../../shared/useSiteT";
-import {
-  readyPageHref,
-  sitePagePath,
-} from "../../../../shared/business/store-sites/store-site-pages";
+import { readyPageHref } from "../../../../shared/business/store-sites/store-site-pages";
 import {
   IStoreSiteBlock,
   siteBlocksOf,
@@ -45,11 +40,9 @@ import {
 import {
   TPartType,
   TTemplatePartType,
-  isHeroOnTop,
   pageSections,
   visiblePageSections,
 } from "../../../../shared/business/store-sites/store-site-layout";
-import { siteMarqueeStyleOf } from "../../../../shared/business/store-sites/store-site-marquee-style";
 import StoreSitesEnum from "../../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteTemplateProps } from "../../template.types";
 import styles from "./Impact.module.css";
@@ -79,11 +72,6 @@ const Impact = ({
   builder,
 }: IStoreSiteTemplateProps) => {
   const t = useSiteT();
-
-  // The symbol between the phrases of the strip: the owner's, else the template's.
-  const marqueeSeparator: string | null = siteMarqueeStyleOf(
-    site.marqueeStyle,
-  ).separator;
 
   // What each product shows, and the ones the visitor's search left.
   const catalog: ISiteCatalog = useSiteCatalog({
@@ -115,8 +103,6 @@ const Impact = ({
     ),
   };
 
-  const homeHref: string = sitePagePath(site.slug);
-
   // "About" leads to it, on this page or on its own.
   const aboutHref: string = shows.about
     ? "#sobre"
@@ -140,11 +126,10 @@ const Impact = ({
   // The entrance as the owner wants it read: hidden lines are not there.
   const hero = heroViewOf(site.hero);
 
-  const { sections, marqueeItems, backgroundImage, logo, brandName } =
-    getSiteContent({
-      site,
-      store,
-    });
+  const { backgroundImage, logo, brandName } = getSiteContent({
+    site,
+    store,
+  });
 
   const { lead, last } = splitTitle(hero.title);
 
@@ -153,7 +138,12 @@ const Impact = ({
   )} • `.toUpperCase();
 
   // The template's own parts, drawn wherever the page's sections put them.
-  const parts: Record<TTemplatePartType, ReactNode> = {
+  const partsOf = ({
+    sections,
+    marqueeItems,
+    marqueeSeparator,
+    about,
+  }: ISitePartView): Record<TTemplatePartType, ReactNode> => ({
     [StoreSitesEnum.BlockType.MARQUEE]: (
       <>
         {marqueeItems.length > 0 && (
@@ -288,7 +278,7 @@ const Impact = ({
       <>
         {
           <SiteAbout
-            about={site.about}
+            about={about}
             storeAbout={store.about}
             defaultTitle={t("storeSite.public.ourStory")}
             kicker={brandName}
@@ -310,19 +300,7 @@ const Impact = ({
         )}
       </>
     ),
-  };
-
-  // A page that starts with its entrance has the menu inside it, as the
-  // template draws it; any other page gets the menu as a bar of its own.
-  const isHeroFirst: boolean = isHeroOnTop(
-    builder
-      ? pageSections(
-          siteBlocksOf(site.blocks),
-          page ?? null,
-          site.isLayoutCustom === true,
-        )
-      : shownSections,
-  );
+  });
 
   // The entrance, drawn wherever the page's sections put it.
   const heroPart: ReactNode = (
@@ -331,39 +309,6 @@ const Impact = ({
       <div
         className={`${styles.cut} ${backgroundImage ? "" : styles.cutSolid}`}
       />
-
-      {isHeroFirst && (
-        <nav className={styles.nav}>
-          <a href={homeHref} className={styles.brand}>
-            {logo && <img src={logo} alt="" />}
-            {brandName}
-          </a>
-          <span className={styles.links}>
-            <SiteMenu
-              pages={site.pages}
-              siteSlug={site.slug}
-              currentKey={page?.key}
-              hasAbout={hasAbout}
-            />
-
-            {site.signIn?.isVisible !== false && (
-              <SiteSignIn
-                signIn={site.signIn}
-                storeId={site.storeId}
-                className={`${styles.bag} ${styles.signIn}`}
-                isCompact
-              />
-            )}
-            <SiteCartButton
-              settings={site.cartButton}
-              cart={cart}
-              className={styles.bag}
-              defaultLabelKey="storeSite.public.cart"
-              countFormat="paren"
-            />
-          </span>
-        </nav>
-      )}
 
       <a
         href={productsHref}
@@ -442,9 +387,7 @@ const Impact = ({
         styles.page
       }`}
     >
-      {!isHeroFirst && (
-        <SiteTopBar site={site} store={store} cart={cart} page={page ?? null} />
-      )}
+      <SiteHeader site={site} store={store} cart={cart} page={page ?? null} />
 
       <SiteSections
         sections={
@@ -458,8 +401,10 @@ const Impact = ({
         }
         builder={builder}
         marqueeStyle={site.marqueeStyle}
-        renderPart={(type: TPartType) =>
-          type === StoreSitesEnum.BlockType.HERO ? heroPart : parts[type]
+        renderPart={(type: TPartType, section: IStoreSiteBlock) =>
+          type === StoreSitesEnum.BlockType.HERO
+            ? heroPart
+            : partsOf(sitePartView(site, section))[type]
         }
         pages={site.pages}
         siteSlug={site.slug}

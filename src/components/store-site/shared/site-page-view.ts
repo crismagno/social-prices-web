@@ -4,7 +4,10 @@ import {
   heroOptionsOf,
   pageHeroOf,
 } from "../../../shared/business/store-sites/store-site-hero";
-import { IStoreSiteHero } from "../../../shared/business/store-sites/store-site.interface";
+import {
+  IStoreSiteHero,
+  IStoreSiteTheme,
+} from "../../../shared/business/store-sites/store-site.interface";
 import { IStoreSiteTemplateProps } from "../template.types";
 
 /** How tall the top of a page other than the home is. */
@@ -16,6 +19,7 @@ interface IPageTop {
   title: string | null;
   intro: string | null;
   hero?: IStoreSitePageHero | null;
+  theme?: Partial<IStoreSiteTheme> | null;
 }
 
 /**
@@ -48,12 +52,17 @@ const ownHero = (
   return {
     tagline: own.tagline,
     ctaLabel: own.ctaLabel?.trim() || hero.ctaLabel,
-    // Its own picture stays still; the home's keeps taking turns.
+    // Its own pictures take turns as it says; with none, the home's do.
     ...(own.backgroundImageUrl
-      ? { backgroundImageUrl: own.backgroundImageUrl, backgroundImageUrls: [] }
+      ? {
+          backgroundImageUrl: own.backgroundImageUrl,
+          backgroundImageUrls: own.backgroundImageUrls,
+          slideSeconds: own.slideSeconds ?? hero.slideSeconds,
+        }
       : {}),
     featuredImageUrl: own.featuredImageUrl,
-    featuredImageUrls: [],
+    featuredImageUrls: own.featuredImageUrl ? own.featuredImageUrls : [],
+    featuredSlideSeconds: own.featuredSlideSeconds ?? hero.featuredSlideSeconds,
     options: {
       ...own.options,
       // A line or picture the page does not want is simply left empty.
@@ -87,6 +96,8 @@ export const sitePageView = <S extends TSite>(
 
   return {
     ...site,
+    // Its own colours over the site's; one it leaves out is the site's.
+    theme: { ...site.theme, ...(page.theme ?? {}) },
     hero: {
       ...site.hero,
       ...(own ? ownHero(site.hero, own) : followingHero(site.hero)),
@@ -97,6 +108,8 @@ export const sitePageView = <S extends TSite>(
     // shorter than the home's.
     sizes: {
       ...site.sizes,
+      // The sizes its entrance has of its own; the others are the site's.
+      ...(own?.sizes ?? {}),
       heroHeight: own?.height ?? site.sizes?.heroHeight ?? PAGE_TOP_HEIGHT,
     },
   };

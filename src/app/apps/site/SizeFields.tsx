@@ -14,20 +14,33 @@ interface Props {
   /** The sizes of the thing just above: its width and height, or its letters. */
   sizes: TSiteSizeKey[];
   className?: string;
+  /**
+   * Sizes kept somewhere else than the site (a page's own entrance): what
+   * they are now, and how one is set. Without these, the site's own sizes.
+   */
+  values?: Partial<Record<TSiteSizeKey, number | null>>;
+  onSizeChange?: (key: TSiteSizeKey, value: number | null) => void;
 }
 
 /**
  * The sizes of one element of the site, in pixels. Empty means "as the
  * template draws it", which is what the placeholder says.
  */
-const SizeFields = ({ editor, sizes, className }: Props) => {
+const SizeFields = ({
+  editor,
+  sizes,
+  className,
+  values: ownValues,
+  onSizeChange,
+}: Props) => {
   const { t } = useLanguageData();
 
   if (!editor.draft) {
     return null;
   }
 
-  const values = editor.draft.sizes;
+  const values: Partial<Record<TSiteSizeKey, number | null>> =
+    ownValues ?? editor.draft.sizes;
 
   return (
     <div
@@ -51,13 +64,15 @@ const SizeFields = ({ editor, sizes, className }: Props) => {
               placeholder={t("storeSite.editor.sizes.auto")}
               value={values[key]}
               onChange={(value: number | null) =>
-                // From the draft as it is now: other sizes may have changed.
-                editor.update((draft) => ({
-                  sizes: {
-                    ...draft.sizes,
-                    [key]: typeof value === "number" ? value : null,
-                  },
-                }))
+                onSizeChange
+                  ? onSizeChange(key, typeof value === "number" ? value : null)
+                  : // From the draft as it is now: other sizes may have changed.
+                    editor.update((draft) => ({
+                      sizes: {
+                        ...draft.sizes,
+                        [key]: typeof value === "number" ? value : null,
+                      },
+                    }))
               }
             />
           </label>

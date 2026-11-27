@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { Button, Form, Input, Segmented, Select, Space, Switch } from "antd";
+import { Button, Form, Input, Segmented, Select, Space } from "antd";
 
 import {
   ArrowDownOutlined,
@@ -16,6 +16,12 @@ import {
   embedUrlOf,
   IStoreSiteAbout,
 } from "../../../shared/business/store-sites/store-site-about";
+import {
+  BLOCK_LIMITS,
+  IStoreSiteBlock,
+  IStoreSiteBlockItem,
+  newBlockItem,
+} from "../../../shared/business/store-sites/store-site-blocks";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import ImageField from "./ImageField";
 import SizeFields from "./SizeFields";
@@ -27,18 +33,41 @@ interface Props {
   storeId: string;
   /** The store's own description: what the site shows when no text is written. */
   storeAbout: string | null;
+  /** A text with media, with content of its own (see ownPartOf). */
+  block: IStoreSiteBlock;
+  /** Applied to the block as it is then. */
+  onChange: (
+    change: (block: IStoreSiteBlock) => Partial<IStoreSiteBlock>,
+  ) => void;
 }
+
+/** The block read as the about it draws. */
+const aboutOf = (block: IStoreSiteBlock): IStoreSiteAbout => ({
+  isActive: true,
+  title: block.title,
+  texts: block.items.map((item: IStoreSiteBlockItem) => item.text ?? ""),
+  media: block.settings.media,
+  mediaPosition:
+    block.settings.mediaPosition ?? StoreSitesEnum.AboutMediaPosition.LEFT,
+});
 
 type TMediaChoice = "NONE" | StoreSitesEnum.AboutMediaType;
 
 /**
- * The about section of the site: a title, as many paragraphs as the owner
- * wants, and an image, a video file or a YouTube/Vimeo video beside them.
+ * A text with media (the "about" of a page): a title, as many paragraphs as
+ * the owner wants, and an image, a video file or a YouTube/Vimeo video beside
+ * them. Each one on the site has its own.
  */
-const AboutTab = ({ editor, storeId, storeAbout }: Props) => {
+const AboutFields = ({
+  editor,
+  storeId,
+  storeAbout,
+  block,
+  onChange,
+}: Props) => {
   const { t } = useLanguageData();
 
-  const about: IStoreSiteAbout | undefined = editor.draft?.about;
+  const about: IStoreSiteAbout = aboutOf(block);
 
   // What was typed in the video link field, valid or not: the draft keeps
   // only the player of a valid one.
@@ -49,7 +78,7 @@ const AboutTab = ({ editor, storeId, storeAbout }: Props) => {
   );
 
   useEffect(() => {
-    // Another store was loaded, or the site was reset to the defaults.
+    // Another one was picked, or the site was reset to the defaults.
     setChoice(about?.media?.type ?? "NONE");
     setTypedLink(
       about?.media?.type === StoreSitesEnum.AboutMediaType.EMBED
@@ -58,19 +87,30 @@ const AboutTab = ({ editor, storeId, storeAbout }: Props) => {
     );
     // Only when the media itself changes from outside this tab.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [about?.media?.url]);
+  }, [block.key, about?.media?.url]);
 
-  if (!about) {
-    return null;
-  }
-
-  // From the draft as it is when applied, like every change of the editor.
+  // From the block as it is when applied, like every change of the editor.
   const set = (patch: Partial<IStoreSiteAbout>): void =>
-    editor.update((draft) => ({ about: { ...draft.about, ...patch } }));
+    onChange((current: IStoreSiteBlock) => ({
+      ...("title" in patch ? { title: patch.title ?? null } : {}),
+      settings: {
+        ...current.settings,
+        isOwn: true,
+        ...("media" in patch ? { media: patch.media ?? null } : {}),
+        ...(patch.mediaPosition ? { mediaPosition: patch.mediaPosition } : {}),
+      },
+    }));
 
   const setTexts = (change: (texts: string[]) => string[]): void =>
-    editor.update((draft) => ({
-      about: { ...draft.about, texts: change([...draft.about.texts]) },
+    onChange((current: IStoreSiteBlock) => ({
+      // A paragraph keeps its item where it stays in its place.
+      items: change(aboutOf(current).texts).map(
+        (text: string, index: number): IStoreSiteBlockItem => ({
+          ...(current.items[index] ?? newBlockItem(current.type)),
+          text,
+        }),
+      ),
+      settings: { ...current.settings, isOwn: true },
     }));
 
   const setMediaUrl = (
@@ -92,14 +132,7 @@ const AboutTab = ({ editor, storeId, storeAbout }: Props) => {
 
   return (
     <Form layout="vertical">
-      <Form.Item label={t("storeSite.editor.about.show")}>
-        <Switch
-          checked={about.isActive}
-          onChange={(isActive: boolean) => set({ isActive })}
-        />
-      </Form.Item>
-
-      {about.isActive && (
+      {
         <>
           <Form.Item
             label={t("storeSite.editor.about.title")}
@@ -127,7 +160,7 @@ const AboutTab = ({ editor, storeId, storeAbout }: Props) => {
               <div key={index} className="flex gap-1 items-start">
                 <Input.TextArea
                   autoSize={{ minRows: 2, maxRows: 8 }}
-                  maxLength={1500}
+                  maxLength={BLOCK_LIMITS.paragraph}
                   value={text}
                   placeholder={t("storeSite.editor.about.textPlaceholder")}
                   onChange={(event) =>
@@ -289,9 +322,9 @@ const AboutTab = ({ editor, storeId, storeAbout }: Props) => {
             </>
           )}
         </>
-      )}
+      }
     </Form>
   );
 };
 
-export default AboutTab;
+export default AboutFields;

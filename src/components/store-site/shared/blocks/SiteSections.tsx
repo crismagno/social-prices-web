@@ -59,8 +59,11 @@ import { IBlockContext, IBlockProps } from "./blockTypes";
 interface Props {
   /** The sections of the page shown, in order (see visiblePageSections). */
   sections: IStoreSiteBlock[];
-  /** How the template draws its own parts: the products, the about... */
-  renderPart: (type: TPartType) => ReactNode;
+  /**
+   * How the template draws its own parts: the products, the about... A strip
+   * or cards are drawn with the content of the section given.
+   */
+  renderPart: (type: TPartType, section: IStoreSiteBlock) => ReactNode;
   pages: IStoreSitePage[] | null | undefined;
   siteSlug: string;
   variant: TSiteAboutVariant;
@@ -214,17 +217,31 @@ const BlockSection = ({
   );
 };
 
-/** A part of the template, the strip of phrases with the owner's choices on it. */
+/**
+ * A part of the template. A strip of phrases gets the owner's choices on it:
+ * its own once it has content of its own, else the site's.
+ */
 const drawPart = (
-  type: TPartType,
-  renderPart: (type: TPartType) => ReactNode,
+  section: IStoreSiteBlock,
+  renderPart: (type: TPartType, section: IStoreSiteBlock) => ReactNode,
   marqueeStyle: Partial<IStoreSiteMarqueeStyle> | null | undefined,
-): ReactNode =>
-  type === StoreSitesEnum.BlockType.MARQUEE ? (
-    <MarqueeStyle style={marqueeStyle}>{renderPart(type)}</MarqueeStyle>
+): ReactNode => {
+  const type = section.type as TPartType;
+
+  return type === StoreSitesEnum.BlockType.MARQUEE ? (
+    <MarqueeStyle
+      style={
+        section.settings.isOwn === true
+          ? section.settings.marquee
+          : marqueeStyle
+      }
+    >
+      {renderPart(type, section)}
+    </MarqueeStyle>
   ) : (
-    renderPart(type)
+    renderPart(type, section)
   );
+};
 
 /** What a dragged thing is, read when it is dropped. */
 const dragOf = (event: DragEvent<HTMLElement>): TSectionDrag | null => {
@@ -329,7 +346,7 @@ const BuilderSections = ({
           section.type === StoreSitesEnum.BlockType.TABS
             ? tabs.length > 0 && <SiteTabs block={section} entries={tabs} />
             : isPart
-              ? drawPart(section.type as TPartType, renderPart, marqueeStyle)
+              ? drawPart(section, renderPart, marqueeStyle)
               : shown && <BlockSection block={shown} {...rest} />;
 
         return (
@@ -394,7 +411,7 @@ const SiteSections = ({
 
   const draw = (section: IStoreSiteBlock): ReactNode =>
     isPartType(section.type) ? (
-      drawPart(section.type as TPartType, renderPart, marqueeStyle)
+      drawPart(section, renderPart, marqueeStyle)
     ) : (
       <BlockSection block={section} {...rest} />
     );

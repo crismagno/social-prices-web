@@ -2538,18 +2538,16 @@
         "template": "Template",
         "colors": "Colors",
         "hero": "Entrance",
-        "sections": "Blocks",
-        "marquee": "Strip",
         "products": "Products",
         "cart": "Bag",
         "publish": "Address",
         "footer": "Footer",
-        "about": "About",
         "pages": "Pages",
         "chat": "Chat",
         "blocks": "Blocks",
         "builder": "Build",
-        "mocks": "Mocks"
+        "mocks": "Mocks",
+        "header": "Header"
       },
       "images": {
         "places": {
@@ -2632,8 +2630,8 @@
             "secondButton": "Second button"
           }
         },
-        "fixedHeader": "Fixed menu at the top",
-        "fixedHeaderHint": "While scrolling, the menu with the name, the pages and the cart stays at the top of the screen.",
+        "fixedHeader": "Keep the header on screen",
+        "fixedHeaderHint": "While scrolling, the header stays at the top of the screen.",
         "cart": {
           "title": "Cart",
           "show": "Show the cart",
@@ -2716,7 +2714,7 @@
       "marquee": {
         "show": "Show the running strip",
         "items": "Phrases",
-        "itemsHint": "One short phrase per line, up to 8.",
+        "itemsHint": "One short phrase per line, up to 12.",
         "style": {
           "title": "Strip style",
           "speed": "Speed",
@@ -2810,28 +2808,25 @@
       "hints": {
         "template": "Pick how the site looks. Your texts, images and products stay the same.",
         "colors": "The five colors the template paints the site with.",
-        "hero": "The top of the site (name and logo) and the first thing a visitor sees: the photo and the opening words.",
-        "sections": "Blocks that present the store: a photo, a title and a few words each.",
-        "marquee": "Short phrases that run across the page.",
+        "hero": "The entrance of the home. Each page has its own entrance: pick it on the page, in Build.",
         "products": "Which products the site sells, in the order they appear.",
         "publish": "The address of the site, and whether it is online.",
         "footer": "The foot of the site: a few words, your links and the button to sign in to the app.",
-        "about": "The about section: a title, your texts and an image or a video.",
         "pages": "The pages of the site besides its home, in the order of the menu. Add your own.",
         "chat": "A chat window on the site: visitors write, you answer in Chats.",
         "builder": "Build each page: drag pieces onto the preview, move the sections around and click one to edit it.",
         "cart": "The bag button at the top of the site and what is asked before an order is sent.",
-        "mocks": "Keep the site as it is in the editor to have a ready example. Open the mock later to keep changing it: the live site only changes when you save."
+        "mocks": "Keep the site as it is in the editor to have a ready example. Open the mock later to keep changing it: the live site only changes when you save.",
+        "header": "The header is the site's own, the same on every page: the name, the logo, the menu, the sign-in and the cart. Choose the side of the screen it stays at. The cart button is set in the Bag tab."
       },
       "problems": {
         "hero": "The entrance needs a title.",
-        "sections": "Every block needs a title.",
         "publish": "The address of the site is not valid yet.",
         "pages": "A page has an address that cannot be used."
       },
       "displayName": {
         "label": "Name shown at the top of the site",
-        "hint": "Leave empty to use the name of the store."
+        "hint": "It starts as the name of the store. Leave it empty to show no name, only the logo."
       },
       "sizes": {
         "auto": "automatic",
@@ -2971,7 +2966,9 @@
           "backgroundHint": "Empty uses the background of the home.",
           "featured": "Featured image",
           "featuredHint": "Shown beside the texts. Empty shows none.",
-          "height": "Height of the entrance"
+          "height": "Height of the entrance",
+          "sizes": "Sizes of this entrance",
+          "sizesHint": "Title, line under it and picture. One left empty follows the site."
         },
         "inMenu": "Show in the menu",
         "label": "Name in the menu",
@@ -2985,13 +2982,16 @@
         "contentTitleHint": "Shown as a highlight, in the look of the template, like the title of the About section. Only shown when the page has a text, an image or a video. Empty shows no title.",
         "productsHint": "This page shows the products chosen in the Products tab.",
         "contactHint": "This page has a form (name, email, phone and message). What visitors send arrives in your Chats, on the Site channel. It also lists the WhatsApp, email, phone and Telegram links of the footer.",
-        "aboutHint": "This page shows what you wrote in the About tab.",
+        "aboutHint": "This page starts with a text with media. Open it in Build to write it, or add anything else.",
         "faq": "Questions and answers",
         "supportHint": "Below them, the page shows the WhatsApp, email, phone and Telegram links of the footer.",
         "question": "Question",
         "answer": "Answer",
         "addQuestion": "Add question",
-        "add": "Add page"
+        "add": "Add page",
+        "colors": "Colours of this page",
+        "colorsHint": "A colour you leave alone follows the colours of the site.",
+        "colorOfSite": "Site"
       },
       "chat": {
         "show": "Let visitors chat with the store",
@@ -3151,6 +3151,11 @@
             "title": "Title",
             "text": "Text",
             "button": "Show a button"
+          },
+          "CARDS": {
+            "imageUrl": "Photo (optional)",
+            "title": "Title",
+            "text": "Text"
           }
         },
         "icons": {
@@ -3334,11 +3339,7 @@
         "removeConfirm": "Remove this section?",
         "editPart": "Edit its content",
         "partNotes": {
-          "HERO": "Shows what the Entrance tab edits. It can be moved or hidden, but not deleted.",
-          "MARQUEE": "Shows the phrases of the Marquee tab.",
-          "CARDS": "Shows the cards of the Sections tab.",
           "PRODUCTS": "Shows the products chosen in the Products tab.",
-          "ABOUT": "Shows the text and media of the About tab.",
           "PAGE_BODY": "Shows this page’s content, edited in the Pages tab."
         },
         "frame": {
@@ -3467,14 +3468,37 @@
               "First item",
               "Second item"
             ]
+          },
+          "MARQUEE": {
+            "items": {
+              "0": "Handmade",
+              "1": "Made for you",
+              "2": "Unique pieces"
+            }
+          },
+          "CARDS": {
+            "items": {
+              "0": {
+                "title": "A title for this card",
+                "text": "A few words about it."
+              },
+              "1": {
+                "title": "Another card",
+                "text": "A few words about it."
+              }
+            }
+          },
+          "ABOUT": {
+            "title": "A title",
+            "text": "Write here what you want to tell."
           }
         },
         "types": {
           "HERO": "Entrance",
-          "MARQUEE": "Marquee",
-          "CARDS": "Sections",
+          "MARQUEE": "Strip",
+          "CARDS": "Cards",
           "PRODUCTS": "Products",
-          "ABOUT": "About",
+          "ABOUT": "Text with media",
           "PAGE_BODY": "Page content",
           "TEXT": "Text",
           "BUTTONS": "Buttons",
@@ -3494,11 +3518,11 @@
           "TABS": "Tabs menu"
         },
         "hints": {
-          "HERO": "The top with the title, button and image (Entrance tab)",
-          "MARQUEE": "The running strip of phrases (Marquee tab)",
-          "CARDS": "The cards with images (Sections tab)",
+          "HERO": "The entrance of this page: its own words, pictures, buttons, colours and sizes.",
+          "MARQUEE": "A running strip of phrases. Add as many as you want: each has its own phrases and look.",
+          "CARDS": "Cards with a photo, a title and a few words. Add as many sets as you want: each has its own cards.",
           "PRODUCTS": "The products for sale (Products tab)",
-          "ABOUT": "The store story (About tab)",
+          "ABOUT": "A title, paragraphs and an image or a video beside them. Use it for an About, a story, anything: each one has its own content.",
           "PAGE_BODY": "This page’s own content (Pages tab)",
           "TEXT": "A title and a text",
           "BUTTONS": "Up to 3 buttons side by side",
@@ -3556,6 +3580,61 @@
         "openedBanner": "The mock “{name}” is open in the editor.",
         "undo": "Go back",
         "keep": "Keep mock"
+      },
+      "header": {
+        "position": "Where the header stays",
+        "positions": {
+          "TOP": {
+            "label": "Top",
+            "hint": "A bar across the top of the page."
+          },
+          "BOTTOM": {
+            "label": "Bottom",
+            "hint": "A bar always at the foot of the screen."
+          },
+          "LEFT": {
+            "label": "Left",
+            "hint": "A column down the left side; on a phone it goes to the top."
+          },
+          "RIGHT": {
+            "label": "Right",
+            "hint": "A column down the right side; on a phone it goes to the top."
+          }
+        },
+        "order": "Where each part goes",
+        "orderHint": "Drag a part onto another to change its place, or use the arrows. In a side header: top, middle and foot.",
+        "slots": {
+          "0": "Start",
+          "1": "Middle",
+          "2": "End"
+        },
+        "parts": {
+          "BRAND": "Name and logo",
+          "MENU": "Menu",
+          "ACTIONS": "Buttons (sign in and cart)"
+        },
+        "clean": "How clean the background is",
+        "cleanHint": "0% is a solid background; 100% is no background at all. With any, at the top the header lies over the entrance, without taking room.",
+        "color": "Colour of the words",
+        "colorHint": "Empty, the colour of the site. Useful over a dark photo or a dark background.",
+        "background": "Background colour",
+        "backgroundHint": "Empty, the background colour of the site.",
+        "height": "Height of the header",
+        "width": "Width of the header",
+        "sizeHint": "In pixels. Empty, the usual size.",
+        "buttons": "More buttons",
+        "buttonsHint": "Buttons of your own in the header, beside the sign-in and the cart: to a page, WhatsApp, phone, e-mail or a link.",
+        "addButton": "Add a button",
+        "newButton": "Button",
+        "actionsOrder": "Order of the buttons",
+        "actionsOrderHint": "Drag to change the order, or use the arrows: each of your buttons, the sign-in and the cart, one by one.",
+        "actions": {
+          "BUTTONS": "Your buttons",
+          "SIGN_IN": "Sign in",
+          "CART": "Cart"
+        },
+        "buttonSize": "Size of the buttons",
+        "buttonSizeHint": "For your buttons and the sign-in. The size of the cart button is set in the Bag tab."
       }
     },
     "footer": {

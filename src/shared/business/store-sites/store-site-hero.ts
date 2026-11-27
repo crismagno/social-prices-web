@@ -90,7 +90,55 @@ export interface IStoreSitePageHero {
   /** How tall, in pixels; empty, the usual height of a page's top. */
   height: number | null;
   options: IStoreSiteHeroOptions;
+  /** More pictures behind: with any, the entrance changes from one to the next. */
+  backgroundImageUrls: string[];
+  /** Seconds each picture behind stays, when there is more than one. */
+  slideSeconds?: number;
+  /** More pictures beside the words: with any, they take turns. */
+  featuredImageUrls: string[];
+  /** Seconds each picture beside the words stays, when there is more than one. */
+  featuredSlideSeconds?: number;
+  /** Its own sizes of the title, the line under it and the picture; an empty one is the site's. */
+  sizes: Partial<Record<THeroSizeKey, number | null>>;
 }
+
+/** The sizes an entrance can have of its own. */
+export type THeroSizeKey =
+  | "heroTitleWidth"
+  | "heroTitleSize"
+  | "heroSubtitleWidth"
+  | "heroSubtitleSize"
+  | "featuredImageWidth"
+  | "featuredImageHeight";
+
+export const HERO_SIZE_KEYS: THeroSizeKey[] = [
+  "heroTitleWidth",
+  "heroTitleSize",
+  "heroSubtitleWidth",
+  "heroSubtitleSize",
+  "featuredImageWidth",
+  "featuredImageHeight",
+];
+
+const imagesOf = (value: unknown): string[] =>
+  (Array.isArray(value) ? value : []).filter(
+    (key: unknown): key is string => typeof key === "string" && !!key.trim(),
+  );
+
+const secondsOf = (value: unknown): number | undefined =>
+  typeof value === "number" && Number.isFinite(value) ? value : undefined;
+
+const heroSizesOf = (
+  value: unknown,
+): Partial<Record<THeroSizeKey, number | null>> => {
+  const source: Record<string, unknown> = recordOf(value);
+
+  return HERO_SIZE_KEYS.reduce(
+    (own: Partial<Record<THeroSizeKey, number | null>>, key: THeroSizeKey) =>
+      typeof source[key] === "number" ? { ...own, [key]: source[key] } : own,
+    {},
+  );
+};
 
 export const PAGE_HERO_TEXT_MAX: number = 80;
 
@@ -107,6 +155,9 @@ export const newPageHero = (): IStoreSitePageHero => ({
   featuredImageUrl: null,
   height: null,
   options: heroOptionsOf(null),
+  backgroundImageUrls: [],
+  featuredImageUrls: [],
+  sizes: {},
 });
 
 /**
@@ -130,5 +181,10 @@ export const pageHeroOf = (hero: unknown): IStoreSitePageHero | null => {
         ? source.height
         : null,
     options: heroOptionsOf(source.options),
+    backgroundImageUrls: imagesOf(source.backgroundImageUrls),
+    slideSeconds: secondsOf(source.slideSeconds),
+    featuredImageUrls: imagesOf(source.featuredImageUrls),
+    featuredSlideSeconds: secondsOf(source.featuredSlideSeconds),
+    sizes: heroSizesOf(source.sizes),
   };
 };

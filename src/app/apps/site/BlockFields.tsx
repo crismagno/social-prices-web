@@ -23,15 +23,18 @@ import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enu
 import BlockItemFields from "./BlockItemFields";
 import ButtonFields, { HOME_PAGE } from "./ButtonFields";
 
-
 interface Props {
   block: IStoreSiteBlock;
   pages: IStoreSitePage[];
   storeId: string;
   /** Applied to the block as it is then. */
-  onChange: (change: (block: IStoreSiteBlock) => Partial<IStoreSiteBlock>) => void;
+  onChange: (
+    change: (block: IStoreSiteBlock) => Partial<IStoreSiteBlock>,
+  ) => void;
   /** A piece without a list (a text) shows no items. */
   showItems?: boolean;
+  /** Cards have no heading of their own: only their items. */
+  showHeading?: boolean;
 }
 
 const move = <T,>(list: T[], from: number, to: number): T[] => {
@@ -50,6 +53,7 @@ const BlockFields = ({
   storeId,
   onChange,
   showItems = true,
+  showHeading = true,
 }: Props) => {
   const { t } = useLanguageData();
 
@@ -103,40 +107,46 @@ const BlockFields = ({
             }
           />
         </Form.Item>
-        <Form.Item label={t("storeSite.editor.blocks.kicker")}>
-          <Input
-            maxLength={BLOCK_LIMITS.kicker}
-            value={block.kicker ?? ""}
-            onChange={(event) =>
-              onChange(() => ({ kicker: event.target.value }))
-            }
-          />
-        </Form.Item>
-        <Form.Item label={t("storeSite.editor.blocks.title")}>
-          <Input
-            maxLength={BLOCK_LIMITS.title}
-            value={block.title ?? ""}
-            onChange={(event) => onChange(() => ({ title: event.target.value }))}
-          />
-        </Form.Item>
-        <Form.Item label={t("storeSite.editor.blocks.subtitle")}>
-          <Input.TextArea
-            autoSize={{
-              minRows: block.type === StoreSitesEnum.BlockType.TEXT ? 4 : 1,
-              maxRows: block.type === StoreSitesEnum.BlockType.TEXT ? 14 : 4,
-            }}
-            maxLength={
-              block.type === StoreSitesEnum.BlockType.TEXT
-                ? BLOCK_LIMITS.textBody
-                : BLOCK_LIMITS.subtitle
-            }
-            value={block.subtitle ?? ""}
-            onChange={(event) =>
-              onChange(() => ({ subtitle: event.target.value }))
-            }
-          />
-        </Form.Item>
-
+        {showHeading && (
+          <>
+            <Form.Item label={t("storeSite.editor.blocks.kicker")}>
+              <Input
+                maxLength={BLOCK_LIMITS.kicker}
+                value={block.kicker ?? ""}
+                onChange={(event) =>
+                  onChange(() => ({ kicker: event.target.value }))
+                }
+              />
+            </Form.Item>
+            <Form.Item label={t("storeSite.editor.blocks.title")}>
+              <Input
+                maxLength={BLOCK_LIMITS.title}
+                value={block.title ?? ""}
+                onChange={(event) =>
+                  onChange(() => ({ title: event.target.value }))
+                }
+              />
+            </Form.Item>
+            <Form.Item label={t("storeSite.editor.blocks.subtitle")}>
+              <Input.TextArea
+                autoSize={{
+                  minRows: block.type === StoreSitesEnum.BlockType.TEXT ? 4 : 1,
+                  maxRows:
+                    block.type === StoreSitesEnum.BlockType.TEXT ? 14 : 4,
+                }}
+                maxLength={
+                  block.type === StoreSitesEnum.BlockType.TEXT
+                    ? BLOCK_LIMITS.textBody
+                    : BLOCK_LIMITS.subtitle
+                }
+                value={block.subtitle ?? ""}
+                onChange={(event) =>
+                  onChange(() => ({ subtitle: event.target.value }))
+                }
+              />
+            </Form.Item>
+          </>
+        )}
         {isCta && (
           <ButtonFields button={button} pages={pages} onChange={setButton} />
         )}

@@ -41,6 +41,35 @@ namespace StoreSitesEnum {
   export const MAX_FOOTER_SECTIONS = 5;
 
   /** Where the sign-in button of the site takes a customer, once signed in. */
+  /** The side of the screen the header of the site is at. */
+  export enum HeaderPosition {
+    TOP = "TOP",
+    BOTTOM = "BOTTOM",
+    LEFT = "LEFT",
+    RIGHT = "RIGHT",
+  }
+
+  /** What the header holds: the name with the logo, the menu, the buttons. */
+  export enum HeaderPart {
+    BRAND = "BRAND",
+    MENU = "MENU",
+    ACTIONS = "ACTIONS",
+  }
+
+  /** The buttons of the header: the owner's own, the sign-in and the cart. */
+  export enum HeaderAction {
+    /** Every button of the owner together: how the order was first kept. */
+    BUTTONS = "BUTTONS",
+    SIGN_IN = "SIGN_IN",
+    CART = "CART",
+  }
+
+  /** One button of the owner in the order of the header: its place in the list. */
+  export const HEADER_BUTTON_PREFIX = "BUTTON_";
+
+  /** The most buttons the owner adds to the header. */
+  export const MAX_HEADER_BUTTONS = 4;
+
   export enum SignInDestination {
     /** The conversation with the store, in the customer's account. */
     STORE_CHAT = "STORE_CHAT",
@@ -88,7 +117,8 @@ namespace StoreSitesEnum {
     [SitePageType.CONTACT]: "contato",
   } as const;
 
-  export const MAX_CUSTOM_PAGES = 7;
+  /** Every page besides the home, the ready ones among them. */
+  export const MAX_PAGES = 20;
   export const MAX_FAQ_ITEMS = 12;
 
   /** Which corner of the site the chat button sits in. */
@@ -200,6 +230,16 @@ namespace StoreSitesEnum {
     BlockType.CARDS,
     BlockType.PRODUCTS,
     BlockType.ABOUT,
+    BlockType.PAGE_BODY,
+  ];
+
+  /**
+   * The parts a page has at most once. The strip and the cards are components
+   * with content of their own: a page can have as many as the owner wants.
+   */
+  export const UNIQUE_PART_TYPES: BlockType[] = [
+    BlockType.HERO,
+    BlockType.PRODUCTS,
     BlockType.PAGE_BODY,
   ];
 

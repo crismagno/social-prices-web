@@ -2541,18 +2541,16 @@
         "template": "Template",
         "colors": "Cores",
         "hero": "Entrada",
-        "sections": "Blocos",
-        "marquee": "Faixa",
         "products": "Produtos",
         "cart": "Sacola",
         "publish": "Endereço",
         "footer": "Rodapé",
-        "about": "Sobre",
         "pages": "Páginas",
         "chat": "Chat",
         "blocks": "Blocos",
         "builder": "Construir",
-        "mocks": "Modelos"
+        "mocks": "Modelos",
+        "header": "Header"
       },
       "images": {
         "places": {
@@ -2635,8 +2633,8 @@
             "secondButton": "Segundo botão"
           }
         },
-        "fixedHeader": "Menu fixo no topo",
-        "fixedHeaderHint": "Ao rolar a página, o menu com o nome, as páginas e a sacola fica preso no alto da tela.",
+        "fixedHeader": "Manter o header na tela",
+        "fixedHeaderHint": "Ao rolar a página, o header continua no alto da tela.",
         "cart": {
           "title": "Sacola",
           "show": "Mostrar a sacola",
@@ -2719,7 +2717,7 @@
       "marquee": {
         "show": "Mostrar a faixa rolando",
         "items": "Frases",
-        "itemsHint": "Uma frase curta por linha, até 8.",
+        "itemsHint": "Uma frase curta por linha, até 12.",
         "style": {
           "title": "Estilo da faixa",
           "speed": "Velocidade",
@@ -2813,28 +2811,25 @@
       "hints": {
         "template": "Escolha a aparência do site. Seus textos, imagens e produtos continuam os mesmos.",
         "colors": "As cinco cores com que o template pinta o site.",
-        "hero": "O topo do site (nome e logo) e a primeira coisa que o visitante vê: a foto e as palavras de abertura.",
-        "sections": "Blocos que apresentam a loja: uma foto, um título e algumas palavras cada.",
-        "marquee": "Frases curtas que correm pela página.",
+        "hero": "A entrada da home. Cada página tem a própria entrada: clique nela na página, em Construir.",
         "products": "Quais produtos o site vende, na ordem em que aparecem.",
         "publish": "O endereço do site e se ele está no ar.",
         "footer": "O pé do site: algumas palavras, seus links e o botão de entrar no app.",
-        "about": "A seção Sobre: um título, seus textos e uma imagem ou um vídeo.",
         "pages": "As páginas do site além da inicial, na ordem do menu. Adicione as suas.",
         "chat": "Uma janela de chat no site: o visitante escreve e você responde em Conversas.",
         "builder": "Monte cada página: arraste peças para a pré-visualização, mude as faixas de lugar e clique numa delas para editar.",
         "cart": "O botão da sacola no topo do site e o que é pedido antes de enviar um pedido.",
-        "mocks": "Guarde o site como está no editor para ter um exemplo pronto. Depois abra o modelo para continuar mudando: o site no ar só muda quando você salvar."
+        "mocks": "Guarde o site como está no editor para ter um exemplo pronto. Depois abra o modelo para continuar mudando: o site no ar só muda quando você salvar.",
+        "header": "O header é do site inteiro, igual em todas as páginas: nome, logo, menu, entrar e carrinho. Escolha em que lado da tela ele fica. O botão do carrinho é configurado na aba Sacola."
       },
       "problems": {
         "hero": "A entrada precisa de um título.",
-        "sections": "Todo bloco precisa de um título.",
         "publish": "O endereço do site ainda não é válido.",
         "pages": "Uma página tem um endereço que não pode ser usado."
       },
       "displayName": {
         "label": "Nome exibido no topo do site",
-        "hint": "Deixe vazio para usar o nome da loja."
+        "hint": "Começa com o nome da loja. Deixe vazio para não mostrar nome nenhum, só a logo."
       },
       "sizes": {
         "auto": "automático",
@@ -2974,7 +2969,9 @@
           "backgroundHint": "Vazio usa o fundo da página inicial.",
           "featured": "Imagem em destaque",
           "featuredHint": "Aparece ao lado dos textos. Vazio não mostra nenhuma.",
-          "height": "Altura da entrada"
+          "height": "Altura da entrada",
+          "sizes": "Tamanhos desta entrada",
+          "sizesHint": "Título, linha abaixo dele e foto. O que ficar vazio segue o site."
         },
         "inMenu": "Mostrar no menu",
         "label": "Nome no menu",
@@ -2988,13 +2985,16 @@
         "contentTitleHint": "Aparece em destaque, no estilo do template, como o título da seção Sobre. Só é mostrado quando a página tem texto, imagem ou vídeo. Vazio não mostra título.",
         "productsHint": "Esta página mostra os produtos escolhidos na aba Produtos.",
         "contactHint": "Esta página tem um formulário (nome, e-mail, telefone e mensagem). O que os visitantes enviam chega nos seus Chats, no canal Site. Ela também lista os links de WhatsApp, e-mail, telefone e Telegram do rodapé.",
-        "aboutHint": "Esta página mostra o que você escreveu na aba Sobre.",
+        "aboutHint": "Esta página começa com um texto com mídia. Abra em Construir para escrever, ou adicione o que quiser.",
         "faq": "Perguntas e respostas",
         "supportHint": "Abaixo delas, a página mostra os links de WhatsApp, e-mail, telefone e Telegram do rodapé.",
         "question": "Pergunta",
         "answer": "Resposta",
         "addQuestion": "Adicionar pergunta",
-        "add": "Adicionar página"
+        "add": "Adicionar página",
+        "colors": "Cores desta página",
+        "colorsHint": "A cor que você não mudar segue as cores do site.",
+        "colorOfSite": "Do site"
       },
       "chat": {
         "show": "Deixar visitantes conversarem com a loja",
@@ -3154,6 +3154,11 @@
             "title": "Título",
             "text": "Texto",
             "button": "Mostrar um botão"
+          },
+          "CARDS": {
+            "imageUrl": "Foto (opcional)",
+            "title": "Título",
+            "text": "Texto"
           }
         },
         "icons": {
@@ -3337,11 +3342,7 @@
         "removeConfirm": "Apagar esta faixa?",
         "editPart": "Editar o conteúdo",
         "partNotes": {
-          "HERO": "Mostra o que a aba Entrada edita. Pode ser movida ou escondida, mas não apagada.",
-          "MARQUEE": "Mostra as frases da aba Faixa.",
-          "CARDS": "Mostra os cartões da aba Seções.",
           "PRODUCTS": "Mostra os produtos escolhidos na aba Produtos.",
-          "ABOUT": "Mostra o texto e a mídia da aba Sobre.",
           "PAGE_BODY": "Mostra o conteúdo desta página, editado na aba Páginas."
         },
         "frame": {
@@ -3470,14 +3471,37 @@
               "Primeiro item",
               "Segundo item"
             ]
+          },
+          "MARQUEE": {
+            "items": {
+              "0": "Feito à mão",
+              "1": "Feito para você",
+              "2": "Peças únicas"
+            }
+          },
+          "CARDS": {
+            "items": {
+              "0": {
+                "title": "Um título para este cartão",
+                "text": "Um texto curto sobre ele."
+              },
+              "1": {
+                "title": "Outro cartão",
+                "text": "Um texto curto sobre ele."
+              }
+            }
+          },
+          "ABOUT": {
+            "title": "Um título",
+            "text": "Escreva aqui o que você quer contar."
           }
         },
         "types": {
           "HERO": "Entrada",
-          "MARQUEE": "Faixa de frases",
-          "CARDS": "Seções",
+          "MARQUEE": "Faixa",
+          "CARDS": "Cartões",
           "PRODUCTS": "Produtos",
-          "ABOUT": "Sobre",
+          "ABOUT": "Texto com mídia",
           "PAGE_BODY": "Conteúdo da página",
           "TEXT": "Texto",
           "BUTTONS": "Botões",
@@ -3497,11 +3521,11 @@
           "TABS": "Menu de abas"
         },
         "hints": {
-          "HERO": "O topo com título, botão e imagem (aba Entrada)",
-          "MARQUEE": "A faixa que corre com frases (aba Faixa)",
-          "CARDS": "Os cartões com imagem (aba Seções)",
+          "HERO": "A entrada desta página: palavras, fotos, botões, cores e tamanhos próprios.",
+          "MARQUEE": "Uma faixa de frases correndo. Adicione quantas quiser: cada uma tem as próprias frases e o próprio visual.",
+          "CARDS": "Cartões com foto, título e um texto curto. Adicione quantos conjuntos quiser: cada um tem os próprios cartões.",
           "PRODUCTS": "Os produtos à venda (aba Produtos)",
-          "ABOUT": "A história da loja (aba Sobre)",
+          "ABOUT": "Um título, parágrafos e uma imagem ou vídeo ao lado. Use para um Sobre, uma história, o que quiser: cada um tem o próprio conteúdo.",
           "PAGE_BODY": "O conteúdo próprio desta página (aba Páginas)",
           "TEXT": "Um título e um texto",
           "BUTTONS": "Até 3 botões lado a lado",
@@ -3559,6 +3583,61 @@
         "openedBanner": "O modelo “{name}” está aberto no editor.",
         "undo": "Voltar ao anterior",
         "keep": "Manter modelo"
+      },
+      "header": {
+        "position": "Onde o header fica",
+        "positions": {
+          "TOP": {
+            "label": "Topo",
+            "hint": "Uma barra no alto da página."
+          },
+          "BOTTOM": {
+            "label": "Embaixo",
+            "hint": "Uma barra sempre no pé da tela."
+          },
+          "LEFT": {
+            "label": "Esquerda",
+            "hint": "Uma coluna no lado esquerdo; no celular vai para o topo."
+          },
+          "RIGHT": {
+            "label": "Direita",
+            "hint": "Uma coluna no lado direito; no celular vai para o topo."
+          }
+        },
+        "order": "Onde fica cada parte",
+        "orderHint": "Arraste uma parte sobre outra para trocar de lugar, ou use as setas. No header lateral: em cima, no meio e no pé.",
+        "slots": {
+          "0": "Início",
+          "1": "Meio",
+          "2": "Fim"
+        },
+        "parts": {
+          "BRAND": "Nome e logo",
+          "MENU": "Menu",
+          "ACTIONS": "Botões (entrar e carrinho)"
+        },
+        "clean": "Quanto o fundo fica limpo",
+        "cleanHint": "0% é fundo sólido; 100% é sem fundo nenhum. Acima de 0%, no topo o header fica por cima da entrada, sem ocupar espaço.",
+        "color": "Cor das palavras",
+        "colorHint": "Vazio, a cor do site. Útil sobre uma foto escura ou um fundo escuro.",
+        "background": "Cor do fundo",
+        "backgroundHint": "Vazio, a cor de fundo do site.",
+        "height": "Altura do header",
+        "width": "Largura do header",
+        "sizeHint": "Em pixels. Vazio, o tamanho padrão.",
+        "buttons": "Mais botões",
+        "buttonsHint": "Botões seus no header, ao lado do entrar e do carrinho: para uma página, WhatsApp, telefone, e-mail ou um link.",
+        "addButton": "Adicionar botão",
+        "newButton": "Botão",
+        "actionsOrder": "Ordem dos botões",
+        "actionsOrderHint": "Arraste para mudar a ordem, ou use as setas: cada botão seu, o entrar e o carrinho, um por um.",
+        "actions": {
+          "BUTTONS": "Seus botões",
+          "SIGN_IN": "Entrar",
+          "CART": "Carrinho"
+        },
+        "buttonSize": "Tamanho dos botões",
+        "buttonSizeHint": "Vale para os seus botões e o entrar. O tamanho do botão do carrinho fica na aba Sacola."
       }
     },
     "footer": {

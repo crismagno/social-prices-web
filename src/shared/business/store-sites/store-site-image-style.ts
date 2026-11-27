@@ -72,7 +72,10 @@ const lookOf = (
  * the template draws it.
  */
 export const siteImageStyleOf = (
-  style: Partial<Record<TSiteImagePlace, Partial<IStoreSiteImageLook>>> | null | undefined,
+  style:
+    | Partial<Record<TSiteImagePlace, Partial<IStoreSiteImageLook>>>
+    | null
+    | undefined,
 ): IStoreSiteImageStyle => ({
   product: lookOf(style?.product),
   section: lookOf(style?.section),

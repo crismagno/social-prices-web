@@ -12,7 +12,6 @@ import {
   IStoreSiteCatalog,
   siteCatalogOf,
 } from "../../shared/business/store-sites/store-site-catalog";
-import SiteStickyBar from "../../components/store-site/shared/SiteStickyBar";
 import { MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
 
 import {
@@ -147,21 +146,15 @@ export default function SitePreviewPage() {
       style={images.style}
       onClickCapture={followPageLink}
     >
-      <SiteStickyBar
-          site={data.site}
-          store={data.store}
-          cart={NO_CART}
-          page={page}
-        />
-    <Component
-      site={sitePageView(data.site, page, page ? labelOfPage(page) : "")}
-      page={page}
-      builder={builder}
-      store={data.store}
-      products={data.products}
-      mode="preview"
-      cart={NO_CART}
-    />
+      <Component
+        site={sitePageView(data.site, page, page ? labelOfPage(page) : "")}
+        page={page}
+        builder={builder}
+        store={data.store}
+        products={data.products}
+        mode="preview"
+        cart={NO_CART}
+      />
     </div>
   );
 }

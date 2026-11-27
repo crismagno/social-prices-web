@@ -12,6 +12,7 @@ import {
   materializeLayout,
   moveSection,
   newSection,
+  ownPartOf,
   pageSections,
   withEveryPage,
 } from "../../../shared/business/store-sites/store-site-layout";
@@ -58,11 +59,15 @@ export interface ISiteBuilder {
   ) => void;
 }
 
-/** The layout the owner arranges: the site's own the first time they touch it. */
+/**
+ * The layout the owner arranges: the site's own the first time they touch it,
+ * every strip and every set of cards with content of its own.
+ */
 export const arrangedBlocks = (draft: ISaveStoreSite): IStoreSiteBlock[] =>
-  draft.isLayoutCustom
+  (draft.isLayoutCustom
     ? withEveryPage(draft.blocks, draft.pages)
-    : materializeLayout(draft.blocks, draft.pages);
+    : materializeLayout(draft.blocks, draft.pages)
+  ).map((block: IStoreSiteBlock) => ownPartOf(block, draft));
 
 /**
  * The page builder of the editor: which page is built, which section is
@@ -92,9 +97,13 @@ const useSiteBuilder = (editor: IStoreSiteEditor): ISiteBuilder => {
     [draft, page],
   );
 
+  const picked: IStoreSiteBlock | undefined = sections.find(
+    (section: IStoreSiteBlock) => section.key === selectedKey,
+  );
+
+  // A strip or cards are edited with content of their own, as a change makes them.
   const selected: IStoreSiteBlock | null =
-    sections.find((section: IStoreSiteBlock) => section.key === selectedKey) ??
-    null;
+    picked && draft ? ownPartOf(picked, draft) : null;
 
   const setPageKey = useCallback((next: string | null): void => {
     setPageKeyState(next);

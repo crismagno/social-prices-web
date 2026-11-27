@@ -107,7 +107,7 @@ const SiteThemeVars = ({ theme, sizes, className, children }: Props) => {
   } as CSSProperties;
 
   return (
-    <div className={className} style={style}>
+    <div className={className} style={style} data-site-root="">
       {children}
     </div>
   );

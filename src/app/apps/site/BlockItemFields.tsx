@@ -15,33 +15,29 @@ import FeatureIconPicker from "./FeatureIconPicker";
 import ImageField from "./ImageField";
 
 type TField =
-  | "imageUrl"
-  | "icon"
-  | "rating"
-  | "title"
-  | "subtitle"
-  | "text"
-  | "button";
+  "imageUrl" | "icon" | "rating" | "title" | "subtitle" | "text" | "button";
 
 /** The fields each kind of block asks of its items, in the order shown. */
-export const ITEM_FIELDS: Partial<Record<StoreSitesEnum.BlockType, TField[]>> = {
-  [StoreSitesEnum.BlockType.TEAM]: ["imageUrl", "title", "subtitle", "text"],
-  [StoreSitesEnum.BlockType.TESTIMONIALS]: [
-    "text",
-    "rating",
-    "title",
-    "subtitle",
-    "imageUrl",
-  ],
-  [StoreSitesEnum.BlockType.LOGOS]: ["imageUrl", "title"],
-  [StoreSitesEnum.BlockType.FEATURES]: ["icon", "title", "text"],
-  [StoreSitesEnum.BlockType.FAQ]: ["title", "text"],
-  [StoreSitesEnum.BlockType.STATS]: ["title", "subtitle"],
-  [StoreSitesEnum.BlockType.STEPS]: ["title", "text"],
-  [StoreSitesEnum.BlockType.IMAGE]: ["imageUrl", "text"],
-  [StoreSitesEnum.BlockType.BOX]: ["imageUrl", "title", "text", "button"],
-  [StoreSitesEnum.BlockType.CTA]: [],
-};
+export const ITEM_FIELDS: Partial<Record<StoreSitesEnum.BlockType, TField[]>> =
+  {
+    [StoreSitesEnum.BlockType.TEAM]: ["imageUrl", "title", "subtitle", "text"],
+    [StoreSitesEnum.BlockType.TESTIMONIALS]: [
+      "text",
+      "rating",
+      "title",
+      "subtitle",
+      "imageUrl",
+    ],
+    [StoreSitesEnum.BlockType.LOGOS]: ["imageUrl", "title"],
+    [StoreSitesEnum.BlockType.FEATURES]: ["icon", "title", "text"],
+    [StoreSitesEnum.BlockType.FAQ]: ["title", "text"],
+    [StoreSitesEnum.BlockType.STATS]: ["title", "subtitle"],
+    [StoreSitesEnum.BlockType.STEPS]: ["title", "text"],
+    [StoreSitesEnum.BlockType.IMAGE]: ["imageUrl", "text"],
+    [StoreSitesEnum.BlockType.BOX]: ["imageUrl", "title", "text", "button"],
+    [StoreSitesEnum.BlockType.CTA]: [],
+    [StoreSitesEnum.BlockType.CARDS]: ["imageUrl", "title", "text"],
+  };
 
 interface Props {
   type: StoreSitesEnum.BlockType;
@@ -112,7 +108,9 @@ const BlockItemFields = ({ type, item, storeId, pages, onChange }: Props) => {
                     pages={pages}
                     withVariant
                     onChange={(patch) =>
-                      onChange({ button: newBlockButton({ ...item.button, ...patch }) })
+                      onChange({
+                        button: newBlockButton({ ...item.button, ...patch }),
+                      })
                     }
                   />
                 )}

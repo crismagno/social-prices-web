@@ -2,6 +2,7 @@ import { CART_PAGE_SLUG, PRODUCT_PAGE_SLUG } from "./store-site-checkout";
 import Urls from "../../common/routes-app/routes-app";
 import { IStoreSiteAboutMedia } from "./store-site-about";
 import { IStoreSitePageHero, pageHeroOf } from "./store-site-hero";
+import { IStoreSiteTheme } from "./store-site.interface";
 import StoreSitesEnum from "./store-sites.enum";
 
 export interface IStoreSiteFaqItem {
@@ -38,6 +39,8 @@ export interface IStoreSitePage {
   faq: IStoreSiteFaqItem[];
   /** The page's own entrance; none, it follows the home's. */
   hero: IStoreSitePageHero | null;
+  /** The page's own colours; one left out is the site's. */
+  theme?: Partial<IStoreSiteTheme> | null;
 }
 
 export const PAGE_SLUG_REGEX = /^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]$/;
@@ -83,6 +86,7 @@ const readyPage = (
   content: emptyPageContent(),
   faq: [],
   hero: null,
+  theme: null,
 });
 
 /**
@@ -105,6 +109,7 @@ export const sitePagesOf = (
       content: { ...emptyPageContent(), ...(page.content ?? {}) },
       faq: page.faq ?? [],
       hero: pageHeroOf(page.hero),
+      theme: page.theme ?? null,
     }));
 };
 

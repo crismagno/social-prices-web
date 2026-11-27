@@ -7,7 +7,6 @@ import {
   IStoreSiteCatalog,
   siteCatalogOf,
 } from "../../../shared/business/store-sites/store-site-catalog";
-import SiteStickyBar from "../../../components/store-site/shared/SiteStickyBar";
 import { sitePageView } from "../../../components/store-site/shared/site-page-view";
 import { useMemo, useState } from "react";
 
@@ -192,9 +191,6 @@ const SiteClient = ({
           page={page}
           onProductOpen={view.isDetailsOpened ? openProduct : undefined}
         />
-      )}
-      {!isOwnPage && (
-        <SiteStickyBar site={site} store={store} cart={cart} page={page} />
       )}
       <SiteProductModal
         product={

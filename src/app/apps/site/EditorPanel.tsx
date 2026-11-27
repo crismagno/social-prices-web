@@ -8,15 +8,13 @@ import {
   AppstoreAddOutlined,
   AppstoreOutlined,
   BgColorsOutlined,
-  BlockOutlined,
   BorderBottomOutlined,
+  BorderTopOutlined,
   CheckCircleFilled,
   CommentOutlined,
   ExportOutlined,
   FileTextOutlined,
   LinkOutlined,
-  NotificationOutlined,
-  ReadOutlined,
   PictureOutlined,
   SaveOutlined,
   SnippetsOutlined,
@@ -31,13 +29,13 @@ import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enu
 import { IStore } from "../../../shared/business/stores/stores.interface";
 import Urls from "../../../shared/common/routes-app/routes-app";
 import { ProductsTab, PublishTab } from "./CatalogPublishTabs";
-import { HeroTab, MarqueeTab, SectionsTab } from "./ContentTabs";
+import { HeroTab } from "./ContentTabs";
 import { ColorsTab, TemplateTab } from "./DesignTabs";
-import AboutTab from "./AboutTab";
 import BuilderTab from "./BuilderTab";
 import CartTab from "./CartTab";
 import ChatTab from "./ChatTab";
 import FooterTab from "./FooterTab";
+import HeaderTab from "./HeaderTab";
 import MocksTab from "./MocksTab";
 import PagesTab from "./PagesTab";
 import useAvailableHeight from "./useAvailableHeight";
@@ -48,12 +46,10 @@ type TTab =
   | "builder"
   | "template"
   | "colors"
+  | "header"
   | "hero"
-  | "sections"
-  | "marquee"
   | "products"
   | "cart"
-  | "about"
   | "pages"
   | "chat"
   | "footer"
@@ -75,12 +71,10 @@ const TABS: { key: TTab; icon: ReactNode }[] = [
   { key: "builder", icon: <AppstoreAddOutlined /> },
   { key: "template", icon: <AppstoreOutlined /> },
   { key: "colors", icon: <BgColorsOutlined /> },
+  { key: "header", icon: <BorderTopOutlined /> },
   { key: "hero", icon: <PictureOutlined /> },
-  { key: "sections", icon: <BlockOutlined /> },
-  { key: "marquee", icon: <NotificationOutlined /> },
   { key: "products", icon: <ShoppingOutlined /> },
   { key: "cart", icon: <ShoppingCartOutlined /> },
-  { key: "about", icon: <ReadOutlined /> },
   { key: "pages", icon: <FileTextOutlined /> },
   { key: "chat", icon: <CommentOutlined /> },
   { key: "footer", icon: <BorderBottomOutlined /> },
@@ -146,12 +140,10 @@ const EditorPanel = ({
   const problems: Record<TTab, boolean> = {
     template: false,
     colors: false,
+    header: false,
     hero: !draft.hero.title.trim(),
-    sections: draft.sections.some((section) => !section.title.trim()),
-    marquee: false,
     products: false,
     cart: false,
-    about: false,
     builder: false,
     pages: invalidPageKeys(draft.pages).length > 0,
     chat: false,
@@ -178,28 +170,21 @@ const EditorPanel = ({
         builder={builder}
         storeId={storeId}
         onOpenTab={(next: string) => setTab(next as TTab)}
+        storeAbout={currentStore?.about ?? null}
       />
     ),
     template: <TemplateTab editor={editor} />,
     colors: <ColorsTab editor={editor} />,
-    hero: (
-      <HeroTab
+    header: (
+      <HeaderTab
         editor={editor}
         storeId={storeId}
         storeName={currentStore?.name ?? ""}
       />
     ),
-    sections: <SectionsTab editor={editor} storeId={storeId} />,
-    marquee: <MarqueeTab editor={editor} />,
+    hero: <HeroTab editor={editor} storeId={storeId} />,
     products: <ProductsTab editor={editor} />,
     cart: <CartTab editor={editor} />,
-    about: (
-      <AboutTab
-        editor={editor}
-        storeId={storeId}
-        storeAbout={currentStore?.about ?? null}
-      />
-    ),
     pages: <PagesTab editor={editor} storeId={storeId} />,
     chat: <ChatTab editor={editor} />,
     footer: <FooterTab editor={editor} storeId={storeId} />,
