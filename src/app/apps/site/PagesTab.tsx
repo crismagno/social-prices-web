@@ -9,7 +9,6 @@ import {
   ColorPicker,
   Form,
   Input,
-  Segmented,
   Space,
   Switch,
   Tag,
@@ -24,7 +23,6 @@ import {
   UpOutlined,
 } from "@ant-design/icons";
 
-import FeatureIcon from "../../../components/store-site/shared/blocks/FeatureIcon";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import {
   emptyPageContent,
@@ -38,12 +36,10 @@ import {
 } from "../../../shared/business/store-sites/store-site-pages";
 import { IStoreSiteTheme } from "../../../shared/business/store-sites/store-site.interface";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
+import FeatureIconPicker from "./FeatureIconPicker";
 import PageContentFields from "./PageContentFields";
 import PageHeroFields from "./PageHeroFields";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
-
-// What the picker holds for a page with no icon: it takes no empty value.
-const NO_ICON: string = "";
 
 interface Props {
   editor: IStoreSiteEditor;
@@ -241,31 +237,13 @@ const PagesTab = ({ editor, storeId }: Props) => {
                   label={t("storeSite.editor.pages.icon")}
                   extra={t("storeSite.editor.pages.iconHint")}
                 >
-                  <Segmented<string>
-                    style={{
-                      flexWrap: "wrap",
-                      display: "inline-flex",
-                      maxWidth: "100%",
-                    }}
-                    value={page.icon ?? NO_ICON}
-                    onChange={(icon: string) =>
-                      setPage(page.key, () => ({
-                        icon: (icon as StoreSitesEnum.FeatureIcon) || null,
-                      }))
+                  <FeatureIconPicker
+                    value={page.icon}
+                    onChange={(icon: StoreSitesEnum.FeatureIcon) =>
+                      setPage(page.key, () => ({ icon }))
                     }
-                    options={[
-                      {
-                        value: NO_ICON,
-                        label: t("storeSite.editor.pages.iconNone"),
-                      },
-                      ...Object.values(StoreSitesEnum.FeatureIcon).map(
-                        (icon: StoreSitesEnum.FeatureIcon) => ({
-                          value: icon as string,
-                          icon: <FeatureIcon icon={icon} />,
-                          title: t(`storeSite.editor.blocks.icons.${icon}`),
-                        }),
-                      ),
-                    ]}
+                    noneLabel={t("storeSite.editor.pages.iconNone")}
+                    onClear={() => setPage(page.key, () => ({ icon: null }))}
                   />
                 </Form.Item>
 
