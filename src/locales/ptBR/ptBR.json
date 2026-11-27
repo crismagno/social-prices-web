@@ -3048,6 +3048,13 @@
           "title": "Campos do cliente",
           "hint": "Escolha quais dados pedir antes da conversa, obrigatórios ou opcionais, na ordem que quiser. As respostas chegam como primeira mensagem em Conversas.",
           "add": "Adicionar campo"
+        },
+        "colors": {
+          "label": "Cores do chat",
+          "hint": "A cor que você não mudar segue as cores do site.",
+          "primary": "Botão e topo",
+          "background": "Fundo",
+          "text": "Palavras"
         }
       },
       "blocks": {

@@ -660,7 +660,13 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
 
   return (
     <SiteThemeVars
-      theme={theme}
+      // Its own colours over the site's; one it leaves out is the site's.
+      theme={{
+        ...theme,
+        primary: settings.colors.primary ?? theme.primary,
+        background: settings.colors.background ?? theme.background,
+        text: settings.colors.text ?? theme.text,
+      }}
       className={`${styles.dock} ${
         settings.position === StoreSitesEnum.ChatPosition.LEFT
           ? styles.left

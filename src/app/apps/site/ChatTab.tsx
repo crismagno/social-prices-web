@@ -9,6 +9,7 @@ import {
 import {
   Alert,
   Button,
+  ColorPicker,
   Form,
   Input,
   InputNumber,
@@ -24,11 +25,24 @@ import {
   chatFieldModeOf,
   ISiteChatExtraField,
   IStoreSiteChat,
+  IStoreSiteChatColors,
+  siteChatOf,
   SESSION_MINUTES_LIMITS,
 } from "../../../shared/business/store-sites/store-site-chat";
+import { IStoreSiteTheme } from "../../../shared/business/store-sites/store-site.interface";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
 import RichTextEditor from "../../../components/common/RichText/RichTextEditor";
+
+/** The colours the chat can have of its own, and the site's each one falls back to. */
+const CHAT_COLORS: {
+  key: keyof IStoreSiteChatColors;
+  siteKey: keyof IStoreSiteTheme;
+}[] = [
+  { key: "primary", siteKey: "primary" },
+  { key: "background", siteKey: "background" },
+  { key: "text", siteKey: "text" },
+];
 
 interface Props {
   editor: IStoreSiteEditor;
@@ -93,6 +107,18 @@ const ChatTab = ({ editor }: Props) => {
 
   const set = (patch: Partial<IStoreSiteChat>): void =>
     editor.update((draft) => ({ chat: { ...draft.chat, ...patch } }));
+
+  // One colour of the chat, from the draft as it is then; null is the site's.
+  const setColor = (
+    key: keyof IStoreSiteChatColors,
+    color: string | null,
+  ): void =>
+    editor.update((draft) => ({
+      chat: {
+        ...draft.chat,
+        colors: { ...siteChatOf(draft.chat).colors, [key]: color },
+      },
+    }));
 
   return (
     <Form layout="vertical">
@@ -291,6 +317,34 @@ const ChatTab = ({ editor }: Props) => {
                 />
               )}
             </Space>
+          </Form.Item>
+
+          <Form.Item
+            label={t("storeSite.editor.chat.colors.label")}
+            extra={t("storeSite.editor.chat.colors.hint")}
+          >
+            <div className="flex flex-wrap gap-4">
+              {CHAT_COLORS.map(({ key, siteKey }) => (
+                <div key={key} className="flex flex-col gap-1">
+                  <span className="text-xs opacity-70">
+                    {t(`storeSite.editor.chat.colors.${key}`)}
+                  </span>
+                  <ColorPicker
+                    allowClear
+                    disabledAlpha
+                    value={chat.colors[key] ?? editor.draft?.theme[siteKey]}
+                    showText={() =>
+                      chat.colors[key] ??
+                      t("storeSite.editor.pages.colorOfSite")
+                    }
+                    onChangeComplete={(color) =>
+                      setColor(key, color.toHexString().slice(0, 7))
+                    }
+                    onClear={() => setColor(key, null)}
+                  />
+                </div>
+              ))}
+            </div>
           </Form.Item>
 
           <Form.Item

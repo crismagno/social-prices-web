@@ -26,7 +26,24 @@ export interface IStoreSiteChat {
   extraFields: ISiteChatExtraField[];
   /** 2 once email and phone live in `extraFields`. */
   fieldsVersion: number;
+  /** Its own colours; an empty one is the site's. */
+  colors: IStoreSiteChatColors;
 }
+
+/** The colours of the chat alone; an empty one is the site's. */
+export interface IStoreSiteChatColors {
+  /** The button, the top of the window and the visitor's messages. */
+  primary: string | null;
+  /** The background of the window. */
+  background: string | null;
+  /** The words in the window. */
+  text: string | null;
+}
+
+const HEX_COLOR: RegExp = /^#[0-9a-fA-F]{6}$/;
+
+const hexOf = (value: unknown): string | null =>
+  typeof value === "string" && HEX_COLOR.test(value) ? value : null;
 
 /** A field of the customer record the owner asks in the chat's form. */
 export interface ISiteChatExtraField {
@@ -182,5 +199,10 @@ export const siteChatOf = (
         : SESSION_MINUTES_LIMITS.initial,
     extraFields,
     fieldsVersion: FIELDS_VERSION,
+    colors: {
+      primary: hexOf(chat?.colors?.primary),
+      background: hexOf(chat?.colors?.background),
+      text: hexOf(chat?.colors?.text),
+    },
   };
 };

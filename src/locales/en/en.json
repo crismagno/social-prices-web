@@ -3045,6 +3045,13 @@
           "title": "Customer fields",
           "hint": "Choose which details to ask before the chat, required or optional, in the order you want. The answers arrive as the first message in Chats.",
           "add": "Add field"
+        },
+        "colors": {
+          "label": "Colours of the chat",
+          "hint": "One left alone follows the colours of the site.",
+          "primary": "Button and top",
+          "background": "Background",
+          "text": "Words"
         }
       },
       "blocks": {
