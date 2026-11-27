@@ -25,6 +25,7 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 
+import FeatureIcon from "../../../components/store-site/shared/blocks/FeatureIcon";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import {
   HEADER_HEIGHT_RANGE,
@@ -41,7 +42,10 @@ import {
   IStoreSiteBlockButton,
   newBlockButton,
 } from "../../../shared/business/store-sites/store-site-blocks";
-import { sitePagesOf } from "../../../shared/business/store-sites/store-site-pages";
+import {
+  IStoreSitePage,
+  sitePagesOf,
+} from "../../../shared/business/store-sites/store-site-pages";
 import ButtonFields from "./ButtonFields";
 import ChoiceList from "./ChoiceList";
 import ImageField from "./ImageField";
@@ -93,6 +97,31 @@ const HeaderTab = ({ editor, storeId, storeName }: Props) => {
 
   const actionsDrag = useDragReorder(moveAction);
 
+  // The pages of the menu change places among themselves: the menu follows
+  // the order of the pages, so those out of it stay where they were.
+  const moveMenuPage = (from: number, to: number): void =>
+    editor.update((draft) => {
+      const pages: IStoreSitePage[] = sitePagesOf(draft.pages);
+
+      const slots: number[] = pages.flatMap(
+        (page: IStoreSitePage, index: number) => (page.isInMenu ? [index] : []),
+      );
+
+      const inMenu: IStoreSitePage[] = slots.map(
+        (index: number) => pages[index],
+      );
+
+      inMenu.splice(to, 0, inMenu.splice(from, 1)[0]);
+
+      slots.forEach((index: number, at: number) => {
+        pages[index] = inMenu[at];
+      });
+
+      return { pages };
+    });
+
+  const menuDrag = useDragReorder(moveMenuPage);
+
   if (!editor.draft) {
     return null;
   }
@@ -139,6 +168,18 @@ const HeaderTab = ({ editor, storeId, storeName }: Props) => {
         },
       };
     });
+
+  const menuPages: IStoreSitePage[] = sitePagesOf(editor.draft.pages).filter(
+    (page: IStoreSitePage) => page.isInMenu,
+  );
+
+  // A page as the menu names it: its own name, else its kind's.
+  const menuPageName = (page: IStoreSitePage): string =>
+    page.label?.trim() ||
+    page.title?.trim() ||
+    (page.type === StoreSitesEnum.SitePageType.CUSTOM
+      ? page.slug
+      : t(`storeSite.pages.types.${page.type}`));
 
   // What a place in the order is called: the button's own words, when it has some.
   const actionName = (token: string): string => {
@@ -242,6 +283,49 @@ const HeaderTab = ({ editor, storeId, storeName }: Props) => {
             </div>
           ))}
         </div>
+      </Form.Item>
+
+      <Form.Item
+        label={t("storeSite.editor.header.menuOrder")}
+        extra={t("storeSite.editor.header.menuOrderHint")}
+      >
+        {menuPages.length === 0 ? (
+          <span className="text-xs opacity-60">
+            {t("storeSite.editor.header.menuOrderEmpty")}
+          </span>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {menuPages.map((page: IStoreSitePage, at: number) => (
+              <div
+                key={page.key}
+                className="flex items-center gap-2 rounded-lg border border-gray-200 dark:border-gray-700 px-3 py-1.5"
+                {...menuDrag.itemProps(at)}
+              >
+                <HolderOutlined className="opacity-50" />
+                {page.icon && <FeatureIcon icon={page.icon} />}
+                <span className="flex-1 font-medium truncate">
+                  {menuPageName(page)}
+                </span>
+                <Button
+                  type="text"
+                  size="small"
+                  icon={<ArrowUpOutlined />}
+                  disabled={at === 0}
+                  aria-label={t("storeSite.editor.moveUp")}
+                  onClick={() => moveMenuPage(at, at - 1)}
+                />
+                <Button
+                  type="text"
+                  size="small"
+                  icon={<ArrowDownOutlined />}
+                  disabled={at === menuPages.length - 1}
+                  aria-label={t("storeSite.editor.moveDown")}
+                  onClick={() => moveMenuPage(at, at + 1)}
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </Form.Item>
 
       <Form.Item

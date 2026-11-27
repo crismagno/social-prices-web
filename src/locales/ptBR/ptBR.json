@@ -3657,6 +3657,9 @@
         "buttonsHint": "Botões seus no header, ao lado do entrar e do carrinho: para uma página, WhatsApp, telefone, e-mail ou um link.",
         "addButton": "Adicionar botão",
         "newButton": "Botão",
+        "menuOrder": "Ordem do menu",
+        "menuOrderHint": "As páginas que aparecem no menu, na ordem em que são mostradas. Quais páginas entram nele é escolhido em Páginas.",
+        "menuOrderEmpty": "Nenhuma página está no menu. Ative uma em Páginas.",
         "actionsOrder": "Ordem dos botões",
         "actionsOrderHint": "Arraste para mudar a ordem, ou use as setas: cada botão seu, o entrar e o carrinho, um por um.",
         "actions": {

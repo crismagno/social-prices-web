@@ -3654,6 +3654,9 @@
         "buttonsHint": "Buttons of your own in the header, beside the sign-in and the cart: to a page, WhatsApp, phone, e-mail or a link.",
         "addButton": "Add a button",
         "newButton": "Button",
+        "menuOrder": "Order of the menu",
+        "menuOrderHint": "The pages shown in the menu, in the order they appear. Which pages are in it is chosen in Pages.",
+        "menuOrderEmpty": "No page is in the menu. Turn one on in Pages.",
         "actionsOrder": "Order of the buttons",
         "actionsOrderHint": "Drag to change the order, or use the arrows: each of your buttons, the sign-in and the cart, one by one.",
         "actions": {
