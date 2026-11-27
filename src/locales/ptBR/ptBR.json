@@ -2865,9 +2865,9 @@
         "textHint": "Algumas palavras abaixo do nome da loja: endereço, horário, uma frase.",
         "login": "Mostrar o botão de entrar no app",
         "loginHint": "Leva o cliente para o app, na mesma página do botão do topo.",
-        "linksHeading": "Links",
-        "add": "Adicionar link",
-        "empty": "Nenhum link ainda. Adicione suas redes sociais, outros sites ou formas de contato.",
+        "linksHeading": "O que o rodapé mostra",
+        "add": "Adicionar",
+        "empty": "Nada ainda. Adicione o nome, um texto, uma imagem, suas redes sociais ou formas de contato.",
         "type": "Tipo",
         "label": "Texto do link",
         "labelHint": "Vazio mostra o nome do tipo, ou o endereço no texto livre.",
@@ -2903,7 +2903,20 @@
         "logoHint": "Aparece ao lado do nome, no formato do logo do topo do site.",
         "logoImage": "Imagem do logo",
         "logoImageHint": "Vazio usa o logo do site.",
-        "logoHeight": "Altura do logo"
+        "logoHeight": "Altura do logo",
+        "kinds": {
+          "content": "Conteúdo",
+          "links": "Links"
+        },
+        "itemsHint": "Adicione o que quiser, quantos quiser: nome, logo, textos, imagens, botão de entrar e links. Cada um vai na seção que você escolher, nesta ordem. Arraste para reordenar; clique para abrir.",
+        "expandAll": "Abrir todos",
+        "collapseAll": "Fechar todos",
+        "image": "Imagem",
+        "imageHeight": "Altura",
+        "imageUrl": "Para onde a imagem leva (opcional)",
+        "imageAlt": "O que é a imagem (para quem não a vê)",
+        "name": "Texto no lugar do nome",
+        "nameHint": "Vazio mostra o nome do site."
       },
       "reset": {
         "button": "Voltar o site ao padrão",
@@ -3657,7 +3670,12 @@
         "EMAIL": "E-mail",
         "PHONE": "Telefone",
         "WEBSITE": "Site",
-        "TEXT": "Texto livre (sem ícone)"
+        "TEXT": "Link de texto (sem ícone)",
+        "NAME": "Nome do site",
+        "LOGO": "Logo",
+        "NOTE": "Texto",
+        "IMAGE": "Imagem",
+        "SIGN_IN": "Botão de entrar"
       }
     },
     "signIn": {

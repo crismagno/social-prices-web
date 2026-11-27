@@ -8,7 +8,37 @@ export interface IStoreSiteFooterLink {
   url: string;
   /** The key of the section of the footer it is shown in. */
   section: string;
+  /** A logo or an image: the key of an uploaded picture. */
+  imageUrl?: string | null;
+  /** A logo or an image: its height in pixels. */
+  height?: number | null;
 }
+
+/** How tall a logo or an image of the footer can be, in pixels. */
+export const FOOTER_IMAGE_HEIGHT_RANGE: [number, number] = [20, 240];
+
+/** Whether a kind of item is not a link: the footer shows it as it is. */
+export const isFooterContent = (type: StoreSitesEnum.FooterLinkType): boolean =>
+  StoreSitesEnum.FOOTER_CONTENT_TYPES.includes(type);
+
+/** A new item of a kind, empty, for a section. */
+export const newFooterItem = (
+  type: StoreSitesEnum.FooterLinkType,
+  section: string,
+): IStoreSiteFooterLink => ({
+  key: `l-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`,
+  type,
+  label: "",
+  url: "",
+  section,
+  imageUrl: null,
+  height:
+    type === StoreSitesEnum.FooterLinkType.LOGO
+      ? 48
+      : type === StoreSitesEnum.FooterLinkType.IMAGE
+        ? 80
+        : null,
+});
 
 /** One column of the footer, with an optional title above what is in it. */
 export interface IStoreSiteFooterSection {
@@ -37,7 +67,16 @@ export interface IStoreSiteFooter {
   textSection: string;
   /** The section the login button is in. */
   loginSection: string;
+  /**
+   * Everything the footer shows, in order: links, and the name, the logo,
+   * paragraphs, pictures and the way into the app, each in its section.
+   */
   links: IStoreSiteFooterLink[];
+  /**
+   * 2 once the name, the logo, the text and the sign-in are items of `links`;
+   * an older footer has them in its own fields, and is read into items.
+   */
+  itemsVersion?: number;
 }
 
 /**
@@ -60,6 +99,59 @@ export const DEFAULT_SITE_FOOTER: IStoreSiteFooter = {
   textSection: "main",
   loginSection: "main",
   links: [],
+};
+
+/**
+ * What a footer saved before its items had kinds showed from its own fields,
+ * as items: the logo, the name and the text where the text was, and the
+ * sign-in where it was. The same reading the API does.
+ */
+const legacyItemsOf = (
+  footer: Partial<IStoreSiteFooter> | null | undefined,
+  textSection: string,
+  loginSection: string,
+): { before: IStoreSiteFooterLink[]; after: IStoreSiteFooterLink[] } => {
+  const F = StoreSitesEnum.FooterLinkType;
+
+  const item = (
+    key: string,
+    type: StoreSitesEnum.FooterLinkType,
+    section: string,
+    patch: Partial<IStoreSiteFooterLink> = {},
+  ): IStoreSiteFooterLink => ({
+    key,
+    type,
+    label: "",
+    url: "",
+    section,
+    imageUrl: null,
+    height: null,
+    ...patch,
+  });
+
+  const text: string = footer?.text?.trim() ?? "";
+
+  return {
+    before: [
+      ...(footer?.isLogoVisible === true
+        ? [
+            item("legacy-logo", F.LOGO, textSection, {
+              imageUrl: footer.logoUrl?.trim() || null,
+              height:
+                typeof footer.logoHeight === "number" ? footer.logoHeight : 48,
+            }),
+          ]
+        : []),
+      item("legacy-name", F.NAME, textSection),
+      ...(text
+        ? [item("legacy-note", F.NOTE, textSection, { label: text })]
+        : []),
+    ],
+    after:
+      footer?.isLoginVisible !== false
+        ? [item("legacy-sign-in", F.SIGN_IN, loginSection)]
+        : [],
+  };
 };
 
 const ALLOWED_PROTOCOLS: string[] = ["http:", "https:", "mailto:", "tel:"];
@@ -110,28 +202,42 @@ export const siteFooterOf = (
       ? section
       : fallback;
 
+  const textSection: string = placeOf(footer?.textSection, first);
+  const loginSection: string = placeOf(footer?.loginSection, first);
+
+  const own: IStoreSiteFooterLink[] = (
+    footer?.links && Array.isArray(footer.links) ? footer.links : []
+  )
+    .filter(
+      (link: IStoreSiteFooterLink) => !!link && typeof link.type === "string",
+    )
+    .map((link: IStoreSiteFooterLink) => ({
+      ...link,
+      label: link.label ?? "",
+      url: link.url ?? "",
+      imageUrl: link.imageUrl ?? null,
+      height: typeof link.height === "number" ? link.height : null,
+      section: placeOf(link.section, linksSection),
+    }));
+
+  const legacy =
+    footer?.itemsVersion === 2
+      ? { before: [], after: [] }
+      : legacyItemsOf(footer, textSection, loginSection);
+
   return {
     isActive: footer?.isActive !== false,
-    text: footer?.text?.trim() || null,
-    isLoginVisible: footer?.isLoginVisible !== false,
-    isLogoVisible: footer?.isLogoVisible === true,
-    logoUrl: footer?.logoUrl?.trim() || null,
-    logoHeight:
-      typeof footer?.logoHeight === "number" &&
-      Number.isFinite(footer.logoHeight)
-        ? Math.min(160, Math.max(20, Math.round(footer.logoHeight)))
-        : 48,
+    // Read into items: the footer shows only its items.
+    text: null,
+    isLoginVisible: false,
+    isLogoVisible: false,
+    logoUrl: null,
+    logoHeight: 48,
     sections,
-    textSection: placeOf(footer?.textSection, first),
-    loginSection: placeOf(footer?.loginSection, first),
-    links: (footer?.links && Array.isArray(footer.links) ? footer.links : [])
-      .filter(
-        (link: IStoreSiteFooterLink) => !!link && typeof link.url === "string",
-      )
-      .map((link: IStoreSiteFooterLink) => ({
-        ...link,
-        section: placeOf(link.section, linksSection),
-      })),
+    textSection,
+    loginSection,
+    links: [...legacy.before, ...own, ...legacy.after],
+    itemsVersion: 2,
   };
 };
 

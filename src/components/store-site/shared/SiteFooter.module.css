@@ -251,3 +251,21 @@
     animation: none;
   }
 }
+
+/* A picture the owner put in the footer, at the height they chose. */
+.image {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.imageLink {
+  display: inline-block;
+  transition: opacity 0.2s;
+}
+
+.imageLink:hover {
+  opacity: 0.85;
+}

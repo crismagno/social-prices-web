@@ -1,6 +1,6 @@
 "use client";
 
-import { CSSProperties, ReactNode } from "react";
+import { CSSProperties, Fragment, ReactNode } from "react";
 
 import {
   FacebookOutlined,
@@ -18,6 +18,7 @@ import {
 } from "@ant-design/icons";
 
 import {
+  isFooterContent,
   isSafeFooterUrl,
   IStoreSiteFooter,
   IStoreSiteFooterLink,
@@ -47,7 +48,7 @@ interface Props {
 }
 
 // A link of free text has no icon: it is just the owner's words.
-const ICONS: Record<StoreSitesEnum.FooterLinkType, ReactNode> = {
+const ICONS: Partial<Record<StoreSitesEnum.FooterLinkType, ReactNode>> = {
   [StoreSitesEnum.FooterLinkType.INSTAGRAM]: <InstagramOutlined />,
   [StoreSitesEnum.FooterLinkType.FACEBOOK]: <FacebookOutlined />,
   [StoreSitesEnum.FooterLinkType.WHATSAPP]: <WhatsAppOutlined />,
@@ -113,26 +114,153 @@ const SiteFooter = ({
 
   const t = useSiteT();
 
-  const {
-    isActive,
-    text,
-    isLoginVisible,
-    isLogoVisible,
-    logoUrl,
-    logoHeight,
-    sections,
-    textSection,
-    loginSection,
-    links,
-  } = siteFooterOf(footer);
+  const { isActive, sections, links } = siteFooterOf(footer);
 
   const year: number = new Date().getFullYear();
 
-  const logo: string | null = isLogoVisible
-    ? logoUrl
-      ? getImageUrl(logoUrl)
-      : (siteLogo ?? null)
-    : null;
+  const F = StoreSitesEnum.FooterLinkType;
+
+  /** A logo: the item's own picture, else the logo of the site; none, nothing. */
+  const logoOf = (item: IStoreSiteFooterLink): ReactNode => {
+    const source: string | null = item.imageUrl
+      ? getImageUrl(item.imageUrl)
+      : (siteLogo ?? null);
+
+    const size: number = item.height ?? 48;
+
+    return (
+      source && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          className={`${styles.logo} ${variant ? (styles[variant] ?? "") : ""}`}
+          src={source}
+          alt=""
+          style={{ width: size, height: size }}
+          loading="lazy"
+        />
+      )
+    );
+  };
+
+  const nameOf = (item: IStoreSiteFooterLink): ReactNode => (
+    <p className={styles.name}>{item.label?.trim() || brandName}</p>
+  );
+
+  /** One item that is not a link, as the footer shows it. */
+  const content = (item: IStoreSiteFooterLink): ReactNode => {
+    switch (item.type) {
+      case F.NAME:
+        return nameOf(item);
+      case F.LOGO:
+        return logoOf(item);
+      case F.NOTE:
+        return item.label?.trim() ? (
+          <p className={styles.text}>{item.label}</p>
+        ) : null;
+      case F.IMAGE: {
+        if (!item.imageUrl) {
+          return null;
+        }
+
+        const picture: ReactNode = (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            className={styles.image}
+            src={getImageUrl(item.imageUrl)}
+            alt={item.label ?? ""}
+            style={{ height: item.height ?? 80 }}
+            loading="lazy"
+          />
+        );
+
+        // It leads somewhere only when that is a safe address.
+        return isSafeFooterUrl(item.url) ? (
+          <a
+            href={item.url}
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            className={styles.imageLink}
+          >
+            {picture}
+          </a>
+        ) : (
+          picture
+        );
+      }
+      case F.SIGN_IN:
+        return (
+          <div className={styles.loginBox}>
+            <SiteSignIn
+              signIn={signIn}
+              storeId={storeId}
+              className={styles.login}
+            />
+            <span className={styles.loginHint}>
+              {t("storeSite.footer.loginHint")}
+            </span>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
+  /**
+   * What a section shows, in the owner's order: links that follow each other
+   * go in one row, a logo right before a name goes beside it, and anything
+   * else stands on its own.
+   */
+  const drawSection = (
+    items: IStoreSiteFooterLink[],
+    title: string | null,
+  ): ReactNode[] => {
+    const drawn: ReactNode[] = [];
+
+    for (let at = 0; at < items.length; at++) {
+      const item: IStoreSiteFooterLink = items[at];
+
+      if (!isFooterContent(item.type)) {
+        const row: IStoreSiteFooterLink[] = [];
+
+        while (at < items.length && !isFooterContent(items[at].type)) {
+          row.push(items[at]);
+          at++;
+        }
+
+        at--;
+
+        drawn.push(
+          <ul
+            key={row[0].key}
+            className={styles.links}
+            aria-label={title ?? t("storeSite.footer.links")}
+          >
+            {row.map((link: IStoreSiteFooterLink) => (
+              <SiteFooterLink key={link.key} link={link} />
+            ))}
+          </ul>,
+        );
+
+        continue;
+      }
+
+      if (item.type === F.LOGO && items[at + 1]?.type === F.NAME) {
+        drawn.push(
+          <div key={item.key} className={styles.brand}>
+            {logoOf(item)}
+            {nameOf(items[at + 1])}
+          </div>,
+        );
+        at++;
+
+        continue;
+      }
+
+      drawn.push(<Fragment key={item.key}>{content(item)}</Fragment>);
+    }
+
+    return drawn;
+  };
 
   const closing: ReactNode = (
     <div className={styles.bottom}>
@@ -149,9 +277,10 @@ const SiteFooter = ({
     );
   }
 
-  // An address that is not a plain link never becomes one, whatever was stored.
-  const safeLinks: IStoreSiteFooterLink[] = links.filter(
-    (link: IStoreSiteFooterLink) => isSafeFooterUrl(link.url),
+  // A link whose address is not a plain link never becomes one, whatever was stored.
+  const shown: IStoreSiteFooterLink[] = links.filter(
+    (link: IStoreSiteFooterLink) =>
+      isFooterContent(link.type) || isSafeFooterUrl(link.url),
   );
 
   return (
@@ -161,73 +290,23 @@ const SiteFooter = ({
         data-columns={sections.length}
         style={{ "--footer-columns": sections.length } as CSSProperties}
       >
-        {sections.map((section: IStoreSiteFooterSection, index: number) => {
-          const sectionLinks: IStoreSiteFooterLink[] = safeLinks.filter(
-            (link: IStoreSiteFooterLink) => link.section === section.key,
-          );
-
-          const hasText: boolean = textSection === section.key;
-
-          const hasLogin: boolean =
-            isLoginVisible && loginSection === section.key;
-
-          return (
-            <div
-              key={section.key}
-              className={styles.section}
-              style={{ "--i": index } as CSSProperties}
-            >
-              {section.title && (
-                <p className={styles.sectionTitle}>{section.title}</p>
-              )}
-
-              {hasText && (
-                <>
-                  <div className={styles.brand}>
-                    {logo && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        className={`${styles.logo} ${
-                          variant ? (styles[variant] ?? "") : ""
-                        }`}
-                        src={logo}
-                        alt=""
-                        style={{ width: logoHeight, height: logoHeight }}
-                        loading="lazy"
-                      />
-                    )}
-                    <p className={styles.name}>{brandName}</p>
-                  </div>
-                  {text && <p className={styles.text}>{text}</p>}
-                </>
-              )}
-
-              {sectionLinks.length > 0 && (
-                <ul
-                  className={styles.links}
-                  aria-label={section.title ?? t("storeSite.footer.links")}
-                >
-                  {sectionLinks.map((link: IStoreSiteFooterLink) => (
-                    <SiteFooterLink key={link.key} link={link} />
-                  ))}
-                </ul>
-              )}
-
-              {hasLogin && (
-                <div className={styles.loginBox}>
-                  <SiteSignIn
-                    signIn={signIn}
-                    storeId={storeId}
-                    className={styles.login}
-                  />
-                  <span className={styles.loginHint}>
-                    {t("storeSite.footer.loginHint")}
-                  </span>
-                </div>
-              )}
-            </div>
-          );
-        })}
+        {sections.map((section: IStoreSiteFooterSection, index: number) => (
+          <div
+            key={section.key}
+            className={styles.section}
+            style={{ "--i": index } as CSSProperties}
+          >
+            {section.title && (
+              <p className={styles.sectionTitle}>{section.title}</p>
+            )}
+            {drawSection(
+              shown.filter(
+                (link: IStoreSiteFooterLink) => link.section === section.key,
+              ),
+              section.title,
+            )}
+          </div>
+        ))}
       </div>
       {closing}
     </footer>

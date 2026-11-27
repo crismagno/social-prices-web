@@ -2862,9 +2862,9 @@
         "textHint": "A few words under the name of the store: address, opening hours, a phrase.",
         "login": "Show the button to sign in to the app",
         "loginHint": "Takes the customer into the app, to the same page as the button at the top.",
-        "linksHeading": "Links",
-        "add": "Add link",
-        "empty": "No link yet. Add your social networks, other sites or ways to get in touch.",
+        "linksHeading": "What the footer shows",
+        "add": "Add",
+        "empty": "Nothing yet. Add the name, a text, an image, your social networks or ways to get in touch.",
         "type": "Kind",
         "label": "Text of the link",
         "labelHint": "Empty shows the name of the kind, or the address for free text.",
@@ -2900,7 +2900,20 @@
         "logoHint": "Shown beside the name, in the shape of the logo at the top of the site.",
         "logoImage": "Logo image",
         "logoImageHint": "Empty uses the logo of the site.",
-        "logoHeight": "Logo height"
+        "logoHeight": "Logo height",
+        "kinds": {
+          "content": "Content",
+          "links": "Links"
+        },
+        "itemsHint": "Add what you want, as many as you want: the name, the logo, texts, images, the sign-in button and links. Each goes in the section you choose, in this order. Drag to reorder; click to open.",
+        "expandAll": "Open all",
+        "collapseAll": "Close all",
+        "image": "Image",
+        "imageHeight": "Height",
+        "imageUrl": "Where the image leads (optional)",
+        "imageAlt": "What the image is (for who cannot see it)",
+        "name": "Words in place of the name",
+        "nameHint": "Empty shows the name of the site."
       },
       "reset": {
         "button": "Reset the site to the defaults",
@@ -3654,7 +3667,12 @@
         "EMAIL": "Email",
         "PHONE": "Phone",
         "WEBSITE": "Website",
-        "TEXT": "Free text (no icon)"
+        "TEXT": "Text link (no icon)",
+        "NAME": "Name of the site",
+        "LOGO": "Logo",
+        "NOTE": "Text",
+        "IMAGE": "Image",
+        "SIGN_IN": "Sign-in button"
       }
     },
     "signIn": {
