@@ -1,6 +1,6 @@
 "use client";
 
-import { RefObject, useEffect, useRef, useState } from "react";
+import { Fragment, RefObject, useEffect, useRef, useState } from "react";
 
 import { Button, Card, Space, Tag, Tooltip } from "antd";
 import moment from "moment";
@@ -175,17 +175,39 @@ export default function EmployeesPage() {
               key: "name",
               align: "center",
               sorter: true,
-              render: (name: string, employee: IEmployee) => (
-                <div className="flex flex-col items-center">
-                  <span>{name}</span>
+              render: (name: string, employee: IEmployee) => {
+                const identifiers = [
+                  { label: t("common.cpf"), value: employee.cpf },
+                  { label: t("common.idNumber"), value: employee.idNumber },
+                ].filter((identifier) => !!identifier.value?.trim());
 
-                  {employee.username && (
-                    <small className="italic text-gray-400 dark:text-gray-500">
-                      {employee.username}
-                    </small>
-                  )}
-                </div>
-              ),
+                return (
+                  <div className="flex flex-col items-center">
+                    <span>{name}</span>
+
+                    {employee.username && (
+                      <small className="italic text-gray-400 dark:text-gray-500">
+                        {employee.username}
+                      </small>
+                    )}
+
+                    {identifiers.length > 0 && (
+                      <span className="text-[11px] leading-tight italic text-gray-400 dark:text-gray-500">
+                        {identifiers.map((identifier, index) => (
+                          <Fragment key={identifier.label}>
+                            {index > 0 && " | "}
+                            <Tooltip title={identifier.label}>
+                              <span className="cursor-help">
+                                {identifier.value}
+                              </span>
+                            </Tooltip>
+                          </Fragment>
+                        ))}
+                      </span>
+                    )}
+                  </div>
+                );
+              },
             },
             {
               title: t("common.email"),
