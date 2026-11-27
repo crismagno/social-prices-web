@@ -34,6 +34,7 @@ export interface IStoreSiteTemplateProps {
     | "catalog"
     | "about"
     | "pages"
+    | "chat"
     | "blocks"
     | "isLayoutCustom"
     | "header"

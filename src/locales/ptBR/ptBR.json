@@ -3774,6 +3774,7 @@
       "required": "Preencha os campos obrigatórios.",
       "invalidEmail": "Informe um e-mail válido.",
       "tooMany": "Muitas mensagens. Aguarde um pouco e tente de novo.",
+      "previewOnly": "Esta é a pré-visualização: as conversas começam no site publicado.",
       "failed": "Não foi possível enviar. Tente de novo.",
       "attach": "Enviar arquivo",
       "emoji": "Emojis",

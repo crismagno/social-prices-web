@@ -48,6 +48,11 @@ interface Props {
   theme: IStoreSiteTheme;
   /** The name of the site: the title of the window when the owner gave none. */
   brandName: string;
+  /**
+   * In the editor's preview: it looks and opens as on the site, but keeps no
+   * conversation and starts none, so nothing reaches the store's inbox.
+   */
+  isPreview?: boolean;
 }
 
 const OPEN_POLL_MS = 5000;
@@ -126,7 +131,13 @@ export const followSiteChat = (
  * answers from its inbox. Answers are fetched every few seconds; a dot on the
  * button says one arrived while the window was closed.
  */
-const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
+const SiteChatWidget = ({
+  slug,
+  chat,
+  theme,
+  brandName,
+  isPreview = false,
+}: Props) => {
   const t = useSiteT();
 
   const settings: IStoreSiteChat = siteChatOf(chat);
@@ -209,6 +220,11 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
   }, [slug, sessionMs]);
 
   useEffect(() => {
+    // The preview never takes up a conversation of the real site.
+    if (isPreview) {
+      return;
+    }
+
     const adopt = (): void => {
       const stored: string | null = read(tokenKey(slug));
 
@@ -241,7 +257,7 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
       window.removeEventListener(FOLLOW_EVENT, adopt);
       window.clearInterval(timer);
     };
-  }, [slug, isExpired, forget, touch]);
+  }, [slug, isExpired, forget, touch, isPreview]);
 
   const load = useCallback(async (): Promise<void> => {
     if (!token) {
@@ -387,6 +403,11 @@ const SiteChatWidget = ({ slug, chat, theme, brandName }: Props) => {
 
   const start = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
+
+    if (isPreview) {
+      setError(t("storeSite.chat.previewOnly"));
+      return;
+    }
 
     const name: string = form.name.trim();
     const email: string = form.email.trim();

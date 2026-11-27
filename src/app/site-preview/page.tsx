@@ -6,6 +6,7 @@ import {
   sitePagePath,
   sitePagesOf,
 } from "../../shared/business/store-sites/store-site-pages";
+import SiteChatWidget from "../../components/store-site/shared/SiteChatWidget";
 import SiteFonts from "../../components/store-site/shared/SiteFonts";
 import base from "../../components/store-site/shared/site-base.module.css";
 import { siteCartButtonOf } from "../../shared/business/store-sites/store-site-cart-button";
@@ -156,6 +157,13 @@ export default function SitePreviewPage() {
           products={data.products}
           mode="preview"
           cart={NO_CART}
+        />
+        <SiteChatWidget
+          slug={data.site.slug}
+          chat={data.site.chat}
+          theme={data.site.theme}
+          brandName={data.site.displayName?.trim() || data.store.name}
+          isPreview
         />
       </div>
     </SiteFonts>

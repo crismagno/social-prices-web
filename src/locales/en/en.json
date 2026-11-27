@@ -3771,6 +3771,7 @@
       "required": "Fill in the required fields.",
       "invalidEmail": "Enter a valid email.",
       "tooMany": "Too many messages. Wait a moment and try again.",
+      "previewOnly": "This is the preview: conversations start on the published site.",
       "failed": "It could not be sent. Try again.",
       "attach": "Send a file",
       "emoji": "Emojis",
