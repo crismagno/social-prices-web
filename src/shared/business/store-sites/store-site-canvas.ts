@@ -1,5 +1,6 @@
 import { IStoreSiteAboutMedia } from "./store-site-about";
 import { IStoreSiteBlockButton } from "./store-site-blocks";
+import { IStoreSiteMap, siteMapOf } from "./store-site-map";
 import StoreSitesEnum from "./store-sites.enum";
 
 /**
@@ -35,6 +36,8 @@ export interface IStoreSiteCanvasElement {
   media: IStoreSiteAboutMedia | null;
   /** Where a button leads. */
   button: IStoreSiteBlockButton | null;
+  /** The places of a map, and how it opens. */
+  map: IStoreSiteMap | null;
 }
 
 /** A free canvas: its height and what was placed on it, back to front. */
@@ -186,6 +189,7 @@ export const siteCanvasOf = (
             : null,
         media: type === Type.VIDEO ? mediaOf(element.media) : null,
         button: type === Type.BUTTON ? buttonOf(element.button) : null,
+        map: type === Type.MAP ? siteMapOf(element.map) : null,
       };
     });
 
@@ -213,6 +217,7 @@ const STARTS: Record<
   [Type.IMAGE]: { width: 320, height: 240, radius: 16 },
   [Type.VIDEO]: { width: 480, height: 270, radius: 16 },
   [Type.DIVIDER]: { width: 400, height: 4 },
+  [Type.MAP]: { width: 520, height: 340, radius: 16 },
 };
 
 /**
@@ -244,5 +249,6 @@ export const newCanvasElement = (
   imageUrl: null,
   media: null,
   button: type === Type.BUTTON ? button : null,
+  map: type === Type.MAP ? siteMapOf(null) : null,
   ...STARTS[type],
 });

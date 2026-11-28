@@ -27,6 +27,7 @@ import {
 import { ISaveStoreSite } from "../../../shared/business/store-sites/store-site.interface";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
+import { withSectionHeight } from "../../../shared/business/store-sites/store-site-section-height";
 
 export interface ISiteBuilder {
   /** The page being built; null is the home. */
@@ -196,6 +197,16 @@ const useSiteBuilder = (editor: IStoreSiteEditor): ISiteBuilder => {
           );
           setSelectedKey(action.key);
           setSelectedElementKey(action.elementKey);
+          return;
+        case "resize":
+          change((blocks) =>
+            blocks.map((block: IStoreSiteBlock) =>
+              block.key === action.key
+                ? withSectionHeight(block, action.height)
+                : block,
+            ),
+          );
+          setSelectedKey(action.key);
           return;
         case "page":
           setPageKey(action.pageKey);

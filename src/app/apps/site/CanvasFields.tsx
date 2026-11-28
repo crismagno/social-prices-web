@@ -47,6 +47,7 @@ import {
 } from "../../../shared/utils/rich-text/rich-text";
 import ButtonFields from "./ButtonFields";
 import ImageField from "./ImageField";
+import { MapEditor } from "./MapFields";
 import VideoField from "./VideoField";
 
 interface Props {
@@ -437,6 +438,27 @@ const CanvasFields = ({
               </>
             )}
 
+            {selected.type === Type.MAP && selected.map && (
+              <MapEditor
+                map={selected.map}
+                hasHeight={false}
+                // From the element as it is when applied.
+                setMap={(change) =>
+                  setCanvas((current) => ({
+                    elements: current.elements.map(
+                      (element: IStoreSiteCanvasElement) =>
+                        element.key === selected.key && element.map
+                          ? {
+                              ...element,
+                              map: { ...element.map, ...change(element.map) },
+                            }
+                          : element,
+                    ),
+                  }))
+                }
+              />
+            )}
+
             {selected.type === Type.IMAGE && (
               <Form.Item label={t(`${KEY}.image`)}>
                 <ImageField
@@ -522,7 +544,8 @@ const CanvasFields = ({
             )}
 
             <div className="flex flex-wrap gap-x-6">
-              {colorField(selected, "color")}
+              {/* A map has no words or line of its own to colour. */}
+              {selected.type !== Type.MAP && colorField(selected, "color")}
               {WITH_BACKGROUND.includes(selected.type) &&
                 colorField(selected, "background")}
               {selected.type !== Type.DIVIDER &&

@@ -7,6 +7,7 @@ import {
   Fragment,
   MouseEvent,
   ReactNode,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -45,6 +46,7 @@ import { CanvasBuilderContext, ICanvasBuilder } from "./canvas-builder";
 import PieceCanvas from "./PieceCanvas";
 import PieceMap from "./PieceMap";
 import SectionBackground from "./SectionBackground";
+import SectionHeight from "./SectionHeight";
 import styles from "./SiteBlocks.module.css";
 import {
   ISectionBuilderHooks,
@@ -61,6 +63,12 @@ import {
 } from "./Pieces";
 import PieceCards, { hasOwnCardsLayout } from "./PieceCards";
 import { IBlockContext, IBlockProps } from "./blockTypes";
+import {
+  hasNativeHeight,
+  sectionHeightOf,
+  withSectionHeight,
+} from "../../../../shared/business/store-sites/store-site-section-height";
+import { CANVAS_LIMITS } from "../../../../shared/business/store-sites/store-site-canvas";
 
 interface Props {
   /** The sections of the page shown, in order (see visiblePageSections). */
@@ -279,12 +287,157 @@ const BuilderSections = ({
 }: Props & { builder: ISectionBuilderHooks }) => {
   const t = useSiteT();
   const [dropIndex, setDropIndex] = useState<number | null>(null);
+  // The section being dragged by its handle; none for a new piece.
+  const [draggingKey, setDraggingKey] = useState<string | null>(null);
+  // A drag of a section or a piece is over the page.
+  const [isDragOver, setIsDragOver] = useState<boolean>(false);
+  // The section whose bottom edge is being pulled, at the height it would
+  // have now: drawn so at once, told to the editor when the pointer lets go.
+  const [pulled, setPulled] = useState<{
+    key: string;
+    height: number;
+  } | null>(null);
+
+  // A pull of a section's edge, as a height of its own kind: a canvas counts
+  // its height in its own pixels (1200 across), everything else on screen.
+  const resize =
+    (section: IStoreSiteBlock) =>
+    (
+      pull: { dy: number; startHeight: number; startWidth: number },
+      isDone: boolean,
+    ): void => {
+      const isCanvas: boolean =
+        section.type === StoreSitesEnum.BlockType.CANVAS;
+      const perPixel: number =
+        isCanvas && pull.startWidth > 0
+          ? CANVAS_LIMITS.width / pull.startWidth
+          : 1;
+
+      // A height of its own starts from itself (the section around it may be
+      // taller, with a title); any other from how tall it is seen, which is
+      // never less than what it shows.
+      const start: number = hasNativeHeight(section.type)
+        ? (sectionHeightOf(section) ?? pull.startHeight * perPixel)
+        : pull.startHeight;
+
+      const height: number =
+        sectionHeightOf(
+          withSectionHeight(section, start + pull.dy * perPixel),
+        ) ?? start;
+
+      if (!isDone) {
+        setPulled({ key: section.key, height });
+
+        return;
+      }
+
+      setPulled(null);
+
+      // A click on the edge without a pull changes nothing.
+      if (pull.dy !== 0) {
+        builder.send({ kind: "resize", key: section.key, height });
+      }
+    };
+
+  const draggingIndex: number = draggingKey
+    ? sections.findIndex(
+        (section: IStoreSiteBlock) => section.key === draggingKey,
+      )
+    : -1;
+
+  // Only a place that changes something: right before or after the section
+  // being moved it would stay where it is.
+  const aim = (at: number | null): void =>
+    setDropIndex(
+      at !== null &&
+        draggingIndex >= 0 &&
+        (at === draggingIndex || at === draggingIndex + 1)
+        ? null
+        : at,
+    );
+
+  // While something is dragged over the page: the page scrolls by itself near
+  // its top and bottom edges, so any place can be reached, and every trace of
+  // the drag goes when it ends, wherever it ends.
+  useEffect(() => {
+    const EDGE: number = 90;
+    const MAX_STEP: number = 22;
+    let speed: number = 0;
+    let frame: number = 0;
+
+    const tick = (): void => {
+      if (speed !== 0) {
+        window.scrollBy(0, speed);
+      }
+
+      frame = window.requestAnimationFrame(tick);
+    };
+
+    const onOver = (event: globalThis.DragEvent): void => {
+      if (!event.dataTransfer?.types.includes(SECTION_DRAG_TYPE)) {
+        return;
+      }
+
+      setIsDragOver(true);
+
+      const fromTop: number = event.clientY;
+      const fromBottom: number = window.innerHeight - event.clientY;
+
+      speed =
+        fromTop < EDGE
+          ? -Math.ceil(((EDGE - fromTop) / EDGE) * MAX_STEP)
+          : fromBottom < EDGE
+            ? Math.ceil(((EDGE - fromBottom) / EDGE) * MAX_STEP)
+            : 0;
+    };
+
+    const finish = (): void => {
+      speed = 0;
+      setIsDragOver(false);
+      setDropIndex(null);
+      setDraggingKey(null);
+    };
+
+    // Leaving the page (back to the editor): it stops scrolling.
+    const onLeave = (event: globalThis.DragEvent): void => {
+      // Told by where the pointer is: some browsers leave `relatedTarget`
+      // empty between two elements of the page too.
+      const isOut: boolean =
+        event.clientX <= 0 ||
+        event.clientY <= 0 ||
+        event.clientX >= window.innerWidth ||
+        event.clientY >= window.innerHeight;
+
+      if (isOut) {
+        speed = 0;
+        setIsDragOver(false);
+        setDropIndex(null);
+      }
+    };
+
+    frame = window.requestAnimationFrame(tick);
+    window.addEventListener("dragover", onOver);
+    window.addEventListener("dragleave", onLeave);
+    window.addEventListener("drop", finish);
+    window.addEventListener("dragend", finish);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("dragover", onOver);
+      window.removeEventListener("dragleave", onLeave);
+      window.removeEventListener("drop", finish);
+      window.removeEventListener("dragend", finish);
+    };
+  }, []);
 
   const drop = (event: DragEvent<HTMLElement>, at: number | null): void => {
     const data: TSectionDrag | null = dragOf(event);
 
     event.preventDefault();
+    event.stopPropagation();
     setDropIndex(null);
+    setDraggingKey(null);
+    setIsDragOver(false);
 
     if (!data || at === null) {
       return;
@@ -308,11 +461,23 @@ const BuilderSections = ({
     }
   };
 
+  // The gap between two sections takes the drop too: it is where the page
+  // says to let go.
   const line = (at: number): ReactNode => (
     <div
       className={frameStyles.dropLine}
       data-open={dropIndex === at || undefined}
       aria-hidden
+      onDragOver={(event: DragEvent<HTMLDivElement>) => {
+        if (
+          dropIndex === at &&
+          event.dataTransfer.types.includes(SECTION_DRAG_TYPE)
+        ) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      }}
+      onDrop={(event) => drop(event, at)}
     >
       <span className={frameStyles.dropPill}>
         {t("storeSite.editor.builder.frame.dropHere")}
@@ -343,6 +508,8 @@ const BuilderSections = ({
   return (
     <CanvasBuilderContext.Provider value={canvasBuilder}>
       <div
+        className={frameStyles.page}
+        data-drag-over={isDragOver || undefined}
         onDragLeave={(event: DragEvent<HTMLDivElement>) => {
           // Out of the page altogether: no line.
           if (
@@ -354,9 +521,14 @@ const BuilderSections = ({
       >
         {sections.map((section: IStoreSiteBlock, index: number) => {
           const isPart: boolean = isPartType(section.type);
+          // While its edge is pulled, drawn at the height it is pulled to.
+          const sized: IStoreSiteBlock =
+            pulled?.key === section.key
+              ? withSectionHeight(section, pulled.height)
+              : section;
           const shown: IStoreSiteBlock | null = isPart
-            ? section
-            : showableSection(section);
+            ? sized
+            : showableSection(sized);
 
           // A menu of tabs is only its menu here: its sections stay on the
           // page, where they are picked and edited.
@@ -375,7 +547,7 @@ const BuilderSections = ({
             section.type === StoreSitesEnum.BlockType.TABS
               ? tabs.length > 0 && <SiteTabs block={section} entries={tabs} />
               : isPart
-                ? drawPart(section, renderPart, marqueeStyle)
+                ? drawPart(sized, renderPart, marqueeStyle)
                 : shown && <BlockSection block={shown} {...rest} />;
 
           return (
@@ -387,13 +559,31 @@ const BuilderSections = ({
                 count={sections.length}
                 isPart={isPart}
                 builder={builder}
-                onDragOverAt={setDropIndex}
+                onDragOverAt={aim}
+                onDragStartMove={() => setDraggingKey(section.key)}
                 onDrop={(event) => drop(event, dropIndex)}
+                onResize={resize(section)}
+                onResizeReset={() =>
+                  builder.send({
+                    kind: "resize",
+                    key: section.key,
+                    height: null,
+                  })
+                }
+                resizeLabel={
+                  pulled?.key === section.key
+                    ? section.type === StoreSitesEnum.BlockType.CANVAS
+                      ? `${pulled.height}`
+                      : `${pulled.height}px`
+                    : null
+                }
               >
                 {content ? (
-                  <SectionBackground background={section.settings.background}>
-                    {content}
-                  </SectionBackground>
+                  <SectionHeight section={sized}>
+                    <SectionBackground background={section.settings.background}>
+                      {content}
+                    </SectionBackground>
+                  </SectionHeight>
                 ) : (
                   placeholder(section)
                 )}
@@ -409,7 +599,7 @@ const BuilderSections = ({
           onDragOver={(event: DragEvent<HTMLDivElement>) => {
             if (event.dataTransfer.types.includes(SECTION_DRAG_TYPE)) {
               event.preventDefault();
-              setDropIndex(sections.length);
+              aim(sections.length);
             }
           }}
           onDrop={(event) => drop(event, sections.length)}
@@ -447,13 +637,15 @@ const SiteSections = ({
 
   // Each section over the background the owner gave it, when it has one.
   const draw = (section: IStoreSiteBlock): ReactNode => (
-    <SectionBackground background={section.settings.background}>
-      {isPartType(section.type) ? (
-        drawPart(section, renderPart, marqueeStyle)
-      ) : (
-        <BlockSection block={section} {...rest} />
-      )}
-    </SectionBackground>
+    <SectionHeight section={section}>
+      <SectionBackground background={section.settings.background}>
+        {isPartType(section.type) ? (
+          drawPart(section, renderPart, marqueeStyle)
+        ) : (
+          <BlockSection block={section} {...rest} />
+        )}
+      </SectionBackground>
+    </SectionHeight>
   );
 
   // A section a menu of tabs shows is drawn inside that menu only.

@@ -282,3 +282,119 @@
 .placeholder strong {
   font-size: 15px;
 }
+
+/* What follows the pointer while a section is dragged: its name in a tag. */
+.ghost {
+  position: fixed;
+  top: -1000px;
+  left: -1000px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 99px;
+  background: #4f6bff;
+  color: #fff;
+  font:
+    600 13px system-ui,
+    sans-serif;
+  white-space: nowrap;
+  box-shadow: 0 10px 24px rgba(79, 107, 255, 0.4);
+}
+
+/*
+ * While something is dragged over the page, the frames are only places to
+ * drop: no names, toolbars or hover outlines to get in the way.
+ */
+.page[data-drag-over] .frame > .chip,
+.page[data-drag-over] .frame > .toolbar {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.page[data-drag-over] .frame:not([data-selected]):hover::after {
+  border-color: transparent;
+}
+
+/* The section being moved shrinks back, so where it goes stands out. */
+.page[data-drag-over] .frame[data-dragging] {
+  opacity: 0.3;
+  filter: grayscale(0.8);
+}
+
+/*
+ * The bottom edge of a section, pulled to change its height: a bar that
+ * shows on hover or when the section is picked, and says the height while it
+ * is pulled.
+ */
+.resize {
+  position: absolute;
+  z-index: 32;
+  left: 0;
+  right: 0;
+  bottom: -7px;
+  height: 14px;
+  display: grid;
+  place-items: center;
+  cursor: ns-resize;
+  touch-action: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.frame:hover > .resize,
+.frame[data-selected] > .resize,
+.resize[data-pulling] {
+  opacity: 1;
+}
+
+.resizeGrip {
+  width: 56px;
+  height: 6px;
+  border-radius: 99px;
+  background: var(--builder-blue);
+  box-shadow:
+    0 0 0 3px #fff,
+    0 4px 12px rgba(79, 107, 255, 0.45);
+  transition:
+    width 0.2s,
+    height 0.2s;
+}
+
+.resize:hover .resizeGrip,
+.resize[data-pulling] .resizeGrip {
+  width: 84px;
+  height: 8px;
+}
+
+/* A line across the whole edge while it is pulled. */
+.resize[data-pulling]::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  translate: 0 -50%;
+  background: var(--builder-blue);
+}
+
+.resizeLabel {
+  position: absolute;
+  top: 14px;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: var(--builder-blue);
+  color: #fff;
+  font:
+    600 12px system-ui,
+    sans-serif;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  box-shadow: 0 6px 16px rgba(79, 107, 255, 0.35);
+}
+
+/* No pulling while a section is dragged over the page. */
+.page[data-drag-over] .resize {
+  display: none;
+}

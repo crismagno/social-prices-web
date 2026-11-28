@@ -26,6 +26,7 @@ import { readableOver } from "../SiteThemeVars";
 import { IBlockProps } from "./blockTypes";
 import { CanvasBuilderContext, ICanvasBuilder } from "./canvas-builder";
 import styles from "./PieceCanvas.module.css";
+import { MapView } from "./PieceMap";
 
 const Type = StoreSitesEnum.CanvasElementType;
 
@@ -217,6 +218,8 @@ const PieceCanvas = ({ block, context }: IBlockProps) => {
         );
       case Type.DIVIDER:
         return null;
+      case Type.MAP:
+        return <MapView map={element.map} isFill />;
       case Type.BUTTON:
         return element.text;
       default:

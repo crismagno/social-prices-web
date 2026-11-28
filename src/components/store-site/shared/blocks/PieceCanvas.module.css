@@ -157,3 +157,17 @@ a.element[data-kind="BUTTON"]:hover {
   bottom: -7px;
   cursor: nwse-resize;
 }
+
+/*
+ * In the builder a map is moved and resized like any element: dragging it
+ * moves it instead of the places it shows.
+ */
+.canvas[data-building] [data-kind="MAP"] > :not(.grip) {
+  pointer-events: none;
+}
+
+/* A map fills its element from edge to edge. */
+.element[data-kind="MAP"] {
+  align-items: stretch;
+  overflow: hidden;
+}

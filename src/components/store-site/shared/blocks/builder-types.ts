@@ -13,6 +13,8 @@ export type TBuilderAction =
   | { kind: "selectElement"; key: string; elementKey: string | null }
   /** An element of a free canvas was moved or resized. */
   | { kind: "placeElement"; key: string; elementKey: string; box: TCanvasBox }
+  /** A section's bottom edge was pulled: its height; null is as tall as it needs. */
+  | { kind: "resize"; key: string; height: number | null }
   /** A link to a page of the site was clicked: the preview shows that page. */
   | { kind: "page"; pageKey: string | null };
 

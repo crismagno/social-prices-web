@@ -3646,7 +3646,8 @@
           "dropHere": "Soltar aqui",
           "dragHere": "Arraste peças para cá",
           "empty": "Ainda vazia: preencha no painel",
-          "tabsNote": "No site, o menu mostra as seções ligadas aos itens: uma por vez ou todas, com o menu rolando até cada uma."
+          "tabsNote": "No site, o menu mostra as seções ligadas aos itens: uma por vez ou todas, com o menu rolando até cada uma.",
+          "resize": "Arraste para mudar a altura · duplo clique para automática"
         },
         "fields": {
           "variant": "Estilo",
@@ -3898,7 +3899,8 @@
             "BOX": "Caixa",
             "IMAGE": "Imagem",
             "VIDEO": "Vídeo",
-            "DIVIDER": "Divisor"
+            "DIVIDER": "Divisor",
+            "MAP": "Mapa"
           },
           "samples": {
             "TEXT": "Seu texto",

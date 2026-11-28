@@ -32,24 +32,35 @@ interface ITile {
 /** The tiles of OpenStreetMap: free to show, with their credit beside them. */
 const TILE_URL = "https://tile.openstreetmap.org";
 
+interface IMapViewProps {
+  map: IStoreSiteMap | null;
+  /**
+   * It takes the whole of the box it is in (an element of a free canvas)
+   * instead of the height the map was given.
+   */
+  isFill?: boolean;
+}
+
 /**
  * A map with the places the owner marked: it opens showing all of them (or
  * the centre the owner chose), can be dragged and zoomed, and a pin that is
  * picked says its name and what was written about it.
  */
-const PieceMap = ({ block }: IBlockProps) => {
+export const MapView = ({ map, isFill = false }: IMapViewProps) => {
   const t = useSiteT();
 
   const frameRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ x: number; y: number; view: IView } | null>(null);
 
   const [width, setWidth] = useState<number>(0);
+  const [boxHeight, setBoxHeight] = useState<number>(0);
   const [moved, setMoved] = useState<IView | null>(null);
   const [openKey, setOpenKey] = useState<string | null>(null);
 
-  const map: IStoreSiteMap | null = block.settings.map;
+  // Its height: the box's own when it fills one, else the one it was given.
+  const height: number = isFill ? boxHeight : (map?.height ?? 0);
 
-  // The frame's own width: the map fills it, whatever the screen.
+  // The frame's own size: the map fills it, whatever the screen.
   useEffect(() => {
     const frame: HTMLDivElement | null = frameRef.current;
 
@@ -57,7 +68,10 @@ const PieceMap = ({ block }: IBlockProps) => {
       return;
     }
 
-    const read = (): void => setWidth(frame.clientWidth);
+    const read = (): void => {
+      setWidth(frame.clientWidth);
+      setBoxHeight(frame.clientHeight);
+    };
 
     read();
 
@@ -75,10 +89,12 @@ const PieceMap = ({ block }: IBlockProps) => {
     }
 
     const fitted =
-      map.isAutoFit && width > 0 ? fitPins(map.pins, width, map.height) : null;
+      map.isAutoFit && width > 0 && height > 0
+        ? fitPins(map.pins, width, height)
+        : null;
 
     return fitted ?? { lat: map.centerLat, lng: map.centerLng, zoom: map.zoom };
-  }, [map, width]);
+  }, [map, width, height]);
 
   // What the owner changes in the editor is shown at once: a view the
   // visitor dragged to belongs to the map as it was.
@@ -91,7 +107,6 @@ const PieceMap = ({ block }: IBlockProps) => {
   }
 
   const view: IView = moved ?? start;
-  const { height } = map;
 
   const center = toWorld(view.lat, view.lng, view.zoom);
   const left: number = center.x - width / 2;
@@ -177,7 +192,8 @@ const PieceMap = ({ block }: IBlockProps) => {
     <div
       ref={frameRef}
       className={styles.map}
-      style={{ height }}
+      data-fill={isFill ? "" : undefined}
+      style={isFill ? undefined : { height }}
       onPointerDown={begin}
       onPointerMove={drag}
       onPointerUp={end}
@@ -274,5 +290,10 @@ const PieceMap = ({ block }: IBlockProps) => {
     </div>
   );
 };
+
+/** The map section: the map, as tall as the owner made it. */
+const PieceMap = ({ block }: IBlockProps) => (
+  <MapView map={block.settings.map} />
+);
 
 export default PieceMap;

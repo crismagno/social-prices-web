@@ -3643,7 +3643,8 @@
           "dropHere": "Drop here",
           "dragHere": "Drag pieces here",
           "empty": "Still empty: fill it in the panel",
-          "tabsNote": "On the site, the menu shows the sections its items point to: one at a time, or all of them with the menu scrolling to each."
+          "tabsNote": "On the site, the menu shows the sections its items point to: one at a time, or all of them with the menu scrolling to each.",
+          "resize": "Drag to change the height · double-click for automatic"
         },
         "fields": {
           "variant": "Style",
@@ -3895,7 +3896,8 @@
             "BOX": "Box",
             "IMAGE": "Image",
             "VIDEO": "Video",
-            "DIVIDER": "Divider"
+            "DIVIDER": "Divider",
+            "MAP": "Map"
           },
           "samples": {
             "TEXT": "Your text",

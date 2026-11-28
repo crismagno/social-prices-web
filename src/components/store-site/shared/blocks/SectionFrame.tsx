@@ -1,6 +1,13 @@
 "use client";
 
-import { DragEvent, MouseEvent, ReactNode, useState } from "react";
+import {
+  DragEvent,
+  MouseEvent,
+  PointerEvent,
+  ReactNode,
+  useRef,
+  useState,
+} from "react";
 
 import {
   ArrowDownOutlined,
@@ -30,7 +37,22 @@ interface Props {
   builder: ISectionBuilderHooks;
   /** Where a drag over this section would drop: before it or after it. */
   onDragOverAt: (index: number) => void;
+  /** This section started being dragged by its handle. */
+  onDragStartMove: () => void;
   onDrop: (event: DragEvent<HTMLElement>) => void;
+  /**
+   * Its bottom edge is being pulled: how far, in screen pixels, from where it
+   * was when the pull began (with the size the section had then). `isDone`
+   * when the pointer lets go.
+   */
+  onResize: (
+    pull: { dy: number; startHeight: number; startWidth: number },
+    isDone: boolean,
+  ) => void;
+  /** Back to as tall as it needs: a double click on the edge. */
+  onResizeReset: () => void;
+  /** What the edge says while it is pulled: the height it will have. */
+  resizeLabel: string | null;
   children: ReactNode;
 }
 
@@ -46,7 +68,11 @@ const SectionFrame = ({
   isPart,
   builder,
   onDragOverAt,
+  onDragStartMove,
   onDrop,
+  onResize,
+  onResizeReset,
+  resizeLabel,
   children,
 }: Props) => {
   const t = useSiteT();
@@ -54,6 +80,25 @@ const SectionFrame = ({
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const isSelected: boolean = builder.selectedKey === section.key;
+
+  // Where a pull of the bottom edge began, and how big the section was then.
+  const pullRef = useRef<{
+    y: number;
+    startHeight: number;
+    startWidth: number;
+  } | null>(null);
+
+  const pullOf = (event: PointerEvent<HTMLElement>) => {
+    const pull = pullRef.current;
+
+    return pull
+      ? {
+          dy: event.clientY - pull.y,
+          startHeight: pull.startHeight,
+          startWidth: pull.startWidth,
+        }
+      : null;
+  };
 
   const act =
     (action: () => void) =>
@@ -118,15 +163,18 @@ const SectionFrame = ({
             event.dataTransfer.setData(SECTION_DRAG_TYPE, JSON.stringify(data));
             event.dataTransfer.effectAllowed = "move";
 
-            const frame = event.currentTarget.closest(
-              `.${styles.frame}`,
-            ) as HTMLElement | null;
+            // A small tag with its name follows the pointer, not a picture of
+            // the whole section (which can be as tall as the screen).
+            const ghost: HTMLSpanElement = document.createElement("span");
 
-            if (frame) {
-              event.dataTransfer.setDragImage(frame, 24, 24);
-            }
+            ghost.className = styles.ghost;
+            ghost.textContent = builder.labelOf(section.type);
+            document.body.appendChild(ghost);
+            event.dataTransfer.setDragImage(ghost, 16, 16);
+            window.setTimeout(() => ghost.remove(), 0);
 
             setIsDragging(true);
+            onDragStartMove();
           }}
           onDragEnd={() => setIsDragging(false)}
         >
@@ -208,6 +256,85 @@ const SectionFrame = ({
       </div>
 
       {children}
+
+      {/* The bottom edge: pulled to make the section taller or shorter. */}
+      <div
+        className={styles.resize}
+        data-frame-tool
+        data-pulling={resizeLabel !== null || undefined}
+        role="separator"
+        aria-orientation="horizontal"
+        aria-label={label("resize")}
+        title={label("resize")}
+        onPointerDown={(event: PointerEvent<HTMLDivElement>) => {
+          if (event.button !== 0) {
+            return;
+          }
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          const frame = event.currentTarget.closest(
+            `.${styles.frame}`,
+          ) as HTMLElement | null;
+          const box: DOMRect | undefined = frame?.getBoundingClientRect();
+
+          // A free canvas inside counts in its own width, which can be
+          // narrower than the section.
+          const canvas: Element | null | undefined =
+            frame?.querySelector("[data-building]");
+
+          pullRef.current = {
+            y: event.clientY,
+            startHeight: box?.height ?? 0,
+            startWidth:
+              canvas?.getBoundingClientRect().width ?? box?.width ?? 0,
+          };
+
+          try {
+            event.currentTarget.setPointerCapture(event.pointerId);
+          } catch {
+            // A pointer that cannot be held still pulls while it stays over it.
+          }
+
+          builder.send({ kind: "select", key: section.key });
+          onResize({ dy: 0, ...pullRef.current }, false);
+        }}
+        onPointerMove={(event: PointerEvent<HTMLDivElement>) => {
+          const pull = pullOf(event);
+
+          if (pull) {
+            onResize(pull, false);
+          }
+        }}
+        onPointerUp={(event: PointerEvent<HTMLDivElement>) => {
+          const pull = pullOf(event);
+
+          pullRef.current = null;
+
+          if (pull) {
+            onResize(pull, true);
+          }
+        }}
+        onPointerCancel={(event: PointerEvent<HTMLDivElement>) => {
+          const pull = pullOf(event);
+
+          pullRef.current = null;
+
+          if (pull) {
+            onResize(pull, true);
+          }
+        }}
+        onDoubleClick={(event: MouseEvent<HTMLDivElement>) => {
+          event.stopPropagation();
+          onResizeReset();
+        }}
+      >
+        <span className={styles.resizeGrip} />
+        {resizeLabel !== null && (
+          <span className={styles.resizeLabel}>{resizeLabel}</span>
+        )}
+      </div>
     </div>
   );
 };

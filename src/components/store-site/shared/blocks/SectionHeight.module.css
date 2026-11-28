@@ -1,0 +1,14 @@
+/* The entrance's own height reaches it through the variable alone. */
+.hero {
+  display: contents;
+}
+
+/* At least as tall as the owner pulled it: its one child fills the room. */
+.box {
+  display: flex;
+  flex-direction: column;
+}
+
+.box > :only-child {
+  flex: 1 0 auto;
+}

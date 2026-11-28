@@ -104,6 +104,12 @@ export interface IStoreSiteBlockSettings {
   canvas: IStoreSiteCanvas | null;
   /** A map only: its pins and how it is shown. */
   map: IStoreSiteMap | null;
+  /**
+   * The height the owner pulled the section to, in pixels: at least that
+   * tall. Empty, as tall as it needs. A spacer, a canvas and a map have a
+   * height of their own instead.
+   */
+  boxHeight: number | null;
 }
 
 /**
@@ -133,6 +139,9 @@ export const MAX_SECTION_BUTTONS: number = 20;
 /** The most sections one item of a menu of tabs shows. */
 export const MAX_TAB_SECTIONS: number = 12;
 export const SPACER_LIMITS = { min: 8, max: 240, initial: 48 } as const;
+
+/** The height a section can be pulled to; see store-site-section-height.ts. */
+export const SECTION_BOX_HEIGHT_RANGE: [number, number] = [80, 2000];
 
 export const isPartType = (type: StoreSitesEnum.BlockType): boolean =>
   StoreSitesEnum.PART_TYPES.includes(type);
@@ -444,6 +453,15 @@ export const blockSettingsOf = (
       ? siteCanvasOf(source.canvas, { buttonOf, mediaOf })
       : null,
     map: uses(T.MAP) ? siteMapOf(source.map) : null,
+    boxHeight:
+      !uses(T.SPACER, T.CANVAS, T.MAP) &&
+      typeof source.boxHeight === "number" &&
+      Number.isFinite(source.boxHeight)
+        ? Math.min(
+            SECTION_BOX_HEIGHT_RANGE[1],
+            Math.max(SECTION_BOX_HEIGHT_RANGE[0], Math.round(source.boxHeight)),
+          )
+        : null,
   };
 };
 

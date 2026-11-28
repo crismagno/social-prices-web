@@ -71,34 +71,29 @@ const findAddress = async (
     : null;
 };
 
+interface IMapEditorProps {
+  map: IStoreSiteMap;
+  /** Applied to the map as it is then. */
+  setMap: (change: (current: IStoreSiteMap) => Partial<IStoreSiteMap>) => void;
+  /** Without it the height is not asked: the map takes its box's (a canvas). */
+  hasHeight?: boolean;
+}
+
 /**
  * A map in the panel: its height, how it opens, and its pins. A pin is added
  * by an address (looked up on OpenStreetMap) or by a latitude and longitude
- * pasted from any map service.
+ * pasted from any map service. The map section and a map on a free canvas
+ * both use it.
  */
-const MapFields = ({ section, onChange }: Props) => {
+export const MapEditor = ({
+  map,
+  setMap,
+  hasHeight = true,
+}: IMapEditorProps) => {
   const { t } = useLanguageData();
 
   const [query, setQuery] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
-
-  const map: IStoreSiteMap | null = section.settings.map;
-
-  if (!map) {
-    return null;
-  }
-
-  // From the section as it is when applied, like every change of the editor.
-  const setMap = (
-    change: (current: IStoreSiteMap) => Partial<IStoreSiteMap>,
-  ): void =>
-    onChange((current) => {
-      const now: IStoreSiteMap = current.settings.map ?? map;
-
-      return {
-        settings: { ...current.settings, map: { ...now, ...change(now) } },
-      };
-    });
 
   const setPin = (key: string, patch: Partial<IStoreSiteMapPin>): void =>
     setMap((current) => ({
@@ -167,16 +162,18 @@ const MapFields = ({ section, onChange }: Props) => {
   return (
     <Space direction="vertical" className="w-full">
       <Form layout="vertical">
-        <Form.Item label={t(`${KEY}.height`)}>
-          <Slider
-            min={MAP_LIMITS.height[0]}
-            max={MAP_LIMITS.height[1]}
-            step={10}
-            tooltip={{ formatter: (value?: number) => `${value ?? 0}px` }}
-            value={map.height}
-            onChange={(height: number) => setMap(() => ({ height }))}
-          />
-        </Form.Item>
+        {hasHeight && (
+          <Form.Item label={t(`${KEY}.height`)}>
+            <Slider
+              min={MAP_LIMITS.height[0]}
+              max={MAP_LIMITS.height[1]}
+              step={10}
+              tooltip={{ formatter: (value?: number) => `${value ?? 0}px` }}
+              value={map.height}
+              onChange={(height: number) => setMap(() => ({ height }))}
+            />
+          </Form.Item>
+        )}
 
         <label className="mb-3 flex items-center justify-between gap-2">
           <span>{t(`${KEY}.isAutoFit`)}</span>
@@ -353,6 +350,31 @@ const MapFields = ({ section, onChange }: Props) => {
         </Card>
       ))}
     </Space>
+  );
+};
+
+/** The map section in the panel. */
+const MapFields = ({ section, onChange }: Props) => {
+  const map: IStoreSiteMap | null = section.settings.map;
+
+  if (!map) {
+    return null;
+  }
+
+  return (
+    <MapEditor
+      map={map}
+      // From the section as it is when applied, like every change of the editor.
+      setMap={(change) =>
+        onChange((current) => {
+          const now: IStoreSiteMap = current.settings.map ?? map;
+
+          return {
+            settings: { ...current.settings, map: { ...now, ...change(now) } },
+          };
+        })
+      }
+    />
   );
 };
 
