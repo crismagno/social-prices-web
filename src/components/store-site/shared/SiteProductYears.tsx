@@ -24,14 +24,18 @@ const SiteProductYears = ({ product, className }: Props) => {
   }
 
   return (
-    <span
-      className={className ?? base.productYears}
-      title={t("storeSite.product.years")}
-    >
-      <span className={base.productYearsWord}>
-        {t("storeSite.product.years")}
-      </span>{" "}
-      {label}
+    // A line of its own, under the price: the label keeps the side the
+    // template writes on (left, centre), whichever it is.
+    <span className={base.productYearsRow}>
+      <span
+        className={className ?? base.productYears}
+        title={t("storeSite.product.years")}
+      >
+        <span className={base.productYearsWord}>
+          {t("storeSite.product.years")}
+        </span>{" "}
+        {label}
+      </span>
     </span>
   );
 };

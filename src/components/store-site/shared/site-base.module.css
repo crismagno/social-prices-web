@@ -73,10 +73,14 @@
 }
 
 /* The years a product is for, the same small label in every template. */
+.productYearsRow {
+  display: block;
+  margin-top: 8px;
+  line-height: 1;
+}
+
 .productYears {
   display: inline-block;
-  width: fit-content;
-  margin-top: 6px;
   padding: 2px 9px;
   border-radius: 99px;
   border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
