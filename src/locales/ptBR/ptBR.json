@@ -2737,6 +2737,14 @@
           "veil": {
             "label": "Camada esmaecida sobre a foto",
             "hint": "Quão forte é a camada de cor sobre a foto, com o degradê embaixo: 100% é o visual do template, 0% é a foto como ela é."
+          },
+          "spacing": {
+            "label": "Espaço em volta da entrada",
+            "hint": "Espaço extra em cada lado, em pixels, somado ao que o template já deixa. Vazio não adiciona nada.",
+            "top": "Topo",
+            "right": "Direita",
+            "bottom": "Baixo",
+            "left": "Esquerda"
           }
         },
         "fixedHeader": "Manter o header na tela",

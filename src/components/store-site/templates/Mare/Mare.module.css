@@ -116,6 +116,8 @@
 
 /* ---------- The top: a sand panel, the title, an arched photo ---------- */
 .hero {
+  --hero-pad-top: 20px;
+  --hero-pad-x: clamp(12px, 3vw, 40px);
   padding: 20px clamp(12px, 3vw, 40px) 0;
 }
 

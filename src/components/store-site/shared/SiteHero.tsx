@@ -7,7 +7,9 @@ import {
   blockButtonHref,
 } from "../../../shared/business/store-sites/store-site-blocks";
 import {
+  HERO_SIDES,
   IStoreSiteHeroOptions,
+  THeroSide,
   heroOptionsOf,
 } from "../../../shared/business/store-sites/store-site-hero";
 import { IStoreSiteHero } from "../../../shared/business/store-sites/store-site.interface";
@@ -94,10 +96,22 @@ export const heroColorProps = (
     button ? "btn" : "",
   ].filter(Boolean);
 
-  const veilStyle: CSSProperties =
-    hasPhoto && options.veil < 100
+  // The room the owner added on each side, one variable per side that has any.
+  const spaceStyle: Record<string, string> = Object.fromEntries(
+    HERO_SIDES.filter((side: THeroSide) => options.spacing[side]).map(
+      (side: THeroSide) => [
+        `--hero-space-${side}`,
+        `${options.spacing[side]}px`,
+      ],
+    ),
+  );
+
+  const veilStyle: CSSProperties = {
+    ...spaceStyle,
+    ...(hasPhoto && options.veil < 100
       ? ({ "--hero-veil": options.veil / 100 } as CSSProperties)
-      : {};
+      : {}),
+  };
 
   if (!set.length) {
     return {

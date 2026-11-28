@@ -27,7 +27,7 @@
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: clamp(24px, 5vw, 70px);
   align-items: center;
-  padding: 120px clamp(18px, 5vw, 56px) 80px;
+  padding: 72px clamp(18px, 5vw, 56px) 80px;
 }
 
 .heroBodyAlone {
@@ -455,7 +455,7 @@
 @media (max-width: 767px) {
   .heroBody {
     grid-template-columns: minmax(0, 1fr);
-    padding: 100px 18px 60px;
+    padding: 56px 18px 60px;
   }
 
   .shape {

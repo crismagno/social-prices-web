@@ -44,6 +44,9 @@ interface Props {
 const SCROLLED_AFTER: number = 8;
 const SCROLLED_ALPHA: number = 96;
 
+/** Pixels of air between a clean header and the words of the entrance. */
+const OVER_GAP: number = 20;
+
 /**
  * The header of the site: its name, its menu, the sign-in and the cart. It is
  * the site's, not a page's: the same on every page, apart from the entrance,
@@ -107,6 +110,14 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
         "--site-sticky-top",
         isOnTop && isStuck ? `${height}px` : "0px",
       );
+      // A clean header at the top lies over the page: the entrance starts
+      // its words below it, so none of them ends up behind the menu.
+      root.style.setProperty(
+        "--site-header-over",
+        position === P.TOP && transparency > 0
+          ? `${height + OVER_GAP}px`
+          : "0px",
+      );
       root.style.setProperty(
         "--site-bottom-bar",
         position === P.BOTTOM ? `${height}px` : "0px",
@@ -125,9 +136,10 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
       window.removeEventListener("resize", measure);
       root.style.removeProperty("--site-sticky-top");
       root.style.removeProperty("--site-bottom-bar");
+      root.style.removeProperty("--site-header-over");
       root.style.removeProperty("--site-header-side");
     };
-  }, [position, isFixed, height, width]);
+  }, [position, isFixed, height, width, transparency]);
 
   // One button of the header: the sign-in, the cart or one of the owner's own
   // (one that says nothing or goes nowhere safe is not drawn).

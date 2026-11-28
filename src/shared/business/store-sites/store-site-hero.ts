@@ -7,6 +7,34 @@ export interface IStoreSiteHeroColors {
   button: string | null;
 }
 
+export const HERO_SPACING_MAX: number = 400;
+
+export type THeroSide = "top" | "right" | "bottom" | "left";
+
+export const HERO_SIDES: THeroSide[] = ["top", "right", "bottom", "left"];
+
+/** Pixels of room on each side of the entrance; empty, none added. */
+export type IStoreSiteHeroSpacing = Record<THeroSide, number | null>;
+
+const spaceOf = (value: unknown): number | null =>
+  typeof value === "number" && Number.isFinite(value) && value >= 1
+    ? Math.min(HERO_SPACING_MAX, Math.round(value))
+    : null;
+
+const spacingOf = (spacing: unknown): IStoreSiteHeroSpacing => {
+  const source: Record<string, unknown> =
+    spacing && typeof spacing === "object"
+      ? (spacing as Record<string, unknown>)
+      : {};
+
+  return {
+    top: spaceOf(source.top),
+    right: spaceOf(source.right),
+    bottom: spaceOf(source.bottom),
+    left: spaceOf(source.left),
+  };
+};
+
 /**
  * The owner's own choices for the entrance: which of its pieces show, one more
  * paragraph, where its button leads, a second button and its own colours.
@@ -23,6 +51,8 @@ export interface IStoreSiteHeroOptions {
    * fading foot: 100 as the template draws it, 0 the photo as it is.
    */
   veil: number;
+  /** Room added around what the entrance holds, in pixels, side by side. */
+  spacing: IStoreSiteHeroSpacing;
   isButtonVisible: boolean;
   /** A paragraph under the subtitle. */
   extraText: string | null;
@@ -71,6 +101,7 @@ export const heroOptionsOf = (options: unknown): IStoreSiteHeroOptions => {
       typeof source.veil === "number" && Number.isFinite(source.veil)
         ? Math.min(100, Math.max(0, Math.round(source.veil)))
         : 100,
+    spacing: spacingOf(source.spacing),
     isButtonVisible: source.isButtonVisible !== false,
     extraText:
       typeof source.extraText === "string" && source.extraText.trim()

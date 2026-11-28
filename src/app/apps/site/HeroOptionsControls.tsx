@@ -5,6 +5,7 @@ import {
   Divider,
   Form,
   Input,
+  InputNumber,
   Segmented,
   Slider,
   Switch,
@@ -17,7 +18,10 @@ import {
 } from "../../../shared/business/store-sites/store-site-blocks";
 import {
   HERO_EXTRA_TEXT_MAX,
+  HERO_SIDES,
+  HERO_SPACING_MAX,
   IStoreSiteHeroColors,
+  THeroSide,
   IStoreSiteHeroOptions,
 } from "../../../shared/business/store-sites/store-site-hero";
 import { IStoreSitePage } from "../../../shared/business/store-sites/store-site-pages";
@@ -103,6 +107,31 @@ const HeroOptionsControls = ({
           value={options.veil}
           onChange={(veil: number) => set(() => ({ veil }))}
         />
+      </Form.Item>
+
+      <Form.Item
+        label={t(`${KEY}.spacing.label`)}
+        extra={t(`${KEY}.spacing.hint`)}
+      >
+        <div className="grid grid-cols-2 gap-2">
+          {HERO_SIDES.map((side: THeroSide) => (
+            <InputNumber
+              key={side}
+              className="w-full"
+              min={0}
+              max={HERO_SPACING_MAX}
+              addonBefore={t(`${KEY}.spacing.${side}`)}
+              addonAfter="px"
+              placeholder="0"
+              value={options.spacing[side]}
+              onChange={(pixels: number | null) =>
+                set((current) => ({
+                  spacing: { ...current.spacing, [side]: pixels || null },
+                }))
+              }
+            />
+          ))}
+        </div>
       </Form.Item>
 
       <Divider orientation="left" plain>

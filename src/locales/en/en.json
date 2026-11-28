@@ -2734,6 +2734,14 @@
           "veil": {
             "label": "Faded layer over the photo",
             "hint": "How strong the wash of colour over the photo is, with the fade at its foot: 100% is the look of the template, 0% is the photo as it is."
+          },
+          "spacing": {
+            "label": "Space around the entrance",
+            "hint": "Room added on each side, in pixels, over what the template already leaves. Empty adds none.",
+            "top": "Top",
+            "right": "Right",
+            "bottom": "Bottom",
+            "left": "Left"
           }
         },
         "fixedHeader": "Keep the header on screen",

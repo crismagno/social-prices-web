@@ -452,6 +452,25 @@
   opacity: var(--hero-veil) !important;
 }
 
+/*
+ * Under a clean header, which lies over the top of the page, the entrance
+ * keeps its words clear of it: the header's height is added above them. A
+ * template whose entrance has a top padding of its own says so in
+ * `--hero-pad-top`.
+ */
+.root .heroPart {
+  padding-top: calc(
+    var(--hero-pad-top, 0px) + var(--site-header-over, 0px) +
+      var(--hero-space-top, 0px)
+  );
+  /* The room the owner added on the other sides, over the template's own. */
+  padding-right: calc(var(--hero-pad-x, 0px) + var(--hero-space-right, 0px));
+  padding-bottom: calc(
+    var(--hero-pad-bottom, 0px) + var(--hero-space-bottom, 0px)
+  );
+  padding-left: calc(var(--hero-pad-x, 0px) + var(--hero-space-left, 0px));
+}
+
 /* The paragraph the owner added: a little apart from the subtitle. */
 .heroExtraText {
   margin-top: 12px;
