@@ -3749,6 +3749,34 @@
           "editSection": "Editar este conteúdo",
           "unlink": "Tirar deste item (continua na página)",
           "back": "Voltar ao menu: {item}"
+        },
+        "background": {
+          "title": "Fundo desta seção",
+          "types": {
+            "NONE": "Nenhum",
+            "COLOR": "Cor",
+            "GRADIENT": "Gradiente",
+            "IMAGE": "Imagem"
+          },
+          "color": {
+            "COLOR": "Cor",
+            "GRADIENT": "De"
+          },
+          "color2": {
+            "GRADIENT": "Até"
+          },
+          "angle": "Direção",
+          "isAnimated": "Gradiente em movimento",
+          "image": "Imagem",
+          "blur": "Desfoque",
+          "opacity": "Opacidade",
+          "fade": "Bordas esmaecidas",
+          "fadeHint": "Quanto do topo e da base some aos poucos na página.",
+          "isWide": "De ponta a ponta da tela",
+          "space": "Espaço",
+          "spaceHint": "Espaço acima e abaixo do conteúdo da seção, em pixels.",
+          "spaceTop": "Topo",
+          "spaceBottom": "Baixo"
         }
       },
       "mocks": {

@@ -51,6 +51,7 @@ import { HeroTab } from "./ContentTabs";
 import PageHeroFields from "./PageHeroFields";
 import ImageLookCard from "./ImageLookCard";
 import MarqueeFields from "./MarqueeFields";
+import SectionBackgroundFields from "./SectionBackgroundFields";
 import SizeFields from "./SizeFields";
 import styles from "./BuilderTab.module.css";
 import PieceFields from "./PieceFields";
@@ -645,6 +646,16 @@ const BuilderTab = ({
                   </div>
                 )}
               </>
+            )}
+            {/* What lies behind it: the entrance has a background of its own. */}
+            {selected.type !== T.HERO && (
+              <SectionBackgroundFields
+                section={selected}
+                storeId={storeId}
+                onChange={(change) =>
+                  builder.updateSection(selected.key, change)
+                }
+              />
             )}
           </Card>
         ) : (

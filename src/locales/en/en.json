@@ -3746,6 +3746,34 @@
           "editSection": "Edit this content",
           "unlink": "Take out of this item (it stays on the page)",
           "back": "Back to the menu: {item}"
+        },
+        "background": {
+          "title": "Background of this section",
+          "types": {
+            "NONE": "None",
+            "COLOR": "Color",
+            "GRADIENT": "Gradient",
+            "IMAGE": "Image"
+          },
+          "color": {
+            "COLOR": "Color",
+            "GRADIENT": "From"
+          },
+          "color2": {
+            "GRADIENT": "To"
+          },
+          "angle": "Direction",
+          "isAnimated": "Keep the gradient moving",
+          "image": "Image",
+          "blur": "Blur",
+          "opacity": "Opacity",
+          "fade": "Faded edges",
+          "fadeHint": "How much of the top and the bottom fade away into the page.",
+          "isWide": "Across the whole screen",
+          "space": "Space",
+          "spaceHint": "Room above and below what the section holds, in pixels.",
+          "spaceTop": "Top",
+          "spaceBottom": "Bottom"
         }
       },
       "mocks": {

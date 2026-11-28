@@ -16,6 +16,10 @@ import {
   siteCardLookOf,
   siteCardsStyleOf,
 } from "./store-site-cards-style";
+import {
+  IStoreSiteSectionBackground,
+  sectionBackgroundOf,
+} from "./store-site-section-background";
 import StoreSitesEnum from "./store-sites.enum";
 
 /** One entry of a block; which fields count depends on the block's type. */
@@ -92,6 +96,8 @@ export interface IStoreSiteBlockSettings {
   mediaPosition: StoreSitesEnum.AboutMediaPosition | null;
   /** Cards with content of their own: how they are laid out. */
   cards: IStoreSiteCardsStyle | null;
+  /** What lies behind the section; none on the entrance, which has its own. */
+  background: IStoreSiteSectionBackground | null;
 }
 
 /**
@@ -426,6 +432,8 @@ export const blockSettingsOf = (
       uses(T.CARDS) && source.isOwn === true
         ? siteCardsStyleOf(source.cards as Partial<IStoreSiteCardsStyle> | null)
         : null,
+    // The entrance has a background of its own.
+    background: uses(T.HERO) ? null : sectionBackgroundOf(source.background),
   };
 };
 

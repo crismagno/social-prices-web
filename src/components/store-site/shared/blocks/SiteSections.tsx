@@ -40,6 +40,7 @@ import MarqueeStyle from "./MarqueeStyle";
 import SectionFrame from "./SectionFrame";
 import SiteTabs from "./SiteTabs";
 import frameStyles from "./SectionFrame.module.css";
+import SectionBackground from "./SectionBackground";
 import styles from "./SiteBlocks.module.css";
 import {
   ISectionBuilderHooks,
@@ -367,7 +368,13 @@ const BuilderSections = ({
               onDragOverAt={setDropIndex}
               onDrop={(event) => drop(event, dropIndex)}
             >
-              {content || placeholder(section)}
+              {content ? (
+                <SectionBackground background={section.settings.background}>
+                  {content}
+                </SectionBackground>
+              ) : (
+                placeholder(section)
+              )}
             </SectionFrame>
           </Fragment>
         );
@@ -415,12 +422,16 @@ const SiteSections = ({
     );
   }
 
-  const draw = (section: IStoreSiteBlock): ReactNode =>
-    isPartType(section.type) ? (
-      drawPart(section, renderPart, marqueeStyle)
-    ) : (
-      <BlockSection block={section} {...rest} />
-    );
+  // Each section over the background the owner gave it, when it has one.
+  const draw = (section: IStoreSiteBlock): ReactNode => (
+    <SectionBackground background={section.settings.background}>
+      {isPartType(section.type) ? (
+        drawPart(section, renderPart, marqueeStyle)
+      ) : (
+        <BlockSection block={section} {...rest} />
+      )}
+    </SectionBackground>
+  );
 
   // A section a menu of tabs shows is drawn inside that menu only.
   const { taken, entriesOf } = tabsLayoutOf(sections);

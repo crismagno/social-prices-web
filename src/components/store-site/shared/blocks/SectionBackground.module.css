@@ -1,0 +1,50 @@
+/*
+ * A section over its own background. The layer is behind what the section
+ * holds and never takes a click; the section keeps its own width inside.
+ */
+.wrap {
+  position: relative;
+  isolation: isolate;
+  /* A blurred image spills past its edges: it is cut at the section's. */
+  overflow: clip;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* A gradient that keeps moving: twice as long as the section, sliding. */
+.layer[data-animated] {
+  background-size: 200% 200% !important;
+  animation: sectionGradient 12s ease-in-out infinite alternate;
+}
+
+/* Not across the screen: a rounded panel around the section. */
+.wrap[data-panel] {
+  max-width: 1240px;
+  margin-inline: auto;
+  width: calc(100% - 2 * clamp(12px, 3vw, 32px));
+  border-radius: 32px;
+}
+
+.wrap[data-panel] .layer {
+  border-radius: inherit;
+}
+
+@keyframes sectionGradient {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 100% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layer[data-animated] {
+    animation: none;
+  }
+}
