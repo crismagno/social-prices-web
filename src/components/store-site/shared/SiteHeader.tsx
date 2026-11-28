@@ -58,6 +58,7 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
     order,
     transparency,
     shadow,
+    border,
     color,
     background,
     height,
@@ -213,6 +214,7 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
       data-clean={transparency > 0 || undefined}
       data-scrolled={isScrolled || undefined}
       data-shadow={shadow === null ? undefined : ""}
+      data-border={border ? "" : undefined}
       data-button-size={buttonSize}
       style={
         {
@@ -227,6 +229,17 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
             SCROLLED_ALPHA,
           )}%`,
           ...(height ? { "--site-header-h": `${height}px` } : {}),
+          // Its border, when the owner chose one: none is one too.
+          ...(border
+            ? {
+                "--site-header-border":
+                  border.style === StoreSitesEnum.BorderStyle.NONE
+                    ? "0 none transparent"
+                    : `${border.width}px ${border.style.toLowerCase()} ${
+                        border.color ?? "var(--site-text)"
+                      }`,
+              }
+            : {}),
           // The strength of its shadow, when the owner chose one.
           ...(shadow === null ? {} : { "--site-header-shadow": shadow / 100 }),
         } as CSSProperties

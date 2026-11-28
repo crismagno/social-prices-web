@@ -1,6 +1,15 @@
 import { IStoreSiteBlockButton, blockButtonOf } from "./store-site-blocks";
 import StoreSitesEnum from "./store-sites.enum";
 
+/** The border of the header: its line, how thick, and its colour. */
+export interface IStoreSiteHeaderBorder {
+  style: StoreSitesEnum.BorderStyle;
+  /** In pixels. */
+  width: number;
+  /** As #rrggbb; empty, the colour of the site's words. */
+  color: string | null;
+}
+
 /**
  * The header of the site: its name, its menu, the sign-in and the cart. It is
  * the site's own, the same on every page, apart from any entrance.
@@ -22,6 +31,8 @@ export interface IStoreSiteHeader {
    * light shadow, and none on a clean header or down a side.
    */
   shadow: number | null;
+  /** The border on its edge that faces the page; empty, the usual thin line. */
+  border: IStoreSiteHeaderBorder | null;
   /** The colour of its words; empty, the site's. */
   color: string | null;
   /** The colour of its background, when it has one; empty, the site's. */
@@ -114,6 +125,31 @@ const PARTS: StoreSitesEnum.HeaderPart[] = Object.values(
 
 const HEX: RegExp = /^#[0-9a-fA-F]{6}$/;
 
+/** The border the owner chose, checked the way the API checks it. */
+const borderOf = (
+  border: Partial<IStoreSiteHeaderBorder> | null | undefined,
+): IStoreSiteHeaderBorder | null => {
+  if (
+    !border ||
+    !Object.values(StoreSitesEnum.BorderStyle).includes(
+      border.style as StoreSitesEnum.BorderStyle,
+    )
+  ) {
+    return null;
+  }
+
+  const [min, max] = StoreSitesEnum.HEADER_BORDER_WIDTH_RANGE;
+
+  return {
+    style: border.style as StoreSitesEnum.BorderStyle,
+    width:
+      typeof border.width === "number" && Number.isFinite(border.width)
+        ? Math.min(max, Math.max(min, Math.round(border.width)))
+        : 1,
+    color: border.color && HEX.test(border.color) ? border.color : null,
+  };
+};
+
 /** The header of a site, also for one saved before the options: at the top. */
 export const siteHeaderOf = (
   header: Partial<IStoreSiteHeader> | null | undefined,
@@ -154,6 +190,7 @@ export const siteHeaderOf = (
       typeof header?.shadow === "number" && Number.isFinite(header.shadow)
         ? Math.min(100, Math.max(0, Math.round(header.shadow)))
         : null,
+    border: borderOf(header?.border),
     color: header?.color && HEX.test(header.color) ? header.color : null,
     background:
       header?.background && HEX.test(header.background)

@@ -3828,7 +3828,21 @@
           "RIGHT": "Align right"
         },
         "shadow": "Shadow",
-        "shadowHint": "0% is no shadow; 100% is the strongest. It falls under a header at the top, over one at the bottom and beside one down a side."
+        "shadowHint": "0% is no shadow; 100% is the strongest. It falls under a header at the top, over one at the bottom and beside one down a side.",
+        "border": {
+          "label": "Border",
+          "hint": "On the edge of the header that faces the page: below it at the top, above it at the bottom, beside it down a side.",
+          "width": "Thickness",
+          "color": "Color",
+          "styles": {
+            "USUAL": "Usual thin line",
+            "NONE": "None",
+            "SOLID": "Solid",
+            "DASHED": "Dashed",
+            "DOTTED": "Dotted",
+            "DOUBLE": "Double"
+          }
+        }
       }
     },
     "footer": {

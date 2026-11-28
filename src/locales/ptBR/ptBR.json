@@ -3831,7 +3831,21 @@
           "RIGHT": "Alinhar à direita"
         },
         "shadow": "Sombra",
-        "shadowHint": "0% é sem sombra; 100% é a mais forte. Ela cai abaixo de um header no topo, acima de um embaixo e ao lado de um na lateral."
+        "shadowHint": "0% é sem sombra; 100% é a mais forte. Ela cai abaixo de um header no topo, acima de um embaixo e ao lado de um na lateral.",
+        "border": {
+          "label": "Borda",
+          "hint": "Na beirada do header voltada para a página: embaixo quando ele fica no topo, em cima quando fica embaixo, ao lado quando fica na lateral.",
+          "width": "Espessura",
+          "color": "Cor",
+          "styles": {
+            "USUAL": "Linha fina padrão",
+            "NONE": "Sem borda",
+            "SOLID": "Sólida",
+            "DASHED": "Tracejada",
+            "DOTTED": "Pontilhada",
+            "DOUBLE": "Dupla"
+          }
+        }
       }
     },
     "footer": {

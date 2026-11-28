@@ -399,3 +399,29 @@
   padding-inline: 9px;
   font-size: 1.15em;
 }
+
+/*
+ * The border the owner chose, on the edge that faces the page: its line, its
+ * width and its colour. It takes the place of the usual thin line, on a clean
+ * header too.
+ */
+.header[data-border] .inner {
+  border-bottom: var(--site-header-border);
+}
+
+.header[data-border][data-site-header="BOTTOM"] .inner {
+  border-bottom: 0;
+  border-top: var(--site-header-border);
+}
+
+@media (min-width: 900px) {
+  .header[data-border][data-site-header="LEFT"] .inner {
+    border-bottom: 0;
+    border-right: var(--site-header-border);
+  }
+
+  .header[data-border][data-site-header="RIGHT"] .inner {
+    border-bottom: 0;
+    border-left: var(--site-header-border);
+  }
+}

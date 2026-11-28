@@ -28,6 +28,7 @@ import {
 import FeatureIcon from "../../../components/store-site/shared/blocks/FeatureIcon";
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import {
+  IStoreSiteHeaderBorder,
   HEADER_HEIGHT_RANGE,
   HEADER_SLOT_ALIGNS,
   HEADER_WIDTH_RANGE,
@@ -52,6 +53,9 @@ import ImageField from "./ImageField";
 import SizeFields from "./SizeFields";
 import useDragReorder from "./useDragReorder";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
+
+/** The choice of the border select that leaves the usual thin line. */
+const USUAL_BORDER: string = "USUAL";
 
 interface Props {
   editor: IStoreSiteEditor;
@@ -133,6 +137,17 @@ const HeaderTab = ({ editor, storeId, storeName }: Props) => {
   const isSide: boolean =
     header.position === StoreSitesEnum.HeaderPosition.LEFT ||
     header.position === StoreSitesEnum.HeaderPosition.RIGHT;
+
+  // A change to the border the owner already chose.
+  const setBorder = (patch: Partial<IStoreSiteHeaderBorder>): void =>
+    editor.update((draft) => ({
+      header: {
+        ...draft.header,
+        border: draft.header.border
+          ? { ...draft.header.border, ...patch }
+          : null,
+      },
+    }));
 
   // From the draft as it is when applied, like every change of the editor.
   const setSignIn = (patch: Partial<IStoreSiteSignIn>): void =>
@@ -371,6 +386,74 @@ const HeaderTab = ({ editor, storeId, storeName }: Props) => {
           }
         />
       </Form.Item>
+
+      {/* Its border: the usual thin line, none, or the owner's own. */}
+      <Form.Item
+        label={t("storeSite.editor.header.border.label")}
+        extra={t("storeSite.editor.header.border.hint")}
+      >
+        <Select
+          value={header.border?.style ?? USUAL_BORDER}
+          options={[
+            {
+              value: USUAL_BORDER,
+              label: t("storeSite.editor.header.border.styles.USUAL"),
+            },
+            ...Object.values(StoreSitesEnum.BorderStyle).map(
+              (style: StoreSitesEnum.BorderStyle) => ({
+                value: style as string,
+                label: t(`storeSite.editor.header.border.styles.${style}`),
+              }),
+            ),
+          ]}
+          onChange={(style: string) =>
+            editor.update((draft) => ({
+              header: {
+                ...draft.header,
+                border:
+                  style === USUAL_BORDER
+                    ? null
+                    : {
+                        width: draft.header.border?.width ?? 2,
+                        color: draft.header.border?.color ?? null,
+                        style: style as StoreSitesEnum.BorderStyle,
+                      },
+              },
+            }))
+          }
+        />
+      </Form.Item>
+      {header.border &&
+        header.border.style !== StoreSitesEnum.BorderStyle.NONE && (
+          <div className="flex flex-wrap gap-x-6">
+            <Form.Item label={t("storeSite.editor.header.border.width")}>
+              <InputNumber
+                min={StoreSitesEnum.HEADER_BORDER_WIDTH_RANGE[0]}
+                max={StoreSitesEnum.HEADER_BORDER_WIDTH_RANGE[1]}
+                addonAfter="px"
+                value={header.border.width}
+                onChange={(width: number | null) =>
+                  setBorder({ width: width ?? 1 })
+                }
+              />
+            </Form.Item>
+            <Form.Item label={t("storeSite.editor.header.border.color")}>
+              <ColorPicker
+                allowClear
+                disabledAlpha
+                value={header.border.color ?? editor.draft.theme.text}
+                showText={() =>
+                  header.border?.color ??
+                  t("storeSite.editor.pages.colorOfSite")
+                }
+                onChangeComplete={(picked) =>
+                  setBorder({ color: picked.toHexString().slice(0, 7) })
+                }
+                onClear={() => setBorder({ color: null })}
+              />
+            </Form.Item>
+          </div>
+        )}
 
       {/* Its size: how tall across the screen, how wide down a side. */}
       {isSide ? (
