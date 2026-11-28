@@ -103,6 +103,7 @@ export default function AppSitePage() {
             price: product.price,
             mainUrl: product.mainUrl,
             filesUrl: product.filesUrl ?? [],
+            yearRange: product.yearRange ?? null,
             isAvailable: product.quantity > 0,
           });
         }
