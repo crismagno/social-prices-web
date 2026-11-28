@@ -2,9 +2,9 @@
 
 import { useMemo, useState } from "react";
 
-import { Avatar, Badge, Checkbox, Input, Segmented, Spin, theme } from "antd";
+import { Avatar, Badge, Checkbox, Input, Segmented, Spin, Tooltip, theme } from "antd";
 
-import { InboxOutlined, SearchOutlined } from "@ant-design/icons";
+import { ClockCircleOutlined, InboxOutlined, SearchOutlined } from "@ant-design/icons";
 
 import ChannelIcon from "../../components/common/ChannelIcon/ChannelIcon";
 import useLanguageData from "../../data/context/language/useLanguageData";
@@ -347,17 +347,20 @@ export default function ChatsList({
                     )}
 
                     {chat.hasReplied === false && (
-                      <span
-                        className="ml-auto shrink-0 rounded px-1.5 py-px text-[11px] font-medium leading-4"
-                        title={t("chats.notAnsweredHint")}
-                        style={{
-                          color: token.colorWarningText,
-                          background: token.colorWarningBg,
-                          border: `1px solid ${token.colorWarningBorder}`,
-                        }}
+                      <Tooltip
+                        title={
+                          <>
+                            <strong>{t("chats.notAnswered")}</strong>
+                            <div>{t("chats.notAnsweredHint")}</div>
+                          </>
+                        }
                       >
-                        {t("chats.notAnswered")}
-                      </span>
+                        <ClockCircleOutlined
+                          className="ml-auto shrink-0 text-[13px]"
+                          aria-label={t("chats.notAnswered")}
+                          style={{ color: token.colorWarning }}
+                        />
+                      </Tooltip>
                     )}
                   </div>
                 </div>
