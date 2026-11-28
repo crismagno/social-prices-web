@@ -3256,6 +3256,32 @@
           "SHOP": "Loja",
           "MAIL": "E-mail"
         },
+        "buttonSize": "Tamanho do botão",
+        "windowSize": "Tamanho da janela",
+        "sizes": {
+          "SMALL": "Pequeno",
+          "MEDIUM": "Médio",
+          "LARGE": "Grande"
+        },
+        "buttonAnimation": "Animação do botão",
+        "buttonAnimationHint": "Como o botão fechado chama a atenção do visitante.",
+        "buttonAnimations": {
+          "NONE": "Nenhuma",
+          "BOB": "Balançar",
+          "PULSE": "Pulsar",
+          "BOUNCE": "Quicar",
+          "SHAKE": "Tremer",
+          "GLOW": "Brilho"
+        },
+        "windowAnimation": "Animação da janela",
+        "windowAnimationHint": "Como a janela da conversa abre.",
+        "windowAnimations": {
+          "POP": "Pop",
+          "SLIDE": "Deslizar",
+          "FADE": "Esmaecer",
+          "ZOOM": "Zoom",
+          "NONE": "Nenhuma"
+        },
         "buttonLabel": "Texto do botão",
         "buttonLabelHint": "Vazio mostra “Fale com a gente”.",
         "title": "Título da janela",

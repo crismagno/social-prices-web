@@ -697,6 +697,8 @@ const SiteChatWidget = ({
       {isOpen && (
         <section
           className={styles.panel}
+          data-size={settings.windowSize}
+          data-animation={settings.windowAnimation}
           role="dialog"
           aria-label={settings.title ?? brandName}
         >
@@ -1203,6 +1205,8 @@ const SiteChatWidget = ({
       <button
         type="button"
         className={styles.button}
+        data-size={settings.buttonSize}
+        data-animation={settings.buttonAnimation}
         aria-expanded={isOpen}
         aria-label={isOpen ? t("storeSite.chat.close") : buttonLabel}
         onClick={() => setIsOpen((open: boolean) => !open)}

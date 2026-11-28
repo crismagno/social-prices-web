@@ -85,10 +85,56 @@
   animation: iconIn 0.45s cubic-bezier(0.2, 1.6, 0.4, 1) both;
 }
 
-.button[aria-expanded="false"] .icon {
+/* How the closed button calls for attention, as the owner chose. */
+.button[data-animation="BOB"][aria-expanded="false"] .icon {
   animation:
     iconIn 0.45s cubic-bezier(0.2, 1.6, 0.4, 1) both,
     bob 4s ease-in-out infinite 2s;
+}
+
+.button[data-animation="PULSE"][aria-expanded="false"] {
+  animation:
+    buttonIn 0.6s cubic-bezier(0.2, 1.4, 0.4, 1) both 0.8s,
+    attentionPulse 2.4s ease-in-out infinite 2s;
+}
+
+.button[data-animation="BOUNCE"][aria-expanded="false"] {
+  animation:
+    buttonIn 0.6s cubic-bezier(0.2, 1.4, 0.4, 1) both 0.8s,
+    attentionBounce 3s ease-in-out infinite 2s;
+}
+
+.button[data-animation="SHAKE"][aria-expanded="false"] {
+  animation:
+    buttonIn 0.6s cubic-bezier(0.2, 1.4, 0.4, 1) both 0.8s,
+    attentionShake 4s ease-in-out infinite 2s;
+}
+
+.button[data-animation="GLOW"][aria-expanded="false"] {
+  animation:
+    buttonIn 0.6s cubic-bezier(0.2, 1.4, 0.4, 1) both 0.8s,
+    attentionGlow 2s ease-in-out infinite 2s;
+}
+
+/* The size of the button in the corner; MEDIUM is the rules above. */
+.button[data-size="SMALL"] {
+  gap: 8px;
+  padding: 10px 15px;
+  font-size: 13px;
+}
+
+.button[data-size="SMALL"] :global(.anticon) {
+  font-size: 16px;
+}
+
+.button[data-size="LARGE"] {
+  gap: 12px;
+  padding: 18px 26px;
+  font-size: 17px;
+}
+
+.button[data-size="LARGE"] :global(.anticon) {
+  font-size: 24px;
 }
 
 .button :global(.anticon) {
@@ -123,6 +169,40 @@
 
 .left .panel {
   transform-origin: bottom left;
+}
+
+/* The size of the window; MEDIUM is the rules above. */
+.panel[data-size="SMALL"] {
+  width: min(320px, calc(100vw - 40px));
+  height: min(460px, calc(100vh - 120px));
+}
+
+.panel[data-size="LARGE"] {
+  width: min(460px, calc(100vw - 40px));
+  height: min(680px, calc(100vh - 120px));
+}
+
+/* How the window opens; POP is the rule above. */
+.panel[data-animation="SLIDE"] {
+  animation-name: panelSlide;
+  animation-duration: 0.45s;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.panel[data-animation="FADE"] {
+  animation-name: panelFade;
+  animation-duration: 0.35s;
+  animation-timing-function: ease-out;
+}
+
+.panel[data-animation="ZOOM"] {
+  animation-name: panelZoom;
+  animation-duration: 0.45s;
+  animation-timing-function: cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+
+.panel[data-animation="NONE"] {
+  animation: none;
 }
 
 .header {
@@ -787,6 +867,14 @@
   .button {
     padding: 16px;
   }
+
+  .button[data-size="SMALL"] {
+    padding: 12px;
+  }
+
+  .button[data-size="LARGE"] {
+    padding: 20px;
+  }
 }
 
 @keyframes buttonIn {
@@ -808,6 +896,91 @@
   to {
     translate: none;
     scale: none;
+  }
+}
+
+@keyframes panelSlide {
+  from {
+    opacity: 0;
+    translate: 0 60px;
+  }
+  to {
+    translate: none;
+  }
+}
+
+@keyframes panelFade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes panelZoom {
+  from {
+    opacity: 0;
+    scale: 0.4;
+  }
+  to {
+    scale: none;
+  }
+}
+
+@keyframes attentionPulse {
+  0%,
+  100% {
+    scale: 1;
+  }
+  50% {
+    scale: 1.08;
+  }
+}
+
+@keyframes attentionBounce {
+  0%,
+  60%,
+  100% {
+    translate: 0 0;
+  }
+  20% {
+    translate: 0 -12px;
+  }
+  35% {
+    translate: 0 0;
+  }
+  45% {
+    translate: 0 -5px;
+  }
+}
+
+@keyframes attentionShake {
+  0%,
+  84%,
+  100% {
+    translate: 0 0;
+  }
+  86%,
+  90%,
+  94% {
+    translate: -5px 0;
+  }
+  88%,
+  92%,
+  96% {
+    translate: 5px 0;
+  }
+}
+
+@keyframes attentionGlow {
+  0%,
+  100% {
+    box-shadow:
+      0 14px 34px color-mix(in srgb, var(--site-primary) 45%, transparent),
+      0 0 0 0 color-mix(in srgb, var(--site-primary) 55%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 14px 34px color-mix(in srgb, var(--site-primary) 45%, transparent),
+      0 0 0 12px color-mix(in srgb, var(--site-primary) 0%, transparent);
   }
 }
 
@@ -986,7 +1159,10 @@
   .loading,
   .image,
   .video,
-  .button[aria-expanded="false"] .icon {
+  .button[aria-expanded="false"] .icon,
+  .button[data-animation][aria-expanded="false"],
+  .button[data-animation="BOB"][aria-expanded="false"] .icon,
+  .panel[data-animation] {
     animation: none;
   }
 }

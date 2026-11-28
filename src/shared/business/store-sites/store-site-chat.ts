@@ -10,6 +10,14 @@ export interface IStoreSiteChat {
   position: StoreSitesEnum.ChatPosition;
   /** The ready icon of the button. */
   icon: StoreSitesEnum.ChatIcon;
+  /** How big the button in the corner is. */
+  buttonSize: StoreSitesEnum.ChatSize;
+  /** How big the conversation window is. */
+  windowSize: StoreSitesEnum.ChatSize;
+  /** How the closed button calls for attention. */
+  buttonAnimation: StoreSitesEnum.ChatButtonAnimation;
+  /** How the window opens. */
+  windowAnimation: StoreSitesEnum.ChatWindowAnimation;
   /** What the button says; empty, the site says its own. */
   buttonLabel: string | null;
   /** The title of the chat window; empty, the name of the site. */
@@ -159,6 +167,12 @@ export const chatFieldModeOf = (
   return found.isRequired ? Mode.REQUIRED : Mode.OPTIONAL;
 };
 
+const oneOf = <T extends string>(
+  value: unknown,
+  options: T[],
+  fallback: T,
+): T => (options.includes(value as T) ? (value as T) : fallback);
+
 /** The chat of a site, also for one saved before it existed: off. */
 export const siteChatOf = (
   chat: Partial<IStoreSiteChat> | null | undefined,
@@ -176,6 +190,26 @@ export const siteChatOf = (
     )
       ? (chat?.icon as StoreSitesEnum.ChatIcon)
       : StoreSitesEnum.ChatIcon.MESSAGE,
+    buttonSize: oneOf(
+      chat?.buttonSize,
+      Object.values(StoreSitesEnum.ChatSize),
+      StoreSitesEnum.ChatSize.MEDIUM,
+    ),
+    windowSize: oneOf(
+      chat?.windowSize,
+      Object.values(StoreSitesEnum.ChatSize),
+      StoreSitesEnum.ChatSize.MEDIUM,
+    ),
+    buttonAnimation: oneOf(
+      chat?.buttonAnimation,
+      Object.values(StoreSitesEnum.ChatButtonAnimation),
+      StoreSitesEnum.ChatButtonAnimation.BOB,
+    ),
+    windowAnimation: oneOf(
+      chat?.windowAnimation,
+      Object.values(StoreSitesEnum.ChatWindowAnimation),
+      StoreSitesEnum.ChatWindowAnimation.POP,
+    ),
     buttonLabel: chat?.buttonLabel?.trim() || null,
     title: chat?.title?.trim() || null,
     greeting: chat?.greeting?.trim() || null,

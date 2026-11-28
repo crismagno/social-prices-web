@@ -3253,6 +3253,32 @@
           "SHOP": "Shop",
           "MAIL": "Email"
         },
+        "buttonSize": "Button size",
+        "windowSize": "Window size",
+        "sizes": {
+          "SMALL": "Small",
+          "MEDIUM": "Medium",
+          "LARGE": "Large"
+        },
+        "buttonAnimation": "Button animation",
+        "buttonAnimationHint": "How the closed button calls the visitor's attention.",
+        "buttonAnimations": {
+          "NONE": "None",
+          "BOB": "Wiggle",
+          "PULSE": "Pulse",
+          "BOUNCE": "Bounce",
+          "SHAKE": "Shake",
+          "GLOW": "Glow"
+        },
+        "windowAnimation": "Window animation",
+        "windowAnimationHint": "How the conversation window opens.",
+        "windowAnimations": {
+          "POP": "Pop",
+          "SLIDE": "Slide up",
+          "FADE": "Fade",
+          "ZOOM": "Zoom",
+          "NONE": "None"
+        },
         "buttonLabel": "Text of the button",
         "buttonLabelHint": "Empty shows “Chat with us”.",
         "title": "Title of the window",
