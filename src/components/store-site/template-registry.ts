@@ -6,6 +6,7 @@ import Atlas from "./templates/Atlas/Atlas";
 import Aurora from "./templates/Aurora/Aurora";
 import Buddy from "./templates/Buddy/Buddy";
 import Clean from "./templates/Clean/Clean";
+import Corporate from "./templates/Corporate/Corporate";
 import Garden from "./templates/Garden/Garden";
 import Impact from "./templates/Impact/Impact";
 import Lumen from "./templates/Lumen/Lumen";
@@ -167,6 +168,18 @@ export const TEMPLATE_REGISTRY: Record<
     },
     labelKey: "storeSite.templates.ATLAS.name",
     descriptionKey: "storeSite.templates.ATLAS.description",
+  },
+  [StoreSitesEnum.Template.CORPORATE]: {
+    Component: Corporate,
+    defaultTheme: {
+      primary: "#0b2545",
+      secondary: "#5b6b82",
+      accent: "#e6ebf2",
+      background: "#ffffff",
+      text: "#0f172a",
+    },
+    labelKey: "storeSite.templates.CORPORATE.name",
+    descriptionKey: "storeSite.templates.CORPORATE.description",
   },
   [StoreSitesEnum.Template.NEBULA]: {
     Component: Nebula,

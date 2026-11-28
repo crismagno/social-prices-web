@@ -2547,6 +2547,10 @@
         "name": "Atlas",
         "description": "Sóbrio e sólido, cantos retos e linhas finas. Para qualquer negócio que queira um visual neutro."
       },
+      "CORPORATE": {
+        "name": "Corporativo",
+        "description": "Sério e institucional: entrada em azul profundo, seções numeradas e linhas finas. Para empresas de porte."
+      },
       "MARE": {
         "name": "Maré",
         "description": "Calmo e natural, em areia, argila e azul-mar: serifa suave com itálico, foto em arco e mosaicos. Para lojas de casa, decoração e feito à mão."

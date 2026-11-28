@@ -2544,6 +2544,10 @@
         "name": "Atlas",
         "description": "Sober and solid, squared corners and thin lines. For any business that wants a neutral look."
       },
+      "CORPORATE": {
+        "name": "Corporate",
+        "description": "Serious and institutional: a deep blue entrance, numbered sections and hairlines. For established companies."
+      },
       "MARE": {
         "name": "Maré",
         "description": "Calm and natural, in sand, clay and sea blue: soft serif with italics, an arched photo and mosaics. For home, decor and handmade stores."

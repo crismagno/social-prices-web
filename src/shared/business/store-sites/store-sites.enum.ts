@@ -16,6 +16,8 @@ namespace StoreSitesEnum {
     BUDDY = "BUDDY",
     ARCADE = "ARCADE",
     ATLAS = "ATLAS",
+    // Deep entrance, squared and numbered: the look of a large company.
+    CORPORATE = "CORPORATE",
     NEBULA = "NEBULA",
     LUMEN = "LUMEN",
   }
