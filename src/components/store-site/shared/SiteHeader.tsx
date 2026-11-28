@@ -57,6 +57,7 @@ const OVER_GAP: number = 20;
 const SiteHeader = ({ site, store, cart, page }: Props) => {
   const {
     position,
+    style,
     isFixed,
     order,
     transparency,
@@ -224,6 +225,7 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
       ref={ref}
       className={styles.header}
       data-site-header={position}
+      data-style={style}
       data-fixed={isFixed || undefined}
       data-clean={transparency > 0 || undefined}
       data-scrolled={isScrolled || undefined}

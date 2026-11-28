@@ -173,6 +173,26 @@ const HeaderTab = ({ editor, storeId, storeName }: Props) => {
 
   return (
     <Form layout="vertical">
+      <Form.Item
+        label={t("storeSite.editor.header.style.label")}
+        extra={t("storeSite.editor.header.style.hint")}
+      >
+        <Select<StoreSitesEnum.HeaderStyle>
+          value={header.style}
+          options={Object.values(StoreSitesEnum.HeaderStyle).map(
+            (style: StoreSitesEnum.HeaderStyle) => ({
+              value: style,
+              label: t(`storeSite.editor.header.style.names.${style}`),
+            }),
+          )}
+          onChange={(style: StoreSitesEnum.HeaderStyle) =>
+            editor.update((draft) => ({
+              header: { ...draft.header, style },
+            }))
+          }
+        />
+      </Form.Item>
+
       <Form.Item label={t("storeSite.editor.header.position")}>
         <ChoiceList<StoreSitesEnum.HeaderPosition>
           value={header.position}

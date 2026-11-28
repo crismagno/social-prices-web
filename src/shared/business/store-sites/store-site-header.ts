@@ -19,6 +19,8 @@ export interface IStoreSiteHeader {
   isFixed: boolean;
   /** The side of the screen it is at. */
   position: StoreSitesEnum.HeaderPosition;
+  /** Its ready look; the colours, shadow and border chosen apply over it. */
+  style: StoreSitesEnum.HeaderStyle;
   /** Its three parts in order: start, middle and end of the header. */
   order: StoreSitesEnum.HeaderPart[];
   /**
@@ -184,6 +186,11 @@ export const siteHeaderOf = (
     )
       ? (header?.position as StoreSitesEnum.HeaderPosition)
       : StoreSitesEnum.HeaderPosition.TOP,
+    style: Object.values(StoreSitesEnum.HeaderStyle).includes(
+      header?.style as StoreSitesEnum.HeaderStyle,
+    )
+      ? (header?.style as StoreSitesEnum.HeaderStyle)
+      : StoreSitesEnum.HeaderStyle.CLASSIC,
     // The three parts, each once; anything else is the usual order.
     order:
       order.length === PARTS.length &&

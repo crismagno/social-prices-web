@@ -3991,6 +3991,32 @@
             "DOTTED": "Pontilhada",
             "DOUBLE": "Dupla"
           }
+        },
+        "style": {
+          "label": "Estilo",
+          "hint": "Um visual pronto. As cores, a transparência, a sombra e a borda abaixo continuam valendo por cima.",
+          "names": {
+            "CLASSIC": "Clássico — barra suave",
+            "FLOATING": "Flutuante — pílula afastada das bordas",
+            "GLASS": "Vidro — fosco e translúcido",
+            "BOLD": "Marcante — faixa na cor principal",
+            "MINIMAL": "Minimalista — só as palavras",
+            "LINE": "Linha — fechado por uma linha na cor principal",
+            "BOXED": "Emoldurado — moldura reta com sombra dura",
+            "ATELIER": "Atelier — faixa pastel com barra pontilhada",
+            "GARDEN": "Garden — pílula calma com moldura",
+            "STUDIO": "Studio — moldura grossa, sombra deslocada",
+            "AURORA": "Aurora — vidro com anel de gradiente em movimento",
+            "IMPACT": "Impact — maiúsculas fortes sobre linha marcante",
+            "RIVIERA": "Riviera — maiúsculas finas sobre linha fina",
+            "MARE": "Maré — barra quente com linha dupla",
+            "SWELL": "Swell — itálico, corte diagonal",
+            "BUDDY": "Buddy — adesivo redondo com costura",
+            "ARCADE": "Arcade — brilho neon e linhas de tela",
+            "ATLAS": "Atlas — sóbrio, reto, linha fina",
+            "NEBULA": "Nebula — vidro profundo com halo",
+            "LUMEN": "Lumen — branco fosco, sombra suave"
+          }
         }
       }
     },

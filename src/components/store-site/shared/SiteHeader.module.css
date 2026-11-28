@@ -425,3 +425,416 @@
     border-left: var(--site-header-border);
   }
 }
+
+/*
+ * The ready looks of the header. Each changes its shape and its surface; the
+ * colour, the see-through, the shadow and the border the owner chose still
+ * apply over it, because they are set on the header itself.
+ */
+
+/* Floating: a pill away from the edges, with a soft shadow. */
+.header[data-style="FLOATING"] {
+  padding: 10px clamp(10px, 3vw, 28px);
+}
+
+.header[data-style="FLOATING"] .inner {
+  max-width: 1240px;
+  margin-inline: auto;
+  padding-block: 9px;
+  border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  border-radius: 99px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.14);
+}
+
+/* Glass: see-through and frosted, a light edge all round. */
+.header[data-style="GLASS"] .inner {
+  background: color-mix(
+    in srgb,
+    var(--site-header-bg, var(--site-bg-solid, var(--site-bg)))
+      min(var(--site-header-alpha, 46%), 46%),
+    transparent
+  );
+  backdrop-filter: blur(22px) saturate(1.7);
+  border-bottom: 1px solid color-mix(in srgb, #fff 34%, transparent);
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 color-mix(in srgb, #fff 30%, transparent);
+}
+
+/* Bold: a band of the site's main colour, its words readable over it. */
+.header[data-style="BOLD"] {
+  --site-header-bg: var(--site-primary);
+  color: var(--site-on-primary, #fff);
+}
+
+.header[data-style="BOLD"] .inner {
+  border-bottom-color: transparent;
+}
+
+/* Minimal: only the words, no surface of its own, wide apart. */
+.header[data-style="MINIMAL"] .inner {
+  background: transparent;
+  backdrop-filter: none;
+  box-shadow: none;
+  border-color: transparent;
+}
+
+.header[data-style="MINIMAL"] .links {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Rolling under it, even the minimal one needs something behind its words. */
+.header[data-style="MINIMAL"][data-scrolled] .inner {
+  background: color-mix(
+    in srgb,
+    var(--site-header-bg, var(--site-bg-solid, var(--site-bg))) 92%,
+    transparent
+  );
+  backdrop-filter: blur(14px);
+}
+
+/* Line: a solid bar closed by a thick line of the site's main colour. */
+.header[data-style="LINE"] .inner {
+  box-shadow: none;
+  border-bottom: 3px solid var(--site-primary);
+}
+
+.header[data-style="LINE"][data-site-header="BOTTOM"] .inner {
+  border-bottom: 0;
+  border-top: 3px solid var(--site-primary);
+}
+
+/* Boxed: a squared frame set in from the edges, a hard shadow under it. */
+.header[data-style="BOXED"] {
+  padding: 12px clamp(10px, 3vw, 28px);
+}
+
+.header[data-style="BOXED"] .inner {
+  max-width: 1240px;
+  margin-inline: auto;
+  border: 2px solid currentColor;
+  border-radius: 6px;
+  box-shadow: 6px 6px 0 color-mix(in srgb, currentColor 85%, transparent);
+  backdrop-filter: none;
+}
+
+@media (min-width: 900px) {
+  /* Down a side, a floating or boxed header keeps its room all round. */
+  .header:is([data-style="FLOATING"], [data-style="BOXED"]):is(
+      [data-site-header="LEFT"],
+      [data-site-header="RIGHT"]
+    ) {
+    padding: 12px;
+  }
+
+  .header[data-style="FLOATING"]:is(
+      [data-site-header="LEFT"],
+      [data-site-header="RIGHT"]
+    )
+    .inner {
+    border-radius: 28px;
+  }
+
+  .header[data-style="LINE"][data-site-header="LEFT"] .inner {
+    border-bottom: 0;
+    border-right: 3px solid var(--site-primary);
+  }
+
+  .header[data-style="LINE"][data-site-header="RIGHT"] .inner {
+    border-bottom: 0;
+    border-left: 3px solid var(--site-primary);
+  }
+}
+
+/*
+ * Looks in the character of each template, for any template: they take the
+ * site's own colours, so they follow whatever the owner chose.
+ */
+
+/* Atelier: soft and pastel, a rounded band with a dotted hem. */
+.header[data-style="ATELIER"] .inner {
+  background: color-mix(
+    in srgb,
+    var(--site-header-bg, var(--site-secondary)) var(--site-header-alpha, 78%),
+    transparent
+  );
+  border-bottom: 2px dotted
+    color-mix(in srgb, var(--site-primary) 55%, transparent);
+  border-radius: 0 0 26px 26px;
+  box-shadow: 0 10px 26px
+    color-mix(in srgb, var(--site-primary) 16%, transparent);
+}
+
+/* Garden: calm and centred, a sage pill with a thin frame. */
+.header[data-style="GARDEN"] {
+  padding: 12px clamp(10px, 3vw, 28px);
+}
+
+.header[data-style="GARDEN"] .inner {
+  max-width: 1180px;
+  margin-inline: auto;
+  background: color-mix(
+    in srgb,
+    var(--site-header-bg, var(--site-accent)) var(--site-header-alpha, 86%),
+    transparent
+  );
+  border: 1px solid color-mix(in srgb, var(--site-primary) 40%, transparent);
+  border-radius: 99px;
+  box-shadow: none;
+  outline: 1px solid color-mix(in srgb, var(--site-primary) 18%, transparent);
+  outline-offset: 4px;
+}
+
+/* Studio: playful blocks, a thick frame and a shadow set off to one side. */
+.header[data-style="STUDIO"] {
+  padding: 12px clamp(10px, 3vw, 28px) 16px;
+}
+
+.header[data-style="STUDIO"] .inner {
+  max-width: 1240px;
+  margin-inline: auto;
+  border: 2.5px solid var(--site-text);
+  border-radius: 20px;
+  box-shadow: 6px 6px 0 var(--site-secondary);
+  backdrop-filter: none;
+}
+
+/* Aurora: glass with a border of the three colours, always moving. */
+.header[data-style="AURORA"] {
+  padding: 12px clamp(10px, 3vw, 28px);
+}
+
+.header[data-style="AURORA"] .inner {
+  position: relative;
+  max-width: 1240px;
+  margin-inline: auto;
+  border: 0;
+  border-radius: 99px;
+  backdrop-filter: blur(18px) saturate(1.6);
+  box-shadow: 0 16px 50px
+    color-mix(in srgb, var(--site-primary) 30%, transparent);
+}
+
+.header[data-style="AURORA"] .inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    var(--site-primary),
+    var(--site-secondary),
+    var(--site-accent),
+    var(--site-primary)
+  );
+  background-size: 300% 100%;
+  animation: headerSweep 6s linear infinite;
+  /* Only the ring of it shows: the middle is cut out. */
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+}
+
+/* Impact: a hard dark bar, loud capitals, a line of the main colour. */
+.header[data-style="IMPACT"] .inner {
+  backdrop-filter: none;
+  box-shadow: none;
+  border-bottom: 4px solid var(--site-primary);
+}
+
+.header[data-style="IMPACT"] .links,
+.header[data-style="IMPACT"] .brand {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Riviera: editorial and airy, thin capitals over a hairline. */
+.header[data-style="RIVIERA"] .inner {
+  padding-block: 18px;
+  backdrop-filter: none;
+  box-shadow: none;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+}
+
+.header[data-style="RIVIERA"] .links {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.header[data-style="RIVIERA"] .brand {
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Mare: sand and clay, a warm bar with a double line. */
+.header[data-style="MARE"] .inner {
+  background: color-mix(
+    in srgb,
+    var(--site-header-bg, var(--site-accent)) var(--site-header-alpha, 92%),
+    transparent
+  );
+  box-shadow: none;
+  border-bottom: 4px double var(--site-primary);
+}
+
+/* Swell: fast and sporty, slanted, cut on a diagonal. */
+.header[data-style="SWELL"] .inner {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 14px), 0 100%);
+  padding-bottom: 24px;
+  box-shadow: none;
+  border-bottom: 0;
+  backdrop-filter: none;
+}
+
+.header[data-style="SWELL"] .links,
+.header[data-style="SWELL"] .brand {
+  font-style: italic;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Buddy: round and friendly, a sticker with a stitched edge. */
+.header[data-style="BUDDY"] {
+  padding: 12px clamp(10px, 3vw, 28px);
+}
+
+.header[data-style="BUDDY"] .inner {
+  max-width: 1240px;
+  margin-inline: auto;
+  border: 3px solid #fff;
+  border-radius: 30px;
+  outline: 2px dashed color-mix(in srgb, var(--site-primary) 70%, transparent);
+  outline-offset: -8px;
+  box-shadow: 0 10px 0 color-mix(in srgb, var(--site-primary) 26%, transparent);
+  backdrop-filter: none;
+}
+
+/* Arcade: neon on the dark, squared, the glow of an old screen. */
+.header[data-style="ARCADE"] .inner {
+  backdrop-filter: none;
+  border-bottom: 2px solid var(--site-primary);
+  box-shadow:
+    0 0 18px color-mix(in srgb, var(--site-primary) 70%, transparent),
+    0 0 44px color-mix(in srgb, var(--site-secondary) 40%, transparent);
+  background-image: repeating-linear-gradient(
+    0deg,
+    color-mix(in srgb, currentColor 6%, transparent) 0 1px,
+    transparent 1px 4px
+  );
+}
+
+.header[data-style="ARCADE"] .links,
+.header[data-style="ARCADE"] .brand {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px color-mix(in srgb, var(--site-primary) 80%, transparent);
+}
+
+/* Atlas: sober and solid, squared, a thin line and nothing else. */
+.header[data-style="ATLAS"] .inner {
+  background: var(--site-header-bg, var(--site-bg-solid, var(--site-bg)));
+  backdrop-filter: none;
+  box-shadow: none;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+}
+
+.header[data-style="ATLAS"] .links {
+  font-weight: 500;
+}
+
+/* Nebula: deep glass, a halo of the main colour under it. */
+.header[data-style="NEBULA"] {
+  padding: 12px clamp(10px, 3vw, 28px);
+}
+
+.header[data-style="NEBULA"] .inner {
+  max-width: 1240px;
+  margin-inline: auto;
+  background: color-mix(
+    in srgb,
+    var(--site-header-bg, var(--site-bg-solid, var(--site-bg)))
+      min(var(--site-header-alpha, 46%), 46%),
+    transparent
+  );
+  backdrop-filter: blur(20px) saturate(1.5);
+  border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  border-radius: 22px;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    0 0 50px color-mix(in srgb, var(--site-primary) 34%, transparent);
+}
+
+/* Lumen: light and afloat, frosted white, a soft wide shadow. */
+.header[data-style="LUMEN"] {
+  padding: 12px clamp(10px, 3vw, 28px);
+}
+
+.header[data-style="LUMEN"] .inner {
+  max-width: 1240px;
+  margin-inline: auto;
+  background: color-mix(
+    in srgb,
+    var(--site-header-bg, var(--site-bg-solid, var(--site-bg)))
+      min(var(--site-header-alpha, 62%), 62%),
+    transparent
+  );
+  backdrop-filter: blur(20px) saturate(1.6);
+  border: 1px solid color-mix(in srgb, #fff 55%, transparent);
+  border-radius: 28px;
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--site-text) 14%, transparent);
+}
+
+@keyframes headerSweep {
+  to {
+    background-position: 300% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header[data-style="AURORA"] .inner::before {
+    animation: none;
+  }
+}
+
+@media (min-width: 900px) {
+  /* Down a side, the framed ones keep their room; a diagonal cut has none. */
+  .header:is(
+      [data-style="GARDEN"],
+      [data-style="STUDIO"],
+      [data-style="AURORA"],
+      [data-style="BUDDY"],
+      [data-style="NEBULA"],
+      [data-style="LUMEN"]
+    ):is([data-site-header="LEFT"], [data-site-header="RIGHT"]) {
+    padding: 12px;
+  }
+
+  .header:is([data-style="GARDEN"], [data-style="AURORA"]):is(
+      [data-site-header="LEFT"],
+      [data-site-header="RIGHT"]
+    )
+    .inner {
+    border-radius: 28px;
+  }
+
+  .header[data-style="SWELL"]:is(
+      [data-site-header="LEFT"],
+      [data-site-header="RIGHT"]
+    )
+    .inner {
+    clip-path: none;
+  }
+}

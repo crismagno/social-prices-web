@@ -3988,6 +3988,32 @@
             "DOTTED": "Dotted",
             "DOUBLE": "Double"
           }
+        },
+        "style": {
+          "label": "Style",
+          "hint": "A ready look. The colours, transparency, shadow and border below still apply over it.",
+          "names": {
+            "CLASSIC": "Classic — a soft bar",
+            "FLOATING": "Floating — a pill away from the edges",
+            "GLASS": "Glass — frosted and see-through",
+            "BOLD": "Bold — a band of the main colour",
+            "MINIMAL": "Minimal — only the words",
+            "LINE": "Line — closed by a line of the main colour",
+            "BOXED": "Boxed — a squared frame with a hard shadow",
+            "ATELIER": "Atelier — pastel band with a dotted hem",
+            "GARDEN": "Garden — a calm framed pill",
+            "STUDIO": "Studio — thick frame, offset shadow",
+            "AURORA": "Aurora — glass with a moving gradient ring",
+            "IMPACT": "Impact — loud capitals over a bold line",
+            "RIVIERA": "Riviera — thin capitals over a hairline",
+            "MARE": "Maré — warm bar with a double line",
+            "SWELL": "Swell — slanted, cut on a diagonal",
+            "BUDDY": "Buddy — a round sticker with stitches",
+            "ARCADE": "Arcade — neon glow and scanlines",
+            "ATLAS": "Atlas — sober, squared, a thin line",
+            "NEBULA": "Nebula — deep glass with a halo",
+            "LUMEN": "Lumen — frosted white, soft shadow"
+          }
         }
       }
     },
