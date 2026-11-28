@@ -33,6 +33,16 @@
   animation: drift 14s ease infinite;
 }
 
+.fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 140px;
+  pointer-events: none;
+  background: linear-gradient(0deg, var(--site-bg), transparent);
+}
+
 .veilSolid {
   background: linear-gradient(
     115deg,

@@ -386,6 +386,8 @@ const Studio = ({
         className={`${styles.veil} ${backgroundImage ? "" : styles.veilSolid}`}
         data-hero="veil"
       />
+      {/* The entrance fades into the page instead of ending in a hard line. */}
+      <div className={styles.fade} data-hero="fade" />
 
       <div
         className={`${styles.heroBody} ${
