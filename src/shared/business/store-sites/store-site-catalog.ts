@@ -1,3 +1,7 @@
+import {
+  IStoreSiteCatalogFilter,
+  catalogFilterOf,
+} from "./store-site-catalog-filter";
 import StoreSitesEnum from "./store-sites.enum";
 
 /** What each product shows on the site, and whether they can be searched. */
@@ -6,6 +10,8 @@ export interface IStoreSiteCatalog {
   isPriceShown: boolean;
   /** The short description, under the name and the price. */
   isDescriptionShown: boolean;
+  /** The years the product is for, when it is for some. */
+  isYearsShown: boolean;
   /** A search box on the page of products. */
   isSearchShown: boolean;
   /** The "add" button of each product; off, products are only shown. */
@@ -20,6 +26,8 @@ export interface IStoreSiteCatalog {
   title: string | null;
   /** The owner's own text of the add button; empty, the site says its own. */
   addLabel: string | null;
+  /** The floating filter of the page of products. */
+  filter: IStoreSiteCatalogFilter;
 }
 
 export const CATALOG_TITLE_MAX = 60;
@@ -35,6 +43,7 @@ export const siteCatalogOf = (
   isNameShown: catalog?.isNameShown !== false,
   isPriceShown: catalog?.isPriceShown !== false,
   isDescriptionShown: catalog?.isDescriptionShown === true,
+  isYearsShown: catalog?.isYearsShown !== false,
   isSearchShown: catalog?.isSearchShown !== false,
   isAddButtonShown: catalog?.isAddButtonShown !== false,
   isDetailsOpened: catalog?.isDetailsOpened !== false,
@@ -45,4 +54,5 @@ export const siteCatalogOf = (
   isTitleShown: catalog?.isTitleShown !== false,
   title: catalog?.title?.trim().slice(0, CATALOG_TITLE_MAX) || null,
   addLabel: catalog?.addLabel?.trim().slice(0, CATALOG_ADD_LABEL_MAX) || null,
+  filter: catalogFilterOf(catalog?.filter),
 });

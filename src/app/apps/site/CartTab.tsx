@@ -64,6 +64,7 @@ const CartTab = ({ editor }: Props) => {
     "isBrandShown",
     "isDescriptionShown",
     "isTagsShown",
+    "isYearsShown",
     "isProductOpened",
     "isShippingNoteShown",
   ];

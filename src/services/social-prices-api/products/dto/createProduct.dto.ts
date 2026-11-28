@@ -1,4 +1,5 @@
 import { IDynamicField } from "../../../../shared/business/shared/dynamic-field/dynamic-field.interface";
+import { IProductYearRange } from "../../../../shared/business/products/products.interface";
 import { IPricing } from "../../../../shared/business/shared/pricing/pricing.interface";
 
 export class ProductDimensionsDto {
@@ -30,6 +31,7 @@ export default class CreateProductDto {
   releaseDate: string | null = null;
   expirationDate: string | null = null;
   dimensions: ProductDimensionsDto | null = null;
+  yearRange: IProductYearRange | null = null;
   pricing: IPricing | null = null;
   colors: string[] = [];
 

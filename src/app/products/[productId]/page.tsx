@@ -40,6 +40,7 @@ import CategoriesEnum from "../../../shared/business/categories/categories.enum"
 import { hasPricing } from "../../../shared/business/shared/pricing/pricing.utils";
 import TagsEnum from "../../../shared/business/tags/tags.enum";
 import Urls from "../../../shared/common/routes-app/routes-app";
+import { yearRangeLabel } from "../../../shared/business/products/products.interface";
 import DatesEnum from "../../../shared/utils/dates/dates.enum";
 import { getImageUrl } from "../../../shared/utils/images/images-url";
 import ImagesEnum from "../../../shared/utils/images/images.enum";
@@ -202,6 +203,9 @@ export default function ProductPage() {
 
                     <Descriptions.Item label={t("products.brand")}>
                       {product.brand || "-"}
+                    </Descriptions.Item>
+                    <Descriptions.Item label={t("products.yearRange")}>
+                      {yearRangeLabel(product.yearRange) || "-"}
                     </Descriptions.Item>
                     <Descriptions.Item label={t("products.location")}>
                       {product.location || "-"}

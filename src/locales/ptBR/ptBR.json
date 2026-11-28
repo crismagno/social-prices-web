@@ -699,6 +699,10 @@
     "enterSku": "Digite o SKU",
     "brand": "Marca",
     "enterBrand": "Digite a marca",
+    "yearRange": "Anos",
+    "yearFrom": "Ano de",
+    "yearTo": "Ano até",
+    "yearPlaceholder": "Ex.: 2015",
     "location": "Localização",
     "enterLocation": "Digite a localização",
     "height": "Altura(m)",
@@ -2376,7 +2380,8 @@
         "thickness": "Espessura",
         "volume": "Volume",
         "weight": "Peso"
-      }
+      },
+      "years": "Anos"
     },
     "public": {
       "noProducts": "Os produtos aparecem aqui em breve.",
@@ -2398,7 +2403,27 @@
       "personalized": "feito para você",
       "availableNow": "Disponíveis agora",
       "ourStory": "Nossa história",
-      "news": "Novidades"
+      "news": "Novidades",
+      "filter": {
+        "title": "Filtros",
+        "open": "Abrir ou fechar os filtros",
+        "close": "Fechar os filtros",
+        "text": "Buscar",
+        "sort": "Ordenar",
+        "sorts": {
+          "DEFAULT": "Como a loja organizou",
+          "PRICE_UP": "Menor preço primeiro",
+          "PRICE_DOWN": "Maior preço primeiro",
+          "NAME": "Nome, A a Z"
+        },
+        "price": "Preço",
+        "onlyAvailable": "Só o que está disponível",
+        "brand": "Marca",
+        "color": "Cor",
+        "size": "Tamanho",
+        "found": "{count} produtos",
+        "clear": "Limpar"
+      }
     },
     "cart": {
       "title": "Seu carrinho",
@@ -2798,6 +2823,7 @@
             "isBrandShown": "Mostrar a marca",
             "isDescriptionShown": "Mostrar a descrição",
             "isTagsShown": "Mostrar tamanho e cores",
+            "isYearsShown": "Mostrar os anos",
             "isProductOpened": "Abrir os detalhes ao clicar no produto",
             "isShippingNoteShown": "Mostrar o aviso de frete",
             "shippingNote": "Texto do aviso de frete",
@@ -2924,7 +2950,36 @@
         "detailsModeHints": {
           "MODAL": "Os detalhes abrem numa janela sobre a página.",
           "PAGE": "Cada produto tem sua própria página, em /produto/…, que pode ser compartilhada. Nenhuma página sua pode usar o endereço produto."
-        }
+        },
+        "filter": {
+          "title": "Filtro flutuante",
+          "hint": "Uma aba em um lado da página de produtos que abre um painel de filtros. Cada filtro só aparece quando os produtos têm o que escolher.",
+          "side": "Lado",
+          "sides": {
+            "LEFT": "Esquerda",
+            "RIGHT": "Direita"
+          },
+          "heading": "Título",
+          "fields": {
+            "title": "Pelo que o visitante pode filtrar",
+            "TEXT": "Busca por texto",
+            "SORT": "Ordenação",
+            "PRICE": "Faixa de preço",
+            "AVAILABILITY": "Só disponíveis",
+            "BRAND": "Marca",
+            "COLOR": "Cor",
+            "SIZE": "Tamanho",
+            "DIMENSIONS": "Medidas (altura, largura, peso…)",
+            "YEAR": "Anos"
+          },
+          "colors": {
+            "title": "Cores do filtro",
+            "background": "Fundo",
+            "text": "Texto",
+            "accent": "Destaque"
+          }
+        },
+        "isYearsShown": "Anos"
       },
       "products": {
         "empty": "Nenhum produto escolhido ainda.",

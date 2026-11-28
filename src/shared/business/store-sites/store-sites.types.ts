@@ -1,3 +1,4 @@
+import { IProductYearRange } from "../products/products.interface";
 import { IStoreSite } from "./store-site.interface";
 
 /** What a visitor may know about a product: nothing about cost or stock. */
@@ -14,6 +15,23 @@ export interface IPublicSiteProduct {
   colors?: string[];
   /** Only the measures that were filled; null when none was. */
   dimensions?: TPublicSiteProductDimensions | null;
+  /** The years the product is for, when it is for some. */
+  yearRange?: IProductYearRange | null;
+  isAvailable: boolean;
+  /**
+   * The items the product is kept as, with what a visitor can filter by: a
+   * product is found by what any of them is.
+   */
+  variants?: IPublicSiteProductVariant[];
+}
+
+/** One item of a product, as far as the filter of the site needs it. */
+export interface IPublicSiteProductVariant {
+  name: string;
+  price: number;
+  brand: string | null;
+  colors: string[];
+  dimensions: TPublicSiteProductDimensions | null;
   isAvailable: boolean;
 }
 

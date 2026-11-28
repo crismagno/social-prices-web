@@ -39,6 +39,7 @@ import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enu
 import Urls from "../../../shared/common/routes-app/routes-app";
 import { getImageUrl } from "../../../shared/utils/images/images-url";
 import ImageLookCard from "./ImageLookCard";
+import CatalogFilterFields from "./CatalogFilterFields";
 import ProductPickerModal from "./ProductPickerModal";
 import SizeFields from "./SizeFields";
 import useDragReorder from "./useDragReorder";
@@ -61,6 +62,7 @@ const CATALOG_CHOICES: TCatalogSwitch[] = [
   "isNameShown",
   "isPriceShown",
   "isDescriptionShown",
+  "isYearsShown",
   "isAddButtonShown",
   "isDetailsOpened",
   "isSearchShown",
@@ -188,6 +190,7 @@ export const ProductsTab = ({ editor }: Omit<Props, "storeId">) => {
           </span>
         </Space>
       </Card>
+      <CatalogFilterFields editor={editor} />
       <Card size="small" title={t("storeSite.editor.sizes.productsHeading")}>
         <SizeFields
           editor={editor}

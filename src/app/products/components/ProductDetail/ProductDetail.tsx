@@ -81,6 +81,9 @@ import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../../tags/useFindTagsByType";
 import { useFindProductById } from "../../detail/useFindProductById";
 
+// The years a product can be said to be for, as the API takes them.
+const YEAR_LIMITS: [number, number] = [1800, 2200];
+
 const dimensionsFormSchema = z.object({
   size: z.string().optional(),
   height: z.any().optional(),
@@ -92,6 +95,20 @@ const dimensionsFormSchema = z.object({
   volume: z.any().optional(),
   weight: z.any().optional(),
 });
+
+const yearRangeFormSchema = z.object({
+  from: z.any().optional(),
+  to: z.any().optional(),
+});
+
+// A year typed in the form, or none when the field was left empty.
+const yearOf = (value: unknown): number | null => {
+  const year: number = Number(value);
+
+  return value !== "" && value !== null && value !== undefined && year > 0
+    ? Math.trunc(year)
+    : null;
+};
 
 const _baseFormSchema = z.object({
   name: z.string().trim(),
@@ -111,6 +128,7 @@ const _baseFormSchema = z.object({
   releaseDate: z.any().nullable().optional(),
   expirationDate: z.any().nullable().optional(),
   dimensions: dimensionsFormSchema.optional(),
+  yearRange: yearRangeFormSchema.optional(),
   pricing: pricingFormSchema.optional(),
   colors: z.array(colorSchema).optional(),
   dynamicFields: z
@@ -167,6 +185,7 @@ export const ProductDetail: React.FC<Props> = ({
         releaseDate: z.any().nullable().optional(),
         expirationDate: z.any().nullable().optional(),
         dimensions: dimensionsFormSchema.optional(),
+        yearRange: yearRangeFormSchema.optional(),
         pricing: pricingFormSchema.optional(),
         colors: z.array(colorSchema).optional(),
         dynamicFields: z
@@ -244,6 +263,10 @@ export const ProductDetail: React.FC<Props> = ({
       dynamicFields: product?.dynamicFields ?? [],
       colors: map(product?.colors ?? [], (color: string) => ({ value: color })),
       pricing: pricingToFormValues(product?.pricing),
+      yearRange: {
+        from: product?.yearRange?.from ?? "",
+        to: product?.yearRange?.to ?? "",
+      },
       dimensions: {
         size: product?.dimensions?.size ?? "",
         height: product?.dimensions?.height ?? 0,
@@ -292,6 +315,7 @@ export const ProductDetail: React.FC<Props> = ({
       colors: [],
       dynamicFields: [],
       pricing: pricingToFormValues(),
+      yearRange: { from: "", to: "" },
       dimensions: {
         size: "",
         height: 0,
@@ -384,6 +408,10 @@ export const ProductDetail: React.FC<Props> = ({
             )
           : [],
         dimensions: data?.dimensions as any,
+        yearRange: {
+          from: yearOf(data.yearRange?.from),
+          to: yearOf(data.yearRange?.to),
+        },
         pricing: normalizePricing(data.pricing),
       };
 
@@ -478,6 +506,10 @@ export const ProductDetail: React.FC<Props> = ({
             )
           : [],
         dimensions: data?.dimensions as any,
+        yearRange: {
+          from: yearOf(data.yearRange?.from),
+          to: yearOf(data.yearRange?.to),
+        },
         pricing: normalizePricing(data.pricing),
       };
 
@@ -631,6 +663,28 @@ export const ProductDetail: React.FC<Props> = ({
               label={t("products.brand")}
               placeholder={t("products.enterBrand")}
               errorMessage={errors.brand?.message}
+            />
+          </Col>
+
+          <Col xs={12} md={4} sm={6} lg={4}>
+            <InputCustomAntd
+              controller={{ control, name: "yearRange.from" }}
+              label={t("products.yearFrom")}
+              placeholder={t("products.yearPlaceholder")}
+              type="number"
+              min={YEAR_LIMITS[0]}
+              max={YEAR_LIMITS[1]}
+            />
+          </Col>
+
+          <Col xs={12} md={4} sm={6} lg={4}>
+            <InputCustomAntd
+              controller={{ control, name: "yearRange.to" }}
+              label={t("products.yearTo")}
+              placeholder={t("products.yearPlaceholder")}
+              type="number"
+              min={YEAR_LIMITS[0]}
+              max={YEAR_LIMITS[1]}
             />
           </Col>
 

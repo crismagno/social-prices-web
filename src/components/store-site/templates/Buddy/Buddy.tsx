@@ -25,6 +25,7 @@ import {
 import SiteHeader from "../../shared/SiteHeader";
 import SiteFooter from "../../shared/SiteFooter";
 import SitePageBody from "../../shared/SitePageBody";
+import SiteProductYears from "../../shared/SiteProductYears";
 import SiteThemeVars from "../../shared/SiteThemeVars";
 import { ISitePartView, sitePartView } from "../../shared/useSiteContent";
 import {
@@ -87,6 +88,7 @@ const Buddy = ({
     catalog: site.catalog,
     products,
     page,
+    accent: site.theme?.primary,
   });
 
   // The home shows every part; each other page shows its own.
@@ -252,6 +254,9 @@ const Buddy = ({
                                 <span className={styles.price} data-part="2">
                                   {formatSiteMoney(product.price)}
                                 </span>
+                              )}
+                              {catalog.view.isYearsShown && (
+                                <SiteProductYears product={product} />
                               )}
                               {catalog.view.isDescriptionShown &&
                                 product.description && (

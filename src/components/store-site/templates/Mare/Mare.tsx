@@ -25,6 +25,7 @@ import {
 import SiteFooter from "../../shared/SiteFooter";
 import SiteHeader from "../../shared/SiteHeader";
 import SitePageBody from "../../shared/SitePageBody";
+import SiteProductYears from "../../shared/SiteProductYears";
 import SiteThemeVars from "../../shared/SiteThemeVars";
 import { ISitePartView, sitePartView } from "../../shared/useSiteContent";
 import {
@@ -100,6 +101,7 @@ const Mare = ({
     catalog: site.catalog,
     products,
     page,
+    accent: site.theme?.primary,
   });
 
   // The sections of this page, in the order the owner put them.
@@ -287,6 +289,9 @@ const Mare = ({
                             formatSiteMoney(product.price)
                           : t("storeSite.public.unavailable")}
                       </span>
+                      {catalog.view.isYearsShown && (
+                        <SiteProductYears product={product} />
+                      )}
                       {catalog.view.isDescriptionShown &&
                         product.description && (
                           <span className={base.productDescription}>

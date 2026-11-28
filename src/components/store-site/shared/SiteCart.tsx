@@ -1,5 +1,6 @@
 "use client";
 
+import { yearRangeLabel } from "../../../shared/business/products/products.interface";
 import { CSSProperties, ReactNode, useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
@@ -415,8 +416,17 @@ const SiteCart = ({
               <div className={styles.lines}>
                 {orderableLines.map((line: ISiteCartLine) => {
                   const { product } = line;
-                  const size: string | undefined = product.dimensions?.size;
-                  const colors: string[] = product.colors ?? [];
+                  // Its size and colours, when the owner left them in the cart.
+                  const size: string | undefined = look.isTagsShown
+                    ? product.dimensions?.size
+                    : undefined;
+                  // The years it is for, when the owner left them in the cart.
+                  const years: string = look.isYearsShown
+                    ? yearRangeLabel(product.yearRange)
+                    : "";
+                  const colors: string[] = look.isTagsShown
+                    ? (product.colors ?? [])
+                    : [];
 
                   return (
                     <div
@@ -458,8 +468,13 @@ const SiteCart = ({
                             {richTextToPlain(product.description)}
                           </div>
                         )}
-                        {look.isTagsShown && (size || colors.length > 0) && (
+                        {(size || colors.length > 0 || years) && (
                           <div className={styles.tags}>
+                            {years && (
+                              <span className={styles.tag}>
+                                {t("storeSite.product.years")}: {years}
+                              </span>
+                            )}
                             {size && (
                               <span className={styles.tag}>
                                 {t("storeSite.cart.size")}: {size}

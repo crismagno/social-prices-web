@@ -22,6 +22,8 @@ export interface IStoreSiteCartLook {
   isDescriptionShown: boolean;
   /** Size and colors of the product. */
   isTagsShown: boolean;
+  /** The years the product is for, when it is for some. */
+  isYearsShown: boolean;
   /** A click on a product shows it in full. */
   isProductOpened: boolean;
   isShippingNoteShown: boolean;
@@ -81,6 +83,7 @@ export const cartLookOf = (
   isBrandShown: look?.isBrandShown !== false,
   isDescriptionShown: look?.isDescriptionShown !== false,
   isTagsShown: look?.isTagsShown !== false,
+  isYearsShown: look?.isYearsShown !== false,
   isProductOpened: look?.isProductOpened !== false,
   isShippingNoteShown: look?.isShippingNoteShown !== false,
   shippingNote: textOf(look?.shippingNote, CART_SHIPPING_NOTE_MAX),

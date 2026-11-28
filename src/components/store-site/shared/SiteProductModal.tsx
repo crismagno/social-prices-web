@@ -1,5 +1,6 @@
 "use client";
 
+import { yearRangeLabel } from "../../../shared/business/products/products.interface";
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -117,6 +118,13 @@ const SiteProductModal = ({
           : `${NUMBER.format(Number(value))} ${UNITS[key]}`,
       ])
     : [];
+
+  // The years it is for come first among what is measured of it.
+  const years: string = yearRangeLabel(shown?.yearRange);
+
+  if (years) {
+    measures.unshift([t("storeSite.product.years"), years]);
+  }
 
   const colors: string[] = shown?.colors ?? [];
 

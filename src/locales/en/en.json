@@ -696,6 +696,10 @@
     "enterSku": "Enter sku",
     "brand": "Brand",
     "enterBrand": "Enter brand",
+    "yearRange": "Years",
+    "yearFrom": "Year from",
+    "yearTo": "Year to",
+    "yearPlaceholder": "E.g. 2015",
     "location": "Location",
     "enterLocation": "Enter location",
     "height": "Height(m)",
@@ -2373,7 +2377,8 @@
         "thickness": "Thickness",
         "volume": "Volume",
         "weight": "Weight"
-      }
+      },
+      "years": "Years"
     },
     "public": {
       "noProducts": "The products will be here soon.",
@@ -2395,7 +2400,27 @@
       "personalized": "made for you",
       "availableNow": "Available now",
       "ourStory": "Our story",
-      "news": "News"
+      "news": "News",
+      "filter": {
+        "title": "Filters",
+        "open": "Open or close the filters",
+        "close": "Close the filters",
+        "text": "Search",
+        "sort": "Order",
+        "sorts": {
+          "DEFAULT": "As the store arranged",
+          "PRICE_UP": "Lowest price first",
+          "PRICE_DOWN": "Highest price first",
+          "NAME": "Name, A to Z"
+        },
+        "price": "Price",
+        "onlyAvailable": "Only what is available",
+        "brand": "Brand",
+        "color": "Color",
+        "size": "Size",
+        "found": "{count} products",
+        "clear": "Clear"
+      }
     },
     "cart": {
       "title": "Your cart",
@@ -2795,6 +2820,7 @@
             "isBrandShown": "Show the brand",
             "isDescriptionShown": "Show the description",
             "isTagsShown": "Show size and colors",
+            "isYearsShown": "Show the years",
             "isProductOpened": "Open the details when a product is clicked",
             "isShippingNoteShown": "Show the shipping note",
             "shippingNote": "Shipping note text",
@@ -2921,7 +2947,36 @@
         "detailsModeHints": {
           "MODAL": "The details open in a window over the page.",
           "PAGE": "Each product gets a page of its own, at /produto/…, that can be shared. None of your pages can use the address produto."
-        }
+        },
+        "filter": {
+          "title": "Floating filter",
+          "hint": "A tab on one side of the page of products that opens a panel of filters. Each filter only appears when the products have something to choose among.",
+          "side": "Side",
+          "sides": {
+            "LEFT": "Left",
+            "RIGHT": "Right"
+          },
+          "heading": "Title",
+          "fields": {
+            "title": "What visitors can filter by",
+            "TEXT": "Text search",
+            "SORT": "Order",
+            "PRICE": "Price range",
+            "AVAILABILITY": "Only available",
+            "BRAND": "Brand",
+            "COLOR": "Color",
+            "SIZE": "Size",
+            "DIMENSIONS": "Measures (height, width, weight…)",
+            "YEAR": "Years"
+          },
+          "colors": {
+            "title": "Colours of the filter",
+            "background": "Background",
+            "text": "Text",
+            "accent": "Highlight"
+          }
+        },
+        "isYearsShown": "Years"
       },
       "products": {
         "empty": "No product chosen yet.",
