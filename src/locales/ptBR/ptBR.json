@@ -2423,7 +2423,8 @@
       "size": "Tamanho",
       "colors": "Cores",
       "total": "Total dos produtos",
-      "keepShopping": "Continuar comprando"
+      "keepShopping": "Continuar comprando",
+      "emptyHint": "Escolha algo que você goste e ele aparece aqui."
     },
     "checkout": {
       "title": "Seus dados",

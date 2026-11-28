@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import { CSSProperties, ReactNode, useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -9,7 +9,6 @@ import {
   Button,
   ConfigProvider,
   Drawer,
-  Empty,
   Form,
   Input,
   InputNumber,
@@ -364,7 +363,54 @@ const SiteCart = ({
         <div className={styles.cartLayout}>
           <div className={styles.cartMain}>
             {cart.items.length === 0 ? (
-              <Empty description={t("storeSite.cart.empty")} />
+              <div
+                className={styles.empty}
+                style={{ "--empty-color": theme.primary } as CSSProperties}
+              >
+                <div className={styles.emptyArt} aria-hidden="true">
+                  <span className={styles.emptyHalo} />
+                  <span className={styles.emptySpark} />
+                  <span className={styles.emptySpark} />
+                  <span className={styles.emptySpark} />
+                  <svg viewBox="0 0 96 96" className={styles.emptyBag}>
+                    <path
+                      d="M22 34h52l-4 44a6 6 0 0 1-6 5H32a6 6 0 0 1-6-5l-4-44Z"
+                      fill="currentColor"
+                      fillOpacity="0.14"
+                      stroke="currentColor"
+                      strokeWidth="3.5"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M36 40V28a12 12 0 0 1 24 0v12"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="3.5"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M40 58c2.5 4 5 6 8 6s5.5-2 8-6"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="3.5"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </div>
+                <h3 className={styles.emptyTitle}>
+                  {t("storeSite.cart.empty")}
+                </h3>
+                <p className={styles.emptyHint}>
+                  {t("storeSite.cart.emptyHint")}
+                </p>
+                <button
+                  type="button"
+                  className={styles.emptyButton}
+                  onClick={close}
+                >
+                  {t("storeSite.cart.keepShopping")}
+                </button>
+              </div>
             ) : (
               <div className={styles.lines}>
                 {orderableLines.map((line: ISiteCartLine) => {

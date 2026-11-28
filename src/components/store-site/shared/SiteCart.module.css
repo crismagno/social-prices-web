@@ -383,6 +383,11 @@ button.name:hover {
     align-items: start;
   }
 
+  /* Nothing in the cart: no summary beside it, so its words take the row. */
+  .page .cartLayout:has(.empty) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .page .cartAside {
     position: sticky;
     top: 24px;
@@ -615,4 +620,147 @@ button.name:hover {
 
 .checkoutForm :global(.ant-form-item-label) {
   padding-bottom: 4px;
+}
+
+/* An empty cart: a bag that floats, and the way back to the products. */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 48px 16px 40px;
+  color: var(--empty-color, #555);
+}
+
+.emptyArt {
+  position: relative;
+  width: 148px;
+  height: 148px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 22px;
+}
+
+.emptyHalo {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, currentColor 22%, transparent),
+    color-mix(in srgb, currentColor 5%, transparent) 62%,
+    transparent 72%
+  );
+  animation: emptyBreathe 3.6s ease-in-out infinite;
+}
+
+.emptyBag {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  animation: emptyFloat 3.6s ease-in-out infinite;
+}
+
+.emptySpark {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0;
+  animation: emptySpark 3.2s ease-in-out infinite;
+}
+
+.emptySpark:nth-of-type(2) {
+  top: 16px;
+  left: 22px;
+}
+
+.emptySpark:nth-of-type(3) {
+  top: 30px;
+  right: 14px;
+  width: 6px;
+  height: 6px;
+  animation-delay: 1s;
+}
+
+.emptySpark:nth-of-type(4) {
+  bottom: 22px;
+  left: 12px;
+  width: 5px;
+  height: 5px;
+  animation-delay: 2s;
+}
+
+.emptyTitle {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--site-text, #222);
+}
+
+.emptyHint {
+  margin: 0 0 22px;
+  max-width: 30ch;
+  font-size: 14px;
+  color: var(--site-text, #222);
+  opacity: 0.65;
+}
+
+.emptyButton {
+  padding: 11px 26px;
+  border: 0;
+  border-radius: 99px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  color: #fff;
+  background: var(--empty-color, #555);
+  box-shadow: 0 10px 26px color-mix(in srgb, var(--empty-color, #555) 34%, transparent);
+  transition:
+    translate 0.25s,
+    box-shadow 0.25s;
+}
+
+.emptyButton:hover {
+  translate: 0 -2px;
+  box-shadow: 0 16px 34px color-mix(in srgb, var(--empty-color, #555) 44%, transparent);
+}
+
+@keyframes emptyFloat {
+  0%,
+  100% {
+    translate: 0 4px;
+    rotate: -3deg;
+  }
+  50% {
+    translate: 0 -8px;
+    rotate: 3deg;
+  }
+}
+
+@keyframes emptyBreathe {
+  50% {
+    scale: 1.1;
+  }
+}
+
+@keyframes emptySpark {
+  0%,
+  100% {
+    opacity: 0;
+    scale: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+    scale: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .emptyHalo,
+  .emptyBag,
+  .emptySpark {
+    animation: none;
+  }
 }

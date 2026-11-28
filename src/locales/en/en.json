@@ -2420,7 +2420,8 @@
       "size": "Size",
       "colors": "Colors",
       "total": "Products total",
-      "keepShopping": "Keep shopping"
+      "keepShopping": "Keep shopping",
+      "emptyHint": "Pick something you like and it will show up here."
     },
     "checkout": {
       "title": "Your details",
