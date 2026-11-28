@@ -19,7 +19,10 @@ export interface IPreviewData {
   /** The page to show; null is the home. */
   page?: IStoreSitePage | null;
   /** The builder's state; absent, the preview is just the site. */
-  builder?: { selectedKey: string | null } | null;
+  builder?: {
+    selectedKey: string | null;
+    selectedElementKey?: string | null;
+  } | null;
 }
 
 export interface IPreviewMessage {

@@ -1,0 +1,159 @@
+/*
+ * A free canvas. It keeps the proportion the owner drew it in and everything
+ * on it is placed in shares of its own size, so the whole of it scales with
+ * the screen: on a phone it is the same picture, smaller.
+ */
+.canvas {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  container-type: inline-size;
+  isolation: isolate;
+}
+
+.element {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  margin: 0;
+  line-height: 1.15;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+/* A text is only its words: it grows down when they do not fit. */
+.element[data-kind="TEXT"] {
+  align-items: flex-start;
+}
+
+.element[data-kind="BUTTON"] {
+  padding-inline: calc(20 / 1200 * 100cqw);
+  cursor: pointer;
+  transition:
+    scale 0.25s,
+    filter 0.25s;
+}
+
+a.element[data-kind="BUTTON"]:hover {
+  scale: 1.04;
+  filter: brightness(1.06);
+}
+
+.element[data-kind="BOX"] {
+  padding: calc(18 / 1200 * 100cqw);
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+.element[data-kind="IMAGE"],
+.element[data-kind="VIDEO"] {
+  overflow: hidden;
+}
+
+.picture,
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background-size: cover;
+  background-position: center;
+  object-fit: cover;
+}
+
+/* The words of a text or a box: as wide as it, sized by its own size. */
+.words {
+  width: 100%;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  white-space: normal;
+}
+
+.words > :first-child {
+  margin-top: 0;
+}
+
+/* ---------- in the editor's builder ---------- */
+.canvas[data-building] {
+  /* A faint grid, so there is something to place things against. */
+  background-image:
+    linear-gradient(
+      color-mix(in srgb, currentColor 7%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, currentColor 7%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: calc(100% / 24) calc(100% / 24);
+  outline: 1px dashed color-mix(in srgb, currentColor 30%, transparent);
+  touch-action: none;
+}
+
+.canvas[data-building] .element {
+  cursor: move;
+  user-select: none;
+  touch-action: none;
+}
+
+/* An element with nothing to show yet can still be seen and picked. */
+.canvas[data-building] .element:empty,
+.canvas[data-building] .element[data-kind="IMAGE"]:not(:has(.picture)),
+.canvas[data-building] .element[data-kind="VIDEO"]:not(:has(.video)) {
+  outline: 1px dashed color-mix(in srgb, currentColor 45%, transparent);
+  background-color: color-mix(in srgb, currentColor 6%, transparent);
+}
+
+.canvas[data-building] .element:hover {
+  outline: 1px solid #1677ff;
+}
+
+.canvas[data-building] .element[data-selected] {
+  outline: 2px solid #1677ff;
+  outline-offset: 1px;
+  overflow: visible;
+}
+
+/* A video is worked on like the rest: its own controls wait for the site. */
+.canvas[data-building] .video,
+.canvas[data-building] .words {
+  pointer-events: none;
+}
+
+.grip {
+  position: absolute;
+  z-index: 5;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: #1677ff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  touch-action: none;
+}
+
+.grip[data-grip="right"] {
+  top: 50%;
+  right: -7px;
+  translate: 0 -50%;
+  cursor: ew-resize;
+}
+
+.grip[data-grip="bottom"] {
+  left: 50%;
+  bottom: -7px;
+  translate: -50% 0;
+  cursor: ns-resize;
+}
+
+.grip[data-grip="corner"] {
+  right: -7px;
+  bottom: -7px;
+  cursor: nwse-resize;
+}

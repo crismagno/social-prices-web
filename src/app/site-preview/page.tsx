@@ -69,6 +69,8 @@ export default function SitePreviewPage() {
   }, []);
 
   const selectedKey: string | null = data?.builder?.selectedKey ?? null;
+  const selectedElementKey: string | null =
+    data?.builder?.selectedElementKey ?? null;
   const isBuilding: boolean = !!data?.builder;
 
   const builder: ISectionBuilderHooks | undefined = useMemo(
@@ -76,12 +78,13 @@ export default function SitePreviewPage() {
       isBuilding
         ? {
             selectedKey,
+            selectedElementKey,
             send,
             labelOf: (type: StoreSitesEnum.BlockType) =>
               t(`storeSite.editor.builder.types.${type}`),
           }
         : undefined,
-    [isBuilding, selectedKey, send, t],
+    [isBuilding, selectedKey, selectedElementKey, send, t],
   );
 
   useEffect(() => {

@@ -3742,6 +3742,10 @@
           "ABOUT": {
             "title": "A title",
             "text": "Write here what you want to tell."
+          },
+          "CANVAS": {
+            "title": "Drag me anywhere",
+            "button": "A button"
           }
         },
         "types": {
@@ -3766,7 +3770,8 @@
           "STEPS": "Steps",
           "FAQ": "FAQ",
           "CTA": "Call to action",
-          "TABS": "Tabs menu"
+          "TABS": "Tabs menu",
+          "CANVAS": "Free canvas"
         },
         "hints": {
           "HERO": "The entrance of this page: its own words, pictures, buttons, colours and sizes.",
@@ -3790,7 +3795,8 @@
           "STEPS": "How it works, in steps",
           "FAQ": "Questions that open and close",
           "CTA": "A banner with an action button",
-          "TABS": "Items that show, one at a time, other sections of this page"
+          "TABS": "Items that show, one at a time, other sections of this page",
+          "CANVAS": "Place text, buttons, boxes, images, video and lines anywhere, one over the other, and resize them"
         },
         "tabs": {
           "title": "Title above the menu",
@@ -3833,6 +3839,51 @@
           "spaceHint": "Room above and below what the section holds, in pixels.",
           "spaceTop": "Top",
           "spaceBottom": "Bottom"
+        },
+        "canvas": {
+          "hint": "In the preview, click an element to pick it, drag it to move it and pull its blue dots to resize it. Everything scales with the width of the screen.",
+          "height": "Height of the canvas",
+          "add": "Add",
+          "layers": "Elements (front first)",
+          "properties": "properties",
+          "kinds": {
+            "TEXT": "Text",
+            "BUTTON": "Button",
+            "BOX": "Box",
+            "IMAGE": "Image",
+            "VIDEO": "Video",
+            "DIVIDER": "Divider"
+          },
+          "samples": {
+            "TEXT": "Your text",
+            "BUTTON": "Button"
+          },
+          "forward": "Bring forward",
+          "backward": "Send backward",
+          "duplicate": "Duplicate",
+          "remove": "Remove",
+          "place": "Place and size",
+          "placeHint": "In pixels of a canvas 1200 wide.",
+          "box": {
+            "x": "X",
+            "y": "Y",
+            "width": "Width",
+            "height": "Height"
+          },
+          "text": "Text",
+          "fontSize": "Text size",
+          "bold": "Bold",
+          "align": "Align",
+          "image": "Image",
+          "video": "Or a video address",
+          "videoHint": "A YouTube or Vimeo link.",
+          "color": "Color",
+          "background": "Background",
+          "borderColor": "Border color",
+          "borderWidth": "Border",
+          "radius": "Rounded corners",
+          "opacity": "Opacity",
+          "videoFile": "Video file"
         }
       },
       "mocks": {

@@ -20,6 +20,7 @@ import {
   IStoreSiteSectionBackground,
   sectionBackgroundOf,
 } from "./store-site-section-background";
+import { IStoreSiteCanvas, siteCanvasOf } from "./store-site-canvas";
 import StoreSitesEnum from "./store-sites.enum";
 
 /** One entry of a block; which fields count depends on the block's type. */
@@ -98,6 +99,8 @@ export interface IStoreSiteBlockSettings {
   cards: IStoreSiteCardsStyle | null;
   /** What lies behind the section; none on the entrance, which has its own. */
   background: IStoreSiteSectionBackground | null;
+  /** A free canvas only: its height and what was placed on it. */
+  canvas: IStoreSiteCanvas | null;
 }
 
 /**
@@ -434,6 +437,9 @@ export const blockSettingsOf = (
         : null,
     // The entrance has a background of its own.
     background: uses(T.HERO) ? null : sectionBackgroundOf(source.background),
+    canvas: uses(T.CANVAS)
+      ? siteCanvasOf(source.canvas, { buttonOf, mediaOf })
+      : null,
   };
 };
 
@@ -586,6 +592,8 @@ export const showableSection = (
       return block.buttons.length ? shown : null;
     case T.VIDEO:
       return block.settings.media ? shown : null;
+    case T.CANVAS:
+      return block.settings.canvas?.elements.length ? shown : null;
     case T.SPACER:
     case T.DIVIDER:
       return shown;

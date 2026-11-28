@@ -6,6 +6,10 @@ import { TBuilderAction } from "../../../components/store-site/shared/blocks/bui
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import { IStoreSiteBlock } from "../../../shared/business/store-sites/store-site-blocks";
 import {
+  IStoreSiteCanvasElement,
+  boxWithin,
+} from "../../../shared/business/store-sites/store-site-canvas";
+import {
   canAdd,
   duplicateSection,
   insertSection,
@@ -34,6 +38,9 @@ export interface ISiteBuilder {
   selectedKey: string | null;
   selected: IStoreSiteBlock | null;
   select: (key: string | null) => void;
+  /** The element picked on the selected free canvas, if any. */
+  selectedElementKey: string | null;
+  selectElement: (elementKey: string | null) => void;
   /** Whether the builder tab is open: only then the preview frames sections. */
   isActive: boolean;
   setIsActive: (isActive: boolean) => void;
@@ -81,6 +88,9 @@ const useSiteBuilder = (editor: IStoreSiteEditor): ISiteBuilder => {
   const [pageKey, setPageKeyState] = useState<string | null>(null);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [isActive, setIsActive] = useState<boolean>(false);
+  const [selectedElementKey, setSelectedElementKey] = useState<string | null>(
+    null,
+  );
 
   const draft: ISaveStoreSite | null = editor.draft;
 
@@ -147,6 +157,45 @@ const useSiteBuilder = (editor: IStoreSiteEditor): ISiteBuilder => {
       switch (action.kind) {
         case "select":
           setSelectedKey(action.key);
+          // Another section: the element that was picked is let go.
+          setSelectedElementKey((current: string | null) =>
+            action.key === selectedKey ? current : null,
+          );
+          return;
+        case "selectElement":
+          setSelectedKey(action.key);
+          setSelectedElementKey(action.elementKey);
+          return;
+        case "placeElement":
+          change((blocks) =>
+            blocks.map((block: IStoreSiteBlock) =>
+              block.key === action.key && block.settings.canvas
+                ? {
+                    ...block,
+                    settings: {
+                      ...block.settings,
+                      canvas: {
+                        ...block.settings.canvas,
+                        elements: block.settings.canvas.elements.map(
+                          (element: IStoreSiteCanvasElement) =>
+                            element.key === action.elementKey
+                              ? {
+                                  ...element,
+                                  ...boxWithin(
+                                    action.box,
+                                    block.settings.canvas?.height ?? 0,
+                                  ),
+                                }
+                              : element,
+                        ),
+                      },
+                    },
+                  }
+                : block,
+            ),
+          );
+          setSelectedKey(action.key);
+          setSelectedElementKey(action.elementKey);
           return;
         case "page":
           setPageKey(action.pageKey);
@@ -186,7 +235,7 @@ const useSiteBuilder = (editor: IStoreSiteEditor): ISiteBuilder => {
           return;
       }
     },
-    [change, insert, setPageKey],
+    [change, insert, setPageKey, selectedKey],
   );
 
   const add = useCallback(
@@ -272,6 +321,8 @@ const useSiteBuilder = (editor: IStoreSiteEditor): ISiteBuilder => {
     selectedKey: selected?.key ?? null,
     selected,
     select: setSelectedKey,
+    selectedElementKey: selected ? selectedElementKey : null,
+    selectElement: setSelectedElementKey,
     isActive,
     setIsActive,
     canAdd: canAddType,

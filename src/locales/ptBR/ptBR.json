@@ -3745,6 +3745,10 @@
           "ABOUT": {
             "title": "Um título",
             "text": "Escreva aqui o que você quer contar."
+          },
+          "CANVAS": {
+            "title": "Me arraste para qualquer lugar",
+            "button": "Um botão"
           }
         },
         "types": {
@@ -3769,7 +3773,8 @@
           "STEPS": "Passo a passo",
           "FAQ": "Perguntas",
           "CTA": "Chamada final",
-          "TABS": "Menu de abas"
+          "TABS": "Menu de abas",
+          "CANVAS": "Tela livre"
         },
         "hints": {
           "HERO": "A entrada desta página: palavras, fotos, botões, cores e tamanhos próprios.",
@@ -3793,7 +3798,8 @@
           "STEPS": "Como funciona, em etapas",
           "FAQ": "Perguntas que abrem e fecham",
           "CTA": "Um banner com botão de ação",
-          "TABS": "Itens que mostram, um de cada vez, outras seções desta página"
+          "TABS": "Itens que mostram, um de cada vez, outras seções desta página",
+          "CANVAS": "Coloque texto, botões, caixas, imagens, vídeo e linhas em qualquer lugar, um sobre o outro, e redimensione"
         },
         "tabs": {
           "title": "Título acima do menu",
@@ -3836,6 +3842,51 @@
           "spaceHint": "Espaço acima e abaixo do conteúdo da seção, em pixels.",
           "spaceTop": "Topo",
           "spaceBottom": "Baixo"
+        },
+        "canvas": {
+          "hint": "No preview, clique num elemento para selecioná-lo, arraste para mover e puxe os pontos azuis para redimensionar. Tudo acompanha a largura da tela.",
+          "height": "Altura da tela",
+          "add": "Adicionar",
+          "layers": "Elementos (da frente para trás)",
+          "properties": "propriedades",
+          "kinds": {
+            "TEXT": "Texto",
+            "BUTTON": "Botão",
+            "BOX": "Caixa",
+            "IMAGE": "Imagem",
+            "VIDEO": "Vídeo",
+            "DIVIDER": "Divisor"
+          },
+          "samples": {
+            "TEXT": "Seu texto",
+            "BUTTON": "Botão"
+          },
+          "forward": "Trazer para frente",
+          "backward": "Enviar para trás",
+          "duplicate": "Duplicar",
+          "remove": "Remover",
+          "place": "Posição e tamanho",
+          "placeHint": "Em pixels de uma tela de 1200 de largura.",
+          "box": {
+            "x": "X",
+            "y": "Y",
+            "width": "Largura",
+            "height": "Altura"
+          },
+          "text": "Texto",
+          "fontSize": "Tamanho do texto",
+          "bold": "Negrito",
+          "align": "Alinhar",
+          "image": "Imagem",
+          "video": "Ou o endereço de um vídeo",
+          "videoHint": "Um link do YouTube ou do Vimeo.",
+          "color": "Cor",
+          "background": "Fundo",
+          "borderColor": "Cor da borda",
+          "borderWidth": "Borda",
+          "radius": "Cantos arredondados",
+          "opacity": "Opacidade",
+          "videoFile": "Arquivo de vídeo"
         }
       },
       "mocks": {

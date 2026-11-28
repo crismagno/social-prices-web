@@ -991,6 +991,12 @@
   padding-block: 0;
 }
 
+/* A free canvas is its own layout: the whole width, no room around it. */
+.block[data-type="CANVAS"] {
+  max-width: 1200px;
+  padding: 0;
+}
+
 .spacer {
   width: 100%;
 }

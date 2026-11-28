@@ -1,3 +1,4 @@
+import { TCanvasBox } from "../../../../shared/business/store-sites/store-site-canvas";
 import StoreSitesEnum from "../../../../shared/business/store-sites/store-sites.enum";
 
 /** What the preview tells the editor the owner did on a section. */
@@ -8,6 +9,10 @@ export type TBuilderAction =
   | { kind: "remove"; key: string }
   | { kind: "duplicate"; key: string }
   | { kind: "toggle"; key: string }
+  /** An element of a free canvas was picked; none lets go of it. */
+  | { kind: "selectElement"; key: string; elementKey: string | null }
+  /** An element of a free canvas was moved or resized. */
+  | { kind: "placeElement"; key: string; elementKey: string; box: TCanvasBox }
   /** A link to a page of the site was clicked: the preview shows that page. */
   | { kind: "page"; pageKey: string | null };
 
@@ -24,6 +29,8 @@ export type TSectionDrag =
  */
 export interface ISectionBuilderHooks {
   selectedKey: string | null;
+  /** The element picked on the selected free canvas, if any. */
+  selectedElementKey?: string | null;
   send: (action: TBuilderAction) => void;
   labelOf: (type: StoreSitesEnum.BlockType) => string;
 }

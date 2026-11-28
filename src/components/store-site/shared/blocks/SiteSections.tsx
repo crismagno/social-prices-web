@@ -7,6 +7,7 @@ import {
   Fragment,
   MouseEvent,
   ReactNode,
+  useMemo,
   useState,
 } from "react";
 
@@ -40,6 +41,8 @@ import MarqueeStyle from "./MarqueeStyle";
 import SectionFrame from "./SectionFrame";
 import SiteTabs from "./SiteTabs";
 import frameStyles from "./SectionFrame.module.css";
+import { CanvasBuilderContext, ICanvasBuilder } from "./canvas-builder";
+import PieceCanvas from "./PieceCanvas";
 import SectionBackground from "./SectionBackground";
 import styles from "./SiteBlocks.module.css";
 import {
@@ -85,6 +88,7 @@ export const SECTION_COMPONENTS: Partial<
   [StoreSitesEnum.BlockType.IMAGE]: PieceImage,
   [StoreSitesEnum.BlockType.VIDEO]: PieceVideo,
   [StoreSitesEnum.BlockType.SPACER]: PieceSpacer,
+  [StoreSitesEnum.BlockType.CANVAS]: PieceCanvas,
   [StoreSitesEnum.BlockType.DIVIDER]: PieceDivider,
   [StoreSitesEnum.BlockType.BOX]: PieceBox,
   [StoreSitesEnum.BlockType.TESTIMONIALS]: BlockTestimonials,
@@ -314,6 +318,19 @@ const BuilderSections = ({
     </div>
   );
 
+  // A free canvas is worked on right here: what is done to its elements
+  // goes to the editor like everything else.
+  const canvasBuilder: ICanvasBuilder = useMemo(
+    () => ({
+      selectedElementKey: builder.selectedElementKey ?? null,
+      select: (key: string, elementKey: string | null) =>
+        builder.send({ kind: "selectElement", key, elementKey }),
+      place: (key, elementKey, box) =>
+        builder.send({ kind: "placeElement", key, elementKey, box }),
+    }),
+    [builder],
+  );
+
   const placeholder = (section: IStoreSiteBlock): ReactNode => (
     <div className={frameStyles.placeholder}>
       <strong>{builder.labelOf(section.type)}</strong>
@@ -322,79 +339,83 @@ const BuilderSections = ({
   );
 
   return (
-    <div
-      onDragLeave={(event: DragEvent<HTMLDivElement>) => {
-        // Out of the page altogether: no line.
-        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-          setDropIndex(null);
-        }
-      }}
-    >
-      {sections.map((section: IStoreSiteBlock, index: number) => {
-        const isPart: boolean = isPartType(section.type);
-        const shown: IStoreSiteBlock | null = isPart
-          ? section
-          : showableSection(section);
-
-        // A menu of tabs is only its menu here: its sections stay on the
-        // page, where they are picked and edited.
-        const tabs: ITabsEntry[] =
-          section.type === StoreSitesEnum.BlockType.TABS
-            ? section.items
-                .filter((item) => !!item.title?.trim())
-                .map((item) => ({
-                  key: item.key,
-                  label: item.title?.trim() ?? "",
-                  sections: [],
-                }))
-            : [];
-
-        const content: ReactNode =
-          section.type === StoreSitesEnum.BlockType.TABS
-            ? tabs.length > 0 && <SiteTabs block={section} entries={tabs} />
-            : isPart
-              ? drawPart(section, renderPart, marqueeStyle)
-              : shown && <BlockSection block={shown} {...rest} />;
-
-        return (
-          <Fragment key={section.key}>
-            {line(index)}
-            <SectionFrame
-              section={section}
-              index={index}
-              count={sections.length}
-              isPart={isPart}
-              builder={builder}
-              onDragOverAt={setDropIndex}
-              onDrop={(event) => drop(event, dropIndex)}
-            >
-              {content ? (
-                <SectionBackground background={section.settings.background}>
-                  {content}
-                </SectionBackground>
-              ) : (
-                placeholder(section)
-              )}
-            </SectionFrame>
-          </Fragment>
-        );
-      })}
-      {sections.length > 0 && line(sections.length)}
+    <CanvasBuilderContext.Provider value={canvasBuilder}>
       <div
-        className={frameStyles.dropEnd}
-        data-empty={sections.length === 0 || undefined}
-        data-open={dropIndex === sections.length || undefined}
-        onDragOver={(event: DragEvent<HTMLDivElement>) => {
-          if (event.dataTransfer.types.includes(SECTION_DRAG_TYPE)) {
-            event.preventDefault();
-            setDropIndex(sections.length);
+        onDragLeave={(event: DragEvent<HTMLDivElement>) => {
+          // Out of the page altogether: no line.
+          if (
+            !event.currentTarget.contains(event.relatedTarget as Node | null)
+          ) {
+            setDropIndex(null);
           }
         }}
-        onDrop={(event) => drop(event, sections.length)}
       >
-        {t("storeSite.editor.builder.frame.dragHere")}
+        {sections.map((section: IStoreSiteBlock, index: number) => {
+          const isPart: boolean = isPartType(section.type);
+          const shown: IStoreSiteBlock | null = isPart
+            ? section
+            : showableSection(section);
+
+          // A menu of tabs is only its menu here: its sections stay on the
+          // page, where they are picked and edited.
+          const tabs: ITabsEntry[] =
+            section.type === StoreSitesEnum.BlockType.TABS
+              ? section.items
+                  .filter((item) => !!item.title?.trim())
+                  .map((item) => ({
+                    key: item.key,
+                    label: item.title?.trim() ?? "",
+                    sections: [],
+                  }))
+              : [];
+
+          const content: ReactNode =
+            section.type === StoreSitesEnum.BlockType.TABS
+              ? tabs.length > 0 && <SiteTabs block={section} entries={tabs} />
+              : isPart
+                ? drawPart(section, renderPart, marqueeStyle)
+                : shown && <BlockSection block={shown} {...rest} />;
+
+          return (
+            <Fragment key={section.key}>
+              {line(index)}
+              <SectionFrame
+                section={section}
+                index={index}
+                count={sections.length}
+                isPart={isPart}
+                builder={builder}
+                onDragOverAt={setDropIndex}
+                onDrop={(event) => drop(event, dropIndex)}
+              >
+                {content ? (
+                  <SectionBackground background={section.settings.background}>
+                    {content}
+                  </SectionBackground>
+                ) : (
+                  placeholder(section)
+                )}
+              </SectionFrame>
+            </Fragment>
+          );
+        })}
+        {sections.length > 0 && line(sections.length)}
+        <div
+          className={frameStyles.dropEnd}
+          data-empty={sections.length === 0 || undefined}
+          data-open={dropIndex === sections.length || undefined}
+          onDragOver={(event: DragEvent<HTMLDivElement>) => {
+            if (event.dataTransfer.types.includes(SECTION_DRAG_TYPE)) {
+              event.preventDefault();
+              setDropIndex(sections.length);
+            }
+          }}
+          onDrop={(event) => drop(event, sections.length)}
+        >
+          {t("storeSite.editor.builder.frame.dragHere")}
+        </div>
       </div>
-    </div>
+    </CanvasBuilderContext.Provider>
   );
 };
 

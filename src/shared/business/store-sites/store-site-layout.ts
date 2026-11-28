@@ -13,6 +13,7 @@ import {
   showableSection,
 } from "./store-site-blocks";
 import { IStoreSiteAbout, siteAboutOf } from "./store-site-about";
+import { newCanvasElement } from "./store-site-canvas";
 import { siteMarqueeStyleOf } from "./store-site-marquee-style";
 import { IStoreSitePage, sitePagesOf } from "./store-site-pages";
 import { IStoreSiteMarquee, IStoreSiteSection } from "./store-site.interface";
@@ -456,6 +457,51 @@ export const newSection = (
           title: t(`${SAMPLE}.TABS.items.${index}`),
         })),
       };
+    case T.CANVAS: {
+      // A panel, a title and a button to move about: something to start from.
+      const E = StoreSitesEnum.CanvasElementType;
+
+      return {
+        ...base,
+        settings: blockSettingsOf(type, {
+          canvas: {
+            height: 420,
+            elements: [
+              {
+                ...newCanvasElement(E.BOX, null, 0, null),
+                x: 60,
+                y: 50,
+                width: 1080,
+                height: 320,
+              },
+              {
+                ...newCanvasElement(
+                  E.TEXT,
+                  t(`${SAMPLE}.CANVAS.title`),
+                  0,
+                  null,
+                ),
+                x: 120,
+                y: 110,
+                width: 640,
+                height: 110,
+                fontSize: 52,
+              },
+              {
+                ...newCanvasElement(
+                  E.BUTTON,
+                  t(`${SAMPLE}.CANVAS.button`),
+                  0,
+                  newBlockButton(),
+                ),
+                x: 120,
+                y: 250,
+              },
+            ],
+          },
+        }),
+      };
+    }
     default:
       // A video, a spacer or a divider: nothing to say yet.
       return { ...base, settings };

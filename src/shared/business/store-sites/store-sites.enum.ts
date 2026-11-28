@@ -227,6 +227,23 @@ namespace StoreSitesEnum {
     RIGHT = "RIGHT",
   }
 
+  /** What can be placed on a free canvas. */
+  export enum CanvasElementType {
+    TEXT = "TEXT",
+    BUTTON = "BUTTON",
+    BOX = "BOX",
+    IMAGE = "IMAGE",
+    VIDEO = "VIDEO",
+    DIVIDER = "DIVIDER",
+  }
+
+  /** The side the words of a canvas element are written on. */
+  export enum CanvasAlign {
+    LEFT = "LEFT",
+    CENTER = "CENTER",
+    RIGHT = "RIGHT",
+  }
+
   /** What lies behind one section of a page. */
   export enum SectionBackgroundType {
     NONE = "NONE",
@@ -292,6 +309,8 @@ namespace StoreSitesEnum {
     BOX = "BOX",
     // A menu of tabs: each item shows one other section of its page.
     TABS = "TABS",
+    // A free canvas: anything placed anywhere on it, one over the other.
+    CANVAS = "CANVAS",
   }
 
   /** The template's own parts: each at most once on a page. */
@@ -321,6 +340,7 @@ namespace StoreSitesEnum {
     BlockType.IMAGE,
     BlockType.VIDEO,
     BlockType.BOX,
+    BlockType.CANVAS,
     BlockType.TABS,
     BlockType.SPACER,
     BlockType.DIVIDER,

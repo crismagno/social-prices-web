@@ -46,6 +46,7 @@ import {
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import AboutFields from "./AboutFields";
 import BlockFields from "./BlockFields";
+import CanvasFields from "./CanvasFields";
 import CardsLayoutFields from "./CardsLayoutFields";
 import { HeroTab } from "./ContentTabs";
 import PageHeroFields from "./PageHeroFields";
@@ -631,6 +632,18 @@ const BuilderTab = ({
                 )}
                 {selected.type === T.TABS && (
                   <TabsFields section={selected} builder={builder} />
+                )}
+                {selected.type === T.CANVAS && (
+                  <CanvasFields
+                    section={selected}
+                    pages={pages}
+                    storeId={storeId}
+                    selectedElementKey={builder.selectedElementKey}
+                    onSelectElement={builder.selectElement}
+                    onChange={(change) =>
+                      builder.updateSection(selected.key, change)
+                    }
+                  />
                 )}
                 <PieceFields
                   section={selected}

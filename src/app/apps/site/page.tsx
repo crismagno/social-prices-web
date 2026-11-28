@@ -123,7 +123,12 @@ export default function AppSitePage() {
       products,
       page: builder.page,
       // Sections are framed and can be dropped only while the builder is open.
-      builder: builder.isActive ? { selectedKey: builder.selectedKey } : null,
+      builder: builder.isActive
+        ? {
+            selectedKey: builder.selectedKey,
+            selectedElementKey: builder.selectedElementKey,
+          }
+        : null,
     };
   }, [
     editor.draft,
@@ -132,6 +137,7 @@ export default function AppSitePage() {
     builder.page,
     builder.isActive,
     builder.selectedKey,
+    builder.selectedElementKey,
   ]);
 
   const [isSideBySide, setIsSideBySide] = useState<boolean>(false);
