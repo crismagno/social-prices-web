@@ -347,6 +347,31 @@ const HeaderTab = ({ editor, storeId, storeName }: Props) => {
         />
       </Form.Item>
 
+      <Form.Item
+        label={t("storeSite.editor.header.shadow")}
+        extra={t("storeSite.editor.header.shadowHint")}
+      >
+        <Slider
+          min={0}
+          max={100}
+          step={5}
+          marks={{ 0: "0%", 50: "50%", 100: "100%" }}
+          tooltip={{ formatter: (value?: number) => `${value ?? 0}%` }}
+          // Until one is chosen: the usual light shadow, none where there is none.
+          value={
+            header.shadow ??
+            (header.transparency > 0 || isSide
+              ? 0
+              : StoreSitesEnum.DEFAULT_HEADER_SHADOW)
+          }
+          onChange={(shadow: number) =>
+            editor.update((draft) => ({
+              header: { ...draft.header, shadow },
+            }))
+          }
+        />
+      </Form.Item>
+
       {/* Its size: how tall across the screen, how wide down a side. */}
       {isSide ? (
         <Form.Item

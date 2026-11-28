@@ -3818,7 +3818,9 @@
           "LEFT": "Align left",
           "CENTER": "Align centre",
           "RIGHT": "Align right"
-        }
+        },
+        "shadow": "Shadow",
+        "shadowHint": "0% is no shadow; 100% is the strongest. It falls under a header at the top, over one at the bottom and beside one down a side."
       }
     },
     "footer": {

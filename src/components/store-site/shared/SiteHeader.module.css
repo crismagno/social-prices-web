@@ -362,3 +362,34 @@
   padding: 11px 22px;
   font-size: 16px;
 }
+
+/*
+ * The shadow the owner chose, 0 to 100%: under a header at the top, over one
+ * at the bottom, beside one down a side. 20% is the usual one. It wins over a
+ * clean header having none.
+ */
+.header[data-shadow] .inner {
+  box-shadow: 0 calc(6px + 10px * var(--site-header-shadow))
+    calc(18px + 36px * var(--site-header-shadow))
+    rgba(0, 0, 0, calc(var(--site-header-shadow) * 0.4));
+}
+
+.header[data-shadow][data-site-header="BOTTOM"] .inner {
+  box-shadow: 0 calc(-6px - 10px * var(--site-header-shadow))
+    calc(18px + 36px * var(--site-header-shadow))
+    rgba(0, 0, 0, calc(var(--site-header-shadow) * 0.4));
+}
+
+@media (min-width: 900px) {
+  .header[data-shadow][data-site-header="LEFT"] .inner {
+    box-shadow: calc(6px + 10px * var(--site-header-shadow)) 0
+      calc(18px + 36px * var(--site-header-shadow))
+      rgba(0, 0, 0, calc(var(--site-header-shadow) * 0.4));
+  }
+
+  .header[data-shadow][data-site-header="RIGHT"] .inner {
+    box-shadow: calc(-6px - 10px * var(--site-header-shadow)) 0
+      calc(18px + 36px * var(--site-header-shadow))
+      rgba(0, 0, 0, calc(var(--site-header-shadow) * 0.4));
+  }
+}

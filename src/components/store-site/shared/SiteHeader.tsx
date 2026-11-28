@@ -57,6 +57,7 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
     isFixed,
     order,
     transparency,
+    shadow,
     color,
     background,
     height,
@@ -211,6 +212,7 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
       data-fixed={isFixed || undefined}
       data-clean={transparency > 0 || undefined}
       data-scrolled={isScrolled || undefined}
+      data-shadow={shadow === null ? undefined : ""}
       data-button-size={buttonSize}
       style={
         {
@@ -225,6 +227,8 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
             SCROLLED_ALPHA,
           )}%`,
           ...(height ? { "--site-header-h": `${height}px` } : {}),
+          // The strength of its shadow, when the owner chose one.
+          ...(shadow === null ? {} : { "--site-header-shadow": shadow / 100 }),
         } as CSSProperties
       }
     >

@@ -1,4 +1,7 @@
 namespace StoreSitesEnum {
+  /** The strength of the header's usual shadow, in percent of the strongest. */
+  export const DEFAULT_HEADER_SHADOW = 20;
+
   export enum Template {
     AURORA = "AURORA",
     IMPACT = "IMPACT",
