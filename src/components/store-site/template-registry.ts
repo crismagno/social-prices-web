@@ -5,6 +5,7 @@ import Atelier from "./templates/Atelier/Atelier";
 import Atlas from "./templates/Atlas/Atlas";
 import Aurora from "./templates/Aurora/Aurora";
 import Buddy from "./templates/Buddy/Buddy";
+import Clean from "./templates/Clean/Clean";
 import Garden from "./templates/Garden/Garden";
 import Impact from "./templates/Impact/Impact";
 import Lumen from "./templates/Lumen/Lumen";
@@ -22,6 +23,19 @@ export const TEMPLATE_REGISTRY: Record<
   StoreSitesEnum.Template,
   IStoreSiteTemplateEntry
 > = {
+  // First: the clean start new sites get.
+  [StoreSitesEnum.Template.CLEAN]: {
+    Component: Clean,
+    defaultTheme: {
+      primary: "#111111",
+      secondary: "#6b7280",
+      accent: "#f3f4f6",
+      background: "#ffffff",
+      text: "#111111",
+    },
+    labelKey: "storeSite.templates.CLEAN.name",
+    descriptionKey: "storeSite.templates.CLEAN.description",
+  },
   [StoreSitesEnum.Template.ATELIER]: {
     Component: Atelier,
     defaultTheme: {

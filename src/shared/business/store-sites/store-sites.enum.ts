@@ -3,6 +3,8 @@ namespace StoreSitesEnum {
   export const DEFAULT_HEADER_SHADOW = 20;
 
   export enum Template {
+    // The clean start new sites get: plain, for building from scratch.
+    CLEAN = "CLEAN",
     AURORA = "AURORA",
     IMPACT = "IMPACT",
     ATELIER = "ATELIER",

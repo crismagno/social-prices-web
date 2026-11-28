@@ -134,8 +134,9 @@ const toDraft = (site: IStoreSite): ISaveStoreSite => ({
 
 const newDraft = (store: IStore): ISaveStoreSite => ({
   slug: slugify(store.name) || "minha-loja",
-  templateId: StoreSitesEnum.Template.ATELIER,
-  theme: { ...getTemplateEntry(StoreSitesEnum.Template.ATELIER).defaultTheme },
+  // A new site starts clean: the plain template, its home only its entrance.
+  templateId: StoreSitesEnum.Template.CLEAN,
+  theme: { ...getTemplateEntry(StoreSitesEnum.Template.CLEAN).defaultTheme },
   displayName: null,
   sizes: { ...EMPTY_SITE_SIZES },
   footer: siteFooterOf(null),
@@ -145,7 +146,8 @@ const newDraft = (store: IStore): ISaveStoreSite => ({
   pages: sitePagesOf(null),
   chat: siteChatOf(null),
   blocks: [],
-  isLayoutCustom: false,
+  // Arranged from the start: the home holds only the entrance.
+  isLayoutCustom: true,
   header: siteHeaderOf(null),
   cartButton: siteCartButtonOf(null),
   imageStyle: siteImageStyleOf(null),

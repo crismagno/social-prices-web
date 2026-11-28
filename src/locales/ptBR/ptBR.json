@@ -2503,6 +2503,10 @@
       "privacy": "Seus dados vão apenas para a loja."
     },
     "templates": {
+      "CLEAN": {
+        "name": "Limpo",
+        "description": "Neutro e sem decoração: comece do zero e monte do seu jeito."
+      },
       "ATELIER": {
         "name": "Ateliê",
         "description": "Delicado e pastel, para peças feitas à mão."

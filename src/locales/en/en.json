@@ -2500,6 +2500,10 @@
       "privacy": "Your details go only to the store."
     },
     "templates": {
+      "CLEAN": {
+        "name": "Clean",
+        "description": "Plain and undecorated: a blank start to build your own way."
+      },
       "ATELIER": {
         "name": "Atelier",
         "description": "Delicate and pastel, for handmade pieces."
