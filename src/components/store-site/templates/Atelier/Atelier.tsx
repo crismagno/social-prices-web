@@ -329,7 +329,7 @@ const Atelier = ({
           animationDelay: "-6s",
         }}
       />
-      <div className={styles.fade} />
+      <div className={styles.fade} data-hero="fade" />
 
       <div
         className={`${styles.heroBody} ${

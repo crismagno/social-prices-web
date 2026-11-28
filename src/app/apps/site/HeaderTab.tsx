@@ -612,6 +612,7 @@ const HeaderTab = ({ editor, storeId, storeName }: Props) => {
               button={button}
               pages={sitePagesOf(editor.draft?.pages)}
               withVariant
+              withIcon
               onChange={(patch) =>
                 setButtons((list) =>
                   list.map((each, at) =>

@@ -438,6 +438,20 @@
   border: 0 !important;
 }
 
+/* The title the owner left empty: no room is kept for it. */
+.heroPart[data-hero-title="none"] h1 {
+  display: none !important;
+}
+
+/*
+ * How much of the template's wash of colour lies over the photo, with its
+ * fading foot, whichever template draws them: the owner's own measure. At
+ * none, the photo is as it is.
+ */
+.heroPart[data-hero-veil] :is([data-hero="veil"], [data-hero="fade"]) {
+  opacity: var(--hero-veil) !important;
+}
+
 /* The paragraph the owner added: a little apart from the subtitle. */
 .heroExtraText {
   margin-top: 12px;

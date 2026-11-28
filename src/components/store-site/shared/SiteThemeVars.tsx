@@ -25,7 +25,7 @@ const safe = (color: string | undefined, fallback: string): string =>
   color && HEX_COLOR.test(color) ? color : fallback;
 
 // Dark text over a light color, light text over a dark one (WCAG luminance).
-const readableOver = (hex: string): string => {
+export const readableOver = (hex: string): string => {
   const [red, green, blue]: number[] = [1, 3, 5].map((start: number) => {
     const channel: number = parseInt(hex.slice(start, start + 2), 16) / 255;
 

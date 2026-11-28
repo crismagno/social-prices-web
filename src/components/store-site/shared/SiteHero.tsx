@@ -56,20 +56,36 @@ export const heroColorProps = (
 ): {
   className: string;
   "data-hero-colors"?: string;
-  "data-hero-title"?: "off";
+  "data-hero-title"?: "off" | "none";
   "data-hero-bare"?: "";
+  "data-hero-veil"?: "";
   style?: CSSProperties;
 } => {
   const options: IStoreSiteHeroOptions = heroOptionsOf(hero.options);
   const { background, text, button } = options.colors;
 
   // A title the owner hid stays in the page, only out of sight.
-  const title: { "data-hero-title"?: "off"; "data-hero-bare"?: "" } = {
-    ...(options.isTitleVisible ? {} : { "data-hero-title": "off" as const }),
+  const hasPhoto: boolean =
+    !!hero.backgroundImageUrl || !!hero.backgroundImageUrls?.length;
+
+  const title: {
+    "data-hero-title"?: "off" | "none";
+    "data-hero-bare"?: "";
+    "data-hero-veil"?: "";
+  } = {
+    // Less of the template's wash over the photo, as the owner measured.
+    // Only over a photo: with none, that wash is the whole look.
+    ...(hasPhoto && options.veil < 100
+      ? { "data-hero-veil": "" as const }
+      : {}),
+    // One left empty is not there at all.
+    ...(!hero.title?.trim()
+      ? { "data-hero-title": "none" as const }
+      : options.isTitleVisible
+        ? {}
+        : { "data-hero-title": "off" as const }),
     // No picture of its own behind it: a backdrop of the site shows through.
-    ...(hero.backgroundImageUrl || hero.backgroundImageUrls?.length
-      ? {}
-      : { "data-hero-bare": "" as const }),
+    ...(hasPhoto ? {} : { "data-hero-bare": "" as const }),
   };
 
   const set: string[] = [
@@ -78,8 +94,17 @@ export const heroColorProps = (
     button ? "btn" : "",
   ].filter(Boolean);
 
+  const veilStyle: CSSProperties =
+    hasPhoto && options.veil < 100
+      ? ({ "--hero-veil": options.veil / 100 } as CSSProperties)
+      : {};
+
   if (!set.length) {
-    return { className: `${className} ${base.heroPart}`, ...title };
+    return {
+      className: `${className} ${base.heroPart}`,
+      ...title,
+      style: veilStyle,
+    };
   }
 
   return {
@@ -87,6 +112,7 @@ export const heroColorProps = (
     ...title,
     "data-hero-colors": set.join(" "),
     style: {
+      ...veilStyle,
       ...(background ? { "--hero-bg": background } : {}),
       ...(text ? { "--hero-text": text } : {}),
       ...(button

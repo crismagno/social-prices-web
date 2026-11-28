@@ -305,6 +305,7 @@ const Aurora = ({
       <HeroBackground hero={hero} className={styles.bg} />
       <div
         className={`${styles.tint} ${backgroundImage ? "" : styles.tintSolid}`}
+        data-hero="fade"
       />
       <div
         className={styles.blob}
@@ -319,7 +320,7 @@ const Aurora = ({
           animationDelay: "-4s",
         }}
       />
-      <div className={styles.shade} />
+      <div className={styles.shade} data-hero="fade" />
 
       <div
         className={`${styles.heroBody} ${

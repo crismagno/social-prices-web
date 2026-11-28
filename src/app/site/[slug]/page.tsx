@@ -21,7 +21,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const brandName: string = data.site.displayName?.trim() || data.store.name;
 
-  const title: string = `${data.site.hero.title} · ${brandName}`;
+  // An entrance with no title leaves the name of the store alone.
+  const heroTitle: string = data.site.hero.title?.trim() ?? "";
+
+  const title: string = heroTitle ? `${heroTitle} · ${brandName}` : brandName;
 
   const description: string | undefined =
     data.site.hero.subtitle ?? data.store.description ?? undefined;

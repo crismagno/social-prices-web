@@ -1,6 +1,14 @@
 "use client";
 
-import { ColorPicker, Divider, Form, Input, Segmented, Switch } from "antd";
+import {
+  ColorPicker,
+  Divider,
+  Form,
+  Input,
+  Segmented,
+  Slider,
+  Switch,
+} from "antd";
 
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import {
@@ -84,6 +92,18 @@ const HeroOptionsControls = ({
           </label>
         ))}
       </div>
+
+      <Form.Item label={t(`${KEY}.veil.label`)} extra={t(`${KEY}.veil.hint`)}>
+        <Slider
+          min={0}
+          max={100}
+          step={5}
+          marks={{ 0: "0%", 50: "50%", 100: "100%" }}
+          tooltip={{ formatter: (value?: number) => `${value ?? 0}%` }}
+          value={options.veil}
+          onChange={(veil: number) => set(() => ({ veil }))}
+        />
+      </Form.Item>
 
       <Divider orientation="left" plain>
         {t(`${KEY}.colors.title`)}

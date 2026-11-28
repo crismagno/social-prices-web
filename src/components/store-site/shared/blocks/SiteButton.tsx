@@ -7,7 +7,9 @@ import {
   blockButtonHref,
 } from "../../../../shared/business/store-sites/store-site-blocks";
 import StoreSitesEnum from "../../../../shared/business/store-sites/store-sites.enum";
+import { readableOver } from "../SiteThemeVars";
 import useSiteT from "../useSiteT";
+import FeatureIcon from "./FeatureIcon";
 import styles from "./SiteBlocks.module.css";
 import { IBlockContext } from "./blockTypes";
 
@@ -46,9 +48,15 @@ const SiteButton = ({
     return null;
   }
 
-  if (hasNoDefaultLabel && !button.label?.trim()) {
+  const label: string | null = button.label?.trim() || null;
+
+  // With nothing to say and nothing to show, there is no button.
+  if (hasNoDefaultLabel && !label && !button.icon) {
     return null;
   }
+
+  // An icon alone is a button: it says where it goes to who cannot see it.
+  const isIconOnly: boolean = !!button.icon && !label && !!hasNoDefaultLabel;
 
   const isExternal: boolean = /^https?:/.test(href);
   const isOutline: boolean =
@@ -59,9 +67,20 @@ const SiteButton = ({
       className={`${styles.siteButton} ${isOutline ? styles.outline : ""} ${
         className ?? ""
       }`}
-      style={style}
+      style={
+        // Its own colour takes the place of the site's main one, here only.
+        button.color
+          ? ({
+              ...style,
+              "--site-primary": button.color,
+              "--site-on-primary": readableOver(button.color),
+            } as React.CSSProperties)
+          : style
+      }
       href={href}
       data-shine={isOutline ? undefined : true}
+      data-icon-only={isIconOnly || undefined}
+      aria-label={isIconOnly ? href : undefined}
       {...(isExternal ? { target: "_blank", rel: "noreferrer" } : {})}
       onClick={(event: MouseEvent<HTMLAnchorElement>) => {
         if (context.mode === "preview") {
@@ -69,7 +88,8 @@ const SiteButton = ({
         }
       }}
     >
-      {button.label ?? t("storeSite.blocks.ctaButton")}
+      {button.icon && <FeatureIcon icon={button.icon} />}
+      {!isIconOnly && (button.label ?? t("storeSite.blocks.ctaButton"))}
     </a>
   );
 };

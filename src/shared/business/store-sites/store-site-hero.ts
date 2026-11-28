@@ -18,6 +18,11 @@ export interface IStoreSiteHeroOptions {
   isTitleVisible: boolean;
   isSubtitleVisible: boolean;
   isFeaturedVisible: boolean;
+  /**
+   * How much of the template's wash of colour lies over the photo, with its
+   * fading foot: 100 as the template draws it, 0 the photo as it is.
+   */
+  veil: number;
   isButtonVisible: boolean;
   /** A paragraph under the subtitle. */
   extraText: string | null;
@@ -62,6 +67,10 @@ export const heroOptionsOf = (options: unknown): IStoreSiteHeroOptions => {
     isTitleVisible: source.isTitleVisible !== false,
     isSubtitleVisible: source.isSubtitleVisible !== false,
     isFeaturedVisible: source.isFeaturedVisible !== false,
+    veil:
+      typeof source.veil === "number" && Number.isFinite(source.veil)
+        ? Math.min(100, Math.max(0, Math.round(source.veil)))
+        : 100,
     isButtonVisible: source.isButtonVisible !== false,
     extraText:
       typeof source.extraText === "string" && source.extraText.trim()

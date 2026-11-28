@@ -393,3 +393,9 @@
       rgba(0, 0, 0, calc(var(--site-header-shadow) * 0.4));
   }
 }
+
+/* A button of the header that is only an icon: as wide as it is tall. */
+.header .button[data-icon-only] {
+  padding-inline: 9px;
+  font-size: 1.15em;
+}

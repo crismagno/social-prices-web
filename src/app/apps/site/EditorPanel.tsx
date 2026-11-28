@@ -147,7 +147,7 @@ const EditorPanel = ({
     colors: false,
     fonts: false,
     header: false,
-    hero: !draft.hero.title.trim(),
+    hero: false,
     products: false,
     cart: false,
     builder: false,

@@ -2730,6 +2730,10 @@
             "toProducts": "Products",
             "toOther": "Another destination",
             "secondButton": "Second button"
+          },
+          "veil": {
+            "label": "Faded layer over the photo",
+            "hint": "How strong the wash of colour over the photo is, with the fade at its foot: 100% is the look of the template, 0% is the photo as it is."
           }
         },
         "fixedHeader": "Keep the header on screen",
@@ -3239,7 +3243,11 @@
             "PHONE": "+1 555 123 4567",
             "EMAIL": "hello@yourcompany.com",
             "URL": "yourcompany.com"
-          }
+          },
+          "icon": "Icon",
+          "iconHint": "Shown before the text. With no text, the button is only the icon.",
+          "iconNone": "No icon",
+          "color": "Color"
         },
         "types": {
           "TEAM": {

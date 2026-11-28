@@ -323,7 +323,7 @@ const Garden = ({
         className={`${styles.veil} ${backgroundImage ? "" : styles.veilSolid}`}
         data-hero="veil"
       />
-      <div className={styles.fade} />
+      <div className={styles.fade} data-hero="fade" />
       {PETALS.map((petal) => (
         <span
           key={petal.left}

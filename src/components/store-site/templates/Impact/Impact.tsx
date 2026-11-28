@@ -308,6 +308,7 @@ const Impact = ({
       <HeroBackground hero={hero} className={styles.bg} />
       <div
         className={`${styles.cut} ${backgroundImage ? "" : styles.cutSolid}`}
+        data-hero="fade"
       />
 
       <a

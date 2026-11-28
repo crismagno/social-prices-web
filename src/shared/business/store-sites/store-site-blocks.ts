@@ -53,6 +53,10 @@ export interface IStoreSiteBlockButton {
   /** What the owner typed for the other targets: a number, an e-mail, an address. */
   value: string | null;
   variant: StoreSitesEnum.ButtonVariant;
+  /** A ready icon before its words; with no words, the icon is the button. */
+  icon: StoreSitesEnum.FeatureIcon | null;
+  /** Its own colour, as #rrggbb; empty, the site's main one. */
+  color: string | null;
 }
 
 /** The few options a piece of the page has; null where its type has none. */
@@ -299,6 +303,12 @@ const buttonOf = (raw: unknown): IStoreSiteBlockButton => {
     variant:
       oneOf(source.variant, Object.values(StoreSitesEnum.ButtonVariant)) ??
       StoreSitesEnum.ButtonVariant.PRIMARY,
+    icon: oneOf(source.icon, Object.values(StoreSitesEnum.FeatureIcon)),
+    color:
+      typeof source.color === "string" &&
+      /^#[0-9a-fA-F]{6}$/.test(source.color.trim())
+        ? source.color.trim().toLowerCase()
+        : null,
   };
 };
 
@@ -311,6 +321,8 @@ export const newBlockButton = (
   pageKey: null,
   value: null,
   variant: StoreSitesEnum.ButtonVariant.PRIMARY,
+  icon: null,
+  color: null,
   ...patch,
 });
 

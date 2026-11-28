@@ -2733,6 +2733,10 @@
             "toProducts": "Produtos",
             "toOther": "Outro destino",
             "secondButton": "Segundo botão"
+          },
+          "veil": {
+            "label": "Camada esmaecida sobre a foto",
+            "hint": "Quão forte é a camada de cor sobre a foto, com o degradê embaixo: 100% é o visual do template, 0% é a foto como ela é."
           }
         },
         "fixedHeader": "Manter o header na tela",
@@ -3242,7 +3246,11 @@
             "PHONE": "+55 11 3333-4444",
             "EMAIL": "contato@suaempresa.com",
             "URL": "suaempresa.com"
-          }
+          },
+          "icon": "Ícone",
+          "iconHint": "Aparece antes do texto. Sem texto, o botão é só o ícone.",
+          "iconNone": "Sem ícone",
+          "color": "Cor"
         },
         "types": {
           "TEAM": {

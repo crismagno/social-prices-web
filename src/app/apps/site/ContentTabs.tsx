@@ -119,11 +119,7 @@ export const HeroTab = ({ editor, storeId }: Props) => {
           onChange={(event) => set({ tagline: event.target.value || null })}
         />
       </Form.Item>
-      <Form.Item
-        label={t("storeSite.editor.hero.title")}
-        required
-        validateStatus={hero.title.trim() ? undefined : "error"}
-      >
+      <Form.Item label={t("storeSite.editor.hero.title")}>
         <Input
           maxLength={120}
           value={hero.title}
