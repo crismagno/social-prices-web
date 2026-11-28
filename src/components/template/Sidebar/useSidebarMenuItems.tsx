@@ -39,6 +39,13 @@ import { APP_URLS } from "../../../shared/common/routes-app/apps-urls";
 import AppIcon from "../../common/AppIcon/AppIcon";
 import { getItem, MenuItem } from "../../utils/navigation/navigation.util";
 
+// Every page under Apps, taken from APP_URLS so a new app (like the site) is
+// selected in the menu without being listed here by hand.
+const APPS_ROUTE_URLS: string[] = [
+  Urls.APPS,
+  ...(Object.values(APP_URLS) as string[]),
+];
+
 export namespace SidebarMenuKeys {
   export const STORES = "stores";
   export const GENERAL = "general";
@@ -70,14 +77,7 @@ const submenuKeyByUrl = (url: string): string | null => {
       Urls.EMPLOYEES,
     ],
     [SidebarMenuKeys.CHATS]: [Urls.CHATS, Urls.QUICK_MESSAGES],
-    [SidebarMenuKeys.APPS]: [
-      Urls.APPS,
-      Urls.APPS_GOOGLE_CONTACTS,
-      Urls.APPS_TELEGRAM,
-      Urls.APPS_MESSENGER,
-      Urls.APPS_INSTAGRAM,
-      Urls.APPS_WHATSAPP,
-    ],
+    [SidebarMenuKeys.APPS]: APPS_ROUTE_URLS,
   };
 
   const entry = Object.entries(submenus).find(([, urls]) => urls.includes(url));
@@ -343,12 +343,7 @@ export const useSidebarMenuItems = (
     Urls.NOTES,
     Urls.CHATS,
     Urls.QUICK_MESSAGES,
-    Urls.APPS,
-    Urls.APPS_GOOGLE_CONTACTS,
-    Urls.APPS_TELEGRAM,
-    Urls.APPS_MESSENGER,
-    Urls.APPS_INSTAGRAM,
-    Urls.APPS_WHATSAPP,
+    ...APPS_ROUTE_URLS,
     Urls.STORES,
     Urls.CUSTOMERS,
     Urls.PRODUCTS,
