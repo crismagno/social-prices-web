@@ -63,6 +63,8 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
     transparency,
     shadow,
     border,
+    logoBorder,
+    logoShadow,
     home,
     color,
     background,
@@ -74,9 +76,15 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
     aligns,
   } = siteHeaderOf(site.header);
 
+  const isSide: boolean =
+    position === StoreSitesEnum.HeaderPosition.LEFT ||
+    position === StoreSitesEnum.HeaderPosition.RIGHT;
+
   // Where each place puts its part: as the owner said, else as the place does.
+  // Down a side the places stack, so they all start at the same edge.
   const alignOf = (slot: number): StoreSitesEnum.HeaderAlign =>
-    aligns[order[slot]] ?? HEADER_SLOT_ALIGNS[slot];
+    aligns[order[slot]] ??
+    (isSide ? StoreSitesEnum.HeaderAlign.LEFT : HEADER_SLOT_ALIGNS[slot]);
   const { logo, brandName } = getSiteContent({ site, store });
 
   const ref = useRef<HTMLElement>(null);
@@ -181,12 +189,30 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
     );
   };
 
+  // The border and the shadow the owner gave the logo, when any.
+  const logoStyle: CSSProperties = {
+    ...(logoBorder && logoBorder.style !== StoreSitesEnum.BorderStyle.NONE
+      ? {
+          border: `${logoBorder.width}px ${logoBorder.style.toLowerCase()} ${
+            logoBorder.color ?? "currentColor"
+          }`,
+        }
+      : {}),
+    ...(logoShadow
+      ? {
+          boxShadow: `0 ${2 + logoShadow * 0.1}px ${
+            6 + logoShadow * 0.24
+          }px rgba(0, 0, 0, ${(logoShadow / 100) * 0.45})`,
+        }
+      : {}),
+  };
+
   // The three parts of the header; the owner chose where each one goes.
   const parts: Record<StoreSitesEnum.HeaderPart, ReactNode> = {
     [StoreSitesEnum.HeaderPart.BRAND]: (
       <a href={sitePagePath(site.slug)} className={styles.brand}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        {logo && <img src={logo} alt="" />}
+        {logo && <img src={logo} alt="" style={logoStyle} />}
         {/* Emptied by the owner: the header shows no name, only the logo. */}
         {site.displayName !== "" && <span>{brandName}</span>}
       </a>

@@ -35,6 +35,10 @@ export interface IStoreSiteHeader {
   shadow: number | null;
   /** The border on its edge that faces the page; empty, the usual thin line. */
   border: IStoreSiteHeaderBorder | null;
+  /** A border round the logo; empty, none. */
+  logoBorder: IStoreSiteHeaderBorder | null;
+  /** How strong the shadow under the logo is, 0 to 100; empty, none. */
+  logoShadow: number | null;
   /** The colour of its words; empty, the site's. */
   color: string | null;
   /** The colour of its background, when it has one; empty, the site's. */
@@ -211,6 +215,12 @@ export const siteHeaderOf = (
         ? Math.min(100, Math.max(0, Math.round(header.shadow)))
         : null,
     border: borderOf(header?.border),
+    logoBorder: borderOf(header?.logoBorder),
+    logoShadow:
+      typeof header?.logoShadow === "number" &&
+      Number.isFinite(header.logoShadow)
+        ? Math.min(100, Math.max(0, Math.round(header.logoShadow)))
+        : null,
     color: header?.color && HEX.test(header.color) ? header.color : null,
     background:
       header?.background && HEX.test(header.background)

@@ -123,6 +123,17 @@ const HeaderTab = ({ editor, storeId, storeName }: Props) => {
       },
     }));
 
+  // A change to the border the owner already gave the logo.
+  const setLogoBorder = (patch: Partial<IStoreSiteHeaderBorder>): void =>
+    editor.update((draft) => ({
+      header: {
+        ...draft.header,
+        logoBorder: draft.header.logoBorder
+          ? { ...draft.header.logoBorder, ...patch }
+          : null,
+      },
+    }));
+
   // From the draft as it is when applied, like every change of the editor.
   const setSignIn = (patch: Partial<IStoreSiteSignIn>): void =>
     editor.update((draft) => ({ signIn: { ...draft.signIn, ...patch } }));
@@ -552,6 +563,90 @@ const HeaderTab = ({ editor, storeId, storeName }: Props) => {
       )}
       {logo.isActive && (
         <SizeFields editor={editor} sizes={["logoWidth", "logoHeight"]} />
+      )}
+      {logo.isActive && (
+        <>
+          {/* A border round the logo: none, or a line of the owner's. */}
+          <Form.Item label={t("storeSite.editor.logo.border")}>
+            <Select
+              value={
+                header.logoBorder?.style ?? StoreSitesEnum.BorderStyle.NONE
+              }
+              options={Object.values(StoreSitesEnum.BorderStyle).map(
+                (style: StoreSitesEnum.BorderStyle) => ({
+                  value: style,
+                  label: t(`storeSite.editor.header.border.styles.${style}`),
+                }),
+              )}
+              onChange={(style: StoreSitesEnum.BorderStyle) =>
+                editor.update((draft) => ({
+                  header: {
+                    ...draft.header,
+                    logoBorder:
+                      style === StoreSitesEnum.BorderStyle.NONE
+                        ? null
+                        : {
+                            width: draft.header.logoBorder?.width ?? 2,
+                            color: draft.header.logoBorder?.color ?? null,
+                            style,
+                          },
+                  },
+                }))
+              }
+            />
+          </Form.Item>
+          {header.logoBorder && (
+            <div className="flex flex-wrap gap-x-6">
+              <Form.Item label={t("storeSite.editor.header.border.width")}>
+                <InputNumber
+                  min={StoreSitesEnum.HEADER_BORDER_WIDTH_RANGE[0]}
+                  max={StoreSitesEnum.HEADER_BORDER_WIDTH_RANGE[1]}
+                  addonAfter="px"
+                  value={header.logoBorder.width}
+                  onChange={(width: number | null) =>
+                    setLogoBorder({ width: width ?? 1 })
+                  }
+                />
+              </Form.Item>
+              <Form.Item label={t("storeSite.editor.header.border.color")}>
+                <ColorPicker
+                  allowClear
+                  disabledAlpha
+                  value={header.logoBorder.color ?? editor.draft.theme.text}
+                  showText={() =>
+                    header.logoBorder?.color ??
+                    t("storeSite.editor.pages.colorOfSite")
+                  }
+                  onChangeComplete={(picked) =>
+                    setLogoBorder({ color: picked.toHexString().slice(0, 7) })
+                  }
+                  onClear={() => setLogoBorder({ color: null })}
+                />
+              </Form.Item>
+            </div>
+          )}
+          <Form.Item
+            label={t("storeSite.editor.logo.shadow")}
+            extra={t("storeSite.editor.logo.shadowHint")}
+          >
+            <Slider
+              min={0}
+              max={100}
+              step={5}
+              marks={{ 0: "0%", 50: "50%", 100: "100%" }}
+              tooltip={{ formatter: (value?: number) => `${value ?? 0}%` }}
+              value={header.logoShadow ?? 0}
+              onChange={(logoShadow: number) =>
+                editor.update((draft) => ({
+                  header: {
+                    ...draft.header,
+                    logoShadow: logoShadow || null,
+                  },
+                }))
+              }
+            />
+          </Form.Item>
+        </>
       )}
 
       {/* The "home" of the menu: the same choice the pages tab shows. */}

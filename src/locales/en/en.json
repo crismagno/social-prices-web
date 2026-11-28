@@ -2857,7 +2857,10 @@
       "logo": {
         "show": "Show the logo on the site",
         "image": "Logo of the site",
-        "imageHint": "Without an image here, the site shows the logo of the store."
+        "imageHint": "Without an image here, the site shows the logo of the store.",
+        "border": "Logo border",
+        "shadow": "Logo shadow",
+        "shadowHint": "0% is no shadow."
       },
       "cards": {
         "heading": "Layout of the cards",

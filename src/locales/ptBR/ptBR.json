@@ -2860,7 +2860,10 @@
       "logo": {
         "show": "Mostrar o logo no site",
         "image": "Logo do site",
-        "imageHint": "Sem uma imagem aqui, o site mostra o logo da loja."
+        "imageHint": "Sem uma imagem aqui, o site mostra o logo da loja.",
+        "border": "Borda do logo",
+        "shadow": "Sombra do logo",
+        "shadowHint": "0% é sem sombra."
       },
       "cards": {
         "heading": "Layout dos cards",

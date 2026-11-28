@@ -70,6 +70,8 @@
 
 .brand img {
   flex-shrink: 0;
+  /* A border the owner gives the logo stays inside its size. */
+  box-sizing: border-box;
   width: var(--sz-logo-w, 32px);
   height: var(--sz-logo-h, 32px);
   border-radius: 50%;
@@ -307,9 +309,156 @@
     text-align: center;
   }
 
+  /* A thin scrollbar when the column is taller than the screen. */
+  .header[data-site-header="LEFT"] .inner,
+  .header[data-site-header="RIGHT"] .inner {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, currentColor 20%, transparent)
+      transparent;
+  }
+
+  /* The name sits apart from the menu under it, as the head of the column. */
+  .header[data-site-header="LEFT"] .slot:has(> .brand),
+  .header[data-site-header="RIGHT"] .slot:has(> .brand) {
+    padding-bottom: 22px;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+  }
+
+  .header[data-site-header="LEFT"] .slot[data-align="CENTER"] .brand,
+  .header[data-site-header="RIGHT"] .slot[data-align="CENTER"] .brand {
+    align-items: center;
+    text-align: center;
+  }
+
+  .header[data-site-header="LEFT"] .slot[data-align="RIGHT"] .brand,
+  .header[data-site-header="RIGHT"] .slot[data-align="RIGHT"] .brand {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  /* The menu as a list of rows: each one a place to click, the page you are on marked. */
+  .header[data-site-header="LEFT"] .links,
+  .header[data-site-header="RIGHT"] .links {
+    align-items: stretch;
+    gap: 2px;
+    margin-inline: -12px;
+    width: calc(100% + 24px);
+  }
+
+  .header[data-site-header="LEFT"] .links > a,
+  .header[data-site-header="RIGHT"] .links > a {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 10px;
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.8;
+    transition:
+      background-color 0.2s ease,
+      opacity 0.2s ease,
+      translate 0.2s ease;
+  }
+
+  .header[data-site-header="LEFT"] .links > a::after,
+  .header[data-site-header="RIGHT"] .links > a::after {
+    display: none;
+  }
+
+  .header[data-site-header="LEFT"] .links > a:hover,
+  .header[data-site-header="RIGHT"] .links > a:hover {
+    opacity: 1;
+    background: color-mix(in srgb, currentColor 7%, transparent);
+  }
+
+  .header[data-site-header="LEFT"] .links > a:hover {
+    translate: 3px 0;
+  }
+
+  .header[data-site-header="RIGHT"] .links > a:hover {
+    translate: -3px 0;
+  }
+
+  .header[data-site-header="LEFT"] .links > a[aria-current="page"],
+  .header[data-site-header="RIGHT"] .links > a[aria-current="page"] {
+    opacity: 1;
+    background: color-mix(in srgb, var(--site-primary) 14%, transparent);
+    box-shadow: inset 3px 0 0 var(--site-primary);
+  }
+
+  .header[data-site-header="RIGHT"] .links > a[aria-current="page"] {
+    box-shadow: inset -3px 0 0 var(--site-primary);
+  }
+
+  /*
+   * Down the right side, the logo and the name sit against the right edge,
+   * whatever side they had in a top bar.
+   */
+  .header[data-site-header="RIGHT"] .slot:has(> .brand) {
+    justify-content: flex-end;
+  }
+
+  .header[data-site-header="RIGHT"] .slot .brand {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  /*
+   * The rows of a side menu read from the edge the header sits on: a menu
+   * set to the centre or a side of a top bar keeps that only there.
+   */
+  .header[data-site-header="LEFT"] .slot:has(> .links) {
+    justify-content: flex-start;
+  }
+
+  .header[data-site-header="RIGHT"] .slot:has(> .links) {
+    justify-content: flex-end;
+  }
+
+  .header[data-site-header="LEFT"] .links > a {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  /* Down the right side they read from the right, a mirror of the left. */
+  .header[data-site-header="RIGHT"] .links > a {
+    justify-content: flex-end;
+    text-align: right;
+  }
+
+  /* The buttons at the foot, apart from the menu above them. */
+  .header[data-site-header="LEFT"] .slot:has(> .end),
+  .header[data-site-header="RIGHT"] .slot:has(> .end) {
+    padding-top: 20px;
+    border-top: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+  }
+
+  .header[data-site-header="LEFT"] .end > *,
+  .header[data-site-header="RIGHT"] .end > * {
+    width: 100%;
+  }
+
+  .header[data-site-header="LEFT"] .signIn,
+  .header[data-site-header="RIGHT"] .signIn,
+  .header[data-site-header="LEFT"] .button,
+  .header[data-site-header="RIGHT"] .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding-block: 10px;
+  }
+
+  /* The cart: its icon and name together, the count at the far end. */
   .header[data-site-header="LEFT"] .cart,
   .header[data-site-header="RIGHT"] .cart {
-    justify-content: space-between;
+    justify-content: flex-start;
+    padding: 8px 8px 8px 16px;
+  }
+
+  .header[data-site-header="LEFT"] .cart b,
+  .header[data-site-header="RIGHT"] .cart b {
+    margin-left: auto;
   }
 
   :global([data-site-root]):has(> .header[data-site-header="LEFT"]) {
@@ -836,5 +985,17 @@
     )
     .inner {
     clip-path: none;
+  }
+}
+
+/*
+ * Down a side, whatever the look: the foot of the column keeps room for the
+ * chat button floating over that corner. Doubled class so no look's own
+ * padding undoes it.
+ */
+@media (min-width: 900px) {
+  .header.header:is([data-site-header="LEFT"], [data-site-header="RIGHT"])
+    .inner {
+    padding-bottom: 96px;
   }
 }
