@@ -20,6 +20,8 @@ export const useGetSalesSummaryByUserTableState = (
       subtotal: 0,
       tax: 0,
       totalFinal: 0,
+      statusCounts: {},
+      typeCounts: {},
     });
 
   const [isLoadingSalesSummary, setIsLoadingSalesSummary] =

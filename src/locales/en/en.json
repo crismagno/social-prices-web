@@ -519,6 +519,9 @@
     "deliveryDelivery": "Delivery",
     "typeManual": "Manual",
     "typeShopping": "Shopping",
+    "originAll": "All sales",
+    "originSite": "Website",
+    "originManual": "Manual",
     "paymentNote": "Note about payment",
     "typeSite": "Site"
   },

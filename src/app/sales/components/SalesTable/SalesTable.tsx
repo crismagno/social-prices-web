@@ -83,6 +83,8 @@ import { useFindStoresByUser } from "../../../stores/useFindStoresByUser";
 import { useFindTagsByType } from "../../../tags/useFindTagsByType";
 import { useFindSalesByUserTableState } from "../../useFindSalesByUserTableState";
 import { useGetSalesSummaryByUserTableState } from "../../useGetSalesSummaryByUserTableState";
+import { SalesStatusCards } from "../SalesStatusCards/SalesStatusCards";
+import { SalesTypeFilter } from "../SalesTypeFilter/SalesTypeFilter";
 import { DownloadSalesDrawer } from "../DownloadSalesDrawer/DownloadSalesDrawer";
 import { UpdateSaleCustomerButton } from "../UpdateSaleCustomerButton/UpdateSaleCustomerButton";
 import SalesMissingPaymentLabel from "./SalesMissingPaymentLabel";
@@ -96,6 +98,7 @@ interface Props {
   productItemId?: string;
   employeeId?: string;
   onEdit?: (sale: ISale) => void;
+  isShowStatusCards?: boolean;
 }
 
 const SalesTable: React.FC<Props> = ({
@@ -105,6 +108,7 @@ const SalesTable: React.FC<Props> = ({
   productItemId,
   employeeId,
   onEdit,
+  isShowStatusCards = false,
 }) => {
   const { message } = App.useApp();
   const { user } = useAuthData();
@@ -308,8 +312,52 @@ const SalesTable: React.FC<Props> = ({
     }
   };
 
+  /** Clicking the card of the only filtered status clears it; any other card filters by it alone. */
+  const handleFilterSaleByStatusCard = (status: SalesEnum.Status) => {
+    const currentStatuses: SalesEnum.Status[] =
+      tableStateRequest?.filters?.status ?? [];
+
+    const isOnlySelected: boolean =
+      currentStatuses.length === 1 && currentStatuses[0] === status;
+
+    setTableStateRequest({
+      ...tableStateRequest,
+      filters: {
+        ...tableStateRequest?.filters,
+        status: isOnlySelected ? [] : [status],
+      },
+      pagination: { pageSize: 10, skip: 0, current: undefined, total: 0 },
+    });
+  };
+
+  const handleFilterSaleByType = (types: SalesEnum.Type[]) => {
+    setTableStateRequest({
+      ...tableStateRequest,
+      filters: { ...tableStateRequest?.filters, type: types },
+      pagination: { pageSize: 10, skip: 0, current: undefined, total: 0 },
+    });
+  };
+
   return (
     <>
+      {isShowStatusCards && (
+        <div className="mt-5 mb-4 flex flex-col gap-4">
+          <SalesTypeFilter
+            typeCounts={salesSummary.typeCounts}
+            isLoading={isLoadingSalesSummary}
+            selectedTypes={tableStateRequest?.filters?.type ?? []}
+            onChange={handleFilterSaleByType}
+          />
+
+          <SalesStatusCards
+            statusCounts={salesSummary.statusCounts}
+            isLoading={isLoadingSalesSummary}
+            selectedStatuses={tableStateRequest?.filters?.status ?? []}
+            onSelectStatus={handleFilterSaleByStatusCard}
+          />
+        </div>
+      )}
+
       <Card
         title={t("sales.title")}
         className="h-min-80 mt-2"
@@ -576,6 +624,9 @@ const SalesTable: React.FC<Props> = ({
               dataIndex: "type",
               key: "type",
               align: "center",
+              filteredValue: tableStateRequest?.filters?.type?.length
+                ? tableStateRequest.filters.type
+                : null,
               filters: Object.keys(SalesEnum.Type).map((type: string) => ({
                 text: t(SalesEnum.TypeLabels[type as SalesEnum.Type]),
                 value: type,
@@ -618,6 +669,9 @@ const SalesTable: React.FC<Props> = ({
               dataIndex: "status",
               key: "status",
               align: "center",
+              filteredValue: tableStateRequest?.filters?.status?.length
+                ? tableStateRequest.filters.status
+                : null,
               filters: Object.keys(SalesEnum.Status).map((status: string) => ({
                 text: t(SalesEnum.StatusLabels[status as SalesEnum.Status]),
                 value: status,
