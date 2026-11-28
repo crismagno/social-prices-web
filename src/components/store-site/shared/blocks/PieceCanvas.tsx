@@ -27,6 +27,8 @@ import { IBlockProps } from "./blockTypes";
 import { CanvasBuilderContext, ICanvasBuilder } from "./canvas-builder";
 import styles from "./PieceCanvas.module.css";
 import { MapView } from "./PieceMap";
+import SiteContactForm from "../SiteContactForm";
+import { FORM_KEY_SEPARATOR } from "../../../../shared/business/store-sites/store-site-contact";
 
 const Type = StoreSitesEnum.CanvasElementType;
 
@@ -220,6 +222,17 @@ const PieceCanvas = ({ block, context }: IBlockProps) => {
         return null;
       case Type.MAP:
         return <MapView map={element.map} isFill />;
+      case Type.FORM:
+        return element.form ? (
+          <div className={styles.form}>
+            <SiteContactForm
+              slug={context.siteSlug}
+              contact={element.form}
+              formKey={`${block.key}${FORM_KEY_SEPARATOR}${element.key}`}
+              isPreview={context.mode === "preview"}
+            />
+          </div>
+        ) : null;
       case Type.BUTTON:
         return element.text;
       default:

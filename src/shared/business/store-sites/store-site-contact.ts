@@ -12,6 +12,34 @@ export interface IStoreSiteContactField {
   options: string[];
 }
 
+/** The send button of the contact form; an empty colour is the site's own. */
+export interface IStoreSiteContactButton {
+  color: string | null;
+  textColor: string | null;
+  icon: StoreSitesEnum.FeatureIcon | null;
+  iconPosition: StoreSitesEnum.ContactIconPosition;
+  size: StoreSitesEnum.ContactButtonSize;
+  shape: StoreSitesEnum.ContactButtonShape;
+  align: StoreSitesEnum.ContactButtonAlign;
+  /** Across the whole width of the box. */
+  isFullWidth: boolean;
+}
+
+/** The box around the contact form; empty, the template's own. */
+export interface IStoreSiteContactBox {
+  /** The widest it gets, in pixels; empty, the page's width. */
+  width: number | null;
+  padding: number | null;
+  radius: number | null;
+  background: string | null;
+  borderColor: string | null;
+  isBorderVisible: boolean;
+  textColor: string | null;
+  /** The colour inside each field. */
+  fieldBackground: string | null;
+  shadow: StoreSitesEnum.ContactBoxShadow;
+}
+
 /**
  * The form of the contact page: what it asks, its words, and where what a
  * visitor writes goes. The e-mail and the webhook are the owner's alone: the
@@ -30,6 +58,8 @@ export interface IStoreSiteContactForm {
   /** A number with its country code, digits only. */
   whatsapp: string | null;
   webhookUrl: string | null;
+  button: IStoreSiteContactButton;
+  box: IStoreSiteContactBox;
 }
 
 const Type = StoreSitesEnum.ContactFieldType;
@@ -90,6 +120,82 @@ export const newContactField = (
     false,
   );
 
+const HEX_COLOR = /^#[0-9a-fA-F]{6}$/;
+
+const colorOf = (value: unknown): string | null =>
+  typeof value === "string" && HEX_COLOR.test(value) ? value : null;
+
+const oneOf = <T extends string>(
+  value: unknown,
+  options: T[],
+  fallback: T,
+): T => (options.includes(value as T) ? (value as T) : fallback);
+
+const pixelsOf = (
+  value: unknown,
+  limits: { min: number; max: number },
+): number | null =>
+  typeof value === "number" && Number.isFinite(value)
+    ? Math.min(limits.max, Math.max(limits.min, Math.round(value)))
+    : null;
+
+/** The send button, also for a form saved before it could be styled. */
+export const contactButtonOf = (
+  button: Partial<IStoreSiteContactButton> | null | undefined,
+): IStoreSiteContactButton => ({
+  color: colorOf(button?.color),
+  textColor: colorOf(button?.textColor),
+  icon: Object.values(StoreSitesEnum.FeatureIcon).includes(
+    button?.icon as StoreSitesEnum.FeatureIcon,
+  )
+    ? (button?.icon as StoreSitesEnum.FeatureIcon)
+    : null,
+  iconPosition: oneOf(
+    button?.iconPosition,
+    Object.values(StoreSitesEnum.ContactIconPosition),
+    StoreSitesEnum.ContactIconPosition.START,
+  ),
+  size: oneOf(
+    button?.size,
+    Object.values(StoreSitesEnum.ContactButtonSize),
+    StoreSitesEnum.ContactButtonSize.MEDIUM,
+  ),
+  shape: oneOf(
+    button?.shape,
+    Object.values(StoreSitesEnum.ContactButtonShape),
+    StoreSitesEnum.ContactButtonShape.PILL,
+  ),
+  align: oneOf(
+    button?.align,
+    Object.values(StoreSitesEnum.ContactButtonAlign),
+    StoreSitesEnum.ContactButtonAlign.START,
+  ),
+  isFullWidth: button?.isFullWidth === true,
+});
+
+/** The box around the form, also for a form saved before it could be styled. */
+export const contactBoxOf = (
+  box: Partial<IStoreSiteContactBox> | null | undefined,
+): IStoreSiteContactBox => {
+  const limits = StoreSitesEnum.CONTACT_BOX_LIMITS;
+
+  return {
+    width: pixelsOf(box?.width, limits.width),
+    padding: pixelsOf(box?.padding, limits.padding),
+    radius: pixelsOf(box?.radius, limits.radius),
+    background: colorOf(box?.background),
+    borderColor: colorOf(box?.borderColor),
+    isBorderVisible: box?.isBorderVisible !== false,
+    textColor: colorOf(box?.textColor),
+    fieldBackground: colorOf(box?.fieldBackground),
+    shadow: oneOf(
+      box?.shadow,
+      Object.values(StoreSitesEnum.ContactBoxShadow),
+      StoreSitesEnum.ContactBoxShadow.NONE,
+    ),
+  };
+};
+
 /**
  * The form of the contact page, whatever was stored. One saved before it
  * could be changed asks what it always asked and goes to the store's inbox.
@@ -127,10 +233,17 @@ export const siteContactFormOf = (
     email: form?.email ?? null,
     whatsapp: form?.whatsapp ?? null,
     webhookUrl: form?.webhookUrl ?? null,
+    button: contactButtonOf(form?.button),
+    box: contactBoxOf(form?.box),
   };
 };
 
 /** What the form of the contact page sends: each answer by the key of its field. */
 export interface ISiteContactAnswers {
   answers: Record<string, string>;
+  /** A form section (or "<section>/<element>" on a canvas); none, the contact page's. */
+  formKey?: string;
 }
+
+/** Between the key of a canvas section and the key of the form on it. */
+export const FORM_KEY_SEPARATOR: string = "/";

@@ -22,6 +22,7 @@ import {
 } from "./store-site-section-background";
 import { IStoreSiteCanvas, siteCanvasOf } from "./store-site-canvas";
 import { IStoreSiteMap, siteMapOf } from "./store-site-map";
+import { IStoreSiteContactForm, siteContactFormOf } from "./store-site-contact";
 import StoreSitesEnum from "./store-sites.enum";
 
 /** One entry of a block; which fields count depends on the block's type. */
@@ -104,6 +105,8 @@ export interface IStoreSiteBlockSettings {
   canvas: IStoreSiteCanvas | null;
   /** A map only: its pins and how it is shown. */
   map: IStoreSiteMap | null;
+  /** A form only: what it asks, its button, its box and where it goes. */
+  form: IStoreSiteContactForm | null;
   /**
    * The height the owner pulled the section to, in pixels: at least that
    * tall. Empty, as tall as it needs. A spacer, a canvas and a map have a
@@ -453,6 +456,9 @@ export const blockSettingsOf = (
       ? siteCanvasOf(source.canvas, { buttonOf, mediaOf })
       : null,
     map: uses(T.MAP) ? siteMapOf(source.map) : null,
+    form: uses(T.FORM)
+      ? siteContactFormOf(source.form as Partial<IStoreSiteContactForm> | null)
+      : null,
     boxHeight:
       !uses(T.SPACER, T.CANVAS, T.MAP) &&
       typeof source.boxHeight === "number" &&
@@ -618,6 +624,8 @@ export const showableSection = (
       return block.settings.canvas?.elements.length ? shown : null;
     case T.MAP:
       return block.settings.map?.pins.length ? shown : null;
+    case T.FORM:
+      return block.settings.form ? shown : null;
     case T.SPACER:
     case T.DIVIDER:
       return shown;

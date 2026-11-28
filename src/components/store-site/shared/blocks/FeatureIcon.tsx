@@ -1,4 +1,5 @@
 import {
+  ArrowRightOutlined,
   BulbOutlined,
   CheckCircleOutlined,
   ClockCircleOutlined,
@@ -14,6 +15,7 @@ import {
   QuestionCircleOutlined,
   RocketOutlined,
   SafetyOutlined,
+  SendOutlined,
   ShopOutlined,
   ShoppingOutlined,
   SmileOutlined,
@@ -52,6 +54,8 @@ const ICONS: Record<StoreSitesEnum.FeatureIcon, typeof StarOutlined> = {
   [StoreSitesEnum.FeatureIcon.QUESTION]: QuestionCircleOutlined,
   [StoreSitesEnum.FeatureIcon.PHONE]: PhoneOutlined,
   [StoreSitesEnum.FeatureIcon.MAIL]: MailOutlined,
+  [StoreSitesEnum.FeatureIcon.SEND]: SendOutlined,
+  [StoreSitesEnum.FeatureIcon.ARROW]: ArrowRightOutlined,
 };
 
 /** The ready icon of a feature card; an unknown one shows the star. */

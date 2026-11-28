@@ -1,6 +1,7 @@
 import { IStoreSiteAboutMedia } from "./store-site-about";
 import { IStoreSiteBlockButton } from "./store-site-blocks";
 import { IStoreSiteMap, siteMapOf } from "./store-site-map";
+import { IStoreSiteContactForm, siteContactFormOf } from "./store-site-contact";
 import StoreSitesEnum from "./store-sites.enum";
 
 /**
@@ -38,6 +39,8 @@ export interface IStoreSiteCanvasElement {
   button: IStoreSiteBlockButton | null;
   /** The places of a map, and how it opens. */
   map: IStoreSiteMap | null;
+  /** A form: what it asks, its button, its box and where it goes. */
+  form: IStoreSiteContactForm | null;
 }
 
 /** A free canvas: its height and what was placed on it, back to front. */
@@ -190,6 +193,12 @@ export const siteCanvasOf = (
         media: type === Type.VIDEO ? mediaOf(element.media) : null,
         button: type === Type.BUTTON ? buttonOf(element.button) : null,
         map: type === Type.MAP ? siteMapOf(element.map) : null,
+        form:
+          type === Type.FORM
+            ? siteContactFormOf(
+                element.form as Partial<IStoreSiteContactForm> | null,
+              )
+            : null,
       };
     });
 
@@ -218,6 +227,7 @@ const STARTS: Record<
   [Type.VIDEO]: { width: 480, height: 270, radius: 16 },
   [Type.DIVIDER]: { width: 400, height: 4 },
   [Type.MAP]: { width: 520, height: 340, radius: 16 },
+  [Type.FORM]: { width: 440, height: 520 },
 };
 
 /**
@@ -250,5 +260,6 @@ export const newCanvasElement = (
   media: null,
   button: type === Type.BUTTON ? button : null,
   map: type === Type.MAP ? siteMapOf(null) : null,
+  form: type === Type.FORM ? siteContactFormOf(null) : null,
   ...STARTS[type],
 });

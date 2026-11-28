@@ -1,22 +1,22 @@
 "use client";
 
-import { Alert, Button, Card, Form, Input, Select, Space, Switch } from "antd";
+import { Alert, Card, Collapse, Form, Input, Select } from "antd";
 
-import {
-  ArrowDownOutlined,
-  ArrowUpOutlined,
-  DeleteOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { BorderOutlined, SendOutlined } from "@ant-design/icons";
 
 import useLanguageData from "../../../data/context/language/useLanguageData";
 import {
   CONTACT_LIMITS,
-  IStoreSiteContactField,
+  IStoreSiteContactBox,
+  IStoreSiteContactButton,
   IStoreSiteContactForm,
-  newContactField,
+  contactBoxOf,
+  contactButtonOf,
 } from "../../../shared/business/store-sites/store-site-contact";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
+import ContactBoxStyleFields from "./ContactBoxStyleFields";
+import ContactButtonStyleFields from "./ContactButtonStyleFields";
+import ContactFieldsList from "./ContactFieldsList";
 
 interface Props {
   contact: IStoreSiteContactForm;
@@ -24,11 +24,14 @@ interface Props {
   onChange: (
     change: (current: IStoreSiteContactForm) => Partial<IStoreSiteContactForm>,
   ) => void;
+  /** The card's heading; none, the contact page's. */
+  heading?: string;
+  /** Off where the heading over the form is the section's own. */
+  withTitle?: boolean;
 }
 
 const KEY = "storeSite.editor.contactForm";
 
-const Type = StoreSitesEnum.ContactFieldType;
 const Destination = StoreSitesEnum.ContactDestination;
 
 /**
@@ -36,33 +39,22 @@ const Destination = StoreSitesEnum.ContactDestination;
  * kind, its name and whether it must be filled, in the order shown) and where
  * what a visitor writes goes.
  */
-const ContactFormFields = ({ contact, onChange }: Props) => {
+const ContactFormFields = ({
+  contact,
+  onChange,
+  heading,
+  withTitle = true,
+}: Props) => {
   const { t } = useLanguageData();
 
   const set = (patch: Partial<IStoreSiteContactForm>): void =>
     onChange(() => patch);
 
-  const setField = (
-    key: string,
-    patch: Partial<IStoreSiteContactField>,
-  ): void =>
-    onChange((current) => ({
-      fields: current.fields.map((asked: IStoreSiteContactField) =>
-        asked.key === key ? { ...asked, ...patch } : asked,
-      ),
-    }));
+  const setButton = (patch: Partial<IStoreSiteContactButton>): void =>
+    onChange((current) => ({ button: { ...current.button, ...patch } }));
 
-  const move = (from: number, to: number): void =>
-    onChange((current) => {
-      const fields: IStoreSiteContactField[] = [...current.fields];
-
-      fields.splice(to, 0, fields.splice(from, 1)[0]);
-
-      return { fields };
-    });
-
-  const isFull: boolean =
-    contact.fields.length >= StoreSitesEnum.MAX_CONTACT_FIELDS;
+  const setBox = (patch: Partial<IStoreSiteContactBox>): void =>
+    onChange((current) => ({ box: { ...current.box, ...patch } }));
 
   // The address the chosen destination needs, when it has none yet.
   const isMissingAddress: boolean =
@@ -73,153 +65,21 @@ const ContactFormFields = ({ contact, onChange }: Props) => {
       !contact.webhookUrl?.trim());
 
   return (
-    <Card size="small" title={t(`${KEY}.heading`)} className="mb-4">
-      <Form.Item label={t(`${KEY}.title`)}>
-        <Input
-          allowClear
-          maxLength={CONTACT_LIMITS.title}
-          placeholder={t("storeSite.contact.formTitle")}
-          value={contact.title ?? ""}
-          onChange={(event) => set({ title: event.target.value || null })}
-        />
-      </Form.Item>
+    <Card size="small" title={heading ?? t(`${KEY}.heading`)} className="mb-4">
+      {withTitle && (
+        <Form.Item label={t(`${KEY}.title`)}>
+          <Input
+            allowClear
+            maxLength={CONTACT_LIMITS.title}
+            placeholder={t("storeSite.contact.formTitle")}
+            value={contact.title ?? ""}
+            onChange={(event) => set({ title: event.target.value || null })}
+          />
+        </Form.Item>
+      )}
 
       <Form.Item label={t(`${KEY}.fields`)} extra={t(`${KEY}.fieldsHint`)}>
-        <Space direction="vertical" className="w-full">
-          {contact.fields.map(
-            (asked: IStoreSiteContactField, index: number) => (
-              <Card
-                key={asked.key}
-                size="small"
-                type="inner"
-                title={
-                  <span className="truncate">
-                    {asked.label?.trim() || t(`${KEY}.types.${asked.type}`)}
-                  </span>
-                }
-                extra={
-                  <Space size={2}>
-                    <Button
-                      type="text"
-                      size="small"
-                      icon={<ArrowUpOutlined />}
-                      disabled={index === 0}
-                      aria-label={t("storeSite.editor.moveUp")}
-                      onClick={() => move(index, index - 1)}
-                    />
-                    <Button
-                      type="text"
-                      size="small"
-                      icon={<ArrowDownOutlined />}
-                      disabled={index === contact.fields.length - 1}
-                      aria-label={t("storeSite.editor.moveDown")}
-                      onClick={() => move(index, index + 1)}
-                    />
-                    <Button
-                      type="text"
-                      size="small"
-                      danger
-                      icon={<DeleteOutlined />}
-                      // A form asks at least one thing.
-                      disabled={contact.fields.length === 1}
-                      aria-label={t("storeSite.editor.remove")}
-                      onClick={() =>
-                        onChange((current) => ({
-                          fields: current.fields.filter(
-                            (each: IStoreSiteContactField) =>
-                              each.key !== asked.key,
-                          ),
-                        }))
-                      }
-                    />
-                  </Space>
-                }
-              >
-                <Form.Item label={t(`${KEY}.type`)}>
-                  <Select<StoreSitesEnum.ContactFieldType>
-                    value={asked.type}
-                    onChange={(type) => setField(asked.key, { type })}
-                    options={Object.values(Type).map(
-                      (type: StoreSitesEnum.ContactFieldType) => ({
-                        value: type,
-                        label: t(`${KEY}.types.${type}`),
-                      }),
-                    )}
-                  />
-                </Form.Item>
-                <Form.Item label={t(`${KEY}.label`)}>
-                  <Input
-                    allowClear
-                    maxLength={CONTACT_LIMITS.label}
-                    placeholder={t(`${KEY}.types.${asked.type}`)}
-                    value={asked.label ?? ""}
-                    onChange={(event) =>
-                      setField(asked.key, { label: event.target.value || null })
-                    }
-                  />
-                </Form.Item>
-                <Form.Item label={t(`${KEY}.placeholder`)}>
-                  <Input
-                    allowClear
-                    maxLength={CONTACT_LIMITS.placeholder}
-                    value={asked.placeholder ?? ""}
-                    onChange={(event) =>
-                      setField(asked.key, {
-                        placeholder: event.target.value || null,
-                      })
-                    }
-                  />
-                </Form.Item>
-                {asked.type === Type.SELECT && (
-                  <Form.Item
-                    label={t(`${KEY}.options`)}
-                    extra={t(`${KEY}.optionsHint`)}
-                  >
-                    <Input.TextArea
-                      autoSize={{ minRows: 2, maxRows: 8 }}
-                      value={asked.options.join("\n")}
-                      onChange={(event) =>
-                        setField(asked.key, {
-                          // Kept as typed, blank lines too, so a new line can be
-                          // started: the API keeps the ones with words.
-                          options: event.target.value
-                            .split("\n")
-                            .slice(0, StoreSitesEnum.MAX_CONTACT_OPTIONS)
-                            .map((option: string) =>
-                              option.slice(0, CONTACT_LIMITS.option),
-                            ),
-                        })
-                      }
-                    />
-                  </Form.Item>
-                )}
-                <label className="flex items-center justify-between gap-3">
-                  <span>{t(`${KEY}.required`)}</span>
-                  <Switch
-                    checked={asked.isRequired}
-                    onChange={(isRequired: boolean) =>
-                      setField(asked.key, { isRequired })
-                    }
-                  />
-                </label>
-              </Card>
-            ),
-          )}
-          <Button
-            block
-            type="dashed"
-            icon={<PlusOutlined />}
-            disabled={isFull}
-            onClick={() =>
-              onChange((current) => ({
-                fields: [...current.fields, newContactField()],
-              }))
-            }
-          >
-            {t(`${KEY}.addField`)} ({contact.fields.length}/
-            {StoreSitesEnum.MAX_CONTACT_FIELDS})
-          </Button>
-        </Space>
+        <ContactFieldsList fields={contact.fields} onChange={onChange} />
       </Form.Item>
 
       <Form.Item label={t(`${KEY}.buttonLabel`)}>
@@ -231,6 +91,45 @@ const ContactFormFields = ({ contact, onChange }: Props) => {
           onChange={(event) => set({ buttonLabel: event.target.value || null })}
         />
       </Form.Item>
+
+      <Collapse
+        size="small"
+        className="mb-4"
+        items={[
+          {
+            key: "button",
+            label: (
+              <span className="flex items-center gap-2">
+                <SendOutlined />
+                {t(`${KEY}.button.heading`)}
+              </span>
+            ),
+            children: (
+              <ContactButtonStyleFields
+                button={contact.button}
+                onChange={setButton}
+                onReset={() => set({ button: contactButtonOf(null) })}
+              />
+            ),
+          },
+          {
+            key: "box",
+            label: (
+              <span className="flex items-center gap-2">
+                <BorderOutlined />
+                {t(`${KEY}.box.heading`)}
+              </span>
+            ),
+            children: (
+              <ContactBoxStyleFields
+                box={contact.box}
+                onChange={setBox}
+                onReset={() => set({ box: contactBoxOf(null) })}
+              />
+            ),
+          },
+        ]}
+      />
 
       <Form.Item
         label={t(`${KEY}.successMessage`)}

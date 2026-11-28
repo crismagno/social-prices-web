@@ -2629,7 +2629,7 @@
         "heading": "Form of this page",
         "title": "Heading over the form",
         "fields": "What the form asks",
-        "fieldsHint": "Each field with its kind, in the order shown. Open one to name it and say whether it must be filled.",
+        "fieldsHint": "Each field with its kind, in the order shown. Pick its position from the list beside its name; open a field to name it and say whether it must be filled.",
         "type": "Kind",
         "types": {
           "NAME": "Name",
@@ -2666,7 +2666,66 @@
         "whatsappHint": "With the country code and the area code, digits only.",
         "webhookUrl": "Address that receives it",
         "webhookUrlHint": "It must start with https:// and be out on the internet. It receives the site, the store, the time and each field with its answer.",
-        "missingAddress": "Until this is filled in, the form keeps going to your inbox here, so no message is lost."
+        "missingAddress": "Until this is filled in, the form keeps going to your inbox here, so no message is lost.",
+        "requiredShort": "Required",
+        "position": "Position in the form",
+        "positionOption": "{n}º",
+        "expandAll": "Open all",
+        "collapseAll": "Fold all",
+        "reset": "Back to the usual",
+        "button": {
+          "heading": "Send button style",
+          "color": "Button colour",
+          "textColor": "Text colour",
+          "textColorAuto": "Automatic",
+          "icon": "Icon",
+          "iconNone": "No icon",
+          "iconPosition": "Icon side",
+          "iconPositions": {
+            "START": "Before the words",
+            "END": "After the words"
+          },
+          "size": "Size",
+          "sizes": {
+            "SMALL": "Small",
+            "MEDIUM": "Medium",
+            "LARGE": "Large"
+          },
+          "shape": "Corners",
+          "shapes": {
+            "PILL": "Round",
+            "ROUNDED": "Soft",
+            "SQUARE": "Straight"
+          },
+          "fullWidth": "Across the whole box",
+          "align": "Position",
+          "aligns": {
+            "START": "Left",
+            "CENTER": "Centre",
+            "END": "Right"
+          }
+        },
+        "box": {
+          "heading": "Form box",
+          "widthMode": "Width",
+          "widthAuto": "Page width",
+          "widthCustom": "Choose",
+          "width": "Maximum width",
+          "padding": "Inner space",
+          "radius": "Corners",
+          "background": "Background",
+          "textColor": "Text colour",
+          "fieldBackground": "Inside the fields",
+          "borderColor": "Border colour",
+          "border": "Show the border",
+          "usual": "Template's own",
+          "shadow": "Shadow",
+          "shadows": {
+            "NONE": "None",
+            "SOFT": "Soft",
+            "STRONG": "Strong"
+          }
+        }
       },
       "backdrop": {
         "types": {
@@ -3470,7 +3529,9 @@
           "INFO": "Info",
           "QUESTION": "Question",
           "PHONE": "Phone",
-          "MAIL": "Mail"
+          "MAIL": "Mail",
+          "SEND": "Send",
+          "ARROW": "Arrow"
         },
         "samples": {
           "TEAM": {
@@ -3796,6 +3857,10 @@
           "MAP": {
             "title": "Where to find us",
             "pin": "Our store"
+          },
+          "FORM": {
+            "title": "Ask for a quote",
+            "text": "Tell us what you need and we will get back to you."
           }
         },
         "types": {
@@ -3822,7 +3887,8 @@
           "CTA": "Call to action",
           "TABS": "Tabs menu",
           "CANVAS": "Free canvas",
-          "MAP": "Map"
+          "MAP": "Map",
+          "FORM": "Form"
         },
         "hints": {
           "HERO": "The entrance of this page: its own words, pictures, buttons, colours and sizes.",
@@ -3848,7 +3914,8 @@
           "CTA": "A banner with an action button",
           "TABS": "Items that show, one at a time, other sections of this page",
           "CANVAS": "Place text, buttons, boxes, images, video and lines anywhere, one over the other, and resize them",
-          "MAP": "A map with as many pins as you want, each with a name and a few words"
+          "MAP": "A map with as many pins as you want, each with a name and a few words",
+          "FORM": "A form of your own: its fields, its button and where the answers go"
         },
         "tabs": {
           "title": "Title above the menu",
@@ -3905,7 +3972,8 @@
             "IMAGE": "Image",
             "VIDEO": "Video",
             "DIVIDER": "Divider",
-            "MAP": "Map"
+            "MAP": "Map",
+            "FORM": "Form"
           },
           "samples": {
             "TEXT": "Your text",
@@ -3954,6 +4022,9 @@
           "label": "Name",
           "description": "Description",
           "color": "Colour"
+        },
+        "form": {
+          "heading": "Form"
         }
       },
       "mocks": {

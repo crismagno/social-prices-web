@@ -14,6 +14,7 @@ import {
 } from "./store-site-blocks";
 import { IStoreSiteAbout, siteAboutOf } from "./store-site-about";
 import { newCanvasElement } from "./store-site-canvas";
+import { siteContactFormOf } from "./store-site-contact";
 import { newMapPin } from "./store-site-map";
 import { siteMarqueeStyleOf } from "./store-site-marquee-style";
 import { IStoreSitePage, sitePagesOf } from "./store-site-pages";
@@ -457,6 +458,14 @@ export const newSection = (
           ...newBlockItem(T.TABS),
           title: t(`${SAMPLE}.TABS.items.${index}`),
         })),
+      };
+    case T.FORM:
+      // The usual questions, sent to the inbox: the owner changes them below.
+      return {
+        ...base,
+        title: t(`${SAMPLE}.FORM.title`),
+        subtitle: t(`${SAMPLE}.FORM.text`),
+        settings: blockSettingsOf(type, { form: siteContactFormOf(null) }),
       };
     case T.MAP:
       // One pin to start from: the owner moves it to where the store is.

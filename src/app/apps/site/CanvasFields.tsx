@@ -48,6 +48,8 @@ import {
 import ButtonFields from "./ButtonFields";
 import ImageField from "./ImageField";
 import { MapEditor } from "./MapFields";
+import ContactFormFields from "./ContactFormFields";
+import { siteContactFormOf } from "../../../shared/business/store-sites/store-site-contact";
 import VideoField from "./VideoField";
 
 interface Props {
@@ -459,6 +461,32 @@ const CanvasFields = ({
               />
             )}
 
+            {selected.type === Type.FORM && (
+              <ContactFormFields
+                heading={t("storeSite.editor.builder.form.heading")}
+                contact={siteContactFormOf(selected.form)}
+                // From the element as it is when applied.
+                onChange={(change) =>
+                  setCanvas((current) => ({
+                    elements: current.elements.map(
+                      (element: IStoreSiteCanvasElement) => {
+                        if (element.key !== selected.key) {
+                          return element;
+                        }
+
+                        const form = siteContactFormOf(element.form);
+
+                        return {
+                          ...element,
+                          form: { ...form, ...change(form) },
+                        };
+                      },
+                    ),
+                  }))
+                }
+              />
+            )}
+
             {selected.type === Type.IMAGE && (
               <Form.Item label={t(`${KEY}.image`)}>
                 <ImageField
@@ -544,8 +572,10 @@ const CanvasFields = ({
             )}
 
             <div className="flex flex-wrap gap-x-6">
-              {/* A map has no words or line of its own to colour. */}
-              {selected.type !== Type.MAP && colorField(selected, "color")}
+              {/* A map and a form have no words or line of their own to colour. */}
+              {selected.type !== Type.MAP &&
+                selected.type !== Type.FORM &&
+                colorField(selected, "color")}
               {WITH_BACKGROUND.includes(selected.type) &&
                 colorField(selected, "background")}
               {selected.type !== Type.DIVIDER &&

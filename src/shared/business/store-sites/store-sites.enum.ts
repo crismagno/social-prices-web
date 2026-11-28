@@ -267,6 +267,8 @@ namespace StoreSitesEnum {
     DIVIDER = "DIVIDER",
     // A map with the places the owner marked, like the map section.
     MAP = "MAP",
+    // A form the owner makes, like the one of the contact page.
+    FORM = "FORM",
   }
 
   /** The side the words of a canvas element are written on. */
@@ -370,6 +372,8 @@ namespace StoreSitesEnum {
     CANVAS = "CANVAS",
     // A map with the places the owner marked on it.
     MAP = "MAP",
+    // A form the owner makes: its fields, its button and where it goes.
+    FORM = "FORM",
   }
 
   /** The template's own parts: each at most once on a page. */
@@ -401,6 +405,7 @@ namespace StoreSitesEnum {
     BlockType.BOX,
     BlockType.CANVAS,
     BlockType.MAP,
+    BlockType.FORM,
     BlockType.TABS,
     BlockType.SPACER,
     BlockType.DIVIDER,
@@ -560,6 +565,8 @@ namespace StoreSitesEnum {
     QUESTION = "QUESTION",
     PHONE = "PHONE",
     MAIL = "MAIL",
+    SEND = "SEND",
+    ARROW = "ARROW",
   }
 
   /** How the chat asks a field before it starts. */
@@ -659,6 +666,47 @@ namespace StoreSitesEnum {
 
   export const MAX_CONTACT_FIELDS = 12;
   export const MAX_CONTACT_OPTIONS = 12;
+
+  /** How big the send button of the contact form is. */
+  export enum ContactButtonSize {
+    SMALL = "SMALL",
+    MEDIUM = "MEDIUM",
+    LARGE = "LARGE",
+  }
+
+  /** The corners of the send button. */
+  export enum ContactButtonShape {
+    PILL = "PILL",
+    ROUNDED = "ROUNDED",
+    SQUARE = "SQUARE",
+  }
+
+  /** Where the send button sits under the fields. */
+  export enum ContactButtonAlign {
+    START = "START",
+    CENTER = "CENTER",
+    END = "END",
+  }
+
+  /** On which side of its words the send button's icon is. */
+  export enum ContactIconPosition {
+    START = "START",
+    END = "END",
+  }
+
+  /** The shadow under the box of the contact form. */
+  export enum ContactBoxShadow {
+    NONE = "NONE",
+    SOFT = "SOFT",
+    STRONG = "STRONG",
+  }
+
+  /** The sizes, in pixels, the box of the contact form may take. */
+  export const CONTACT_BOX_LIMITS = {
+    width: { min: 280, max: 1200 },
+    padding: { min: 0, max: 64 },
+    radius: { min: 0, max: 48 },
+  } as const;
 
   /** What lies behind the whole site: its colour, images in turn or a video. */
   export enum BackdropType {

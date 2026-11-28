@@ -91,14 +91,34 @@
 }
 
 /* The contact page: a form that writes to the store, and the ways to reach it. */
+/* Each --cf-* is what the owner chose for the box; unset, the usual look. */
 .contactForm {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: clamp(18px, 3vw, 28px);
-  border-radius: 22px;
-  background: color-mix(in srgb, var(--site-text) 5%, var(--site-bg));
-  border: 1px solid color-mix(in srgb, var(--site-text) 12%, transparent);
+  width: 100%;
+  max-width: var(--cf-width, none);
+  padding: var(--cf-padding, clamp(18px, 3vw, 28px));
+  border-radius: var(--cf-radius, 22px);
+  background: var(
+    --cf-bg,
+    color-mix(in srgb, var(--site-text) 5%, var(--site-bg))
+  );
+  color: var(--cf-text, inherit);
+  border: 1px solid
+    var(--cf-border, color-mix(in srgb, var(--site-text) 12%, transparent));
+}
+
+.contactBoxBorderless {
+  border-color: transparent;
+}
+
+.contactBoxSoft {
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--site-text) 10%, transparent);
+}
+
+.contactBoxStrong {
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--site-text) 22%, transparent);
 }
 
 .contactRow {
@@ -125,10 +145,12 @@
 .contactField textarea {
   width: 100%;
   padding: 12px 14px;
-  border-radius: 12px;
-  border: 1px solid color-mix(in srgb, var(--site-text) 18%, transparent);
-  background: var(--site-bg);
-  color: var(--site-text);
+  border: 1px solid
+    var(--cf-border, color-mix(in srgb, var(--site-text) 18%, transparent));
+  /* Rounder boxes get rounder fields, never rounder than the box. */
+  border-radius: min(12px, var(--cf-radius, 12px));
+  background: var(--cf-field-bg, var(--site-bg));
+  color: var(--cf-text, var(--site-text));
   font: inherit;
   font-weight: 400;
   transition:
@@ -156,12 +178,16 @@
 }
 
 .contactSend {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   align-self: flex-start;
   padding: 13px 28px;
   border: 0;
   border-radius: 99px;
-  background: var(--site-primary);
-  color: var(--site-on-primary, #fff);
+  background: var(--cf-btn-bg, var(--site-primary));
+  color: var(--cf-btn-text, var(--site-on-primary, #fff));
   font: inherit;
   font-weight: 700;
   cursor: pointer;
@@ -173,7 +199,42 @@
 .contactSend:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 10px 22px
-    color-mix(in srgb, var(--site-primary) 35%, transparent);
+    color-mix(in srgb, var(--cf-btn-bg, var(--site-primary)) 35%, transparent);
+}
+
+.contactSendIcon {
+  display: inline-flex;
+  font-size: 1.1em;
+}
+
+.contactSendSmall {
+  padding: 9px 18px;
+  font-size: 13px;
+}
+
+.contactSendLarge {
+  padding: 17px 38px;
+  font-size: 18px;
+}
+
+.contactSendRounded {
+  border-radius: 10px;
+}
+
+.contactSendSquare {
+  border-radius: 0;
+}
+
+.contactSendCenter {
+  align-self: center;
+}
+
+.contactSendEnd {
+  align-self: flex-end;
+}
+
+.contactSendFull {
+  align-self: stretch;
 }
 
 .contactSend:disabled {

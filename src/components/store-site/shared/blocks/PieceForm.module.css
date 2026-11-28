@@ -1,0 +1,10 @@
+.piece {
+  display: flex;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+/* A centred section puts the box in the middle; its words stay on the left. */
+.center {
+  justify-content: center;
+}

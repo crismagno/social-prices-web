@@ -2632,7 +2632,7 @@
         "heading": "Formulário desta página",
         "title": "Título acima do formulário",
         "fields": "O que o formulário pergunta",
-        "fieldsHint": "Cada campo com o seu tipo, na ordem em que aparece. Abra um para dar nome e dizer se é obrigatório.",
+        "fieldsHint": "Cada campo com o seu tipo, na ordem em que aparece. Escolha a posição na lista ao lado do nome; abra um campo para dar nome e dizer se é obrigatório.",
         "type": "Tipo",
         "types": {
           "NAME": "Nome",
@@ -2669,7 +2669,66 @@
         "whatsappHint": "Com o código do país e o DDD, só números.",
         "webhookUrl": "Endereço que recebe",
         "webhookUrlHint": "Precisa começar com https:// e estar na internet. Recebe o site, a loja, a hora e cada campo com a resposta.",
-        "missingAddress": "Enquanto isto não for preenchido, o formulário continua indo para a sua caixa de entrada aqui, para nenhuma mensagem se perder."
+        "missingAddress": "Enquanto isto não for preenchido, o formulário continua indo para a sua caixa de entrada aqui, para nenhuma mensagem se perder.",
+        "requiredShort": "Obrigatório",
+        "position": "Posição no formulário",
+        "positionOption": "{n}º",
+        "expandAll": "Abrir todos",
+        "collapseAll": "Recolher todos",
+        "reset": "Voltar ao padrão",
+        "button": {
+          "heading": "Estilo do botão de enviar",
+          "color": "Cor do botão",
+          "textColor": "Cor do texto",
+          "textColorAuto": "Automática",
+          "icon": "Ícone",
+          "iconNone": "Sem ícone",
+          "iconPosition": "Lado do ícone",
+          "iconPositions": {
+            "START": "Antes do texto",
+            "END": "Depois do texto"
+          },
+          "size": "Tamanho",
+          "sizes": {
+            "SMALL": "Pequeno",
+            "MEDIUM": "Médio",
+            "LARGE": "Grande"
+          },
+          "shape": "Cantos",
+          "shapes": {
+            "PILL": "Redondo",
+            "ROUNDED": "Suave",
+            "SQUARE": "Reto"
+          },
+          "fullWidth": "Ocupar toda a largura da caixa",
+          "align": "Posição",
+          "aligns": {
+            "START": "Esquerda",
+            "CENTER": "Centro",
+            "END": "Direita"
+          }
+        },
+        "box": {
+          "heading": "Caixa do formulário",
+          "widthMode": "Largura",
+          "widthAuto": "Largura da página",
+          "widthCustom": "Escolher",
+          "width": "Largura máxima",
+          "padding": "Espaço interno",
+          "radius": "Cantos",
+          "background": "Fundo",
+          "textColor": "Cor do texto",
+          "fieldBackground": "Dentro dos campos",
+          "borderColor": "Cor da borda",
+          "border": "Mostrar borda",
+          "usual": "Do template",
+          "shadow": "Sombra",
+          "shadows": {
+            "NONE": "Nenhuma",
+            "SOFT": "Suave",
+            "STRONG": "Forte"
+          }
+        }
       },
       "backdrop": {
         "types": {
@@ -3473,7 +3532,9 @@
           "INFO": "Informação",
           "QUESTION": "Pergunta",
           "PHONE": "Telefone",
-          "MAIL": "E-mail"
+          "MAIL": "E-mail",
+          "SEND": "Enviar",
+          "ARROW": "Seta"
         },
         "samples": {
           "TEAM": {
@@ -3799,6 +3860,10 @@
           "MAP": {
             "title": "Onde nos encontrar",
             "pin": "Nossa loja"
+          },
+          "FORM": {
+            "title": "Peça um orçamento",
+            "text": "Conte o que você precisa e nós retornamos."
           }
         },
         "types": {
@@ -3825,7 +3890,8 @@
           "CTA": "Chamada final",
           "TABS": "Menu de abas",
           "CANVAS": "Tela livre",
-          "MAP": "Mapa"
+          "MAP": "Mapa",
+          "FORM": "Formulário"
         },
         "hints": {
           "HERO": "A entrada desta página: palavras, fotos, botões, cores e tamanhos próprios.",
@@ -3851,7 +3917,8 @@
           "CTA": "Um banner com botão de ação",
           "TABS": "Itens que mostram, um de cada vez, outras seções desta página",
           "CANVAS": "Coloque texto, botões, caixas, imagens, vídeo e linhas em qualquer lugar, um sobre o outro, e redimensione",
-          "MAP": "Um mapa com quantos pins você quiser, cada um com nome e algumas palavras"
+          "MAP": "Um mapa com quantos pins você quiser, cada um com nome e algumas palavras",
+          "FORM": "Um formulário seu: os campos, o botão e para onde vão as respostas"
         },
         "tabs": {
           "title": "Título acima do menu",
@@ -3908,7 +3975,8 @@
             "IMAGE": "Imagem",
             "VIDEO": "Vídeo",
             "DIVIDER": "Divisor",
-            "MAP": "Mapa"
+            "MAP": "Mapa",
+            "FORM": "Formulário"
           },
           "samples": {
             "TEXT": "Seu texto",
@@ -3957,6 +4025,9 @@
           "label": "Nome",
           "description": "Descrição",
           "color": "Cor"
+        },
+        "form": {
+          "heading": "Formulário"
         }
       },
       "mocks": {

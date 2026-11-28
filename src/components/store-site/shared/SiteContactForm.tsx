@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { CSSProperties, FormEvent, useState } from "react";
 
 import { serviceMethodsInstance } from "../../../services/social-prices-api/service-methods";
 import {
@@ -10,7 +10,9 @@ import {
   siteContactFormOf,
 } from "../../../shared/business/store-sites/store-site-contact";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
+import FeatureIcon from "./blocks/FeatureIcon";
 import { followSiteChat } from "./SiteChatWidget";
+import { readableOver } from "./SiteThemeVars";
 import styles from "./SitePageBody.module.css";
 import useSiteT from "./useSiteT";
 
@@ -20,6 +22,11 @@ interface Props {
   contact: Partial<IStoreSiteContactForm> | null | undefined;
   /** The editor: the form is there to be seen, and sends nothing. */
   isPreview: boolean;
+  /**
+   * A form section, or "<section>/<element>" for one on a free canvas: the
+   * key the API finds it by. None, the contact page's form.
+   */
+  formKey?: string;
 }
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -56,6 +63,33 @@ const INPUT_PROPS: Partial<
   [Type.PHONE]: { type: "tel", inputMode: "tel", autoComplete: "tel" },
 };
 
+const BUTTON_SIZE_CLASS: Record<StoreSitesEnum.ContactButtonSize, string> = {
+  [StoreSitesEnum.ContactButtonSize.SMALL]: styles.contactSendSmall,
+  [StoreSitesEnum.ContactButtonSize.MEDIUM]: "",
+  [StoreSitesEnum.ContactButtonSize.LARGE]: styles.contactSendLarge,
+};
+
+const BUTTON_SHAPE_CLASS: Record<StoreSitesEnum.ContactButtonShape, string> = {
+  [StoreSitesEnum.ContactButtonShape.PILL]: "",
+  [StoreSitesEnum.ContactButtonShape.ROUNDED]: styles.contactSendRounded,
+  [StoreSitesEnum.ContactButtonShape.SQUARE]: styles.contactSendSquare,
+};
+
+const BUTTON_ALIGN_CLASS: Record<StoreSitesEnum.ContactButtonAlign, string> = {
+  [StoreSitesEnum.ContactButtonAlign.START]: "",
+  [StoreSitesEnum.ContactButtonAlign.CENTER]: styles.contactSendCenter,
+  [StoreSitesEnum.ContactButtonAlign.END]: styles.contactSendEnd,
+};
+
+const BOX_SHADOW_CLASS: Record<StoreSitesEnum.ContactBoxShadow, string> = {
+  [StoreSitesEnum.ContactBoxShadow.NONE]: "",
+  [StoreSitesEnum.ContactBoxShadow.SOFT]: styles.contactBoxSoft,
+  [StoreSitesEnum.ContactBoxShadow.STRONG]: styles.contactBoxStrong,
+};
+
+const px = (value: number | null): string | undefined =>
+  value === null ? undefined : `${value}px`;
+
 /**
  * The form of the contact page, as the owner made it: what it asks, the
  * words of its button, and where it goes. To the store's inbox it becomes a
@@ -65,7 +99,7 @@ const INPUT_PROPS: Partial<
  * it is sent and that is all. To WhatsApp it opens the conversation with the
  * answers already written, for the visitor to send.
  */
-const SiteContactForm = ({ slug, contact, isPreview }: Props) => {
+const SiteContactForm = ({ slug, contact, isPreview, formKey }: Props) => {
   const t = useSiteT();
 
   const settings: IStoreSiteContactForm = siteContactFormOf(contact);
@@ -74,6 +108,48 @@ const SiteContactForm = ({ slug, contact, isPreview }: Props) => {
   const [isSending, setIsSending] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [sent, setSent] = useState<TSent>(null);
+
+  const { button, box } = settings;
+
+  // What the owner chose for the box and the button; the rest stays the template's.
+  const boxStyle = {
+    "--cf-width": px(box.width),
+    "--cf-padding": px(box.padding),
+    "--cf-radius": px(box.radius),
+    "--cf-bg": box.background ?? undefined,
+    "--cf-border": box.borderColor ?? undefined,
+    "--cf-text": box.textColor ?? undefined,
+    "--cf-field-bg": box.fieldBackground ?? undefined,
+    "--cf-btn-bg": button.color ?? undefined,
+    "--cf-btn-text":
+      button.textColor ??
+      (button.color ? readableOver(button.color) : undefined),
+  } as CSSProperties;
+
+  const boxClassName: string = [
+    styles.contactForm,
+    box.isBorderVisible ? "" : styles.contactBoxBorderless,
+    BOX_SHADOW_CLASS[box.shadow],
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const buttonClassName: string = [
+    styles.contactSend,
+    BUTTON_SIZE_CLASS[button.size],
+    BUTTON_SHAPE_CLASS[button.shape],
+    button.isFullWidth
+      ? styles.contactSendFull
+      : BUTTON_ALIGN_CLASS[button.align],
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const buttonIcon = button.icon ? (
+    <span className={styles.contactSendIcon} aria-hidden>
+      <FeatureIcon icon={button.icon} />
+    </span>
+  ) : null;
 
   const labelOf = (asked: IStoreSiteContactField): string =>
     asked.label?.trim() || t(USUAL_LABEL[asked.type]);
@@ -160,7 +236,7 @@ const SiteContactForm = ({ slug, contact, isPreview }: Props) => {
       const token: string | null =
         await serviceMethodsInstance.storeSitesServiceMethods.sendContact(
           slug,
-          { answers: filled },
+          { answers: filled, ...(formKey ? { formKey } : {}) },
         );
 
       const first = (type: StoreSitesEnum.ContactFieldType): string | null => {
@@ -206,7 +282,7 @@ const SiteContactForm = ({ slug, contact, isPreview }: Props) => {
 
   if (sent) {
     return (
-      <div className={styles.contactDone} role="status">
+      <div className={styles.contactDone} role="status" style={boxStyle}>
         <div className={styles.contactDoneMark} aria-hidden>
           ✓
         </div>
@@ -241,7 +317,7 @@ const SiteContactForm = ({ slug, contact, isPreview }: Props) => {
   }
 
   return (
-    <form className={styles.contactForm} onSubmit={send} noValidate>
+    <form className={boxClassName} style={boxStyle} onSubmit={send} noValidate>
       {settings.fields.map((asked: IStoreSiteContactField) => (
         <label key={asked.key} className={styles.contactField}>
           <span>
@@ -295,12 +371,18 @@ const SiteContactForm = ({ slug, contact, isPreview }: Props) => {
 
       <button
         type="submit"
-        className={styles.contactSend}
+        className={buttonClassName}
         disabled={isSending || isPreview}
       >
-        {isSending
-          ? t("storeSite.contact.sending")
-          : settings.buttonLabel?.trim() || t("storeSite.contact.send")}
+        {button.iconPosition === StoreSitesEnum.ContactIconPosition.START &&
+          buttonIcon}
+        <span>
+          {isSending
+            ? t("storeSite.contact.sending")
+            : settings.buttonLabel?.trim() || t("storeSite.contact.send")}
+        </span>
+        {button.iconPosition === StoreSitesEnum.ContactIconPosition.END &&
+          buttonIcon}
       </button>
     </form>
   );

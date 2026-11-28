@@ -50,6 +50,8 @@ import CanvasFields from "./CanvasFields";
 import CardsLayoutFields from "./CardsLayoutFields";
 import { HeroTab } from "./ContentTabs";
 import MapFields from "./MapFields";
+import ContactFormFields from "./ContactFormFields";
+import { siteContactFormOf } from "../../../shared/business/store-sites/store-site-contact";
 import PageHeroFields from "./PageHeroFields";
 import ImageLookCard from "./ImageLookCard";
 import MarqueeFields from "./MarqueeFields";
@@ -88,6 +90,7 @@ const WITH_BLOCK_FIELDS: StoreSitesEnum.BlockType[] = [
   T.IMAGE,
   T.BOX,
   T.MAP,
+  T.FORM,
 ];
 
 const HOME: string = "__home__";
@@ -627,7 +630,9 @@ const BuilderTab = ({
                     pages={pages}
                     storeId={storeId}
                     showItems={
-                      selected.type !== T.TEXT && selected.type !== T.MAP
+                      selected.type !== T.TEXT &&
+                      selected.type !== T.MAP &&
+                      selected.type !== T.FORM
                     }
                     onChange={(change) =>
                       builder.updateSection(selected.key, change)
@@ -642,6 +647,25 @@ const BuilderTab = ({
                     section={selected}
                     onChange={(change) =>
                       builder.updateSection(selected.key, change)
+                    }
+                  />
+                )}
+                {selected.type === T.FORM && (
+                  <ContactFormFields
+                    heading={t("storeSite.editor.builder.form.heading")}
+                    withTitle={false}
+                    contact={siteContactFormOf(selected.settings.form)}
+                    onChange={(change) =>
+                      builder.updateSection(selected.key, (current) => {
+                        const form = siteContactFormOf(current.settings.form);
+
+                        return {
+                          settings: {
+                            ...current.settings,
+                            form: { ...form, ...change(form) },
+                          },
+                        };
+                      })
                     }
                   />
                 )}
