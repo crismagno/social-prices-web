@@ -9,6 +9,7 @@ import {
   sitePagePath,
   sitePagesOf,
 } from "../../../shared/business/store-sites/store-site-pages";
+import { IStoreSiteHeaderHome } from "../../../shared/business/store-sites/store-site-header";
 import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enum";
 import FeatureIcon from "./blocks/FeatureIcon";
 import styles from "./SiteMenu.module.css";
@@ -21,6 +22,8 @@ interface Props {
   currentKey?: string | null;
   /** Whether the site has an about to show: its page leaves the menu if not. */
   hasAbout: boolean;
+  /** The link to the first page: whether it is there, and its own words. */
+  home?: IStoreSiteHeaderHome | null;
 }
 
 /** The name of a page in the menu: the owner's, else its kind's. */
@@ -39,7 +42,7 @@ export const usePageLabel = (): ((page: IStoreSitePage) => string) => {
  * The top menu of the site: one link per page the owner put in it, in the
  * order chosen. On a phone it folds into a button that opens a panel.
  */
-const SiteMenu = ({ pages, siteSlug, currentKey, hasAbout }: Props) => {
+const SiteMenu = ({ pages, siteSlug, currentKey, hasAbout, home }: Props) => {
   const t = useSiteT();
   const labelOf = usePageLabel();
 
@@ -61,11 +64,44 @@ const SiteMenu = ({ pages, siteSlug, currentKey, hasAbout }: Props) => {
     return () => window.removeEventListener("keydown", close);
   }, [isOpen]);
 
-  const items: IStoreSitePage[] = sitePagesOf(pages).filter(
-    (page: IStoreSitePage) =>
-      page.isInMenu &&
-      // An about page with nothing to say stays out of the menu.
-      (page.type !== StoreSitesEnum.SitePageType.ABOUT || hasAbout),
+  // The pages the owner put in the menu, in their order.
+  const inMenu: IStoreSitePage[] = sitePagesOf(pages).filter(
+    (page: IStoreSitePage) => page.isInMenu,
+  );
+
+  // An about page with nothing to say stays out of the menu.
+  const isShown = (page: IStoreSitePage): boolean =>
+    page.type !== StoreSitesEnum.SitePageType.ABOUT || hasAbout;
+
+  const items: IStoreSitePage[] = inMenu.filter(isShown);
+
+  // The way back to the first page: there unless the owner hid it.
+  const hasHome: boolean = home?.isInMenu !== false;
+  const homeLabel: string = home?.label?.trim() || t("storeSite.pages.home");
+
+  // The menu in order: the home (told apart as "no page") where the owner
+  // put it among the pages. Counted with every page of the menu, shown or
+  // not, so it keeps its place when one of them has nothing to show.
+  const entries: (IStoreSitePage | null)[] = [...inMenu];
+
+  if (hasHome) {
+    entries.splice(Math.min(home?.position ?? 0, inMenu.length), 0, null);
+  }
+
+  const shownEntries: (IStoreSitePage | null)[] = entries.filter(
+    (entry: IStoreSitePage | null) => entry === null || isShown(entry),
+  );
+
+  const homeLink = (className: string, extra = {}) => (
+    <a
+      key="home"
+      href={sitePagePath(siteSlug)}
+      className={className}
+      aria-current={currentKey ? undefined : "page"}
+      {...extra}
+    >
+      {homeLabel}
+    </a>
   );
 
   const link = (page: IStoreSitePage, className: string, extra = {}) => (
@@ -87,9 +123,12 @@ const SiteMenu = ({ pages, siteSlug, currentKey, hasAbout }: Props) => {
 
   return (
     <>
-      {items.map((page: IStoreSitePage) =>
-        link(page, styles.link, { "data-navlink": "" }),
-      )}
+      {items.length > 0 &&
+        shownEntries.map((entry: IStoreSitePage | null) =>
+          entry
+            ? link(entry, styles.link, { "data-navlink": "" })
+            : homeLink(styles.link, { "data-navlink": "" }),
+        )}
 
       {items.length > 0 && (
         <button
@@ -109,10 +148,9 @@ const SiteMenu = ({ pages, siteSlug, currentKey, hasAbout }: Props) => {
 
       {isOpen && (
         <nav className={styles.panel} aria-label={t("storeSite.pages.menu")}>
-          <a href={sitePagePath(siteSlug)} className={styles.panelLink}>
-            {t("storeSite.pages.home")}
-          </a>
-          {items.map((page: IStoreSitePage) => link(page, styles.panelLink))}
+          {shownEntries.map((entry: IStoreSitePage | null) =>
+            entry ? link(entry, styles.panelLink) : homeLink(styles.panelLink),
+          )}
         </nav>
       )}
     </>

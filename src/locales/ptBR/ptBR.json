@@ -3167,7 +3167,11 @@
         "add": "Adicionar página",
         "colors": "Cores desta página",
         "colorsHint": "A cor que você não mudar segue as cores do site.",
-        "colorOfSite": "Do site"
+        "colorOfSite": "Do site",
+        "homeMenu": {
+          "title": "Home (primeiro item do menu)",
+          "hint": "Desligue para esconder do menu. Deixe o nome vazio para usar a palavra padrão do site."
+        }
       },
       "chat": {
         "show": "Deixar visitantes conversarem com a loja",
@@ -3850,7 +3854,7 @@
         "addButton": "Adicionar botão",
         "newButton": "Botão",
         "menuOrder": "Ordem do menu",
-        "menuOrderHint": "As páginas que aparecem no menu, na ordem em que são mostradas. Quais páginas entram nele é escolhido em Páginas.",
+        "menuOrderHint": "Arraste um item ou use as setas. Mover uma página muda também a ordem das páginas.",
         "menuOrderEmpty": "Nenhuma página está no menu. Ative uma em Páginas.",
         "actionsOrder": "Ordem dos botões",
         "actionsOrderHint": "Arraste para mudar a ordem, ou use as setas: cada botão seu, o entrar e o carrinho, um por um.",

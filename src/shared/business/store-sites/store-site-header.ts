@@ -57,7 +57,20 @@ export interface IStoreSiteHeader {
   aligns: Partial<
     Record<StoreSitesEnum.HeaderPart, StoreSitesEnum.HeaderAlign>
   >;
+  /** The link to the first page, at the start of the menu. */
+  home: IStoreSiteHeaderHome;
 }
+
+/** The "home" of the menu: whether it is there and what it says. */
+export interface IStoreSiteHeaderHome {
+  isInMenu: boolean;
+  /** Its words; empty, the site says "Home" in the visitor's language. */
+  label: string | null;
+  /** Its place among the pages of the menu: 0 is before them all. */
+  position: number;
+}
+
+export const HOME_LABEL_MAX: number = 40;
 
 /** Where a place of the header puts its part when the owner did not say. */
 export const HEADER_SLOT_ALIGNS: StoreSitesEnum.HeaderAlign[] = [
@@ -219,5 +232,22 @@ export const siteHeaderOf = (
           : kept,
       {},
     ),
+    // There unless the owner hid it. Its words are kept as typed while they
+    // are being written; the API trims them.
+    home: {
+      isInMenu: header?.home?.isInMenu !== false,
+      label:
+        typeof header?.home?.label === "string" && header.home.label.trim()
+          ? header.home.label.slice(0, HOME_LABEL_MAX)
+          : null,
+      position:
+        typeof header?.home?.position === "number" &&
+        Number.isFinite(header.home.position)
+          ? Math.min(
+              StoreSitesEnum.MAX_PAGES,
+              Math.max(0, Math.round(header.home.position)),
+            )
+          : 0,
+    },
   };
 };

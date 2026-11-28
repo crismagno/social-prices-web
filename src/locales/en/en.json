@@ -3164,7 +3164,11 @@
         "add": "Add page",
         "colors": "Colours of this page",
         "colorsHint": "A colour you leave alone follows the colours of the site.",
-        "colorOfSite": "Site"
+        "colorOfSite": "Site",
+        "homeMenu": {
+          "title": "Home (first item of the menu)",
+          "hint": "Turn it off to hide it from the menu. Leave the name empty to use the site’s own word."
+        }
       },
       "chat": {
         "show": "Let visitors chat with the store",
@@ -3847,7 +3851,7 @@
         "addButton": "Add a button",
         "newButton": "Button",
         "menuOrder": "Order of the menu",
-        "menuOrderHint": "The pages shown in the menu, in the order they appear. Which pages are in it is chosen in Pages.",
+        "menuOrderHint": "Drag an item, or use the arrows. Moving a page changes the order of the pages too.",
         "menuOrderEmpty": "No page is in the menu. Turn one on in Pages.",
         "actionsOrder": "Order of the buttons",
         "actionsOrderHint": "Drag to change the order, or use the arrows: each of your buttons, the sign-in and the cart, one by one.",

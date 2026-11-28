@@ -41,6 +41,7 @@ import StoreSitesEnum from "../../../shared/business/store-sites/store-sites.enu
 import BackdropFields from "./BackdropFields";
 import ContactFormFields from "./ContactFormFields";
 import FeatureIconPicker from "./FeatureIconPicker";
+import HomeMenuFields from "./HomeMenuFields";
 import PageContentFields from "./PageContentFields";
 import PageHeroFields from "./PageHeroFields";
 import { IStoreSiteEditor } from "./useStoreSiteEditor";
@@ -138,6 +139,7 @@ const PagesTab = ({ editor, storeId }: Props) => {
 
   return (
     <Space direction="vertical" className="w-full">
+      <HomeMenuFields editor={editor} />
       {pages.map((page: IStoreSitePage, index: number) => {
         const isOpen: boolean = openKey === page.key;
         const isCustom: boolean =

@@ -62,6 +62,7 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
     transparency,
     shadow,
     border,
+    home,
     color,
     background,
     height,
@@ -195,6 +196,7 @@ const SiteHeader = ({ site, store, cart, page }: Props) => {
           pages={site.pages}
           siteSlug={site.slug}
           currentKey={page?.key}
+          home={home}
           hasAbout={
             siteHasAbout(site.about, store.about) ||
             // A text with media of its own, wherever the owner put it.
