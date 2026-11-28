@@ -49,6 +49,7 @@ import BlockFields from "./BlockFields";
 import CanvasFields from "./CanvasFields";
 import CardsLayoutFields from "./CardsLayoutFields";
 import { HeroTab } from "./ContentTabs";
+import MapFields from "./MapFields";
 import PageHeroFields from "./PageHeroFields";
 import ImageLookCard from "./ImageLookCard";
 import MarqueeFields from "./MarqueeFields";
@@ -86,6 +87,7 @@ const WITH_BLOCK_FIELDS: StoreSitesEnum.BlockType[] = [
   T.TEXT,
   T.IMAGE,
   T.BOX,
+  T.MAP,
 ];
 
 const HOME: string = "__home__";
@@ -624,7 +626,9 @@ const BuilderTab = ({
                     block={selected}
                     pages={pages}
                     storeId={storeId}
-                    showItems={selected.type !== T.TEXT}
+                    showItems={
+                      selected.type !== T.TEXT && selected.type !== T.MAP
+                    }
                     onChange={(change) =>
                       builder.updateSection(selected.key, change)
                     }
@@ -632,6 +636,14 @@ const BuilderTab = ({
                 )}
                 {selected.type === T.TABS && (
                   <TabsFields section={selected} builder={builder} />
+                )}
+                {selected.type === T.MAP && (
+                  <MapFields
+                    section={selected}
+                    onChange={(change) =>
+                      builder.updateSection(selected.key, change)
+                    }
+                  />
                 )}
                 {selected.type === T.CANVAS && (
                   <CanvasFields

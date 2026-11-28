@@ -14,6 +14,7 @@ import {
 } from "./store-site-blocks";
 import { IStoreSiteAbout, siteAboutOf } from "./store-site-about";
 import { newCanvasElement } from "./store-site-canvas";
+import { newMapPin } from "./store-site-map";
 import { siteMarqueeStyleOf } from "./store-site-marquee-style";
 import { IStoreSitePage, sitePagesOf } from "./store-site-pages";
 import { IStoreSiteMarquee, IStoreSiteSection } from "./store-site.interface";
@@ -456,6 +457,21 @@ export const newSection = (
           ...newBlockItem(T.TABS),
           title: t(`${SAMPLE}.TABS.items.${index}`),
         })),
+      };
+    case T.MAP:
+      // One pin to start from: the owner moves it to where the store is.
+      return {
+        ...base,
+        title: t(`${SAMPLE}.MAP.title`),
+        settings: blockSettingsOf(type, {
+          map: {
+            pins: [
+              {
+                ...newMapPin(-23.55052, -46.633308, t(`${SAMPLE}.MAP.pin`)),
+              },
+            ],
+          },
+        }),
       };
     case T.CANVAS: {
       // A panel, a title and a button to move about: something to start from.

@@ -2420,6 +2420,11 @@
         "size": "Size",
         "found": "{count} products",
         "clear": "Clear"
+      },
+      "map": {
+        "pin": "Place on the map",
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out"
       }
     },
     "cart": {
@@ -3746,6 +3751,10 @@
           "CANVAS": {
             "title": "Drag me anywhere",
             "button": "A button"
+          },
+          "MAP": {
+            "title": "Where to find us",
+            "pin": "Our store"
           }
         },
         "types": {
@@ -3771,7 +3780,8 @@
           "FAQ": "FAQ",
           "CTA": "Call to action",
           "TABS": "Tabs menu",
-          "CANVAS": "Free canvas"
+          "CANVAS": "Free canvas",
+          "MAP": "Map"
         },
         "hints": {
           "HERO": "The entrance of this page: its own words, pictures, buttons, colours and sizes.",
@@ -3796,7 +3806,8 @@
           "FAQ": "Questions that open and close",
           "CTA": "A banner with an action button",
           "TABS": "Items that show, one at a time, other sections of this page",
-          "CANVAS": "Place text, buttons, boxes, images, video and lines anywhere, one over the other, and resize them"
+          "CANVAS": "Place text, buttons, boxes, images, video and lines anywhere, one over the other, and resize them",
+          "MAP": "A map with as many pins as you want, each with a name and a few words"
         },
         "tabs": {
           "title": "Title above the menu",
@@ -3884,6 +3895,23 @@
           "radius": "Rounded corners",
           "opacity": "Opacity",
           "videoFile": "Video file"
+        },
+        "map": {
+          "height": "Height",
+          "isAutoFit": "Show every pin at once",
+          "zoom": "Zoom",
+          "center": "Centre of the map",
+          "addPin": "Add a pin",
+          "addPlaceholder": "An address, or a latitude and longitude",
+          "add": "Add",
+          "addHint": "Type an address to look it up on OpenStreetMap, or paste the coordinates a map gives you, like -23.5505, -46.6333.",
+          "notFound": "No place found for that address. Try it more complete, or paste the coordinates.",
+          "searchFailed": "The address could not be looked up now. Try again, or paste the coordinates.",
+          "pin": "Pin",
+          "removePin": "Remove the pin",
+          "label": "Name",
+          "description": "Description",
+          "color": "Colour"
         }
       },
       "mocks": {

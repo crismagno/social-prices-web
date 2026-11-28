@@ -1,0 +1,182 @@
+/*
+ * A map: tiles laid side by side, the pins over them, everything cut to the
+ * frame. It is dragged with the pointer; the page still scrolls up and down
+ * over it on a touch screen.
+ */
+.map {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--site-text, #222) 8%, var(--site-bg, #fff));
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  isolation: isolate;
+}
+
+.map:active {
+  cursor: grabbing;
+}
+
+.tile {
+  position: absolute;
+  width: 256px;
+  height: 256px;
+  max-width: none !important;
+  pointer-events: none;
+}
+
+/* A pin stands on its point: the place is under its tip. */
+.pin {
+  position: absolute;
+  z-index: 2;
+  width: 0;
+  height: 0;
+}
+
+.pin[data-open] {
+  z-index: 4;
+}
+
+.marker {
+  position: absolute;
+  left: -15px;
+  bottom: 0;
+  width: 30px;
+  height: 40px;
+  padding: 0;
+  border: 0 !important;
+  background: none !important;
+  color: inherit !important;
+  cursor: pointer;
+  pointer-events: auto !important;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.35));
+  transform-origin: 50% 100%;
+  transition: scale 0.2s cubic-bezier(0.2, 1.6, 0.4, 1);
+  animation: pinDrop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+
+.marker:hover,
+.pin[data-open] .marker {
+  scale: 1.18;
+}
+
+.marker svg {
+  width: 100%;
+  height: 100%;
+}
+
+.marker path {
+  fill: currentColor;
+  stroke: #fff;
+  stroke-width: 1.5;
+}
+
+.marker circle {
+  fill: #fff;
+}
+
+/* Its name under it, readable over any map. */
+.name {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  translate: -50% 0;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: #222;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+.card {
+  position: absolute;
+  bottom: 48px;
+  left: 0;
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: max-content;
+  max-width: 240px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 13px;
+  line-height: 1.4;
+  white-space: pre-line;
+  color: #222;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+  cursor: default;
+}
+
+.card strong {
+  font-size: 14px;
+}
+
+.zoom {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.zoom button {
+  width: 36px;
+  height: 36px;
+  font-size: 20px;
+  line-height: 1;
+  color: #222 !important;
+  background: #fff !important;
+  cursor: pointer;
+  pointer-events: auto !important;
+}
+
+.zoom button + button {
+  border-top: 1px solid #e5e5e5 !important;
+}
+
+.zoom button:disabled {
+  opacity: 0.35;
+}
+
+.credit {
+  position: absolute;
+  right: 6px;
+  bottom: 4px;
+  z-index: 5;
+  padding: 1px 6px;
+  border-radius: 6px;
+  font-size: 10px;
+  color: #333 !important;
+  background: rgba(255, 255, 255, 0.8);
+  pointer-events: auto !important;
+}
+
+@keyframes pinDrop {
+  from {
+    opacity: 0;
+    translate: 0 -18px;
+  }
+  to {
+    translate: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marker {
+    animation: none;
+    transition: none;
+  }
+}

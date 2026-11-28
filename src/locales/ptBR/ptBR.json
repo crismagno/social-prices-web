@@ -2423,6 +2423,11 @@
         "size": "Tamanho",
         "found": "{count} produtos",
         "clear": "Limpar"
+      },
+      "map": {
+        "pin": "Local no mapa",
+        "zoomIn": "Aproximar",
+        "zoomOut": "Afastar"
       }
     },
     "cart": {
@@ -3749,6 +3754,10 @@
           "CANVAS": {
             "title": "Me arraste para qualquer lugar",
             "button": "Um botão"
+          },
+          "MAP": {
+            "title": "Onde nos encontrar",
+            "pin": "Nossa loja"
           }
         },
         "types": {
@@ -3774,7 +3783,8 @@
           "FAQ": "Perguntas",
           "CTA": "Chamada final",
           "TABS": "Menu de abas",
-          "CANVAS": "Tela livre"
+          "CANVAS": "Tela livre",
+          "MAP": "Mapa"
         },
         "hints": {
           "HERO": "A entrada desta página: palavras, fotos, botões, cores e tamanhos próprios.",
@@ -3799,7 +3809,8 @@
           "FAQ": "Perguntas que abrem e fecham",
           "CTA": "Um banner com botão de ação",
           "TABS": "Itens que mostram, um de cada vez, outras seções desta página",
-          "CANVAS": "Coloque texto, botões, caixas, imagens, vídeo e linhas em qualquer lugar, um sobre o outro, e redimensione"
+          "CANVAS": "Coloque texto, botões, caixas, imagens, vídeo e linhas em qualquer lugar, um sobre o outro, e redimensione",
+          "MAP": "Um mapa com quantos pins você quiser, cada um com nome e algumas palavras"
         },
         "tabs": {
           "title": "Título acima do menu",
@@ -3887,6 +3898,23 @@
           "radius": "Cantos arredondados",
           "opacity": "Opacidade",
           "videoFile": "Arquivo de vídeo"
+        },
+        "map": {
+          "height": "Altura",
+          "isAutoFit": "Mostrar todos os pins de uma vez",
+          "zoom": "Zoom",
+          "center": "Centro do mapa",
+          "addPin": "Adicionar um pin",
+          "addPlaceholder": "Um endereço, ou latitude e longitude",
+          "add": "Adicionar",
+          "addHint": "Digite um endereço para buscar no OpenStreetMap, ou cole as coordenadas que um mapa informa, como -23.5505, -46.6333.",
+          "notFound": "Nenhum lugar encontrado para esse endereço. Tente mais completo, ou cole as coordenadas.",
+          "searchFailed": "Não foi possível buscar o endereço agora. Tente de novo, ou cole as coordenadas.",
+          "pin": "Pin",
+          "removePin": "Remover o pin",
+          "label": "Nome",
+          "description": "Descrição",
+          "color": "Cor"
         }
       },
       "mocks": {

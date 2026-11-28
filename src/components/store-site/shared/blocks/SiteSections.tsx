@@ -43,6 +43,7 @@ import SiteTabs from "./SiteTabs";
 import frameStyles from "./SectionFrame.module.css";
 import { CanvasBuilderContext, ICanvasBuilder } from "./canvas-builder";
 import PieceCanvas from "./PieceCanvas";
+import PieceMap from "./PieceMap";
 import SectionBackground from "./SectionBackground";
 import styles from "./SiteBlocks.module.css";
 import {
@@ -89,6 +90,7 @@ export const SECTION_COMPONENTS: Partial<
   [StoreSitesEnum.BlockType.VIDEO]: PieceVideo,
   [StoreSitesEnum.BlockType.SPACER]: PieceSpacer,
   [StoreSitesEnum.BlockType.CANVAS]: PieceCanvas,
+  [StoreSitesEnum.BlockType.MAP]: PieceMap,
   [StoreSitesEnum.BlockType.DIVIDER]: PieceDivider,
   [StoreSitesEnum.BlockType.BOX]: PieceBox,
   [StoreSitesEnum.BlockType.TESTIMONIALS]: BlockTestimonials,

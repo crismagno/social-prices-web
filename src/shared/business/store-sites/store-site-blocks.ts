@@ -21,6 +21,7 @@ import {
   sectionBackgroundOf,
 } from "./store-site-section-background";
 import { IStoreSiteCanvas, siteCanvasOf } from "./store-site-canvas";
+import { IStoreSiteMap, siteMapOf } from "./store-site-map";
 import StoreSitesEnum from "./store-sites.enum";
 
 /** One entry of a block; which fields count depends on the block's type. */
@@ -101,6 +102,8 @@ export interface IStoreSiteBlockSettings {
   background: IStoreSiteSectionBackground | null;
   /** A free canvas only: its height and what was placed on it. */
   canvas: IStoreSiteCanvas | null;
+  /** A map only: its pins and how it is shown. */
+  map: IStoreSiteMap | null;
 }
 
 /**
@@ -440,6 +443,7 @@ export const blockSettingsOf = (
     canvas: uses(T.CANVAS)
       ? siteCanvasOf(source.canvas, { buttonOf, mediaOf })
       : null,
+    map: uses(T.MAP) ? siteMapOf(source.map) : null,
   };
 };
 
@@ -594,6 +598,8 @@ export const showableSection = (
       return block.settings.media ? shown : null;
     case T.CANVAS:
       return block.settings.canvas?.elements.length ? shown : null;
+    case T.MAP:
+      return block.settings.map?.pins.length ? shown : null;
     case T.SPACER:
     case T.DIVIDER:
       return shown;
